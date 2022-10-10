@@ -1,8 +1,8 @@
 diff --git a/lib/Core.js b/lib/Core.js
-index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..12520ac47448b9017f863d4e66771806b757e2a4 100644
+index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..a75fde491fec9f0d6e14c3adf2cc9b000f1c625e 100644
 --- a/lib/Core.js
 +++ b/lib/Core.js
-@@ -167,7 +167,33 @@ var typeCheckExamples = function (modules) {
+@@ -167,7 +167,30 @@ var typeCheckExamples = function (modules) {
      return function_1.pipe(getExampleFiles(modules), RTE.chain(handleImports), RTE.chain(function (examples) {
          return examples.length === 0
              ? cleanExamples
@@ -29,9 +29,6 @@ index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..12520ac47448b9017f863d4e66771806
 +                    "@fp-ts/core/*": ["../../src/*"]
 +                  }
 +                }
-+              }
-+              )}); }), RTE.chain(function () { return writeFile({"path": "./docs/examples/package.json", "content": JSON.stringify({
-+                "name": "@fp-ts/examples"
 +              }
 +              )}); }), RTE.chain(function () { return spawnTsNode; }), RTE.chain(function () { return cleanExamples; }));
      }));

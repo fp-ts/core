@@ -5,10 +5,10 @@
     "baseUrl": "."
   },
   "include": [
-    "./packages/core/src/**/*.ts",
-    "./packages/core/test/**/*.ts",
-    "./packages/core/dtslint/**/*.ts",
-    "./packages/core/examples/**/*.ts",
+    "./src/**/*.ts",
+    "./test/**/*.ts",
+    "./dtslint/**/*.ts",
+    "./examples/**/*.ts",
     "./vitest.config.ts"
   ]
 }

@@ -1,6 +1,6 @@
 <h3 align="center">
   <a href="https://fp-ts.github.io/core/">
-    <img src="./packages/core/docs/fp-ts-logo.png">
+    <img src="./docs/fp-ts-logo.png">
   </a>
 </h3>
 

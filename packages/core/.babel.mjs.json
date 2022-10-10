@@ -1,3 +1,0 @@
-{
-  "plugins": [["@fp-ts/babel-plugin"], ["annotate-pure-calls"]]
-}
