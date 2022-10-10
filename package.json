@@ -43,7 +43,8 @@
     "tc": "tsc --noEmit",
     "gen-docs": "docs-ts",
     "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning packages/*/build/esm packages/*/build/test packages/*/build/examples",
-    "test": "vitest"
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "exports": {
     ".": {
