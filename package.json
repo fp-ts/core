@@ -41,7 +41,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "autofix": "pnpm lint --fix",
     "tc": "tsc --noEmit",
-    "gen-docs": "docs-ts",
+    "docs": "docs-ts",
     "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning packages/*/build/esm packages/*/build/test packages/*/build/examples",
     "test": "vitest",
     "coverage": "vitest run --coverage"

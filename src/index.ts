@@ -17,7 +17,6 @@ import * as nonEmptyReadonlyArray from "@fp-ts/core/NonEmptyReadonlyArray"
 import * as number from "@fp-ts/core/number"
 import * as option from "@fp-ts/core/Option"
 import * as predicate from "@fp-ts/core/Predicate"
-import * as random from "@fp-ts/core/Random"
 import * as reader from "@fp-ts/core/Reader"
 import * as readerAsync from "@fp-ts/core/ReaderAsync"
 import * as readerAsyncResult from "@fp-ts/core/ReaderAsyncResult"
@@ -312,10 +311,6 @@ export {
    * @since 3.0.0
    */
   predicate,
-  /**
-   * @since 3.0.0
-   */
-  random,
   /**
    * @category data types
    * @since 3.0.0

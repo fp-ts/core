@@ -1,6 +1,6 @@
 ---
 title: typeclasses/FromReader.ts
-nav_order: 59
+nav_order: 58
 parent: Modules
 ---
 

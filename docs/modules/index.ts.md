@@ -89,7 +89,6 @@ Added in v3.0.0
   - [number](#number)
   - [ordering](#ordering)
   - [predicate](#predicate)
-  - [random](#random)
   - [string](#string)
 
 ---
@@ -828,16 +827,6 @@ Added in v3.0.0
 
 ```ts
 export declare const predicate: any
-```
-
-Added in v3.0.0
-
-## random
-
-**Signature**
-
-```ts
-export declare const random: any
 ```
 
 Added in v3.0.0
