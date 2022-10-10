@@ -1108,7 +1108,6 @@ export const Comonad: comonad.Comonad<NonEmptyReadonlyArrayTypeLambda> = {
  * @since 3.0.0
  */
 export const Do: NonEmptyReadonlyArray<{}> =
-  /*#__PURE__*/
   of(_.Do)
 
 /**

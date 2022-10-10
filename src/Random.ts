@@ -45,7 +45,6 @@ export const randomRange = (min: number, max: number): Sync<number> =>
  * @since 3.0.0
  */
 export const randomBool: Sync<boolean> =
-  /*#__PURE__*/
   pipe(
     random,
     sync.map((n) => n < 0.5)
