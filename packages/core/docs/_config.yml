@@ -6,8 +6,8 @@ search_enabled: true
 # Aux links for the upper right navigation
 aux_links:
   "Docs":
-    - "//fp-ts.github.io/core/"
+    - "//fp-ts.github.io/core"
   "API Reference":
-    - "//fp-ts.github.io/core/modules/"
+    - "//fp-ts.github.io/core/docs/modules"
   "GitHub":
     - "//github.com/fp-ts/core"
