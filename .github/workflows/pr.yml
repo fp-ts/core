@@ -1,13 +1,13 @@
-name: Node.js CI
+name: PR Flow
 
 on:
   pull_request:
     branches:
-      - 'master'
+      - 'main'
   push:
     branches:
       - '**'
-      - '!master'
+      - '!main'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
