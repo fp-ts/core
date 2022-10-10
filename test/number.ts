@@ -3,6 +3,18 @@ import * as _ from "@fp-ts/core/number"
 import * as U from "./util"
 
 describe("number", () => {
+  it("sum", () => {
+    U.deepStrictEqual(_.sum(1)(2), 3)
+  })
+
+  it("sub", () => {
+    U.deepStrictEqual(_.sub(1)(2), 1)
+  })
+
+  it("multiply", () => {
+    U.deepStrictEqual(_.multiply(3)(2), 6)
+  })
+
   it("sumAll", () => {
     U.deepStrictEqual(_.sumAll([1, 2, 3]), 6)
   })
@@ -23,5 +35,9 @@ describe("number", () => {
 
   it("SemigroupMultiply", () => {
     U.deepStrictEqual(pipe(2, _.SemigroupMultiply.combine(3)), 6)
+  })
+
+  it("SemigroupSum", () => {
+    U.deepStrictEqual(pipe(2, _.SemigroupSum.combine(3)), 5)
   })
 })
