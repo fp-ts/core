@@ -1,23 +1,23 @@
 /**
  * @since 3.0.0
  */
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import type { Apply } from '@fp-ts/core/typeclasses/Apply'
-import type * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import type * as comonad from '@fp-ts/core/typeclasses/Comonad'
-import { flow, identity, pipe, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Monad } from '@fp-ts/core/typeclasses/Monad'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type { FromIdentity } from '@fp-ts/core/typeclasses/FromIdentity'
-import * as nonEmptyReadonlyArrayModule from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import type * as composable from '@fp-ts/core/typeclasses/Composable'
-import type * as traversable from '@fp-ts/core/typeclasses/Traversable'
+import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import * as nonEmptyReadonlyArrayModule from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import type { Apply } from "@fp-ts/core/typeclasses/Apply"
+import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import type * as comonad from "@fp-ts/core/typeclasses/Comonad"
+import type * as composable from "@fp-ts/core/typeclasses/Composable"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
+import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type { Monad } from "@fp-ts/core/typeclasses/Monad"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type * as traversable from "@fp-ts/core/typeclasses/Traversable"
 
 /**
  * @category model
@@ -34,7 +34,7 @@ export type Writer<W, A> = readonly [W, A]
  * @since 3.0.0
  */
 export interface WriterTypeLambda extends TypeLambda {
-  readonly type: Writer<this['Out2'], this['Out1']>
+  readonly type: Writer<this["Out2"], this["Out1"]>
 }
 
 /**
@@ -42,7 +42,7 @@ export interface WriterTypeLambda extends TypeLambda {
  * @since 3.0.0
  */
 export interface WriterFComposable extends TypeLambda {
-  readonly type: Writer<this['In1'], this['Out1']>
+  readonly type: Writer<this["In1"], this["Out1"]>
 }
 
 /**
@@ -50,7 +50,7 @@ export interface WriterFComposable extends TypeLambda {
  * @since 3.0.0
  */
 export interface WriterFFix<W> extends TypeLambda {
-  readonly type: Writer<W, this['Out1']>
+  readonly type: Writer<W, this["Out1"]>
 }
 
 /**
@@ -101,8 +101,7 @@ export const pass = <W, A>(self: Writer<W, readonly [A, (w: W) => W]>): Writer<W
  *
  * @since 3.0.0
  */
-export const listens =
-  <W, B>(f: (w: W) => B) =>
+export const listens = <W, B>(f: (w: W) => B) =>
   <A>(self: Writer<W, A>): Writer<W, readonly [A, B]> => {
     const [w, a] = self
     return [w, [a, f(w)]]
@@ -113,8 +112,7 @@ export const listens =
  *
  * @since 3.0.0
  */
-export const censor =
-  <W>(f: (w: W) => W) =>
+export const censor = <W>(f: (w: W) => W) =>
   <A>(self: Writer<W, A>): Writer<W, A> => {
     const [w, a] = self
     return [f(w), a]
@@ -126,8 +124,7 @@ export const censor =
  * @category mapping
  * @since 3.0.0
  */
-export const map =
-  <A, B>(f: (a: A) => B) =>
+export const map = <A, B>(f: (a: A) => B) =>
   <W>(self: Writer<W, A>): Writer<W, B> => {
     const [w, a] = self
     return [w, f(a)]
@@ -137,8 +134,7 @@ export const map =
  * @category Bifunctor
  * @since 3.0.0
  */
-export const mapLeft =
-  <W, X>(f: (w: W) => X) =>
+export const mapLeft = <W, X>(f: (w: W) => X) =>
   <A>(self: Writer<W, A>): Writer<X, A> => {
     const [w, a] = self
     return [f(w), a]
@@ -151,26 +147,20 @@ export const mapLeft =
  * @category mapping
  * @since 3.0.0
  */
-export const mapBoth =
-  <W, X, A, B>(f: (w: W) => X, g: (a: A) => B) =>
-  (self: Writer<W, A>): Writer<X, B> =>
-    [f(left(self)), g(right(self))]
+export const mapBoth = <W, X, A, B>(f: (w: W) => X, g: (a: A) => B) =>
+  (self: Writer<W, A>): Writer<X, B> => [f(left(self)), g(right(self))]
 
 /**
  * @since 3.0.0
  */
-export const compose =
-  <B, C>(bc: Writer<B, C>) =>
-  <A>(ab: Writer<A, B>): Writer<A, C> =>
-    [left(ab), right(bc)]
+export const compose = <B, C>(bc: Writer<B, C>) =>
+  <A>(ab: Writer<A, B>): Writer<A, C> => [left(ab), right(bc)]
 
 /**
  * @since 3.0.0
  */
-export const extend =
-  <W, A, B>(f: (self: Writer<W, A>) => B) =>
-  (self: Writer<W, A>): Writer<W, B> =>
-    [left(self), f(self)]
+export const extend = <W, A, B>(f: (self: Writer<W, A>) => B) =>
+  (self: Writer<W, A>): Writer<W, B> => [left(self), f(self)]
 
 /**
  * @since 3.0.0
@@ -180,20 +170,19 @@ export const extract: <W, A>(self: Writer<W, A>) => A = right
 /**
  * @since 3.0.0
  */
-export const duplicate: <W, A>(self: Writer<W, A>) => Writer<W, Writer<W, A>> =extend(identity)
+export const duplicate: <W, A>(self: Writer<W, A>) => Writer<W, Writer<W, A>> = extend(identity)
 
 /**
  * @category traversing
  * @since 3.0.0
  */
-export const traverse =
-  <F extends TypeLambda>(F: Apply<F>) =>
+export const traverse = <F extends TypeLambda>(F: Apply<F>) =>
   <A, S, R, O, E, B>(f: (a: A) => Kind<F, S, R, O, E, B>) =>
-  <W>(self: Writer<W, A>): Kind<F, S, R, O, E, Writer<W, B>> =>
-    pipe(
-      f(right(self)),
-      F.map((b) => [left(self), b])
-    )
+    <W>(self: Writer<W, A>): Kind<F, S, R, O, E, Writer<W, B>> =>
+      pipe(
+        f(right(self)),
+        F.map((b) => [left(self), b])
+      )
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -219,8 +208,9 @@ export const Functor: functor.Functor<WriterTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <W, B>(fab: Writer<W, (a: A) => B>) => Writer<W, B> =
- functor.flap(Functor)
+export const flap: <A>(a: A) => <W, B>(fab: Writer<W, (a: A) => B>) => Writer<W, B> = functor.flap(
+  Functor
+)
 
 /**
  * @category instances
@@ -250,29 +240,22 @@ export const toReadonlyArray = <W, A>(self: Writer<W, A>): ReadonlyArray<A> => [
  * @category folding
  * @since 3.0.0
  */
-export const reduce =
-  <B, A>(b: B, f: (b: B, a: A) => B) =>
-  <W>(self: Writer<W, A>): B =>
-    f(b, right(self))
+export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
+  <W>(self: Writer<W, A>): B => f(b, right(self))
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const foldMap =
-  <M>(_: Monoid<M>) =>
-  <A>(f: (a: A) => M) =>
-  <W>(self: Writer<W, A>): M =>
-    f(right(self))
+export const foldMap = <M>(_: Monoid<M>) =>
+  <A>(f: (a: A) => M) => <W>(self: Writer<W, A>): M => f(right(self))
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceRight =
-  <B, A>(b: B, f: (a: A, b: B) => B) =>
-  <W>(self: Writer<W, A>): B =>
-    f(right(self), b)
+export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
+  <W>(self: Writer<W, A>): B => f(right(self), b)
 
 /**
  * @category instances
@@ -288,8 +271,9 @@ export const Traversable: traversable.Traversable<WriterTypeLambda> = {
  */
 export const sequence: <F extends TypeLambda>(
   F: Apply<F>
-) => <W, S, R, O, E, A>(self: Writer<W, Kind<F, S, R, O, E, A>>) => Kind<F, S, R, O, E, Writer<W, A>> = (F) =>
-  traverse(F)(identity)
+) => <W, S, R, O, E, A>(
+  self: Writer<W, Kind<F, S, R, O, E, A>>
+) => Kind<F, S, R, O, E, Writer<W, A>> = (F) => traverse(F)(identity)
 
 /**
  * @category instances
@@ -305,11 +289,12 @@ export const getFromIdentity = <W>(M: Monoid<W>): FromIdentity<WriterFFix<W>> =>
  */
 export const getApply = <W>(Semigroup: Semigroup<W>): Apply<WriterFFix<W>> => ({
   map,
-  ap: (fa) => (fab) => {
-    const [w1, f] = fab
-    const [w2, a] = fa
-    return [Semigroup.combine(w2)(w1), f(a)]
-  }
+  ap: (fa) =>
+    (fab) => {
+      const [w1, f] = fab
+      const [w2, a] = fa
+      return [Semigroup.combine(w2)(w1), f(a)]
+    }
 })
 
 /**
@@ -333,11 +318,12 @@ export const getApplicative = <W>(Monoid: Monoid<W>): applicative.Applicative<Wr
 export const getFlattenable = <W>(S: Semigroup<W>): Flattenable<WriterFFix<W>> => {
   return {
     map,
-    flatMap: (f) => (ma) => {
-      const [w1, a] = ma
-      const [w2, b] = f(a)
-      return [S.combine(w2)(w1), b]
-    }
+    flatMap: (f) =>
+      (ma) => {
+        const [w1, a] = ma
+        const [w2, b] = f(a)
+        return [S.combine(w2)(w1), b]
+      }
   }
 }
 
@@ -365,13 +351,12 @@ export const getMonad = <W>(M: Monoid<W>): Monad<WriterFFix<W>> => {
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <W>(S: Semigroup<W>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <W>(S: Semigroup<W>) =>
   <A, B>(f: (index: number, a: A) => Writer<W, B>) =>
-  (as: NonEmptyReadonlyArray<A>): Writer<W, NonEmptyReadonlyArray<B>> => {
-    // TODO
-    return nonEmptyReadonlyArrayModule.traverseWithIndex(getApply(S))(f)(as)
-  }
+    (as: NonEmptyReadonlyArray<A>): Writer<W, NonEmptyReadonlyArray<B>> => {
+      // TODO
+      return nonEmptyReadonlyArrayModule.traverseWithIndex(getApply(S))(f)(as)
+    }
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(getApplicative(M))`.
@@ -379,9 +364,10 @@ export const traverseNonEmptyReadonlyArrayWithIndex =
  * @category traversing
  * @since 3.0.0
  */
-export const traverseReadonlyArrayWithIndex =
-  <W>(M: Monoid<W>) =>
-  <A, B>(f: (index: number, a: A) => Writer<W, B>): ((as: ReadonlyArray<A>) => Writer<W, ReadonlyArray<B>>) => {
+export const traverseReadonlyArrayWithIndex = <W>(M: Monoid<W>) =>
+  <A, B>(
+    f: (index: number, a: A) => Writer<W, B>
+  ): ((as: ReadonlyArray<A>) => Writer<W, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndex(M)(f)
     return (as) => (_.isNonEmpty(as) ? g(as) : [M.empty, _.empty])
   }
@@ -394,7 +380,9 @@ export const traverseReadonlyArrayWithIndex =
  */
 export const traverseNonEmptyReadonlyArray = <W>(S: Semigroup<W>) => {
   const traverseNonEmptyReadonlyArrayWithIndexS = traverseNonEmptyReadonlyArrayWithIndex(S)
-  return <A, B>(f: (a: A) => Writer<W, B>): ((as: NonEmptyReadonlyArray<A>) => Writer<W, NonEmptyReadonlyArray<B>>) => {
+  return <A, B>(
+    f: (a: A) => Writer<W, B>
+  ): ((as: NonEmptyReadonlyArray<A>) => Writer<W, NonEmptyReadonlyArray<B>>) => {
     return traverseNonEmptyReadonlyArrayWithIndexS(flow(SK, f))
   }
 }
@@ -407,7 +395,9 @@ export const traverseNonEmptyReadonlyArray = <W>(S: Semigroup<W>) => {
  */
 export const traverseReadonlyArray = <W>(M: Monoid<W>) => {
   const traverseReadonlyArrayWithIndexS = traverseReadonlyArrayWithIndex(M)
-  return <A, B>(f: (a: A) => Writer<W, B>): ((as: ReadonlyArray<A>) => Writer<W, ReadonlyArray<B>>) => {
+  return <A, B>(
+    f: (a: A) => Writer<W, B>
+  ): ((as: ReadonlyArray<A>) => Writer<W, ReadonlyArray<B>>) => {
     return traverseReadonlyArrayWithIndexS(flow(SK, f))
   }
 }
@@ -420,4 +410,5 @@ export const traverseReadonlyArray = <W>(M: Monoid<W>) => {
  */
 export const sequenceReadonlyArray = <W>(
   M: Monoid<W>
-): (<A>(arr: ReadonlyArray<Writer<W, A>>) => Writer<W, ReadonlyArray<A>>) => traverseReadonlyArray(M)(identity)
+): (<A>(arr: ReadonlyArray<Writer<W, A>>) => Writer<W, ReadonlyArray<A>>) =>
+  traverseReadonlyArray(M)(identity)

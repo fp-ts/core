@@ -1,9 +1,9 @@
 /**
  * @since 3.0.0
  */
-import { identity } from '@fp-ts/core/Function'
-import type { Result } from '@fp-ts/core/Result'
-import * as result from '@fp-ts/core/Result'
+import { identity } from "@fp-ts/core/Function"
+import type { Result } from "@fp-ts/core/Result"
+import * as result from "@fp-ts/core/Result"
 
 /**
  * @since 3.0.0
@@ -15,8 +15,8 @@ export type Json =
   | null
   | ReadonlyArray<Json>
   | {
-      readonly [key: string]: Json
-    }
+    readonly [key: string]: Json
+  }
 
 /**
  * Converts a JavaScript Object Notation (JSON) string into an object.
@@ -31,7 +31,8 @@ export type Json =
  *
  * @since 3.0.0
  */
-export const parse = (s: string): Result<unknown, Json> => result.fromThrowable(() => JSON.parse(s), identity)
+export const parse = (s: string): Result<unknown, Json> =>
+  result.fromThrowable(() => JSON.parse(s), identity)
 
 /**
  * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
@@ -41,8 +42,8 @@ export const parse = (s: string): Result<unknown, Json> => result.fromThrowable(
 export const stringify = <A>(value: A): Result<unknown, string> =>
   result.fromThrowable(() => {
     const s = JSON.stringify(value)
-    if (typeof s !== 'string') {
-      throw new Error('Converting unsupported structure to JSON')
+    if (typeof s !== "string") {
+      throw new Error("Converting unsupported structure to JSON")
     }
     return s
   }, identity)

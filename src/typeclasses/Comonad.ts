@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
-import type { Extendable } from '@fp-ts/core/typeclasses/Extendable'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Extendable } from "@fp-ts/core/typeclasses/Extendable"
 
 /**
  * @category model

@@ -8,38 +8,38 @@
  *
  * @since 3.0.0
  */
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as alt from '@fp-ts/core/typeclasses/Alt'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import type { Compactable } from '@fp-ts/core/typeclasses/Compactable'
-import * as result from '@fp-ts/core/Result'
-import type { Result } from '@fp-ts/core/Result'
-import * as resultT from '@fp-ts/core/transformers/ResultT'
-import type { Filterable } from '@fp-ts/core/typeclasses/Filterable'
-import * as fromResult_ from '@fp-ts/core/typeclasses/FromResult'
-import * as fromSync_ from '@fp-ts/core/typeclasses/FromSync'
-import * as fromAsync_ from '@fp-ts/core/typeclasses/FromAsync'
-import type { LazyArg } from '@fp-ts/core/Function'
-import { flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Sync } from '@fp-ts/core/Sync'
-import type { SyncResult } from '@fp-ts/core/SyncResult'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import type { Option } from '@fp-ts/core/Option'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Refinement } from '@fp-ts/core/Refinement'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import * as async from '@fp-ts/core/Async'
-import type { Async } from '@fp-ts/core/Async'
-import type { AsyncOption } from '@fp-ts/core/AsyncOption'
+import * as async from "@fp-ts/core/Async"
+import type { Async } from "@fp-ts/core/Async"
+import type { AsyncOption } from "@fp-ts/core/AsyncOption"
+import type { LazyArg } from "@fp-ts/core/Function"
+import { flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import * as result from "@fp-ts/core/Result"
+import type { Result } from "@fp-ts/core/Result"
+import type { Sync } from "@fp-ts/core/Sync"
+import type { SyncResult } from "@fp-ts/core/SyncResult"
+import * as resultT from "@fp-ts/core/transformers/ResultT"
+import * as alt from "@fp-ts/core/typeclasses/Alt"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
+import type { Filterable } from "@fp-ts/core/typeclasses/Filterable"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromAsync_ from "@fp-ts/core/typeclasses/FromAsync"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
+import * as fromSync_ from "@fp-ts/core/typeclasses/FromSync"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @category model
@@ -56,44 +56,48 @@ export interface AsyncResult<E, A> extends Async<Result<E, A>> {}
  * @since 3.0.0
  */
 export interface AsyncResultTypeLambda extends TypeLambda {
-  readonly type: AsyncResult<this['Out2'], this['Out1']>
+  readonly type: AsyncResult<this["Out2"], this["Out1"]>
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fail: <E>(e: E) => AsyncResult<E, never> =resultT.fail(async.FromIdentity)
+export const fail: <E>(e: E) => AsyncResult<E, never> = resultT.fail(async.FromIdentity)
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const succeed: <A>(a: A) => AsyncResult<never, A> =resultT.succeed(async.FromIdentity)
+export const succeed: <A>(a: A) => AsyncResult<never, A> = resultT.succeed(async.FromIdentity)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromAsync: <A>(async: Async<A>) => AsyncResult<never, A> =resultT.fromKind(async.Functor)
+export const fromAsync: <A>(async: Async<A>) => AsyncResult<never, A> = resultT.fromKind(
+  async.Functor
+)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const failAsync: <E>(async: Async<E>) => AsyncResult<E, never> =resultT.failKind(async.Functor)
+export const failAsync: <E>(async: Async<E>) => AsyncResult<E, never> = resultT.failKind(
+  async.Functor
+)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromSync: <A>(sync: Sync<A>) => AsyncResult<never, A> =flow(async.fromSync, fromAsync)
+export const fromSync: <A>(sync: Sync<A>) => AsyncResult<never, A> = flow(async.fromSync, fromAsync)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const failSync: <E>(sync: Sync<E>) => AsyncResult<E, never> =flow(async.fromSync, failAsync)
+export const failSync: <E>(sync: Sync<E>) => AsyncResult<E, never> = flow(async.fromSync, failAsync)
 
 /**
  * @category conversions
@@ -105,20 +109,22 @@ export const fromResult: <E, A>(either: Result<E, A>) => AsyncResult<E, A> = asy
  * @category conversions
  * @since 3.0.0
  */
-export const fromSyncResult: <E, A>(syncResult: SyncResult<E, A>) => AsyncResult<E, A> = async.fromSync
+export const fromSyncResult: <E, A>(syncResult: SyncResult<E, A>) => AsyncResult<E, A> =
+  async.fromSync
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromAsyncOption: <E>(onNone: E) => <A>(self: AsyncOption<A>) => AsyncResult<E, A> = (onNone) =>
-  async.map(result.fromOption(onNone))
+export const fromAsyncOption: <E>(onNone: E) => <A>(self: AsyncOption<A>) => AsyncResult<E, A> = (
+  onNone
+) => async.map(result.fromOption(onNone))
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const toUnion: <E, A>(fa: AsyncResult<E, A>) => Async<E | A> =resultT.toUnion(async.Functor)
+export const toUnion: <E, A>(fa: AsyncResult<E, A>) => Async<E | A> = resultT.toUnion(async.Functor)
 
 /**
  * @category pattern matching
@@ -127,7 +133,7 @@ export const toUnion: <E, A>(fa: AsyncResult<E, A>) => Async<E | A> =resultT.toU
 export const match: <E, B, A, C = B>(
   onError: (e: E) => B,
   onSuccess: (a: A) => C
-) => (async: AsyncResult<E, A>) => Async<B | C> =resultT.match(async.Functor)
+) => (async: AsyncResult<E, A>) => Async<B | C> = resultT.match(async.Functor)
 
 /**
  * @category pattern matching
@@ -136,21 +142,22 @@ export const match: <E, B, A, C = B>(
 export const matchAsync: <E, B, A, C = B>(
   onError: (e: E) => Async<B>,
   onSuccess: (a: A) => Async<C>
-) => (self: AsyncResult<E, A>) => Async<B | C> =resultT.matchKind(async.Monad)
+) => (self: AsyncResult<E, A>) => Async<B | C> = resultT.matchKind(async.Monad)
 
 /**
  * @category error handling
  * @since 3.0.0
  */
 export const getOrElse: <B>(onError: B) => <A>(self: AsyncResult<unknown, A>) => Async<A | B> =
- resultT.getOrElse(async.Functor)
+  resultT.getOrElse(async.Functor)
 
 /**
  * @category error handling
  * @since 3.0.0
  */
-export const getOrElseAsync: <B>(onError: Async<B>) => <A>(self: AsyncResult<unknown, A>) => Async<A | B> =
- resultT.getOrElseKind(async.Monad)
+export const getOrElseAsync: <B>(
+  onError: Async<B>
+) => <A>(self: AsyncResult<unknown, A>) => Async<A | B> = resultT.getOrElseKind(async.Monad)
 
 /**
  * Converts a `Promise` that may reject to a `AsyncResult`.
@@ -171,8 +178,10 @@ export const getOrElseAsync: <B>(onError: Async<B>) => <A>(self: AsyncResult<unk
  * @see {@link liftRejectable}
  * @since 3.0.0
  */
-export const fromRejectable =
-  <A, E>(f: LazyArg<Promise<A>>, onRejected: (reason: unknown) => E): AsyncResult<E, A> =>
+export const fromRejectable = <A, E>(
+  f: LazyArg<Promise<A>>,
+  onRejected: (reason: unknown) => E
+): AsyncResult<E, A> =>
   async () => {
     try {
       return await f().then(_.succeed)
@@ -187,13 +196,10 @@ export const fromRejectable =
  * @category interop
  * @since 3.0.0
  */
-export const liftRejectable =
-  <A extends ReadonlyArray<unknown>, B, E>(
-    f: (...a: A) => Promise<B>,
-    onRejected: (error: unknown) => E
-  ): ((...a: A) => AsyncResult<E, B>) =>
-  (...a) =>
-    fromRejectable(() => f(...a), onRejected)
+export const liftRejectable = <A extends ReadonlyArray<unknown>, B, E>(
+  f: (...a: A) => Promise<B>,
+  onRejected: (error: unknown) => E
+): ((...a: A) => AsyncResult<E, B>) => (...a) => fromRejectable(() => f(...a), onRejected)
 
 /**
  * Recovers from all errors.
@@ -216,12 +222,12 @@ export const liftRejectable =
  */
 export const catchAll: <E1, E2, B>(
   onError: (e: E1) => AsyncResult<E2, B>
-) => <A>(self: AsyncResult<E1, A>) => AsyncResult<E2, A | B> =resultT.catchAll(async.Monad)
+) => <A>(self: AsyncResult<E1, A>) => AsyncResult<E2, A | B> = resultT.catchAll(async.Monad)
 
 /**
  * @since 3.0.0
  */
-export const reverse: <E, A>(self: AsyncResult<E, A>) => AsyncResult<A, E> =resultT.reverse(
+export const reverse: <E, A>(self: AsyncResult<E, A>) => AsyncResult<A, E> = resultT.reverse(
   async.Functor
 )
 
@@ -231,7 +237,9 @@ export const reverse: <E, A>(self: AsyncResult<E, A>) => AsyncResult<A, E> =resu
  */
 export const liftAsyncOption = <E>(
   onNone: E
-): (<A extends ReadonlyArray<unknown>, B>(f: (...a: A) => AsyncOption<B>) => (...a: A) => AsyncResult<E, B>) => {
+): (<A extends ReadonlyArray<unknown>, B>(
+  f: (...a: A) => AsyncOption<B>
+) => (...a: A) => AsyncResult<E, B>) => {
   const from = fromAsyncOption(onNone)
   return (f) => flow(f, from)
 }
@@ -269,9 +277,10 @@ export const flatMapSyncResult = <A, E2, B>(
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <E>(fa: AsyncResult<E, A>) => AsyncResult<E, B> =resultT.map(
-  async.Functor
-)
+export const map: <A, B>(f: (a: A) => B) => <E>(fa: AsyncResult<E, A>) => AsyncResult<E, B> =
+  resultT.map(
+    async.Functor
+  )
 
 /**
  * Returns an effect whose failure and success channels have been mapped by
@@ -280,8 +289,10 @@ export const map: <A, B>(f: (a: A) => B) => <E>(fa: AsyncResult<E, A>) => AsyncR
  * @category mapping
  * @since 3.0.0
  */
-export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: AsyncResult<E, A>) => AsyncResult<G, B> =
- resultT.mapBoth(async.Functor)
+export const mapBoth: <E, G, A, B>(
+  f: (e: E) => G,
+  g: (a: A) => B
+) => (self: AsyncResult<E, A>) => AsyncResult<G, B> = resultT.mapBoth(async.Functor)
 
 /**
  * Returns an effect with its error channel mapped using the specified
@@ -291,7 +302,7 @@ export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Asy
  * @since 3.0.0
  */
 export const mapError: <E, G>(f: (e: E) => G) => <A>(self: AsyncResult<E, A>) => AsyncResult<G, A> =
- resultT.mapError(async.Functor)
+  resultT.mapError(async.Functor)
 
 /**
  * @category sequencing
@@ -299,7 +310,7 @@ export const mapError: <E, G>(f: (e: E) => G) => <A>(self: AsyncResult<E, A>) =>
  */
 export const flatMap: <A, E2, B>(
   f: (a: A) => AsyncResult<E2, B>
-) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, B> =resultT.flatMap(async.Monad)
+) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, B> = resultT.flatMap(async.Monad)
 
 /**
  * Creates a composite effect that represents this effect followed by another
@@ -308,15 +319,17 @@ export const flatMap: <A, E2, B>(
  * @category error handling
  * @since 3.0.0
  */
-export const flatMapError: <E1, E2>(f: (e: E1) => Async<E2>) => <A>(self: AsyncResult<E1, A>) => AsyncResult<E2, A> =
- resultT.flatMapError(async.Monad)
+export const flatMapError: <E1, E2>(
+  f: (e: E1) => Async<E2>
+) => <A>(self: AsyncResult<E1, A>) => AsyncResult<E2, A> = resultT.flatMapError(async.Monad)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatten: <E1, E2, A>(self: AsyncResult<E1, AsyncResult<E2, A>>) => AsyncResult<E1 | E2, A> =
- flatMap(identity)
+export const flatten: <E1, E2, A>(
+  self: AsyncResult<E1, AsyncResult<E2, A>>
+) => AsyncResult<E1 | E2, A> = flatMap(identity)
 
 /**
  * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
@@ -359,8 +372,9 @@ export const flatten: <E1, E2, A>(self: AsyncResult<E1, AsyncResult<E2, A>>) => 
  * @see {@link catchAll}
  * @since 3.0.0
  */
-export const orElse: <E2, B>(that: AsyncResult<E2, B>) => <E1, A>(self: AsyncResult<E1, A>) => AsyncResult<E2, A | B> =
- resultT.orElse(async.Monad)
+export const orElse: <E2, B>(
+  that: AsyncResult<E2, B>
+) => <E1, A>(self: AsyncResult<E1, A>) => AsyncResult<E2, A | B> = resultT.orElse(async.Monad)
 
 /**
  * The default [`Applicative`](#applicative) instance returns the first error, if you want to
@@ -385,7 +399,9 @@ export const getValidatedApplicative = <E>(
  * @category error handling
  * @since 3.0.0
  */
-export const getValidatedAlt = <E>(Semigroup: Semigroup<E>): alt.Alt<result.ValidatedT<AsyncResultTypeLambda, E>> => {
+export const getValidatedAlt = <E>(
+  Semigroup: Semigroup<E>
+): alt.Alt<result.ValidatedT<AsyncResultTypeLambda, E>> => {
   return {
     orElse: resultT.getValidatedOrElse(async.Monad, Semigroup)
   }
@@ -396,7 +412,7 @@ export const getValidatedAlt = <E>(Semigroup: Semigroup<E>): alt.Alt<result.Vali
  * @since 3.0.0
  */
 export const compact: <E>(onNone: E) => <A>(self: AsyncResult<E, Option<A>>) => AsyncResult<E, A> =
- resultT.compact(async.Functor)
+  resultT.compact(async.Functor)
 
 /**
  * @category filtering
@@ -405,13 +421,15 @@ export const compact: <E>(onNone: E) => <A>(self: AsyncResult<E, Option<A>>) => 
 export const separate: <E>(
   onEmpty: E
 ) => <A, B>(self: AsyncResult<E, Result<A, B>>) => readonly [AsyncResult<E, A>, AsyncResult<E, B>] =
- resultT.separate(async.Functor)
+  resultT.separate(async.Functor)
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const getCompactable = <E>(onNone: E): Compactable<result.ValidatedT<AsyncResultTypeLambda, E>> => {
+export const getCompactable = <E>(
+  onNone: E
+): Compactable<result.ValidatedT<AsyncResultTypeLambda, E>> => {
   return {
     compact: compact(onNone)
   }
@@ -421,7 +439,9 @@ export const getCompactable = <E>(onNone: E): Compactable<result.ValidatedT<Asyn
  * @category instances
  * @since 3.0.0
  */
-export const getFilterable = <E>(onEmpty: E): Filterable<result.ValidatedT<AsyncResultTypeLambda, E>> => {
+export const getFilterable = <E>(
+  onEmpty: E
+): Filterable<result.ValidatedT<AsyncResultTypeLambda, E>> => {
   return {
     filterMap: (f) => filterMap(f, onEmpty)
   }
@@ -440,7 +460,7 @@ export const Functor: functor.Functor<AsyncResultTypeLambda> = {
  * @since 3.0.0
  */
 export const flap: <A>(a: A) => <E, B>(fab: AsyncResult<E, (a: A) => B>) => AsyncResult<E, B> =
- functor.flap(Functor)
+  functor.flap(Functor)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -448,8 +468,9 @@ export const flap: <A>(a: A) => <E, B>(fab: AsyncResult<E, (a: A) => B>) => Asyn
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <E>(self: AsyncResult<E, unknown>) => AsyncResult<E, B> =
- functor.as(Functor)
+export const as: <B>(b: B) => <E>(self: AsyncResult<E, unknown>) => AsyncResult<E, B> = functor.as(
+  Functor
+)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -457,7 +478,9 @@ export const as: <B>(b: B) => <E>(self: AsyncResult<E, unknown>) => AsyncResult<
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <E>(self: AsyncResult<E, unknown>) => AsyncResult<E, void> =functor.unit(Functor)
+export const unit: <E>(self: AsyncResult<E, unknown>) => AsyncResult<E, void> = functor.unit(
+  Functor
+)
 
 /**
  * @category instances
@@ -481,8 +504,8 @@ export const Flattenable: flattenable.Flattenable<AsyncResultTypeLambda> = {
  */
 export const composeKleisli: <B, E2, C>(
   bfc: (b: B) => AsyncResult<E2, C>
-) => <A, E1>(afb: (a: A) => AsyncResult<E1, B>) => (a: A) => AsyncResult<E2 | E1, C> =
- flattenable.composeKleisli(Flattenable)
+) => <A, E1>(afb: (a: A) => AsyncResult<E1, B>) => (a: A) => AsyncResult<E2 | E1, C> = flattenable
+  .composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -495,7 +518,9 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<AsyncResultT
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => AsyncResult<never, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => AsyncResult<never, A> = fromIdentity.idKleisli(
+  FromIdentity
+)
 
 /**
  * @category instances
@@ -515,7 +540,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<AsyncResultTypeLambda
  */
 export const zipLeft: <E2>(
   that: AsyncResult<E2, unknown>
-) => <E1, A>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, A> =flattenable.zipLeft(Flattenable)
+) => <E1, A>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, A> = flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -525,14 +550,18 @@ export const zipLeft: <E2>(
  */
 export const zipRight: <E2, A>(
   that: AsyncResult<E2, A>
-) => <E1>(self: AsyncResult<E1, unknown>) => AsyncResult<E2 | E1, A> =flattenable.zipRight(Flattenable)
+) => <E1>(self: AsyncResult<E1, unknown>) => AsyncResult<E2 | E1, A> = flattenable.zipRight(
+  Flattenable
+)
 
 /**
  * @since 3.0.0
  */
 export const ap: <E2, A>(
   fa: AsyncResult<E2, A>
-) => <E1, B>(self: AsyncResult<E1, (a: A) => B>) => AsyncResult<E2 | E1, B> =flattenable.ap(Flattenable)
+) => <E1, B>(self: AsyncResult<E1, (a: A) => B>) => AsyncResult<E2 | E1, B> = flattenable.ap(
+  Flattenable
+)
 
 /**
  * @category instances
@@ -551,8 +580,8 @@ export const Apply: apply.Apply<AsyncResultTypeLambda> = {
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <E1, E2>(fa: AsyncResult<E1, A>, fb: AsyncResult<E2, B>) => AsyncResult<E1 | E2, C> =
- apply.lift2(Apply)
+) => <E1, E2>(fa: AsyncResult<E1, A>, fb: AsyncResult<E2, B>) => AsyncResult<E1 | E2, C> = apply
+  .lift2(Apply)
 
 /**
  * Lifts a ternary function into `AsyncResult`.
@@ -566,7 +595,7 @@ export const lift3: <A, B, C, D>(
   fa: AsyncResult<E1, A>,
   fb: AsyncResult<E2, B>,
   fc: AsyncResult<E3, C>
-) => AsyncResult<E1 | E2 | E3, D> =apply.lift3(Apply)
+) => AsyncResult<E1 | E2 | E3, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -585,7 +614,7 @@ export const Applicative: applicative.Applicative<AsyncResultTypeLambda> = {
  */
 export const tap: <A, E2>(
   f: (a: A) => AsyncResult<E2, unknown>
-) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, A> =flattenable.tap(Flattenable)
+) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, A> = flattenable.tap(Flattenable)
 
 /**
  * Returns an effect that effectfully "peeks" at the failure of this effect.
@@ -595,7 +624,7 @@ export const tap: <A, E2>(
  */
 export const tapError: <E1, E2>(
   onError: (e: E1) => AsyncResult<E2, unknown>
-) => <A>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, A> =resultT.tapLeft(async.Monad)
+) => <A>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, A> = resultT.tapLeft(async.Monad)
 
 /**
  * @category instances
@@ -631,14 +660,14 @@ export const Alt: alt.Alt<AsyncResultTypeLambda> = {
  */
 export const firstSuccessOf: <E, A>(
   startWith: AsyncResult<E, A>
-) => (collection: Iterable<AsyncResult<E, A>>) => AsyncResult<E, A> =alt.firstSuccessOf(Alt)
+) => (collection: Iterable<AsyncResult<E, A>>) => AsyncResult<E, A> = alt.firstSuccessOf(Alt)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const FromSync: fromSync_.FromSync<AsyncResultTypeLambda> = {
-  fromSync: fromSync
+  fromSync
 }
 
 // -------------------------------------------------------------------------------------
@@ -650,7 +679,7 @@ export const FromSync: fromSync_.FromSync<AsyncResultTypeLambda> = {
  * @since 3.0.0
  */
 export const log: <A extends ReadonlyArray<unknown>>(...x: A) => AsyncResult<never, void> =
- fromSync_.log(FromSync)
+  fromSync_.log(FromSync)
 
 /**
  * @category lifting
@@ -658,22 +687,26 @@ export const log: <A extends ReadonlyArray<unknown>>(...x: A) => AsyncResult<nev
  */
 export const liftSync: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => Sync<B>
-) => (...a: A) => AsyncResult<never, B> =fromSync_.liftSync(FromSync)
+) => (...a: A) => AsyncResult<never, B> = fromSync_.liftSync(FromSync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapSync: <A, B>(f: (a: A) => Sync<B>) => <E>(self: AsyncResult<E, A>) => AsyncResult<E, B> =
- fromSync_.flatMapSync(FromSync, Flattenable)
+export const flatMapSync: <A, B>(
+  f: (a: A) => Sync<B>
+) => <E>(self: AsyncResult<E, A>) => AsyncResult<E, B> = fromSync_.flatMapSync(
+  FromSync,
+  Flattenable
+)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const FromAsync: fromAsync_.FromAsync<AsyncResultTypeLambda> = {
-  fromSync: fromSync,
-  fromAsync: fromAsync
+  fromSync,
+  fromAsync
 }
 
 /**
@@ -682,7 +715,7 @@ export const FromAsync: fromAsync_.FromAsync<AsyncResultTypeLambda> = {
  * @category constructors
  * @since 3.0.0
  */
-export const sleep: (duration: number) => AsyncResult<never, void> =fromAsync_.sleep(FromAsync)
+export const sleep: (duration: number) => AsyncResult<never, void> = fromAsync_.sleep(FromAsync)
 
 /**
  * Returns an effect that is delayed from this effect by the specified `duration` (in millis).
@@ -690,7 +723,7 @@ export const sleep: (duration: number) => AsyncResult<never, void> =fromAsync_.s
  * @since 3.0.0
  */
 export const delay: (duration: number) => <E, A>(self: AsyncResult<E, A>) => AsyncResult<E, A> =
- fromAsync_.delay(FromAsync, Flattenable)
+  fromAsync_.delay(FromAsync, Flattenable)
 
 /**
  * @category lifting
@@ -698,14 +731,18 @@ export const delay: (duration: number) => <E, A>(self: AsyncResult<E, A>) => Asy
  */
 export const liftAsync: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => Async<B>
-) => (...a: A) => AsyncResult<never, B> =fromAsync_.liftAsync(FromAsync)
+) => (...a: A) => AsyncResult<never, B> = fromAsync_.liftAsync(FromAsync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapAsync: <A, B>(f: (a: A) => Async<B>) => <E>(self: AsyncResult<E, A>) => AsyncResult<E, B> =
- fromAsync_.flatMapAsync(FromAsync, Flattenable)
+export const flatMapAsync: <A, B>(
+  f: (a: A) => Async<B>
+) => <E>(self: AsyncResult<E, A>) => AsyncResult<E, B> = fromAsync_.flatMapAsync(
+  FromAsync,
+  Flattenable
+)
 
 /**
  * @category instances
@@ -719,8 +756,8 @@ export const FromResult: fromResult_.FromResult<AsyncResultTypeLambda> = {
  * @category conversions
  * @since 3.0.0
  */
-export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => AsyncResult<E, A> =
- fromResult_.fromOption(FromResult)
+export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => AsyncResult<E, A> = fromResult_
+  .fromOption(FromResult)
 
 /**
  * @category lifting
@@ -729,7 +766,7 @@ export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => AsyncResult<E, 
 export const liftOption: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => Option<B>,
   onNone: E
-) => (...a: A) => AsyncResult<E, B> =fromResult_.liftOption(FromResult)
+) => (...a: A) => AsyncResult<E, B> = fromResult_.liftOption(FromResult)
 
 /**
  * @category sequencing
@@ -738,7 +775,7 @@ export const liftOption: <A extends ReadonlyArray<unknown>, B, E>(
 export const flatMapOption: <A, B, E2>(
   f: (a: A) => Option<B>,
   onNone: E2
-) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, B> =fromResult_.flatMapOption(
+) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, B> = fromResult_.flatMapOption(
   FromResult,
   Flattenable
 )
@@ -748,9 +785,12 @@ export const flatMapOption: <A, B, E2>(
  * @since 3.0.0
  */
 export const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: Refinement<A, B>, onFalse: E): (c: C) => AsyncResult<E, B>
+  <C extends A, B extends A, E, A = C>(
+    refinement: Refinement<A, B>,
+    onFalse: E
+  ): (c: C) => AsyncResult<E, B>
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (b: B) => AsyncResult<E, B>
-} =fromResult_.liftPredicate(FromResult)
+} = fromResult_.liftPredicate(FromResult)
 
 /**
  * @category filtering
@@ -763,14 +803,16 @@ export const filter: {
   <B extends A, E2, A = B>(predicate: Predicate<A>, onFalse: E2): <E1>(
     self: AsyncResult<E1, B>
   ) => AsyncResult<E2 | E1, B>
-} =fromResult_.filter(FromResult, Flattenable)
+} = fromResult_.filter(FromResult, Flattenable)
 
 /**
  * @category filtering
  * @since 3.0.0
  */
-export const filterMap: <A, B, E>(f: (a: A) => Option<B>, onNone: E) => (self: AsyncResult<E, A>) => AsyncResult<E, B> =
- fromResult_.filterMap(FromResult, Flattenable)
+export const filterMap: <A, B, E>(
+  f: (a: A) => Option<B>,
+  onNone: E
+) => (self: AsyncResult<E, A>) => AsyncResult<E, B> = fromResult_.filterMap(FromResult, Flattenable)
 
 /**
  * @category filtering
@@ -783,7 +825,7 @@ export const partition: {
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (
     self: AsyncResult<E, B>
   ) => readonly [AsyncResult<E, B>, AsyncResult<E, B>]
-} =fromResult_.partition(FromResult, Flattenable)
+} = fromResult_.partition(FromResult, Flattenable)
 
 /**
  * @category filtering
@@ -792,8 +834,8 @@ export const partition: {
 export const partitionMap: <A, B, C, E>(
   f: (a: A) => Result<B, C>,
   onEmpty: E
-) => (self: AsyncResult<E, A>) => readonly [AsyncResult<E, B>, AsyncResult<E, C>] =
- fromResult_.partitionMap(FromResult, Flattenable)
+) => (self: AsyncResult<E, A>) => readonly [AsyncResult<E, B>, AsyncResult<E, C>] = fromResult_
+  .partitionMap(FromResult, Flattenable)
 
 /**
  * @category lifting
@@ -801,7 +843,7 @@ export const partitionMap: <A, B, C, E>(
  */
 export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Result<E, B>
-) => (...a: A) => AsyncResult<E, B> =fromResult_.liftResult(FromResult)
+) => (...a: A) => AsyncResult<E, B> = fromResult_.liftResult(FromResult)
 
 /**
  * @category sequencing
@@ -809,7 +851,7 @@ export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
  */
 export const flatMapResult: <A, E2, B>(
   f: (a: A) => Result<E2, B>
-) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, B> =fromResult_.flatMapResult(
+) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, B> = fromResult_.flatMapResult(
   FromResult,
   Flattenable
 )
@@ -819,7 +861,7 @@ export const flatMapResult: <A, E2, B>(
  * @since 3.0.0
  */
 export const fromNullable: <E>(onNullable: E) => <A>(a: A) => AsyncResult<E, NonNullable<A>> =
- fromResult_.fromNullable(FromResult)
+  fromResult_.fromNullable(FromResult)
 
 /**
  * @category lifting
@@ -828,7 +870,7 @@ export const fromNullable: <E>(onNullable: E) => <A>(a: A) => AsyncResult<E, Non
 export const liftNullable: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => B | null | undefined,
   onNullable: E
-) => (...a: A) => AsyncResult<E, NonNullable<B>> =fromResult_.liftNullable(FromResult)
+) => (...a: A) => AsyncResult<E, NonNullable<B>> = fromResult_.liftNullable(FromResult)
 
 /**
  * @category sequencing
@@ -837,10 +879,11 @@ export const liftNullable: <A extends ReadonlyArray<unknown>, B, E>(
 export const flatMapNullable: <A, B, E2>(
   f: (a: A) => B | null | undefined,
   onNullable: E2
-) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, NonNullable<B>> =fromResult_.flatMapNullable(
-  FromResult,
-  Flattenable
-)
+) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, NonNullable<B>> = fromResult_
+  .flatMapNullable(
+    FromResult,
+    Flattenable
+  )
 
 /**
  * Convert a node style callback function to one returning a `AsyncResult`
@@ -870,7 +913,9 @@ export const flatMapNullable: <A, B, E2>(
  * @category interop
  * @since 3.0.0
  */
-export function taskify<L, R>(f: (cb: (e: L | null | undefined, r?: R) => void) => void): () => AsyncResult<L, R>
+export function taskify<L, R>(
+  f: (cb: (e: L | null | undefined, r?: R) => void) => void
+): () => AsyncResult<L, R>
 export function taskify<A, L, R>(
   f: (a: A, cb: (e: L | null | undefined, r?: R) => void) => void
 ): (a: A) => AsyncResult<L, R>
@@ -887,7 +932,7 @@ export function taskify<A, B, C, D, E, L, R>(
   f: (a: A, b: B, c: C, d: D, e: E, cb: (e: L | null | undefined, r?: R) => void) => void
 ): (a: A, b: B, c: C, d: D, e: E) => AsyncResult<L, R>
 export function taskify<L, R>(f: Function): () => AsyncResult<L, R> {
-  return function () {
+  return function() {
     const args = Array.prototype.slice.call(arguments)
     return () =>
       new Promise((resolve) => {
@@ -909,7 +954,7 @@ export const bracket: <E1, A, E2, B, E3>(
   acquire: AsyncResult<E1, A>,
   use: (a: A) => AsyncResult<E2, B>,
   release: (a: A, e: Result<E2, B>) => AsyncResult<E3, void>
-) => AsyncResult<E1 | E2 | E3, B> =resultT.bracket(async.Monad)
+) => AsyncResult<E1 | E2 | E3, B> = resultT.bracket(async.Monad)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -919,7 +964,7 @@ export const bracket: <E1, A, E2, B, E3>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: AsyncResult<never, {}> =succeed(_.Do)
+export const Do: AsyncResult<never, {}> = succeed(_.Do)
 
 /**
  * @category do notation
@@ -927,13 +972,18 @@ export const Do: AsyncResult<never, {}> =succeed(_.Do)
  */
 export const bindTo: <N extends string>(
   name: N
-) => <E, A>(self: AsyncResult<E, A>) => AsyncResult<E, { readonly [K in N]: A }> =functor.bindTo(Functor)
+) => <E, A>(self: AsyncResult<E, A>) => AsyncResult<E, { readonly [K in N]: A }> = functor.bindTo(
+  Functor
+)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <E>(self: AsyncResult<E, A>) => AsyncResult<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <E>(
+  self: AsyncResult<E, A>
+) => AsyncResult<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(
+  Functor
+)
 
 export {
   /**
@@ -953,7 +1003,7 @@ export const bind: <N extends string, A extends object, E2, B>(
 ) => <E1>(
   self: AsyncResult<E1, A>
 ) => AsyncResult<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+  flattenable.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -966,8 +1016,8 @@ export const bindRight: <N extends string, A extends object, E2, B>(
   fb: AsyncResult<E2, B>
 ) => <E1>(
   self: AsyncResult<E1, A>
-) => AsyncResult<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => AsyncResult<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -977,14 +1027,14 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: AsyncResult<never, readonly []> =succeed(_.empty)
+export const Zip: AsyncResult<never, readonly []> = succeed(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <E, A>(self: AsyncResult<E, A>) => AsyncResult<E, readonly [A]> =
- functor.tupled(Functor)
+export const tupled: <E, A>(self: AsyncResult<E, A>) => AsyncResult<E, readonly [A]> = functor
+  .tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -994,8 +1044,9 @@ export const tupled: <E, A>(self: AsyncResult<E, A>) => AsyncResult<E, readonly 
  */
 export const zipFlatten: <E2, B>(
   fb: AsyncResult<E2, B>
-) => <E1, A extends ReadonlyArray<unknown>>(self: AsyncResult<E1, A>) => AsyncResult<E1 | E2, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <E1, A extends ReadonlyArray<unknown>>(
+  self: AsyncResult<E1, A>
+) => AsyncResult<E1 | E2, readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -1006,7 +1057,7 @@ export const zipFlatten: <E2, B>(
 export const zipWith: <E2, B, A, C>(
   that: AsyncResult<E2, B>,
   f: (a: A, b: B) => C
-) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, C> =apply.zipWith(Apply)
+) => <E1>(self: AsyncResult<E1, A>) => AsyncResult<E2 | E1, C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -1023,7 +1074,10 @@ export const zipWith: <E2, B, A, C>(
 export const traverseNonEmptyReadonlyArrayWithIndexPar = <A, E, B>(
   f: (index: number, a: A) => AsyncResult<E, B>
 ): ((as: NonEmptyReadonlyArray<A>) => AsyncResult<E, NonEmptyReadonlyArray<B>>) =>
-  flow(async.traverseNonEmptyReadonlyArrayWithIndexPar(f), async.map(result.traverseNonEmptyReadonlyArrayWithIndex(SK)))
+  flow(
+    async.traverseNonEmptyReadonlyArrayWithIndexPar(f),
+    async.map(result.traverseNonEmptyReadonlyArrayWithIndex(SK))
+  )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(ApplicativePar)`.
@@ -1070,7 +1124,7 @@ export const traverseReadonlyArrayPar = <A, E, B>(
  */
 export const sequenceReadonlyArrayPar: <E, A>(
   arr: ReadonlyArray<AsyncResult<E, A>>
-) => AsyncResult<E, ReadonlyArray<A>> =traverseReadonlyArrayPar(identity)
+) => AsyncResult<E, ReadonlyArray<A>> = traverseReadonlyArrayPar(identity)
 
 // --- Seq ---
 
@@ -1080,25 +1134,26 @@ export const sequenceReadonlyArrayPar: <E, A>(
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <A, E, B>(f: (index: number, a: A) => AsyncResult<E, B>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <A, E, B>(
+  f: (index: number, a: A) => AsyncResult<E, B>
+) =>
   (as: NonEmptyReadonlyArray<A>): AsyncResult<E, NonEmptyReadonlyArray<B>> =>
-  () =>
-    _.tail(as).reduce<Promise<Result<E, _.NonEmptyArray<B>>>>(
-      (acc, a, i) =>
-        acc.then((ebs) =>
-          _.isFailure(ebs)
-            ? acc
-            : f(i + 1, a)().then((eb) => {
+    () =>
+      _.tail(as).reduce<Promise<Result<E, _.NonEmptyArray<B>>>>(
+        (acc, a, i) =>
+          acc.then((ebs) =>
+            _.isFailure(ebs)
+              ? acc
+              : f(i + 1, a)().then((eb) => {
                 if (_.isFailure(eb)) {
                   return eb
                 }
                 ebs.success.push(eb.success)
                 return ebs
               })
-        ),
-      f(0, _.head(as))().then(result.map(_.toNonEmptyArray))
-    )
+          ),
+        f(0, _.head(as))().then(result.map(_.toNonEmptyArray))
+      )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(Applicative)`.
@@ -1143,5 +1198,6 @@ export const traverseReadonlyArray = <A, E, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <E, A>(arr: ReadonlyArray<AsyncResult<E, A>>) => AsyncResult<E, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <E, A>(
+  arr: ReadonlyArray<AsyncResult<E, A>>
+) => AsyncResult<E, ReadonlyArray<A>> = traverseReadonlyArray(identity)

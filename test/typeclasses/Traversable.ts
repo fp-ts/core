@@ -1,11 +1,11 @@
-import { pipe } from '@fp-ts/core/Function'
-import * as O from '@fp-ts/core/Option'
-import * as RA from '@fp-ts/core/ReadonlyArray'
-import * as _ from '@fp-ts/core/typeclasses/Traversable'
-import * as U from '../util'
+import { pipe } from "@fp-ts/core/Function"
+import * as O from "@fp-ts/core/Option"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as _ from "@fp-ts/core/typeclasses/Traversable"
+import * as U from "../util"
 
-describe('Traversable', () => {
-  it('traverse', () => {
+describe("Traversable", () => {
+  it("traverse", () => {
     const traverse = _.traverseComposition(RA.Traversable, RA.Traversable)
     U.deepStrictEqual(
       pipe(

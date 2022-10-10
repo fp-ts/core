@@ -3,13 +3,13 @@
  *
  * @since 3.0.0
  */
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import { pipe } from '@fp-ts/core/Function'
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Option } from '@fp-ts/core/Option'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { Refinement } from '@fp-ts/core/Refinement'
+import { pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
 
 /**
  * @category model
@@ -27,8 +27,7 @@ export interface FromOption<F extends TypeLambda> extends TypeClass<F> {
  * @category conversions
  * @since 3.0.0
  */
-export const fromNullable =
-  <F extends TypeLambda>(F: FromOption<F>) =>
+export const fromNullable = <F extends TypeLambda>(F: FromOption<F>) =>
   <A, S>(a: A): Kind<F, S, unknown, never, never, NonNullable<A>> =>
     F.fromOption(_.fromNullableToOption(a))
 
@@ -40,26 +39,25 @@ export const fromNullable =
  * @category lifting
  * @since 3.0.0
  */
-export const liftPredicate =
-  <F extends TypeLambda>(
-    F: FromOption<F>
-  ): {
-    <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <S>(c: C) => Kind<F, S, unknown, never, never, B>
-    <B extends A, A = B>(predicate: Predicate<A>): <S>(b: B) => Kind<F, S, unknown, never, never, B>
-  } =>
+export const liftPredicate = <F extends TypeLambda>(
+  F: FromOption<F>
+): {
+  <C extends A, B extends A, A = C>(
+    refinement: Refinement<A, B>
+  ): <S>(c: C) => Kind<F, S, unknown, never, never, B>
+  <B extends A, A = B>(predicate: Predicate<A>): <S>(b: B) => Kind<F, S, unknown, never, never, B>
+} =>
   <B extends A, A = B>(predicate: Predicate<A>) =>
-  <S>(b: B): Kind<F, S, unknown, never, never, B> =>
-    F.fromOption(predicate(b) ? _.some(b) : _.none)
+    <S>(b: B): Kind<F, S, unknown, never, never, B> =>
+      F.fromOption(predicate(b) ? _.some(b) : _.none)
 
 /**
  * @category lifting
  * @since 3.0.0
  */
-export const liftOption =
-  <F extends TypeLambda>(F: FromOption<F>) =>
+export const liftOption = <F extends TypeLambda>(F: FromOption<F>) =>
   <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => Option<B>) =>
-  <S>(...a: A): Kind<F, S, unknown, never, never, B> =>
-    F.fromOption(f(...a))
+    <S>(...a: A): Kind<F, S, unknown, never, never, B> => F.fromOption(f(...a))
 
 /**
  * @category lifting

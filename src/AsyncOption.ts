@@ -1,38 +1,38 @@
 /**
  * @since 3.0.0
  */
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import type * as alt from '@fp-ts/core/typeclasses/Alt'
-import * as alternative from '@fp-ts/core/typeclasses/Alternative'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import * as compactable from '@fp-ts/core/typeclasses/Compactable'
-import type { Result } from '@fp-ts/core/Result'
-import * as filterable from '@fp-ts/core/typeclasses/Filterable'
-import * as fromOption_ from '@fp-ts/core/typeclasses/FromOption'
-import * as fromResult_ from '@fp-ts/core/typeclasses/FromResult'
-import * as fromSync_ from '@fp-ts/core/typeclasses/FromSync'
-import * as fromAsync_ from '@fp-ts/core/typeclasses/FromAsync'
-import type { LazyArg } from '@fp-ts/core/Function'
-import { flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Sync } from '@fp-ts/core/Sync'
-import type { SyncResult } from '@fp-ts/core/SyncResult'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import * as option from '@fp-ts/core/Option'
-import type { Option } from '@fp-ts/core/Option'
-import * as optionT from '@fp-ts/core/transformers/OptionT'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Refinement } from '@fp-ts/core/Refinement'
-import * as async from '@fp-ts/core/Async'
-import type { Async } from '@fp-ts/core/Async'
-import type { AsyncResult } from '@fp-ts/core/AsyncResult'
+import * as async from "@fp-ts/core/Async"
+import type { Async } from "@fp-ts/core/Async"
+import type { AsyncResult } from "@fp-ts/core/AsyncResult"
+import type { LazyArg } from "@fp-ts/core/Function"
+import { flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import * as option from "@fp-ts/core/Option"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import type { Result } from "@fp-ts/core/Result"
+import type { Sync } from "@fp-ts/core/Sync"
+import type { SyncResult } from "@fp-ts/core/SyncResult"
+import * as optionT from "@fp-ts/core/transformers/OptionT"
+import type * as alt from "@fp-ts/core/typeclasses/Alt"
+import * as alternative from "@fp-ts/core/typeclasses/Alternative"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as compactable from "@fp-ts/core/typeclasses/Compactable"
+import * as filterable from "@fp-ts/core/typeclasses/Filterable"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromAsync_ from "@fp-ts/core/typeclasses/FromAsync"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromOption_ from "@fp-ts/core/typeclasses/FromOption"
+import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
+import * as fromSync_ from "@fp-ts/core/typeclasses/FromSync"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
 
 /**
  * @category model
@@ -44,13 +44,13 @@ export interface AsyncOption<A> extends Async<Option<A>> {}
  * @category constructors
  * @since 3.0.0
  */
-export const none: AsyncOption<never> =optionT.none(async.FromIdentity)()
+export const none: AsyncOption<never> = optionT.none(async.FromIdentity)()
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const some: <A>(a: A) => AsyncOption<A> =optionT.some(async.FromIdentity)
+export const some: <A>(a: A) => AsyncOption<A> = optionT.some(async.FromIdentity)
 
 /**
  * @category conversions
@@ -62,7 +62,7 @@ export const fromOption: <A>(fa: Option<A>) => AsyncOption<A> = async.of
  * @category conversions
  * @since 3.0.0
  */
-export const fromResult: <A>(fa: Result<unknown, A>) => AsyncOption<A> =optionT.fromResult(
+export const fromResult: <A>(fa: Result<unknown, A>) => AsyncOption<A> = optionT.fromResult(
   async.FromIdentity
 )
 
@@ -76,13 +76,13 @@ export const fromSync: <A>(fa: Sync<A>) => AsyncOption<A> = (fa) => fromAsync(as
  * @category conversions
  * @since 3.0.0
  */
-export const fromAsync: <A>(fa: Async<A>) => AsyncOption<A> =optionT.fromKind(async.Functor)
+export const fromAsync: <A>(fa: Async<A>) => AsyncOption<A> = optionT.fromKind(async.Functor)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromSyncResult: <A>(fa: SyncResult<unknown, A>) => AsyncOption<A> =flow(
+export const fromSyncResult: <A>(fa: SyncResult<unknown, A>) => AsyncOption<A> = flow(
   async.fromSync,
   async.map(option.fromResult)
 )
@@ -91,7 +91,7 @@ export const fromSyncResult: <A>(fa: SyncResult<unknown, A>) => AsyncOption<A> =
  * @category conversions
  * @since 3.0.0
  */
-export const fromAsyncResult: <A>(fa: AsyncResult<unknown, A>) => AsyncOption<A> =async.map(
+export const fromAsyncResult: <A>(fa: AsyncResult<unknown, A>) => AsyncOption<A> = async.map(
   option.fromResult
 )
 
@@ -103,8 +103,10 @@ export const fromAsyncResult: <A>(fa: AsyncResult<unknown, A>) => AsyncOption<A>
  * @category pattern matching
  * @since 3.0.0
  */
-export const match: <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (ma: AsyncOption<A>) => Async<B | C> =
- optionT.match(async.Functor)
+export const match: <B, A, C = B>(
+  onNone: LazyArg<B>,
+  onSome: (a: A) => C
+) => (ma: AsyncOption<A>) => Async<B | C> = optionT.match(async.Functor)
 
 /**
  * @category pattern matching
@@ -113,22 +115,23 @@ export const match: <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (m
 export const matchAsync: <B, A, C = B>(
   onNone: LazyArg<Async<B>>,
   onSome: (a: A) => Async<C>
-) => (ma: AsyncOption<A>) => Async<B | C> =optionT.matchKind(async.Monad)
+) => (ma: AsyncOption<A>) => Async<B | C> = optionT.matchKind(async.Monad)
 
 /**
  * @category error handling
  * @since 3.0.0
  */
-export const getOrElse: <B>(onNone: B) => <A>(self: AsyncOption<A>) => Async<A | B> =optionT.getOrElse(
-  async.Functor
-)
+export const getOrElse: <B>(onNone: B) => <A>(self: AsyncOption<A>) => Async<A | B> = optionT
+  .getOrElse(
+    async.Functor
+  )
 
 /**
  * @category error handling
  * @since 3.0.0
  */
 export const getOrElseAsync: <B>(onNone: Async<B>) => <A>(self: AsyncOption<A>) => Async<A | B> =
- optionT.getOrElseKind(async.Monad)
+  optionT.getOrElseKind(async.Monad)
 
 /**
  * Converts a `Promise` that may reject to a `AsyncOption`.
@@ -137,8 +140,7 @@ export const getOrElseAsync: <B>(onNone: Async<B>) => <A>(self: AsyncOption<A>) 
  * @see {@link liftRejectable}
  * @since 3.0.0
  */
-export const fromRejectable =
-  <A>(f: LazyArg<Promise<A>>): AsyncOption<A> =>
+export const fromRejectable = <A>(f: LazyArg<Promise<A>>): AsyncOption<A> =>
   async () => {
     try {
       return await f().then(_.some)
@@ -153,10 +155,9 @@ export const fromRejectable =
  * @category interop
  * @since 3.0.0
  */
-export const liftRejectable =
-  <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => Promise<B>): ((...a: A) => AsyncOption<B>) =>
-  (...a) =>
-    fromRejectable(() => f(...a))
+export const liftRejectable = <A extends ReadonlyArray<unknown>, B>(
+  f: (...a: A) => Promise<B>
+): ((...a: A) => AsyncOption<B>) => (...a) => fromRejectable(() => f(...a))
 
 /**
  * @category lifting
@@ -172,7 +173,7 @@ export const liftAsyncResult = <A extends ReadonlyArray<unknown>, B>(
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => (fa: AsyncOption<A>) => AsyncOption<B> =optionT.map(
+export const map: <A, B>(f: (a: A) => B) => (fa: AsyncOption<A>) => AsyncOption<B> = optionT.map(
   async.Functor
 )
 
@@ -180,8 +181,9 @@ export const map: <A, B>(f: (a: A) => B) => (fa: AsyncOption<A>) => AsyncOption<
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMap: <A, B>(f: (a: A) => AsyncOption<B>) => (self: AsyncOption<A>) => AsyncOption<B> =
- optionT.flatMap(async.Monad)
+export const flatMap: <A, B>(
+  f: (a: A) => AsyncOption<B>
+) => (self: AsyncOption<A>) => AsyncOption<B> = optionT.flatMap(async.Monad)
 
 /**
  * @category sequencing
@@ -189,12 +191,12 @@ export const flatMap: <A, B>(f: (a: A) => AsyncOption<B>) => (self: AsyncOption<
  */
 export const flatMapAsyncResult: <A, B>(
   f: (a: A) => AsyncResult<unknown, B>
-) => (ma: AsyncOption<A>) => AsyncOption<B> =flow(liftAsyncResult, flatMap)
+) => (ma: AsyncOption<A>) => AsyncOption<B> = flow(liftAsyncResult, flatMap)
 
 /**
  * @since 3.0.0
  */
-export const flatten: <A>(mma: AsyncOption<AsyncOption<A>>) => AsyncOption<A> =flatMap(identity)
+export const flatten: <A>(mma: AsyncOption<AsyncOption<A>>) => AsyncOption<A> = flatMap(identity)
 
 /**
  * Lazy version of `orElse`.
@@ -202,21 +204,22 @@ export const flatten: <A>(mma: AsyncOption<AsyncOption<A>>) => AsyncOption<A> =f
  * @category error handling
  * @since 3.0.0
  */
-export const catchAll: <B>(that: LazyArg<AsyncOption<B>>) => <A>(self: AsyncOption<A>) => AsyncOption<A | B> =
- optionT.catchAll(async.Monad)
+export const catchAll: <B>(
+  that: LazyArg<AsyncOption<B>>
+) => <A>(self: AsyncOption<A>) => AsyncOption<A | B> = optionT.catchAll(async.Monad)
 
 /**
  * @since 3.0.0
  */
 export const orElse: <B>(that: AsyncOption<B>) => <A>(self: AsyncOption<A>) => AsyncOption<A | B> =
- optionT.orElse(async.Monad)
+  optionT.orElse(async.Monad)
 
 /**
  * @category filtering
  * @since 3.0.0
  */
 export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: AsyncOption<A>) => AsyncOption<B> =
- filterable.filterMapComposition(async.Functor, option.Filterable)
+  filterable.filterMapComposition(async.Functor, option.Filterable)
 
 // -------------------------------------------------------------------------------------
 // type lambdas
@@ -227,7 +230,7 @@ export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: AsyncOption<A>) =
  * @since 3.0.0
  */
 export interface AsyncOptionTypeLambda extends TypeLambda {
-  readonly type: AsyncOption<this['Out1']>
+  readonly type: AsyncOption<this["Out1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -246,8 +249,9 @@ export const Functor: functor.Functor<AsyncOptionTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <B>(fab: AsyncOption<(a: A) => B>) => AsyncOption<B> =
- functor.flap(Functor)
+export const flap: <A>(a: A) => <B>(fab: AsyncOption<(a: A) => B>) => AsyncOption<B> = functor.flap(
+  Functor
+)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -255,7 +259,7 @@ export const flap: <A>(a: A) => <B>(fab: AsyncOption<(a: A) => B>) => AsyncOptio
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => (self: AsyncOption<unknown>) => AsyncOption<B> =functor.as(Functor)
+export const as: <B>(b: B) => (self: AsyncOption<unknown>) => AsyncOption<B> = functor.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -263,7 +267,7 @@ export const as: <B>(b: B) => (self: AsyncOption<unknown>) => AsyncOption<B> =fu
  * @category mapping
  * @since 3.0.0
  */
-export const unit: (self: AsyncOption<unknown>) => AsyncOption<void> =functor.unit(Functor)
+export const unit: (self: AsyncOption<unknown>) => AsyncOption<void> = functor.unit(Functor)
 
 /**
  * @category instances
@@ -287,8 +291,9 @@ export const Flattenable: flattenable.Flattenable<AsyncOptionTypeLambda> = {
  */
 export const composeKleisli: <B, C>(
   bfc: (b: B) => AsyncOption<C>
-) => <A>(afb: (a: A) => AsyncOption<B>) => (a: A) => AsyncOption<C> =
- flattenable.composeKleisli(Flattenable)
+) => <A>(afb: (a: A) => AsyncOption<B>) => (a: A) => AsyncOption<C> = flattenable.composeKleisli(
+  Flattenable
+)
 
 /**
  * @category instances
@@ -301,7 +306,7 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<AsyncOptionT
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => AsyncOption<A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => AsyncOption<A> = fromIdentity.idKleisli(FromIdentity)
 
 /**
  * @category instances
@@ -320,7 +325,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<AsyncOptionTypeLambda
  * @since 3.0.0
  */
 export const zipLeft: (that: AsyncOption<unknown>) => <A>(self: AsyncOption<A>) => AsyncOption<A> =
- flattenable.zipLeft(Flattenable)
+  flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -329,13 +334,13 @@ export const zipLeft: (that: AsyncOption<unknown>) => <A>(self: AsyncOption<A>) 
  * @since 3.0.0
  */
 export const zipRight: <A>(that: AsyncOption<A>) => (self: AsyncOption<unknown>) => AsyncOption<A> =
- flattenable.zipRight(Flattenable)
+  flattenable.zipRight(Flattenable)
 
 /**
  * @since 3.0.0
  */
 export const ap: <A>(fa: AsyncOption<A>) => <B>(self: AsyncOption<(a: A) => B>) => AsyncOption<B> =
- flattenable.ap(Flattenable)
+  flattenable.ap(Flattenable)
 
 /**
  * @category instances
@@ -352,8 +357,9 @@ export const Apply: apply.Apply<AsyncOptionTypeLambda> = {
  * @category lifting
  * @since 3.0.0
  */
-export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: AsyncOption<A>, fb: AsyncOption<B>) => AsyncOption<C> =
- apply.lift2(Apply)
+export const lift2: <A, B, C>(
+  f: (a: A, b: B) => C
+) => (fa: AsyncOption<A>, fb: AsyncOption<B>) => AsyncOption<C> = apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `AsyncOption`.
@@ -363,7 +369,9 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: AsyncOption<A>, fb: 
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: AsyncOption<A>, fb: AsyncOption<B>, fc: AsyncOption<C>) => AsyncOption<D> =apply.lift3(Apply)
+) => (fa: AsyncOption<A>, fb: AsyncOption<B>, fc: AsyncOption<C>) => AsyncOption<D> = apply.lift3(
+  Apply
+)
 
 /**
  * @category instances
@@ -380,8 +388,9 @@ export const Applicative: applicative.Applicative<AsyncOptionTypeLambda> = {
  *
  * @since 3.0.0
  */
-export const tap: <A>(f: (a: A) => AsyncOption<unknown>) => (self: AsyncOption<A>) => AsyncOption<A> =
- flattenable.tap(Flattenable)
+export const tap: <A>(
+  f: (a: A) => AsyncOption<unknown>
+) => (self: AsyncOption<A>) => AsyncOption<A> = flattenable.tap(Flattenable)
 
 /**
  * Returns an effect that effectfully "peeks" at the failure of this effect.
@@ -389,8 +398,9 @@ export const tap: <A>(f: (a: A) => AsyncOption<unknown>) => (self: AsyncOption<A
  * @category error handling
  * @since 3.0.0
  */
-export const tapError: (onNone: AsyncOption<unknown>) => <A>(self: AsyncOption<A>) => AsyncOption<A> =
- optionT.tapError(async.Monad)
+export const tapError: (
+  onNone: AsyncOption<unknown>
+) => <A>(self: AsyncOption<A>) => AsyncOption<A> = optionT.tapError(async.Monad)
 
 /**
  * @category instances
@@ -426,29 +436,30 @@ export const Alternative: alternative.Alternative<AsyncOptionTypeLambda> = {
  * @since 3.0.0
  */
 export const firstSuccessOf: <A>(collection: Iterable<AsyncOption<A>>) => AsyncOption<A> =
- alternative.firstSuccessOf(Alternative)
+  alternative.firstSuccessOf(Alternative)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const FromSync: fromSync_.FromSync<AsyncOptionTypeLambda> = {
-  fromSync: fromSync
+  fromSync
 }
 
 /**
  * @category lifting
  * @since 3.0.0
  */
-export const liftSync: <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => Sync<B>) => (...a: A) => AsyncOption<B> =
- fromSync_.liftSync(FromSync)
+export const liftSync: <A extends ReadonlyArray<unknown>, B>(
+  f: (...a: A) => Sync<B>
+) => (...a: A) => AsyncOption<B> = fromSync_.liftSync(FromSync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
 export const flatMapSync: <A, B>(f: (a: A) => Sync<B>) => (self: AsyncOption<A>) => AsyncOption<B> =
- fromSync_.flatMapSync(FromSync, Flattenable)
+  fromSync_.flatMapSync(FromSync, Flattenable)
 
 /**
  * @category instances
@@ -465,7 +476,7 @@ export const FromOption: fromOption_.FromOption<AsyncOptionTypeLambda> = {
 export const liftPredicate: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => AsyncOption<B>
   <B extends A, A = B>(predicate: Predicate<A>): (b: B) => AsyncOption<B>
-} =fromOption_.liftPredicate(FromOption)
+} = fromOption_.liftPredicate(FromOption)
 
 /**
  * @category lifting
@@ -473,13 +484,15 @@ export const liftPredicate: {
  */
 export const liftOption: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => Option<B>
-) => (...a: A) => AsyncOption<B> =fromOption_.liftOption(FromOption)
+) => (...a: A) => AsyncOption<B> = fromOption_.liftOption(FromOption)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromNullable: <A>(a: A) => AsyncOption<NonNullable<A>> =fromOption_.fromNullable(FromOption)
+export const fromNullable: <A>(a: A) => AsyncOption<NonNullable<A>> = fromOption_.fromNullable(
+  FromOption
+)
 
 /**
  * @category lifting
@@ -487,7 +500,7 @@ export const fromNullable: <A>(a: A) => AsyncOption<NonNullable<A>> =fromOption_
  */
 export const liftNullable: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => B | null | undefined
-) => (...a: A) => AsyncOption<NonNullable<B>> =fromOption_.liftNullable(FromOption)
+) => (...a: A) => AsyncOption<NonNullable<B>> = fromOption_.liftNullable(FromOption)
 
 /**
  * @category sequencing
@@ -495,7 +508,7 @@ export const liftNullable: <A extends ReadonlyArray<unknown>, B>(
  */
 export const flatMapNullable: <A, B>(
   f: (a: A) => B | null | undefined
-) => (ma: AsyncOption<A>) => AsyncOption<NonNullable<B>> =fromOption_.flatMapNullable(
+) => (ma: AsyncOption<A>) => AsyncOption<NonNullable<B>> = fromOption_.flatMapNullable(
   FromOption,
   Flattenable
 )
@@ -514,22 +527,23 @@ export const FromResult: fromResult_.FromResult<AsyncOptionTypeLambda> = {
  */
 export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Result<E, B>
-) => (...a: A) => AsyncOption<B> =fromResult_.liftResult(FromResult)
+) => (...a: A) => AsyncOption<B> = fromResult_.liftResult(FromResult)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapResult: <A, E, B>(f: (a: A) => Result<E, B>) => (ma: AsyncOption<A>) => AsyncOption<B> =
- fromResult_.flatMapResult(FromResult, Flattenable)
+export const flatMapResult: <A, E, B>(
+  f: (a: A) => Result<E, B>
+) => (ma: AsyncOption<A>) => AsyncOption<B> = fromResult_.flatMapResult(FromResult, Flattenable)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const FromAsync: fromAsync_.FromAsync<AsyncOptionTypeLambda> = {
-  fromSync: fromSync,
-  fromAsync: fromAsync
+  fromSync,
+  fromAsync
 }
 
 /**
@@ -538,40 +552,44 @@ export const FromAsync: fromAsync_.FromAsync<AsyncOptionTypeLambda> = {
  * @category constructors
  * @since 3.0.0
  */
-export const sleep: (duration: number) => AsyncOption<void> =fromAsync_.sleep(FromAsync)
+export const sleep: (duration: number) => AsyncOption<void> = fromAsync_.sleep(FromAsync)
 
 /**
  * Returns an effect that is delayed from this effect by the specified `duration` (in millis).
  *
  * @since 3.0.0
  */
-export const delay: (duration: number) => <A>(self: AsyncOption<A>) => AsyncOption<A> =fromAsync_.delay(
-  FromAsync,
-  Flattenable
-)
+export const delay: (duration: number) => <A>(self: AsyncOption<A>) => AsyncOption<A> = fromAsync_
+  .delay(
+    FromAsync,
+    Flattenable
+  )
 
 /**
  * @category lifting
  * @since 3.0.0
  */
-export const liftAsync: <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => Async<B>) => (...a: A) => AsyncOption<B> =
- fromAsync_.liftAsync(FromAsync)
+export const liftAsync: <A extends ReadonlyArray<unknown>, B>(
+  f: (...a: A) => Async<B>
+) => (...a: A) => AsyncOption<B> = fromAsync_.liftAsync(FromAsync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapAsync: <A, B>(f: (a: A) => Async<B>) => (self: AsyncOption<A>) => AsyncOption<B> =
- fromAsync_.flatMapAsync(FromAsync, Flattenable)
+export const flatMapAsync: <A, B>(
+  f: (a: A) => Async<B>
+) => (self: AsyncOption<A>) => AsyncOption<B> = fromAsync_.flatMapAsync(FromAsync, Flattenable)
 
 /**
  * @category filtering
  * @since 3.0.0
  */
-export const compact: <A>(foa: AsyncOption<Option<A>>) => AsyncOption<A> =compactable.compactComposition(
-  async.Functor,
-  option.Compactable
-)
+export const compact: <A>(foa: AsyncOption<Option<A>>) => AsyncOption<A> = compactable
+  .compactComposition(
+    async.Functor,
+    option.Compactable
+  )
 
 /**
  * @category instances
@@ -585,8 +603,9 @@ export const Compactable: compactable.Compactable<AsyncOptionTypeLambda> = {
  * @category filtering
  * @since 3.0.0
  */
-export const separate: <A, B>(fe: AsyncOption<Result<A, B>>) => readonly [AsyncOption<A>, AsyncOption<B>] =
- compactable.separate(Functor, Compactable)
+export const separate: <A, B>(
+  fe: AsyncOption<Result<A, B>>
+) => readonly [AsyncOption<A>, AsyncOption<B>] = compactable.separate(Functor, Compactable)
 
 /**
  * @category instances
@@ -602,17 +621,20 @@ export const Filterable: filterable.Filterable<AsyncOptionTypeLambda> = {
  */
 export const partitionMap: <A, B, C>(
   f: (a: A) => Result<B, C>
-) => (fa: AsyncOption<A>) => readonly [AsyncOption<B>, AsyncOption<C>] =
- filterable.partitionMap(Filterable)
+) => (fa: AsyncOption<A>) => readonly [AsyncOption<B>, AsyncOption<C>] = filterable.partitionMap(
+  Filterable
+)
 
 /**
  * @category filtering
  * @since 3.0.0
  */
 export const filter: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: AsyncOption<C>) => AsyncOption<B>
+  <C extends A, B extends A, A = C>(
+    refinement: Refinement<A, B>
+  ): (fc: AsyncOption<C>) => AsyncOption<B>
   <B extends A, A = B>(predicate: Predicate<A>): (fb: AsyncOption<B>) => AsyncOption<B>
-} =filterable.filter(Filterable)
+} = filterable.filter(Filterable)
 
 /**
  * @category filtering
@@ -622,8 +644,10 @@ export const partition: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (
     fc: AsyncOption<C>
   ) => readonly [AsyncOption<C>, AsyncOption<B>]
-  <B extends A, A = B>(predicate: Predicate<A>): (fb: AsyncOption<B>) => readonly [AsyncOption<B>, AsyncOption<B>]
-} =filterable.partition(Filterable)
+  <B extends A, A = B>(
+    predicate: Predicate<A>
+  ): (fb: AsyncOption<B>) => readonly [AsyncOption<B>, AsyncOption<B>]
+} = filterable.partition(Filterable)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -633,20 +657,24 @@ export const partition: {
  * @category do notation
  * @since 3.0.0
  */
-export const Do: AsyncOption<{}> =some(_.Do)
+export const Do: AsyncOption<{}> = some(_.Do)
 
 /**
  * @category do notation
  * @since 3.0.0
  */
-export const bindTo: <N extends string>(name: N) => <A>(self: AsyncOption<A>) => AsyncOption<{ readonly [K in N]: A }> =
- functor.bindTo(Functor)
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: AsyncOption<A>) => AsyncOption<{ readonly [K in N]: A }> = functor.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => (self: AsyncOption<A>) => AsyncOption<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => (
+  self: AsyncOption<A>
+) => AsyncOption<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(
+  Functor
+)
 
 export {
   /**
@@ -663,8 +691,11 @@ export {
 export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => AsyncOption<B>
-) => (self: AsyncOption<A>) => AsyncOption<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+) => (
+  self: AsyncOption<A>
+) => AsyncOption<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = flattenable.bind(
+  Flattenable
+)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -675,8 +706,11 @@ export const bind: <N extends string, A extends object, B>(
 export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: AsyncOption<B>
-) => (self: AsyncOption<A>) => AsyncOption<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => (
+  self: AsyncOption<A>
+) => AsyncOption<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = apply.bindRight(
+  Apply
+)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -686,13 +720,15 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: AsyncOption<readonly []> =some(_.empty)
+export const Zip: AsyncOption<readonly []> = some(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <A>(self: AsyncOption<A>) => AsyncOption<readonly [A]> =functor.tupled(Functor)
+export const tupled: <A>(self: AsyncOption<A>) => AsyncOption<readonly [A]> = functor.tupled(
+  Functor
+)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -703,7 +739,7 @@ export const tupled: <A>(self: AsyncOption<A>) => AsyncOption<readonly [A]> =fun
 export const zipFlatten: <B>(
   fb: AsyncOption<B>
 ) => <A extends ReadonlyArray<unknown>>(self: AsyncOption<A>) => AsyncOption<readonly [...A, B]> =
- apply.zipFlatten(Apply)
+  apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -714,7 +750,7 @@ export const zipFlatten: <B>(
 export const zipWith: <B, A, C>(
   that: AsyncOption<B>,
   f: (a: A, b: B) => C
-) => (self: AsyncOption<A>) => AsyncOption<C> =apply.zipWith(Apply)
+) => (self: AsyncOption<A>) => AsyncOption<C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -731,7 +767,10 @@ export const zipWith: <B, A, C>(
 export const traverseNonEmptyReadonlyArrayWithIndexPar = <A, B>(
   f: (index: number, a: A) => AsyncOption<B>
 ): ((as: NonEmptyReadonlyArray<A>) => AsyncOption<NonEmptyReadonlyArray<B>>) =>
-  flow(async.traverseNonEmptyReadonlyArrayWithIndexPar(f), async.map(option.traverseNonEmptyReadonlyArrayWithIndex(SK)))
+  flow(
+    async.traverseNonEmptyReadonlyArrayWithIndexPar(f),
+    async.map(option.traverseNonEmptyReadonlyArrayWithIndex(SK))
+  )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(ApplicativePar)`.
@@ -776,8 +815,9 @@ export const traverseReadonlyArrayPar = <A, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArrayPar: <A>(arr: ReadonlyArray<AsyncOption<A>>) => AsyncOption<ReadonlyArray<A>> =
- traverseReadonlyArrayPar(identity)
+export const sequenceReadonlyArrayPar: <A>(
+  arr: ReadonlyArray<AsyncOption<A>>
+) => AsyncOption<ReadonlyArray<A>> = traverseReadonlyArrayPar(identity)
 
 // --- Seq ---
 
@@ -787,25 +827,26 @@ export const sequenceReadonlyArrayPar: <A>(arr: ReadonlyArray<AsyncOption<A>>) =
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <A, B>(f: (index: number, a: A) => AsyncOption<B>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(
+  f: (index: number, a: A) => AsyncOption<B>
+) =>
   (as: NonEmptyReadonlyArray<A>): AsyncOption<NonEmptyReadonlyArray<B>> =>
-  () =>
-    _.tail(as).reduce<Promise<Option<_.NonEmptyArray<B>>>>(
-      (acc, a, i) =>
-        acc.then((obs) =>
-          _.isNone(obs)
-            ? acc
-            : f(i + 1, a)().then((ob) => {
+    () =>
+      _.tail(as).reduce<Promise<Option<_.NonEmptyArray<B>>>>(
+        (acc, a, i) =>
+          acc.then((obs) =>
+            _.isNone(obs)
+              ? acc
+              : f(i + 1, a)().then((ob) => {
                 if (_.isNone(ob)) {
                   return ob
                 }
                 obs.value.push(ob.value)
                 return obs
               })
-        ),
-      f(0, _.head(as))().then(option.map(_.toNonEmptyArray))
-    )
+          ),
+        f(0, _.head(as))().then(option.map(_.toNonEmptyArray))
+      )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(Applicative)`.
@@ -850,5 +891,6 @@ export const traverseReadonlyArray = <A, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <A>(arr: ReadonlyArray<AsyncOption<A>>) => AsyncOption<ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <A>(
+  arr: ReadonlyArray<AsyncOption<A>>
+) => AsyncOption<ReadonlyArray<A>> = traverseReadonlyArray(identity)

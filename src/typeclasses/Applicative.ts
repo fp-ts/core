@@ -17,11 +17,11 @@
  *
  * @since 3.0.0
  */
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type { Apply } from '@fp-ts/core/typeclasses/Apply'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type { FromIdentity } from '@fp-ts/core/typeclasses/FromIdentity'
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import type { Apply } from "@fp-ts/core/typeclasses/Apply"
+import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
 
 /**
  * @category model
@@ -34,8 +34,7 @@ export interface Applicative<F extends TypeLambda> extends Apply<F>, FromIdentit
  *
  * @since 3.0.0
  */
-export const getApplicativeMonoid =
-  <F extends TypeLambda>(Applicative: Applicative<F>) =>
+export const getApplicativeMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> => {
     return {
       combine: apply.getApplySemigroup(Applicative)<A, S, R, O, E>(Monoid).combine,

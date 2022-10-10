@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import type { Composable } from '@fp-ts/core/typeclasses/Composable'
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Composable } from "@fp-ts/core/typeclasses/Composable"
 
 /**
  * @category model

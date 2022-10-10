@@ -3,12 +3,12 @@
  *
  * @since 3.0.0
  */
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import type { FromSync } from '@fp-ts/core/typeclasses/FromSync'
-import { pipe } from '@fp-ts/core/Function'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import type { Async } from '@fp-ts/core/Async'
-import * as async from '@fp-ts/core/Async'
+import type { Async } from "@fp-ts/core/Async"
+import * as async from "@fp-ts/core/Async"
+import { pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
+import type { FromSync } from "@fp-ts/core/typeclasses/FromSync"
 
 /**
  * @category model
@@ -24,8 +24,7 @@ export interface FromAsync<F extends TypeLambda> extends FromSync<F> {
  * @category constructors
  * @since 3.0.0
  */
-export const sleep =
-  <F extends TypeLambda>(FromAsync: FromAsync<F>) =>
+export const sleep = <F extends TypeLambda>(FromAsync: FromAsync<F>) =>
   <S>(duration: number): Kind<F, S, unknown, never, never, void> =>
     FromAsync.fromAsync(async.sleep(duration))
 
@@ -34,7 +33,10 @@ export const sleep =
  *
  * @since 3.0.0
  */
-export const delay = <F extends TypeLambda>(FromAsync: FromAsync<F>, Flattenable: Flattenable<F>) => {
+export const delay = <F extends TypeLambda>(
+  FromAsync: FromAsync<F>,
+  Flattenable: Flattenable<F>
+) => {
   const sleepF = sleep(FromAsync)
   return (duration: number) =>
     <S, R, O, E, A>(self: Kind<F, S, R, O, E, A>): Kind<F, S, R, O, E, A> =>
@@ -48,11 +50,9 @@ export const delay = <F extends TypeLambda>(FromAsync: FromAsync<F>, Flattenable
  * @category lifting
  * @since 3.0.0
  */
-export const liftAsync =
-  <F extends TypeLambda>(FromAsync: FromAsync<F>) =>
+export const liftAsync = <F extends TypeLambda>(FromAsync: FromAsync<F>) =>
   <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => Async<B>) =>
-  <S>(...a: A): Kind<F, S, unknown, never, never, B> =>
-    FromAsync.fromAsync(f(...a))
+    <S>(...a: A): Kind<F, S, unknown, never, never, B> => FromAsync.fromAsync(f(...a))
 
 /**
  * @category sequencing
@@ -61,6 +61,8 @@ export const liftAsync =
 export const flatMapAsync = <F extends TypeLambda>(
   FromAsync: FromAsync<F>,
   Flattenable: Flattenable<F>
-): (<A, B>(f: (a: A) => Async<B>) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) => {
+): (<A, B>(
+  f: (a: A) => Async<B>
+) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) => {
   return (f) => Flattenable.flatMap((a) => FromAsync.fromAsync(f(a)))
 }

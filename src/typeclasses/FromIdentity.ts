@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
-import type { KleisliCategory } from '@fp-ts/core/typeclasses/KleisliCategory'
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { KleisliCategory } from "@fp-ts/core/typeclasses/KleisliCategory"
 
 /**
  * @category model
@@ -15,7 +15,6 @@ export interface FromIdentity<F extends TypeLambda> extends TypeClass<F> {
 /**
  * @since 3.0.0
  */
-export const idKleisli =
-  <F extends TypeLambda>(FromIdentity: FromIdentity<F>): KleisliCategory<F>['idKleisli'] =>
-  () =>
-    FromIdentity.of
+export const idKleisli = <F extends TypeLambda>(
+  FromIdentity: FromIdentity<F>
+): KleisliCategory<F>["idKleisli"] => () => FromIdentity.of

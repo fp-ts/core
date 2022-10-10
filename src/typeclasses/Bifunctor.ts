@@ -1,9 +1,9 @@
 /**
  * @since 3.0.0
  */
-import { identity } from '@fp-ts/core/Function'
-import type { Functor } from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
+import { identity } from "@fp-ts/core/Function"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 
 /**
  * @category model
@@ -19,10 +19,11 @@ export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
 /**
  * @since 3.0.0
  */
-export const mapLeft =
-  <F extends TypeLambda>(
-    Bifunctor: Bifunctor<F>
-  ): (<E, G>(f: (e: E) => G) => <S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
+export const mapLeft = <F extends TypeLambda>(
+  Bifunctor: Bifunctor<F>
+): (<E, G>(
+  f: (e: E) => G
+) => <S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
   <E, G>(f: (e: E) => G): (<S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
     Bifunctor.mapBoth(f, identity)
 
@@ -31,8 +32,7 @@ export const mapLeft =
  *
  * @since 3.0.0
  */
-export const map =
-  <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>['map'] =>
+export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>["map"] =>
   <A, B>(f: (a: A) => B): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
     Bifunctor.mapBoth(identity, f)
 
@@ -41,8 +41,10 @@ export const map =
  *
  * @since 3.0.0
  */
-export const mapBothComposition =
-  <F extends TypeLambda, G extends TypeLambda>(FunctorF: Functor<F>, BifunctorG: Bifunctor<G>) =>
+export const mapBothComposition = <F extends TypeLambda, G extends TypeLambda>(
+  FunctorF: Functor<F>,
+  BifunctorG: Bifunctor<G>
+) =>
   <GE, GG, A, B>(
     f: (e: GE) => GG,
     g: (a: A) => B

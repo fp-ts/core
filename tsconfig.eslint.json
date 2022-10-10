@@ -9,6 +9,7 @@
     "./test/**/*.ts",
     "./dtslint/**/*.ts",
     "./examples/**/*.ts",
-    "./vitest.config.ts"
+    "./vitest.config.ts",
+    "./.eslintrc.cjs"
   ]
 }

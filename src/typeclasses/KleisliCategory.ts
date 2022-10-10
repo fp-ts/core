@@ -3,8 +3,8 @@
  *
  * @since 3.0.0
  */
-import type { KleisliComposable } from '@fp-ts/core/typeclasses/KleisliComposable'
-import type { Kind, TypeLambda } from '@fp-ts/core/HKT'
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { KleisliComposable } from "@fp-ts/core/typeclasses/KleisliComposable"
 
 /**
  * @category model

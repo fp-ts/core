@@ -1,24 +1,24 @@
 /**
  * @since 3.0.0
  */
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import * as fromSync_ from '@fp-ts/core/typeclasses/FromSync'
-import * as fromReader_ from '@fp-ts/core/typeclasses/FromReader'
-import { flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import * as sync from '@fp-ts/core/Sync'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import * as reader from '@fp-ts/core/Reader'
-import * as readerT from '@fp-ts/core/transformers/ReaderT'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Sync } from '@fp-ts/core/Sync'
+import { flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import * as reader from "@fp-ts/core/Reader"
+import * as sync from "@fp-ts/core/Sync"
+import type { Sync } from "@fp-ts/core/Sync"
+import * as readerT from "@fp-ts/core/transformers/ReaderT"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromReader_ from "@fp-ts/core/typeclasses/FromReader"
+import * as fromSync_ from "@fp-ts/core/typeclasses/FromSync"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
 
 /**
  * @category model
@@ -33,7 +33,7 @@ export interface ReaderSync<R, A> {
  * @category conversions
  * @since 3.0.0
  */
-export const fromReader: <R, A>(fa: reader.Reader<R, A>) => ReaderSync<R, A> =readerT.fromReader(
+export const fromReader: <R, A>(fa: reader.Reader<R, A>) => ReaderSync<R, A> = readerT.fromReader(
   sync.FromIdentity
 )
 
@@ -41,7 +41,7 @@ export const fromReader: <R, A>(fa: reader.Reader<R, A>) => ReaderSync<R, A> =re
  * @category conversions
  * @since 3.0.0
  */
-export const fromSync: <A>(fa: sync.Sync<A>) => ReaderSync<unknown, A> =reader.of
+export const fromSync: <A>(fa: sync.Sync<A>) => ReaderSync<unknown, A> = reader.of
 
 /**
  * Changes the value of the local context during the execution of the action `ma` (similar to `Contravariant`'s
@@ -49,14 +49,17 @@ export const fromSync: <A>(fa: sync.Sync<A>) => ReaderSync<unknown, A> =reader.o
  *
  * @since 3.0.0
  */
-export const local: <R2, R1>(f: (r2: R2) => R1) => <A>(ma: ReaderSync<R1, A>) => ReaderSync<R2, A> = reader.local
+export const local: <R2, R1>(f: (r2: R2) => R1) => <A>(ma: ReaderSync<R1, A>) => ReaderSync<R2, A> =
+  reader.local
 
 /**
  * Effectfully accesses the environment.
  *
  * @since 3.0.0
  */
-export const asksReaderSync: <R1, R2, A>(f: (r1: R1) => ReaderSync<R2, A>) => ReaderSync<R1 & R2, A> = reader.asksReader
+export const asksReaderSync: <R1, R2, A>(
+  f: (r1: R1) => ReaderSync<R2, A>
+) => ReaderSync<R1 & R2, A> = reader.asksReader
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.
@@ -64,15 +67,16 @@ export const asksReaderSync: <R1, R2, A>(f: (r1: R1) => ReaderSync<R2, A>) => Re
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <R>(fa: ReaderSync<R, A>) => ReaderSync<R, B> =readerT.map(
-  sync.Functor
-)
+export const map: <A, B>(f: (a: A) => B) => <R>(fa: ReaderSync<R, A>) => ReaderSync<R, B> = readerT
+  .map(
+    sync.Functor
+  )
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const of: <A>(a: A) => ReaderSync<unknown, A> =readerT.of(sync.FromIdentity)
+export const of: <A>(a: A) => ReaderSync<unknown, A> = readerT.of(sync.FromIdentity)
 
 /**
  * @category instances
@@ -88,7 +92,7 @@ export const FromIdentity: fromIdentity.FromIdentity<ReaderSyncTypeLambda> = {
  */
 export const flatMap: <A, R2, B>(
   f: (a: A) => ReaderSync<R2, B>
-) => <R1>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, B> =readerT.flatMap(sync.Monad)
+) => <R1>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, B> = readerT.flatMap(sync.Monad)
 
 /**
  * @category instances
@@ -104,8 +108,8 @@ export const Flattenable: flattenable.Flattenable<ReaderSyncTypeLambda> = {
  */
 export const composeKleisli: <B, R2, C>(
   bfc: (b: B) => ReaderSync<R2, C>
-) => <A, R1>(afb: (a: A) => ReaderSync<R1, B>) => (a: A) => ReaderSync<R1 & R2, C> =
- flattenable.composeKleisli(Flattenable)
+) => <A, R1>(afb: (a: A) => ReaderSync<R1, B>) => (a: A) => ReaderSync<R1 & R2, C> = flattenable
+  .composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -118,7 +122,9 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<ReaderSyncTy
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => ReaderSync<unknown, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => ReaderSync<unknown, A> = fromIdentity.idKleisli(
+  FromIdentity
+)
 
 /**
  * @category instances
@@ -138,7 +144,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<ReaderSyncTypeLambda>
  */
 export const zipLeft: <R2>(
   that: ReaderSync<R2, unknown>
-) => <R1, A>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, A> =flattenable.zipLeft(Flattenable)
+) => <R1, A>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, A> = flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -148,20 +154,25 @@ export const zipLeft: <R2>(
  */
 export const zipRight: <R2, A>(
   that: ReaderSync<R2, A>
-) => <R1>(self: ReaderSync<R1, unknown>) => ReaderSync<R1 & R2, A> =flattenable.zipRight(Flattenable)
+) => <R1>(self: ReaderSync<R1, unknown>) => ReaderSync<R1 & R2, A> = flattenable.zipRight(
+  Flattenable
+)
 
 /**
  * @since 3.0.0
  */
 export const ap: <R2, A>(
   fa: ReaderSync<R2, A>
-) => <R1, B>(self: ReaderSync<R1, (a: A) => B>) => ReaderSync<R1 & R2, B> =flattenable.ap(Flattenable)
+) => <R1, B>(self: ReaderSync<R1, (a: A) => B>) => ReaderSync<R1 & R2, B> = flattenable.ap(
+  Flattenable
+)
 
 /**
  * @since 3.0.0
  */
-export const flatten: <R1, R2, A>(mma: ReaderSync<R1, ReaderSync<R2, A>>) => ReaderSync<R1 & R2, A> =
- flatMap(identity)
+export const flatten: <R1, R2, A>(
+  mma: ReaderSync<R1, ReaderSync<R2, A>>
+) => ReaderSync<R1 & R2, A> = flatMap(identity)
 
 // -------------------------------------------------------------------------------------
 // type lambdas
@@ -172,7 +183,7 @@ export const flatten: <R1, R2, A>(mma: ReaderSync<R1, ReaderSync<R2, A>>) => Rea
  * @since 3.0.0
  */
 export interface ReaderSyncTypeLambda extends TypeLambda {
-  readonly type: ReaderSync<this['In1'], this['Out1']>
+  readonly type: ReaderSync<this["In1"], this["Out1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -192,7 +203,7 @@ export const Functor: functor.Functor<ReaderSyncTypeLambda> = {
  * @since 3.0.0
  */
 export const flap: <A>(a: A) => <R, B>(fab: ReaderSync<R, (a: A) => B>) => ReaderSync<R, B> =
- functor.flap(Functor)
+  functor.flap(Functor)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -200,7 +211,9 @@ export const flap: <A>(a: A) => <R, B>(fab: ReaderSync<R, (a: A) => B>) => Reade
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <R>(self: ReaderSync<R, unknown>) => ReaderSync<R, B> =functor.as(Functor)
+export const as: <B>(b: B) => <R>(self: ReaderSync<R, unknown>) => ReaderSync<R, B> = functor.as(
+  Functor
+)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -208,7 +221,7 @@ export const as: <B>(b: B) => <R>(self: ReaderSync<R, unknown>) => ReaderSync<R,
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <R>(self: ReaderSync<R, unknown>) => ReaderSync<R, void> =functor.unit(Functor)
+export const unit: <R>(self: ReaderSync<R, unknown>) => ReaderSync<R, void> = functor.unit(Functor)
 
 /**
  * @category instances
@@ -227,7 +240,9 @@ export const Apply: apply.Apply<ReaderSyncTypeLambda> = {
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <R1, R2>(fa: ReaderSync<R1, A>, fb: ReaderSync<R2, B>) => ReaderSync<R1 & R2, C> =apply.lift2(Apply)
+) => <R1, R2>(fa: ReaderSync<R1, A>, fb: ReaderSync<R2, B>) => ReaderSync<R1 & R2, C> = apply.lift2(
+  Apply
+)
 
 /**
  * Lifts a ternary function into `ReaderSync`.
@@ -237,8 +252,11 @@ export const lift2: <A, B, C>(
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => <R1, R2, R3>(fa: ReaderSync<R1, A>, fb: ReaderSync<R2, B>, fc: ReaderSync<R3, C>) => ReaderSync<R1 & R2 & R3, D> =
- apply.lift3(Apply)
+) => <R1, R2, R3>(
+  fa: ReaderSync<R1, A>,
+  fb: ReaderSync<R2, B>,
+  fc: ReaderSync<R3, C>
+) => ReaderSync<R1 & R2 & R3, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -267,14 +285,14 @@ export const Monad: monad.Monad<ReaderSyncTypeLambda> = {
  */
 export const tap: <A, R2>(
   f: (a: A) => ReaderSync<R2, unknown>
-) => <R1>(ma: ReaderSync<R1, A>) => ReaderSync<R1 & R2, A> =flattenable.tap(Flattenable)
+) => <R1>(ma: ReaderSync<R1, A>) => ReaderSync<R1 & R2, A> = flattenable.tap(Flattenable)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const FromSync: fromSync_.FromSync<ReaderSyncTypeLambda> = {
-  fromSync: fromSync
+  fromSync
 }
 
 // -------------------------------------------------------------------------------------
@@ -286,7 +304,7 @@ export const FromSync: fromSync_.FromSync<ReaderSyncTypeLambda> = {
  * @since 3.0.0
  */
 export const log: <A extends ReadonlyArray<unknown>>(...x: A) => ReaderSync<unknown, void> =
- fromSync_.log(FromSync)
+  fromSync_.log(FromSync)
 
 /**
  * @category lifting
@@ -294,13 +312,14 @@ export const log: <A extends ReadonlyArray<unknown>>(...x: A) => ReaderSync<unkn
  */
 export const liftSync: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => sync.Sync<B>
-) => (...a: A) => ReaderSync<unknown, B> =fromSync_.liftSync(FromSync)
+) => (...a: A) => ReaderSync<unknown, B> = fromSync_.liftSync(FromSync)
 
 /**
  * @since 3.0.0
  */
-export const flatMapSync: <A, B>(f: (a: A) => sync.Sync<B>) => <R>(self: ReaderSync<R, A>) => ReaderSync<R, B> =
- fromSync_.flatMapSync(FromSync, Flattenable)
+export const flatMapSync: <A, B>(
+  f: (a: A) => sync.Sync<B>
+) => <R>(self: ReaderSync<R, A>) => ReaderSync<R, B> = fromSync_.flatMapSync(FromSync, Flattenable)
 
 /**
  * @category instances
@@ -316,7 +335,7 @@ export const FromReader: fromReader_.FromReader<ReaderSyncTypeLambda> = {
  * @category constructors
  * @since 3.0.0
  */
-export const ask: <R>() => ReaderSync<R, R> =fromReader_.ask(FromReader)
+export const ask: <R>() => ReaderSync<R, R> = fromReader_.ask(FromReader)
 
 /**
  * Projects a value from the global context in a `ReaderSync`.
@@ -324,7 +343,7 @@ export const ask: <R>() => ReaderSync<R, R> =fromReader_.ask(FromReader)
  * @category constructors
  * @since 3.0.0
  */
-export const asks: <R, A>(f: (r: R) => A) => ReaderSync<R, A> =fromReader_.asks(FromReader)
+export const asks: <R, A>(f: (r: R) => A) => ReaderSync<R, A> = fromReader_.asks(FromReader)
 
 /**
  * @category lifting
@@ -332,7 +351,7 @@ export const asks: <R, A>(f: (r: R) => A) => ReaderSync<R, A> =fromReader_.asks(
  */
 export const liftReader: <A extends ReadonlyArray<unknown>, R, B>(
   f: (...a: A) => reader.Reader<R, B>
-) => (...a: A) => ReaderSync<R, B> =fromReader_.liftReader(FromReader)
+) => (...a: A) => ReaderSync<R, B> = fromReader_.liftReader(FromReader)
 
 /**
  * @category sequencing
@@ -340,7 +359,7 @@ export const liftReader: <A extends ReadonlyArray<unknown>, R, B>(
  */
 export const flatMapReader: <A, R2, B>(
   f: (a: A) => reader.Reader<R2, B>
-) => <R1>(ma: ReaderSync<R1, A>) => ReaderSync<R1 & R2, B> =fromReader_.flatMapReader(
+) => <R1>(ma: ReaderSync<R1, A>) => ReaderSync<R1 & R2, B> = fromReader_.flatMapReader(
   FromReader,
   Flattenable
 )
@@ -353,7 +372,7 @@ export const flatMapReader: <A, R2, B>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: ReaderSync<unknown, {}> =of(_.Do)
+export const Do: ReaderSync<unknown, {}> = of(_.Do)
 
 /**
  * @category do notation
@@ -361,13 +380,18 @@ export const Do: ReaderSync<unknown, {}> =of(_.Do)
  */
 export const bindTo: <N extends string>(
   name: N
-) => <R, A>(self: ReaderSync<R, A>) => ReaderSync<R, { readonly [K in N]: A }> =functor.bindTo(Functor)
+) => <R, A>(self: ReaderSync<R, A>) => ReaderSync<R, { readonly [K in N]: A }> = functor.bindTo(
+  Functor
+)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <R>(self: ReaderSync<R, A>) => ReaderSync<R, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <R>(
+  self: ReaderSync<R, A>
+) => ReaderSync<R, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(
+  Functor
+)
 
 export {
   /**
@@ -387,7 +411,7 @@ export const bind: <N extends string, A extends object, R2, B>(
 ) => <R1>(
   self: ReaderSync<R1, A>
 ) => ReaderSync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+  flattenable.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -400,8 +424,8 @@ export const bindRight: <N extends string, A extends object, R2, B>(
   fb: ReaderSync<R2, B>
 ) => <R1>(
   self: ReaderSync<R1, A>
-) => ReaderSync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => ReaderSync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -411,14 +435,15 @@ export const bindRight: <N extends string, A extends object, R2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: ReaderSync<unknown, readonly []> =of(_.empty)
+export const Zip: ReaderSync<unknown, readonly []> = of(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <R, A>(self: ReaderSync<R, A>) => ReaderSync<R, readonly [A]> =
- functor.tupled(Functor)
+export const tupled: <R, A>(self: ReaderSync<R, A>) => ReaderSync<R, readonly [A]> = functor.tupled(
+  Functor
+)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -428,8 +453,9 @@ export const tupled: <R, A>(self: ReaderSync<R, A>) => ReaderSync<R, readonly [A
  */
 export const zipFlatten: <R2, B>(
   fb: ReaderSync<R2, B>
-) => <R1, A extends ReadonlyArray<unknown>>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <R1, A extends ReadonlyArray<unknown>>(
+  self: ReaderSync<R1, A>
+) => ReaderSync<R1 & R2, readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -440,7 +466,7 @@ export const zipFlatten: <R2, B>(
 export const zipWith: <R2, B, A, C>(
   that: ReaderSync<R2, B>,
   f: (a: A, b: B) => C
-) => <R1>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, C> =apply.zipWith(Apply)
+) => <R1>(self: ReaderSync<R1, A>) => ReaderSync<R1 & R2, C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -455,7 +481,10 @@ export const zipWith: <R2, B, A, C>(
 export const traverseNonEmptyReadonlyArrayWithIndex = <A, R, B>(
   f: (index: number, a: A) => ReaderSync<R, B>
 ): ((as: NonEmptyReadonlyArray<A>) => ReaderSync<R, NonEmptyReadonlyArray<B>>) =>
-  flow(reader.traverseNonEmptyReadonlyArrayWithIndex(f), reader.map(sync.traverseNonEmptyReadonlyArrayWithIndex(SK)))
+  flow(
+    reader.traverseNonEmptyReadonlyArrayWithIndex(f),
+    reader.map(sync.traverseNonEmptyReadonlyArrayWithIndex(SK))
+  )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(Applicative)`.
@@ -500,5 +529,6 @@ export const traverseReadonlyArray = <A, R, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <R, A>(arr: ReadonlyArray<ReaderSync<R, A>>) => ReaderSync<R, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <R, A>(
+  arr: ReadonlyArray<ReaderSync<R, A>>
+) => ReaderSync<R, ReadonlyArray<A>> = traverseReadonlyArray(identity)

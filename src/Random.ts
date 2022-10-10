@@ -1,10 +1,10 @@
 /**
  * @since 3.0.0
  */
-import * as sync from '@fp-ts/core/Sync'
-import { pipe } from '@fp-ts/core/Function'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Sync } from '@fp-ts/core/Sync'
+import { pipe } from "@fp-ts/core/Function"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import * as sync from "@fp-ts/core/Sync"
+import type { Sync } from "@fp-ts/core/Sync"
 
 /**
  * Returns a random number between 0 (inclusive) and 1 (exclusive). This is a direct wrapper around JavaScript's
@@ -44,11 +44,10 @@ export const randomRange = (min: number, max: number): Sync<number> =>
  *
  * @since 3.0.0
  */
-export const randomBool: Sync<boolean> =
-  pipe(
-    random,
-    sync.map((n) => n < 0.5)
-  )
+export const randomBool: Sync<boolean> = pipe(
+  random,
+  sync.map((n) => n < 0.5)
+)
 
 /**
  * Returns a random element of a `NonEmptyReadonlyArray`.

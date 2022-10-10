@@ -1,11 +1,11 @@
 /**
  * @since 3.0.0
  */
-import type * as contravariant from '@fp-ts/core/typeclasses/Contravariant'
-import { constFalse, constTrue, flow } from '@fp-ts/core/Function'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
+import { constFalse, constTrue, flow } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @category model
@@ -24,7 +24,7 @@ export interface Predicate<A> {
  * @since 3.0.0
  */
 export interface PredicateTypeLambda extends TypeLambda {
-  readonly type: Predicate<this['In1']>
+  readonly type: Predicate<this["In1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -68,8 +68,8 @@ export const getMonoidAnd = <A>(): Monoid<Predicate<A>> => ({
 /**
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => (fa: Predicate<A>) => Predicate<B> = (f) => (predicate) =>
-  flow(f, predicate)
+export const contramap: <B, A>(f: (b: B) => A) => (fa: Predicate<A>) => Predicate<B> = (f) =>
+  (predicate) => flow(f, predicate)
 
 /**
  * @category instances
@@ -82,25 +82,16 @@ export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const not =
-  <A>(predicate: Predicate<A>): Predicate<A> =>
-  (a) =>
-    !predicate(a)
+export const not = <A>(predicate: Predicate<A>): Predicate<A> => (a) => !predicate(a)
 
 /**
  * @since 3.0.0
  */
-export const or =
-  <A>(that: Predicate<A>) =>
-  (self: Predicate<A>): Predicate<A> =>
-  (a) =>
-    self(a) || that(a)
+export const or = <A>(that: Predicate<A>) =>
+  (self: Predicate<A>): Predicate<A> => (a) => self(a) || that(a)
 
 /**
  * @since 3.0.0
  */
-export const and =
-  <A>(that: Predicate<A>) =>
-  (self: Predicate<A>): Predicate<A> =>
-  (a) =>
-    self(a) && that(a)
+export const and = <A>(that: Predicate<A>) =>
+  (self: Predicate<A>): Predicate<A> => (a) => self(a) && that(a)

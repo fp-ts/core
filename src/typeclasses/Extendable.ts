@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
-import type { Functor } from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 
 /**
  * @category model

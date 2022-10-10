@@ -32,22 +32,21 @@ export interface TypeLambda {
  */
 export type Kind<F extends TypeLambda, InOut1, In1, Out3, Out2, Out1> = F extends {
   readonly type: unknown
-}
-  ? (F & {
-      readonly InOut1: InOut1
-      readonly In1: In1
-      readonly Out3: Out3
-      readonly Out2: Out2
-      readonly Out1: Out1
-    })['type']
+} ? (F & {
+  readonly InOut1: InOut1
+  readonly In1: In1
+  readonly Out3: Out3
+  readonly Out2: Out2
+  readonly Out1: Out1
+})["type"]
   : {
-      readonly F: F
-      readonly InOut1: (_: InOut1) => InOut1
-      readonly In1: (_: In1) => void
-      readonly Out3: () => Out3
-      readonly Out2: () => Out2
-      readonly Out1: () => Out1
-    }
+    readonly F: F
+    readonly InOut1: (_: InOut1) => InOut1
+    readonly In1: (_: In1) => void
+    readonly Out3: () => Out3
+    readonly Out2: () => Out2
+    readonly Out1: () => Out1
+  }
 
 /**
  * @since 3.0.0

@@ -19,37 +19,36 @@
  *
  * @since 3.0.0
  */
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import type { Apply } from '@fp-ts/core/typeclasses/Apply'
-import * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import type { Result, Failure, Success, ValidatedT } from '@fp-ts/core/Result'
-import type { Eq } from '@fp-ts/core/typeclasses/Eq'
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import * as fromResult_ from '@fp-ts/core/typeclasses/FromResult'
-import type * as fromThese_ from '@fp-ts/core/typeclasses/FromThese'
-import { flow, SK } from '@fp-ts/core/Function'
-import { identity, pipe } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Monad } from '@fp-ts/core/typeclasses/Monad'
-import type { Option } from '@fp-ts/core/Option'
-import type * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Refinement } from '@fp-ts/core/Refinement'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import type { Show } from '@fp-ts/core/typeclasses/Show'
-import * as traversable from '@fp-ts/core/typeclasses/Traversable'
+import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import type { Failure, Result, Success, ValidatedT } from "@fp-ts/core/Result"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import type { Apply } from "@fp-ts/core/typeclasses/Apply"
+import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import type { Eq } from "@fp-ts/core/typeclasses/Eq"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
+import type * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
+import type * as fromThese_ from "@fp-ts/core/typeclasses/FromThese"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type { Monad } from "@fp-ts/core/typeclasses/Monad"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type { Show } from "@fp-ts/core/typeclasses/Show"
+import * as traversable from "@fp-ts/core/typeclasses/Traversable"
 
 /**
  * @category model
  * @since 3.0.0
  */
 export interface Both<E, A> {
-  readonly _tag: 'Both'
+  readonly _tag: "Both"
   readonly failure: E
   readonly success: A
 }
@@ -69,26 +68,30 @@ export type These<E, A> = Result<E, A> | Both<E, A>
  * @since 3.0.0
  */
 export interface TheseTypeLambda extends TypeLambda {
-  readonly type: These<this['Out2'], this['Out1']>
+  readonly type: These<this["Out2"], this["Out1"]>
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fail = <E>(failure: E): These<E, never> => ({ _tag: 'Failure', failure })
+export const fail = <E>(failure: E): These<E, never> => ({ _tag: "Failure", failure })
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const succeed = <A>(success: A): These<never, A> => ({ _tag: 'Success', success })
+export const succeed = <A>(success: A): These<never, A> => ({ _tag: "Success", success })
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const both = <E, A>(failure: E, success: A): These<E, A> => ({ _tag: 'Both', failure, success })
+export const both = <E, A>(failure: E, success: A): These<E, A> => ({
+  _tag: "Both",
+  failure,
+  success
+})
 
 /**
  * @example
@@ -101,10 +104,8 @@ export const both = <E, A>(failure: E, success: A): These<E, A> => ({ _tag: 'Bot
  * @category constructors
  * @since 3.0.0
  */
-export const failureOrBoth =
-  <E>(e: E) =>
-  <A>(ma: Option<A>): These<E, A> =>
-    _.isNone(ma) ? fail(e) : both(e, ma.value)
+export const failureOrBoth = <E>(e: E) =>
+  <A>(ma: Option<A>): These<E, A> => _.isNone(ma) ? fail(e) : both(e, ma.value)
 
 /**
  * @example
@@ -117,10 +118,8 @@ export const failureOrBoth =
  * @category constructors
  * @since 3.0.0
  */
-export const successOrBoth =
-  <A>(a: A) =>
-  <E>(me: Option<E>): These<E, A> =>
-    _.isNone(me) ? succeed(a) : both(me.value, a)
+export const successOrBoth = <A>(a: A) =>
+  <E>(me: Option<E>): These<E, A> => _.isNone(me) ? succeed(a) : both(me.value, a)
 
 /**
  * Takes a pair of `Option`s and attempts to create a `These` from them
@@ -154,15 +153,18 @@ export const fromOptions = <E, A>(fe: Option<E>, fa: Option<A>): Option<These<E,
  * @category pattern matching
  * @since 3.0.0
  */
-export const match =
-  <E, B, A, C = B, D = B>(onError: (e: E) => B, onSuccess: (a: A) => C, onBoth: (e: E, a: A) => D) =>
+export const match = <E, B, A, C = B, D = B>(
+  onError: (e: E) => B,
+  onSuccess: (a: A) => C,
+  onBoth: (e: E, a: A) => D
+) =>
   (fa: These<E, A>): B | C | D => {
     switch (fa._tag) {
-      case 'Failure':
+      case "Failure":
         return onError(fa.failure)
-      case 'Success':
+      case "Success":
         return onSuccess(fa.success)
-      case 'Both':
+      case "Both":
         return onBoth(fa.failure, fa.success)
     }
   }
@@ -170,7 +172,11 @@ export const match =
 /**
  * @since 3.0.0
  */
-export const reverse: <E, A>(fa: These<E, A>) => These<A, E> = match(succeed, fail, (e, a) => both(a, e))
+export const reverse: <E, A>(fa: These<E, A>) => These<A, E> = match(
+  succeed,
+  fail,
+  (e, a) => both(a, e)
+)
 
 /**
  * Returns `true` if the these is an instance of `Failure`, `false` otherwise
@@ -178,7 +184,7 @@ export const reverse: <E, A>(fa: These<E, A>) => These<A, E> = match(succeed, fa
  * @category refinements
  * @since 3.0.0
  */
-export const isFailure = <E>(fa: These<E, unknown>): fa is Failure<E> => fa._tag === 'Failure'
+export const isFailure = <E>(fa: These<E, unknown>): fa is Failure<E> => fa._tag === "Failure"
 
 /**
  * Returns `true` if the these is an instance of `Success`, `false` otherwise
@@ -186,7 +192,7 @@ export const isFailure = <E>(fa: These<E, unknown>): fa is Failure<E> => fa._tag
  * @category refinements
  * @since 3.0.0
  */
-export const isSuccess = <A>(fa: These<unknown, A>): fa is Success<A> => fa._tag === 'Success'
+export const isSuccess = <A>(fa: These<unknown, A>): fa is Success<A> => fa._tag === "Success"
 
 /**
  * Returns `true` if the these is an instance of `Both`, `false` otherwise
@@ -194,7 +200,7 @@ export const isSuccess = <A>(fa: These<unknown, A>): fa is Success<A> => fa._tag
  * @category refinements
  * @since 3.0.0
  */
-export const isBoth = <E, A>(fa: These<E, A>): fa is Both<E, A> => fa._tag === 'Both'
+export const isBoth = <E, A>(fa: These<E, A>): fa is Both<E, A> => fa._tag === "Both"
 
 /**
  * Returns an effect whose failure and success channels have been mapped by
@@ -203,9 +209,16 @@ export const isBoth = <E, A>(fa: These<E, A>): fa is Both<E, A> => fa._tag === '
  * @category mapping
  * @since 3.0.0
  */
-export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: These<E, A>) => These<G, B> =
-  (f, g) => (fa) =>
-    isFailure(fa) ? fail(f(fa.failure)) : isSuccess(fa) ? succeed(g(fa.success)) : both(f(fa.failure), g(fa.success))
+export const mapBoth: <E, G, A, B>(
+  f: (e: E) => G,
+  g: (a: A) => B
+) => (self: These<E, A>) => These<G, B> = (f, g) =>
+  (fa) =>
+    isFailure(fa) ?
+      fail(f(fa.failure)) :
+      isSuccess(fa) ?
+      succeed(g(fa.success)) :
+      both(f(fa.failure), g(fa.success))
 
 /**
  * @category traversing
@@ -215,15 +228,17 @@ export const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <A, S, R, O, FE, B>(
   f: (a: A) => Kind<F, S, R, O, FE, B>
-) => <E>(ta: These<E, A>) => Kind<F, S, R, O, FE, These<E, B>> = (F) => (f) => (ta) =>
-  isFailure(ta)
-    ? F.of(ta)
-    : isSuccess(ta)
-    ? pipe(f(ta.success), F.map(succeed))
-    : pipe(
-        f(ta.success),
-        F.map((b) => both(ta.failure, b))
-      )
+) => <E>(ta: These<E, A>) => Kind<F, S, R, O, FE, These<E, B>> = (F) =>
+  (f) =>
+    (ta) =>
+      isFailure(ta)
+        ? F.of(ta)
+        : isSuccess(ta)
+        ? pipe(f(ta.success), F.map(succeed))
+        : pipe(
+          f(ta.success),
+          F.map((b) => both(ta.failure, b))
+        )
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -247,12 +262,14 @@ export const getShow = <E, A>(SE: Show<E>, SA: Show<A>): Show<These<E, A>> => ({
  */
 export const getEq = <E, A>(EE: Eq<E>, EA: Eq<A>): Eq<These<E, A>> =>
   eq.fromEquals(
-    (that) => (self) =>
-      isFailure(self)
-        ? isFailure(that) && EE.equals(that.failure)(self.failure)
-        : isSuccess(self)
-        ? isSuccess(that) && EA.equals(that.success)(self.success)
-        : isBoth(that) && EE.equals(that.failure)(self.failure) && EA.equals(that.success)(self.success)
+    (that) =>
+      (self) =>
+        isFailure(self)
+          ? isFailure(that) && EE.equals(that.failure)(self.failure)
+          : isSuccess(self)
+          ? isSuccess(that) && EA.equals(that.success)(self.success)
+          : isBoth(that) && EE.equals(that.failure)(self.failure) &&
+            EA.equals(that.success)(self.success)
   )
 
 /**
@@ -260,24 +277,25 @@ export const getEq = <E, A>(EE: Eq<E>, EA: Eq<A>): Eq<These<E, A>> =>
  * @since 3.0.0
  */
 export const getSemigroup = <E, A>(SE: Semigroup<E>, SA: Semigroup<A>): Semigroup<These<E, A>> => ({
-  combine: (that) => (self) =>
-    isFailure(self)
-      ? isFailure(that)
-        ? fail(SE.combine(that.failure)(self.failure))
+  combine: (that) =>
+    (self) =>
+      isFailure(self)
+        ? isFailure(that)
+          ? fail(SE.combine(that.failure)(self.failure))
+          : isSuccess(that)
+          ? both(self.failure, that.success)
+          : both(SE.combine(that.failure)(self.failure), that.success)
+        : isSuccess(self)
+        ? isFailure(that)
+          ? both(that.failure, self.success)
+          : isSuccess(that)
+          ? succeed(SA.combine(that.success)(self.success))
+          : both(that.failure, SA.combine(that.success)(self.success))
+        : isFailure(that)
+        ? both(SE.combine(that.failure)(self.failure), self.success)
         : isSuccess(that)
-        ? both(self.failure, that.success)
-        : both(SE.combine(that.failure)(self.failure), that.success)
-      : isSuccess(self)
-      ? isFailure(that)
-        ? both(that.failure, self.success)
-        : isSuccess(that)
-        ? succeed(SA.combine(that.success)(self.success))
-        : both(that.failure, SA.combine(that.success)(self.success))
-      : isFailure(that)
-      ? both(SE.combine(that.failure)(self.failure), self.success)
-      : isSuccess(that)
-      ? both(self.failure, SA.combine(that.success)(self.success))
-      : both(SE.combine(that.failure)(self.failure), SA.combine(that.success)(self.success))
+        ? both(self.failure, SA.combine(that.success)(self.success))
+        : both(SE.combine(that.failure)(self.failure), SA.combine(that.success)(self.success))
 })
 
 /**
@@ -295,8 +313,8 @@ export const Bifunctor: bifunctor.Bifunctor<TheseTypeLambda> = {
  * @category error handling
  * @since 3.0.0
  */
-export const mapError: <E, G>(f: (e: E) => G) => <A>(self: These<E, A>) => These<G, A> =
- bifunctor.mapLeft(Bifunctor)
+export const mapError: <E, G>(f: (e: E) => G) => <A>(self: These<E, A>) => These<G, A> = bifunctor
+  .mapLeft(Bifunctor)
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.
@@ -304,7 +322,9 @@ export const mapError: <E, G>(f: (e: E) => G) => <A>(self: These<E, A>) => These
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <E>(fa: These<E, A>) => These<E, B> =bifunctor.map(Bifunctor)
+export const map: <A, B>(f: (a: A) => B) => <E>(fa: These<E, A>) => These<E, B> = bifunctor.map(
+  Bifunctor
+)
 
 /**
  * @category instances
@@ -318,7 +338,9 @@ export const Functor: functor.Functor<TheseTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <E, B>(fab: These<E, (a: A) => B>) => These<E, B> =functor.flap(Functor)
+export const flap: <A>(a: A) => <E, B>(fab: These<E, (a: A) => B>) => These<E, B> = functor.flap(
+  Functor
+)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -326,7 +348,7 @@ export const flap: <A>(a: A) => <E, B>(fab: These<E, (a: A) => B>) => These<E, B
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <E>(self: These<E, unknown>) => These<E, B> =functor.as(Functor)
+export const as: <B>(b: B) => <E>(self: These<E, unknown>) => These<E, B> = functor.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -334,7 +356,7 @@ export const as: <B>(b: B) => <E>(self: These<E, unknown>) => These<E, B> =funct
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <E>(self: These<E, unknown>) => These<E, void> =functor.unit(Functor)
+export const unit: <E>(self: These<E, unknown>) => These<E, void> = functor.unit(Functor)
 
 /**
  * @category instances
@@ -350,31 +372,34 @@ export const FromIdentity: fromIdentity.FromIdentity<TheseTypeLambda> = {
  */
 export const getApply = <E>(Semigroup: Semigroup<E>): Apply<ValidatedT<TheseTypeLambda, E>> => ({
   map,
-  ap: (fa) => (fab) =>
-    isFailure(fab)
-      ? isFailure(fa)
+  ap: (fa) =>
+    (fab) =>
+      isFailure(fab)
+        ? isFailure(fa)
+          ? fail(Semigroup.combine(fa.failure)(fab.failure))
+          : isSuccess(fa)
+          ? fail(fab.failure)
+          : fail(Semigroup.combine(fa.failure)(fab.failure))
+        : isSuccess(fab)
+        ? isFailure(fa)
+          ? fail(fa.failure)
+          : isSuccess(fa)
+          ? succeed(fab.success(fa.success))
+          : both(fa.failure, fab.success(fa.success))
+        : isFailure(fa)
         ? fail(Semigroup.combine(fa.failure)(fab.failure))
         : isSuccess(fa)
-        ? fail(fab.failure)
-        : fail(Semigroup.combine(fa.failure)(fab.failure))
-      : isSuccess(fab)
-      ? isFailure(fa)
-        ? fail(fa.failure)
-        : isSuccess(fa)
-        ? succeed(fab.success(fa.success))
-        : both(fa.failure, fab.success(fa.success))
-      : isFailure(fa)
-      ? fail(Semigroup.combine(fa.failure)(fab.failure))
-      : isSuccess(fa)
-      ? both(fab.failure, fab.success(fa.success))
-      : both(Semigroup.combine(fa.failure)(fab.failure), fab.success(fa.success))
+        ? both(fab.failure, fab.success(fa.success))
+        : both(Semigroup.combine(fa.failure)(fab.failure), fab.success(fa.success))
 })
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const getApplicative = <E>(Semigroup: Semigroup<E>): applicative.Applicative<ValidatedT<TheseTypeLambda, E>> => {
+export const getApplicative = <E>(
+  Semigroup: Semigroup<E>
+): applicative.Applicative<ValidatedT<TheseTypeLambda, E>> => {
   const A = getApply(Semigroup)
   return {
     map,
@@ -388,8 +413,7 @@ export const getApplicative = <E>(Semigroup: Semigroup<E>): applicative.Applicat
  * @since 3.0.0
  */
 export const getFlattenable = <E>(S: Semigroup<E>): Flattenable<ValidatedT<TheseTypeLambda, E>> => {
-  const flatMap =
-    <A, B>(f: (a: A) => These<E, B>) =>
+  const flatMap = <A, B>(f: (a: A) => These<E, B>) =>
     (ma: These<E, A>): These<E, B> => {
       if (isFailure(ma)) {
         return ma
@@ -436,8 +460,8 @@ export const FromResult: fromResult_.FromResult<TheseTypeLambda> = {
  * @category conversions
  * @since 3.0.0
  */
-export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => These<E, A> =
- fromResult_.fromOption(FromResult)
+export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => These<E, A> = fromResult_
+  .fromOption(FromResult)
 
 /**
  * @category lifting
@@ -446,16 +470,19 @@ export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => These<E, A> =
 export const liftOption: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => Option<B>,
   onNone: E
-) => (...a: A) => These<E, B> =fromResult_.liftOption(FromResult)
+) => (...a: A) => These<E, B> = fromResult_.liftOption(FromResult)
 
 /**
  * @category lifting
  * @since 3.0.0
  */
 export const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: Refinement<A, B>, onFalse: E): (c: C) => These<E, B>
+  <C extends A, B extends A, E, A = C>(
+    refinement: Refinement<A, B>,
+    onFalse: E
+  ): (c: C) => These<E, B>
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (b: B) => These<E, B>
-} =fromResult_.liftPredicate(FromResult)
+} = fromResult_.liftPredicate(FromResult)
 
 /**
  * @category lifting
@@ -463,14 +490,14 @@ export const liftPredicate: {
  */
 export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Result<E, B>
-) => (...a: A) => These<E, B> =fromResult_.liftResult(FromResult)
+) => (...a: A) => These<E, B> = fromResult_.liftResult(FromResult)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromNullable: <E>(onNullable: E) => <A>(a: A) => These<E, NonNullable<A>> =
- fromResult_.fromNullable(FromResult)
+export const fromNullable: <E>(onNullable: E) => <A>(a: A) => These<E, NonNullable<A>> = fromResult_
+  .fromNullable(FromResult)
 
 /**
  * @category lifting
@@ -479,7 +506,7 @@ export const fromNullable: <E>(onNullable: E) => <A>(a: A) => These<E, NonNullab
 export const liftNullable: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => B | null | undefined,
   onNullable: E
-) => (...a: A) => These<E, NonNullable<B>> =fromResult_.liftNullable(FromResult)
+) => (...a: A) => These<E, NonNullable<B>> = fromResult_.liftNullable(FromResult)
 
 /**
  * @category instances
@@ -500,35 +527,31 @@ export const toReadonlyArray = <E, A>(self: These<E, A>): ReadonlyArray<A> =>
  * @category folding
  * @since 3.0.0
  */
-export const reduce =
-  <B, A>(b: B, f: (b: B, a: A) => B) =>
-  <E>(self: These<E, A>): B =>
-    isFailure(self) ? b : f(b, self.success)
+export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
+  <E>(self: These<E, A>): B => isFailure(self) ? b : f(b, self.success)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const foldMap =
-  <M>(Monoid: Monoid<M>) =>
+export const foldMap = <M>(Monoid: Monoid<M>) =>
   <A>(f: (a: A) => M) =>
-  <E>(self: These<E, A>): M =>
-    isFailure(self) ? Monoid.empty : f(self.success)
+    <E>(self: These<E, A>): M => isFailure(self) ? Monoid.empty : f(self.success)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceRight =
-  <B, A>(b: B, f: (a: A, b: B) => B) =>
-  <E>(self: These<E, A>): B =>
-    isFailure(self) ? b : f(self.success, b)
+export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
+  <E>(self: These<E, A>): B => isFailure(self) ? b : f(self.success, b)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const toOption = <E, A>(self: These<E, A>): Option<A> => (isFailure(self) ? _.none : _.some(self.success))
+export const toOption = <E, A>(
+  self: These<E, A>
+): Option<A> => (isFailure(self) ? _.none : _.some(self.success))
 
 /**
  * @category instances
@@ -544,24 +567,21 @@ export const Traversable: traversable.Traversable<TheseTypeLambda> = {
  */
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <E, FS, FR, FO, FE, A>(fa: These<E, Kind<F, FS, FR, FO, FE, A>>) => Kind<F, FS, FR, FO, FE, These<E, A>> =
- traversable.sequence(Traversable)
+) => <E, FS, FR, FO, FE, A>(
+  fa: These<E, Kind<F, FS, FR, FO, FE, A>>
+) => Kind<F, FS, FR, FO, FE, These<E, A>> = traversable.sequence(Traversable)
 
 /**
  * @since 3.0.0
  */
-export const elem =
-  <A>(E: Eq<A>) =>
-  (a: A): (<E>(ma: These<E, A>) => boolean) =>
-    exists(E.equals(a))
+export const elem = <A>(E: Eq<A>) =>
+  (a: A): (<E>(ma: These<E, A>) => boolean) => exists(E.equals(a))
 
 /**
  * @since 3.0.0
  */
-export const exists =
-  <A>(predicate: Predicate<A>) =>
-  (ma: These<unknown, A>): boolean =>
-    isFailure(ma) ? false : predicate(ma.success)
+export const exists = <A>(predicate: Predicate<A>) =>
+  (ma: These<unknown, A>): boolean => isFailure(ma) ? false : predicate(ma.success)
 
 /**
  * @example
@@ -575,8 +595,7 @@ export const exists =
  * @category conversions
  * @since 3.0.0
  */
-export const toTuple2 =
-  <E, A>(e: E, a: A) =>
+export const toTuple2 = <E, A>(e: E, a: A) =>
   (fa: These<E, A>): readonly [E, A] =>
     isFailure(fa) ? [fa.failure, a] : isSuccess(fa) ? [e, fa.success] : [fa.failure, fa.success]
 
@@ -593,7 +612,9 @@ export const toTuple2 =
  *
  * @since 3.0.0
  */
-export const getFailure = <E, A>(self: These<E, A>): Option<E> => (isSuccess(self) ? _.none : _.some(self.failure))
+export const getFailure = <E, A>(
+  self: These<E, A>
+): Option<E> => (isSuccess(self) ? _.none : _.some(self.failure))
 
 /**
  * Converts a `These` to an `Option` discarding the error.
@@ -608,7 +629,9 @@ export const getFailure = <E, A>(self: These<E, A>): Option<E> => (isSuccess(sel
  *
  * @since 3.0.0
  */
-export const getSuccess = <E, A>(self: These<E, A>): Option<A> => (isFailure(self) ? _.none : _.some(self.success))
+export const getSuccess = <E, A>(
+  self: These<E, A>
+): Option<A> => (isFailure(self) ? _.none : _.some(self.success))
 
 /**
  * Returns the `E` value if and only if the value is constructed with `Success`
@@ -623,7 +646,9 @@ export const getSuccess = <E, A>(self: These<E, A>): Option<A> => (isFailure(sel
  *
  * @since 3.0.0
  */
-export const getFailureOnly = <E, A>(fa: These<E, A>): Option<E> => (isFailure(fa) ? _.some(fa.failure) : _.none)
+export const getFailureOnly = <E, A>(
+  fa: These<E, A>
+): Option<E> => (isFailure(fa) ? _.some(fa.failure) : _.none)
 
 /**
  * Returns the `A` value if and only if the value is constructed with `Success`
@@ -638,7 +663,9 @@ export const getFailureOnly = <E, A>(fa: These<E, A>): Option<E> => (isFailure(f
  *
  * @since 3.0.0
  */
-export const getSuccessOnly = <E, A>(fa: These<E, A>): Option<A> => (isSuccess(fa) ? _.some(fa.success) : _.none)
+export const getSuccessOnly = <E, A>(
+  fa: These<E, A>
+): Option<A> => (isSuccess(fa) ? _.some(fa.success) : _.none)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -648,7 +675,7 @@ export const getSuccessOnly = <E, A>(fa: These<E, A>): Option<A> => (isSuccess(f
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: These<never, readonly []> =succeed(_.empty)
+export const Zip: These<never, readonly []> = succeed(_.empty)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -660,31 +687,30 @@ export const Zip: These<never, readonly []> =succeed(_.empty)
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <E>(S: Semigroup<E>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
   <A, B>(f: (index: number, a: A) => These<E, B>) =>
-  (as: NonEmptyReadonlyArray<A>): These<E, NonEmptyReadonlyArray<B>> => {
-    let e: Option<E> = _.none
-    const t = f(0, _.head(as))
-    if (isFailure(t)) {
-      return t
-    }
-    if (isBoth(t)) {
-      e = _.some(t.failure)
-    }
-    const out: _.NonEmptyArray<B> = [t.success]
-    for (let i = 1; i < as.length; i++) {
-      const t = f(i, as[i])
+    (as: NonEmptyReadonlyArray<A>): These<E, NonEmptyReadonlyArray<B>> => {
+      let e: Option<E> = _.none
+      const t = f(0, _.head(as))
       if (isFailure(t)) {
         return t
       }
       if (isBoth(t)) {
-        e = _.isNone(e) ? _.some(t.failure) : _.some(S.combine(t.failure)(e.value))
+        e = _.some(t.failure)
       }
-      out.push(t.success)
+      const out: _.NonEmptyArray<B> = [t.success]
+      for (let i = 1; i < as.length; i++) {
+        const t = f(i, as[i])
+        if (isFailure(t)) {
+          return t
+        }
+        if (isBoth(t)) {
+          e = _.isNone(e) ? _.some(t.failure) : _.some(S.combine(t.failure)(e.value))
+        }
+        out.push(t.success)
+      }
+      return _.isNone(e) ? succeed(out) : both(e.value, out)
     }
-    return _.isNone(e) ? succeed(out) : both(e.value, out)
-  }
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(getApplicative(S))`.
@@ -692,9 +718,10 @@ export const traverseNonEmptyReadonlyArrayWithIndex =
  * @category traversing
  * @since 3.0.0
  */
-export const traverseReadonlyArrayWithIndex =
-  <E>(S: Semigroup<E>) =>
-  <A, B>(f: (index: number, a: A) => These<E, B>): ((as: ReadonlyArray<A>) => These<E, ReadonlyArray<B>>) => {
+export const traverseReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
+  <A, B>(
+    f: (index: number, a: A) => These<E, B>
+  ): ((as: ReadonlyArray<A>) => These<E, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndex(S)(f)
     return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
   }
@@ -707,7 +734,9 @@ export const traverseReadonlyArrayWithIndex =
  */
 export const traverseNonEmptyReadonlyArray = <E>(S: Semigroup<E>) => {
   const traverseNonEmptyReadonlyArrayWithIndexS = traverseNonEmptyReadonlyArrayWithIndex(S)
-  return <A, B>(f: (a: A) => These<E, B>): ((as: NonEmptyReadonlyArray<A>) => These<E, NonEmptyReadonlyArray<B>>) => {
+  return <A, B>(
+    f: (a: A) => These<E, B>
+  ): ((as: NonEmptyReadonlyArray<A>) => These<E, NonEmptyReadonlyArray<B>>) => {
     return traverseNonEmptyReadonlyArrayWithIndexS(flow(SK, f))
   }
 }
@@ -720,7 +749,9 @@ export const traverseNonEmptyReadonlyArray = <E>(S: Semigroup<E>) => {
  */
 export const traverseReadonlyArray = <E>(S: Semigroup<E>) => {
   const traverseReadonlyArrayWithIndexS = traverseReadonlyArrayWithIndex(S)
-  return <A, B>(f: (a: A) => These<E, B>): ((as: ReadonlyArray<A>) => These<E, ReadonlyArray<B>>) => {
+  return <A, B>(
+    f: (a: A) => These<E, B>
+  ): ((as: ReadonlyArray<A>) => These<E, ReadonlyArray<B>>) => {
     return traverseReadonlyArrayWithIndexS(flow(SK, f))
   }
 }
@@ -733,4 +764,5 @@ export const traverseReadonlyArray = <E>(S: Semigroup<E>) => {
  */
 export const sequenceReadonlyArray = <E>(
   S: Semigroup<E>
-): (<A>(arr: ReadonlyArray<These<E, A>>) => These<E, ReadonlyArray<A>>) => traverseReadonlyArray(S)(identity)
+): (<A>(arr: ReadonlyArray<These<E, A>>) => These<E, ReadonlyArray<A>>) =>
+  traverseReadonlyArray(S)(identity)

@@ -1,11 +1,11 @@
 /**
  * @since 3.0.0
  */
-import { flow, pipe } from '@fp-ts/core/Function'
-import type { Kind, TypeLambda } from '@fp-ts/core/HKT'
-import type { Apply } from '@fp-ts/core/typeclasses/Apply'
-import type { Functor } from '@fp-ts/core/typeclasses/Functor'
-import type { KleisliComposable } from '@fp-ts/core/typeclasses/KleisliComposable'
+import { flow, pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Apply } from "@fp-ts/core/typeclasses/Apply"
+import type { Functor } from "@fp-ts/core/typeclasses/Functor"
+import type { KleisliComposable } from "@fp-ts/core/typeclasses/KleisliComposable"
 
 /**
  * @category model
@@ -32,7 +32,9 @@ export const zipLeft = <F extends TypeLambda>(Flattenable: Flattenable<F>) => {
   const tap_ = tap(Flattenable)
   return <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
-  ): (<R1, O1, E1, A>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => {
+  ): (<R1, O1, E1, A>(
+    self: Kind<F, S, R1, O1, E1, A>
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => {
     return tap_(() => that)
   }
 }
@@ -46,7 +48,9 @@ export const zipLeft = <F extends TypeLambda>(Flattenable: Flattenable<F>) => {
 export const zipRight = <F extends TypeLambda>(Flattenable: Flattenable<F>) => {
   return <S, R2, O2, E2, A>(
     that: Kind<F, S, R2, O2, E2, A>
-  ): (<R1, O1, E1>(self: Kind<F, S, R1, O1, E1, unknown>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => {
+  ): (<R1, O1, E1>(
+    self: Kind<F, S, R1, O1, E1, unknown>
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => {
     return Flattenable.flatMap(() => that)
   }
 }
@@ -59,14 +63,20 @@ export const zipRight = <F extends TypeLambda>(Flattenable: Flattenable<F>) => {
  * @category do notation
  * @since 3.0.0
  */
-export const bind =
-  <M extends TypeLambda>(Flattenable: Flattenable<M>) =>
+export const bind = <M extends TypeLambda>(Flattenable: Flattenable<M>) =>
   <N extends string, A extends object, S, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     f: (a: A) => Kind<M, S, R2, O2, E2, B>
   ): (<R1, O1, E1>(
     self: Kind<M, S, R1, O1, E1, A>
-  ) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
+  ) => Kind<
+    M,
+    S,
+    R1 & R2,
+    O1 | O2,
+    E1 | E2,
+    { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
+  >) =>
     Flattenable.flatMap((a) =>
       pipe(
         f(a),
@@ -77,31 +87,27 @@ export const bind =
 /**
  * @since 3.0.0
  */
-export const ap =
-  <F extends TypeLambda>(Flattenable: Flattenable<F>): Apply<F>['ap'] =>
+export const ap = <F extends TypeLambda>(Flattenable: Flattenable<F>): Apply<F>["ap"] =>
   (fa) =>
-  (fab) =>
-    pipe(
-      fab,
-      Flattenable.flatMap((f) => pipe(fa, Flattenable.map(f)))
-    )
+    (fab) =>
+      pipe(
+        fab,
+        Flattenable.flatMap((f) => pipe(fa, Flattenable.map(f)))
+      )
 
 /**
  * @since 3.0.0
  */
-export const composeKleisli =
-  <F extends TypeLambda>(Flattenable: Flattenable<F>): KleisliComposable<F>['composeKleisli'] =>
-  (bc) =>
-  (ab) =>
-    flow(ab, Flattenable.flatMap(bc))
+export const composeKleisli = <F extends TypeLambda>(
+  Flattenable: Flattenable<F>
+): KleisliComposable<F>["composeKleisli"] => (bc) => (ab) => flow(ab, Flattenable.flatMap(bc))
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
  * @since 3.0.0
  */
-export const tap =
-  <F extends TypeLambda>(Flattenable: Flattenable<F>) =>
+export const tap = <F extends TypeLambda>(Flattenable: Flattenable<F>) =>
   <A, S, R2, O2, E2>(
     f: (a: A) => Kind<F, S, R2, O2, E2, unknown>
   ): (<R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) =>

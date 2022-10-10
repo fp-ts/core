@@ -1,20 +1,20 @@
 /**
  * @since 3.0.0
  */
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import type { Endomorphism } from '@fp-ts/core/Endomorphism'
-import type { FromState as FromState_ } from '@fp-ts/core/typeclasses/FromState'
-import { flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
+import type { Endomorphism } from "@fp-ts/core/Endomorphism"
+import { flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import type { FromState as FromState_ } from "@fp-ts/core/typeclasses/FromState"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
 
 /**
  * @category model
@@ -33,7 +33,7 @@ export interface State<S, A> {
  * @since 3.0.0
  */
 export interface StateTypeLambda extends TypeLambda {
-  readonly type: State<this['InOut1'], this['Out1']>
+  readonly type: State<this["InOut1"], this["Out1"]>
 }
 
 /**
@@ -42,10 +42,7 @@ export interface StateTypeLambda extends TypeLambda {
  * @category constructors
  * @since 3.0.0
  */
-export const get =
-  <S>(): State<S, S> =>
-  (s) =>
-    [s, s]
+export const get = <S>(): State<S, S> => (s) => [s, s]
 
 /**
  * Set the state
@@ -53,10 +50,7 @@ export const get =
  * @category constructors
  * @since 3.0.0
  */
-export const put =
-  <S>(s: S): State<S, void> =>
-  () =>
-    [s, undefined]
+export const put = <S>(s: S): State<S, void> => () => [s, undefined]
 
 /**
  * Modify the state by applying a function to the current state
@@ -64,10 +58,7 @@ export const put =
  * @category constructors
  * @since 3.0.0
  */
-export const modify =
-  <S>(f: Endomorphism<S>): State<S, void> =>
-  (s) =>
-    [f(s), undefined]
+export const modify = <S>(f: Endomorphism<S>): State<S, void> => (s) => [f(s), undefined]
 
 /**
  * Get a value which depends on the current state
@@ -75,10 +66,7 @@ export const modify =
  * @category constructors
  * @since 3.0.0
  */
-export const gets =
-  <S, A>(f: (s: S) => A): State<S, A> =>
-  (s) =>
-    [s, f(s)]
+export const gets = <S, A>(f: (s: S) => A): State<S, A> => (s) => [s, f(s)]
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.
@@ -86,21 +74,17 @@ export const gets =
  * @category mapping
  * @since 3.0.0
  */
-export const map =
-  <A, B>(f: (a: A) => B) =>
+export const map = <A, B>(f: (a: A) => B) =>
   <S>(self: State<S, A>): State<S, B> =>
-  (s1) => {
-    const [s2, a] = self(s1)
-    return [s2, f(a)]
-  }
+    (s1) => {
+      const [s2, a] = self(s1)
+      return [s2, f(a)]
+    }
 
 /**
  * @since 3.0.0
  */
-export const of =
-  <A, S>(a: A): State<S, A> =>
-  (s) =>
-    [s, a]
+export const of = <A, S>(a: A): State<S, A> => (s) => [s, a]
 
 /**
  * @category instances
@@ -114,11 +98,14 @@ export const FromIdentity: fromIdentity.FromIdentity<StateTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMap: <A, S, B>(f: (a: A) => State<S, B>) => (self: State<S, A>) => State<S, B> =
-  (f) => (self) => (s1) => {
-    const [s2, a] = self(s1)
-    return f(a)(s2)
-  }
+export const flatMap: <A, S, B>(f: (a: A) => State<S, B>) => (self: State<S, A>) => State<S, B> = (
+  f
+) =>
+  (self) =>
+    (s1) => {
+      const [s2, a] = self(s1)
+      return f(a)(s2)
+    }
 
 /**
  * @category instances
@@ -134,7 +121,9 @@ export const Flattenable: flattenable.Flattenable<StateTypeLambda> = {
  */
 export const composeKleisli: <B, S, C>(
   bfc: (b: B) => State<S, C>
-) => <A>(afb: (a: A) => State<S, B>) => (a: A) => State<S, C> =flattenable.composeKleisli(Flattenable)
+) => <A>(afb: (a: A) => State<S, B>) => (a: A) => State<S, C> = flattenable.composeKleisli(
+  Flattenable
+)
 
 /**
  * @category instances
@@ -147,7 +136,7 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<StateTypeLam
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => <S>(a: A) => State<S, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => <S>(a: A) => State<S, A> = fromIdentity.idKleisli(FromIdentity)
 
 /**
  * @category instances
@@ -166,7 +155,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<StateTypeLambda> = {
  * @since 3.0.0
  */
 export const zipLeft: <S>(that: State<S, unknown>) => <A>(self: State<S, A>) => State<S, A> =
- flattenable.zipLeft(Flattenable)
+  flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -175,13 +164,13 @@ export const zipLeft: <S>(that: State<S, unknown>) => <A>(self: State<S, A>) => 
  * @since 3.0.0
  */
 export const zipRight: <S, A>(that: State<S, A>) => (self: State<S, unknown>) => State<S, A> =
- flattenable.zipRight(Flattenable)
+  flattenable.zipRight(Flattenable)
 
 /**
  * @since 3.0.0
  */
 export const ap: <S, A>(fa: State<S, A>) => <B>(self: State<S, (a: A) => B>) => State<S, B> =
- flattenable.ap(Flattenable)
+  flattenable.ap(Flattenable)
 
 /**
  * @since 3.0.0
@@ -191,7 +180,7 @@ export const unit = <S>(): State<S, void> => of(undefined)
 /**
  * @since 3.0.0
  */
-export const flatten: <S, A>(mma: State<S, State<S, A>>) => State<S, A> =flatMap(identity)
+export const flatten: <S, A>(mma: State<S, State<S, A>>) => State<S, A> = flatMap(identity)
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -209,7 +198,9 @@ export const Functor: functor.Functor<StateTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <S, B>(fab: State<S, (a: A) => B>) => State<S, B> =functor.flap(Functor)
+export const flap: <A>(a: A) => <S, B>(fab: State<S, (a: A) => B>) => State<S, B> = functor.flap(
+  Functor
+)
 
 /**
  * @category instances
@@ -226,8 +217,9 @@ export const Apply: apply.Apply<StateTypeLambda> = {
  * @category lifting
  * @since 3.0.0
  */
-export const lift2: <A, B, C>(f: (a: A, b: B) => C) => <S>(fa: State<S, A>, fb: State<S, B>) => State<S, C> =
- apply.lift2(Apply)
+export const lift2: <A, B, C>(
+  f: (a: A, b: B) => C
+) => <S>(fa: State<S, A>, fb: State<S, B>) => State<S, C> = apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `State`.
@@ -237,7 +229,7 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => <S>(fa: State<S, A>, fb: 
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => <S>(fa: State<S, A>, fb: State<S, B>, fc: State<S, C>) => State<S, D> =apply.lift3(Apply)
+) => <S>(fa: State<S, A>, fb: State<S, B>, fc: State<S, C>) => State<S, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -272,20 +264,14 @@ export const FromState: FromState_<StateTypeLambda> = {
  *
  * @since 3.0.0
  */
-export const evaluate =
-  <S>(s: S) =>
-  <A>(ma: State<S, A>): A =>
-    ma(s)[1]
+export const evaluate = <S>(s: S) => <A>(ma: State<S, A>): A => ma(s)[1]
 
 /**
  * Run a computation in the `State` monad discarding the result.
  *
  * @since 3.0.0
  */
-export const execute =
-  <S>(s: S) =>
-  <A>(self: State<S, A>): S =>
-    self(s)[0]
+export const execute = <S>(s: S) => <A>(self: State<S, A>): S => self(s)[0]
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -295,14 +281,16 @@ export const execute =
  * @category do notation
  * @since 3.0.0
  */
-export const bindTo: <N extends string>(name: N) => <S, A>(self: State<S, A>) => State<S, { readonly [K in N]: A }> =
- functor.bindTo(Functor)
+export const bindTo: <N extends string>(
+  name: N
+) => <S, A>(self: State<S, A>) => State<S, { readonly [K in N]: A }> = functor.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <S>(self: State<S, A>) => State<S, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <S>(
+  self: State<S, A>
+) => State<S, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(Functor)
 
 export {
   /**
@@ -319,8 +307,11 @@ export {
 export const bind: <N extends string, A extends object, S, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => State<S, B>
-) => (self: State<S, A>) => State<S, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+) => (
+  self: State<S, A>
+) => State<S, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = flattenable.bind(
+  Flattenable
+)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -331,8 +322,11 @@ export const bind: <N extends string, A extends object, S, B>(
 export const bindRight: <N extends string, A extends object, S, B>(
   name: Exclude<N, keyof A>,
   fb: State<S, B>
-) => (self: State<S, A>) => State<S, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => (
+  self: State<S, A>
+) => State<S, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = apply.bindRight(
+  Apply
+)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -342,7 +336,7 @@ export const bindRight: <N extends string, A extends object, S, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <S, A>(self: State<S, A>) => State<S, readonly [A]> =functor.tupled(Functor)
+export const tupled: <S, A>(self: State<S, A>) => State<S, readonly [A]> = functor.tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -352,8 +346,8 @@ export const tupled: <S, A>(self: State<S, A>) => State<S, readonly [A]> =functo
  */
 export const zipFlatten: <S, B>(
   fb: State<S, B>
-) => <A extends ReadonlyArray<unknown>>(self: State<S, A>) => State<S, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <A extends ReadonlyArray<unknown>>(self: State<S, A>) => State<S, readonly [...A, B]> = apply
+  .zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -361,8 +355,10 @@ export const zipFlatten: <S, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const zipWith: <S, B, A, C>(that: State<S, B>, f: (a: A, b: B) => C) => (self: State<S, A>) => State<S, C> =
- apply.zipWith(Apply)
+export const zipWith: <S, B, A, C>(
+  that: State<S, B>,
+  f: (a: A, b: B) => C
+) => (self: State<S, A>) => State<S, C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -374,8 +370,9 @@ export const zipWith: <S, B, A, C>(that: State<S, B>, f: (a: A, b: B) => C) => (
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <A, S, B>(f: (index: number, a: A) => State<S, B>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <A, S, B>(
+  f: (index: number, a: A) => State<S, B>
+) =>
   (as: NonEmptyReadonlyArray<A>): State<S, NonEmptyReadonlyArray<B>> => {
     return (s) => {
       const [s2, b] = f(0, _.head(as))(s)
@@ -396,7 +393,9 @@ export const traverseNonEmptyReadonlyArrayWithIndex =
  * @category traversing
  * @since 3.0.0
  */
-export const traverseReadonlyArrayWithIndex = <A, S, B>(f: (index: number, a: A) => State<S, B>) => {
+export const traverseReadonlyArrayWithIndex = <A, S, B>(
+  f: (index: number, a: A) => State<S, B>
+) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
   return (as: ReadonlyArray<A>): State<S, ReadonlyArray<B>> => {
     return _.isNonEmpty(as) ? g(as) : of(_.empty)
@@ -433,5 +432,6 @@ export const traverseReadonlyArray = <A, S, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <S, A>(arr: ReadonlyArray<State<S, A>>) => State<S, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <S, A>(
+  arr: ReadonlyArray<State<S, A>>
+) => State<S, ReadonlyArray<A>> = traverseReadonlyArray(identity)

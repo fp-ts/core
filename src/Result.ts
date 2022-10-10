@@ -13,41 +13,40 @@
  *
  * @since 3.0.0
  */
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as alt from '@fp-ts/core/typeclasses/Alt'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import type { Compactable } from '@fp-ts/core/typeclasses/Compactable'
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import type * as extendable from '@fp-ts/core/typeclasses/Extendable'
-import type * as filterable from '@fp-ts/core/typeclasses/Filterable'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import * as fromResult_ from '@fp-ts/core/typeclasses/FromResult'
-import { SK } from '@fp-ts/core/Function'
-import { flow, identity, pipe } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import type { Option } from '@fp-ts/core/Option'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Refinement } from '@fp-ts/core/Refinement'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import type { Show } from '@fp-ts/core/typeclasses/Show'
-import * as traversable from '@fp-ts/core/typeclasses/Traversable'
-import type { TraversableFilterable } from '@fp-ts/core/typeclasses/TraversableFilterable'
+import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import * as alt from "@fp-ts/core/typeclasses/Alt"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type * as extendable from "@fp-ts/core/typeclasses/Extendable"
+import type * as filterable from "@fp-ts/core/typeclasses/Filterable"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type { Show } from "@fp-ts/core/typeclasses/Show"
+import * as traversable from "@fp-ts/core/typeclasses/Traversable"
+import type { TraversableFilterable } from "@fp-ts/core/typeclasses/TraversableFilterable"
 
 /**
  * @category model
  * @since 3.0.0
  */
 export interface Failure<E> {
-  readonly _tag: 'Failure'
+  readonly _tag: "Failure"
   readonly failure: E
 }
 
@@ -56,7 +55,7 @@ export interface Failure<E> {
  * @since 3.0.0
  */
 export interface Success<A> {
-  readonly _tag: 'Success'
+  readonly _tag: "Success"
   readonly success: A
 }
 
@@ -75,7 +74,7 @@ export type Result<E, A> = Failure<E> | Success<A>
  * @since 3.0.0
  */
 export interface ResultTypeLambda extends TypeLambda {
-  readonly type: Result<this['Out2'], this['Out1']>
+  readonly type: Result<this["Out2"], this["Out1"]>
 }
 
 /**
@@ -83,7 +82,7 @@ export interface ResultTypeLambda extends TypeLambda {
  * @since 3.0.0
  */
 export interface ResultTypeLambdaFix<E> extends TypeLambda {
-  readonly type: Result<E, this['Out1']>
+  readonly type: Result<E, this["Out1"]>
 }
 
 /**
@@ -91,7 +90,7 @@ export interface ResultTypeLambdaFix<E> extends TypeLambda {
  * @since 3.0.0
  */
 export interface ValidatedT<F extends TypeLambda, E> extends TypeLambda {
-  readonly type: Kind<F, this['InOut1'], this['In1'], this['Out3'], E, this['Out1']>
+  readonly type: Kind<F, this["InOut1"], this["In1"], this["Out3"], E, this["Out1"]>
 }
 
 /**
@@ -162,10 +161,8 @@ export const succeed: <A>(a: A) => Result<never, A> = _.succeed
  * @category pattern matching
  * @since 3.0.0
  */
-export const match =
-  <E, B, A, C = B>(onError: (e: E) => B, onSuccess: (a: A) => C) =>
-  (self: Result<E, A>): B | C =>
-    isFailure(self) ? onError(self.failure) : onSuccess(self.success)
+export const match = <E, B, A, C = B>(onError: (e: E) => B, onSuccess: (a: A) => C) =>
+  (self: Result<E, A>): B | C => isFailure(self) ? onError(self.failure) : onSuccess(self.success)
 
 /**
  * Returns the wrapped value if it's a `Success` or a default value if is a `Failure`.
@@ -192,10 +189,8 @@ export const match =
  * @category error handling
  * @since 3.0.0
  */
-export const getOrElse =
-  <B>(onError: B) =>
-  <A>(self: Result<unknown, A>): A | B =>
-    isFailure(self) ? onError : self.success
+export const getOrElse = <B>(onError: B) =>
+  <A>(self: Result<unknown, A>): A | B => isFailure(self) ? onError : self.success
 
 /**
  * Takes a lazy default and a nullable value, if the value is not nully, turn it into a `Success`, if the value is nully use
@@ -212,7 +207,8 @@ export const getOrElse =
  * @category conversions
  * @since 3.0.0
  */
-export const fromNullable: <E>(onNullable: E) => <A>(a: A) => Result<E, NonNullable<A>> = _.fromNullableToResult
+export const fromNullable: <E>(onNullable: E) => <A>(a: A) => Result<E, NonNullable<A>> =
+  _.fromNullableToResult
 
 /**
  * @category lifting
@@ -233,7 +229,8 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B, E>(
 export const flatMapNullable = <A, B, E2>(
   f: (a: A) => B | null | undefined,
   onNullable: E2
-): (<E1>(self: Result<E1, A>) => Result<E1 | E2, NonNullable<B>>) => flatMap(liftNullable(f, onNullable))
+): (<E1>(self: Result<E1, A>) => Result<E1 | E2, NonNullable<B>>) =>
+  flatMap(liftNullable(f, onNullable))
 
 /**
  * Constructs a new `Result` from a function that might throw.
@@ -274,19 +271,16 @@ export const fromThrowable = <A, E>(f: () => A, onThrow: (error: unknown) => E):
  * @category interop
  * @since 3.0.0
  */
-export const liftThrowable =
-  <A extends ReadonlyArray<unknown>, B, E>(
-    f: (...a: A) => B,
-    onThrow: (error: unknown) => E
-  ): ((...a: A) => Result<E, B>) =>
-  (...a) =>
-    fromThrowable(() => f(...a), onThrow)
+export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
+  f: (...a: A) => B,
+  onThrow: (error: unknown) => E
+): ((...a: A) => Result<E, B>) => (...a) => fromThrowable(() => f(...a), onThrow)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const toUnion: <E, A>(fa: Result<E, A>) => E | A =match(identity, identity)
+export const toUnion: <E, A>(fa: Result<E, A>) => E | A = match(identity, identity)
 
 /**
  * @since 3.0.0
@@ -302,8 +296,8 @@ export const reverse = <E, A>(ma: Result<E, A>): Result<A, E> =>
  */
 export const catchAll: <E1, E2, B>(
   onError: (e: E1) => Result<E2, B>
-) => <A>(self: Result<E1, A>) => Result<E2, A | B> = (onError) => (self) =>
-  isFailure(self) ? onError(self.failure) : self
+) => <A>(self: Result<E1, A>) => Result<E2, A | B> = (onError) =>
+  (self) => isFailure(self) ? onError(self.failure) : self
 
 /**
  * Returns an effect whose failure and success channels have been mapped by
@@ -312,9 +306,11 @@ export const catchAll: <E1, E2, B>(
  * @category mapping
  * @since 3.0.0
  */
-export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Result<E, A>) => Result<G, B> =
-  (f, g) => (fa) =>
-    isFailure(fa) ? fail(f(fa.failure)) : succeed(g(fa.success))
+export const mapBoth: <E, G, A, B>(
+  f: (e: E) => G,
+  g: (a: A) => B
+) => (self: Result<E, A>) => Result<G, B> = (f, g) =>
+  (fa) => isFailure(fa) ? fail(f(fa.failure)) : succeed(g(fa.success))
 
 /**
  * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
@@ -365,20 +361,21 @@ export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Res
  * @category error handling
  * @since 3.0.0
  */
-export const orElse: <E2, B>(that: Result<E2, B>) => <E1, A>(self: Result<E1, A>) => Result<E2, A | B> =
-  (that) => (fa) =>
-    isFailure(fa) ? that : fa
+export const orElse: <E2, B>(
+  that: Result<E2, B>
+) => <E1, A>(self: Result<E1, A>) => Result<E2, A | B> = (that) => (fa) => isFailure(fa) ? that : fa
 
 /**
  * @since 3.0.0
  */
-export const extend: <E, A, B>(f: (wa: Result<E, A>) => B) => (wa: Result<E, A>) => Result<E, B> = (f) => (wa) =>
-  isFailure(wa) ? wa : succeed(f(wa))
+export const extend: <E, A, B>(f: (wa: Result<E, A>) => B) => (wa: Result<E, A>) => Result<E, B> = (
+  f
+) => (wa) => isFailure(wa) ? wa : succeed(f(wa))
 
 /**
  * @since 3.0.0
  */
-export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> =extend(identity)
+export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> = extend(identity)
 
 /**
  * Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
@@ -402,11 +399,10 @@ export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> =ext
  * @category traversing
  * @since 3.0.0
  */
-export const traverse =
-  <F extends TypeLambda>(F: applicative.Applicative<F>) =>
+export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
   <A, FS, FR, FO, FE, B>(f: (a: A) => Kind<F, FS, FR, FO, FE, B>) =>
-  <E>(ta: Result<E, A>): Kind<F, FS, FR, FO, FE, Result<E, B>> =>
-    isFailure(ta) ? F.of(fail(ta.failure)) : pipe(f(ta.success), F.map(succeed))
+    <E>(ta: Result<E, A>): Kind<F, FS, FR, FO, FE, Result<E, B>> =>
+      isFailure(ta) ? F.of(fail(ta.failure)) : pipe(f(ta.success), F.map(succeed))
 
 /**
  * @category instances
@@ -422,10 +418,11 @@ export const getShow = <E, A>(SE: Show<E>, SA: Show<A>): Show<Result<E, A>> => (
  */
 export const getEq = <E, A>(EE: eq.Eq<E>, EA: eq.Eq<A>): eq.Eq<Result<E, A>> =>
   eq.fromEquals(
-    (that) => (self) =>
-      isFailure(self)
-        ? isFailure(that) && EE.equals(that.failure)(self.failure)
-        : isSuccess(that) && EA.equals(that.success)(self.success)
+    (that) =>
+      (self) =>
+        isFailure(self)
+          ? isFailure(that) && EE.equals(that.failure)(self.failure)
+          : isSuccess(that) && EA.equals(that.success)(self.success)
   )
 
 /**
@@ -447,16 +444,21 @@ export const getEq = <E, A>(EE: eq.Eq<E>, EA: eq.Eq<A>): eq.Eq<Result<E, A>> =>
  * @since 3.0.0
  */
 export const getSemigroup = <A, E>(S: Semigroup<A>): Semigroup<Result<E, A>> => ({
-  combine: (that) => (self) =>
-    isFailure(that) ? self : isFailure(self) ? that : succeed(S.combine(that.success)(self.success))
+  combine: (that) =>
+    (self) =>
+      isFailure(that) ?
+        self :
+        isFailure(self) ?
+        that :
+        succeed(S.combine(that.success)(self.success))
 })
 
 /**
  * @category filtering
  * @since 3.0.0
  */
-export const compact: <E>(onNone: E) => <A>(self: Result<E, Option<A>>) => Result<E, A> = (e) => (self) =>
-  isFailure(self) ? self : _.isNone(self.success) ? fail(e) : succeed(self.success.value)
+export const compact: <E>(onNone: E) => <A>(self: Result<E, Option<A>>) => Result<E, A> = (e) =>
+  (self) => isFailure(self) ? self : _.isNone(self.success) ? fail(e) : succeed(self.success.value)
 
 /**
  * @category filtering
@@ -487,7 +489,9 @@ export const getCompactable = <E>(onNone: E): Compactable<ValidatedT<ResultTypeL
  * @category instances
  * @since 3.0.0
  */
-export const getFilterable = <E>(onEmpty: E): filterable.Filterable<ValidatedT<ResultTypeLambda, E>> => {
+export const getFilterable = <E>(
+  onEmpty: E
+): filterable.Filterable<ValidatedT<ResultTypeLambda, E>> => {
   return {
     filterMap: (f) => filterMap(f, onEmpty)
   }
@@ -497,7 +501,9 @@ export const getFilterable = <E>(onEmpty: E): filterable.Filterable<ValidatedT<R
  * @category filtering
  * @since 3.0.0
  */
-export const traverseFilterMap = <F extends TypeLambda>(Applicative: applicative.Applicative<F>) => {
+export const traverseFilterMap = <F extends TypeLambda>(
+  Applicative: applicative.Applicative<F>
+) => {
   const traverse_ = traverse(Applicative)
   return <A, S, R, O, FE, B, E>(
     f: (a: A) => Kind<F, S, R, O, FE, Option<B>>,
@@ -511,7 +517,9 @@ export const traverseFilterMap = <F extends TypeLambda>(Applicative: applicative
  * @category filtering
  * @since 3.0.0
  */
-export const traversePartitionMap = <F extends TypeLambda>(Applicative: applicative.Applicative<F>) => {
+export const traversePartitionMap = <F extends TypeLambda>(
+  Applicative: applicative.Applicative<F>
+) => {
   const traverse_ = traverse(Applicative)
   return <A, S, R, O, FE, B, C, E>(
     f: (a: A) => Kind<F, S, R, O, FE, Result<B, C>>,
@@ -525,7 +533,9 @@ export const traversePartitionMap = <F extends TypeLambda>(Applicative: applicat
  * @category instances
  * @since 3.0.0
  */
-export const getTraversableFilterable = <E>(onEmpty: E): TraversableFilterable<ValidatedT<ResultTypeLambda, E>> => {
+export const getTraversableFilterable = <E>(
+  onEmpty: E
+): TraversableFilterable<ValidatedT<ResultTypeLambda, E>> => {
   return {
     traverseFilterMap: (Applicative) => {
       const traverseFilterMap_ = traverseFilterMap(Applicative)
@@ -553,8 +563,8 @@ export const Bifunctor: bifunctor.Bifunctor<ResultTypeLambda> = {
  * @category error handling
  * @since 3.0.0
  */
-export const mapError: <E, G>(f: (e: E) => G) => <A>(self: Result<E, A>) => Result<G, A> =
- bifunctor.mapLeft(Bifunctor)
+export const mapError: <E, G>(f: (e: E) => G) => <A>(self: Result<E, A>) => Result<G, A> = bifunctor
+  .mapLeft(Bifunctor)
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.
@@ -562,8 +572,9 @@ export const mapError: <E, G>(f: (e: E) => G) => <A>(self: Result<E, A>) => Resu
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <E>(fa: Result<E, A>) => Result<E, B> =
- bifunctor.map(Bifunctor)
+export const map: <A, B>(f: (a: A) => B) => <E>(fa: Result<E, A>) => Result<E, B> = bifunctor.map(
+  Bifunctor
+)
 
 /**
  * @category instances
@@ -577,8 +588,9 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <E, B>(fab: Result<E, (a: A) => B>) => Result<E, B> =
- functor.flap(Functor)
+export const flap: <A>(a: A) => <E, B>(fab: Result<E, (a: A) => B>) => Result<E, B> = functor.flap(
+  Functor
+)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -586,7 +598,7 @@ export const flap: <A>(a: A) => <E, B>(fab: Result<E, (a: A) => B>) => Result<E,
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <E>(self: Result<E, unknown>) => Result<E, B> =functor.as(Functor)
+export const as: <B>(b: B) => <E>(self: Result<E, unknown>) => Result<E, B> = functor.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -594,7 +606,7 @@ export const as: <B>(b: B) => <E>(self: Result<E, unknown>) => Result<E, B> =fun
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <E>(self: Result<E, unknown>) => Result<E, void> =functor.unit(Functor)
+export const unit: <E>(self: Result<E, unknown>) => Result<E, void> = functor.unit(Functor)
 
 /**
  * @category instances
@@ -608,9 +620,10 @@ export const FromIdentity: fromIdentity.FromIdentity<ResultTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMap: <A, E2, B>(f: (a: A) => Result<E2, B>) => <E1>(self: Result<E1, A>) => Result<E1 | E2, B> =
-  (f) => (self) =>
-    isFailure(self) ? self : f(self.success)
+export const flatMap: <A, E2, B>(
+  f: (a: A) => Result<E2, B>
+) => <E1>(self: Result<E1, A>) => Result<E1 | E2, B> = (f) =>
+  (self) => isFailure(self) ? self : f(self.success)
 
 /**
  * The `flatten` function is the conventional monad join operator. It is used to remove one level of monadic structure, projecting its bound argument into the outer level.
@@ -625,8 +638,9 @@ export const flatMap: <A, E2, B>(f: (a: A) => Result<E2, B>) => <E1>(self: Resul
  * @category sequencing
  * @since 3.0.0
  */
-export const flatten: <E1, E2, A>(mma: Result<E1, Result<E2, A>>) => Result<E1 | E2, A> =
- flatMap(identity)
+export const flatten: <E1, E2, A>(mma: Result<E1, Result<E2, A>>) => Result<E1 | E2, A> = flatMap(
+  identity
+)
 
 /**
  * @category instances
@@ -642,8 +656,8 @@ export const Flattenable: flattenable.Flattenable<ResultTypeLambda> = {
  */
 export const composeKleisli: <B, E2, C>(
   bfc: (b: B) => Result<E2, C>
-) => <A, E1>(afb: (a: A) => Result<E1, B>) => (a: A) => Result<E2 | E1, C> =
- flattenable.composeKleisli(Flattenable)
+) => <A, E1>(afb: (a: A) => Result<E1, B>) => (a: A) => Result<E2 | E1, C> = flattenable
+  .composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -656,7 +670,7 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<ResultTypeLa
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => Result<never, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => Result<never, A> = fromIdentity.idKleisli(FromIdentity)
 
 /**
  * @category instances
@@ -674,8 +688,9 @@ export const CategoryKind: kleisliCategory.KleisliCategory<ResultTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const zipLeft: <E2>(that: Result<E2, unknown>) => <E1, A>(self: Result<E1, A>) => Result<E2 | E1, A> =
- flattenable.zipLeft(Flattenable)
+export const zipLeft: <E2>(
+  that: Result<E2, unknown>
+) => <E1, A>(self: Result<E1, A>) => Result<E2 | E1, A> = flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -683,14 +698,16 @@ export const zipLeft: <E2>(that: Result<E2, unknown>) => <E1, A>(self: Result<E1
  * @category sequencing
  * @since 3.0.0
  */
-export const zipRight: <E2, A>(that: Result<E2, A>) => <E1>(self: Result<E1, unknown>) => Result<E2 | E1, A> =
- flattenable.zipRight(Flattenable)
+export const zipRight: <E2, A>(
+  that: Result<E2, A>
+) => <E1>(self: Result<E1, unknown>) => Result<E2 | E1, A> = flattenable.zipRight(Flattenable)
 
 /**
  * @since 3.0.0
  */
-export const ap: <E2, A>(fa: Result<E2, A>) => <E1, B>(fab: Result<E1, (a: A) => B>) => Result<E1 | E2, B> =
- flattenable.ap(Flattenable)
+export const ap: <E2, A>(
+  fa: Result<E2, A>
+) => <E1, B>(fab: Result<E1, (a: A) => B>) => Result<E1 | E2, B> = flattenable.ap(Flattenable)
 
 /**
  * @category instances
@@ -709,7 +726,7 @@ export const Apply: apply.Apply<ResultTypeLambda> = {
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <E1, E2>(fa: Result<E1, A>, fb: Result<E2, B>) => Result<E1 | E2, C> =apply.lift2(Apply)
+) => <E1, E2>(fa: Result<E1, A>, fb: Result<E2, B>) => Result<E1 | E2, C> = apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `Result`.
@@ -719,8 +736,11 @@ export const lift2: <A, B, C>(
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => <E1, E2, E3>(fa: Result<E1, A>, fb: Result<E2, B>, fc: Result<E3, C>) => Result<E1 | E2 | E3, D> =
- apply.lift3(Apply)
+) => <E1, E2, E3>(
+  fa: Result<E1, A>,
+  fb: Result<E2, B>,
+  fc: Result<E3, C>
+) => Result<E1 | E2 | E3, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -789,14 +809,15 @@ export const getValidatedApplicative = <E>(
   Semigroup: Semigroup<E>
 ): applicative.Applicative<ValidatedT<ResultTypeLambda, E>> => ({
   map,
-  ap: (fa) => (fab) =>
-    isFailure(fab)
-      ? isFailure(fa)
-        ? fail(Semigroup.combine(fa.failure)(fab.failure))
-        : fab
-      : isFailure(fa)
-      ? fa
-      : succeed(fab.success(fa.success)),
+  ap: (fa) =>
+    (fab) =>
+      isFailure(fab)
+        ? isFailure(fa)
+          ? fail(Semigroup.combine(fa.failure)(fab.failure))
+          : fab
+        : isFailure(fa)
+        ? fa
+        : succeed(fab.success(fa.success)),
   of: succeed
 })
 
@@ -818,21 +839,23 @@ export const Monad: monad.Monad<ResultTypeLambda> = {
  */
 export const tapError: <E1, E2>(
   onError: (e: E1) => Result<E2, unknown>
-) => <A>(self: Result<E1, A>) => Result<E1 | E2, A> = (onError) => (self) => {
-  if (isSuccess(self)) {
-    return self
+) => <A>(self: Result<E1, A>) => Result<E1 | E2, A> = (onError) =>
+  (self) => {
+    if (isSuccess(self)) {
+      return self
+    }
+    const out = onError(self.failure)
+    return isFailure(out) ? out : self
   }
-  const out = onError(self.failure)
-  return isFailure(out) ? out : self
-}
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
  * @since 3.0.0
  */
-export const tap: <A, E2>(f: (a: A) => Result<E2, unknown>) => <E1>(self: Result<E1, A>) => Result<E1 | E2, A> =
- flattenable.tap(Flattenable)
+export const tap: <A, E2>(
+  f: (a: A) => Result<E2, unknown>
+) => <E1>(self: Result<E1, A>) => Result<E1 | E2, A> = flattenable.tap(Flattenable)
 
 /**
  * @category conversions
@@ -845,29 +868,23 @@ export const toReadonlyArray = <E, A>(self: Result<E, A>): ReadonlyArray<A> =>
  * @category folding
  * @since 3.0.0
  */
-export const reduce =
-  <B, A>(b: B, f: (b: B, a: A) => B) =>
-  <E>(self: Result<E, A>): B =>
-    isFailure(self) ? b : f(b, self.success)
+export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
+  <E>(self: Result<E, A>): B => isFailure(self) ? b : f(b, self.success)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const foldMap =
-  <M>(Monoid: Monoid<M>) =>
+export const foldMap = <M>(Monoid: Monoid<M>) =>
   <A>(f: (a: A) => M) =>
-  <E>(self: Result<E, A>): M =>
-    isFailure(self) ? Monoid.empty : f(self.success)
+    <E>(self: Result<E, A>): M => isFailure(self) ? Monoid.empty : f(self.success)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceRight =
-  <B, A>(b: B, f: (a: A, b: B) => B) =>
-  <E>(self: Result<E, A>): B =>
-    isFailure(self) ? b : f(self.success, b)
+export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
+  <E>(self: Result<E, A>): B => isFailure(self) ? b : f(self.success, b)
 
 /**
  * @category instances
@@ -883,8 +900,9 @@ export const Traversable: traversable.Traversable<ResultTypeLambda> = {
  */
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <E, FS, FR, FO, FE, A>(fa: Result<E, Kind<F, FS, FR, FO, FE, A>>) => Kind<F, FS, FR, FO, FE, Result<E, A>> =
- traversable.sequence(Traversable)
+) => <E, FS, FR, FO, FE, A>(
+  fa: Result<E, Kind<F, FS, FR, FO, FE, A>>
+) => Kind<F, FS, FR, FO, FE, Result<E, A>> = traversable.sequence(Traversable)
 
 /**
  * @category instances
@@ -900,8 +918,9 @@ export const Alt: alt.Alt<ResultTypeLambda> = {
  * @category error handling
  * @since 3.0.0
  */
-export const firstSuccessOf: <E, A>(startWith: Result<E, A>) => (collection: Iterable<Result<E, A>>) => Result<E, A> =
- alt.firstSuccessOf(Alt)
+export const firstSuccessOf: <E, A>(
+  startWith: Result<E, A>
+) => (collection: Iterable<Result<E, A>>) => Result<E, A> = alt.firstSuccessOf(Alt)
 
 /**
  * The default [`Alt`](#semigroupkind) instance returns the last error, if you want to
@@ -937,13 +956,16 @@ export const firstSuccessOf: <E, A>(startWith: Result<E, A>) => (collection: Ite
  * @category error handling
  * @since 3.0.0
  */
-export const getValidatedAlt = <E>(Semigroup: Semigroup<E>): alt.Alt<ValidatedT<ResultTypeLambda, E>> => ({
-  orElse: (that) => (self) => {
-    if (isSuccess(self)) {
-      return self
+export const getValidatedAlt = <E>(
+  Semigroup: Semigroup<E>
+): alt.Alt<ValidatedT<ResultTypeLambda, E>> => ({
+  orElse: (that) =>
+    (self) => {
+      if (isSuccess(self)) {
+        return self
+      }
+      return isFailure(that) ? fail(Semigroup.combine(that.failure)(self.failure)) : that
     }
-    return isFailure(that) ? fail(Semigroup.combine(that.failure)(self.failure)) : that
-  }
 })
 
 /**
@@ -1023,13 +1045,13 @@ export const getSuccess: <E, A>(self: Result<E, A>) => Option<A> = _.getSuccess
  * @category conversions
  * @since 3.0.0
  */
-export const toNull: <E, A>(self: Result<E, A>) => A | null =getOrElse(null)
+export const toNull: <E, A>(self: Result<E, A>) => A | null = getOrElse(null)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const toUndefined: <E, A>(self: Result<E, A>) => A | undefined =getOrElse(undefined)
+export const toUndefined: <E, A>(self: Result<E, A>) => A | undefined = getOrElse(undefined)
 
 /**
  * @example
@@ -1055,9 +1077,12 @@ export const toUndefined: <E, A>(self: Result<E, A>) => A | undefined =getOrElse
  * @since 3.0.0
  */
 export const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: Refinement<A, B>, onFalse: E): (c: C) => Result<E, B>
+  <C extends A, B extends A, E, A = C>(
+    refinement: Refinement<A, B>,
+    onFalse: E
+  ): (c: C) => Result<E, B>
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (b: B) => Result<E, B>
-} =fromResult_.liftPredicate(FromResult)
+} = fromResult_.liftPredicate(FromResult)
 
 /**
  * @category lifting
@@ -1066,7 +1091,7 @@ export const liftPredicate: {
 export const liftOption: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => Option<B>,
   onNone: E
-) => (...a: A) => Result<E, B> =fromResult_.liftOption(FromResult)
+) => (...a: A) => Result<E, B> = fromResult_.liftOption(FromResult)
 
 /**
  * @example
@@ -1102,15 +1127,20 @@ export const filter: {
   <C extends A, B extends A, E2, A = C>(refinement: Refinement<A, B>, onFalse: E2): <E1>(
     self: Result<E1, C>
   ) => Result<E2 | E1, B>
-  <B extends A, E2, A = B>(predicate: Predicate<A>, onFalse: E2): <E1>(self: Result<E1, B>) => Result<E2 | E1, B>
-} =fromResult_.filter(FromResult, Flattenable)
+  <B extends A, E2, A = B>(
+    predicate: Predicate<A>,
+    onFalse: E2
+  ): <E1>(self: Result<E1, B>) => Result<E2 | E1, B>
+} = fromResult_.filter(FromResult, Flattenable)
 
 /**
  * @category filtering
  * @since 3.0.0
  */
-export const filterMap: <A, B, E>(f: (a: A) => Option<B>, onNone: E) => (self: Result<E, A>) => Result<E, B> =
- fromResult_.filterMap(FromResult, Flattenable)
+export const filterMap: <A, B, E>(
+  f: (a: A) => Option<B>,
+  onNone: E
+) => (self: Result<E, A>) => Result<E, B> = fromResult_.filterMap(FromResult, Flattenable)
 
 /**
  * @category filtering
@@ -1123,7 +1153,7 @@ export const partition: {
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (
     self: Result<E, B>
   ) => readonly [Result<E, B>, Result<E, B>]
-} =fromResult_.partition(FromResult, Flattenable)
+} = fromResult_.partition(FromResult, Flattenable)
 
 /**
  * @category filtering
@@ -1132,7 +1162,7 @@ export const partition: {
 export const partitionMap: <A, B, C, E>(
   f: (a: A) => Result<B, C>,
   onEmpty: E
-) => (self: Result<E, A>) => readonly [Result<E, B>, Result<E, C>] =fromResult_.partitionMap(
+) => (self: Result<E, A>) => readonly [Result<E, B>, Result<E, C>] = fromResult_.partitionMap(
   FromResult,
   Flattenable
 )
@@ -1144,18 +1174,18 @@ export const partitionMap: <A, B, C, E>(
 export const flatMapOption: <A, B, E2>(
   f: (a: A) => Option<B>,
   onNone: E2
-) => <E1>(self: Result<E1, A>) => Result<E2 | E1, B> =fromResult_.flatMapOption(FromResult, Flattenable)
+) => <E1>(self: Result<E1, A>) => Result<E2 | E1, B> = fromResult_.flatMapOption(
+  FromResult,
+  Flattenable
+)
 
 /**
  * Tests whether a value is a member of a `Result`.
  *
  * @since 3.0.0
  */
-export const elem =
-  <A>(E: eq.Eq<A>) =>
-  (a: A) =>
-  <E>(ma: Result<E, A>): boolean =>
-    isFailure(ma) ? false : E.equals(ma.success)(a)
+export const elem = <A>(E: eq.Eq<A>) =>
+  (a: A) => <E>(ma: Result<E, A>): boolean => isFailure(ma) ? false : E.equals(ma.success)(a)
 
 /**
  * Returns `false` if `Failure` or returns the result of the application of the given predicate to the `Success` value.
@@ -1171,10 +1201,8 @@ export const elem =
  *
  * @since 3.0.0
  */
-export const exists =
-  <A>(predicate: Predicate<A>) =>
-  (ma: Result<unknown, A>): boolean =>
-    isFailure(ma) ? false : predicate(ma.success)
+export const exists = <A>(predicate: Predicate<A>) =>
+  (ma: Result<unknown, A>): boolean => isFailure(ma) ? false : predicate(ma.success)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -1184,20 +1212,22 @@ export const exists =
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Result<never, {}> =succeed(_.Do)
+export const Do: Result<never, {}> = succeed(_.Do)
 
 /**
  * @category do notation
  * @since 3.0.0
  */
-export const bindTo: <N extends string>(name: N) => <E, A>(self: Result<E, A>) => Result<E, { readonly [K in N]: A }> =
- functor.bindTo(Functor)
+export const bindTo: <N extends string>(
+  name: N
+) => <E, A>(self: Result<E, A>) => Result<E, { readonly [K in N]: A }> = functor.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <E>(self: Result<E, A>) => Result<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <E>(
+  self: Result<E, A>
+) => Result<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(Functor)
 
 export {
   /**
@@ -1214,8 +1244,10 @@ export {
 export const bind: <N extends string, A extends object, E2, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Result<E2, B>
-) => <E1>(self: Result<E1, A>) => Result<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+) => <E1>(
+  self: Result<E1, A>
+) => Result<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = flattenable
+  .bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -1226,8 +1258,10 @@ export const bind: <N extends string, A extends object, E2, B>(
 export const bindRight: <N extends string, A extends object, E2, B>(
   name: Exclude<N, keyof A>,
   fb: Result<E2, B>
-) => <E1>(self: Result<E1, A>) => Result<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => <E1>(
+  self: Result<E1, A>
+) => Result<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -1237,13 +1271,13 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Result<never, readonly []> =succeed(_.empty)
+export const Zip: Result<never, readonly []> = succeed(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <E, A>(self: Result<E, A>) => Result<E, readonly [A]> =functor.tupled(Functor)
+export const tupled: <E, A>(self: Result<E, A>) => Result<E, readonly [A]> = functor.tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -1253,8 +1287,9 @@ export const tupled: <E, A>(self: Result<E, A>) => Result<E, readonly [A]> =func
  */
 export const zipFlatten: <E2, B>(
   fb: Result<E2, B>
-) => <E1, A extends ReadonlyArray<unknown>>(self: Result<E1, A>) => Result<E1 | E2, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <E1, A extends ReadonlyArray<unknown>>(
+  self: Result<E1, A>
+) => Result<E1 | E2, readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -1265,7 +1300,7 @@ export const zipFlatten: <E2, B>(
 export const zipWith: <E2, B, A, C>(
   that: Result<E2, B>,
   f: (a: A, b: B) => C
-) => <E1>(self: Result<E1, A>) => Result<E2 | E1, C> =apply.zipWith(Apply)
+) => <E1>(self: Result<E1, A>) => Result<E2 | E1, C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -1277,8 +1312,9 @@ export const zipWith: <E2, B, A, C>(
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <A, E, B>(f: (index: number, a: A) => Result<E, B>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <A, E, B>(
+  f: (index: number, a: A) => Result<E, B>
+) =>
   (as: NonEmptyReadonlyArray<A>): Result<E, NonEmptyReadonlyArray<B>> => {
     const e = f(0, _.head(as))
     if (isFailure(e)) {
@@ -1338,5 +1374,6 @@ export const traverseReadonlyArray = <A, E, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <E, A>(arr: ReadonlyArray<Result<E, A>>) => Result<E, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <E, A>(
+  arr: ReadonlyArray<Result<E, A>>
+) => Result<E, ReadonlyArray<A>> = traverseReadonlyArray(identity)

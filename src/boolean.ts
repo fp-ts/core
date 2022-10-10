@@ -1,14 +1,14 @@
 /**
  * @since 3.0.0
  */
-import type { LazyArg } from '@fp-ts/core/Function'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import * as monoid from '@fp-ts/core/typeclasses/Monoid'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import type * as ord from '@fp-ts/core/typeclasses/Ord'
-import type * as show_ from '@fp-ts/core/typeclasses/Show'
-import type { Refinement } from '@fp-ts/core/Refinement'
+import type { LazyArg } from "@fp-ts/core/Function"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import * as monoid from "@fp-ts/core/typeclasses/Monoid"
+import type * as ord from "@fp-ts/core/typeclasses/Ord"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type * as show_ from "@fp-ts/core/typeclasses/Show"
 
 // -------------------------------------------------------------------------------------
 // refinements
@@ -18,7 +18,8 @@ import type { Refinement } from '@fp-ts/core/Refinement'
  * @category refinements
  * @since 3.0.0
  */
-export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean => typeof u === 'boolean'
+export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean =>
+  typeof u === "boolean"
 
 // -------------------------------------------------------------------------------------
 // pattern matching
@@ -45,10 +46,8 @@ export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolea
  * @category pattern matching
  * @since 3.0.0
  */
-export const match =
-  <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
-  (value: boolean): A | B =>
-    value ? onTrue() : onFalse()
+export const match = <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
+  (value: boolean): A | B => value ? onTrue() : onFalse()
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -63,10 +62,7 @@ export const Eq: eq.Eq<boolean> = eq.EqStrict
 /**
  * @since 3.0.0
  */
-export const and =
-  (that: boolean) =>
-  (self: boolean): boolean =>
-    self && that
+export const and = (that: boolean) => (self: boolean): boolean => self && that
 
 /**
  * `boolean` semigroup under conjunction.
@@ -88,10 +84,7 @@ export const SemigroupAnd: Semigroup<boolean> = {
 /**
  * @since 3.0.0
  */
-export const or =
-  (that: boolean) =>
-  (self: boolean): boolean =>
-    self || that
+export const or = (that: boolean) => (self: boolean): boolean => self || that
 
 /**
  * `boolean` semigroup under disjunction.
@@ -127,7 +120,7 @@ export const MonoidAnd: Monoid<boolean> = {
 /**
  * @since 3.0.0
  */
-export const andAll: (collection: Iterable<boolean>) => boolean =monoid.combineAll(MonoidAnd)
+export const andAll: (collection: Iterable<boolean>) => boolean = monoid.combineAll(MonoidAnd)
 
 /**
  * `boolean` monoid under disjunction.
@@ -145,7 +138,7 @@ export const MonoidOr: Monoid<boolean> = {
 /**
  * @since 3.0.0
  */
-export const orAll: (collection: Iterable<boolean>) => boolean =monoid.combineAll(MonoidOr)
+export const orAll: (collection: Iterable<boolean>) => boolean = monoid.combineAll(MonoidOr)
 
 /**
  * @category instances

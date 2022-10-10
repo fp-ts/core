@@ -1,27 +1,27 @@
-import { pipe } from '@fp-ts/core/Function'
-import { combineAll } from '@fp-ts/core/typeclasses/Monoid'
-import * as _ from '@fp-ts/core/typeclasses/Ord'
-import { sort } from '@fp-ts/core/ReadonlyArray'
-import * as boolean from '@fp-ts/core/boolean'
-import * as string from '@fp-ts/core/string'
-import * as number from '@fp-ts/core/number'
-import * as U from '../util'
+import * as boolean from "@fp-ts/core/boolean"
+import { pipe } from "@fp-ts/core/Function"
+import * as number from "@fp-ts/core/number"
+import { sort } from "@fp-ts/core/ReadonlyArray"
+import * as string from "@fp-ts/core/string"
+import { combineAll } from "@fp-ts/core/typeclasses/Monoid"
+import * as _ from "@fp-ts/core/typeclasses/Ord"
+import * as U from "../util"
 
-describe('Ord', () => {
-  it('tuple', () => {
+describe("Ord", () => {
+  it("tuple", () => {
     const O = _.tuple(string.Ord, number.Ord, boolean.Ord)
-    U.deepStrictEqual(pipe(['a', 1, true], O.compare(['b', 2, true])), -1)
-    U.deepStrictEqual(pipe(['a', 1, true], O.compare(['a', 2, true])), -1)
-    U.deepStrictEqual(pipe(['a', 1, true], O.compare(['a', 1, false])), 1)
+    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["b", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 1, false])), 1)
   })
 
-  it('getMonoid', () => {
+  it("getMonoid", () => {
     type T = readonly [number, string]
     const tuples: ReadonlyArray<T> = [
-      [2, 'c'],
-      [1, 'b'],
-      [2, 'a'],
-      [1, 'c']
+      [2, "c"],
+      [1, "b"],
+      [2, "a"],
+      [1, "c"]
     ]
     const M = _.getMonoid<T>()
     const sortByFst = pipe(
@@ -35,28 +35,28 @@ describe('Ord', () => {
     //                  v-- left unit
     const O1 = combineAll(M)([M.empty, sortByFst, sortBySnd])
     U.deepStrictEqual(sort(O1)(tuples), [
-      [1, 'b'],
-      [1, 'c'],
-      [2, 'a'],
-      [2, 'c']
+      [1, "b"],
+      [1, "c"],
+      [2, "a"],
+      [2, "c"]
     ])
     //                           right unit --v
     const O2 = combineAll(M)([sortBySnd, sortByFst, M.empty])
     U.deepStrictEqual(sort(O2)(tuples), [
-      [2, 'a'],
-      [1, 'b'],
-      [1, 'c'],
-      [2, 'c']
+      [2, "a"],
+      [1, "b"],
+      [1, "c"],
+      [2, "c"]
     ])
   })
 
-  it('ordNumber', () => {
+  it("ordNumber", () => {
     U.deepStrictEqual(pipe(1, number.Ord.compare(2)), -1)
     U.deepStrictEqual(pipe(2, number.Ord.compare(1)), 1)
     U.deepStrictEqual(pipe(2, number.Ord.compare(2)), 0)
   })
 
-  it('clamp', () => {
+  it("clamp", () => {
     const clampNumber = _.clamp(number.Ord)
     U.deepStrictEqual(clampNumber(1, 10)(2), 2)
     U.deepStrictEqual(clampNumber(1, 10)(10), 10)
@@ -65,7 +65,7 @@ describe('Ord', () => {
     U.deepStrictEqual(clampNumber(1, 10)(-10), 1)
   })
 
-  it('between', () => {
+  it("between", () => {
     const betweenNumber = _.between(number.Ord)
     U.deepStrictEqual(betweenNumber(1, 10)(2), true)
     U.deepStrictEqual(betweenNumber(1, 10)(10), true)
@@ -74,28 +74,28 @@ describe('Ord', () => {
     U.deepStrictEqual(betweenNumber(1, 10)(-10), false)
   })
 
-  it('reverse', () => {
+  it("reverse", () => {
     const O = _.reverse(number.Ord)
     U.deepStrictEqual(pipe(1, O.compare(2)), 1)
     U.deepStrictEqual(pipe(2, O.compare(1)), -1)
     U.deepStrictEqual(pipe(2, O.compare(2)), 0)
   })
 
-  it('leq', () => {
+  it("leq", () => {
     const f = _.leq(number.Ord)
     U.deepStrictEqual(pipe(0, f(1)), true)
     U.deepStrictEqual(pipe(1, f(1)), true)
     U.deepStrictEqual(pipe(2, f(1)), false)
   })
 
-  it('geq', () => {
+  it("geq", () => {
     const f = _.geq(number.Ord)
     U.deepStrictEqual(pipe(0, f(1)), false)
     U.deepStrictEqual(pipe(1, f(1)), true)
     U.deepStrictEqual(pipe(2, f(1)), true)
   })
 
-  it('min', () => {
+  it("min", () => {
     type A = { readonly a: number }
     const min = _.min(
       pipe(
@@ -110,7 +110,7 @@ describe('Ord', () => {
     U.strictEqual(pipe(first, min(second)), first)
   })
 
-  it('max', () => {
+  it("max", () => {
     type A = { readonly a: number }
     const max = _.max(
       pipe(
@@ -125,13 +125,13 @@ describe('Ord', () => {
     U.strictEqual(pipe(first, max(second)), first)
   })
 
-  it('equals', () => {
+  it("equals", () => {
     const equals = _.equals(number.Ord)
     U.deepStrictEqual(equals(1)(1), true)
     U.deepStrictEqual(equals(1)(2), false)
   })
 
-  it('trivial', () => {
-    U.deepStrictEqual(sort(_.trivial)(['b', 'a']), ['b', 'a'])
+  it("trivial", () => {
+    U.deepStrictEqual(sort(_.trivial)(["b", "a"]), ["b", "a"])
   })
 })

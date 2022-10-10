@@ -3,10 +3,10 @@
  *
  * @since 3.0.0
  */
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import { pipe } from '@fp-ts/core/Function'
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
-import type { Sync } from '@fp-ts/core/Sync'
+import { pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Sync } from "@fp-ts/core/Sync"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
 
 /**
  * @category model
@@ -20,25 +20,22 @@ export interface FromSync<F extends TypeLambda> extends TypeClass<F> {
  * @category lifting
  * @since 3.0.0
  */
-export const liftSync =
-  <F extends TypeLambda>(FromSync: FromSync<F>) =>
+export const liftSync = <F extends TypeLambda>(FromSync: FromSync<F>) =>
   <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => Sync<B>) =>
-  <S>(...a: A): Kind<F, S, unknown, never, never, B> =>
-    FromSync.fromSync(f(...a))
+    <S>(...a: A): Kind<F, S, unknown, never, never, B> => FromSync.fromSync(f(...a))
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapSync =
-  <M extends TypeLambda>(FromSync: FromSync<M>, M: Flattenable<M>) =>
+export const flatMapSync = <M extends TypeLambda>(FromSync: FromSync<M>, M: Flattenable<M>) =>
   <A, B>(f: (a: A) => Sync<B>) =>
-  <S, R, O, E>(self: Kind<M, S, R, O, E, A>): Kind<M, S, R, O, E, B> => {
-    return pipe(
-      self,
-      M.flatMap<A, S, R, O, E, B>((a) => FromSync.fromSync(f(a)))
-    )
-  }
+    <S, R, O, E>(self: Kind<M, S, R, O, E, A>): Kind<M, S, R, O, E, B> => {
+      return pipe(
+        self,
+        M.flatMap<A, S, R, O, E, B>((a) => FromSync.fromSync(f(a)))
+      )
+    }
 
 // -------------------------------------------------------------------------------------
 // logging
@@ -48,7 +45,6 @@ export const flatMapSync =
  * @category logging
  * @since 3.0.0
  */
-export const log =
-  <M extends TypeLambda>(FromSync: FromSync<M>) =>
+export const log = <M extends TypeLambda>(FromSync: FromSync<M>) =>
   <A extends ReadonlyArray<unknown>, S>(...x: A): Kind<M, S, unknown, never, never, void> =>
     FromSync.fromSync(() => console.log(...x))

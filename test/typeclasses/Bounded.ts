@@ -1,9 +1,9 @@
-import * as _ from '@fp-ts/core/typeclasses/Bounded'
-import * as N from '@fp-ts/core/number'
-import * as U from '../util'
+import * as N from "@fp-ts/core/number"
+import * as _ from "@fp-ts/core/typeclasses/Bounded"
+import * as U from "../util"
 
-describe('Bounded', () => {
-  it('clamp', () => {
+describe("Bounded", () => {
+  it("clamp", () => {
     const B: _.Bounded<number> = {
       ...N.Ord,
       top: 10,
@@ -15,7 +15,7 @@ describe('Bounded', () => {
     U.deepStrictEqual(clamp(11), 10)
   })
 
-  it('reverse', () => {
+  it("reverse", () => {
     const B: _.Bounded<number> = _.reverse({
       ...N.Ord,
       top: 10,

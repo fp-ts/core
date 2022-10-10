@@ -8,9 +8,9 @@
  *
  * @since 3.0.0
  */
-import type * as contravariant from '@fp-ts/core/typeclasses/Contravariant'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
 
 /**
  * @category model
@@ -29,7 +29,7 @@ export interface Show<A> {
  * @since 3.0.0
  */
 export interface ShowTypeLambda extends TypeLambda {
-  readonly type: Show<this['In1']>
+  readonly type: Show<this["In1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -39,9 +39,10 @@ export interface ShowTypeLambda extends TypeLambda {
 /**
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => (self: Show<A>) => Show<B> = (f) => (self) => ({
-  show: (b) => self.show(f(b))
-})
+export const contramap: <B, A>(f: (b: B) => A) => (self: Show<A>) => Show<B> = (f) =>
+  (self) => ({
+    show: (b) => self.show(f(b))
+  })
 
 /**
  * @category instances
@@ -54,18 +55,20 @@ export const Contravariant: contravariant.Contravariant<ShowTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const struct = <A>(shows: { [K in keyof A]: Show<A[K]> }): Show<{ readonly [K in keyof A]: A[K] }> => ({
+export const struct = <A>(
+  shows: { [K in keyof A]: Show<A[K]> }
+): Show<{ readonly [K in keyof A]: A[K] }> => ({
   show: (a) => {
-    let s = '{'
+    let s = "{"
     for (const k in shows) {
       if (_.has.call(shows, k)) {
         s += ` ${k}: ${shows[k].show(a[k])},`
       }
     }
     if (s.length > 1) {
-      s = s.slice(0, -1) + ' '
+      s = s.slice(0, -1) + " "
     }
-    s += '}'
+    s += "}"
     return s
   }
 })
@@ -76,5 +79,5 @@ export const struct = <A>(shows: { [K in keyof A]: Show<A[K]> }): Show<{ readonl
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...shows: { [K in keyof A]: Show<A[K]> }
 ): Show<Readonly<A>> => ({
-  show: (t) => `[${t.map((a, i) => shows[i].show(a)).join(', ')}]`
+  show: (t) => `[${t.map((a, i) => shows[i].show(a)).join(", ")}]`
 })

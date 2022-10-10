@@ -7,33 +7,33 @@
  *
  * @since 3.0.0
  */
-import * as alt from '@fp-ts/core/typeclasses/Alt'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import type { Compactable } from '@fp-ts/core/typeclasses/Compactable'
-import * as result from '@fp-ts/core/Result'
-import type { Result } from '@fp-ts/core/Result'
-import * as resultT from '@fp-ts/core/transformers/ResultT'
-import type * as filterable from '@fp-ts/core/typeclasses/Filterable'
-import * as fromResult_ from '@fp-ts/core/typeclasses/FromResult'
-import * as fromSync_ from '@fp-ts/core/typeclasses/FromSync'
-import { flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import * as sync from '@fp-ts/core/Sync'
-import type { Sync } from '@fp-ts/core/Sync'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import type { Option } from '@fp-ts/core/Option'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { Refinement } from '@fp-ts/core/Refinement'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
+import { flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import * as result from "@fp-ts/core/Result"
+import type { Result } from "@fp-ts/core/Result"
+import * as sync from "@fp-ts/core/Sync"
+import type { Sync } from "@fp-ts/core/Sync"
+import * as resultT from "@fp-ts/core/transformers/ResultT"
+import * as alt from "@fp-ts/core/typeclasses/Alt"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
+import type * as filterable from "@fp-ts/core/typeclasses/Filterable"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
+import * as fromSync_ from "@fp-ts/core/typeclasses/FromSync"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @category model
@@ -50,32 +50,32 @@ export interface SyncResult<E, A> extends Sync<Result<E, A>> {}
  * @since 3.0.0
  */
 export interface SyncResultTypeLambda extends TypeLambda {
-  readonly type: SyncResult<this['Out2'], this['Out1']>
+  readonly type: SyncResult<this["Out2"], this["Out1"]>
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fail: <E>(e: E) => SyncResult<E, never> =resultT.fail(sync.FromIdentity)
+export const fail: <E>(e: E) => SyncResult<E, never> = resultT.fail(sync.FromIdentity)
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const succeed: <A>(a: A) => SyncResult<never, A> =resultT.succeed(sync.FromIdentity)
+export const succeed: <A>(a: A) => SyncResult<never, A> = resultT.succeed(sync.FromIdentity)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromSync: <A>(ma: Sync<A>) => SyncResult<never, A> =resultT.fromKind(sync.Functor)
+export const fromSync: <A>(ma: Sync<A>) => SyncResult<never, A> = resultT.fromKind(sync.Functor)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const failSync: <E>(me: Sync<E>) => SyncResult<E, never> =resultT.failKind(sync.Functor)
+export const failSync: <E>(me: Sync<E>) => SyncResult<E, never> = resultT.failKind(sync.Functor)
 
 /**
  * @category conversions
@@ -94,7 +94,7 @@ export const fromResult: <E, A>(fa: Result<E, A>) => SyncResult<E, A> = sync.of
 export const match: <E, B, A, C = B>(
   onError: (e: E) => B,
   onSuccess: (a: A) => C
-) => (ma: SyncResult<E, A>) => Sync<B | C> =resultT.match(sync.Functor)
+) => (ma: SyncResult<E, A>) => Sync<B | C> = resultT.match(sync.Functor)
 
 /**
  * @category pattern matching
@@ -103,21 +103,22 @@ export const match: <E, B, A, C = B>(
 export const matchSync: <E, B, A, C = B>(
   onError: (e: E) => Sync<B>,
   onSuccess: (a: A) => Sync<C>
-) => (ma: SyncResult<E, A>) => Sync<B | C> =resultT.matchKind(sync.Monad)
+) => (ma: SyncResult<E, A>) => Sync<B | C> = resultT.matchKind(sync.Monad)
 
 /**
  * @category error handling
  * @since 3.0.0
  */
 export const getOrElse: <B>(onError: B) => <A>(self: SyncResult<unknown, A>) => Sync<A | B> =
- resultT.getOrElse(sync.Functor)
+  resultT.getOrElse(sync.Functor)
 
 /**
  * @category error handling
  * @since 3.0.0
  */
-export const getOrElseSync: <B>(onError: Sync<B>) => <A>(self: SyncResult<unknown, A>) => Sync<A | B> =
- resultT.getOrElseKind(sync.Monad)
+export const getOrElseSync: <B>(
+  onError: Sync<B>
+) => <A>(self: SyncResult<unknown, A>) => Sync<A | B> = resultT.getOrElseKind(sync.Monad)
 
 /**
  * Constructs a new `SyncResult` from a function that performs a side effect and might throw.
@@ -126,10 +127,8 @@ export const getOrElseSync: <B>(onError: Sync<B>) => <A>(self: SyncResult<unknow
  * @see {@link liftThrowable}
  * @since 3.0.0
  */
-export const fromThrowable =
-  <A, E>(f: () => A, onThrow: (error: unknown) => E): SyncResult<E, A> =>
-  () =>
-    result.fromThrowable(f, onThrow)
+export const fromThrowable = <A, E>(f: () => A, onThrow: (error: unknown) => E): SyncResult<E, A> =>
+  () => result.fromThrowable(f, onThrow)
 
 /**
  * Lifts a function that may throw to one returning a `SyncResult`.
@@ -137,19 +136,16 @@ export const fromThrowable =
  * @category interop
  * @since 3.0.0
  */
-export const liftThrowable =
-  <A extends ReadonlyArray<unknown>, B, E>(
-    f: (...a: A) => B,
-    onThrow: (error: unknown) => E
-  ): ((...a: A) => SyncResult<E, B>) =>
-  (...a) =>
-    fromThrowable(() => f(...a), onThrow)
+export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
+  f: (...a: A) => B,
+  onThrow: (error: unknown) => E
+): ((...a: A) => SyncResult<E, B>) => (...a) => fromThrowable(() => f(...a), onThrow)
 
 /**
  * @category interop
  * @since 3.0.0
  */
-export const toUnion: <E, A>(fa: SyncResult<E, A>) => Sync<E | A> =resultT.toUnion(sync.Functor)
+export const toUnion: <E, A>(fa: SyncResult<E, A>) => Sync<E | A> = resultT.toUnion(sync.Functor)
 
 /**
  * Recovers from all errors.
@@ -159,12 +155,14 @@ export const toUnion: <E, A>(fa: SyncResult<E, A>) => Sync<E | A> =resultT.toUni
  */
 export const catchAll: <E1, E2, B>(
   onError: (e: E1) => SyncResult<E2, B>
-) => <A>(ma: SyncResult<E1, A>) => SyncResult<E2, A | B> =resultT.catchAll(sync.Monad)
+) => <A>(ma: SyncResult<E1, A>) => SyncResult<E2, A | B> = resultT.catchAll(sync.Monad)
 
 /**
  * @since 3.0.0
  */
-export const reverse: <E, A>(ma: SyncResult<E, A>) => SyncResult<A, E> =resultT.reverse(sync.Functor)
+export const reverse: <E, A>(ma: SyncResult<E, A>) => SyncResult<A, E> = resultT.reverse(
+  sync.Functor
+)
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.
@@ -172,9 +170,10 @@ export const reverse: <E, A>(ma: SyncResult<E, A>) => SyncResult<A, E> =resultT.
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <E>(fa: SyncResult<E, A>) => SyncResult<E, B> =resultT.map(
-  sync.Functor
-)
+export const map: <A, B>(f: (a: A) => B) => <E>(fa: SyncResult<E, A>) => SyncResult<E, B> = resultT
+  .map(
+    sync.Functor
+  )
 
 /**
  * Returns an effect whose failure and success channels have been mapped by
@@ -183,8 +182,10 @@ export const map: <A, B>(f: (a: A) => B) => <E>(fa: SyncResult<E, A>) => SyncRes
  * @category mapping
  * @since 3.0.0
  */
-export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: SyncResult<E, A>) => SyncResult<G, B> =
- resultT.mapBoth(sync.Functor)
+export const mapBoth: <E, G, A, B>(
+  f: (e: E) => G,
+  g: (a: A) => B
+) => (self: SyncResult<E, A>) => SyncResult<G, B> = resultT.mapBoth(sync.Functor)
 
 /**
  * Returns an effect with its error channel mapped using the specified
@@ -194,7 +195,7 @@ export const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Syn
  * @since 3.0.0
  */
 export const mapError: <E, G>(f: (e: E) => G) => <A>(self: SyncResult<E, A>) => SyncResult<G, A> =
- resultT.mapError(sync.Functor)
+  resultT.mapError(sync.Functor)
 
 /**
  * @category sequencing
@@ -202,7 +203,7 @@ export const mapError: <E, G>(f: (e: E) => G) => <A>(self: SyncResult<E, A>) => 
  */
 export const flatMap: <A, E2, B>(
   f: (a: A) => SyncResult<E2, B>
-) => <E1>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, B> =resultT.flatMap(sync.Monad)
+) => <E1>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, B> = resultT.flatMap(sync.Monad)
 
 /**
  * Creates a composite effect that represents this effect followed by another
@@ -211,14 +212,16 @@ export const flatMap: <A, E2, B>(
  * @category error handling
  * @since 3.0.0
  */
-export const flatMapError: <E1, E2>(f: (e: E1) => Sync<E2>) => <A>(self: SyncResult<E1, A>) => SyncResult<E2, A> =
- resultT.flatMapError(sync.Monad)
+export const flatMapError: <E1, E2>(
+  f: (e: E1) => Sync<E2>
+) => <A>(self: SyncResult<E1, A>) => SyncResult<E2, A> = resultT.flatMapError(sync.Monad)
 
 /**
  * @since 3.0.0
  */
-export const flatten: <E1, E2, A>(mma: SyncResult<E1, SyncResult<E2, A>>) => SyncResult<E1 | E2, A> =
- flatMap(identity)
+export const flatten: <E1, E2, A>(
+  mma: SyncResult<E1, SyncResult<E2, A>>
+) => SyncResult<E1 | E2, A> = flatMap(identity)
 
 /**
  * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
@@ -226,8 +229,9 @@ export const flatten: <E1, E2, A>(mma: SyncResult<E1, SyncResult<E2, A>>) => Syn
  *
  * @since 3.0.0
  */
-export const orElse: <E2, B>(that: SyncResult<E2, B>) => <E1, A>(self: SyncResult<E1, A>) => SyncResult<E2, A | B> =
- resultT.orElse(sync.Monad)
+export const orElse: <E2, B>(
+  that: SyncResult<E2, B>
+) => <E1, A>(self: SyncResult<E1, A>) => SyncResult<E2, A | B> = resultT.orElse(sync.Monad)
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -255,7 +259,9 @@ export const getValidatedApplicative = <E>(
  * @category error handling
  * @since 3.0.0
  */
-export const getValidatedAlt = <E>(Semigroup: Semigroup<E>): alt.Alt<result.ValidatedT<SyncResultTypeLambda, E>> => {
+export const getValidatedAlt = <E>(
+  Semigroup: Semigroup<E>
+): alt.Alt<result.ValidatedT<SyncResultTypeLambda, E>> => {
   return {
     orElse: resultT.getValidatedOrElse(sync.Monad, Semigroup)
   }
@@ -266,7 +272,7 @@ export const getValidatedAlt = <E>(Semigroup: Semigroup<E>): alt.Alt<result.Vali
  * @since 3.0.0
  */
 export const compact: <E>(onNone: E) => <A>(self: SyncResult<E, Option<A>>) => SyncResult<E, A> =
- resultT.compact(sync.Functor)
+  resultT.compact(sync.Functor)
 
 /**
  * @category filtering
@@ -275,13 +281,15 @@ export const compact: <E>(onNone: E) => <A>(self: SyncResult<E, Option<A>>) => S
 export const separate: <E>(
   onEmpty: E
 ) => <A, B>(self: SyncResult<E, Result<A, B>>) => readonly [SyncResult<E, A>, SyncResult<E, B>] =
- resultT.separate(sync.Functor)
+  resultT.separate(sync.Functor)
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const getCompactable = <E>(onNone: E): Compactable<result.ValidatedT<SyncResultTypeLambda, E>> => {
+export const getCompactable = <E>(
+  onNone: E
+): Compactable<result.ValidatedT<SyncResultTypeLambda, E>> => {
   return {
     compact: compact(onNone)
   }
@@ -291,7 +299,9 @@ export const getCompactable = <E>(onNone: E): Compactable<result.ValidatedT<Sync
  * @category instances
  * @since 3.0.0
  */
-export const getFilterable = <E>(onEmpty: E): filterable.Filterable<result.ValidatedT<SyncResultTypeLambda, E>> => {
+export const getFilterable = <E>(
+  onEmpty: E
+): filterable.Filterable<result.ValidatedT<SyncResultTypeLambda, E>> => {
   return {
     filterMap: (f) => filterMap(f, onEmpty)
   }
@@ -310,7 +320,7 @@ export const Functor: functor.Functor<SyncResultTypeLambda> = {
  * @since 3.0.0
  */
 export const flap: <A>(a: A) => <E, B>(fab: SyncResult<E, (a: A) => B>) => SyncResult<E, B> =
- functor.flap(Functor)
+  functor.flap(Functor)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -318,7 +328,9 @@ export const flap: <A>(a: A) => <E, B>(fab: SyncResult<E, (a: A) => B>) => SyncR
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <E>(self: SyncResult<E, unknown>) => SyncResult<E, B> =functor.as(Functor)
+export const as: <B>(b: B) => <E>(self: SyncResult<E, unknown>) => SyncResult<E, B> = functor.as(
+  Functor
+)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -326,7 +338,7 @@ export const as: <B>(b: B) => <E>(self: SyncResult<E, unknown>) => SyncResult<E,
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <E>(self: SyncResult<E, unknown>) => SyncResult<E, void> =functor.unit(Functor)
+export const unit: <E>(self: SyncResult<E, unknown>) => SyncResult<E, void> = functor.unit(Functor)
 
 /**
  * @category instances
@@ -358,8 +370,8 @@ export const Flattenable: flattenable.Flattenable<SyncResultTypeLambda> = {
  */
 export const composeKleisli: <B, E2, C>(
   bfc: (b: B) => SyncResult<E2, C>
-) => <A, E1>(afb: (a: A) => SyncResult<E1, B>) => (a: A) => SyncResult<E2 | E1, C> =
- flattenable.composeKleisli(Flattenable)
+) => <A, E1>(afb: (a: A) => SyncResult<E1, B>) => (a: A) => SyncResult<E2 | E1, C> = flattenable
+  .composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -372,7 +384,9 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<SyncResultTy
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => SyncResult<never, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => SyncResult<never, A> = fromIdentity.idKleisli(
+  FromIdentity
+)
 
 /**
  * @category instances
@@ -392,7 +406,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<SyncResultTypeLambda>
  */
 export const zipLeft: <E2>(
   that: SyncResult<E2, unknown>
-) => <E1, A>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, A> =flattenable.zipLeft(Flattenable)
+) => <E1, A>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, A> = flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -402,7 +416,9 @@ export const zipLeft: <E2>(
  */
 export const zipRight: <E2, A>(
   that: SyncResult<E2, A>
-) => <E1>(self: SyncResult<E1, unknown>) => SyncResult<E2 | E1, A> =flattenable.zipRight(Flattenable)
+) => <E1>(self: SyncResult<E1, unknown>) => SyncResult<E2 | E1, A> = flattenable.zipRight(
+  Flattenable
+)
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
@@ -411,14 +427,16 @@ export const zipRight: <E2, A>(
  */
 export const tap: <A, E2>(
   f: (a: A) => SyncResult<E2, unknown>
-) => <E1>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, A> =flattenable.tap(Flattenable)
+) => <E1>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, A> = flattenable.tap(Flattenable)
 
 /**
  * @since 3.0.0
  */
 export const ap: <E2, A>(
   fa: SyncResult<E2, A>
-) => <E1, B>(self: SyncResult<E1, (a: A) => B>) => SyncResult<E2 | E1, B> =flattenable.ap(Flattenable)
+) => <E1, B>(self: SyncResult<E1, (a: A) => B>) => SyncResult<E2 | E1, B> = flattenable.ap(
+  Flattenable
+)
 
 /**
  * @category instances
@@ -437,7 +455,9 @@ export const Apply: apply.Apply<SyncResultTypeLambda> = {
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <E1, E2>(fa: SyncResult<E1, A>, fb: SyncResult<E2, B>) => SyncResult<E1 | E2, C> =apply.lift2(Apply)
+) => <E1, E2>(fa: SyncResult<E1, A>, fb: SyncResult<E2, B>) => SyncResult<E1 | E2, C> = apply.lift2(
+  Apply
+)
 
 /**
  * Lifts a ternary function into `SyncResult`.
@@ -447,8 +467,11 @@ export const lift2: <A, B, C>(
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => <E1, E2, E3>(fa: SyncResult<E1, A>, fb: SyncResult<E2, B>, fc: SyncResult<E3, C>) => SyncResult<E1 | E2 | E3, D> =
- apply.lift3(Apply)
+) => <E1, E2, E3>(
+  fa: SyncResult<E1, A>,
+  fb: SyncResult<E2, B>,
+  fc: SyncResult<E3, C>
+) => SyncResult<E1 | E2 | E3, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -478,7 +501,7 @@ export const Monad: monad.Monad<SyncResultTypeLambda> = {
  */
 export const tapError: <E1, E2>(
   onError: (e: E1) => SyncResult<E2, unknown>
-) => <A>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, A> =resultT.tapLeft(sync.Monad)
+) => <A>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, A> = resultT.tapLeft(sync.Monad)
 
 /**
  * @category instances
@@ -496,14 +519,14 @@ export const Alt: alt.Alt<SyncResultTypeLambda> = {
  */
 export const firstSuccessOf: <E, A>(
   startWith: SyncResult<E, A>
-) => (collection: Iterable<SyncResult<E, A>>) => SyncResult<E, A> =alt.firstSuccessOf(Alt)
+) => (collection: Iterable<SyncResult<E, A>>) => SyncResult<E, A> = alt.firstSuccessOf(Alt)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const FromSync: fromSync_.FromSync<SyncResultTypeLambda> = {
-  fromSync: fromSync
+  fromSync
 }
 
 // -------------------------------------------------------------------------------------
@@ -514,8 +537,8 @@ export const FromSync: fromSync_.FromSync<SyncResultTypeLambda> = {
  * @category logging
  * @since 3.0.0
  */
-export const log: <A extends ReadonlyArray<unknown>>(...x: A) => SyncResult<never, void> =
- fromSync_.log(FromSync)
+export const log: <A extends ReadonlyArray<unknown>>(...x: A) => SyncResult<never, void> = fromSync_
+  .log(FromSync)
 
 /**
  * @category lifting
@@ -523,14 +546,15 @@ export const log: <A extends ReadonlyArray<unknown>>(...x: A) => SyncResult<neve
  */
 export const liftSync: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => Sync<B>
-) => (...a: A) => SyncResult<never, B> =fromSync_.liftSync(FromSync)
+) => (...a: A) => SyncResult<never, B> = fromSync_.liftSync(FromSync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapSync: <A, B>(f: (a: A) => Sync<B>) => <E>(self: SyncResult<E, A>) => SyncResult<E, B> =
- fromSync_.flatMapSync(FromSync, Flattenable)
+export const flatMapSync: <A, B>(
+  f: (a: A) => Sync<B>
+) => <E>(self: SyncResult<E, A>) => SyncResult<E, B> = fromSync_.flatMapSync(FromSync, Flattenable)
 
 /**
  * @category instances
@@ -544,8 +568,8 @@ export const FromResult: fromResult_.FromResult<SyncResultTypeLambda> = {
  * @category conversions
  * @since 3.0.0
  */
-export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => SyncResult<E, A> =
- fromResult_.fromOption(FromResult)
+export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => SyncResult<E, A> = fromResult_
+  .fromOption(FromResult)
 
 /**
  * @category lifting
@@ -554,7 +578,7 @@ export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => SyncResult<E, A
 export const liftOption: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => Option<B>,
   onNone: E
-) => (...a: A) => SyncResult<E, B> =fromResult_.liftOption(FromResult)
+) => (...a: A) => SyncResult<E, B> = fromResult_.liftOption(FromResult)
 
 /**
  * @category sequencing
@@ -563,7 +587,7 @@ export const liftOption: <A extends ReadonlyArray<unknown>, B, E>(
 export const flatMapOption: <A, B, E2>(
   f: (a: A) => Option<B>,
   onNone: E2
-) => <E1>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, B> =fromResult_.flatMapOption(
+) => <E1>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, B> = fromResult_.flatMapOption(
   FromResult,
   Flattenable
 )
@@ -574,7 +598,7 @@ export const flatMapOption: <A, B, E2>(
  */
 export const flatMapResult: <A, E2, B>(
   f: (a: A) => Result<E2, B>
-) => <E1>(ma: SyncResult<E1, A>) => SyncResult<E1 | E2, B> =fromResult_.flatMapResult(
+) => <E1>(ma: SyncResult<E1, A>) => SyncResult<E1 | E2, B> = fromResult_.flatMapResult(
   FromResult,
   Flattenable
 )
@@ -584,9 +608,12 @@ export const flatMapResult: <A, E2, B>(
  * @since 3.0.0
  */
 export const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: Refinement<A, B>, onFalse: E): (c: C) => SyncResult<E, B>
+  <C extends A, B extends A, E, A = C>(
+    refinement: Refinement<A, B>,
+    onFalse: E
+  ): (c: C) => SyncResult<E, B>
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (b: B) => SyncResult<E, B>
-} =fromResult_.liftPredicate(FromResult)
+} = fromResult_.liftPredicate(FromResult)
 
 /**
  * @category filtering
@@ -596,15 +623,20 @@ export const filter: {
   <C extends A, B extends A, E2, A = C>(refinement: Refinement<A, B>, onFalse: E2): <E1>(
     ma: SyncResult<E1, C>
   ) => SyncResult<E2 | E1, B>
-  <B extends A, E2, A = B>(predicate: Predicate<A>, onFalse: E2): <E1>(mb: SyncResult<E1, B>) => SyncResult<E2 | E1, B>
-} =fromResult_.filter(FromResult, Flattenable)
+  <B extends A, E2, A = B>(
+    predicate: Predicate<A>,
+    onFalse: E2
+  ): <E1>(mb: SyncResult<E1, B>) => SyncResult<E2 | E1, B>
+} = fromResult_.filter(FromResult, Flattenable)
 
 /**
  * @category filtering
  * @since 3.0.0
  */
-export const filterMap: <A, B, E>(f: (a: A) => Option<B>, onNone: E) => (self: SyncResult<E, A>) => SyncResult<E, B> =
- fromResult_.filterMap(FromResult, Flattenable)
+export const filterMap: <A, B, E>(
+  f: (a: A) => Option<B>,
+  onNone: E
+) => (self: SyncResult<E, A>) => SyncResult<E, B> = fromResult_.filterMap(FromResult, Flattenable)
 
 /**
  * @category filtering
@@ -617,7 +649,7 @@ export const partition: {
   <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: E): (
     self: SyncResult<E, B>
   ) => readonly [SyncResult<E, B>, SyncResult<E, B>]
-} =fromResult_.partition(FromResult, Flattenable)
+} = fromResult_.partition(FromResult, Flattenable)
 
 /**
  * @category filtering
@@ -626,10 +658,11 @@ export const partition: {
 export const partitionMap: <A, B, C, E>(
   f: (a: A) => Result<B, C>,
   onEmpty: E
-) => (self: SyncResult<E, A>) => readonly [SyncResult<E, B>, SyncResult<E, C>] =fromResult_.partitionMap(
-  FromResult,
-  Flattenable
-)
+) => (self: SyncResult<E, A>) => readonly [SyncResult<E, B>, SyncResult<E, C>] = fromResult_
+  .partitionMap(
+    FromResult,
+    Flattenable
+  )
 
 /**
  * @category lifting
@@ -637,14 +670,14 @@ export const partitionMap: <A, B, C, E>(
  */
 export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Result<E, B>
-) => (...a: A) => SyncResult<E, B> =fromResult_.liftResult(FromResult)
+) => (...a: A) => SyncResult<E, B> = fromResult_.liftResult(FromResult)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
 export const fromNullable: <E>(onNullable: E) => <A>(a: A) => SyncResult<E, NonNullable<A>> =
- fromResult_.fromNullable(FromResult)
+  fromResult_.fromNullable(FromResult)
 
 /**
  * @category lifting
@@ -653,7 +686,7 @@ export const fromNullable: <E>(onNullable: E) => <A>(a: A) => SyncResult<E, NonN
 export const liftNullable: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => B | null | undefined,
   onNullable: E
-) => (...a: A) => SyncResult<E, NonNullable<B>> =fromResult_.liftNullable(FromResult)
+) => (...a: A) => SyncResult<E, NonNullable<B>> = fromResult_.liftNullable(FromResult)
 
 /**
  * @category sequencing
@@ -662,10 +695,11 @@ export const liftNullable: <A extends ReadonlyArray<unknown>, B, E>(
 export const flatMapNullable: <A, B, E2>(
   f: (a: A) => B | null | undefined,
   onNullable: E2
-) => <E1>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, NonNullable<B>> =fromResult_.flatMapNullable(
-  FromResult,
-  Flattenable
-)
+) => <E1>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, NonNullable<B>> = fromResult_
+  .flatMapNullable(
+    FromResult,
+    Flattenable
+  )
 
 /**
  * Make sure that a resource is cleaned up in the event of an exception (\*). The release action is called regardless of
@@ -679,7 +713,7 @@ export const bracket: <E1, A, E2, B, E3>(
   acquire: SyncResult<E1, A>,
   use: (a: A) => SyncResult<E2, B>,
   release: (a: A, e: Result<E2, B>) => SyncResult<E3, void>
-) => SyncResult<E1 | E2 | E3, B> =resultT.bracket(sync.Monad)
+) => SyncResult<E1 | E2 | E3, B> = resultT.bracket(sync.Monad)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -689,7 +723,7 @@ export const bracket: <E1, A, E2, B, E3>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: SyncResult<never, {}> =succeed(_.Do)
+export const Do: SyncResult<never, {}> = succeed(_.Do)
 
 /**
  * @category do notation
@@ -697,13 +731,18 @@ export const Do: SyncResult<never, {}> =succeed(_.Do)
  */
 export const bindTo: <N extends string>(
   name: N
-) => <E, A>(self: SyncResult<E, A>) => SyncResult<E, { readonly [K in N]: A }> =functor.bindTo(Functor)
+) => <E, A>(self: SyncResult<E, A>) => SyncResult<E, { readonly [K in N]: A }> = functor.bindTo(
+  Functor
+)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <E>(self: SyncResult<E, A>) => SyncResult<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <E>(
+  self: SyncResult<E, A>
+) => SyncResult<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(
+  Functor
+)
 
 export {
   /**
@@ -723,7 +762,7 @@ export const bind: <N extends string, A extends object, E2, B>(
 ) => <E1>(
   self: SyncResult<E1, A>
 ) => SyncResult<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+  flattenable.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -736,8 +775,8 @@ export const bindRight: <N extends string, A extends object, E2, B>(
   fb: SyncResult<E2, B>
 ) => <E1>(
   self: SyncResult<E1, A>
-) => SyncResult<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => SyncResult<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -747,14 +786,15 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: SyncResult<never, readonly []> =succeed(_.empty)
+export const Zip: SyncResult<never, readonly []> = succeed(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <E, A>(self: SyncResult<E, A>) => SyncResult<E, readonly [A]> =
- functor.tupled(Functor)
+export const tupled: <E, A>(self: SyncResult<E, A>) => SyncResult<E, readonly [A]> = functor.tupled(
+  Functor
+)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -764,8 +804,9 @@ export const tupled: <E, A>(self: SyncResult<E, A>) => SyncResult<E, readonly [A
  */
 export const zipFlatten: <E2, B>(
   fb: SyncResult<E2, B>
-) => <E1, A extends ReadonlyArray<unknown>>(self: SyncResult<E1, A>) => SyncResult<E1 | E2, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <E1, A extends ReadonlyArray<unknown>>(
+  self: SyncResult<E1, A>
+) => SyncResult<E1 | E2, readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -776,7 +817,7 @@ export const zipFlatten: <E2, B>(
 export const zipWith: <E2, B, A, C>(
   that: SyncResult<E2, B>,
   f: (a: A, b: B) => C
-) => <E1>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, C> =apply.zipWith(Apply)
+) => <E1>(self: SyncResult<E1, A>) => SyncResult<E2 | E1, C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -793,7 +834,10 @@ export const zipWith: <E2, B, A, C>(
 export const traverseNonEmptyReadonlyArrayWithIndexPar: <A, E, B>(
   f: (index: number, a: A) => SyncResult<E, B>
 ) => (as: NonEmptyReadonlyArray<A>) => SyncResult<E, NonEmptyReadonlyArray<B>> = (f) =>
-  flow(sync.traverseNonEmptyReadonlyArrayWithIndex(f), sync.map(result.traverseNonEmptyReadonlyArrayWithIndex(SK)))
+  flow(
+    sync.traverseNonEmptyReadonlyArrayWithIndex(f),
+    sync.map(result.traverseNonEmptyReadonlyArrayWithIndex(SK))
+  )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(ApplicativePar)`.
@@ -838,8 +882,9 @@ export const traverseReadonlyArrayPar = <A, E, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArrayPar: <E, A>(arr: ReadonlyArray<SyncResult<E, A>>) => SyncResult<E, ReadonlyArray<A>> =
- traverseReadonlyArrayPar(identity)
+export const sequenceReadonlyArrayPar: <E, A>(
+  arr: ReadonlyArray<SyncResult<E, A>>
+) => SyncResult<E, ReadonlyArray<A>> = traverseReadonlyArrayPar(identity)
 
 // --- Seq ---
 
@@ -849,24 +894,25 @@ export const sequenceReadonlyArrayPar: <E, A>(arr: ReadonlyArray<SyncResult<E, A
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <A, E, B>(f: (index: number, a: A) => SyncResult<E, B>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <A, E, B>(
+  f: (index: number, a: A) => SyncResult<E, B>
+) =>
   (as: NonEmptyReadonlyArray<A>): SyncResult<E, NonEmptyReadonlyArray<B>> =>
-  () => {
-    const e = f(0, _.head(as))()
-    if (_.isFailure(e)) {
-      return e
-    }
-    const out: _.NonEmptyArray<B> = [e.success]
-    for (let i = 1; i < as.length; i++) {
-      const e = f(i, as[i])()
+    () => {
+      const e = f(0, _.head(as))()
       if (_.isFailure(e)) {
         return e
       }
-      out.push(e.success)
+      const out: _.NonEmptyArray<B> = [e.success]
+      for (let i = 1; i < as.length; i++) {
+        const e = f(i, as[i])()
+        if (_.isFailure(e)) {
+          return e
+        }
+        out.push(e.success)
+      }
+      return _.succeed(out)
     }
-    return _.succeed(out)
-  }
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(Applicative)`.
@@ -911,5 +957,6 @@ export const traverseReadonlyArray = <A, E, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <E, A>(arr: ReadonlyArray<SyncResult<E, A>>) => SyncResult<E, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <E, A>(
+  arr: ReadonlyArray<SyncResult<E, A>>
+) => SyncResult<E, ReadonlyArray<A>> = traverseReadonlyArray(identity)

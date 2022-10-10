@@ -1,44 +1,36 @@
 /**
  * @since 3.0.0
  */
-import type * as bounded from '@fp-ts/core/typeclasses/Bounded'
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import type * as ord from '@fp-ts/core/typeclasses/Ord'
-import type * as show_ from '@fp-ts/core/typeclasses/Show'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import * as monoid from '@fp-ts/core/typeclasses/Monoid'
-import type { Refinement } from '@fp-ts/core/Refinement'
+import type { Refinement } from "@fp-ts/core/Refinement"
+import type * as bounded from "@fp-ts/core/typeclasses/Bounded"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import * as monoid from "@fp-ts/core/typeclasses/Monoid"
+import type * as ord from "@fp-ts/core/typeclasses/Ord"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type * as show_ from "@fp-ts/core/typeclasses/Show"
 
 /**
  * @category refinements
  * @since 3.0.0
  */
-export const isNumber: Refinement<unknown, number> = (u: unknown): u is number => typeof u === 'number'
+export const isNumber: Refinement<unknown, number> = (u: unknown): u is number =>
+  typeof u === "number"
 
 /**
  * @since 3.0.0
  */
-export const sum =
-  (that: number) =>
-  (self: number): number =>
-    self + that
+export const sum = (that: number) => (self: number): number => self + that
 
 /**
  * @since 3.0.0
  */
-export const multiply =
-  (that: number) =>
-  (self: number): number =>
-    self * that
+export const multiply = (that: number) => (self: number): number => self * that
 
 /**
  * @since 3.0.0
  */
-export const sub =
-  (that: number) =>
-  (self: number): number =>
-    self - that
+export const sub = (that: number) => (self: number): number => self - that
 
 /**
  * @category instances
@@ -133,9 +125,11 @@ export const MonoidMultiply: Monoid<number> = {
 /**
  * @since 3.0.0
  */
-export const sumAll: (collection: Iterable<number>) => number =monoid.combineAll(MonoidSum)
+export const sumAll: (collection: Iterable<number>) => number = monoid.combineAll(MonoidSum)
 
 /**
  * @since 3.0.0
  */
-export const multiplyAll: (collection: Iterable<number>) => number =monoid.combineAll(MonoidMultiply)
+export const multiplyAll: (collection: Iterable<number>) => number = monoid.combineAll(
+  MonoidMultiply
+)

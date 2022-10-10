@@ -11,16 +11,18 @@
  *
  * @since 3.0.0
  */
-import { apply, constant } from '@fp-ts/core/Function'
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
+import { apply, constant } from "@fp-ts/core/Function"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
 
 /**
  * @category model
  * @since 3.0.0
  */
 export interface Functor<F extends TypeLambda> extends TypeClass<F> {
-  readonly map: <A, B>(f: (a: A) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+  readonly map: <A, B>(
+    f: (a: A) => B
+  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
 }
 
 /**
@@ -28,24 +30,20 @@ export interface Functor<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 3.0.0
  */
-export const mapComposition =
-  <F extends TypeLambda, G extends TypeLambda>(
-    FunctorF: Functor<F>,
-    FunctorG: Functor<G>
-  ): (<A, B>(
-    f: (a: A) => B
-  ) => <FS, FR, FO, FE, GS, GR, GO, GE>(
-    self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) =>
-  (f) =>
-    FunctorF.map(FunctorG.map(f))
+export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
+  FunctorF: Functor<F>,
+  FunctorG: Functor<G>
+): (<A, B>(
+  f: (a: A) => B
+) => <FS, FR, FO, FE, GS, GR, GO, GE>(
+  self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) => (f) => FunctorF.map(FunctorG.map(f))
 
 /**
  * @category mapping
  * @since 3.0.0
  */
-export const flap =
-  <F extends TypeLambda>(Functor: Functor<F>) =>
+export const flap = <F extends TypeLambda>(Functor: Functor<F>) =>
   <A>(a: A): (<S, R, O, E, B>(self: Kind<F, S, R, O, E, (a: A) => B>) => Kind<F, S, R, O, E, B>) =>
     Functor.map(apply(a))
 
@@ -53,8 +51,7 @@ export const flap =
  * @category mapping
  * @since 3.0.0
  */
-export const as =
-  <F extends TypeLambda>(Functor: Functor<F>) =>
+export const as = <F extends TypeLambda>(Functor: Functor<F>) =>
   <B>(b: B): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, B>) =>
     Functor.map(constant(b))
 
@@ -64,7 +61,8 @@ export const as =
  */
 export const unit = <F extends TypeLambda>(
   Functor: Functor<F>
-): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, void>) => as(Functor)(undefined)
+): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, void>) =>
+  as(Functor)(undefined)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -74,12 +72,12 @@ export const unit = <F extends TypeLambda>(
  * @category do notation
  * @since 3.0.0
  */
-export const bindTo =
-  <F extends TypeLambda>(Functor: Functor<F>) =>
+export const bindTo = <F extends TypeLambda>(Functor: Functor<F>) =>
   <N extends string>(
     name: N
-  ): (<S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, { readonly [K in N]: A }>) =>
-    Functor.map((a) => ({ [name]: a } as any))
+  ): (<S, R, O, E, A>(
+    self: Kind<F, S, R, O, E, A>
+  ) => Kind<F, S, R, O, E, { readonly [K in N]: A }>) => Functor.map((a) => ({ [name]: a } as any))
 
 const let_ = <F extends TypeLambda>(
   F: Functor<F>
@@ -110,4 +108,5 @@ export {
  */
 export const tupled = <F extends TypeLambda>(
   Functor: Functor<F>
-): (<S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A]>) => Functor.map((a) => [a])
+): (<S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A]>) =>
+  Functor.map((a) => [a])

@@ -1,62 +1,65 @@
 /**
  * @since 3.0.0
  */
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import type { None, Option, Some } from '@fp-ts/core/Option'
-import type { Failure, Result, Success } from '@fp-ts/core/Result'
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { None, Option, Some } from "@fp-ts/core/Option"
+import type { Failure, Result, Success } from "@fp-ts/core/Result"
 
 // -------------------------------------------------------------------------------------
 // Option
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === 'None'
+export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === "None"
 
 /** @internal */
-export const isSome = <A>(fa: Option<A>): fa is Some<A> => fa._tag === 'Some'
+export const isSome = <A>(fa: Option<A>): fa is Some<A> => fa._tag === "Some"
 
 /** @internal */
-export const none: Option<never> = { _tag: 'None' }
+export const none: Option<never> = { _tag: "None" }
 
 /** @internal */
-export const some = <A>(a: A): Option<A> => ({ _tag: 'Some', value: a })
+export const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
 /** @internal */
-export const fromNullableToOption = <A>(a: A): Option<NonNullable<A>> => (a == null ? none : some(a as NonNullable<A>))
+export const fromNullableToOption = <A>(
+  a: A
+): Option<NonNullable<A>> => (a == null ? none : some(a as NonNullable<A>))
 
 // -------------------------------------------------------------------------------------
 // Result
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export const isFailure = <E, A>(ma: Result<E, A>): ma is Failure<E> => ma._tag === 'Failure'
+export const isFailure = <E, A>(ma: Result<E, A>): ma is Failure<E> => ma._tag === "Failure"
 
 /** @internal */
-export const isSuccess = <E, A>(ma: Result<E, A>): ma is Success<A> => ma._tag === 'Success'
+export const isSuccess = <E, A>(ma: Result<E, A>): ma is Success<A> => ma._tag === "Success"
 
 /** @internal */
-export const fail = <E>(e: E): Result<E, never> => ({ _tag: 'Failure', failure: e })
+export const fail = <E>(e: E): Result<E, never> => ({ _tag: "Failure", failure: e })
 
 /** @internal */
-export const succeed = <A>(a: A): Result<never, A> => ({ _tag: 'Success', success: a })
+export const succeed = <A>(a: A): Result<never, A> => ({ _tag: "Success", success: a })
 
 /** @internal */
-export const getFailure = <E, A>(self: Result<E, A>): Option<E> => (isSuccess(self) ? none : some(self.failure))
+export const getFailure = <E, A>(
+  self: Result<E, A>
+): Option<E> => (isSuccess(self) ? none : some(self.failure))
 
 /** @internal */
-export const getSuccess = <E, A>(self: Result<E, A>): Option<A> => (isFailure(self) ? none : some(self.success))
+export const getSuccess = <E, A>(
+  self: Result<E, A>
+): Option<A> => (isFailure(self) ? none : some(self.success))
 
 /** @internal */
-export const fromNullableToResult =
-  <E>(onNullable: E) =>
+export const fromNullableToResult = <E>(onNullable: E) =>
   <A>(a: A): Result<E, NonNullable<A>> =>
     a == null ? fail(onNullable) : succeed(a as NonNullable<A>)
 
 /** @internal */
-export const fromOptionToResult =
-  <E>(onNone: E) =>
-  <A>(fa: Option<A>): Result<E, A> =>
-    isNone(fa) ? fail(onNone) : succeed(fa.value)
+export const fromOptionToResult = <E>(onNone: E) =>
+  <A>(fa: Option<A>): Result<E, A> => isNone(fa) ? fail(onNone) : succeed(fa.value)
 
 // -------------------------------------------------------------------------------------
 // ReadonlyArray
@@ -106,4 +109,6 @@ export type NonEmptyArray<A> = [A, ...Array<A>]
 export const toNonEmptyArray = <A>(a: A): NonEmptyArray<A> => [a]
 
 /** @internal */
-export const fromNonEmptyReadonlyArray = <A>(as: NonEmptyReadonlyArray<A>): NonEmptyArray<A> => [head(as), ...tail(as)]
+export const fromNonEmptyReadonlyArray = <A>(
+  as: NonEmptyReadonlyArray<A>
+): NonEmptyArray<A> => [head(as), ...tail(as)]

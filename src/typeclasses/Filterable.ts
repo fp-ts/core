@@ -3,14 +3,14 @@
  *
  * @since 3.0.0
  */
-import type { Result } from '@fp-ts/core/Result'
-import { flow, pipe } from '@fp-ts/core/Function'
-import type { Functor } from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
-import type { Option } from '@fp-ts/core/Option'
-import * as _ from '@fp-ts/core/internal'
-import type { Predicate } from '@fp-ts/core/Predicate'
-import type { Refinement } from '@fp-ts/core/Refinement'
+import { flow, pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { Option } from "@fp-ts/core/Option"
+import type { Predicate } from "@fp-ts/core/Predicate"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import type { Result } from "@fp-ts/core/Result"
+import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 
 /**
  * @category model
@@ -47,9 +47,10 @@ export const filter: <F extends TypeLambda>(
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <S, R, O, E>(
     self: Kind<F, S, R, O, E, C>
   ) => Kind<F, S, R, O, E, B>
-  <B extends A, A = B>(predicate: Predicate<A>): <S, R, O, E>(self: Kind<F, S, R, O, E, B>) => Kind<F, S, R, O, E, B>
-} =
-  <F extends TypeLambda>(Filterable: Filterable<F>) =>
+  <B extends A, A = B>(
+    predicate: Predicate<A>
+  ): <S, R, O, E>(self: Kind<F, S, R, O, E, B>) => Kind<F, S, R, O, E, B>
+} = <F extends TypeLambda>(Filterable: Filterable<F>) =>
   <B extends A, A = B>(
     predicate: Predicate<A>
   ): (<S, R, O, E>(self: Kind<F, S, R, O, E, B>) => Kind<F, S, R, O, E, B>) =>
@@ -58,15 +59,16 @@ export const filter: <F extends TypeLambda>(
 /**
  * @since 3.0.0
  */
-export const partitionMap =
-  <F extends TypeLambda>(Filterable: Filterable<F>) =>
+export const partitionMap = <F extends TypeLambda>(Filterable: Filterable<F>) =>
   <A, B, C>(f: (a: A) => Result<B, C>) =>
-  <S, R, O, E>(self: Kind<F, S, R, O, E, A>): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
-    return [
-      pipe(self, Filterable.filterMap(flow(f, _.getFailure))),
-      pipe(self, Filterable.filterMap(flow(f, _.getSuccess)))
-    ]
-  }
+    <S, R, O, E>(
+      self: Kind<F, S, R, O, E, A>
+    ): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
+      return [
+        pipe(self, Filterable.filterMap(flow(f, _.getFailure))),
+        pipe(self, Filterable.filterMap(flow(f, _.getSuccess)))
+      ]
+    }
 
 /**
  * @since 3.0.0
@@ -84,6 +86,8 @@ export const partition: <F extends TypeLambda>(
   const partitionMap_ = partitionMap(Filterable)
   return <B extends A, A = B>(
     predicate: Predicate<A>
-  ): (<S, R, O, E>(self: Kind<F, S, R, O, E, B>) => readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, B>]) =>
+  ): (<S, R, O, E>(
+    self: Kind<F, S, R, O, E, B>
+  ) => readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, B>]) =>
     partitionMap_((b) => (predicate(b) ? _.succeed(b) : _.fail(b)))
 }

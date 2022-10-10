@@ -7,22 +7,22 @@
  *
  * @since 3.0.0
  */
-import type { Applicative } from '@fp-ts/core/typeclasses/Applicative'
-import type { Apply } from '@fp-ts/core/typeclasses/Apply'
-import type * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import type { Bounded } from '@fp-ts/core/typeclasses/Bounded'
-import type * as contravariant from '@fp-ts/core/typeclasses/Contravariant'
-import type { Eq } from '@fp-ts/core/typeclasses/Eq'
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import { constant, unsafeCoerce } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type { Ord } from '@fp-ts/core/typeclasses/Ord'
-import * as ord from '@fp-ts/core/typeclasses/Ord'
-import type { FromIdentity } from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import type { Show } from '@fp-ts/core/typeclasses/Show'
+import { constant, unsafeCoerce } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { Applicative } from "@fp-ts/core/typeclasses/Applicative"
+import type { Apply } from "@fp-ts/core/typeclasses/Apply"
+import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import type { Bounded } from "@fp-ts/core/typeclasses/Bounded"
+import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
+import type { Eq } from "@fp-ts/core/typeclasses/Eq"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Ord } from "@fp-ts/core/typeclasses/Ord"
+import * as ord from "@fp-ts/core/typeclasses/Ord"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type { Show } from "@fp-ts/core/typeclasses/Show"
 
 // TODO Semigroupoid Const
 // TODO Invariant (Const a)
@@ -53,7 +53,7 @@ export interface Const</** in out */ S, /** out */ A> {
  * @since 3.0.0
  */
 export interface ConstTypeLambda extends TypeLambda {
-  readonly type: Const<this['InOut1'], this['Out1']>
+  readonly type: Const<this["InOut1"], this["Out1"]>
 }
 
 /**
@@ -61,7 +61,7 @@ export interface ConstTypeLambda extends TypeLambda {
  * @since 3.0.0
  */
 export interface ConstTypeLambdaBifunctor extends TypeLambda {
-  readonly type: Const<this['Out2'], this['Out1']>
+  readonly type: Const<this["Out2"], this["Out1"]>
 }
 
 /**
@@ -69,7 +69,7 @@ export interface ConstTypeLambdaBifunctor extends TypeLambda {
  * @since 3.0.0
  */
 export interface ConstTypeLambdaContravariant extends TypeLambda {
-  readonly type: Const<this['InOut1'], this['In1']>
+  readonly type: Const<this["InOut1"], this["In1"]>
 }
 
 /**
@@ -77,7 +77,7 @@ export interface ConstTypeLambdaContravariant extends TypeLambda {
  * @since 3.0.0
  */
 export interface ConstTypeLambdaFix<S> extends TypeLambda {
-  readonly type: Const<S, this['Out1']>
+  readonly type: Const<S, this["Out1"]>
 }
 
 /**
@@ -98,13 +98,13 @@ export const execute = <S, A>(self: Const<S, A>): S => self.value
  * @category instances
  * @since 3.0.0
  */
-export const getEq: <S>(E: Eq<S>) => Eq<Const<S, never>> =eq.contramap(execute)
+export const getEq: <S>(E: Eq<S>) => Eq<Const<S, never>> = eq.contramap(execute)
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const getOrd: <S>(O: Ord<S>) => Ord<Const<S, never>> =ord.contramap(execute)
+export const getOrd: <S>(O: Ord<S>) => Ord<Const<S, never>> = ord.contramap(execute)
 
 /**
  * @category instances
@@ -147,7 +147,9 @@ export const getMonoid = <S>(M: Monoid<S>): Monoid<Const<S, never>> => ({
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <S>(self: Const<S, A>) => Const<S, B> =constant(unsafeCoerce)
+export const map: <A, B>(f: (a: A) => B) => <S>(self: Const<S, A>) => Const<S, B> = constant(
+  unsafeCoerce
+)
 
 /**
  * @category instances
@@ -161,14 +163,17 @@ export const Functor: functor.Functor<ConstTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <S, B>(self: Const<S, (a: A) => B>) => Const<S, B> =functor.flap(Functor)
+export const flap: <A>(a: A) => <S, B>(self: Const<S, (a: A) => B>) => Const<S, B> = functor.flap(
+  Functor
+)
 
 /**
  * @category mapping
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => <S>(fa: Const<S, A>) => Const<S, B> =
- constant(unsafeCoerce)
+export const contramap: <B, A>(f: (b: B) => A) => <S>(fa: Const<S, A>) => Const<S, B> = constant(
+  unsafeCoerce
+)
 
 /**
  * @category instances
@@ -182,10 +187,8 @@ export const Contravariant: contravariant.Contravariant<ConstTypeLambdaContravar
  * @category mapping
  * @since 3.0.0
  */
-export const mapLeft =
-  <S, G>(f: (s: S) => G) =>
-  <A>(self: Const<S, A>): Const<G, A> =>
-    make(f(self.value))
+export const mapLeft = <S, G>(f: (s: S) => G) =>
+  <A>(self: Const<S, A>): Const<G, A> => make(f(self.value))
 
 /**
  * Returns an effect whose failure and success channels have been mapped by
@@ -194,8 +197,10 @@ export const mapLeft =
  * @category mapping
  * @since 3.0.0
  */
-export const mapBoth: <S, T, A, B>(f: (s: S) => T, g: (a: A) => B) => (self: Const<S, A>) => Const<T, B> =
- unsafeCoerce(mapLeft)
+export const mapBoth: <S, T, A, B>(
+  f: (s: S) => T,
+  g: (a: A) => B
+) => (self: Const<S, A>) => Const<T, B> = unsafeCoerce(mapLeft)
 
 /**
  * @category instances

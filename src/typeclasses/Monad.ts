@@ -11,9 +11,9 @@
  *
  * @since 3.0.0
  */
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import type { FromIdentity } from '@fp-ts/core/typeclasses/FromIdentity'
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
+import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
 
 /**
  * @category model

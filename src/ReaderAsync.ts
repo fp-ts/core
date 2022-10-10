@@ -1,27 +1,27 @@
 /**
  * @since 3.0.0
  */
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import * as fromSync_ from '@fp-ts/core/typeclasses/FromSync'
-import * as fromReader_ from '@fp-ts/core/typeclasses/FromReader'
-import * as fromAsync_ from '@fp-ts/core/typeclasses/FromAsync'
-import { flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Sync } from '@fp-ts/core/Sync'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import * as reader from '@fp-ts/core/Reader'
-import type { ReaderSync } from '@fp-ts/core/ReaderSync'
-import * as readerT from '@fp-ts/core/transformers/ReaderT'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import * as async from '@fp-ts/core/Async'
-import type { Async } from '@fp-ts/core/Async'
+import * as async from "@fp-ts/core/Async"
+import type { Async } from "@fp-ts/core/Async"
+import { flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import * as reader from "@fp-ts/core/Reader"
+import type { ReaderSync } from "@fp-ts/core/ReaderSync"
+import type { Sync } from "@fp-ts/core/Sync"
+import * as readerT from "@fp-ts/core/transformers/ReaderT"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromAsync_ from "@fp-ts/core/typeclasses/FromAsync"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromReader_ from "@fp-ts/core/typeclasses/FromReader"
+import * as fromSync_ from "@fp-ts/core/typeclasses/FromSync"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
 
 /**
  * @category model
@@ -35,14 +35,15 @@ export interface ReaderAsync<R, A> {
  * @category constructors
  * @since 3.0.0
  */
-export const asksReaderAsync: <R1, R2, A>(f: (r1: R1) => ReaderAsync<R2, A>) => ReaderAsync<R1 & R2, A> =
-  reader.asksReader
+export const asksReaderAsync: <R1, R2, A>(
+  f: (r1: R1) => ReaderAsync<R2, A>
+) => ReaderAsync<R1 & R2, A> = reader.asksReader
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromReader: <R, A>(fa: reader.Reader<R, A>) => ReaderAsync<R, A> =readerT.fromReader(
+export const fromReader: <R, A>(fa: reader.Reader<R, A>) => ReaderAsync<R, A> = readerT.fromReader(
   async.FromIdentity
 )
 
@@ -50,19 +51,21 @@ export const fromReader: <R, A>(fa: reader.Reader<R, A>) => ReaderAsync<R, A> =r
  * @category conversions
  * @since 3.0.0
  */
-export const fromAsync: <A>(fa: Async<A>) => ReaderAsync<unknown, A> =reader.of
+export const fromAsync: <A>(fa: Async<A>) => ReaderAsync<unknown, A> = reader.of
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromSync: <A>(fa: Sync<A>) => ReaderAsync<unknown, A> =flow(async.fromSync, fromAsync)
+export const fromSync: <A>(fa: Sync<A>) => ReaderAsync<unknown, A> = flow(async.fromSync, fromAsync)
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const fromReaderSync: <R, A>(fa: ReaderSync<R, A>) => ReaderAsync<R, A> = reader.map(async.fromSync)
+export const fromReaderSync: <R, A>(fa: ReaderSync<R, A>) => ReaderAsync<R, A> = reader.map(
+  async.fromSync
+)
 
 /**
  * Changes the value of the local context during the execution of the action `ma` (similar to `Contravariant`'s
@@ -70,7 +73,9 @@ export const fromReaderSync: <R, A>(fa: ReaderSync<R, A>) => ReaderAsync<R, A> =
  *
  * @since 3.0.0
  */
-export const local: <R2, R1>(f: (r2: R2) => R1) => <A>(ma: ReaderAsync<R1, A>) => ReaderAsync<R2, A> = reader.local
+export const local: <R2, R1>(
+  f: (r2: R2) => R1
+) => <A>(ma: ReaderAsync<R1, A>) => ReaderAsync<R2, A> = reader.local
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.
@@ -78,22 +83,25 @@ export const local: <R2, R1>(f: (r2: R2) => R1) => <A>(ma: ReaderAsync<R1, A>) =
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <R>(fa: ReaderAsync<R, A>) => ReaderAsync<R, B> =readerT.map(
-  async.Functor
-)
+export const map: <A, B>(f: (a: A) => B) => <R>(fa: ReaderAsync<R, A>) => ReaderAsync<R, B> =
+  readerT.map(
+    async.Functor
+  )
 
 /**
  * @since 3.0.0
  */
 export const apPar: <R2, A>(
   fa: ReaderAsync<R2, A>
-) => <R1, B>(fab: ReaderAsync<R1, (a: A) => B>) => ReaderAsync<R1 & R2, B> =readerT.ap(async.ApplyPar)
+) => <R1, B>(fab: ReaderAsync<R1, (a: A) => B>) => ReaderAsync<R1 & R2, B> = readerT.ap(
+  async.ApplyPar
+)
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const of: <A>(a: A) => ReaderAsync<unknown, A> =readerT.of(async.FromIdentity)
+export const of: <A>(a: A) => ReaderAsync<unknown, A> = readerT.of(async.FromIdentity)
 
 /**
  * @category sequencing
@@ -101,22 +109,22 @@ export const of: <A>(a: A) => ReaderAsync<unknown, A> =readerT.of(async.FromIden
  */
 export const flatMap: <A, R2, B>(
   f: (a: A) => ReaderAsync<R2, B>
-) => <R1>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, B> =readerT.flatMap(async.Monad)
+) => <R1>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, B> = readerT.flatMap(async.Monad)
 
 /**
  * @since 3.0.0
  */
-export const flatten: <R1, R2, A>(mma: ReaderAsync<R1, ReaderAsync<R2, A>>) => ReaderAsync<R1 & R2, A> =
- flatMap(identity)
+export const flatten: <R1, R2, A>(
+  mma: ReaderAsync<R1, ReaderAsync<R2, A>>
+) => ReaderAsync<R1 & R2, A> = flatMap(identity)
 
 /**
  * @category lifting
  * @since 3.0.0
  */
-export const liftReaderSync =
-  <A extends ReadonlyArray<unknown>, R, B>(f: (...a: A) => ReaderSync<R, B>): ((...a: A) => ReaderAsync<R, B>) =>
-  (...a) =>
-    fromReaderSync(f(...a))
+export const liftReaderSync = <A extends ReadonlyArray<unknown>, R, B>(
+  f: (...a: A) => ReaderSync<R, B>
+): ((...a: A) => ReaderAsync<R, B>) => (...a) => fromReaderSync(f(...a))
 
 /**
  * @category sequencing
@@ -135,7 +143,7 @@ export const flatMapReaderSync: <A, R2, B>(
  * @since 3.0.0
  */
 export interface ReaderAsyncTypeLambda extends TypeLambda {
-  readonly type: ReaderAsync<this['In1'], this['Out1']>
+  readonly type: ReaderAsync<this["In1"], this["Out1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -155,7 +163,7 @@ export const Functor: functor.Functor<ReaderAsyncTypeLambda> = {
  * @since 3.0.0
  */
 export const flap: <A>(a: A) => <R, B>(fab: ReaderAsync<R, (a: A) => B>) => ReaderAsync<R, B> =
- functor.flap(Functor)
+  functor.flap(Functor)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -163,8 +171,9 @@ export const flap: <A>(a: A) => <R, B>(fab: ReaderAsync<R, (a: A) => B>) => Read
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <R>(self: ReaderAsync<R, unknown>) => ReaderAsync<R, B> =
- functor.as(Functor)
+export const as: <B>(b: B) => <R>(self: ReaderAsync<R, unknown>) => ReaderAsync<R, B> = functor.as(
+  Functor
+)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -172,7 +181,9 @@ export const as: <B>(b: B) => <R>(self: ReaderAsync<R, unknown>) => ReaderAsync<
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <R>(self: ReaderAsync<R, unknown>) => ReaderAsync<R, void> =functor.unit(Functor)
+export const unit: <R>(self: ReaderAsync<R, unknown>) => ReaderAsync<R, void> = functor.unit(
+  Functor
+)
 
 /**
  * @category instances
@@ -199,8 +210,8 @@ export const ApplyPar: apply.Apply<ReaderAsyncTypeLambda> = {
  */
 export const lift2Par: <A, B, C>(
   f: (a: A, b: B) => C
-) => <R1, R2>(fa: ReaderAsync<R1, A>, fb: ReaderAsync<R2, B>) => ReaderAsync<R1 & R2, C> =
- apply.lift2(ApplyPar)
+) => <R1, R2>(fa: ReaderAsync<R1, A>, fb: ReaderAsync<R2, B>) => ReaderAsync<R1 & R2, C> = apply
+  .lift2(ApplyPar)
 
 /**
  * Lifts a ternary function into `ReaderAsync` in parallel.
@@ -214,7 +225,7 @@ export const lift3Par: <A, B, C, D>(
   fa: ReaderAsync<R1, A>,
   fb: ReaderAsync<R2, B>,
   fc: ReaderAsync<R3, C>
-) => ReaderAsync<R1 & R2 & R3, D> =apply.lift3(ApplyPar)
+) => ReaderAsync<R1 & R2 & R3, D> = apply.lift3(ApplyPar)
 
 /**
  * Combine two effectful actions, keeping only the result of the first.
@@ -222,8 +233,9 @@ export const lift3Par: <A, B, C, D>(
  * @category sequencing
  * @since 3.0.0
  */
-export const zipLeftPar: <R>(that: ReaderAsync<R, unknown>) => <A>(self: ReaderAsync<R, A>) => ReaderAsync<R, A> =
- apply.zipLeftPar(ApplyPar)
+export const zipLeftPar: <R>(
+  that: ReaderAsync<R, unknown>
+) => <A>(self: ReaderAsync<R, A>) => ReaderAsync<R, A> = apply.zipLeftPar(ApplyPar)
 
 /**
  * Combine two effectful actions, keeping only the result of the second.
@@ -231,8 +243,9 @@ export const zipLeftPar: <R>(that: ReaderAsync<R, unknown>) => <A>(self: ReaderA
  * @category sequencing
  * @since 3.0.0
  */
-export const zipRightPar: <R, A>(that: ReaderAsync<R, A>) => (self: ReaderAsync<R, unknown>) => ReaderAsync<R, A> =
- apply.zipRightPar(ApplyPar)
+export const zipRightPar: <R, A>(
+  that: ReaderAsync<R, A>
+) => (self: ReaderAsync<R, unknown>) => ReaderAsync<R, A> = apply.zipRightPar(ApplyPar)
 
 /**
  * @category instances
@@ -258,8 +271,8 @@ export const Flattenable: flattenable.Flattenable<ReaderAsyncTypeLambda> = {
  */
 export const composeKleisli: <B, R2, C>(
   bfc: (b: B) => ReaderAsync<R2, C>
-) => <A, R1>(afb: (a: A) => ReaderAsync<R1, B>) => (a: A) => ReaderAsync<R1 & R2, C> =
- flattenable.composeKleisli(Flattenable)
+) => <A, R1>(afb: (a: A) => ReaderAsync<R1, B>) => (a: A) => ReaderAsync<R1 & R2, C> = flattenable
+  .composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -272,7 +285,9 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<ReaderAsyncT
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => ReaderAsync<unknown, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => ReaderAsync<unknown, A> = fromIdentity.idKleisli(
+  FromIdentity
+)
 
 /**
  * @category instances
@@ -292,7 +307,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<ReaderAsyncTypeLambda
  */
 export const zipLeft: <R2>(
   that: ReaderAsync<R2, unknown>
-) => <R1, A>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, A> =flattenable.zipLeft(Flattenable)
+) => <R1, A>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, A> = flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -302,14 +317,18 @@ export const zipLeft: <R2>(
  */
 export const zipRight: <R2, A>(
   that: ReaderAsync<R2, A>
-) => <R1>(self: ReaderAsync<R1, unknown>) => ReaderAsync<R1 & R2, A> =flattenable.zipRight(Flattenable)
+) => <R1>(self: ReaderAsync<R1, unknown>) => ReaderAsync<R1 & R2, A> = flattenable.zipRight(
+  Flattenable
+)
 
 /**
  * @since 3.0.0
  */
 export const ap: <R2, A>(
   fa: ReaderAsync<R2, A>
-) => <R1, B>(self: ReaderAsync<R1, (a: A) => B>) => ReaderAsync<R1 & R2, B> =flattenable.ap(Flattenable)
+) => <R1, B>(self: ReaderAsync<R1, (a: A) => B>) => ReaderAsync<R1 & R2, B> = flattenable.ap(
+  Flattenable
+)
 
 /**
  * @category instances
@@ -328,8 +347,8 @@ export const Apply: apply.Apply<ReaderAsyncTypeLambda> = {
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <R1, R2>(fa: ReaderAsync<R1, A>, fb: ReaderAsync<R2, B>) => ReaderAsync<R1 & R2, C> =
- apply.lift2(Apply)
+) => <R1, R2>(fa: ReaderAsync<R1, A>, fb: ReaderAsync<R2, B>) => ReaderAsync<R1 & R2, C> = apply
+  .lift2(Apply)
 
 /**
  * Lifts a ternary function into `ReaderAsync`.
@@ -343,7 +362,7 @@ export const lift3: <A, B, C, D>(
   fa: ReaderAsync<R1, A>,
   fb: ReaderAsync<R2, B>,
   fc: ReaderAsync<R3, C>
-) => ReaderAsync<R1 & R2 & R3, D> =apply.lift3(Apply)
+) => ReaderAsync<R1 & R2 & R3, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -362,7 +381,7 @@ export const Applicative: applicative.Applicative<ReaderAsyncTypeLambda> = {
  */
 export const tap: <A, R2>(
   f: (a: A) => ReaderAsync<R2, unknown>
-) => <R1>(ma: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, A> =flattenable.tap(Flattenable)
+) => <R1>(ma: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, A> = flattenable.tap(Flattenable)
 
 /**
  * @category instances
@@ -379,7 +398,7 @@ export const Monad: monad.Monad<ReaderAsyncTypeLambda> = {
  * @since 3.0.0
  */
 export const FromSync: fromSync_.FromSync<ReaderAsyncTypeLambda> = {
-  fromSync: fromSync
+  fromSync
 }
 
 // -------------------------------------------------------------------------------------
@@ -391,7 +410,7 @@ export const FromSync: fromSync_.FromSync<ReaderAsyncTypeLambda> = {
  * @since 3.0.0
  */
 export const log: <A extends ReadonlyArray<unknown>>(...x: A) => ReaderAsync<unknown, void> =
- fromSync_.log(FromSync)
+  fromSync_.log(FromSync)
 
 /**
  * @category lifting
@@ -399,14 +418,18 @@ export const log: <A extends ReadonlyArray<unknown>>(...x: A) => ReaderAsync<unk
  */
 export const liftSync: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => Sync<B>
-) => (...a: A) => ReaderAsync<unknown, B> =fromSync_.liftSync(FromSync)
+) => (...a: A) => ReaderAsync<unknown, B> = fromSync_.liftSync(FromSync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapSync: <A, B>(f: (a: A) => Sync<B>) => <R>(self: ReaderAsync<R, A>) => ReaderAsync<R, B> =
- fromSync_.flatMapSync(FromSync, Flattenable)
+export const flatMapSync: <A, B>(
+  f: (a: A) => Sync<B>
+) => <R>(self: ReaderAsync<R, A>) => ReaderAsync<R, B> = fromSync_.flatMapSync(
+  FromSync,
+  Flattenable
+)
 
 /**
  * @category instances
@@ -422,7 +445,7 @@ export const FromReader: fromReader_.FromReader<ReaderAsyncTypeLambda> = {
  * @category constructors
  * @since 3.0.0
  */
-export const ask: <R>() => ReaderAsync<R, R> =fromReader_.ask(FromReader)
+export const ask: <R>() => ReaderAsync<R, R> = fromReader_.ask(FromReader)
 
 /**
  * Projects a value from the global context in a `ReaderAsync`.
@@ -430,7 +453,7 @@ export const ask: <R>() => ReaderAsync<R, R> =fromReader_.ask(FromReader)
  * @category constructors
  * @since 3.0.0
  */
-export const asks: <R, A>(f: (r: R) => A) => ReaderAsync<R, A> =fromReader_.asks(FromReader)
+export const asks: <R, A>(f: (r: R) => A) => ReaderAsync<R, A> = fromReader_.asks(FromReader)
 
 /**
  * @category lifting
@@ -438,7 +461,7 @@ export const asks: <R, A>(f: (r: R) => A) => ReaderAsync<R, A> =fromReader_.asks
  */
 export const liftReader: <A extends ReadonlyArray<unknown>, R, B>(
   f: (...a: A) => reader.Reader<R, B>
-) => (...a: A) => ReaderAsync<R, B> =fromReader_.liftReader(FromReader)
+) => (...a: A) => ReaderAsync<R, B> = fromReader_.liftReader(FromReader)
 
 /**
  * @category sequencing
@@ -446,7 +469,7 @@ export const liftReader: <A extends ReadonlyArray<unknown>, R, B>(
  */
 export const flatMapReader: <A, R2, B>(
   f: (a: A) => reader.Reader<R2, B>
-) => <R1>(ma: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, B> =fromReader_.flatMapReader(
+) => <R1>(ma: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, B> = fromReader_.flatMapReader(
   FromReader,
   Flattenable
 )
@@ -456,8 +479,8 @@ export const flatMapReader: <A, R2, B>(
  * @since 3.0.0
  */
 export const FromAsync: fromAsync_.FromAsync<ReaderAsyncTypeLambda> = {
-  fromSync: fromSync,
-  fromAsync: fromAsync
+  fromSync,
+  fromAsync
 }
 
 /**
@@ -466,7 +489,7 @@ export const FromAsync: fromAsync_.FromAsync<ReaderAsyncTypeLambda> = {
  * @category constructors
  * @since 3.0.0
  */
-export const sleep: (duration: number) => ReaderAsync<unknown, void> =fromAsync_.sleep(FromAsync)
+export const sleep: (duration: number) => ReaderAsync<unknown, void> = fromAsync_.sleep(FromAsync)
 
 /**
  * Returns an effect that is delayed from this effect by the specified `duration` (in millis).
@@ -474,7 +497,7 @@ export const sleep: (duration: number) => ReaderAsync<unknown, void> =fromAsync_
  * @since 3.0.0
  */
 export const delay: (duration: number) => <R, A>(self: ReaderAsync<R, A>) => ReaderAsync<R, A> =
- fromAsync_.delay(FromAsync, Flattenable)
+  fromAsync_.delay(FromAsync, Flattenable)
 
 /**
  * @category lifting
@@ -482,14 +505,18 @@ export const delay: (duration: number) => <R, A>(self: ReaderAsync<R, A>) => Rea
  */
 export const liftAsync: <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => Async<B>
-) => (...a: A) => ReaderAsync<unknown, B> =fromAsync_.liftAsync(FromAsync)
+) => (...a: A) => ReaderAsync<unknown, B> = fromAsync_.liftAsync(FromAsync)
 
 /**
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMapAsync: <A, B>(f: (a: A) => Async<B>) => <R>(self: ReaderAsync<R, A>) => ReaderAsync<R, B> =
- fromAsync_.flatMapAsync(FromAsync, Flattenable)
+export const flatMapAsync: <A, B>(
+  f: (a: A) => Async<B>
+) => <R>(self: ReaderAsync<R, A>) => ReaderAsync<R, B> = fromAsync_.flatMapAsync(
+  FromAsync,
+  Flattenable
+)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -499,7 +526,7 @@ export const flatMapAsync: <A, B>(f: (a: A) => Async<B>) => <R>(self: ReaderAsyn
  * @category do notation
  * @since 3.0.0
  */
-export const Do: ReaderAsync<unknown, {}> =of(_.Do)
+export const Do: ReaderAsync<unknown, {}> = of(_.Do)
 
 /**
  * @category do notation
@@ -507,13 +534,18 @@ export const Do: ReaderAsync<unknown, {}> =of(_.Do)
  */
 export const bindTo: <N extends string>(
   name: N
-) => <R, A>(self: ReaderAsync<R, A>) => ReaderAsync<R, { readonly [K in N]: A }> =functor.bindTo(Functor)
+) => <R, A>(self: ReaderAsync<R, A>) => ReaderAsync<R, { readonly [K in N]: A }> = functor.bindTo(
+  Functor
+)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <R>(self: ReaderAsync<R, A>) => ReaderAsync<R, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <R>(
+  self: ReaderAsync<R, A>
+) => ReaderAsync<R, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(
+  Functor
+)
 
 export {
   /**
@@ -533,7 +565,7 @@ export const bind: <N extends string, A extends object, R2, B>(
 ) => <R1>(
   self: ReaderAsync<R1, A>
 ) => ReaderAsync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+  flattenable.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -546,8 +578,8 @@ export const bindRight: <N extends string, A extends object, R2, B>(
   fb: ReaderAsync<R2, B>
 ) => <R1>(
   self: ReaderAsync<R1, A>
-) => ReaderAsync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => ReaderAsync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 /**
  * A variant of `bind` that ignores the scope in parallel.
@@ -560,8 +592,8 @@ export const bindRightPar: <N extends string, A extends object, R2, B>(
   fb: ReaderAsync<R2, B>
 ) => <R1>(
   self: ReaderAsync<R1, A>
-) => ReaderAsync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(ApplyPar)
+) => ReaderAsync<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(ApplyPar)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -571,14 +603,14 @@ export const bindRightPar: <N extends string, A extends object, R2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: ReaderAsync<unknown, readonly []> =of(_.empty)
+export const Zip: ReaderAsync<unknown, readonly []> = of(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <R, A>(self: ReaderAsync<R, A>) => ReaderAsync<R, readonly [A]> =
- functor.tupled(Functor)
+export const tupled: <R, A>(self: ReaderAsync<R, A>) => ReaderAsync<R, readonly [A]> = functor
+  .tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -588,8 +620,9 @@ export const tupled: <R, A>(self: ReaderAsync<R, A>) => ReaderAsync<R, readonly 
  */
 export const zipFlatten: <R2, B>(
   fb: ReaderAsync<R2, B>
-) => <R1, A extends ReadonlyArray<unknown>>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <R1, A extends ReadonlyArray<unknown>>(
+  self: ReaderAsync<R1, A>
+) => ReaderAsync<R1 & R2, readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * Zips this effect with the specified effect in parallel.
@@ -599,8 +632,9 @@ export const zipFlatten: <R2, B>(
  */
 export const zipFlattenPar: <R2, B>(
   fb: ReaderAsync<R2, B>
-) => <R1, A extends ReadonlyArray<unknown>>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, readonly [...A, B]> =
- apply.zipFlatten(ApplyPar)
+) => <R1, A extends ReadonlyArray<unknown>>(
+  self: ReaderAsync<R1, A>
+) => ReaderAsync<R1 & R2, readonly [...A, B]> = apply.zipFlatten(ApplyPar)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -611,7 +645,7 @@ export const zipFlattenPar: <R2, B>(
 export const zipWith: <R2, B, A, C>(
   that: ReaderAsync<R2, B>,
   f: (a: A, b: B) => C
-) => <R1>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, C> =apply.zipWith(Apply)
+) => <R1>(self: ReaderAsync<R1, A>) => ReaderAsync<R1 & R2, C> = apply.zipWith(Apply)
 
 /**
  * Zips this effect with the specified effect using the specified combiner function in parallel.
@@ -619,7 +653,7 @@ export const zipWith: <R2, B, A, C>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const zipWithPar =apply.zipWith(ApplyPar)
+export const zipWithPar = apply.zipWith(ApplyPar)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -686,7 +720,7 @@ export const traverseReadonlyArrayPar = <A, R, B>(
  */
 export const sequenceReadonlyArrayPar: <R, A>(
   arr: ReadonlyArray<ReaderAsync<R, A>>
-) => ReaderAsync<R, ReadonlyArray<A>> =traverseReadonlyArrayPar(identity)
+) => ReaderAsync<R, ReadonlyArray<A>> = traverseReadonlyArrayPar(identity)
 
 // --- Seq ---
 
@@ -699,7 +733,10 @@ export const sequenceReadonlyArrayPar: <R, A>(
 export const traverseNonEmptyReadonlyArrayWithIndex = <A, R, B>(
   f: (index: number, a: A) => ReaderAsync<R, B>
 ): ((as: NonEmptyReadonlyArray<A>) => ReaderAsync<R, NonEmptyReadonlyArray<B>>) =>
-  flow(reader.traverseNonEmptyReadonlyArrayWithIndex(f), reader.map(async.traverseNonEmptyReadonlyArrayWithIndex(SK)))
+  flow(
+    reader.traverseNonEmptyReadonlyArrayWithIndex(f),
+    reader.map(async.traverseNonEmptyReadonlyArrayWithIndex(SK))
+  )
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(Applicative)`.
@@ -744,5 +781,6 @@ export const traverseReadonlyArray = <A, R, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <R, A>(arr: ReadonlyArray<ReaderAsync<R, A>>) => ReaderAsync<R, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <R, A>(
+  arr: ReadonlyArray<ReaderAsync<R, A>>
+) => ReaderAsync<R, ReadonlyArray<A>> = traverseReadonlyArray(identity)

@@ -15,10 +15,10 @@
  *
  * @since 3.0.0
  */
-import type { Bounded } from '@fp-ts/core/typeclasses/Bounded'
-import * as _ from '@fp-ts/core/internal'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
-import * as semigroup from '@fp-ts/core/typeclasses/Semigroup'
+import * as _ from "@fp-ts/core/internal"
+import type { Bounded } from "@fp-ts/core/typeclasses/Bounded"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @category model
@@ -112,7 +112,9 @@ export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> => ({
  *
  * @since 3.0.0
  */
-export const struct = <A>(monoids: { [K in keyof A]: Monoid<A[K]> }): Monoid<{ readonly [K in keyof A]: A[K] }> => {
+export const struct = <A>(
+  monoids: { [K in keyof A]: Monoid<A[K]> }
+): Monoid<{ readonly [K in keyof A]: A[K] }> => {
   const empty: A = {} as any
   for (const k in monoids) {
     if (_.has.call(monoids, k)) {
@@ -145,11 +147,10 @@ export const struct = <A>(monoids: { [K in keyof A]: Monoid<A[K]> }): Monoid<{ r
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
-): Monoid<Readonly<A>> =>
-  ({
-    combine: semigroup.tuple(...monoids).combine,
-    empty: monoids.map((m) => m.empty)
-  } as any)
+): Monoid<Readonly<A>> => ({
+  combine: semigroup.tuple(...monoids).combine,
+  empty: monoids.map((m) => m.empty)
+} as any)
 
 /**
  * Given a sequence of `as`, combine them and return the total.

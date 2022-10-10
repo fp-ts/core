@@ -3,12 +3,12 @@
  *
  * @since 3.0.0
  */
-import type { Result } from '@fp-ts/core/Result'
-import { pipe } from '@fp-ts/core/Function'
-import type { Functor } from '@fp-ts/core/typeclasses/Functor'
-import type { Kind, TypeClass, TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type { Option } from '@fp-ts/core/Option'
+import { pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { Option } from "@fp-ts/core/Option"
+import type { Result } from "@fp-ts/core/Result"
+import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 
 /**
  * @category model
@@ -21,8 +21,7 @@ export interface Compactable<F extends TypeLambda> extends TypeClass<F> {
 /**
  * @since 3.0.0
  */
-export const separate =
-  <F extends TypeLambda>(Functor: Functor<F>, Compactable: Compactable<F>) =>
+export const separate = <F extends TypeLambda>(Functor: Functor<F>, Compactable: Compactable<F>) =>
   <S, R, O, E, A, B>(
     self: Kind<F, S, R, O, E, Result<A, B>>
   ): readonly [Kind<F, S, R, O, E, A>, Kind<F, S, R, O, E, B>] => {

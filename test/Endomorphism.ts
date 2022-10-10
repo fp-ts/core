@@ -1,9 +1,9 @@
-import * as _ from '@fp-ts/core/Endomorphism'
-import { pipe } from '@fp-ts/core/Function'
-import * as U from './util'
+import * as _ from "@fp-ts/core/Endomorphism"
+import { pipe } from "@fp-ts/core/Function"
+import * as U from "./util"
 
-describe('Endomorphism', () => {
-  it('getMonoid', () => {
+describe("Endomorphism", () => {
+  it("getMonoid", () => {
     const M = _.getMonoid<number>()
     const inc = (n: number) => n + 1
     const f = pipe(inc, M.combine(U.double))

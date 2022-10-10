@@ -3,8 +3,8 @@
  *
  * @since 3.0.0
  */
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
-import type { These } from '@fp-ts/core/These'
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { These } from "@fp-ts/core/These"
 
 /**
  * @category model
@@ -18,8 +18,6 @@ export interface FromThese<F extends TypeLambda> extends TypeClass<F> {
  * @category lifting
  * @since 3.0.0
  */
-export const liftThese =
-  <F extends TypeLambda>(F: FromThese<F>) =>
+export const liftThese = <F extends TypeLambda>(F: FromThese<F>) =>
   <A extends ReadonlyArray<unknown>, E, B>(f: (...a: A) => These<E, B>) =>
-  <S>(...a: A): Kind<F, S, unknown, never, E, B> =>
-    F.fromThese(f(...a))
+    <S>(...a: A): Kind<F, S, unknown, never, E, B> => F.fromThese(f(...a))

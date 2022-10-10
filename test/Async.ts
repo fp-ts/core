@@ -1,13 +1,16 @@
-import { flow, pipe } from '@fp-ts/core/Function'
-import * as I from '@fp-ts/core/Sync'
-import * as RA from '@fp-ts/core/ReadonlyArray'
+import { flow, pipe } from "@fp-ts/core/Function"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as I from "@fp-ts/core/Sync"
 // import * as RNEA from '@fp-ts/core/NonEmptyReadonlyArray'
-import * as S from '@fp-ts/core/string'
-import * as _ from '@fp-ts/core/Async'
-import * as U from './util'
+import * as _ from "@fp-ts/core/Async"
+import * as S from "@fp-ts/core/string"
+import * as U from "./util"
 
-export const assertAsync =
-  <A, B>(a: _.Async<A>, b: _.Async<B>, expectedLog: ReadonlyArray<A | B>) =>
+export const assertAsync = <A, B>(
+  a: _.Async<A>,
+  b: _.Async<B>,
+  expectedLog: ReadonlyArray<A | B>
+) =>
   async <C>(f: (a: _.Async<A>, b: _.Async<B>) => _.Async<C>, expected: C) => {
     const log: Array<A | B> = []
     const withLog: <X extends A | B>(ma: _.Async<X>) => _.Async<X> = _.tap((x) =>
@@ -20,13 +23,13 @@ export const assertAsync =
     U.deepStrictEqual(log, expectedLog)
   }
 
-const a = pipe(_.of('a'), _.delay(5))
-const b = _.of('b')
+const a = pipe(_.of("a"), _.delay(5))
+const b = _.of("b")
 
-const assertPar = assertAsync(a, b, ['b', 'a'])
-const assertSeq = assertAsync(a, b, ['a', 'b'])
+const assertPar = assertAsync(a, b, ["b", "a"])
+const assertSeq = assertAsync(a, b, ["a", "b"])
 
-describe('Async', () => {
+describe("Async", () => {
   // -------------------------------------------------------------------------------------
   // safety
   // -------------------------------------------------------------------------------------
@@ -43,47 +46,47 @@ describe('Async', () => {
   // type class members
   // -------------------------------------------------------------------------------------
 
-  it('map', async () => {
+  it("map", async () => {
     U.deepStrictEqual(await pipe(_.of(1), _.map(U.double))(), 2)
   })
 
-  it('apPar', async () => {
-    await assertPar((a, b) => pipe(_.of(S.Semigroup.combine), _.apPar(a), _.apPar(b)), 'ba')
+  it("apPar", async () => {
+    await assertPar((a, b) => pipe(_.of(S.Semigroup.combine), _.apPar(a), _.apPar(b)), "ba")
   })
 
-  it('zipLeftPar', async () => {
-    await assertPar((a, b) => pipe(a, _.zipLeftPar(b)), 'a')
+  it("zipLeftPar", async () => {
+    await assertPar((a, b) => pipe(a, _.zipLeftPar(b)), "a")
   })
 
-  it('zipRightPar', async () => {
-    await assertPar((a, b) => pipe(a, _.zipRightPar(b)), 'b')
+  it("zipRightPar", async () => {
+    await assertPar((a, b) => pipe(a, _.zipRightPar(b)), "b")
   })
 
-  it('flatMap', async () => {
+  it("flatMap", async () => {
     U.deepStrictEqual(
       await pipe(
         a,
         _.flatMap(() => b)
       )(),
-      'b'
+      "b"
     )
   })
 
-  it('tap', async () => {
+  it("tap", async () => {
     U.deepStrictEqual(
       await pipe(
         a,
         _.tap(() => b)
       )(),
-      'a'
+      "a"
     )
   })
 
-  it('flatten', async () => {
-    return U.deepStrictEqual(await pipe(_.of(_.of('a')), _.flatten)(), 'a')
+  it("flatten", async () => {
+    return U.deepStrictEqual(await pipe(_.of(_.of("a")), _.flatten)(), "a")
   })
 
-  it('fromSync', async () => {
+  it("fromSync", async () => {
     U.deepStrictEqual(await _.fromSync(() => 1)(), 1)
   })
 
@@ -91,63 +94,69 @@ describe('Async', () => {
   // instances
   // -------------------------------------------------------------------------------------
 
-  it('Applicative', async () => {
-    await assertSeq((a, b) => pipe(a, _.Apply.map(S.Semigroup.combine), _.Apply.ap(b)), 'ba')
-    await assertSeq((a, b) => pipe(a, _.Applicative.map(S.Semigroup.combine), _.Applicative.ap(b)), 'ba')
+  it("Applicative", async () => {
+    await assertSeq((a, b) => pipe(a, _.Apply.map(S.Semigroup.combine), _.Apply.ap(b)), "ba")
+    await assertSeq(
+      (a, b) => pipe(a, _.Applicative.map(S.Semigroup.combine), _.Applicative.ap(b)),
+      "ba"
+    )
   })
 
-  it('ApplicativePar', async () => {
-    await assertPar((a, b) => pipe(a, _.ApplyPar.map(S.Semigroup.combine), _.ApplyPar.ap(b)), 'ba')
-    await assertPar((a, b) => pipe(a, _.ApplicativePar.map(S.Semigroup.combine), _.ApplicativePar.ap(b)), 'ba')
+  it("ApplicativePar", async () => {
+    await assertPar((a, b) => pipe(a, _.ApplyPar.map(S.Semigroup.combine), _.ApplyPar.ap(b)), "ba")
+    await assertPar(
+      (a, b) => pipe(a, _.ApplicativePar.map(S.Semigroup.combine), _.ApplicativePar.ap(b)),
+      "ba"
+    )
   })
 
-  it('getRaceMonoid', async () => {
+  it("getRaceMonoid", async () => {
     const M = _.getRaceMonoid<string>()
 
-    U.deepStrictEqual(await pipe(a, M.combine(b))(), 'b')
-    U.deepStrictEqual(await pipe(a, M.combine(M.empty))(), 'a')
-    U.deepStrictEqual(await pipe(M.empty, M.combine(a))(), 'a')
+    U.deepStrictEqual(await pipe(a, M.combine(b))(), "b")
+    U.deepStrictEqual(await pipe(a, M.combine(M.empty))(), "a")
+    U.deepStrictEqual(await pipe(M.empty, M.combine(a))(), "a")
   })
 
   // -------------------------------------------------------------------------------------
   // combinators
   // -------------------------------------------------------------------------------------
 
-  it('flatMapIO', async () => {
+  it("flatMapIO", async () => {
     const f = flow(S.size, I.of)
-    U.deepStrictEqual(await pipe(_.of('a'), _.flatMapSync(f))(), 1)
+    U.deepStrictEqual(await pipe(_.of("a"), _.flatMapSync(f))(), 1)
   })
 
   // -------------------------------------------------------------------------------------
   // utils
   // -------------------------------------------------------------------------------------
 
-  it('do notation', async () => {
+  it("do notation", async () => {
     await assertSeq(
       (a, b) =>
         pipe(
           a,
-          _.bindTo('a'),
-          _.bind('b', () => b)
+          _.bindTo("a"),
+          _.bind("b", () => b)
         ),
-      { a: 'a', b: 'b' }
+      { a: "a", b: "b" }
     )
   })
 
-  it('bindRight', async () => {
-    await assertSeq((a, b) => pipe(a, _.bindTo('a'), _.bindRight('b', b)), { a: 'a', b: 'b' })
+  it("bindRight", async () => {
+    await assertSeq((a, b) => pipe(a, _.bindTo("a"), _.bindRight("b", b)), { a: "a", b: "b" })
   })
 
-  it('zipFlatten', async () => {
-    await assertSeq((a, b) => pipe(a, _.tupled, _.zipFlatten(b)), ['a', 'b'])
+  it("zipFlatten", async () => {
+    await assertSeq((a, b) => pipe(a, _.tupled, _.zipFlatten(b)), ["a", "b"])
   })
 
-  it('bindRightPar', async () => {
-    await assertPar((a, b) => pipe(a, _.bindTo('a'), _.bindRightPar('b', b)), { a: 'a', b: 'b' })
+  it("bindRightPar", async () => {
+    await assertPar((a, b) => pipe(a, _.bindTo("a"), _.bindRightPar("b", b)), { a: "a", b: "b" })
   })
 
-  it('zipFlattenPar', async () => {
-    await assertPar((a, b) => pipe(a, _.tupled, _.zipFlattenPar(b)), ['a', 'b'])
+  it("zipFlattenPar", async () => {
+    await assertPar((a, b) => pipe(a, _.tupled, _.zipFlattenPar(b)), ["a", "b"])
   })
 
   // -------------------------------------------------------------------------------------
@@ -156,18 +165,18 @@ describe('Async', () => {
 
   // --- Par ---
 
-  it('traverseReadonlyArrayWithIndexPar', async () => {
+  it("traverseReadonlyArrayWithIndexPar", async () => {
     const f = _.traverseReadonlyArrayWithIndexPar((i, a: string) => _.of(a + i))
     U.deepStrictEqual(await pipe(RA.empty, f)(), RA.empty)
-    U.deepStrictEqual(await pipe(['a', 'b'], f)(), ['a0', 'b1'])
+    U.deepStrictEqual(await pipe(["a", "b"], f)(), ["a0", "b1"])
   })
 
-  it('traverseNonEmptyReadonlyArrayPar', async () => {
+  it("traverseNonEmptyReadonlyArrayPar", async () => {
     const f = _.traverseNonEmptyReadonlyArrayPar((a: string) => _.of(a))
-    U.deepStrictEqual(await pipe(['a', 'b'], f)(), ['a', 'b'])
+    U.deepStrictEqual(await pipe(["a", "b"], f)(), ["a", "b"])
   })
 
-  it('sequenceReadonlyArrayPar', async () => {
+  it("sequenceReadonlyArrayPar", async () => {
     const log: Array<number> = []
     const append = (n: number): _.Async<number> =>
       _.delay(n % 2 === 0 ? 5 : 10)(
@@ -183,18 +192,18 @@ describe('Async', () => {
 
   // --- Seq ---
 
-  it('traverseReadonlyArrayWithIndex', async () => {
+  it("traverseReadonlyArrayWithIndex", async () => {
     const f = _.traverseReadonlyArrayWithIndex((i, a: string) => _.of(a + i))
     U.deepStrictEqual(await pipe(RA.empty, f)(), RA.empty)
-    U.deepStrictEqual(await pipe(['a', 'b'], f)(), ['a0', 'b1'])
+    U.deepStrictEqual(await pipe(["a", "b"], f)(), ["a0", "b1"])
   })
 
-  it('traverseNonEmptyReadonlyArray', async () => {
+  it("traverseNonEmptyReadonlyArray", async () => {
     const f = _.traverseNonEmptyReadonlyArray((a: string) => _.of(a))
-    U.deepStrictEqual(await pipe(['a', 'b'], f)(), ['a', 'b'])
+    U.deepStrictEqual(await pipe(["a", "b"], f)(), ["a", "b"])
   })
 
-  it('sequenceReadonlyArray', async () => {
+  it("sequenceReadonlyArray", async () => {
     const log: Array<number> = []
     const append = (n: number): _.Async<number> =>
       _.delay(n % 2 === 0 ? 1 : 2)(

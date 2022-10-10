@@ -5,24 +5,24 @@
  *
  * @since 3.0.0
  */
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as alt from '@fp-ts/core/typeclasses/Alt'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import type * as comonad from '@fp-ts/core/typeclasses/Comonad'
-import type { Eq } from '@fp-ts/core/typeclasses/Eq'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type * as extendable from '@fp-ts/core/typeclasses/Extendable'
-import { flow, identity } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Show } from '@fp-ts/core/typeclasses/Show'
-import * as traversable from '@fp-ts/core/typeclasses/Traversable'
+import { flow, identity } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import * as alt from "@fp-ts/core/typeclasses/Alt"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import type * as comonad from "@fp-ts/core/typeclasses/Comonad"
+import type { Eq } from "@fp-ts/core/typeclasses/Eq"
+import type * as extendable from "@fp-ts/core/typeclasses/Extendable"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Show } from "@fp-ts/core/typeclasses/Show"
+import * as traversable from "@fp-ts/core/typeclasses/Traversable"
 
 /**
  * @category model
@@ -39,7 +39,7 @@ export type Identity<A> = A
  * @since 3.0.0
  */
 export interface IdentityTypeLambda extends TypeLambda {
-  readonly type: Identity<this['Out1']>
+  readonly type: Identity<this["Out1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ export const Functor: functor.Functor<IdentityTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <B>(fab: Identity<(a: A) => B>) => B =functor.flap(Functor)
+export const flap: <A>(a: A) => <B>(fab: Identity<(a: A) => B>) => B = functor.flap(Functor)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -86,7 +86,7 @@ export const flap: <A>(a: A) => <B>(fab: Identity<(a: A) => B>) => B =functor.fl
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <A>(self: Identity<A>) => Identity<B> =functor.as(Functor)
+export const as: <B>(b: B) => <A>(self: Identity<A>) => Identity<B> = functor.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -94,7 +94,7 @@ export const as: <B>(b: B) => <A>(self: Identity<A>) => Identity<B> =functor.as(
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <A>(self: A) => Identity<void> =functor.unit(Functor)
+export const unit: <A>(self: A) => Identity<void> = functor.unit(Functor)
 
 /**
  * @category constructors
@@ -114,7 +114,9 @@ export const FromIdentity: fromIdentity.FromIdentity<IdentityTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMap: <A, B>(f: (a: A) => Identity<B>) => (self: Identity<A>) => Identity<B> = (f) => (self) => f(self)
+export const flatMap: <A, B>(f: (a: A) => Identity<B>) => (self: Identity<A>) => Identity<B> = (
+  f
+) => (self) => f(self)
 
 /**
  * @category instances
@@ -128,8 +130,9 @@ export const Flattenable: flattenable.Flattenable<IdentityTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const composeKleisli: <B, C>(bfc: (b: B) => Identity<C>) => <A>(afb: (a: A) => Identity<B>) => (a: A) => C =
- flattenable.composeKleisli(Flattenable)
+export const composeKleisli: <B, C>(
+  bfc: (b: B) => Identity<C>
+) => <A>(afb: (a: A) => Identity<B>) => (a: A) => C = flattenable.composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -142,7 +145,7 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<IdentityType
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => Identity<A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => Identity<A> = fromIdentity.idKleisli(FromIdentity)
 
 /**
  * @category instances
@@ -161,7 +164,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<IdentityTypeLambda> =
  * @since 3.0.0
  */
 export const zipLeft: (that: Identity<unknown>) => <A>(self: Identity<A>) => Identity<A> =
- flattenable.zipLeft(Flattenable)
+  flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -170,13 +173,13 @@ export const zipLeft: (that: Identity<unknown>) => <A>(self: Identity<A>) => Ide
  * @since 3.0.0
  */
 export const zipRight: <A>(that: Identity<A>) => (self: Identity<unknown>) => Identity<A> =
- flattenable.zipRight(Flattenable)
+  flattenable.zipRight(Flattenable)
 
 /**
  * @since 3.0.0
  */
 export const ap: <A>(fa: Identity<A>) => <B>(fab: Identity<(a: A) => B>) => Identity<B> =
- flattenable.ap(Flattenable)
+  flattenable.ap(Flattenable)
 
 /**
  * @category instances
@@ -193,7 +196,7 @@ export const Apply: apply.Apply<IdentityTypeLambda> = {
  * @category lifting
  * @since 3.0.0
  */
-export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: A, fb: B) => C =apply.lift2(Apply)
+export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: A, fb: B) => C = apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `Identity`.
@@ -201,8 +204,8 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: A, fb: B) => C =appl
  * @category lifting
  * @since 3.0.0
  */
-export const lift3: <A, B, C, D>(f: (a: A, b: B, c: C) => D) => (fa: A, fb: B, fc: C) => D =
- apply.lift3(Apply)
+export const lift3: <A, B, C, D>(f: (a: A, b: B, c: C) => D) => (fa: A, fb: B, fc: C) => D = apply
+  .lift3(Apply)
 
 /**
  * @category instances
@@ -217,7 +220,7 @@ export const Applicative: applicative.Applicative<IdentityTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const flatten: <A>(mma: Identity<Identity<A>>) => Identity<A> =flatMap(identity)
+export const flatten: <A>(mma: Identity<Identity<A>>) => Identity<A> = flatMap(identity)
 
 /**
  * @category instances
@@ -232,12 +235,13 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const extend: <A, B>(f: (wa: Identity<A>) => B) => (wa: Identity<A>) => B = (f) => (wa) => f(wa)
+export const extend: <A, B>(f: (wa: Identity<A>) => B) => (wa: Identity<A>) => B = (f) =>
+  (wa) => f(wa)
 
 /**
  * @since 3.0.0
  */
-export const duplicate: <A>(ma: Identity<A>) => Identity<Identity<A>> =extend(identity)
+export const duplicate: <A>(ma: Identity<A>) => Identity<Identity<A>> = extend(identity)
 
 /**
  * @category instances
@@ -273,29 +277,20 @@ export const toReadonlyArray = <A>(self: Identity<A>): ReadonlyArray<A> => [self
  * @category folding
  * @since 3.0.0
  */
-export const reduce =
-  <B, A>(b: B, f: (b: B, a: A) => B) =>
-  (self: A): B =>
-    f(b, self)
+export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) => (self: A): B => f(b, self)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const foldMap =
-  <M>(_: Monoid<M>) =>
-  <A>(f: (a: A) => M) =>
-  (self: Identity<A>): M =>
-    f(self)
+export const foldMap = <M>(_: Monoid<M>) => <A>(f: (a: A) => M) => (self: Identity<A>): M => f(self)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceRight =
-  <B, A>(b: B, f: (a: A, b: B) => B) =>
-  (self: Identity<A>): B =>
-    f(self, b)
+export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
+  (self: Identity<A>): B => f(self, b)
 
 /**
  * @category traversing
@@ -303,9 +298,9 @@ export const reduceRight =
  */
 export const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, S, R, O, E, B>(f: (a: A) => Kind<F, S, R, O, E, B>) => (ta: Identity<A>) => Kind<F, S, R, O, E, Identity<B>> =
-  (F) => (f) =>
-    flow(f, F.map(identity))
+) => <A, S, R, O, E, B>(
+  f: (a: A) => Kind<F, S, R, O, E, B>
+) => (ta: Identity<A>) => Kind<F, S, R, O, E, Identity<B>> = (F) => (f) => flow(f, F.map(identity))
 
 /**
  * @category instances
@@ -322,12 +317,13 @@ export const Traversable: traversable.Traversable<IdentityTypeLambda> = {
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <S, R, O, E, A>(fas: Identity<Kind<F, S, R, O, E, A>>) => Kind<F, S, R, O, E, Identity<A>> =
- traversable.sequence(Traversable)
+  traversable.sequence(Traversable)
 
 /**
  * @since 3.0.0
  */
-export const orElse: <B>(that: Identity<B>) => <A>(self: Identity<A>) => Identity<A | B> = () => identity
+export const orElse: <B>(that: Identity<B>) => <A>(self: Identity<A>) => Identity<A | B> = () =>
+  identity
 
 /**
  * @category instances
@@ -343,8 +339,9 @@ export const Alt: alt.Alt<IdentityTypeLambda> = {
  * @category error handling
  * @since 3.0.0
  */
-export const firstSuccessOf: <A>(startWith: Identity<A>) => (collection: Iterable<Identity<A>>) => Identity<A> =
- alt.firstSuccessOf(Alt)
+export const firstSuccessOf: <A>(
+  startWith: Identity<A>
+) => (collection: Iterable<Identity<A>>) => Identity<A> = alt.firstSuccessOf(Alt)
 
 // -------------------------------------------------------------------------------------
 // do notation
@@ -354,19 +351,22 @@ export const firstSuccessOf: <A>(startWith: Identity<A>) => (collection: Iterabl
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Identity<{}> =of(_.Do)
+export const Do: Identity<{}> = of(_.Do)
 
 /**
  * @category do notation
  * @since 3.0.0
  */
-export const bindTo: <N extends string>(name: N) => <A>(self: Identity<A>) => { readonly [K in N]: A } =
- functor.bindTo(Functor)
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: Identity<A>) => { readonly [K in N]: A } = functor.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => (self: A) => { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B } =functor.let(Functor)
+) => (self: A) => { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B } = functor.let(
+  Functor
+)
 
 export {
   /**
@@ -384,7 +384,7 @@ export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Identity<B>
 ) => (self: Identity<A>) => { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B } =
- flattenable.bind(Flattenable)
+  flattenable.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -395,8 +395,8 @@ export const bind: <N extends string, A extends object, B>(
 export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Identity<B>
-) => (self: Identity<A>) => { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B } =
- apply.bindRight(Apply)
+) => (self: Identity<A>) => { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B } = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -406,13 +406,13 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Identity<readonly []> =of(_.empty)
+export const Zip: Identity<readonly []> = of(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <A>(self: Identity<A>) => readonly [A] =functor.tupled(Functor)
+export const tupled: <A>(self: Identity<A>) => readonly [A] = functor.tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -420,8 +420,9 @@ export const tupled: <A>(self: Identity<A>) => readonly [A] =functor.tupled(Func
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const zipFlatten: <B>(fb: B) => <A extends ReadonlyArray<unknown>>(self: A) => readonly [...A, B] =
- apply.zipFlatten(Apply)
+export const zipFlatten: <B>(
+  fb: B
+) => <A extends ReadonlyArray<unknown>>(self: A) => readonly [...A, B] = apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -429,4 +430,6 @@ export const zipFlatten: <B>(fb: B) => <A extends ReadonlyArray<unknown>>(self: 
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const zipWith: <B, A, C>(that: B, f: (a: A, b: B) => C) => (self: A) => C =apply.zipWith(Apply)
+export const zipWith: <B, A, C>(that: B, f: (a: A, b: B) => C) => (self: A) => C = apply.zipWith(
+  Apply
+)

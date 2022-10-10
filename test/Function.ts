@@ -1,66 +1,66 @@
-import * as assert from 'assert'
-import * as B from '@fp-ts/core/boolean'
-import * as _ from '@fp-ts/core/Function'
-import { combineAll } from '@fp-ts/core/typeclasses/Monoid'
-import * as RA from '@fp-ts/core/ReadonlyArray'
-import * as S from '@fp-ts/core/string'
-import * as U from './util'
+import * as B from "@fp-ts/core/boolean"
+import * as _ from "@fp-ts/core/Function"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as S from "@fp-ts/core/string"
+import { combineAll } from "@fp-ts/core/typeclasses/Monoid"
+import * as assert from "assert"
+import * as U from "./util"
 
 const f = _.increment
 const g = U.double
 
-describe('Function', () => {
-  it('flip', () => {
+describe("Function", () => {
+  it("flip", () => {
     const f = (a: number) => (b: string) => a - b.length
-    U.deepStrictEqual(_.flip(f)('aaa')(2), -1)
+    U.deepStrictEqual(_.flip(f)("aaa")(2), -1)
   })
 
-  it('id', () => {
+  it("id", () => {
     const x = _.id<number>()
     U.deepStrictEqual(x(1), 1)
   })
 
-  it('compose', () => {
-    U.deepStrictEqual(_.pipe(S.size, _.compose(U.double))('aaa'), 6)
+  it("compose", () => {
+    U.deepStrictEqual(_.pipe(S.size, _.compose(U.double))("aaa"), 6)
   })
 
-  it('unsafeCoerce', () => {
+  it("unsafeCoerce", () => {
     U.deepStrictEqual(_.unsafeCoerce, _.identity)
   })
 
-  it('constTrue', () => {
+  it("constTrue", () => {
     U.deepStrictEqual(_.constTrue(), true)
   })
 
-  it('constFalse', () => {
+  it("constFalse", () => {
     U.deepStrictEqual(_.constFalse(), false)
   })
 
-  it('constNull', () => {
+  it("constNull", () => {
     U.deepStrictEqual(_.constNull(), null)
   })
 
-  it('constUndefined', () => {
+  it("constUndefined", () => {
     U.deepStrictEqual(_.constUndefined(), undefined)
   })
 
-  it('constVoid', () => {
+  it("constVoid", () => {
     U.deepStrictEqual(_.constVoid(), undefined)
   })
 
-  it('increment', () => {
+  it("increment", () => {
     U.deepStrictEqual(_.increment(2), 3)
   })
 
-  it('decrement', () => {
+  it("decrement", () => {
     U.deepStrictEqual(_.decrement(2), 1)
   })
 
-  it('absurd', () => {
+  it("absurd", () => {
     assert.throws(() => _.absurd<string>(null as any as never))
   })
 
-  it('flow', () => {
+  it("flow", () => {
     U.deepStrictEqual(_.flow(f)(2), 3)
     U.deepStrictEqual(_.flow(f, g)(2), 6)
     U.deepStrictEqual(_.flow(f, g, f)(2), 7)
@@ -74,7 +74,7 @@ describe('Function', () => {
     U.deepStrictEqual((_.flow as any)(...[f, g, f, g, f, g, f, g, f, g]), undefined)
   })
 
-  it('tupled', () => {
+  it("tupled", () => {
     const f1 = (a: number): number => a * 2
     const f2 = (a: number, b: number): number => a + b
     const u1 = _.tupled(f1)
@@ -83,7 +83,7 @@ describe('Function', () => {
     U.deepStrictEqual(u2([1, 2]), 3)
   })
 
-  it('untupled', () => {
+  it("untupled", () => {
     const f1 = (a: readonly [number]): number => a[0] * 2
     const f2 = (a: readonly [number, number]): number => a[0] + a[1]
     const u1 = _.untupled(f1)
@@ -92,7 +92,7 @@ describe('Function', () => {
     U.deepStrictEqual(u2(1, 2), 3)
   })
 
-  it('pipe', () => {
+  it("pipe", () => {
     U.deepStrictEqual(_.pipe(2), 2)
     U.deepStrictEqual(_.pipe(2, f), 3)
     U.deepStrictEqual(_.pipe(2, f, g), 6)
@@ -113,10 +113,13 @@ describe('Function', () => {
     U.deepStrictEqual(_.pipe(2, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f), 1023)
     U.deepStrictEqual(_.pipe(2, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g), 2046)
     U.deepStrictEqual(_.pipe(2, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f), 2047)
-    U.deepStrictEqual((_.pipe as any)(...[2, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g]), 4094)
+    U.deepStrictEqual(
+      (_.pipe as any)(...[2, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g, f, g]),
+      4094
+    )
   })
 
-  it('getMonoid', () => {
+  it("getMonoid", () => {
     const getPredicateMonoidAll = _.getMonoid(B.MonoidAnd)
     const getPredicateMonoidAny = _.getMonoid(B.MonoidOr)
 
@@ -124,11 +127,17 @@ describe('Function', () => {
     const isEven = (n: number) => n % 2 === 0
 
     U.deepStrictEqual(
-      _.pipe([1, 2, 3, 40], RA.filter(combineAll(getPredicateMonoidAll<number>())([isLessThan10, isEven]))),
+      _.pipe(
+        [1, 2, 3, 40],
+        RA.filter(combineAll(getPredicateMonoidAll<number>())([isLessThan10, isEven]))
+      ),
       [2]
     )
     U.deepStrictEqual(
-      _.pipe([1, 2, 3, 40, 41], RA.filter(combineAll(getPredicateMonoidAny<number>())([isLessThan10, isEven]))),
+      _.pipe(
+        [1, 2, 3, 40, 41],
+        RA.filter(combineAll(getPredicateMonoidAny<number>())([isLessThan10, isEven]))
+      ),
       [1, 2, 3, 40]
     )
   })

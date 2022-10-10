@@ -2,12 +2,12 @@
  * @since 3.0.0
  */
 
-import type * as category from '@fp-ts/core/typeclasses/Category'
-import type * as composable from '@fp-ts/core/typeclasses/Composable'
-import * as func from '@fp-ts/core/Function'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
+import * as func from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as category from "@fp-ts/core/typeclasses/Category"
+import type * as composable from "@fp-ts/core/typeclasses/Composable"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @category model
@@ -26,7 +26,7 @@ export interface Endomorphism<A> {
  * @since 3.0.0
  */
 export interface EndomorphismTypeLambda extends TypeLambda {
-  readonly type: Endomorphism<this['InOut1']>
+  readonly type: Endomorphism<this["InOut1"]>
 }
 
 /**

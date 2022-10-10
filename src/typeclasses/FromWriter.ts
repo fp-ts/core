@@ -3,8 +3,8 @@
  *
  * @since 3.0.0
  */
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
-import type { Writer } from '@fp-ts/core/Writer'
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Writer } from "@fp-ts/core/Writer"
 
 /**
  * @category model
@@ -18,8 +18,6 @@ export interface FromWriter<F extends TypeLambda> extends TypeClass<F> {
  * @category lifting
  * @since 3.0.0
  */
-export const liftWriter =
-  <F extends TypeLambda>(F: FromWriter<F>) =>
+export const liftWriter = <F extends TypeLambda>(F: FromWriter<F>) =>
   <A extends ReadonlyArray<unknown>, E, B>(f: (...a: A) => Writer<E, B>) =>
-  <S>(...a: A): Kind<F, S, unknown, never, E, B> =>
-    F.fromWriter(f(...a))
+    <S>(...a: A): Kind<F, S, unknown, never, E, B> => F.fromWriter(f(...a))

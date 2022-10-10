@@ -1,45 +1,45 @@
-import * as N from '@fp-ts/core/number'
-import { identity, pipe } from '@fp-ts/core/Function'
-import * as _ from '@fp-ts/core/Identity'
-import * as S from '@fp-ts/core/string'
-import * as O from '@fp-ts/core/Option'
-import * as U from './util'
+import { identity, pipe } from "@fp-ts/core/Function"
+import * as _ from "@fp-ts/core/Identity"
+import * as N from "@fp-ts/core/number"
+import * as O from "@fp-ts/core/Option"
+import * as S from "@fp-ts/core/string"
+import * as U from "./util"
 
-describe('Identity', () => {
-  it('reduce', () => {
+describe("Identity", () => {
+  it("reduce", () => {
     U.deepStrictEqual(
       pipe(
-        'b',
-        _.reduce('a', (b, a) => b + a)
+        "b",
+        _.reduce("a", (b, a) => b + a)
       ),
-      'ab'
+      "ab"
     )
   })
 
-  it('foldMap', () => {
-    U.deepStrictEqual(pipe('a', _.foldMap(S.Monoid)(identity)), 'a')
+  it("foldMap", () => {
+    U.deepStrictEqual(pipe("a", _.foldMap(S.Monoid)(identity)), "a")
   })
 
-  it('reduceRight', () => {
+  it("reduceRight", () => {
     const f = (a: string, acc: string) => acc + a
-    U.deepStrictEqual(pipe('a', _.reduceRight('', f)), 'a')
+    U.deepStrictEqual(pipe("a", _.reduceRight("", f)), "a")
   })
 
-  describe('pipeables', () => {
-    it('map', () => {
+  describe("pipeables", () => {
+    it("map", () => {
       U.deepStrictEqual(pipe(1, _.map(U.double)), 2)
     })
 
-    it('ap', () => {
+    it("ap", () => {
       const fab = U.double
       U.deepStrictEqual(pipe(fab, _.ap(1)), 2)
     })
 
-    it('flatMap', () => {
+    it("flatMap", () => {
       U.deepStrictEqual(pipe(1, _.flatMap(U.double)), 2)
     })
 
-    it('orElse', () => {
+    it("orElse", () => {
       const assertAlt = (a: _.Identity<number>, b: _.Identity<number>, expected: number) => {
         U.deepStrictEqual(
           pipe(
@@ -52,23 +52,23 @@ describe('Identity', () => {
       assertAlt(1, 2, 1)
     })
 
-    it('extract', () => {
+    it("extract", () => {
       U.deepStrictEqual(pipe(1, _.extract), 1)
     })
 
-    it('extend', () => {
-      U.deepStrictEqual(pipe('foo', _.extend(S.size)), 3)
+    it("extend", () => {
+      U.deepStrictEqual(pipe("foo", _.extend(S.size)), 3)
     })
 
-    it('duplicate', () => {
-      U.deepStrictEqual(pipe('a', _.duplicate), 'a')
+    it("duplicate", () => {
+      U.deepStrictEqual(pipe("a", _.duplicate), "a")
     })
 
-    it('flatten', () => {
-      U.deepStrictEqual(pipe('a', _.flatten), 'a')
+    it("flatten", () => {
+      U.deepStrictEqual(pipe("a", _.flatten), "a")
     })
 
-    it('traverse', () => {
+    it("traverse", () => {
       const traverse = _.traverse(O.Applicative)
       U.deepStrictEqual(pipe(1, traverse(O.some)), O.some(1))
       U.deepStrictEqual(
@@ -80,41 +80,41 @@ describe('Identity', () => {
       )
     })
 
-    it('sequence', () => {
+    it("sequence", () => {
       const sequence = _.sequence(O.Applicative)
-      U.deepStrictEqual(sequence(O.some('a')), O.some('a'))
+      U.deepStrictEqual(sequence(O.some("a")), O.some("a"))
       U.deepStrictEqual(sequence(O.none), O.none)
     })
   })
 
-  it('getEq', () => {
+  it("getEq", () => {
     const E = _.getEq(N.Eq)
     U.deepStrictEqual(E.equals(1)(1), true)
     U.deepStrictEqual(E.equals(1)(2), false)
     U.deepStrictEqual(E.equals(2)(1), false)
   })
 
-  it('getShow', () => {
+  it("getShow", () => {
     const Sh = _.getShow(S.Show)
-    U.deepStrictEqual(Sh.show('a'), `"a"`)
+    U.deepStrictEqual(Sh.show("a"), `"a"`)
   })
 
-  it('do notation', () => {
+  it("do notation", () => {
     U.deepStrictEqual(
       pipe(
         _.of(1),
-        _.bindTo('a'),
-        _.bind('b', () => _.of('b'))
+        _.bindTo("a"),
+        _.bind("b", () => _.of("b"))
       ),
-      { a: 1, b: 'b' }
+      { a: 1, b: "b" }
     )
   })
 
-  it('apS', () => {
-    U.deepStrictEqual(pipe(_.of(1), _.bindTo('a'), _.bindRight('b', _.of('b'))), { a: 1, b: 'b' })
+  it("apS", () => {
+    U.deepStrictEqual(pipe(_.of(1), _.bindTo("a"), _.bindRight("b", _.of("b"))), { a: 1, b: "b" })
   })
 
-  it('zipFlatten', () => {
-    U.deepStrictEqual(pipe(_.of(1), _.tupled, _.zipFlatten(_.of('b'))), [1, 'b'])
+  it("zipFlatten", () => {
+    U.deepStrictEqual(pipe(_.of(1), _.tupled, _.zipFlatten(_.of("b"))), [1, "b"])
   })
 })

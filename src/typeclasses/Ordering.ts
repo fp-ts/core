@@ -1,10 +1,10 @@
 /**
  * @since 3.0.0
  */
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import type { LazyArg } from '@fp-ts/core/Function'
-import type * as monoid from '@fp-ts/core/typeclasses/Monoid'
-import type * as semigroup from '@fp-ts/core/typeclasses/Semigroup'
+import type { LazyArg } from "@fp-ts/core/Function"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type * as monoid from "@fp-ts/core/typeclasses/Monoid"
+import type * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @category model
@@ -25,10 +25,11 @@ export const reverse = (o: Ordering): Ordering => (o === -1 ? 1 : o === 1 ? -1 :
  * @category pattern matching
  * @since 3.0.0
  */
-export const match =
-  <A, B, C = B>(onLessThan: LazyArg<A>, onEqual: LazyArg<B>, onGreaterThan: LazyArg<C>) =>
-  (o: Ordering): A | B | C =>
-    o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan()
+export const match = <A, B, C = B>(
+  onLessThan: LazyArg<A>,
+  onEqual: LazyArg<B>,
+  onGreaterThan: LazyArg<C>
+) => (o: Ordering): A | B | C => o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan()
 
 // -------------------------------------------------------------------------------------
 // instances

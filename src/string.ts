@@ -1,14 +1,14 @@
 /**
  * @since 3.0.0
  */
-import type * as eq from '@fp-ts/core/typeclasses/Eq'
-import * as monoid from '@fp-ts/core/typeclasses/Monoid'
-import type * as semigroup from '@fp-ts/core/typeclasses/Semigroup'
-import type * as ord from '@fp-ts/core/typeclasses/Ord'
-import type * as show_ from '@fp-ts/core/typeclasses/Show'
-import type { Refinement } from '@fp-ts/core/Refinement'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
-import * as _ from '@fp-ts/core/internal'
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type { Refinement } from "@fp-ts/core/Refinement"
+import type * as eq from "@fp-ts/core/typeclasses/Eq"
+import * as monoid from "@fp-ts/core/typeclasses/Monoid"
+import type * as ord from "@fp-ts/core/typeclasses/Ord"
+import type * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
+import type * as show_ from "@fp-ts/core/typeclasses/Show"
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -32,10 +32,7 @@ export const Eq: eq.Eq<string> = {
 /**
  * @since 3.0.0
  */
-export const concat =
-  (that: string) =>
-  (self: string): string =>
-    self + that
+export const concat = (that: string) => (self: string): string => self + that
 
 /**
  * `string` semigroup under concatenation.
@@ -58,7 +55,7 @@ export const Semigroup: semigroup.Semigroup<string> = {
  *
  * @since 3.0.0
  */
-export const empty = ''
+export const empty = ""
 
 /**
  * `string` monoid under concatenation.
@@ -83,7 +80,7 @@ export const Monoid: monoid.Monoid<string> = {
 /**
  * @since 3.0.0
  */
-export const concatAll: (collection: Iterable<string>) => string =monoid.combineAll(Monoid)
+export const concatAll: (collection: Iterable<string>) => string = monoid.combineAll(Monoid)
 
 /**
  * @example
@@ -128,7 +125,8 @@ export const Show: show_.Show<string> = {
  * @category refinements
  * @since 3.0.0
  */
-export const isString: Refinement<unknown, string> = (u: unknown): u is string => typeof u === 'string'
+export const isString: Refinement<unknown, string> = (u: unknown): u is string =>
+  typeof u === "string"
 
 /**
  * @example
@@ -161,10 +159,8 @@ export const toLowerCase = (s: string): string => s.toLowerCase()
  *
  * @since 3.0.0
  */
-export const replace =
-  (searchValue: string | RegExp, replaceValue: string) =>
-  (s: string): string =>
-    s.replace(searchValue, replaceValue)
+export const replace = (searchValue: string | RegExp, replaceValue: string) =>
+  (s: string): string => s.replace(searchValue, replaceValue)
 
 /**
  * @example
@@ -208,10 +204,7 @@ export const trimRight = (s: string): string => s.trimRight()
  *
  * @since 3.0.0
  */
-export const slice =
-  (start: number, end: number) =>
-  (s: string): string =>
-    s.slice(start, end)
+export const slice = (start: number, end: number) => (s: string): string => s.slice(start, end)
 
 /**
  * Test whether a `string` is empty.
@@ -250,8 +243,7 @@ export const size = (s: string): number => s.length
  *
  * @since 3.0.0
  */
-export const split =
-  (separator: string | RegExp) =>
+export const split = (separator: string | RegExp) =>
   (s: string): NonEmptyReadonlyArray<string> => {
     const out = s.split(separator)
     return _.isNonEmpty(out) ? out : [s]
@@ -267,10 +259,8 @@ export const split =
  *
  * @since 3.0.0
  */
-export const includes =
-  (searchString: string, position?: number) =>
-  (s: string): boolean =>
-    s.includes(searchString, position)
+export const includes = (searchString: string, position?: number) =>
+  (s: string): boolean => s.includes(searchString, position)
 
 /**
  * @example
@@ -282,10 +272,8 @@ export const includes =
  *
  * @since 3.0.0
  */
-export const startsWith =
-  (searchString: string, position?: number) =>
-  (s: string): boolean =>
-    s.startsWith(searchString, position)
+export const startsWith = (searchString: string, position?: number) =>
+  (s: string): boolean => s.startsWith(searchString, position)
 
 /**
  * @example
@@ -297,7 +285,5 @@ export const startsWith =
  *
  * @since 3.0.0
  */
-export const endsWith =
-  (searchString: string, position?: number) =>
-  (s: string): boolean =>
-    s.endsWith(searchString, position)
+export const endsWith = (searchString: string, position?: number) =>
+  (s: string): boolean => s.endsWith(searchString, position)

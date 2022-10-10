@@ -1,12 +1,12 @@
 /**
  * @since 3.0.0
  */
-import type * as category from '@fp-ts/core/typeclasses/Category'
-import type * as composable from '@fp-ts/core/typeclasses/Composable'
-import type { Endomorphism } from '@fp-ts/core/Endomorphism'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import type { Monoid } from '@fp-ts/core/typeclasses/Monoid'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
+import type { Endomorphism } from "@fp-ts/core/Endomorphism"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as category from "@fp-ts/core/typeclasses/Category"
+import type * as composable from "@fp-ts/core/typeclasses/Composable"
+import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 // -------------------------------------------------------------------------------------
 // type lambdas
@@ -17,7 +17,7 @@ import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
  * @since 3.0.0
  */
 export interface FunctionTypeLambda extends TypeLambda {
-  readonly type: (a: this['In1']) => this['Out1']
+  readonly type: (a: this["In1"]) => this["Out1"]
 }
 
 /**
@@ -29,7 +29,8 @@ export const id: <A>() => Endomorphism<A> = () => identity
 /**
  * @since 3.0.0
  */
-export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C = (bc) => (ab) => flow(ab, bc)
+export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C = (bc) =>
+  (ab) => flow(ab, bc)
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -76,8 +77,7 @@ export const Category: category.Category<FunctionTypeLambda> = {
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup =
-  <S>(S: Semigroup<S>) =>
+export const getSemigroup = <S>(S: Semigroup<S>) =>
   <A>(): Semigroup<(a: A) => S> => ({
     combine: (that) => (self) => (a) => S.combine(that(a))(self(a))
   })
@@ -117,10 +117,7 @@ export const getMonoid = <M>(M: Monoid<M>): (<A>() => Monoid<(a: A) => M>) => {
 /**
  * @since 3.0.0
  */
-export const apply =
-  <A>(a: A) =>
-  <B>(f: (a: A) => B): B =>
-    f(a)
+export const apply = <A>(a: A) => <B>(f: (a: A) => B): B => f(a)
 
 /**
  * A lazy argument
@@ -156,38 +153,35 @@ export const unsafeCoerce: <A, B>(a: A) => B = identity as any
 /**
  * @since 3.0.0
  */
-export const constant =
-  <A>(a: A): LazyArg<A> =>
-  () =>
-    a
+export const constant = <A>(a: A): LazyArg<A> => () => a
 
 /**
  * A thunk that returns always `true`.
  *
  * @since 3.0.0
  */
-export const constTrue: LazyArg<boolean> =constant(true)
+export const constTrue: LazyArg<boolean> = constant(true)
 
 /**
  * A thunk that returns always `false`.
  *
  * @since 3.0.0
  */
-export const constFalse: LazyArg<boolean> =constant(false)
+export const constFalse: LazyArg<boolean> = constant(false)
 
 /**
  * A thunk that returns always `null`.
  *
  * @since 3.0.0
  */
-export const constNull: LazyArg<null> =constant(null)
+export const constNull: LazyArg<null> = constant(null)
 
 /**
  * A thunk that returns always `undefined`.
  *
  * @since 3.0.0
  */
-export const constUndefined: LazyArg<undefined> =constant(undefined)
+export const constUndefined: LazyArg<undefined> = constant(undefined)
 
 /**
  * A thunk that returns always `void`.
@@ -208,11 +202,8 @@ export const constVoid: LazyArg<void> = constUndefined
  *
  * @since 3.0.0
  */
-export const flip =
-  <A, B, C>(f: (a: A) => (b: B) => C): ((b: B) => (a: A) => C) =>
-  (b) =>
-  (a) =>
-    f(a)(b)
+export const flip = <A, B, C>(f: (a: A) => (b: B) => C): ((b: B) => (a: A) => C) =>
+  (b) => (a) => f(a)(b)
 
 /**
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
@@ -231,7 +222,10 @@ export const flip =
  * @since 3.0.0
  */
 export function flow<A extends ReadonlyArray<unknown>, B>(ab: (...a: A) => B): (...a: A) => B
-export function flow<A extends ReadonlyArray<unknown>, B, C>(ab: (...a: A) => B, bc: (b: B) => C): (...a: A) => C
+export function flow<A extends ReadonlyArray<unknown>, B, C>(
+  ab: (...a: A) => B,
+  bc: (b: B) => C
+): (...a: A) => C
 export function flow<A extends ReadonlyArray<unknown>, B, C, D>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
@@ -303,35 +297,35 @@ export function flow(
     case 1:
       return ab
     case 2:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return bc!(ab.apply(this, arguments))
       }
     case 3:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return cd!(bc!(ab.apply(this, arguments)))
       }
     case 4:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return de!(cd!(bc!(ab.apply(this, arguments))))
       }
     case 5:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return ef!(de!(cd!(bc!(ab.apply(this, arguments)))))
       }
     case 6:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return fg!(ef!(de!(cd!(bc!(ab.apply(this, arguments))))))
       }
     case 7:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return gh!(fg!(ef!(de!(cd!(bc!(ab.apply(this, arguments)))))))
       }
     case 8:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return hi!(gh!(fg!(ef!(de!(cd!(bc!(ab.apply(this, arguments))))))))
       }
     case 9:
-      return function (this: unknown) {
+      return function(this: unknown) {
         return ij!(hi!(gh!(fg!(ef!(de!(cd!(bc!(ab.apply(this, arguments)))))))))
       }
   }
@@ -352,7 +346,7 @@ export const decrement = (n: number): number => n - 1
  * @since 3.0.0
  */
 export const absurd = <A>(_: never): A => {
-  throw new Error('Called `absurd` function which should be uncallable')
+  throw new Error("Called `absurd` function which should be uncallable")
 }
 
 /**
@@ -367,20 +361,16 @@ export const absurd = <A>(_: never): A => {
  *
  * @since 3.0.0
  */
-export const tupled =
-  <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => B): ((a: A) => B) =>
-  (a) =>
-    f(...a)
+export const tupled = <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => B): ((a: A) => B) =>
+  (a) => f(...a)
 
 /**
  * Inverse function of `tupled`
  *
  * @since 3.0.0
  */
-export const untupled =
-  <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): ((...a: A) => B) =>
-  (...a) =>
-    f(a)
+export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): ((...a: A) => B) =>
+  (...a) => f(a)
 
 /**
  * Pipes the value of an expression into a pipeline of functions.
@@ -404,7 +394,13 @@ export function pipe<A>(a: A): A
 export function pipe<A, B>(a: A, ab: (a: A) => B): B
 export function pipe<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C
 export function pipe<A, B, C, D>(a: A, ab: (a: A) => B, bc: (b: B) => C, cd: (c: C) => D): D
-export function pipe<A, B, C, D, E>(a: A, ab: (a: A) => B, bc: (b: B) => C, cd: (c: C) => D, de: (d: D) => E): E
+export function pipe<A, B, C, D, E>(
+  a: A,
+  ab: (a: A) => B,
+  bc: (b: B) => C,
+  cd: (c: C) => D,
+  de: (d: D) => E
+): E
 export function pipe<A, B, C, D, E, F>(
   a: A,
   ab: (a: A) => B,

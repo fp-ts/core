@@ -1,42 +1,47 @@
 /**
  * @since 3.0.0
  */
-import type { Apply } from '@fp-ts/core/typeclasses/Apply'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import * as bifunctor from '@fp-ts/core/typeclasses/Bifunctor'
-import * as compactable from '@fp-ts/core/typeclasses/Compactable'
-import type { Result } from '@fp-ts/core/Result'
-import * as result from '@fp-ts/core/Result'
-import type { Flattenable } from '@fp-ts/core/typeclasses/Flattenable'
-import { flow, pipe } from '@fp-ts/core/Function'
-import type { Functor } from '@fp-ts/core/typeclasses/Functor'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { Kind, TypeLambda } from '@fp-ts/core/HKT'
-import type { Monad } from '@fp-ts/core/typeclasses/Monad'
-import type { Option } from '@fp-ts/core/Option'
-import type { FromIdentity } from '@fp-ts/core/typeclasses/FromIdentity'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
+import { flow, pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Option } from "@fp-ts/core/Option"
+import type { Result } from "@fp-ts/core/Result"
+import * as result from "@fp-ts/core/Result"
+import type { Apply } from "@fp-ts/core/typeclasses/Apply"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
+import * as compactable from "@fp-ts/core/typeclasses/Compactable"
+import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
+import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
+import type { Functor } from "@fp-ts/core/typeclasses/Functor"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type { Monad } from "@fp-ts/core/typeclasses/Monad"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
  * @since 3.0.0
  */
 export interface ResultT<F extends TypeLambda, E> extends TypeLambda {
-  readonly type: Kind<F, this['InOut1'], this['In1'], this['Out3'], this['Out2'], Result<E, this['Out1']>>
+  readonly type: Kind<
+    F,
+    this["InOut1"],
+    this["In1"],
+    this["Out3"],
+    this["Out2"],
+    Result<E, this["Out1"]>
+  >
 }
 
 /**
  * @since 3.0.0
  */
-export const succeed =
-  <F extends TypeLambda>(FromIdentity: FromIdentity<F>) =>
+export const succeed = <F extends TypeLambda>(FromIdentity: FromIdentity<F>) =>
   <A, S>(a: A): Kind<ResultT<F, never>, S, unknown, never, never, A> =>
     FromIdentity.of(result.succeed(a))
 
 /**
  * @since 3.0.0
  */
-export const fail =
-  <F extends TypeLambda>(FromIdentity: FromIdentity<F>) =>
+export const fail = <F extends TypeLambda>(FromIdentity: FromIdentity<F>) =>
   <E, S>(e: E): Kind<ResultT<F, E>, S, unknown, never, never, never> =>
     FromIdentity.of(result.fail(e))
 
@@ -65,7 +70,9 @@ export const map = <F extends TypeLambda>(Functor: Functor<F>) => {
   const map_ = functor.mapComposition(Functor, result.Functor)
   return <A, B>(
     f: (a: A) => B
-  ): (<S, R, O, FE, E>(self: Kind<ResultT<F, E>, S, R, O, FE, A>) => Kind<ResultT<F, E>, S, R, O, FE, B>) => map_(f)
+  ): (<S, R, O, FE, E>(
+    self: Kind<ResultT<F, E>, S, R, O, FE, A>
+  ) => Kind<ResultT<F, E>, S, R, O, FE, B>) => map_(f)
 }
 
 /**
@@ -77,24 +84,24 @@ export const ap = <F extends TypeLambda>(
   fa: Kind<ResultT<F, E2>, S, R2, O2, FE2, A>
 ) => <R1, O1, FE1, E1, B>(
   self: Kind<ResultT<F, E1>, S, R1, O1, FE1, (a: A) => B>
-) => Kind<F, S, R1 & R2, O1 | O2, FE1 | FE2, Result<E1 | E2, B>>) => apply.apComposition(Apply, result.Apply)
+) => Kind<F, S, R1 & R2, O1 | O2, FE1 | FE2, Result<E1 | E2, B>>) =>
+  apply.apComposition(Apply, result.Apply)
 
 /**
  * @since 3.0.0
  */
-export const flatMap =
-  <F extends TypeLambda>(Monad: Monad<F>) =>
+export const flatMap = <F extends TypeLambda>(Monad: Monad<F>) =>
   <A, S, R2, O2, FE2, E2, B>(f: (a: A) => Kind<ResultT<F, E2>, S, R2, O2, FE2, B>) =>
-  <R1, O1, FE1, E1>(
-    self: Kind<ResultT<F, E1>, S, R1, O1, FE1, A>
-  ): Kind<ResultT<F, E1 | E2>, S, R1 & R2, O1 | O2, FE1 | FE2, B> =>
-    pipe(
-      self,
-      Monad.flatMap(
-        (e): Kind<ResultT<F, E1 | E2>, S, R1 & R2, O1 | O2, FE1 | FE2, B> =>
-          result.isFailure(e) ? Monad.of(e) : f(e.success)
+    <R1, O1, FE1, E1>(
+      self: Kind<ResultT<F, E1>, S, R1, O1, FE1, A>
+    ): Kind<ResultT<F, E1 | E2>, S, R1 & R2, O1 | O2, FE1 | FE2, B> =>
+      pipe(
+        self,
+        Monad.flatMap(
+          (e): Kind<ResultT<F, E1 | E2>, S, R1 & R2, O1 | O2, FE1 | FE2, B> =>
+            result.isFailure(e) ? Monad.of(e) : f(e.success)
+        )
       )
-    )
 
 /**
  * Creates a composite effect that represents this effect followed by another
@@ -102,35 +109,33 @@ export const flatMap =
  *
  * @since 3.0.0
  */
-export const flatMapError =
-  <F extends TypeLambda>(Monad: Monad<F>) =>
+export const flatMapError = <F extends TypeLambda>(Monad: Monad<F>) =>
   <E1, S, R, O, FE, E2>(f: (e: E1) => Kind<F, S, R, O, FE, E2>) =>
-  <A>(self: Kind<ResultT<F, E1>, S, R, O, FE, A>): Kind<ResultT<F, E2>, S, R, O, FE, A> =>
-    pipe(
-      self,
-      Monad.flatMap<Result<E1, A>, S, R, O, FE, Result<E2, A>>(
-        result.match(
-          (e) => pipe(f(e), Monad.map(result.fail)),
-          (a) => Monad.of(result.succeed(a))
+    <A>(self: Kind<ResultT<F, E1>, S, R, O, FE, A>): Kind<ResultT<F, E2>, S, R, O, FE, A> =>
+      pipe(
+        self,
+        Monad.flatMap<Result<E1, A>, S, R, O, FE, Result<E2, A>>(
+          result.match(
+            (e) => pipe(f(e), Monad.map(result.fail)),
+            (a) => Monad.of(result.succeed(a))
+          )
         )
       )
-    )
 
 /**
  * @since 3.0.0
  */
-export const catchAll =
-  <F extends TypeLambda>(Monad: Monad<F>) =>
+export const catchAll = <F extends TypeLambda>(Monad: Monad<F>) =>
   <E1, S, R2, O2, FE2, E2, B>(onError: (e: E1) => Kind<ResultT<F, E2>, S, R2, O2, FE2, B>) =>
-  <R1, O1, FE1, A>(
-    self: Kind<ResultT<F, E1>, S, R1, O1, FE1, A>
-  ): Kind<ResultT<F, E2>, S, R1 & R2, O1 | O2, FE1 | FE2, A | B> =>
-    pipe(
-      self,
-      Monad.flatMap<Result<E1, A>, S, R1 & R2, O1 | O2, FE1 | FE2, Result<E2, A | B>>((e) =>
-        result.isFailure(e) ? onError(e.failure) : Monad.of(e)
+    <R1, O1, FE1, A>(
+      self: Kind<ResultT<F, E1>, S, R1, O1, FE1, A>
+    ): Kind<ResultT<F, E2>, S, R1 & R2, O1 | O2, FE1 | FE2, A | B> =>
+      pipe(
+        self,
+        Monad.flatMap<Result<E1, A>, S, R1 & R2, O1 | O2, FE1 | FE2, Result<E2, A | B>>((e) =>
+          result.isFailure(e) ? onError(e.failure) : Monad.of(e)
+        )
       )
-    )
 
 /**
  * @since 3.0.0
@@ -155,39 +160,42 @@ export const mapBoth = <F extends TypeLambda>(
 ): (<E, G, A, B>(
   f: (e: E) => G,
   g: (a: A) => B
-) => <S, R, O, FE>(self: Kind<ResultT<F, E>, S, R, O, FE, A>) => Kind<ResultT<F, G>, S, R, O, FE, B>) =>
-  bifunctor.mapBothComposition(Functor, result.Bifunctor)
+) => <S, R, O, FE>(
+  self: Kind<ResultT<F, E>, S, R, O, FE, A>
+) => Kind<ResultT<F, G>, S, R, O, FE, B>) => bifunctor.mapBothComposition(Functor, result.Bifunctor)
 
 /**
  * @since 3.0.0
  */
-export const mapError =
-  <F extends TypeLambda>(Functor: Functor<F>) =>
+export const mapError = <F extends TypeLambda>(Functor: Functor<F>) =>
   <E, G>(
     f: (e: E) => G
-  ): (<S, R, O, FE, A>(self: Kind<ResultT<F, E>, S, R, O, FE, A>) => Kind<ResultT<F, G>, S, R, O, FE, A>) =>
-    Functor.map(result.mapError(f))
+  ): (<S, R, O, FE, A>(
+    self: Kind<ResultT<F, E>, S, R, O, FE, A>
+  ) => Kind<ResultT<F, G>, S, R, O, FE, A>) => Functor.map(result.mapError(f))
 
 /**
  * @since 3.0.0
  */
-export const getValidatedOrElse =
-  <F extends TypeLambda, E>(Monad: Monad<F>, Semigroup: Semigroup<E>) =>
+export const getValidatedOrElse = <F extends TypeLambda, E>(
+  Monad: Monad<F>,
+  Semigroup: Semigroup<E>
+) =>
   <S, R2, O2, FE2, B>(that: Kind<ResultT<F, E>, S, R2, O2, FE2, B>) =>
-  <R1, O1, FE1, A>(
-    self: Kind<ResultT<F, E>, S, R1, O1, FE1, A>
-  ): Kind<ResultT<F, E>, S, R1 & R2, O1 | O2, FE1 | FE2, A | B> => {
-    const of_ = succeed(Monad)
-    return pipe(
-      self,
-      Monad.flatMap(
-        result.match<E, Kind<F, S, R1 & R2, O1 | O2, FE1 | FE2, Result<E, A | B>>, A | B>(
-          (e1) => pipe(that, Monad.map(result.mapError((e2) => Semigroup.combine(e2)(e1)))),
-          of_
+    <R1, O1, FE1, A>(
+      self: Kind<ResultT<F, E>, S, R1, O1, FE1, A>
+    ): Kind<ResultT<F, E>, S, R1 & R2, O1 | O2, FE1 | FE2, A | B> => {
+      const of_ = succeed(Monad)
+      return pipe(
+        self,
+        Monad.flatMap(
+          result.match<E, Kind<F, S, R1 & R2, O1 | O2, FE1 | FE2, Result<E, A | B>>, A | B>(
+            (e1) => pipe(that, Monad.map(result.mapError((e2) => Semigroup.combine(e2)(e1)))),
+            of_
+          )
         )
       )
-    )
-  }
+    }
 
 /**
  * @since 3.0.0
@@ -203,35 +211,42 @@ export const match = <F extends TypeLambda>(
 /**
  * @since 3.0.0
  */
-export const matchKind =
-  <F extends TypeLambda>(Flattenable: Flattenable<F>) =>
+export const matchKind = <F extends TypeLambda>(Flattenable: Flattenable<F>) =>
   <E, S, R2, O2, FE2, B, A, R3, O3, FE3, C = B>(
     onError: (e: E) => Kind<F, S, R2, O2, FE2, B>,
     onSuccess: (a: A) => Kind<F, S, R3, O3, FE3, C>
   ): (<R1, O1, FE1>(
     self: Kind<ResultT<F, E>, S, R1, O1, FE1, A>
   ) => Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, FE1 | FE2 | FE3, B | C>) =>
-    Flattenable.flatMap(result.match<E, Kind<F, S, R2 & R3, O2 | O3, FE2 | FE3, B | C>, A>(onError, onSuccess))
+    Flattenable.flatMap(
+      result.match<E, Kind<F, S, R2 & R3, O2 | O3, FE2 | FE3, B | C>, A>(onError, onSuccess)
+    )
 
 /**
  * @since 3.0.0
  */
-export const getOrElse =
-  <F extends TypeLambda>(Functor: Functor<F>) =>
-  <B>(onError: B): (<S, R, O, FE, A>(self: Kind<ResultT<F, unknown>, S, R, O, FE, A>) => Kind<F, S, R, O, FE, A | B>) =>
-    Functor.map(result.getOrElse(onError))
+export const getOrElse = <F extends TypeLambda>(Functor: Functor<F>) =>
+  <B>(
+    onError: B
+  ): (<S, R, O, FE, A>(
+    self: Kind<ResultT<F, unknown>, S, R, O, FE, A>
+  ) => Kind<F, S, R, O, FE, A | B>) => Functor.map(result.getOrElse(onError))
 
 /**
  * @since 3.0.0
  */
-export const getOrElseKind =
-  <F extends TypeLambda>(Monad: Monad<F>) =>
+export const getOrElseKind = <F extends TypeLambda>(Monad: Monad<F>) =>
   <S, R2, O2, FE2, B>(onError: Kind<F, S, R2, O2, FE2, B>) =>
-  <R1, O1, FE1, A>(
-    self: Kind<ResultT<F, unknown>, S, R1, O1, FE1, A>
-  ): Kind<F, S, R1 & R2, O1 | O2, FE1 | FE2, A | B> => {
-    return pipe(self, Monad.flatMap(result.match<unknown, Kind<F, S, R2, O2, FE2, A | B>, A>(() => onError, Monad.of)))
-  }
+    <R1, O1, FE1, A>(
+      self: Kind<ResultT<F, unknown>, S, R1, O1, FE1, A>
+    ): Kind<F, S, R1 & R2, O1 | O2, FE1 | FE2, A | B> => {
+      return pipe(
+        self,
+        Monad.flatMap(
+          result.match<unknown, Kind<F, S, R2, O2, FE2, A | B>, A>(() => onError, Monad.of)
+        )
+      )
+    }
 
 /**
  * Returns an effect that effectfully "peeks" at the failure of this effect.
@@ -240,7 +255,9 @@ export const getOrElseKind =
  */
 export const tapLeft = <F extends TypeLambda>(Monad: Monad<F>) => {
   const catchAll_ = catchAll(Monad)
-  return <E1, S, R2, O2, FE2, E2>(onError: (e: E1) => Kind<ResultT<F, E2>, S, R2, O2, FE2, unknown>) =>
+  return <E1, S, R2, O2, FE2, E2>(
+    onError: (e: E1) => Kind<ResultT<F, E2>, S, R2, O2, FE2, unknown>
+  ) =>
     <R1, O1, FE1, A>(
       self: Kind<ResultT<F, E1>, S, R1, O1, FE1, A>
     ): Kind<ResultT<F, E1 | E2>, S, R1 & R2, O1 | O2, FE1 | FE2, A> => {
@@ -261,22 +278,23 @@ export const tapLeft = <F extends TypeLambda>(Monad: Monad<F>) => {
  */
 export const reverse = <F extends TypeLambda>(
   Functor: Functor<F>
-): (<S, R, O, FE, E, A>(self: Kind<ResultT<F, E>, S, R, O, FE, A>) => Kind<ResultT<F, A>, S, R, O, FE, E>) =>
-  Functor.map(result.reverse)
+): (<S, R, O, FE, E, A>(
+  self: Kind<ResultT<F, E>, S, R, O, FE, A>
+) => Kind<ResultT<F, A>, S, R, O, FE, E>) => Functor.map(result.reverse)
 
 /**
  * @since 3.0.0
  */
 export const toUnion = <F extends TypeLambda>(
   Functor: Functor<F>
-): (<S, R, O, FE, E, A>(self: Kind<ResultT<F, E>, S, R, O, FE, A>) => Kind<F, S, R, O, FE, E | A>) =>
-  Functor.map(result.toUnion)
+): (<S, R, O, FE, E, A>(
+  self: Kind<ResultT<F, E>, S, R, O, FE, A>
+) => Kind<F, S, R, O, FE, E | A>) => Functor.map(result.toUnion)
 
 /**
  * @since 3.0.0
  */
-export const bracket =
-  <F extends TypeLambda>(Monad: Monad<F>) =>
+export const bracket = <F extends TypeLambda>(Monad: Monad<F>) =>
   <S, R1, O1, FE1, E1, A, R2, O2, FE2, E2, B, R3, O3, FE3, E3>(
     acquire: Kind<ResultT<F, E1>, S, R1, O1, FE1, A>,
     use: (a: A) => Kind<ResultT<F, E2>, S, R2, O2, FE2, B>,
@@ -286,7 +304,11 @@ export const bracket =
     return pipe(
       acquire,
       Monad.flatMap(
-        result.match<E1, Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, FE1 | FE2 | FE3, Result<E1 | E2 | E3, B>>, A>(
+        result.match<
+          E1,
+          Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, FE1 | FE2 | FE3, Result<E1 | E2 | E3, B>>,
+          A
+        >(
           fail_,
           (a) =>
             pipe(
@@ -295,8 +317,9 @@ export const bracket =
                 pipe(
                   release(a, e),
                   Monad.flatMap(
-                    result.match<E3, Kind<F, S, unknown, never, never, Result<E2 | E3, B>>, void>(fail_, () =>
-                      Monad.of(e)
+                    result.match<E3, Kind<F, S, unknown, never, never, Result<E2 | E3, B>>, void>(
+                      fail_,
+                      () => Monad.of(e)
                     )
                   )
                 )
@@ -310,11 +333,12 @@ export const bracket =
 /**
  * @since 3.0.0
  */
-export const compact =
-  <F extends TypeLambda>(Functor: Functor<F>) =>
+export const compact = <F extends TypeLambda>(Functor: Functor<F>) =>
   <E>(
     onNone: E
-  ): (<S, R, O, FE, A>(self: Kind<ResultT<F, E>, S, R, O, FE, Option<A>>) => Kind<ResultT<F, E>, S, R, O, FE, A>) =>
+  ): (<S, R, O, FE, A>(
+    self: Kind<ResultT<F, E>, S, R, O, FE, Option<A>>
+  ) => Kind<ResultT<F, E>, S, R, O, FE, A>) =>
     compactable.compactComposition(Functor, result.getCompactable(onNone))
 
 /**

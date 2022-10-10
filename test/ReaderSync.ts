@@ -1,43 +1,43 @@
-import { pipe } from '@fp-ts/core/Function'
-import * as I from '@fp-ts/core/Sync'
-import * as R from '@fp-ts/core/Reader'
-import * as _ from '@fp-ts/core/ReaderSync'
-import * as RA from '@fp-ts/core/ReadonlyArray'
-import * as S from '@fp-ts/core/string'
-import * as U from './util'
+import { pipe } from "@fp-ts/core/Function"
+import * as R from "@fp-ts/core/Reader"
+import * as _ from "@fp-ts/core/ReaderSync"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as S from "@fp-ts/core/string"
+import * as I from "@fp-ts/core/Sync"
+import * as U from "./util"
 
-describe('ReaderSync', () => {
+describe("ReaderSync", () => {
   // -------------------------------------------------------------------------------------
   // pipeables
   // -------------------------------------------------------------------------------------
 
-  it('map', () => {
+  it("map", () => {
     U.deepStrictEqual(pipe(_.of(1), _.map(U.double))({})(), 2)
   })
 
-  it('ap', () => {
+  it("ap", () => {
     U.deepStrictEqual(pipe(_.of(U.double), _.ap(_.of(1)))({})(), 2)
   })
 
-  it('flatMap', () => {
+  it("flatMap", () => {
     const f = (a: string) => _.of(a.length)
-    U.deepStrictEqual(pipe(_.of('foo'), _.flatMap(f))({})(), 3)
+    U.deepStrictEqual(pipe(_.of("foo"), _.flatMap(f))({})(), 3)
   })
 
-  it('tap', () => {
+  it("tap", () => {
     const f = (a: string) => _.of(a.length)
-    U.deepStrictEqual(pipe(_.of('foo'), _.tap(f))({})(), 'foo')
+    U.deepStrictEqual(pipe(_.of("foo"), _.tap(f))({})(), "foo")
   })
 
-  it('flatten', () => {
-    U.deepStrictEqual(pipe(_.of(_.of('a')), _.flatten)({ env1: '', env2: '' })(), 'a')
+  it("flatten", () => {
+    U.deepStrictEqual(pipe(_.of(_.of("a")), _.flatten)({ env1: "", env2: "" })(), "a")
   })
 
-  it('of', () => {
+  it("of", () => {
     U.deepStrictEqual(_.fromReader(R.of(1))({})(), 1)
   })
 
-  it('fromSync', async () => {
+  it("fromSync", async () => {
     U.deepStrictEqual(_.fromSync(() => 1)({})(), 1)
   })
 
@@ -45,15 +45,15 @@ describe('ReaderSync', () => {
   // constructors
   // -------------------------------------------------------------------------------------
 
-  it('ask', () => {
+  it("ask", () => {
     return U.deepStrictEqual(_.ask<number>()(1)(), 1)
   })
 
-  it('asks', () => {
-    return U.deepStrictEqual(_.asks((s: string) => s.length)('foo')(), 3)
+  it("asks", () => {
+    return U.deepStrictEqual(_.asks((s: string) => s.length)("foo")(), 3)
   })
 
-  it('fromReader', () => {
+  it("fromReader", () => {
     U.deepStrictEqual(_.fromReader(R.of(1))({})(), 1)
   })
 
@@ -61,45 +61,45 @@ describe('ReaderSync', () => {
   // combinators
   // -------------------------------------------------------------------------------------
 
-  it('local', () => {
+  it("local", () => {
     U.deepStrictEqual(
       pipe(
         _.asks((n: number) => n + 1),
         _.local(S.size)
-      )('aaa')(),
+      )("aaa")(),
       4
     )
   })
 
-  it('flatMapIO', () => {
+  it("flatMapIO", () => {
     const f = (s: string) => I.of(s.length)
-    U.deepStrictEqual(pipe(_.of('a'), _.flatMapSync(f))(undefined)(), 1)
+    U.deepStrictEqual(pipe(_.of("a"), _.flatMapSync(f))(undefined)(), 1)
   })
 
-  it('liftIO', () => {
+  it("liftIO", () => {
     const f = _.liftSync((s: string) => I.of(s.length))
-    U.deepStrictEqual(pipe(_.of('a'), _.flatMap(f))({})(), 1)
+    U.deepStrictEqual(pipe(_.of("a"), _.flatMap(f))({})(), 1)
   })
 
   // -------------------------------------------------------------------------------------
   // utils
   // -------------------------------------------------------------------------------------
 
-  it('do notation', () => {
+  it("do notation", () => {
     U.deepStrictEqual(
       pipe(
         _.of(1),
-        _.bindTo('a'),
-        _.bind('b', () => _.of('b'))
+        _.bindTo("a"),
+        _.bind("b", () => _.of("b"))
       )(undefined)(),
-      { a: 1, b: 'b' }
+      { a: 1, b: "b" }
     )
   })
 
-  it('apS', () => {
-    U.deepStrictEqual(pipe(_.of(1), _.bindTo('a'), _.bindRight('b', _.of('b')))(undefined)(), {
+  it("apS", () => {
+    U.deepStrictEqual(pipe(_.of(1), _.bindTo("a"), _.bindRight("b", _.of("b")))(undefined)(), {
       a: 1,
-      b: 'b'
+      b: "b"
     })
   })
 
@@ -107,18 +107,18 @@ describe('ReaderSync', () => {
   // array utils
   // -------------------------------------------------------------------------------------
 
-  it('traverseNonEmptyReadonlyArray', () => {
+  it("traverseNonEmptyReadonlyArray", () => {
     const f = _.traverseNonEmptyReadonlyArray((a: string) => _.of(a))
-    U.deepStrictEqual(pipe(['a', 'b'], f)(null)(), ['a', 'b'])
+    U.deepStrictEqual(pipe(["a", "b"], f)(null)(), ["a", "b"])
   })
 
-  it('traverseReadonlyArrayWithIndex', () => {
+  it("traverseReadonlyArrayWithIndex", () => {
     const f = _.traverseReadonlyArrayWithIndex((i, a: string) => _.of(a + i))
     U.deepStrictEqual(pipe(RA.empty, f)(null)(), RA.empty)
-    U.deepStrictEqual(pipe(['a', 'b'], f)(null)(), ['a0', 'b1'])
+    U.deepStrictEqual(pipe(["a", "b"], f)(null)(), ["a0", "b1"])
   })
 
-  it('sequenceReadonlyArray', () => {
-    U.deepStrictEqual(pipe([_.of('a'), _.of('b')], _.sequenceReadonlyArray)(null)(), ['a', 'b'])
+  it("sequenceReadonlyArray", () => {
+    U.deepStrictEqual(pipe([_.of("a"), _.of("b")], _.sequenceReadonlyArray)(null)(), ["a", "b"])
   })
 })

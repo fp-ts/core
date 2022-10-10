@@ -11,9 +11,9 @@
  *
  * @since 3.0.0
  */
-import type { Kind, TypeLambda } from '@fp-ts/core/HKT'
-import type { Alt } from '@fp-ts/core/typeclasses/Alt'
-import * as alt from '@fp-ts/core/typeclasses/Alt'
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Alt } from "@fp-ts/core/typeclasses/Alt"
+import * as alt from "@fp-ts/core/typeclasses/Alt"
 
 /**
  * @category model
@@ -28,7 +28,6 @@ export interface Alternative<F extends TypeLambda> extends Alt<F> {
  *
  * @since 3.0.0
  */
-export const firstSuccessOf =
-  <G extends TypeLambda>(Alternative: Alternative<G>) =>
+export const firstSuccessOf = <G extends TypeLambda>(Alternative: Alternative<G>) =>
   <S, R, O, E, A>(collection: Iterable<Kind<G, S, R, O, E, A>>): Kind<G, S, R, O, E, A> =>
     alt.firstSuccessOf(Alternative)<S, R, O, E, A>(Alternative.none())(collection)

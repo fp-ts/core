@@ -1,19 +1,19 @@
 /**
  * @since 3.0.0
  */
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import type * as fromReader_ from '@fp-ts/core/typeclasses/FromReader'
-import { constant, flow, identity, SK } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
+import { constant, flow, identity, SK } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import type * as fromReader_ from "@fp-ts/core/typeclasses/FromReader"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
 
 /**
  * @category model
@@ -32,7 +32,7 @@ export interface Reader<R, A> {
  * @since 3.0.0
  */
 export interface ReaderTypeLambda extends TypeLambda {
-  readonly type: Reader<this['In1'], this['Out1']>
+  readonly type: Reader<this["In1"], this["Out1"]>
 }
 
 /**
@@ -55,10 +55,8 @@ export const asks: <R, A>(f: (r: R) => A) => Reader<R, A> = identity
  * @category constructors
  * @since 3.0.0
  */
-export const asksReader =
-  <R1, R2, A>(f: (r1: R1) => Reader<R2, A>): Reader<R1 & R2, A> =>
-  (r) =>
-    f(r)(r)
+export const asksReader = <R1, R2, A>(f: (r1: R1) => Reader<R2, A>): Reader<R1 & R2, A> =>
+  (r) => f(r)(r)
 
 /**
  * Changes the value of the local context during the execution of the action `ma` (similar to `Contravariant`'s
@@ -66,11 +64,8 @@ export const asksReader =
  *
  * @since 3.0.0
  */
-export const local =
-  <R2, R1>(f: (r2: R2) => R1) =>
-  <A>(ma: Reader<R1, A>): Reader<R2, A> =>
-  (r2) =>
-    ma(f(r2))
+export const local = <R2, R1>(f: (r2: R2) => R1) =>
+  <A>(ma: Reader<R1, A>): Reader<R2, A> => (r2) => ma(f(r2))
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -82,7 +77,8 @@ export const local =
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <R>(fa: Reader<R, A>) => Reader<R, B> = (f) => (fa) => flow(fa, f)
+export const map: <A, B>(f: (a: A) => B) => <R>(fa: Reader<R, A>) => Reader<R, B> = (f) =>
+  (fa) => flow(fa, f)
 
 /**
  * @category instances
@@ -96,8 +92,9 @@ export const Functor: functor.Functor<ReaderTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <R, B>(fab: Reader<R, (a: A) => B>) => Reader<R, B> =
- functor.flap(Functor)
+export const flap: <A>(a: A) => <R, B>(fab: Reader<R, (a: A) => B>) => Reader<R, B> = functor.flap(
+  Functor
+)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -105,7 +102,7 @@ export const flap: <A>(a: A) => <R, B>(fab: Reader<R, (a: A) => B>) => Reader<R,
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => <R>(self: Reader<R, unknown>) => Reader<R, B> =functor.as(Functor)
+export const as: <B>(b: B) => <R>(self: Reader<R, unknown>) => Reader<R, B> = functor.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -113,7 +110,7 @@ export const as: <B>(b: B) => <R>(self: Reader<R, unknown>) => Reader<R, B> =fun
  * @category mapping
  * @since 3.0.0
  */
-export const unit: <R>(self: Reader<R, unknown>) => Reader<R, void> =functor.unit(Functor)
+export const unit: <R>(self: Reader<R, unknown>) => Reader<R, void> = functor.unit(Functor)
 
 /**
  * @category constructors
@@ -133,9 +130,9 @@ export const FromIdentity: fromIdentity.FromIdentity<ReaderTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const flatMap: <A, R2, B>(f: (a: A) => Reader<R2, B>) => <R1>(self: Reader<R1, A>) => Reader<R1 & R2, B> =
-  (f) => (self) => (r) =>
-    f(self(r))(r)
+export const flatMap: <A, R2, B>(
+  f: (a: A) => Reader<R2, B>
+) => <R1>(self: Reader<R1, A>) => Reader<R1 & R2, B> = (f) => (self) => (r) => f(self(r))(r)
 
 /**
  * @category instances
@@ -151,8 +148,8 @@ export const Flattenable: flattenable.Flattenable<ReaderTypeLambda> = {
  */
 export const composeKleisli: <B, R2, C>(
   bfc: (b: B) => Reader<R2, C>
-) => <A, R1>(afb: (a: A) => Reader<R1, B>) => (a: A) => Reader<R1 & R2, C> =
- flattenable.composeKleisli(Flattenable)
+) => <A, R1>(afb: (a: A) => Reader<R1, B>) => (a: A) => Reader<R1 & R2, C> = flattenable
+  .composeKleisli(Flattenable)
 
 /**
  * @category instances
@@ -165,7 +162,7 @@ export const KleisliComposable: kleisliComposable.KleisliComposable<ReaderTypeLa
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => Reader<unknown, A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => Reader<unknown, A> = fromIdentity.idKleisli(FromIdentity)
 
 /**
  * @category instances
@@ -183,8 +180,9 @@ export const CategoryKind: kleisliCategory.KleisliCategory<ReaderTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const zipLeft: <R2>(that: Reader<R2, unknown>) => <R1, A>(self: Reader<R1, A>) => Reader<R1 & R2, A> =
- flattenable.zipLeft(Flattenable)
+export const zipLeft: <R2>(
+  that: Reader<R2, unknown>
+) => <R1, A>(self: Reader<R1, A>) => Reader<R1 & R2, A> = flattenable.zipLeft(Flattenable)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -192,20 +190,23 @@ export const zipLeft: <R2>(that: Reader<R2, unknown>) => <R1, A>(self: Reader<R1
  * @category sequencing
  * @since 3.0.0
  */
-export const zipRight: <R2, A>(that: Reader<R2, A>) => <R1>(self: Reader<R1, unknown>) => Reader<R1 & R2, A> =
- flattenable.zipRight(Flattenable)
+export const zipRight: <R2, A>(
+  that: Reader<R2, A>
+) => <R1>(self: Reader<R1, unknown>) => Reader<R1 & R2, A> = flattenable.zipRight(Flattenable)
 
 /**
  * @since 3.0.0
  */
-export const ap: <R2, A>(fa: Reader<R2, A>) => <R1, B>(self: Reader<R1, (a: A) => B>) => Reader<R1 & R2, B> =
- flattenable.ap(Flattenable)
+export const ap: <R2, A>(
+  fa: Reader<R2, A>
+) => <R1, B>(self: Reader<R1, (a: A) => B>) => Reader<R1 & R2, B> = flattenable.ap(Flattenable)
 
 /**
  * @since 3.0.0
  */
-export const flatten: <R1, R2, A>(mma: Reader<R1, Reader<R2, A>>) => Reader<R1 & R2, A> =
- flatMap(identity)
+export const flatten: <R1, R2, A>(mma: Reader<R1, Reader<R2, A>>) => Reader<R1 & R2, A> = flatMap(
+  identity
+)
 
 /**
  * @category instances
@@ -232,7 +233,7 @@ export const Apply: apply.Apply<ReaderTypeLambda> = {
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <R1, R2>(fa: Reader<R1, A>, fb: Reader<R2, B>) => Reader<R1 & R2, C> =apply.lift2(Apply)
+) => <R1, R2>(fa: Reader<R1, A>, fb: Reader<R2, B>) => Reader<R1 & R2, C> = apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `Reader`.
@@ -242,8 +243,11 @@ export const lift2: <A, B, C>(
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => <R1, R2, R3>(fa: Reader<R1, A>, fb: Reader<R2, B>, fc: Reader<R3, C>) => Reader<R1 & R2 & R3, D> =
- apply.lift3(Apply)
+) => <R1, R2, R3>(
+  fa: Reader<R1, A>,
+  fb: Reader<R2, B>,
+  fc: Reader<R3, C>
+) => Reader<R1 & R2 & R3, D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -273,20 +277,22 @@ export const Monad: monad.Monad<ReaderTypeLambda> = {
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Reader<unknown, {}> =of(_.Do)
+export const Do: Reader<unknown, {}> = of(_.Do)
 
 /**
  * @category do notation
  * @since 3.0.0
  */
-export const bindTo: <N extends string>(name: N) => <R, A>(self: Reader<R, A>) => Reader<R, { readonly [K in N]: A }> =
- functor.bindTo(Functor)
+export const bindTo: <N extends string>(
+  name: N
+) => <R, A>(self: Reader<R, A>) => Reader<R, { readonly [K in N]: A }> = functor.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <R>(self: Reader<R, A>) => Reader<R, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => <R>(
+  self: Reader<R, A>
+) => Reader<R, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor.let(Functor)
 
 export {
   /**
@@ -303,8 +309,10 @@ export {
 export const bind: <N extends string, A extends object, R2, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Reader<R2, B>
-) => <R1>(self: Reader<R1, A>) => Reader<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+) => <R1>(
+  self: Reader<R1, A>
+) => Reader<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = flattenable
+  .bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -315,8 +323,10 @@ export const bind: <N extends string, A extends object, R2, B>(
 export const bindRight: <N extends string, A extends object, R2, B>(
   name: Exclude<N, keyof A>,
   fb: Reader<R2, B>
-) => <R1>(self: Reader<R1, A>) => Reader<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => <R1>(
+  self: Reader<R1, A>
+) => Reader<R1 & R2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -326,13 +336,13 @@ export const bindRight: <N extends string, A extends object, R2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Reader<unknown, readonly []> =of(_.empty)
+export const Zip: Reader<unknown, readonly []> = of(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <R, A>(self: Reader<R, A>) => Reader<R, readonly [A]> =functor.tupled(Functor)
+export const tupled: <R, A>(self: Reader<R, A>) => Reader<R, readonly [A]> = functor.tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -342,8 +352,9 @@ export const tupled: <R, A>(self: Reader<R, A>) => Reader<R, readonly [A]> =func
  */
 export const zipFlatten: <R2, B>(
   fb: Reader<R2, B>
-) => <R1, A extends ReadonlyArray<unknown>>(self: Reader<R1, A>) => Reader<R1 & R2, readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <R1, A extends ReadonlyArray<unknown>>(
+  self: Reader<R1, A>
+) => Reader<R1 & R2, readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -354,7 +365,7 @@ export const zipFlatten: <R2, B>(
 export const zipWith: <R2, B, A, C>(
   that: Reader<R2, B>,
   f: (a: A, b: B) => C
-) => <R1>(self: Reader<R1, A>) => Reader<R1 & R2, C> =apply.zipWith(Apply)
+) => <R1>(self: Reader<R1, A>) => Reader<R1 & R2, C> = apply.zipWith(Apply)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -366,16 +377,17 @@ export const zipWith: <R2, B, A, C>(
  * @category traversing
  * @since 3.0.0
  */
-export const traverseNonEmptyReadonlyArrayWithIndex =
-  <A, R, B>(f: (index: number, a: A) => Reader<R, B>) =>
+export const traverseNonEmptyReadonlyArrayWithIndex = <A, R, B>(
+  f: (index: number, a: A) => Reader<R, B>
+) =>
   (as: NonEmptyReadonlyArray<A>): Reader<R, NonEmptyReadonlyArray<B>> =>
-  (r) => {
-    const out: _.NonEmptyArray<B> = [f(0, _.head(as))(r)]
-    for (let i = 1; i < as.length; i++) {
-      out.push(f(i, as[i])(r))
+    (r) => {
+      const out: _.NonEmptyArray<B> = [f(0, _.head(as))(r)]
+      for (let i = 1; i < as.length; i++) {
+        out.push(f(i, as[i])(r))
+      }
+      return out
     }
-    return out
-  }
 
 /**
  * Equivalent to `ReadonlyArray#traverseWithIndex(Applicative)`.
@@ -420,5 +432,6 @@ export const traverseReadonlyArray = <A, R, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const sequenceReadonlyArray: <R, A>(arr: ReadonlyArray<Reader<R, A>>) => Reader<R, ReadonlyArray<A>> =
- traverseReadonlyArray(identity)
+export const sequenceReadonlyArray: <R, A>(
+  arr: ReadonlyArray<Reader<R, A>>
+) => Reader<R, ReadonlyArray<A>> = traverseReadonlyArray(identity)

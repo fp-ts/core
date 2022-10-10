@@ -1,29 +1,29 @@
-import * as E from '@fp-ts/core/Result'
-import { pipe } from '@fp-ts/core/Function'
-import * as I from '@fp-ts/core/Sync'
-import * as IE from '@fp-ts/core/SyncResult'
-import * as _ from '@fp-ts/core/SyncOption'
-import * as O from '@fp-ts/core/Option'
-import * as RA from '@fp-ts/core/ReadonlyArray'
-import * as U from './util'
+import { pipe } from "@fp-ts/core/Function"
+import * as O from "@fp-ts/core/Option"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as E from "@fp-ts/core/Result"
+import * as I from "@fp-ts/core/Sync"
+import * as _ from "@fp-ts/core/SyncOption"
+import * as IE from "@fp-ts/core/SyncResult"
+import * as U from "./util"
 
-describe('SyncOption', () => {
+describe("SyncOption", () => {
   // -------------------------------------------------------------------------------------
   // type class members
   // -------------------------------------------------------------------------------------
 
-  it('map', () => {
+  it("map", () => {
     U.deepStrictEqual(pipe(_.some(1), _.map(U.double))(), O.some(2))
   })
 
-  it('ap', () => {
+  it("ap", () => {
     U.deepStrictEqual(pipe(_.some(U.double), _.ap(_.some(2)))(), O.some(4))
     U.deepStrictEqual(pipe(_.some(U.double), _.ap(_.none))(), O.none)
     U.deepStrictEqual(pipe(_.none, _.ap(_.some(2)))(), O.none)
     U.deepStrictEqual(pipe(_.none, _.ap(_.none))(), O.none)
   })
 
-  it('flatMap', () => {
+  it("flatMap", () => {
     const f = (n: number) => _.some(n * 2)
     const g = () => _.none
     U.deepStrictEqual(pipe(_.some(1), _.flatMap(f))(), O.some(2))
@@ -32,14 +32,14 @@ describe('SyncOption', () => {
     U.deepStrictEqual(pipe(_.none, _.flatMap(g))(), O.none)
   })
 
-  it('orElse', () => {
+  it("orElse", () => {
     U.deepStrictEqual(pipe(_.some(1), _.orElse(_.some(2)))(), O.some(1))
     U.deepStrictEqual(pipe(_.some(2), _.orElse(_.none as _.SyncOption<number>))(), O.some(2))
     U.deepStrictEqual(pipe(_.none, _.orElse(_.some(1)))(), O.some(1))
     U.deepStrictEqual(pipe(_.none, _.orElse(_.none))(), O.none)
   })
 
-  it('fromSync', () => {
+  it("fromSync", () => {
     U.deepStrictEqual(_.fromSync(() => 1)(), O.some(1))
   })
 
@@ -47,47 +47,47 @@ describe('SyncOption', () => {
   // constructors
   // -------------------------------------------------------------------------------------
 
-  it('fromNullable', () => {
+  it("fromNullable", () => {
     U.deepStrictEqual(_.fromNullable(1)(), O.some(1))
     U.deepStrictEqual(_.fromNullable(null)(), O.none)
     U.deepStrictEqual(_.fromNullable(undefined)(), O.none)
   })
 
-  it('liftNullable', () => {
+  it("liftNullable", () => {
     const f = _.liftNullable((n: number) => (n > 0 ? n : n === 0 ? null : undefined))
     U.deepStrictEqual(f(1)(), O.some(1))
     U.deepStrictEqual(f(0)(), O.none)
     U.deepStrictEqual(f(-1)(), O.none)
   })
 
-  it('flatMapNullable', () => {
+  it("flatMapNullable", () => {
     const f = _.flatMapNullable((n: number) => (n > 0 ? n : n === 0 ? null : undefined))
     U.deepStrictEqual(f(_.some(1))(), O.some(1))
     U.deepStrictEqual(f(_.some(0))(), O.none)
     U.deepStrictEqual(f(_.some(-1))(), O.none)
   })
 
-  it('fromPredicate', () => {
+  it("fromPredicate", () => {
     const p = (n: number): boolean => n > 2
     const f = _.liftPredicate(p)
     U.deepStrictEqual(f(1)(), O.none)
     U.deepStrictEqual(f(3)(), O.some(3))
   })
 
-  it('fromSyncResult', () => {
-    const pl = IE.fail('a')
-    const pr = IE.succeed('a')
+  it("fromSyncResult", () => {
+    const pl = IE.fail("a")
+    const pr = IE.succeed("a")
     const fl = _.fromSyncResult(pl)
     const fr = _.fromSyncResult(pr)
     U.deepStrictEqual(fl(), O.none)
-    U.deepStrictEqual(fr(), O.some('a'))
+    U.deepStrictEqual(fr(), O.some("a"))
   })
 
   // -------------------------------------------------------------------------------------
   // destructors
   // -------------------------------------------------------------------------------------
 
-  it('getOrElseIO', () => {
+  it("getOrElseIO", () => {
     U.deepStrictEqual(pipe(_.some(1), _.getOrElseSync(I.of(2)))(), 1)
     U.deepStrictEqual(pipe(_.none, _.getOrElseSync(I.of(2)))(), 2)
   })
@@ -96,49 +96,49 @@ describe('SyncOption', () => {
   // combinators
   // -------------------------------------------------------------------------------------
 
-  it('liftOption', () => {
+  it("liftOption", () => {
     const f = _.liftOption((n: number) => (n > 0 ? O.some(n) : O.none))
     U.deepStrictEqual(f(1)(), O.some(1))
     U.deepStrictEqual(f(-1)(), O.none)
   })
 
-  it('match', () => {
+  it("match", () => {
     const f = _.match(
-      () => 'none',
+      () => "none",
       (a) => `some(${a})`
     )
-    U.deepStrictEqual(pipe(_.some(1), f)(), 'some(1)')
-    U.deepStrictEqual(pipe(_.none, f)(), 'none')
+    U.deepStrictEqual(pipe(_.some(1), f)(), "some(1)")
+    U.deepStrictEqual(pipe(_.none, f)(), "none")
   })
 
-  it('matchIO', () => {
+  it("matchIO", () => {
     const f = _.matchSync(
-      () => I.of('none'),
+      () => I.of("none"),
       (a) => I.of(`some(${a})`)
     )
-    U.deepStrictEqual(pipe(_.some(1), f)(), 'some(1)')
-    U.deepStrictEqual(pipe(_.none, f)(), 'none')
+    U.deepStrictEqual(pipe(_.some(1), f)(), "some(1)")
+    U.deepStrictEqual(pipe(_.none, f)(), "none")
   })
 
-  it('liftResult', () => {
-    const f = (s: string) => (s.length <= 2 ? E.succeed(s + '!') : E.fail(s.length))
+  it("liftResult", () => {
+    const f = (s: string) => (s.length <= 2 ? E.succeed(s + "!") : E.fail(s.length))
     const g = _.liftResult(f)
-    U.deepStrictEqual(g('')(), O.some('!'))
-    U.deepStrictEqual(g('a')(), O.some('a!'))
-    U.deepStrictEqual(g('aa')(), O.some('aa!'))
-    U.deepStrictEqual(g('aaa')(), O.none)
+    U.deepStrictEqual(g("")(), O.some("!"))
+    U.deepStrictEqual(g("a")(), O.some("a!"))
+    U.deepStrictEqual(g("aa")(), O.some("aa!"))
+    U.deepStrictEqual(g("aaa")(), O.none)
   })
 
-  it('flatMapResult', () => {
-    const f = (s: string) => (s.length <= 2 ? E.succeed(s + '!') : E.fail(s.length))
+  it("flatMapResult", () => {
+    const f = (s: string) => (s.length <= 2 ? E.succeed(s + "!") : E.fail(s.length))
     const g = _.flatMapResult(f)
-    U.deepStrictEqual(g(_.some(''))(), O.some('!'))
-    U.deepStrictEqual(g(_.some('a'))(), O.some('a!'))
-    U.deepStrictEqual(g(_.some('aa'))(), O.some('aa!'))
-    U.deepStrictEqual(g(_.some('aaa'))(), O.none)
+    U.deepStrictEqual(g(_.some(""))(), O.some("!"))
+    U.deepStrictEqual(g(_.some("a"))(), O.some("a!"))
+    U.deepStrictEqual(g(_.some("aa"))(), O.some("aa!"))
+    U.deepStrictEqual(g(_.some("aaa"))(), O.none)
   })
 
-  it('tapError', () => {
+  it("tapError", () => {
     const log: Array<number> = []
     U.deepStrictEqual(pipe(_.some(1), _.tapError(_.some(2)))(), O.some(1))
     U.deepStrictEqual(pipe(_.some(1), _.tapError(_.none))(), O.some(1))
@@ -160,20 +160,23 @@ describe('SyncOption', () => {
   // array utils
   // -------------------------------------------------------------------------------------
 
-  it('traverseReadonlyArrayWithIndex', () => {
-    const f = _.traverseReadonlyArrayWithIndex((i, a: string) => (a.length > 0 ? _.some(a + i) : _.none))
+  it("traverseReadonlyArrayWithIndex", () => {
+    const f = _.traverseReadonlyArrayWithIndex((
+      i,
+      a: string
+    ) => (a.length > 0 ? _.some(a + i) : _.none))
     U.deepStrictEqual(pipe(RA.empty, f)(), O.some(RA.empty))
-    U.deepStrictEqual(pipe(['a', 'b'], f)(), O.some(['a0', 'b1']))
-    U.deepStrictEqual(pipe(['a', ''], f)(), O.none)
+    U.deepStrictEqual(pipe(["a", "b"], f)(), O.some(["a0", "b1"]))
+    U.deepStrictEqual(pipe(["a", ""], f)(), O.none)
   })
 
-  it('traverseNonEmptyReadonlyArray', () => {
+  it("traverseNonEmptyReadonlyArray", () => {
     const f = _.traverseNonEmptyReadonlyArray((a: string) => (a.length > 0 ? _.some(a) : _.none))
-    U.deepStrictEqual(pipe(['a', 'b'], f)(), O.some(['a', 'b'] as const))
-    U.deepStrictEqual(pipe(['a', ''], f)(), O.none)
+    U.deepStrictEqual(pipe(["a", "b"], f)(), O.some(["a", "b"] as const))
+    U.deepStrictEqual(pipe(["a", ""], f)(), O.none)
   })
 
-  it('sequenceReadonlyArray', () => {
+  it("sequenceReadonlyArray", () => {
     const log: Array<number | string> = []
     const some = (n: number): _.SyncOption<number> =>
       _.fromSync(() => {
@@ -189,8 +192,8 @@ describe('SyncOption', () => {
         I.map(() => O.none)
       )
     U.deepStrictEqual(pipe([some(1), some(2)], _.sequenceReadonlyArray)(), O.some([1, 2]))
-    U.deepStrictEqual(pipe([some(3), none('a')], _.sequenceReadonlyArray)(), O.none)
-    U.deepStrictEqual(pipe([none('b'), some(4)], _.sequenceReadonlyArray)(), O.none)
-    U.deepStrictEqual(log, [1, 2, 3, 'a', 'b', 4])
+    U.deepStrictEqual(pipe([some(3), none("a")], _.sequenceReadonlyArray)(), O.none)
+    U.deepStrictEqual(pipe([none("b"), some(4)], _.sequenceReadonlyArray)(), O.none)
+    U.deepStrictEqual(log, [1, 2, 3, "a", "b", 4])
   })
 })

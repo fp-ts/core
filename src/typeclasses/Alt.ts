@@ -14,8 +14,8 @@
  *
  * @since 3.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
 
 /**
  * @category model
@@ -24,7 +24,9 @@ import * as _ from '@fp-ts/core/internal'
 export interface Alt<F extends TypeLambda> extends TypeClass<F> {
   readonly orElse: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A | B>
+  ) => <R1, O1, E1, A>(
+    self: Kind<F, S, R1, O1, E1, A>
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A | B>
 }
 
 /**
@@ -33,8 +35,7 @@ export interface Alt<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 3.0.0
  */
-export const firstSuccessOf =
-  <G extends TypeLambda>(Alt: Alt<G>) =>
+export const firstSuccessOf = <G extends TypeLambda>(Alt: Alt<G>) =>
   <S, R, O, E, A>(startWith: Kind<G, S, R, O, E, A>) =>
-  (collection: Iterable<Kind<G, S, R, O, E, A>>): Kind<G, S, R, O, E, A> =>
-    _.Arrayfrom(collection).reduce((acc, ga) => Alt.orElse(ga)(acc), startWith)
+    (collection: Iterable<Kind<G, S, R, O, E, A>>): Kind<G, S, R, O, E, A> =>
+      _.Arrayfrom(collection).reduce((acc, ga) => Alt.orElse(ga)(acc), startWith)

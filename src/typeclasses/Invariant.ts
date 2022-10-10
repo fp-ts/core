@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import type { TypeLambda, Kind, TypeClass } from '@fp-ts/core/HKT'
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
  * @category model

@@ -15,10 +15,10 @@
  *
  * @since 3.0.0
  */
-import { identity } from '@fp-ts/core/Function'
-import * as _ from '@fp-ts/core/internal'
-import type { Ord } from '@fp-ts/core/typeclasses/Ord'
-import * as ord from '@fp-ts/core/typeclasses/Ord'
+import { identity } from "@fp-ts/core/Function"
+import * as _ from "@fp-ts/core/internal"
+import type { Ord } from "@fp-ts/core/typeclasses/Ord"
+import * as ord from "@fp-ts/core/typeclasses/Ord"
 
 /**
  * @category model
@@ -112,18 +112,21 @@ export const reverse = <S>(Semigroup: Semigroup<S>): Semigroup<S> => ({
  *
  * @since 3.0.0
  */
-export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semigroup<{
-  readonly [K in keyof A]: A[K]
-}> => ({
-  combine: (that) => (self) => {
-    const r: A = {} as any
-    for (const k in semigroups) {
-      if (_.has.call(semigroups, k)) {
-        r[k] = semigroups[k].combine(that[k])(self[k])
-      }
-    }
-    return r
+export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semigroup<
+  {
+    readonly [K in keyof A]: A[K]
   }
+> => ({
+  combine: (that) =>
+    (self) => {
+      const r: A = {} as any
+      for (const k in semigroups) {
+        if (_.has.call(semigroups, k)) {
+          r[k] = semigroups[k].combine(that[k])(self[k])
+        }
+      }
+      return r
+    }
 })
 
 /**
@@ -165,8 +168,7 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  *
  * @since 3.0.0
  */
-export const intercalate =
-  <A>(separator: A) =>
+export const intercalate = <A>(separator: A) =>
   (Semigroup: Semigroup<A>): Semigroup<A> => ({
     combine: (that) => (self) => Semigroup.combine(Semigroup.combine(that)(separator))(self)
   })
@@ -223,13 +225,12 @@ export const last = <A>(): Semigroup<A> => ({
  *
  * @since 3.0.0
  */
-export const combineAll =
-  <S>(Semigroup: Semigroup<S>) =>
+export const combineAll = <S>(Semigroup: Semigroup<S>) =>
   (startWith: S) =>
-  (collection: Iterable<S>): S => {
-    let out: S = startWith
-    for (const s of collection) {
-      out = Semigroup.combine(s)(out)
+    (collection: Iterable<S>): S => {
+      let out: S = startWith
+      for (const s of collection) {
+        out = Semigroup.combine(s)(out)
+      }
+      return out
     }
-    return out
-  }

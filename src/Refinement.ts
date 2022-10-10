@@ -1,9 +1,9 @@
 /**
  * @since 3.0.0
  */
-import type { Option } from '@fp-ts/core/Option'
-import type { Result } from '@fp-ts/core/Result'
-import * as _ from '@fp-ts/core/internal'
+import * as _ from "@fp-ts/core/internal"
+import type { Option } from "@fp-ts/core/Option"
+import type { Result } from "@fp-ts/core/Result"
 
 /**
  * @since 3.0.0
@@ -42,28 +42,22 @@ export const id = <A>(): Refinement<A, A> => {
 /**
  * @since 3.0.0
  */
-export const not =
-  <A, B extends A>(refinement: Refinement<A, B>): Refinement<A, Exclude<A, B>> =>
-  (a): a is Exclude<A, B> =>
-    !refinement(a)
+export const not = <A, B extends A>(refinement: Refinement<A, B>): Refinement<A, Exclude<A, B>> =>
+  (a): a is Exclude<A, B> => !refinement(a)
 
 /**
  * @since 3.0.0
  */
-export const or =
-  <A, C extends A>(that: Refinement<A, C>) =>
+export const or = <A, C extends A>(that: Refinement<A, C>) =>
   <B extends A>(self: Refinement<A, B>): Refinement<A, B | C> =>
-  (a): a is B | C =>
-    self(a) || that(a)
+    (a): a is B | C => self(a) || that(a)
 
 /**
  * @since 3.0.0
  */
-export const and =
-  <A, C extends A>(that: Refinement<A, C>) =>
+export const and = <A, C extends A>(that: Refinement<A, C>) =>
   <B extends A>(self: Refinement<A, B>): Refinement<A, B & C> =>
-  (a): a is B & C =>
-    self(a) && that(a)
+    (a): a is B & C => self(a) && that(a)
 
 /**
  * @since 3.0.0
@@ -75,8 +69,7 @@ export const empty = <A, B extends A>(): Refinement<A, B> => {
 /**
  * @since 3.0.0
  */
-export const compose =
-  <A, B extends A, C extends B>(bc: Refinement<B, C>) =>
+export const compose = <A, B extends A, C extends B>(bc: Refinement<B, C>) =>
   (ab: Refinement<A, B>): Refinement<A, C> => {
     return (i): i is C => ab(i) && bc(i)
   }

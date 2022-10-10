@@ -1,100 +1,97 @@
-import { pipe } from '@fp-ts/core/Function'
-import * as _ from '@fp-ts/core/State'
-import * as U from './util'
-import * as RA from '@fp-ts/core/ReadonlyArray'
-import type { NonEmptyReadonlyArray } from '@fp-ts/core/NonEmptyReadonlyArray'
+import { pipe } from "@fp-ts/core/Function"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as _ from "@fp-ts/core/State"
+import * as U from "./util"
 
-describe('State', () => {
-  it('unit', () => {
+describe("State", () => {
+  it("unit", () => {
     U.deepStrictEqual(_.unit<number>()(0), [0, undefined])
   })
 
-  describe('pipeables', () => {
-    it('map', () => {
+  describe("pipeables", () => {
+    it("map", () => {
       const x = (s: number) => [s - 1, s + 1] as const
       U.deepStrictEqual(pipe(x, _.map(U.double))(0), [-1, 2])
     })
 
-    it('ap', () => {
+    it("ap", () => {
       U.deepStrictEqual(pipe(_.of(U.double), _.ap(_.of(1)))(0), [0, 2])
     })
 
-    it('flatMap', () => {
-      const f = (a: string) => (s: string) => [s + 's2', s + 'a2' + a] as const
-      const x = (s: string) => [s + 's1', s + 'a1'] as const
-      U.deepStrictEqual(pipe(x, _.flatMap(f))(''), ['s1s2', 's1a2a1'])
+    it("flatMap", () => {
+      const f = (a: string) => (s: string) => [s + "s2", s + "a2" + a] as const
+      const x = (s: string) => [s + "s1", s + "a1"] as const
+      U.deepStrictEqual(pipe(x, _.flatMap(f))(""), ["s1s2", "s1a2a1"])
     })
 
-    it('flatten', () => {
-      U.deepStrictEqual(pipe(_.of(_.of('a')), _.flatten)(0), [0, 'a'])
+    it("flatten", () => {
+      U.deepStrictEqual(pipe(_.of(_.of("a")), _.flatten)(0), [0, "a"])
     })
   })
 
-  it('evaluate', () => {
-    U.deepStrictEqual(pipe(_.of<string, number>('a'), _.evaluate(0)), 'a')
+  it("evaluate", () => {
+    U.deepStrictEqual(pipe(_.of<string, number>("a"), _.evaluate(0)), "a")
   })
 
-  it('execute', () => {
-    U.deepStrictEqual(pipe(_.of<string, number>('a'), _.execute(0)), 0)
+  it("execute", () => {
+    U.deepStrictEqual(pipe(_.of<string, number>("a"), _.execute(0)), 0)
   })
 
-  it('put', () => {
+  it("put", () => {
     U.deepStrictEqual(_.put(2)(1), [2, undefined])
   })
 
-  it('get', () => {
+  it("get", () => {
     U.deepStrictEqual(_.get()(1), [1, 1])
   })
 
-  it('modify', () => {
+  it("modify", () => {
     U.deepStrictEqual(_.modify(U.double)(1), [2, undefined])
   })
 
-  it('gets', () => {
+  it("gets", () => {
     U.deepStrictEqual(_.gets(U.double)(1), [1, 2])
   })
 
-  it('do notation', () => {
+  it("do notation", () => {
     U.deepStrictEqual(
       pipe(
         _.of(1),
-        _.bindTo('a'),
-        _.bind('b', () => _.of('b'))
-      )('state'),
-      ['state', { a: 1, b: 'b' }]
+        _.bindTo("a"),
+        _.bind("b", () => _.of("b"))
+      )("state"),
+      ["state", { a: 1, b: "b" }]
     )
   })
 
-  it('apS', () => {
-    U.deepStrictEqual(pipe(_.of(1), _.bindTo('a'), _.bindRight('b', _.of('b')))(undefined), [
+  it("apS", () => {
+    U.deepStrictEqual(pipe(_.of(1), _.bindTo("a"), _.bindRight("b", _.of("b")))(undefined), [
       undefined,
-      { a: 1, b: 'b' }
+      { a: 1, b: "b" }
     ])
   })
 
-  it('zipFlatten', () => {
-    U.deepStrictEqual(pipe(_.of(1), _.tupled, _.zipFlatten(_.of('b')))({}), [{}, [1, 'b']])
+  it("zipFlatten", () => {
+    U.deepStrictEqual(pipe(_.of(1), _.tupled, _.zipFlatten(_.of("b")))({}), [{}, [1, "b"]])
   })
 
-  describe('array utils', () => {
-    const input: NonEmptyReadonlyArray<string> = ['a', 'b']
+  describe("array utils", () => {
+    const input: NonEmptyReadonlyArray<string> = ["a", "b"]
 
-    it('traverseReadonlyArrayWithIndex', () => {
+    it("traverseReadonlyArrayWithIndex", () => {
       const f = _.traverseReadonlyArrayWithIndex((i, a: string) => _.of(a + i))
       U.deepStrictEqual(pipe(RA.empty, f)({}), [{}, RA.empty])
-      U.deepStrictEqual(pipe(input, f)({}), [{}, ['a0', 'b1']])
+      U.deepStrictEqual(pipe(input, f)({}), [{}, ["a0", "b1"]])
     })
 
-    it('traverseNonEmptyReadonlyArray', () => {
+    it("traverseNonEmptyReadonlyArray", () => {
       const f = _.traverseNonEmptyReadonlyArray((a: string) => _.of(a))
-      U.deepStrictEqual(pipe(input, f)({}), [{}, ['a', 'b']])
+      U.deepStrictEqual(pipe(input, f)({}), [{}, ["a", "b"]])
     })
 
-    it('sequenceReadonlyArray', () => {
-      const append =
-        (n: number): _.State<ReadonlyArray<number>, number> =>
-        (s) =>
-          [[...s, n], n]
+    it("sequenceReadonlyArray", () => {
+      const append = (n: number): _.State<ReadonlyArray<number>, number> => (s) => [[...s, n], n]
       U.deepStrictEqual(pipe([append(1), append(2)], _.sequenceReadonlyArray)([]), [
         [1, 2],
         [1, 2]

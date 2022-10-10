@@ -12,29 +12,29 @@
  *
  * @since 3.0.0
  */
-import type * as kleisliCategory from '@fp-ts/core/typeclasses/KleisliCategory'
-import type * as kleisliComposable from '@fp-ts/core/typeclasses/KleisliComposable'
-import * as alt from '@fp-ts/core/typeclasses/Alt'
-import * as apply from '@fp-ts/core/typeclasses/Apply'
-import type * as applicative from '@fp-ts/core/typeclasses/Applicative'
-import * as flattenable from '@fp-ts/core/typeclasses/Flattenable'
-import type * as comonad from '@fp-ts/core/typeclasses/Comonad'
-import type { Endomorphism } from '@fp-ts/core/Endomorphism'
-import * as eq from '@fp-ts/core/typeclasses/Eq'
-import { flow, identity, pipe } from '@fp-ts/core/Function'
-import * as functor from '@fp-ts/core/typeclasses/Functor'
-import type { TypeLambda, Kind } from '@fp-ts/core/HKT'
-import * as _ from '@fp-ts/core/internal'
-import type * as monad from '@fp-ts/core/typeclasses/Monad'
-import type { Option } from '@fp-ts/core/Option'
-import * as ord from '@fp-ts/core/typeclasses/Ord'
-import * as fromIdentity from '@fp-ts/core/typeclasses/FromIdentity'
-import * as semigroup from '@fp-ts/core/typeclasses/Semigroup'
-import type { Show } from '@fp-ts/core/typeclasses/Show'
-import type * as traversable from '@fp-ts/core/typeclasses/Traversable'
-import type { Eq } from '@fp-ts/core/typeclasses/Eq'
-import type { Ord } from '@fp-ts/core/typeclasses/Ord'
-import type { Semigroup } from '@fp-ts/core/typeclasses/Semigroup'
+import type { Endomorphism } from "@fp-ts/core/Endomorphism"
+import { flow, identity, pipe } from "@fp-ts/core/Function"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as _ from "@fp-ts/core/internal"
+import type { Option } from "@fp-ts/core/Option"
+import * as alt from "@fp-ts/core/typeclasses/Alt"
+import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
+import * as apply from "@fp-ts/core/typeclasses/Apply"
+import type * as comonad from "@fp-ts/core/typeclasses/Comonad"
+import * as eq from "@fp-ts/core/typeclasses/Eq"
+import type { Eq } from "@fp-ts/core/typeclasses/Eq"
+import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as functor from "@fp-ts/core/typeclasses/Functor"
+import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
+import type * as monad from "@fp-ts/core/typeclasses/Monad"
+import * as ord from "@fp-ts/core/typeclasses/Ord"
+import type { Ord } from "@fp-ts/core/typeclasses/Ord"
+import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
+import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
+import type { Show } from "@fp-ts/core/typeclasses/Show"
+import type * as traversable from "@fp-ts/core/typeclasses/Traversable"
 
 /**
  * @category model
@@ -49,18 +49,14 @@ export type NonEmptyReadonlyArray<A> = readonly [A, ...Array<A>]
 /**
  * @internal
  */
-export const prepend =
-  <B>(head: B) =>
-  <A>(tail: ReadonlyArray<A>): NonEmptyReadonlyArray<A | B> =>
-    [head, ...tail]
+export const prepend = <B>(head: B) =>
+  <A>(tail: ReadonlyArray<A>): NonEmptyReadonlyArray<A | B> => [head, ...tail]
 
 /**
  * @internal
  */
-export const append =
-  <B>(end: B) =>
-  <A>(init: ReadonlyArray<A>): NonEmptyReadonlyArray<A | B> =>
-    concat([end])(init)
+export const append = <B>(end: B) =>
+  <A>(init: ReadonlyArray<A>): NonEmptyReadonlyArray<A | B> => concat([end])(init)
 
 /**
  * Builds a `NonEmptyReadonlyArray` from an array returning `none` if `as` is an empty array.
@@ -86,8 +82,7 @@ export const fromReadonlyArray = <A>(as: ReadonlyArray<A>): Option<NonEmptyReado
  * @category constructors
  * @since 3.0.0
  */
-export const makeBy =
-  <A>(f: (i: number) => A) =>
+export const makeBy = <A>(f: (i: number) => A) =>
   (n: number): NonEmptyReadonlyArray<A> => {
     const j = Math.max(0, Math.floor(n))
     const out: _.NonEmptyArray<A> = [f(0)]
@@ -142,7 +137,9 @@ export const range = (start: number, end: number): NonEmptyReadonlyArray<number>
  * @category pattern matching
  * @since 3.0.0
  */
-export const unprepend = <A>(as: NonEmptyReadonlyArray<A>): readonly [A, ReadonlyArray<A>] => [head(as), tail(as)]
+export const unprepend = <A>(
+  as: NonEmptyReadonlyArray<A>
+): readonly [A, ReadonlyArray<A>] => [head(as), tail(as)]
 
 /**
  * Produces a couple of a copy of the array without its last element, and that last element.
@@ -155,7 +152,9 @@ export const unprepend = <A>(as: NonEmptyReadonlyArray<A>): readonly [A, Readonl
  * @category pattern matching
  * @since 3.0.0
  */
-export const unappend = <A>(as: NonEmptyReadonlyArray<A>): readonly [ReadonlyArray<A>, A] => [init(as), last(as)]
+export const unappend = <A>(
+  as: NonEmptyReadonlyArray<A>
+): readonly [ReadonlyArray<A>, A] => [init(as), last(as)]
 
 /**
  * Break a `ReadonlyArray` into its first element and remaining elements.
@@ -163,10 +162,8 @@ export const unappend = <A>(as: NonEmptyReadonlyArray<A>): readonly [ReadonlyArr
  * @category pattern matching
  * @since 3.0.0
  */
-export const matchLeft =
-  <A, B>(f: (head: A, tail: ReadonlyArray<A>) => B) =>
-  (as: NonEmptyReadonlyArray<A>): B =>
-    f(head(as), tail(as))
+export const matchLeft = <A, B>(f: (head: A, tail: ReadonlyArray<A>) => B) =>
+  (as: NonEmptyReadonlyArray<A>): B => f(head(as), tail(as))
 
 /**
  * Break a `ReadonlyArray` into its initial elements and the last element.
@@ -174,17 +171,21 @@ export const matchLeft =
  * @category pattern matching
  * @since 3.0.0
  */
-export const matchRight =
-  <A, B>(f: (init: ReadonlyArray<A>, last: A) => B) =>
-  (as: NonEmptyReadonlyArray<A>): B =>
-    f(init(as), last(as))
+export const matchRight = <A, B>(f: (init: ReadonlyArray<A>, last: A) => B) =>
+  (as: NonEmptyReadonlyArray<A>): B => f(init(as), last(as))
 
 /**
  * @since 3.0.0
  */
-export function concat<B>(that: NonEmptyReadonlyArray<B>): <A>(self: ReadonlyArray<A>) => NonEmptyReadonlyArray<A | B>
-export function concat<B>(that: ReadonlyArray<B>): <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A | B>
-export function concat<B>(that: ReadonlyArray<B>): <A>(self: NonEmptyReadonlyArray<A>) => ReadonlyArray<A | B> {
+export function concat<B>(
+  that: NonEmptyReadonlyArray<B>
+): <A>(self: ReadonlyArray<A>) => NonEmptyReadonlyArray<A | B>
+export function concat<B>(
+  that: ReadonlyArray<B>
+): <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A | B>
+export function concat<B>(
+  that: ReadonlyArray<B>
+): <A>(self: NonEmptyReadonlyArray<A>) => ReadonlyArray<A | B> {
   return <A>(self: NonEmptyReadonlyArray<A | B>) => self.concat(that)
 }
 
@@ -199,8 +200,7 @@ export function concat<B>(that: ReadonlyArray<B>): <A>(self: NonEmptyReadonlyArr
  *
  * @since 3.0.0
  */
-export const uniq =
-  <A>(Eq: Eq<A>) =>
+export const uniq = <A>(Eq: Eq<A>) =>
   (self: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => {
     if (self.length === 1) {
       return self
@@ -275,7 +275,7 @@ export const sortBy = <B>(
  *
  * @since 3.0.0
  */
-export const union = <A>(E: Eq<A>): Semigroup<NonEmptyReadonlyArray<A>>['combine'] => {
+export const union = <A>(E: Eq<A>): Semigroup<NonEmptyReadonlyArray<A>>["combine"] => {
   const uniqE = uniq(E)
   return (that) => (self) => uniqE(concat(that)(self))
 }
@@ -291,8 +291,7 @@ export const union = <A>(E: Eq<A>): Semigroup<NonEmptyReadonlyArray<A>>['combine
  *
  * @since 3.0.0
  */
-export const rotate =
-  (n: number) =>
+export const rotate = (n: number) =>
   <A>(as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => {
     const len = as.length
     const m = Math.round(n) % len
@@ -312,34 +311,32 @@ export const rotate =
  *
  * @since 3.0.0
  */
-export const modifyHead =
-  <A>(f: Endomorphism<A>) =>
-  (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> =>
-    [f(head(as)), ...tail(as)]
+export const modifyHead = <A>(f: Endomorphism<A>) =>
+  (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => [f(head(as)), ...tail(as)]
 
 /**
  * Change the head, creating a new `NonEmptyReadonlyArray`.
  *
  * @since 3.0.0
  */
-export const updateHead = <A>(a: A): ((as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A>) => modifyHead(() => a)
+export const updateHead = <A>(a: A): ((as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A>) =>
+  modifyHead(() => a)
 
 /**
  * Apply a function to the last element, creating a new `NonEmptyReadonlyArray`.
  *
  * @since 3.0.0
  */
-export const modifyLast =
-  <A>(f: Endomorphism<A>) =>
-  (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> =>
-    pipe(init(as), append(f(last(as))))
+export const modifyLast = <A>(f: Endomorphism<A>) =>
+  (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => pipe(init(as), append(f(last(as))))
 
 /**
  * Change the last element, creating a new `NonEmptyReadonlyArray`.
  *
  * @since 3.0.0
  */
-export const updateLast = <A>(a: A): ((as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A>) => modifyLast(() => a)
+export const updateLast = <A>(a: A): ((as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A>) =>
+  modifyLast(() => a)
 
 /**
  * Places an element in between members of a `NonEmptyReadonlyArray`, then folds the results using the provided `Semigroup`.
@@ -352,7 +349,9 @@ export const updateLast = <A>(a: A): ((as: NonEmptyReadonlyArray<A>) => NonEmpty
  *
  * @since 3.0.0
  */
-export const intercalate = <A>(S: Semigroup<A>): ((middle: A) => (as: NonEmptyReadonlyArray<A>) => A) => {
+export const intercalate = <A>(
+  S: Semigroup<A>
+): ((middle: A) => (as: NonEmptyReadonlyArray<A>) => A) => {
   const combineAllS = combineAll(S)
   return (middle) => flow(intersperse(middle), combineAllS)
 }
@@ -378,8 +377,7 @@ export const reverse = <A>(as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<
  *
  * @since 3.0.0
  */
-export const group =
-  <B>(E: Eq<B>) =>
+export const group = <B>(E: Eq<B>) =>
   <A extends B>(as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>> =>
     pipe(
       as,
@@ -413,8 +411,7 @@ export const group =
  *
  * @since 3.0.0
  */
-export const groupBy =
-  <A>(f: (a: A) => string) =>
+export const groupBy = <A>(f: (a: A) => string) =>
   (as: ReadonlyArray<A>): Readonly<Record<string, NonEmptyReadonlyArray<A>>> => {
     const out: Record<string, _.NonEmptyArray<A>> = {}
     for (const a of as) {
@@ -433,8 +430,7 @@ export const groupBy =
  *
  * @since 3.0.0
  */
-export const sort =
-  <B>(O: Ord<B>) =>
+export const sort = <B>(O: Ord<B>) =>
   <A extends B>(as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> =>
     as.length === 1 ? as : (as.slice().sort((self, that) => O.compare(that)(self)) as any)
 
@@ -448,8 +444,10 @@ export const isOutOfBound = <A>(i: number, as: ReadonlyArray<A>): boolean => i <
  *
  * @since 3.0.0
  */
-export const updateAt = <A>(i: number, a: A): ((as: NonEmptyReadonlyArray<A>) => Option<NonEmptyReadonlyArray<A>>) =>
-  modifyAt(i, () => a)
+export const updateAt = <A>(
+  i: number,
+  a: A
+): ((as: NonEmptyReadonlyArray<A>) => Option<NonEmptyReadonlyArray<A>>) => modifyAt(i, () => a)
 
 /**
  * Apply a function to the element at the specified index, creating a new `NonEmptyReadonlyArray`, or returning `None` if the index is out
@@ -457,8 +455,7 @@ export const updateAt = <A>(i: number, a: A): ((as: NonEmptyReadonlyArray<A>) =>
  *
  * @since 3.0.0
  */
-export const modifyAt =
-  <A>(i: number, f: (a: A) => A) =>
+export const modifyAt = <A>(i: number, f: (a: A) => A) =>
   (self: NonEmptyReadonlyArray<A>): Option<NonEmptyReadonlyArray<A>> => {
     if (isOutOfBound(i, self)) {
       return _.none
@@ -476,8 +473,7 @@ export const modifyAt =
 /**
  * @since 3.0.0
  */
-export const zipWith =
-  <B, A, C>(bs: NonEmptyReadonlyArray<B>, f: (a: A, b: B) => C) =>
+export const zipWith = <B, A, C>(bs: NonEmptyReadonlyArray<B>, f: (a: A, b: B) => C) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<C> => {
     const cs: _.NonEmptyArray<C> = [f(head(as), head(bs))]
     const len = Math.min(as.length, bs.length)
@@ -490,8 +486,7 @@ export const zipWith =
 /**
  * @since 3.0.0
  */
-export const zip =
-  <B>(bs: NonEmptyReadonlyArray<B>) =>
+export const zip = <B>(bs: NonEmptyReadonlyArray<B>) =>
   <A>(as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<readonly [A, B]> =>
     pipe(
       as,
@@ -524,8 +519,7 @@ export const unzip = <A, B>(
  *
  * @since 3.0.0
  */
-export const prependAll =
-  <A>(middle: A) =>
+export const prependAll = <A>(middle: A) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => {
     const out: _.NonEmptyArray<A> = [middle, head(as)]
     for (let i = 1; i < as.length; i++) {
@@ -545,8 +539,7 @@ export const prependAll =
  *
  * @since 3.0.0
  */
-export const intersperse =
-  <A>(middle: A) =>
+export const intersperse = <A>(middle: A) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => {
     const rest = tail(as)
     return _.isNonEmpty(rest) ? prepend(head(as))(prependAll(middle)(rest)) : as
@@ -555,8 +548,7 @@ export const intersperse =
 /**
  * @since 3.0.0
  */
-export const flatMapWithIndex =
-  <A, B>(f: (i: number, a: A) => NonEmptyReadonlyArray<B>) =>
+export const flatMapWithIndex = <A, B>(f: (i: number, a: A) => NonEmptyReadonlyArray<B>) =>
   (self: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
     const out: _.NonEmptyArray<B> = _.fromNonEmptyReadonlyArray(f(0, head(self)))
     for (let i = 1; i < self.length; i++) {
@@ -572,8 +564,7 @@ export const flatMapWithIndex =
  *
  * @since 3.0.0
  */
-export const chop =
-  <A, B>(f: (as: NonEmptyReadonlyArray<A>) => readonly [B, ReadonlyArray<A>]) =>
+export const chop = <A, B>(f: (as: NonEmptyReadonlyArray<A>) => readonly [B, ReadonlyArray<A>]) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
     const [b, rest] = f(as)
     const out: _.NonEmptyArray<B> = [b]
@@ -591,8 +582,7 @@ export const chop =
  *
  * @since 3.0.0
  */
-export const splitAt =
-  (n: number) =>
+export const splitAt = (n: number) =>
   <A>(as: NonEmptyReadonlyArray<A>): readonly [NonEmptyReadonlyArray<A>, ReadonlyArray<A>] => {
     const m = Math.max(1, n)
     return m >= as.length ? [as, _.empty] : [pipe(as.slice(1, m), prepend(head(as))), as.slice(m)]
@@ -606,7 +596,8 @@ export const splitAt =
  */
 export const chunksOf = (
   n: number
-): (<A>(as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>>) => chop(splitAt(n))
+): (<A>(as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>>) =>
+  chop(splitAt(n))
 
 /**
  * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
@@ -638,7 +629,9 @@ export const orElse = <B>(
  * @category mapping
  * @since 3.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => (fa: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> = (f) =>
+export const map: <A, B>(
+  f: (a: A) => B
+) => (fa: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> = (f) =>
   mapWithIndex((_, a) => f(a))
 
 /**
@@ -673,7 +666,8 @@ export const FromIdentity: fromIdentity.FromIdentity<NonEmptyReadonlyArrayTypeLa
  */
 export const flatMap: <A, B>(
   f: (a: A) => NonEmptyReadonlyArray<B>
-) => (self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> = (f) => flatMapWithIndex((_, a) => f(a))
+) => (self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> = (f) =>
+  flatMapWithIndex((_, a) => f(a))
 
 /**
  * @category instances
@@ -690,20 +684,24 @@ export const Flattenable: flattenable.Flattenable<NonEmptyReadonlyArrayTypeLambd
 export const composeKleisli: <B, C>(
   bfc: (b: B) => NonEmptyReadonlyArray<C>
 ) => <A>(afb: (a: A) => NonEmptyReadonlyArray<B>) => (a: A) => NonEmptyReadonlyArray<C> =
- flattenable.composeKleisli(Flattenable)
+  flattenable.composeKleisli(Flattenable)
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const KleisliComposable: kleisliComposable.KleisliComposable<NonEmptyReadonlyArrayTypeLambda> = {
+export const KleisliComposable: kleisliComposable.KleisliComposable<
+  NonEmptyReadonlyArrayTypeLambda
+> = {
   composeKleisli
 }
 
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => NonEmptyReadonlyArray<A> =fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => NonEmptyReadonlyArray<A> = fromIdentity.idKleisli(
+  FromIdentity
+)
 
 /**
  * @category instances
@@ -723,7 +721,9 @@ export const CategoryKind: kleisliCategory.KleisliCategory<NonEmptyReadonlyArray
  */
 export const zipLeft: (
   second: NonEmptyReadonlyArray<unknown>
-) => <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A> =flattenable.zipLeft(Flattenable)
+) => <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A> = flattenable.zipLeft(
+  Flattenable
+)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -733,22 +733,23 @@ export const zipLeft: (
  */
 export const zipRight: <A>(
   second: NonEmptyReadonlyArray<A>
-) => (self: NonEmptyReadonlyArray<unknown>) => NonEmptyReadonlyArray<A> =
- flattenable.zipRight(Flattenable)
+) => (self: NonEmptyReadonlyArray<unknown>) => NonEmptyReadonlyArray<A> = flattenable.zipRight(
+  Flattenable
+)
 
 /**
  * @since 3.0.0
  */
 export const ap: <A>(
   fa: NonEmptyReadonlyArray<A>
-) => <B>(self: NonEmptyReadonlyArray<(a: A) => B>) => NonEmptyReadonlyArray<B> =
- flattenable.ap(Flattenable)
+) => <B>(self: NonEmptyReadonlyArray<(a: A) => B>) => NonEmptyReadonlyArray<B> = flattenable.ap(
+  Flattenable
+)
 
 /**
  * @since 3.0.0
  */
-export const extend =
-  <A, B>(f: (as: NonEmptyReadonlyArray<A>) => B) =>
+export const extend = <A, B>(f: (as: NonEmptyReadonlyArray<A>) => B) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
     let next: ReadonlyArray<A> = tail(as)
     const out: _.NonEmptyArray<B> = [f(as)]
@@ -762,22 +763,25 @@ export const extend =
 /**
  * @since 3.0.0
  */
-export const duplicate: <A>(ma: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>> =
- extend(identity)
+export const duplicate: <A>(
+  ma: NonEmptyReadonlyArray<A>
+) => NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>> = extend(identity)
 
 /**
  * @since 3.0.0
  */
-export const flatten: <A>(mma: NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>>) => NonEmptyReadonlyArray<A> =
- flatMap(identity)
+export const flatten: <A>(
+  mma: NonEmptyReadonlyArray<NonEmptyReadonlyArray<A>>
+) => NonEmptyReadonlyArray<A> = flatMap(identity)
 
 /**
  * @since 3.0.0
  */
 export const mapWithIndex: <A, B>(
   f: (i: number, a: A) => B
-) => (fa: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> =
-  <A, B>(f: (i: number, a: A) => B) =>
+) => (fa: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> = <A, B>(
+  f: (i: number, a: A) => B
+) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
     const out: _.NonEmptyArray<B> = [f(0, head(as))]
     for (let i = 1; i < as.length; i++) {
@@ -790,27 +794,25 @@ export const mapWithIndex: <A, B>(
  * @category traversing
  * @since 3.0.0
  */
-export const traverseWithIndex =
-  <F extends TypeLambda>(Apply: apply.Apply<F>) =>
+export const traverseWithIndex = <F extends TypeLambda>(Apply: apply.Apply<F>) =>
   <A, S, R, O, E, B>(f: (i: number, a: A) => Kind<F, S, R, O, E, B>) =>
-  (self: NonEmptyReadonlyArray<A>): Kind<F, S, R, O, E, NonEmptyReadonlyArray<B>> => {
-    let out = pipe(f(0, head(self)), Apply.map(of))
-    for (let i = 1; i < self.length; i++) {
-      out = pipe(
-        out,
-        Apply.map((bs) => (b: B) => pipe(bs, append(b))),
-        Apply.ap(f(i, self[i]))
-      )
+    (self: NonEmptyReadonlyArray<A>): Kind<F, S, R, O, E, NonEmptyReadonlyArray<B>> => {
+      let out = pipe(f(0, head(self)), Apply.map(of))
+      for (let i = 1; i < self.length; i++) {
+        out = pipe(
+          out,
+          Apply.map((bs) => (b: B) => pipe(bs, append(b))),
+          Apply.ap(f(i, self[i]))
+        )
+      }
+      return out
     }
-    return out
-  }
 
 /**
  * @category traversing
  * @since 3.0.0
  */
-export const traverse =
-  <F extends TypeLambda>(Apply: apply.Apply<F>) =>
+export const traverse = <F extends TypeLambda>(Apply: apply.Apply<F>) =>
   <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>
   ): ((self: NonEmptyReadonlyArray<A>) => Kind<F, S, R, O, E, NonEmptyReadonlyArray<B>>) =>
@@ -840,7 +842,7 @@ export const extract: <A>(self: NonEmptyReadonlyArray<A>) => A = _.head
  * @since 3.0.0
  */
 export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
-  readonly type: NonEmptyReadonlyArray<this['Out1']>
+  readonly type: NonEmptyReadonlyArray<this["Out1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -852,7 +854,7 @@ export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
  * @since 3.0.0
  */
 export const getShow = <A>(S: Show<A>): Show<NonEmptyReadonlyArray<A>> => ({
-  show: (as) => `[${as.map(S.show).join(', ')}]`
+  show: (as) => `[${as.map(S.show).join(", ")}]`
 })
 
 /**
@@ -868,7 +870,9 @@ export const getSemigroup = <A>(): Semigroup<NonEmptyReadonlyArray<A>> => ({
  * @since 3.0.0
  */
 export const getEq = <A>(E: Eq<A>): Eq<NonEmptyReadonlyArray<A>> =>
-  eq.fromEquals((that) => (self) => self.length === that.length && self.every((a, i) => E.equals(that[i])(a)))
+  eq.fromEquals((that) =>
+    (self) => self.length === that.length && self.every((a, i) => E.equals(that[i])(a))
+  )
 
 /**
  * @since 3.0.0
@@ -889,8 +893,11 @@ export const Functor: functor.Functor<NonEmptyReadonlyArrayTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <B>(fab: NonEmptyReadonlyArray<(a: A) => B>) => NonEmptyReadonlyArray<B> =
- functor.flap(Functor)
+export const flap: <A>(
+  a: A
+) => <B>(fab: NonEmptyReadonlyArray<(a: A) => B>) => NonEmptyReadonlyArray<B> = functor.flap(
+  Functor
+)
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -899,7 +906,7 @@ export const flap: <A>(a: A) => <B>(fab: NonEmptyReadonlyArray<(a: A) => B>) => 
  * @since 3.0.0
  */
 export const as: <B>(b: B) => (self: NonEmptyReadonlyArray<unknown>) => NonEmptyReadonlyArray<B> =
- functor.as(Functor)
+  functor.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -907,8 +914,8 @@ export const as: <B>(b: B) => (self: NonEmptyReadonlyArray<unknown>) => NonEmpty
  * @category mapping
  * @since 3.0.0
  */
-export const unit: (self: NonEmptyReadonlyArray<unknown>) => NonEmptyReadonlyArray<void> =
- functor.unit(Functor)
+export const unit: (self: NonEmptyReadonlyArray<unknown>) => NonEmptyReadonlyArray<void> = functor
+  .unit(Functor)
 
 /**
  * @category instances
@@ -928,7 +935,7 @@ export const Apply: apply.Apply<NonEmptyReadonlyArrayTypeLambda> = {
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
 ) => (fa: NonEmptyReadonlyArray<A>, fb: NonEmptyReadonlyArray<B>) => NonEmptyReadonlyArray<C> =
- apply.lift2(Apply)
+  apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `NonEmptyReadonlyArray`.
@@ -942,7 +949,7 @@ export const lift3: <A, B, C, D>(
   fa: NonEmptyReadonlyArray<A>,
   fb: NonEmptyReadonlyArray<B>,
   fc: NonEmptyReadonlyArray<C>
-) => NonEmptyReadonlyArray<D> =apply.lift3(Apply)
+) => NonEmptyReadonlyArray<D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -983,16 +990,14 @@ export const Monad: monad.Monad<NonEmptyReadonlyArrayTypeLambda> = {
  */
 export const tap: <A>(
   f: (a: A) => NonEmptyReadonlyArray<unknown>
-) => (self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A> =flattenable.tap(Flattenable)
+) => (self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A> = flattenable.tap(Flattenable)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduce =
-  <B, A>(b: B, f: (b: B, a: A) => B) =>
-  (self: NonEmptyReadonlyArray<A>): B =>
-    self.reduce((b, a) => f(b, a), b)
+export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
+  (self: NonEmptyReadonlyArray<A>): B => self.reduce((b, a) => f(b, a), b)
 
 /**
  * **Note**. The constraint is relaxed: a `Semigroup` instead of a `Monoid`.
@@ -1000,29 +1005,24 @@ export const reduce =
  * @category folding
  * @since 3.0.0
  */
-export const foldMap =
-  <S>(S: Semigroup<S>) =>
+export const foldMap = <S>(S: Semigroup<S>) =>
   <A>(f: (a: A) => S) =>
-  (self: NonEmptyReadonlyArray<A>): S =>
-    self.slice(1).reduce((s, a) => S.combine(f(a))(s), f(self[0]))
+    (self: NonEmptyReadonlyArray<A>): S =>
+      self.slice(1).reduce((s, a) => S.combine(f(a))(s), f(self[0]))
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceRight =
-  <B, A>(b: B, f: (a: A, b: B) => B) =>
-  (self: NonEmptyReadonlyArray<A>): B =>
-    self.reduceRight((b, a) => f(a, b), b)
+export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
+  (self: NonEmptyReadonlyArray<A>): B => self.reduceRight((b, a) => f(a, b), b)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceWithIndex =
-  <B, A>(b: B, f: (i: number, b: B, a: A) => B) =>
-  (self: NonEmptyReadonlyArray<A>): B =>
-    self.reduce((b, a, i) => f(i, b, a), b)
+export const reduceWithIndex = <B, A>(b: B, f: (i: number, b: B, a: A) => B) =>
+  (self: NonEmptyReadonlyArray<A>): B => self.reduce((b, a, i) => f(i, b, a), b)
 
 /**
  * **Note**. The constraint is relaxed: a `Semigroup` instead of a `Monoid`.
@@ -1030,27 +1030,23 @@ export const reduceWithIndex =
  * @category folding
  * @since 3.0.0
  */
-export const foldMapWithIndex =
-  <S>(S: Semigroup<S>) =>
+export const foldMapWithIndex = <S>(S: Semigroup<S>) =>
   <A>(f: (i: number, a: A) => S) =>
-  (self: NonEmptyReadonlyArray<A>): S =>
-    self.slice(1).reduce((s, a, i) => S.combine(f(i + 1, a))(s), f(0, self[0]))
+    (self: NonEmptyReadonlyArray<A>): S =>
+      self.slice(1).reduce((s, a, i) => S.combine(f(i + 1, a))(s), f(0, self[0]))
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceRightWithIndex =
-  <B, A>(b: B, f: (i: number, a: A, b: B) => B) =>
-  (self: NonEmptyReadonlyArray<A>): B =>
-    self.reduceRight((b, a, i) => f(i, a, b), b)
+export const reduceRightWithIndex = <B, A>(b: B, f: (i: number, a: A, b: B) => B) =>
+  (self: NonEmptyReadonlyArray<A>): B => self.reduceRight((b, a, i) => f(i, a, b), b)
 
 /**
  * @category folding
  * @since 3.0.0
  */
-export const reduceKind =
-  <F extends TypeLambda>(Flattenable: flattenable.Flattenable<F>) =>
+export const reduceKind = <F extends TypeLambda>(Flattenable: flattenable.Flattenable<F>) =>
   <S, R, O, E, B, A>(
     fb: Kind<F, S, R, O, E, B>,
     f: (b: B, a: A) => Kind<F, S, R, O, E, B>
@@ -1059,8 +1055,7 @@ export const reduceKind =
       pipe(
         fb,
         Flattenable.flatMap((b) => f(b, a))
-      )
-    )
+      ))
 
 /**
  * @category instances
@@ -1086,8 +1081,8 @@ export const Alt: alt.Alt<NonEmptyReadonlyArrayTypeLambda> = {
  */
 export const firstSuccessOf: <A>(
   startWith: NonEmptyReadonlyArray<A>
-) => (collection: Iterable<NonEmptyReadonlyArray<A>>) => NonEmptyReadonlyArray<A> =
- alt.firstSuccessOf(Alt)
+) => (collection: Iterable<NonEmptyReadonlyArray<A>>) => NonEmptyReadonlyArray<A> = alt
+  .firstSuccessOf(Alt)
 
 /**
  * @category instances
@@ -1107,8 +1102,7 @@ export const Comonad: comonad.Comonad<NonEmptyReadonlyArrayTypeLambda> = {
  * @category do notation
  * @since 3.0.0
  */
-export const Do: NonEmptyReadonlyArray<{}> =
-  of(_.Do)
+export const Do: NonEmptyReadonlyArray<{}> = of(_.Do)
 
 /**
  * @category do notation
@@ -1117,15 +1111,15 @@ export const Do: NonEmptyReadonlyArray<{}> =
 export const bindTo: <N extends string>(
   name: N
 ) => <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<{ readonly [K in N]: A }> =
- functor.bindTo(Functor)
+  functor.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
 ) => (
   self: NonEmptyReadonlyArray<A>
-) => NonEmptyReadonlyArray<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
- functor.let(Functor)
+) => NonEmptyReadonlyArray<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = functor
+  .let(Functor)
 
 export {
   /**
@@ -1145,7 +1139,7 @@ export const bind: <N extends string, A extends object, B>(
 ) => (
   self: NonEmptyReadonlyArray<A>
 ) => NonEmptyReadonlyArray<{ readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- flattenable.bind(Flattenable)
+  flattenable.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -1158,8 +1152,8 @@ export const bindRight: <N extends string, A extends object, B>(
   fb: NonEmptyReadonlyArray<B>
 ) => (
   self: NonEmptyReadonlyArray<A>
-) => NonEmptyReadonlyArray<{ readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =
- apply.bindRight(Apply)
+) => NonEmptyReadonlyArray<{ readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = apply
+  .bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -1169,14 +1163,14 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: NonEmptyReadonlyArray<readonly []> =of(_.empty)
+export const Zip: NonEmptyReadonlyArray<readonly []> = of(_.empty)
 
 /**
  * @category tuple sequencing
  * @since 3.0.0
  */
 export const tupled: <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<readonly [A]> =
- functor.tupled(Functor)
+  functor.tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -1186,8 +1180,9 @@ export const tupled: <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArra
  */
 export const zipFlatten: <B>(
   fb: NonEmptyReadonlyArray<B>
-) => <A extends ReadonlyArray<unknown>>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<readonly [...A, B]> =
- apply.zipFlatten(Apply)
+) => <A extends ReadonlyArray<unknown>>(
+  self: NonEmptyReadonlyArray<A>
+) => NonEmptyReadonlyArray<readonly [...A, B]> = apply.zipFlatten(Apply)
 
 /**
  * @since 3.0.0
@@ -1236,7 +1231,5 @@ export const max = <A>(O: Ord<A>): ((as: NonEmptyReadonlyArray<A>) => A) => {
 /**
  * @since 3.0.0
  */
-export const combineAll =
-  <A>(S: Semigroup<A>) =>
-  (fa: NonEmptyReadonlyArray<A>): A =>
-    fa.reduce((a, acc) => S.combine(acc)(a))
+export const combineAll = <A>(S: Semigroup<A>) =>
+  (fa: NonEmptyReadonlyArray<A>): A => fa.reduce((a, acc) => S.combine(acc)(a))
