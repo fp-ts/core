@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.0.2
+
+### Patch Changes
+
+- [#8](https://github.com/fp-ts/core/pull/8) [`79b1237c`](https://github.com/fp-ts/core/commit/79b1237c22a16f8354f8c5f086922585ce26b572) Thanks [@mikearnaldi](https://github.com/mikearnaldi)! - Fix package json repository urls
+
 ## 0.0.1
 
 ### Patch Changes
