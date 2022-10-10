@@ -1,8 +1,13 @@
 name: Node.js CI
 
 on:
+  pull_request:
+    branches:
+      - 'master'
   push:
-    branches: [master]
+    branches:
+      - '**'
+      - '!master'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -45,19 +50,3 @@ jobs:
       - run: pnpm test
       - run: pnpm dtslint
       - run: pnpm gen-docs
-      - name: Deploy pages
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          build_dir: packages/core/docs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create Version PR or Publish to NPM
-        if: github.repository == 'fp-ts/core'
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: node .github/changeset-version.cjs
-          publish: pnpm release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,0 +1,39 @@
+diff --git a/lib/Core.js b/lib/Core.js
+index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..12520ac47448b9017f863d4e66771806b757e2a4 100644
+--- a/lib/Core.js
++++ b/lib/Core.js
+@@ -167,7 +167,33 @@ var typeCheckExamples = function (modules) {
+     return function_1.pipe(getExampleFiles(modules), RTE.chain(handleImports), RTE.chain(function (examples) {
+         return examples.length === 0
+             ? cleanExamples
+-            : function_1.pipe(writeExamples(examples), RTE.chain(function () { return spawnTsNode; }), RTE.chain(function () { return cleanExamples; }));
++            : function_1.pipe(writeExamples(examples), RTE.chain(function () { return writeFile({"path": "./docs/examples/tsconfig.json", "content": JSON.stringify({
++                "compilerOptions": {
++                  "noEmit": true,
++                  "strict": true,
++                  "noImplicitAny": true,
++                  "noImplicitThis": true,
++                  "strictNullChecks": true,
++                  "strictFunctionTypes": true,
++                  "noImplicitReturns": false,
++                  "noUnusedLocals": false,
++                  "noUnusedParameters": false,
++                  "noFallthroughCasesInSwitch": true,
++                  "moduleResolution": "node",
++                  "target": "es2015",
++                  "lib": ["es2015"],
++                  "paths": {
++                    "@fp-ts/core": ["../../src/index.ts"],
++                    "@fp-ts/core/test/*": ["../../test/*"],
++                    "@fp-ts/core/examples/*": ["../../examples/*"],
++                    "@fp-ts/core/*": ["../../src/*"]
++                  }
++                }
++              }
++              )}); }), RTE.chain(function () { return writeFile({"path": "./docs/examples/package.json", "content": JSON.stringify({
++                "name": "@fp-ts/examples"
++              }
++              )}); }), RTE.chain(function () { return spawnTsNode; }), RTE.chain(function () { return cleanExamples; }));
+     }));
+ };
+ // -------------------------------------------------------------------------------------
