@@ -44,6 +44,13 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - run: pnpm dtslint
+      - run: pnpm gen-docs
+      - name: Deploy pages
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          build_dir: packages/core/docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Version PR or Publish to NPM
         if: github.repository == 'fp-ts/core'
         id: changesets
