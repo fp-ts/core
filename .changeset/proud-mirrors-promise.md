@@ -2,4 +2,4 @@
 "@fp-ts/core": patch
 ---
 
-ESM/CJS Dual Support (pre-release)
+Dual ESM-CJS Support

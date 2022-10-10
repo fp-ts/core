@@ -50,7 +50,7 @@ jobs:
         uses: changesets/action@v1
         with:
           version: node .github/changeset-version.cjs
-          publish: pnpm release
+          publish: npm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
