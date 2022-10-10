@@ -37,10 +37,10 @@
     "incremental": true,
     "removeComments": false,
     "paths": {
-      "@fp-ts/core": ["./packages/core/src/index.ts"],
-      "@fp-ts/core/test/*": ["./packages/core/test/*"],
-      "@fp-ts/core/examples/*": ["./packages/core/examples/*"],
-      "@fp-ts/core/*": ["./packages/core/src/*"]
+      "@fp-ts/core": ["./src/index.ts"],
+      "@fp-ts/core/test/*": ["./test/*"],
+      "@fp-ts/core/examples/*": ["./examples/*"],
+      "@fp-ts/core/*": ["./src/*"]
     }
   },
   "include": [],

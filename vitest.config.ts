@@ -4,14 +4,14 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
   test: {
-    include: ["packages/*/test/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    exclude: ["packages/*/test/**/util.ts"],
+    include: ["./test/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    exclude: ["./test/**/util.ts"],
     globals: true
   },
   resolve: {
     alias: {
-      "@fp-ts/core/test": path.resolve(__dirname, "/packages/core/test"),
-      "@fp-ts/core": path.resolve(__dirname, "/packages/core/src")
+      "@fp-ts/core/test": path.resolve(__dirname, "/test"),
+      "@fp-ts/core": path.resolve(__dirname, "/src")
     }
   }
 })

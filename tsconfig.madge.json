@@ -4,9 +4,9 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@fp-ts/core": ["./packages/core/build/esm/index.js"],
-      "@fp-ts/core/*": ["./packages/core/build/esm/*"]
+      "@fp-ts/core": ["./build/esm/index.js"],
+      "@fp-ts/core/*": ["./build/esm/*"]
     }
   },
-  "include": ["./packages/core/build/esm/**/*.js"]
+  "include": ["./build/esm/**/*.js"]
 }
