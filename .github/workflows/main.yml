@@ -44,6 +44,7 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - run: pnpm dtslint
+      - run: pnpm lint
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
