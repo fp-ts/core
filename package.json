@@ -1,5 +1,6 @@
 {
   "name": "@fp-ts/core",
+  "version": "0.0.0",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -26,7 +27,8 @@
     "functional-programming"
   ],
   "scripts": {
-    "changeset": "changeset",
+    "version": "changeset version && pnpm install --no-frozen-lockfile",
+    "release": "pnpm run build && changeset publish",
     "clean": "rimraf build tsbuildinfo dist .ultra.cache.json",
     "build": "pnpm build-all && pnpm build-pack",
     "build-cjs": "babel build/esm --config-file ./.babel.cjs.json --out-dir build/cjs --out-file-extension .js --source-maps",
