@@ -1164,8 +1164,8 @@ describe("ReadonlyArray", () => {
     U.deepStrictEqual(pipe([1, 2], _.map(f)), ["1", "2"])
   })
 
-  it("getShow", () => {
-    const Sh = _.getShow(string.Show)
+  it("liftShow", () => {
+    const Sh = _.liftShow(string.Show)
     U.deepStrictEqual(Sh.show([]), `[]`)
     U.deepStrictEqual(Sh.show(["a"]), `["a"]`)
     U.deepStrictEqual(Sh.show(["a", "b"]), `["a", "b"]`)

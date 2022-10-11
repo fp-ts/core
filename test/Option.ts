@@ -380,8 +380,8 @@ describe("Option", () => {
     )
   })
 
-  it("getShow", () => {
-    const Sh = O.getShow(S.Show)
+  it("liftShow", () => {
+    const Sh = O.liftShow(S.Show)
     U.deepStrictEqual(Sh.show(O.some("a")), `some("a")`)
     U.deepStrictEqual(Sh.show(O.none), `none`)
   })

@@ -408,8 +408,12 @@ export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
  * @category instances
  * @since 3.0.0
  */
-export const getShow = <E, A>(SE: Show<E>, SA: Show<A>): Show<Result<E, A>> => ({
-  show: (ma) => (isFailure(ma) ? `fail(${SE.show(ma.failure)})` : `succeed(${SA.show(ma.success)})`)
+export const getShow = <E, A>(ShowE: Show<E>, ShowA: Show<A>): Show<Result<E, A>> => ({
+  show: (
+    self
+  ) => (isFailure(self) ?
+    `fail(${ShowE.show(self.failure)})` :
+    `succeed(${ShowA.show(self.success)})`)
 })
 
 /**

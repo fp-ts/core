@@ -855,8 +855,8 @@ export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
  * @category instances
  * @since 3.0.0
  */
-export const getShow = <A>(S: Show<A>): Show<NonEmptyReadonlyArray<A>> => ({
-  show: (as) => `[${as.map(S.show).join(", ")}]`
+export const liftShow = <A>(Show: Show<A>): Show<NonEmptyReadonlyArray<A>> => ({
+  show: (as) => `[${as.map(Show.show).join(", ")}]`
 })
 
 /**

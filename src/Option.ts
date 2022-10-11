@@ -610,8 +610,8 @@ export const traverse: <F extends TypeLambda>(
  * @category instances
  * @since 3.0.0
  */
-export const getShow = <A>(S: Show<A>): Show<Option<A>> => ({
-  show: (ma) => (isNone(ma) ? "none" : `some(${S.show(ma.value)})`)
+export const liftShow = <A>(Show: Show<A>): Show<Option<A>> => ({
+  show: (ma) => (isNone(ma) ? "none" : `some(${Show.show(ma.value)})`)
 })
 
 /**

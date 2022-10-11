@@ -50,7 +50,7 @@ export interface IdentityTypeLambda extends TypeLambda {
  * @category instances
  * @since 3.0.0
  */
-export const getShow: <A>(S: Show<A>) => Show<Identity<A>> = identity
+export const liftShow: <A>(Show: Show<A>) => Show<Identity<A>> = identity
 
 /**
  * @category instances

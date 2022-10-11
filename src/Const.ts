@@ -120,8 +120,8 @@ export const liftBounded = <S>(Bounded: Bounded<S>): Bounded<Const<S, never>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getShow = <S>(S: Show<S>): Show<Const<S, never>> => ({
-  show: (c) => `make(${S.show(c.value)})`
+export const liftShow = <S>(Show: Show<S>): Show<Const<S, never>> => ({
+  show: (c) => `make(${Show.show(c.value)})`
 })
 
 /**
