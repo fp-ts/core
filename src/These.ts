@@ -21,7 +21,7 @@
  */
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
@@ -105,7 +105,7 @@ export const both = <E, A>(failure: E, success: A): These<E, A> => ({
  * @since 3.0.0
  */
 export const failureOrBoth = <E>(e: E) =>
-  <A>(ma: Option<A>): These<E, A> => _.isNone(ma) ? fail(e) : both(e, ma.value)
+  <A>(ma: Option<A>): These<E, A> => internal.isNone(ma) ? fail(e) : both(e, ma.value)
 
 /**
  * @example
@@ -119,7 +119,7 @@ export const failureOrBoth = <E>(e: E) =>
  * @since 3.0.0
  */
 export const successOrBoth = <A>(a: A) =>
-  <E>(me: Option<E>): These<E, A> => _.isNone(me) ? succeed(a) : both(me.value, a)
+  <E>(me: Option<E>): These<E, A> => internal.isNone(me) ? succeed(a) : both(me.value, a)
 
 /**
  * Takes a pair of `Option`s and attempts to create a `These` from them
@@ -137,13 +137,13 @@ export const successOrBoth = <A>(a: A) =>
  * @since 3.0.0
  */
 export const fromOptions = <E, A>(fe: Option<E>, fa: Option<A>): Option<These<E, A>> =>
-  _.isNone(fe)
-    ? _.isNone(fa)
-      ? _.none
-      : _.some(succeed(fa.value))
-    : _.isNone(fa)
-    ? _.some(fail(fe.value))
-    : _.some(both(fe.value, fa.value))
+  internal.isNone(fe)
+    ? internal.isNone(fa)
+      ? internal.none
+      : internal.some(succeed(fa.value))
+    : internal.isNone(fa)
+    ? internal.some(fail(fe.value))
+    : internal.some(both(fe.value, fa.value))
 
 // -------------------------------------------------------------------------------------
 // pattern matching
@@ -521,7 +521,7 @@ export const FromThese: fromThese_.FromThese<TheseTypeLambda> = {
  * @since 3.0.0
  */
 export const toReadonlyArray = <E, A>(self: These<E, A>): ReadonlyArray<A> =>
-  isFailure(self) ? _.empty : [self.success]
+  isFailure(self) ? internal.empty : [self.success]
 
 /**
  * @category folding
@@ -551,7 +551,7 @@ export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
  */
 export const toOption = <E, A>(
   self: These<E, A>
-): Option<A> => (isFailure(self) ? _.none : _.some(self.success))
+): Option<A> => (isFailure(self) ? internal.none : internal.some(self.success))
 
 /**
  * @category instances
@@ -614,7 +614,7 @@ export const toTuple2 = <E, A>(e: E, a: A) =>
  */
 export const getFailure = <E, A>(
   self: These<E, A>
-): Option<E> => (isSuccess(self) ? _.none : _.some(self.failure))
+): Option<E> => (isSuccess(self) ? internal.none : internal.some(self.failure))
 
 /**
  * Converts a `These` to an `Option` discarding the error.
@@ -631,7 +631,7 @@ export const getFailure = <E, A>(
  */
 export const getSuccess = <E, A>(
   self: These<E, A>
-): Option<A> => (isFailure(self) ? _.none : _.some(self.success))
+): Option<A> => (isFailure(self) ? internal.none : internal.some(self.success))
 
 /**
  * Returns the `E` value if and only if the value is constructed with `Success`
@@ -648,7 +648,7 @@ export const getSuccess = <E, A>(
  */
 export const getFailureOnly = <E, A>(
   fa: These<E, A>
-): Option<E> => (isFailure(fa) ? _.some(fa.failure) : _.none)
+): Option<E> => (isFailure(fa) ? internal.some(fa.failure) : internal.none)
 
 /**
  * Returns the `A` value if and only if the value is constructed with `Success`
@@ -665,7 +665,7 @@ export const getFailureOnly = <E, A>(
  */
 export const getSuccessOnly = <E, A>(
   fa: These<E, A>
-): Option<A> => (isSuccess(fa) ? _.some(fa.success) : _.none)
+): Option<A> => (isSuccess(fa) ? internal.some(fa.success) : internal.none)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -675,7 +675,7 @@ export const getSuccessOnly = <E, A>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: These<never, readonly []> = succeed(_.empty)
+export const Zip: These<never, readonly []> = succeed(internal.empty)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -690,26 +690,28 @@ export const Zip: These<never, readonly []> = succeed(_.empty)
 export const traverseNonEmptyReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
   <A, B>(f: (index: number, a: A) => These<E, B>) =>
     (as: NonEmptyReadonlyArray<A>): These<E, NonEmptyReadonlyArray<B>> => {
-      let e: Option<E> = _.none
-      const t = f(0, _.head(as))
+      let e: Option<E> = internal.none
+      const t = f(0, internal.head(as))
       if (isFailure(t)) {
         return t
       }
       if (isBoth(t)) {
-        e = _.some(t.failure)
+        e = internal.some(t.failure)
       }
-      const out: _.NonEmptyArray<B> = [t.success]
+      const out: internal.NonEmptyArray<B> = [t.success]
       for (let i = 1; i < as.length; i++) {
         const t = f(i, as[i])
         if (isFailure(t)) {
           return t
         }
         if (isBoth(t)) {
-          e = _.isNone(e) ? _.some(t.failure) : _.some(S.combine(t.failure)(e.value))
+          e = internal.isNone(e) ?
+            internal.some(t.failure) :
+            internal.some(S.combine(t.failure)(e.value))
         }
         out.push(t.success)
       }
-      return _.isNone(e) ? succeed(out) : both(e.value, out)
+      return internal.isNone(e) ? succeed(out) : both(e.value, out)
     }
 
 /**
@@ -723,7 +725,7 @@ export const traverseReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
     f: (index: number, a: A) => These<E, B>
   ): ((as: ReadonlyArray<A>) => These<E, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndex(S)(f)
-    return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+    return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
   }
 
 /**

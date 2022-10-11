@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Refinement } from "@fp-ts/core/Refinement"
 import type * as eq from "@fp-ts/core/typeclasses/Eq"
@@ -246,7 +246,7 @@ export const size = (s: string): number => s.length
 export const split = (separator: string | RegExp) =>
   (s: string): NonEmptyReadonlyArray<string> => {
     const out = s.split(separator)
-    return _.isNonEmpty(out) ? out : [s]
+    return internal.isNonEmpty(out) ? out : [s]
   }
 
 /**

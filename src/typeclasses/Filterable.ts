@@ -5,7 +5,7 @@
  */
 import { flow, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
 import type { Refinement } from "@fp-ts/core/Refinement"
@@ -54,7 +54,7 @@ export const filter: <F extends TypeLambda>(
   <B extends A, A = B>(
     predicate: Predicate<A>
   ): (<S, R, O, E>(self: Kind<F, S, R, O, E, B>) => Kind<F, S, R, O, E, B>) =>
-    Filterable.filterMap((b) => (predicate(b) ? _.some(b) : _.none))
+    Filterable.filterMap((b) => (predicate(b) ? internal.some(b) : internal.none))
 
 /**
  * @since 3.0.0
@@ -65,8 +65,8 @@ export const partitionMap = <F extends TypeLambda>(Filterable: Filterable<F>) =>
       self: Kind<F, S, R, O, E, A>
     ): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
       return [
-        pipe(self, Filterable.filterMap(flow(f, _.getFailure))),
-        pipe(self, Filterable.filterMap(flow(f, _.getSuccess)))
+        pipe(self, Filterable.filterMap(flow(f, internal.getFailure))),
+        pipe(self, Filterable.filterMap(flow(f, internal.getSuccess)))
       ]
     }
 
@@ -89,5 +89,5 @@ export const partition: <F extends TypeLambda>(
   ): (<S, R, O, E>(
     self: Kind<F, S, R, O, E, B>
   ) => readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, B>]) =>
-    partitionMap_((b) => (predicate(b) ? _.succeed(b) : _.fail(b)))
+    partitionMap_((b) => (predicate(b) ? internal.succeed(b) : internal.fail(b)))
 }

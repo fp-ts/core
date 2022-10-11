@@ -15,7 +15,7 @@
 import type { Endomorphism } from "@fp-ts/core/Endomorphism"
 import { flow, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
@@ -65,7 +65,7 @@ export const append = <B>(end: B) =>
  * @since 3.0.0
  */
 export const fromReadonlyArray = <A>(as: ReadonlyArray<A>): Option<NonEmptyReadonlyArray<A>> =>
-  _.isNonEmpty(as) ? _.some(as) : _.none
+  internal.isNonEmpty(as) ? internal.some(as) : internal.none
 
 /**
  * Return a `NonEmptyReadonlyArray` of length `n` with element `i` initialized with `f(i)`.
@@ -85,7 +85,7 @@ export const fromReadonlyArray = <A>(as: ReadonlyArray<A>): Option<NonEmptyReado
 export const makeBy = <A>(f: (i: number) => A) =>
   (n: number): NonEmptyReadonlyArray<A> => {
     const j = Math.max(0, Math.floor(n))
-    const out: _.NonEmptyArray<A> = [f(0)]
+    const out: internal.NonEmptyArray<A> = [f(0)]
     for (let i = 1; i < j; i++) {
       out.push(f(i))
     }
@@ -205,7 +205,7 @@ export const uniq = <A>(Eq: Eq<A>) =>
     if (self.length === 1) {
       return self
     }
-    const out: _.NonEmptyArray<A> = [head(self)]
+    const out: internal.NonEmptyArray<A> = [head(self)]
     const rest = tail(self)
     for (const a of rest) {
       if (out.every((o) => !Eq.equals(o)(a))) {
@@ -256,7 +256,7 @@ export const uniq = <A>(Eq: Eq<A>) =>
 export const sortBy = <B>(
   ords: ReadonlyArray<Ord<B>>
 ): (<A extends B>(as: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A>) => {
-  if (_.isNonEmpty(ords)) {
+  if (internal.isNonEmpty(ords)) {
     const M = ord.getMonoid<B>()
     return sort(ords.reduce((a, acc) => M.combine(acc)(a), M.empty))
   }
@@ -383,7 +383,7 @@ export const group = <B>(E: Eq<B>) =>
       as,
       chop((as) => {
         const h = head(as)
-        const out: _.NonEmptyArray<A> = [h]
+        const out: internal.NonEmptyArray<A> = [h]
         let i = 1
         for (; i < as.length; i++) {
           const a = as[i]
@@ -413,10 +413,10 @@ export const group = <B>(E: Eq<B>) =>
  */
 export const groupBy = <A>(f: (a: A) => string) =>
   (as: ReadonlyArray<A>): Readonly<Record<string, NonEmptyReadonlyArray<A>>> => {
-    const out: Record<string, _.NonEmptyArray<A>> = {}
+    const out: Record<string, internal.NonEmptyArray<A>> = {}
     for (const a of as) {
       const k = f(a)
-      if (_.has.call(out, k)) {
+      if (internal.has.call(out, k)) {
         out[k].push(a)
       } else {
         out[k] = [a]
@@ -458,16 +458,16 @@ export const updateAt = <A>(
 export const modifyAt = <A>(i: number, f: (a: A) => A) =>
   (self: NonEmptyReadonlyArray<A>): Option<NonEmptyReadonlyArray<A>> => {
     if (isOutOfBound(i, self)) {
-      return _.none
+      return internal.none
     }
     const prev = self[i]
     const next = f(prev)
     if (next === prev) {
-      return _.some(self)
+      return internal.some(self)
     }
-    const out = _.fromNonEmptyReadonlyArray(self)
+    const out = internal.fromNonEmptyReadonlyArray(self)
     out[i] = next
-    return _.some(out)
+    return internal.some(out)
   }
 
 /**
@@ -475,7 +475,7 @@ export const modifyAt = <A>(i: number, f: (a: A) => A) =>
  */
 export const zipWith = <B, A, C>(bs: NonEmptyReadonlyArray<B>, f: (a: A, b: B) => C) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<C> => {
-    const cs: _.NonEmptyArray<C> = [f(head(as), head(bs))]
+    const cs: internal.NonEmptyArray<C> = [f(head(as), head(bs))]
     const len = Math.min(as.length, bs.length)
     for (let i = 1; i < len; i++) {
       cs[i] = f(as[i], bs[i])
@@ -499,8 +499,8 @@ export const zip = <B>(bs: NonEmptyReadonlyArray<B>) =>
 export const unzip = <A, B>(
   abs: NonEmptyReadonlyArray<readonly [A, B]>
 ): readonly [NonEmptyReadonlyArray<A>, NonEmptyReadonlyArray<B>] => {
-  const fa: _.NonEmptyArray<A> = [abs[0][0]]
-  const fb: _.NonEmptyArray<B> = [abs[0][1]]
+  const fa: internal.NonEmptyArray<A> = [abs[0][0]]
+  const fb: internal.NonEmptyArray<B> = [abs[0][1]]
   for (let i = 1; i < abs.length; i++) {
     fa[i] = abs[i][0]
     fb[i] = abs[i][1]
@@ -521,7 +521,7 @@ export const unzip = <A, B>(
  */
 export const prependAll = <A>(middle: A) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => {
-    const out: _.NonEmptyArray<A> = [middle, head(as)]
+    const out: internal.NonEmptyArray<A> = [middle, head(as)]
     for (let i = 1; i < as.length; i++) {
       out.push(middle, as[i])
     }
@@ -542,7 +542,7 @@ export const prependAll = <A>(middle: A) =>
 export const intersperse = <A>(middle: A) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<A> => {
     const rest = tail(as)
-    return _.isNonEmpty(rest) ? prepend(head(as))(prependAll(middle)(rest)) : as
+    return internal.isNonEmpty(rest) ? prepend(head(as))(prependAll(middle)(rest)) : as
   }
 
 /**
@@ -550,7 +550,7 @@ export const intersperse = <A>(middle: A) =>
  */
 export const flatMapWithIndex = <A, B>(f: (i: number, a: A) => NonEmptyReadonlyArray<B>) =>
   (self: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
-    const out: _.NonEmptyArray<B> = _.fromNonEmptyReadonlyArray(f(0, head(self)))
+    const out: internal.NonEmptyArray<B> = internal.fromNonEmptyReadonlyArray(f(0, head(self)))
     for (let i = 1; i < self.length; i++) {
       out.push(...f(i, self[i]))
     }
@@ -567,9 +567,9 @@ export const flatMapWithIndex = <A, B>(f: (i: number, a: A) => NonEmptyReadonlyA
 export const chop = <A, B>(f: (as: NonEmptyReadonlyArray<A>) => readonly [B, ReadonlyArray<A>]) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
     const [b, rest] = f(as)
-    const out: _.NonEmptyArray<B> = [b]
+    const out: internal.NonEmptyArray<B> = [b]
     let next: ReadonlyArray<A> = rest
-    while (_.isNonEmpty(next)) {
+    while (internal.isNonEmpty(next)) {
       const [b, rest] = f(next)
       out.push(b)
       next = rest
@@ -585,7 +585,9 @@ export const chop = <A, B>(f: (as: NonEmptyReadonlyArray<A>) => readonly [B, Rea
 export const splitAt = (n: number) =>
   <A>(as: NonEmptyReadonlyArray<A>): readonly [NonEmptyReadonlyArray<A>, ReadonlyArray<A>] => {
     const m = Math.max(1, n)
-    return m >= as.length ? [as, _.empty] : [pipe(as.slice(1, m), prepend(head(as))), as.slice(m)]
+    return m >= as.length ?
+      [as, internal.empty] :
+      [pipe(as.slice(1, m), prepend(head(as))), as.slice(m)]
   }
 
 /**
@@ -638,7 +640,7 @@ export const map: <A, B>(
  * @category constructors
  * @since 3.0.0
  */
-export const of: <A>(a: A) => NonEmptyReadonlyArray<A> = _.toNonEmptyArray
+export const of: <A>(a: A) => NonEmptyReadonlyArray<A> = internal.toNonEmptyArray
 
 /**
  * @category instances
@@ -752,8 +754,8 @@ export const ap: <A>(
 export const extend = <A, B>(f: (as: NonEmptyReadonlyArray<A>) => B) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
     let next: ReadonlyArray<A> = tail(as)
-    const out: _.NonEmptyArray<B> = [f(as)]
-    while (_.isNonEmpty(next)) {
+    const out: internal.NonEmptyArray<B> = [f(as)]
+    while (internal.isNonEmpty(next)) {
       out.push(f(next))
       next = tail(next)
     }
@@ -783,7 +785,7 @@ export const mapWithIndex: <A, B>(
   f: (i: number, a: A) => B
 ) =>
   (as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<B> => {
-    const out: _.NonEmptyArray<B> = [f(0, head(as))]
+    const out: internal.NonEmptyArray<B> = [f(0, head(as))]
     for (let i = 1; i < as.length; i++) {
       out.push(f(i, as[i]))
     }
@@ -831,7 +833,7 @@ export const sequence = <F extends TypeLambda>(
 /**
  * @since 3.0.0
  */
-export const extract: <A>(self: NonEmptyReadonlyArray<A>) => A = _.head
+export const extract: <A>(self: NonEmptyReadonlyArray<A>) => A = internal.head
 
 // -------------------------------------------------------------------------------------
 // type lambdas
@@ -1102,7 +1104,7 @@ export const Comonad: comonad.Comonad<NonEmptyReadonlyArrayTypeLambda> = {
  * @category do notation
  * @since 3.0.0
  */
-export const Do: NonEmptyReadonlyArray<{}> = of(_.Do)
+export const Do: NonEmptyReadonlyArray<{}> = of(internal.Do)
 
 /**
  * @category do notation
@@ -1163,7 +1165,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: NonEmptyReadonlyArray<readonly []> = of(_.empty)
+export const Zip: NonEmptyReadonlyArray<readonly []> = of(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -1192,7 +1194,7 @@ export const head: <A>(as: NonEmptyReadonlyArray<A>) => A = extract
 /**
  * @since 3.0.0
  */
-export const tail: <A>(as: NonEmptyReadonlyArray<A>) => ReadonlyArray<A> = _.tail
+export const tail: <A>(as: NonEmptyReadonlyArray<A>) => ReadonlyArray<A> = internal.tail
 
 /**
  * @since 3.0.0

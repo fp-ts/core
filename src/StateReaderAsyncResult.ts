@@ -6,7 +6,7 @@ import type { AsyncResult } from "@fp-ts/core/AsyncResult"
 import type { Endomorphism } from "@fp-ts/core/Endomorphism"
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
@@ -1038,16 +1038,16 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, S, R, E, B>(
     (s) =>
       (r) =>
         () =>
-          _.tail(as).reduce<Promise<Result<E, [S, _.NonEmptyArray<B>]>>>(
+          internal.tail(as).reduce<Promise<Result<E, [S, internal.NonEmptyArray<B>]>>>(
             (acc, a, i) =>
               acc.then((esb) =>
-                _.isFailure(esb)
+                internal.isFailure(esb)
                   ? acc
                   : f(
                     i + 1,
                     a
                   )(esb.success[0])(r)().then((eb) => {
-                    if (_.isFailure(eb)) {
+                    if (internal.isFailure(eb)) {
                       return eb
                     }
                     const [s, b] = eb.success
@@ -1056,7 +1056,7 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, S, R, E, B>(
                     return esb
                   })
               ),
-            f(0, _.head(as))(s)(r)().then(result.map(([s, b]) => [s, [b]]))
+            f(0, internal.head(as))(s)(r)().then(result.map(([s, b]) => [s, [b]]))
           )
 
 /**
@@ -1069,7 +1069,7 @@ export const traverseReadonlyArrayWithIndex = <A, S, R, E, B>(
   f: (index: number, a: A) => StateReaderAsyncResult<S, R, E, B>
 ): ((as: ReadonlyArray<A>) => StateReaderAsyncResult<S, R, E, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : succeed(_.empty))
+  return (as) => (internal.isNonEmpty(as) ? g(as) : succeed(internal.empty))
 }
 
 /**

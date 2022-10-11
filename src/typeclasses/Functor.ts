@@ -13,7 +13,6 @@
  */
 import { apply, constant } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
 
 /**
  * @category model

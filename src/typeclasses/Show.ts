@@ -9,7 +9,7 @@
  * @since 3.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
 
 /**
@@ -61,7 +61,7 @@ export const struct = <A>(
   show: (a) => {
     let s = "{"
     for (const k in shows) {
-      if (_.has.call(shows, k)) {
+      if (internal.has.call(shows, k)) {
         s += ` ${k}: ${shows[k].show(a[k])},`
       }
     }

@@ -15,7 +15,7 @@
  */
 import { constant, flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
@@ -265,7 +265,7 @@ export const log: <A extends ReadonlyArray<unknown>>(...x: A) => Sync<void> = fr
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Sync<{}> = of(_.Do)
+export const Do: Sync<{}> = of(internal.Do)
 
 /**
  * @category do notation
@@ -319,7 +319,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Sync<readonly []> = of(_.empty)
+export const Zip: Sync<readonly []> = of(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -360,7 +360,7 @@ export const zipWith: <B, A, C>(that: Sync<B>, f: (a: A, b: B) => C) => (self: S
 export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(f: (index: number, a: A) => Sync<B>) =>
   (as: NonEmptyReadonlyArray<A>): Sync<NonEmptyReadonlyArray<B>> =>
     () => {
-      const out: _.NonEmptyArray<B> = [f(0, _.head(as))()]
+      const out: internal.NonEmptyArray<B> = [f(0, internal.head(as))()]
       for (let i = 1; i < as.length; i++) {
         out.push(f(i, as[i])())
       }
@@ -377,7 +377,7 @@ export const traverseReadonlyArrayWithIndex = <A, B>(
   f: (index: number, a: A) => Sync<B>
 ): ((as: ReadonlyArray<A>) => Sync<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

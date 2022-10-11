@@ -3,7 +3,7 @@
  */
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import * as reader from "@fp-ts/core/Reader"
 import * as sync from "@fp-ts/core/Sync"
@@ -372,7 +372,7 @@ export const flatMapReader: <A, R2, B>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: ReaderSync<unknown, {}> = of(_.Do)
+export const Do: ReaderSync<unknown, {}> = of(internal.Do)
 
 /**
  * @category do notation
@@ -435,7 +435,7 @@ export const bindRight: <N extends string, A extends object, R2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: ReaderSync<unknown, readonly []> = of(_.empty)
+export const Zip: ReaderSync<unknown, readonly []> = of(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -496,7 +496,7 @@ export const traverseReadonlyArrayWithIndex = <A, R, B>(
   f: (index: number, a: A) => ReaderSync<R, B>
 ): ((as: ReadonlyArray<A>) => ReaderSync<R, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

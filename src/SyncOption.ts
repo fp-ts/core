@@ -9,7 +9,7 @@
 import type { LazyArg } from "@fp-ts/core/Function"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import * as option from "@fp-ts/core/Option"
 import type { Option } from "@fp-ts/core/Option"
@@ -91,7 +91,7 @@ export const fromSync: <A>(ma: Sync<A>) => SyncOption<A> = optionT.fromKind(sync
  * @since 3.0.0
  */
 export const fromSyncResult: <A>(ma: SyncResult<unknown, A>) => SyncOption<A> = sync.map(
-  _.getSuccess
+  internal.getSuccess
 )
 
 // -------------------------------------------------------------------------------------
@@ -579,7 +579,7 @@ export const flatMapResult: <A, E, B>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: SyncOption<{}> = some(_.Do)
+export const Do: SyncOption<{}> = some(internal.Do)
 
 /**
  * @category do notation
@@ -642,7 +642,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: SyncOption<readonly []> = some(_.empty)
+export const Zip: SyncOption<readonly []> = some(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -700,7 +700,7 @@ export const traverseReadonlyArrayWithIndex = <A, B>(
   f: (index: number, a: A) => SyncOption<B>
 ): ((as: ReadonlyArray<A>) => SyncOption<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

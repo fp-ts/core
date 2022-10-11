@@ -16,7 +16,7 @@
  * @since 3.0.0
  */
 import { identity } from "@fp-ts/core/Function"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Ord } from "@fp-ts/core/typeclasses/Ord"
 import * as ord from "@fp-ts/core/typeclasses/Ord"
 
@@ -121,7 +121,7 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
     (self) => {
       const r: A = {} as any
       for (const k in semigroups) {
-        if (_.has.call(semigroups, k)) {
+        if (internal.has.call(semigroups, k)) {
           r[k] = semigroups[k].combine(that[k])(self[k])
         }
       }

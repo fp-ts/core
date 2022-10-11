@@ -7,7 +7,7 @@ import type { AsyncResult } from "@fp-ts/core/AsyncResult"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import * as option from "@fp-ts/core/Option"
 import type { Option } from "@fp-ts/core/Option"
@@ -143,9 +143,9 @@ export const getOrElseAsync: <B>(onNone: Async<B>) => <A>(self: AsyncOption<A>) 
 export const fromRejectable = <A>(f: LazyArg<Promise<A>>): AsyncOption<A> =>
   async () => {
     try {
-      return await f().then(_.some)
+      return await f().then(internal.some)
     } catch (reason) {
-      return _.none
+      return internal.none
     }
   }
 
@@ -657,7 +657,7 @@ export const partition: {
  * @category do notation
  * @since 3.0.0
  */
-export const Do: AsyncOption<{}> = some(_.Do)
+export const Do: AsyncOption<{}> = some(internal.Do)
 
 /**
  * @category do notation
@@ -720,7 +720,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: AsyncOption<readonly []> = some(_.empty)
+export const Zip: AsyncOption<readonly []> = some(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -782,7 +782,7 @@ export const traverseReadonlyArrayWithIndexPar = <A, B>(
   f: (index: number, a: A) => AsyncOption<B>
 ): ((as: ReadonlyArray<A>) => AsyncOption<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndexPar(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**
@@ -832,20 +832,20 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(
 ) =>
   (as: NonEmptyReadonlyArray<A>): AsyncOption<NonEmptyReadonlyArray<B>> =>
     () =>
-      _.tail(as).reduce<Promise<Option<_.NonEmptyArray<B>>>>(
+      internal.tail(as).reduce<Promise<Option<internal.NonEmptyArray<B>>>>(
         (acc, a, i) =>
           acc.then((obs) =>
-            _.isNone(obs)
+            internal.isNone(obs)
               ? acc
               : f(i + 1, a)().then((ob) => {
-                if (_.isNone(ob)) {
+                if (internal.isNone(ob)) {
                   return ob
                 }
                 obs.value.push(ob.value)
                 return obs
               })
           ),
-        f(0, _.head(as))().then(option.map(_.toNonEmptyArray))
+        f(0, internal.head(as))().then(option.map(internal.toNonEmptyArray))
       )
 
 /**
@@ -858,7 +858,7 @@ export const traverseReadonlyArrayWithIndex = <A, B>(
   f: (index: number, a: A) => AsyncOption<B>
 ): ((as: ReadonlyArray<A>) => AsyncOption<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

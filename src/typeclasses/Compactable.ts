@@ -5,7 +5,7 @@
  */
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import type { Result } from "@fp-ts/core/Result"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"
@@ -26,8 +26,8 @@ export const separate = <F extends TypeLambda>(Functor: Functor<F>, Compactable:
     self: Kind<F, S, R, O, E, Result<A, B>>
   ): readonly [Kind<F, S, R, O, E, A>, Kind<F, S, R, O, E, B>] => {
     return [
-      pipe(self, Functor.map(_.getFailure), Compactable.compact),
-      pipe(self, Functor.map(_.getSuccess), Compactable.compact)
+      pipe(self, Functor.map(internal.getFailure), Compactable.compact),
+      pipe(self, Functor.map(internal.getSuccess), Compactable.compact)
     ]
   }
 

@@ -7,7 +7,7 @@
  */
 import { flow, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
@@ -351,7 +351,7 @@ export const firstSuccessOf: <A>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Identity<{}> = of(_.Do)
+export const Do: Identity<{}> = of(internal.Do)
 
 /**
  * @category do notation
@@ -406,7 +406,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Identity<readonly []> = of(_.empty)
+export const Zip: Identity<readonly []> = of(internal.empty)
 
 /**
  * @category tuple sequencing
