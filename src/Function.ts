@@ -77,9 +77,9 @@ export const Category: category.Category<FunctionTypeLambda> = {
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <S>(S: Semigroup<S>) =>
+export const getSemigroup = <S>(Semigroup: Semigroup<S>) =>
   <A>(): Semigroup<(a: A) => S> => ({
-    combine: (that) => (self) => (a) => S.combine(that(a))(self(a))
+    combine: (that) => (self) => (a) => Semigroup.combine(that(a))(self(a))
   })
 
 /**
@@ -106,13 +106,11 @@ export const getSemigroup = <S>(S: Semigroup<S>) =>
  * @category instances
  * @since 3.0.0
  */
-export const getMonoid = <M>(M: Monoid<M>): (<A>() => Monoid<(a: A) => M>) => {
-  const getSemigroupM = getSemigroup(M)
-  return <A>() => ({
-    combine: getSemigroupM<A>().combine,
-    empty: () => M.empty
+export const getMonoid = <M>(Monoid: Monoid<M>) =>
+  <A>(): Monoid<(a: A) => M> => ({
+    combine: getSemigroup(Monoid)<A>().combine,
+    empty: () => Monoid.empty
   })
-}
 
 /**
  * @since 3.0.0

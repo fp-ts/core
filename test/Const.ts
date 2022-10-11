@@ -59,8 +59,8 @@ describe("Const", () => {
     U.deepStrictEqual(B.bottom, _.make(-Infinity))
   })
 
-  it("getSemigroup", () => {
-    const S = _.getSemigroup(string.Semigroup)
+  it("liftSemigroup", () => {
+    const S = _.liftSemigroup(string.Semigroup)
     U.deepStrictEqual(S.combine(_.make("b"))(_.make("a")), _.make("ab"))
   })
 

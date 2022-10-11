@@ -128,8 +128,8 @@ export const getShow = <S>(S: Show<S>): Show<Const<S, never>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <S>(S: Semigroup<S>): Semigroup<Const<S, never>> => ({
-  combine: (that) => (self) => make(S.combine(that.value)(self.value))
+export const liftSemigroup = <S>(Semigroup: Semigroup<S>): Semigroup<Const<S, never>> => ({
+  combine: (that) => (self) => make(Semigroup.combine(that.value)(self.value))
 })
 
 /**
@@ -137,7 +137,7 @@ export const getSemigroup = <S>(S: Semigroup<S>): Semigroup<Const<S, never>> => 
  * @since 3.0.0
  */
 export const getMonoid = <S>(M: Monoid<S>): Monoid<Const<S, never>> => ({
-  combine: getSemigroup(M).combine,
+  combine: liftSemigroup(M).combine,
   empty: make(M.empty)
 })
 

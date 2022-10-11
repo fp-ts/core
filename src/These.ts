@@ -276,26 +276,32 @@ export const getEq = <E, A>(EE: Eq<E>, EA: Eq<A>): Eq<These<E, A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <E, A>(SE: Semigroup<E>, SA: Semigroup<A>): Semigroup<These<E, A>> => ({
+export const getSemigroup = <E, A>(
+  SemigroupE: Semigroup<E>,
+  SemigroupA: Semigroup<A>
+): Semigroup<These<E, A>> => ({
   combine: (that) =>
     (self) =>
       isFailure(self)
         ? isFailure(that)
-          ? fail(SE.combine(that.failure)(self.failure))
+          ? fail(SemigroupE.combine(that.failure)(self.failure))
           : isSuccess(that)
           ? both(self.failure, that.success)
-          : both(SE.combine(that.failure)(self.failure), that.success)
+          : both(SemigroupE.combine(that.failure)(self.failure), that.success)
         : isSuccess(self)
         ? isFailure(that)
           ? both(that.failure, self.success)
           : isSuccess(that)
-          ? succeed(SA.combine(that.success)(self.success))
-          : both(that.failure, SA.combine(that.success)(self.success))
+          ? succeed(SemigroupA.combine(that.success)(self.success))
+          : both(that.failure, SemigroupA.combine(that.success)(self.success))
         : isFailure(that)
-        ? both(SE.combine(that.failure)(self.failure), self.success)
+        ? both(SemigroupE.combine(that.failure)(self.failure), self.success)
         : isSuccess(that)
-        ? both(self.failure, SA.combine(that.success)(self.success))
-        : both(SE.combine(that.failure)(self.failure), SA.combine(that.success)(self.success))
+        ? both(self.failure, SemigroupA.combine(that.success)(self.success))
+        : both(
+          SemigroupE.combine(that.failure)(self.failure),
+          SemigroupA.combine(that.success)(self.success)
+        )
 })
 
 /**
