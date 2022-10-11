@@ -1,5 +1,5 @@
 import * as _ from '../../src/HKT'
-import * as T from '../../src/Async'
+import * as T from '../../src/data/Async'
 
 // issue #536
 function testIssue536<F extends _.TypeLambda, G extends _.TypeLambda, S, R, W, E, A>(

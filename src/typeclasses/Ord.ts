@@ -93,7 +93,7 @@ export const reverse = <A>(O: Ord<A>): Ord<A> =>
 /**
  * @example
  * import { contramap } from '@fp-ts/core/typeclasses/Ord'
- * import { sort } from '@fp-ts/core/ReadonlyArray'
+ * import { sort } from '@fp-ts/core/data/ReadonlyArray'
  * import * as S from '@fp-ts/core/string'
  * import { pipe } from '@fp-ts/core/Function'
  *
@@ -161,7 +161,7 @@ export const getSemigroup = <A>(): Semigroup<Ord<A>> => ({
  * - its `empty` value is an `Ord` that always considers compared elements equal
  *
  * @example
- * import { sort } from '@fp-ts/core/ReadonlyArray'
+ * import { sort } from '@fp-ts/core/data/ReadonlyArray'
  * import { contramap, reverse, getMonoid } from '@fp-ts/core/typeclasses/Ord'
  * import { pipe } from '@fp-ts/core/Function'
  * import { combineAll } from '@fp-ts/core/typeclasses/Monoid'

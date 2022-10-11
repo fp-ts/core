@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import * as internal from "@fp-ts/core/internal"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Refinement } from "@fp-ts/core/Refinement"
 import type * as eq from "@fp-ts/core/typeclasses/Eq"
 import * as monoid from "@fp-ts/core/typeclasses/Monoid"

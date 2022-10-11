@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Ord.ts
-nav_order: 70
+nav_order: 71
 parent: Modules
 ---
 
@@ -62,7 +62,7 @@ export declare const contramap: <B, A>(f: (b: B) => A) => (fa: Ord<A>) => Ord<B>
 
 ```ts
 import { contramap } from '@fp-ts/core/typeclasses/Ord'
-import { sort } from '@fp-ts/core/ReadonlyArray'
+import { sort } from '@fp-ts/core/data/ReadonlyArray'
 import * as S from '@fp-ts/core/string'
 import { pipe } from '@fp-ts/core/Function'
 
@@ -129,7 +129,7 @@ export declare const getMonoid: <A>() => any
 **Example**
 
 ```ts
-import { sort } from '@fp-ts/core/ReadonlyArray'
+import { sort } from '@fp-ts/core/data/ReadonlyArray'
 import { contramap, reverse, getMonoid } from '@fp-ts/core/typeclasses/Ord'
 import { pipe } from '@fp-ts/core/Function'
 import { combineAll } from '@fp-ts/core/typeclasses/Monoid'

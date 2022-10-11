@@ -1,6 +1,6 @@
 ---
 title: Result.ts
-nav_order: 26
+nav_order: 35
 parent: Modules
 ---
 
@@ -1361,7 +1361,7 @@ export declare const traverse: <F extends any>(
 
 ```ts
 import { pipe } from '@fp-ts/core/Function'
-import * as RA from '@fp-ts/core/ReadonlyArray'
+import * as RA from '@fp-ts/core/data/ReadonlyArray'
 import * as E from '@fp-ts/core/Result'
 import * as O from '@fp-ts/core/Option'
 

@@ -1,5 +1,5 @@
 import * as _ from '../../src/Function'
-import * as A from '../../src/ReadonlyArray'
+import * as A from '../../src/data/ReadonlyArray'
 
 //
 // tupled
