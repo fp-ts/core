@@ -8,11 +8,7 @@ import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
 import * as monoid from "@fp-ts/core/typeclasses/Monoid"
 import type * as ord from "@fp-ts/core/typeclasses/Ord"
 import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
-import type * as show_ from "@fp-ts/core/typeclasses/Show"
-
-// -------------------------------------------------------------------------------------
-// refinements
-// -------------------------------------------------------------------------------------
+import type * as show from "@fp-ts/core/typeclasses/Show"
 
 /**
  * @category refinements
@@ -21,9 +17,15 @@ import type * as show_ from "@fp-ts/core/typeclasses/Show"
 export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean =>
   typeof u === "boolean"
 
-// -------------------------------------------------------------------------------------
-// pattern matching
-// -------------------------------------------------------------------------------------
+/**
+ * @since 3.0.0
+ */
+export const and = (that: boolean) => (self: boolean): boolean => self && that
+
+/**
+ * @since 3.0.0
+ */
+export const or = (that: boolean) => (self: boolean): boolean => self || that
 
 /**
  * Defines the match over a boolean value.
@@ -49,10 +51,6 @@ export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolea
 export const match = <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
   (value: boolean): A | B => value ? onTrue() : onFalse()
 
-// -------------------------------------------------------------------------------------
-// instances
-// -------------------------------------------------------------------------------------
-
 /**
  * @category instances
  * @since 3.0.0
@@ -60,47 +58,37 @@ export const match = <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
 export const Eq: eq.Eq<boolean> = eq.EqStrict
 
 /**
- * @since 3.0.0
- */
-export const and = (that: boolean) => (self: boolean): boolean => self && that
-
-/**
  * `boolean` semigroup under conjunction.
  *
  * @example
- * import { SemigroupAnd } from '@fp-ts/core/boolean'
+ * import { SemigroupAll } from '@fp-ts/core/boolean'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(true, SemigroupAnd.combine(true)), true)
- * assert.deepStrictEqual(pipe(true, SemigroupAnd.combine(false)), false)
+ * assert.deepStrictEqual(pipe(true, SemigroupAll.combine(true)), true)
+ * assert.deepStrictEqual(pipe(true, SemigroupAll.combine(false)), false)
  *
  * @category instances
  * @since 3.0.0
  */
-export const SemigroupAnd: Semigroup<boolean> = {
+export const SemigroupAll: Semigroup<boolean> = {
   combine: and
 }
-
-/**
- * @since 3.0.0
- */
-export const or = (that: boolean) => (self: boolean): boolean => self || that
 
 /**
  * `boolean` semigroup under disjunction.
  *
  * @example
- * import { SemigroupOr } from '@fp-ts/core/boolean'
+ * import { SemigroupAny } from '@fp-ts/core/boolean'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(true, SemigroupOr.combine(true)), true)
- * assert.deepStrictEqual(pipe(true, SemigroupOr.combine(false)), true)
- * assert.deepStrictEqual(pipe(false, SemigroupOr.combine(false)), false)
+ * assert.deepStrictEqual(pipe(true, SemigroupAny.combine(true)), true)
+ * assert.deepStrictEqual(pipe(true, SemigroupAny.combine(false)), true)
+ * assert.deepStrictEqual(pipe(false, SemigroupAny.combine(false)), false)
  *
  * @category instances
  * @since 3.0.0
  */
-export const SemigroupOr: Semigroup<boolean> = {
+export const SemigroupAny: Semigroup<boolean> = {
   combine: or
 }
 
@@ -112,15 +100,10 @@ export const SemigroupOr: Semigroup<boolean> = {
  * @category instances
  * @since 3.0.0
  */
-export const MonoidAnd: Monoid<boolean> = {
-  combine: SemigroupAnd.combine,
+export const MonoidAll: Monoid<boolean> = {
+  combine: SemigroupAll.combine,
   empty: true
 }
-
-/**
- * @since 3.0.0
- */
-export const andAll: (collection: Iterable<boolean>) => boolean = monoid.combineAll(MonoidAnd)
 
 /**
  * `boolean` monoid under disjunction.
@@ -130,15 +113,10 @@ export const andAll: (collection: Iterable<boolean>) => boolean = monoid.combine
  * @category instances
  * @since 3.0.0
  */
-export const MonoidOr: Monoid<boolean> = {
-  combine: SemigroupOr.combine,
+export const MonoidAny: Monoid<boolean> = {
+  combine: SemigroupAny.combine,
   empty: false
 }
-
-/**
- * @since 3.0.0
- */
-export const orAll: (collection: Iterable<boolean>) => boolean = monoid.combineAll(MonoidOr)
 
 /**
  * @category instances
@@ -152,6 +130,16 @@ export const Ord: ord.Ord<boolean> = {
  * @category instances
  * @since 3.0.0
  */
-export const Show: show_.Show<boolean> = {
-  show: (a) => JSON.stringify(a)
+export const Show: show.Show<boolean> = {
+  show: (b) => JSON.stringify(b)
 }
+
+/**
+ * @since 3.0.0
+ */
+export const all: (collection: Iterable<boolean>) => boolean = monoid.combineAll(MonoidAll)
+
+/**
+ * @since 3.0.0
+ */
+export const any: (collection: Iterable<boolean>) => boolean = monoid.combineAll(MonoidAny)
