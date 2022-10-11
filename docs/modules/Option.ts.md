@@ -80,9 +80,9 @@ Added in v3.0.0
   - [Traversable](#traversable)
   - [TraversableFilterable](#traversablefilterable)
   - [getMonoid](#getmonoid)
-  - [getShow](#getshow)
   - [liftEq](#lifteq)
   - [liftOrd](#liftord)
+  - [liftShow](#liftshow)
 - [interop](#interop)
   - [fromThrowable](#fromthrowable)
   - [liftThrowable](#liftthrowable)
@@ -769,7 +769,7 @@ combined using the provided `Semigroup`
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>(S: any) => any
+export declare const getMonoid: <A>(Semigroup: any) => any
 ```
 
 **Example**
@@ -788,22 +788,12 @@ assert.deepStrictEqual(pipe(some(1), M.combine(some(2))), some(3))
 
 Added in v3.0.0
 
-## getShow
-
-**Signature**
-
-```ts
-export declare const getShow: <A>(S: any) => any
-```
-
-Added in v3.0.0
-
 ## liftEq
 
 **Signature**
 
 ```ts
-export declare const liftEq: <A>(E: any) => any
+export declare const liftEq: <A>(Eq: any) => any
 ```
 
 **Example**
@@ -849,6 +839,16 @@ assert.strictEqual(pipe(none, O.compare(some(1))), -1)
 assert.strictEqual(pipe(some(1), O.compare(none)), 1)
 assert.strictEqual(pipe(some(1), O.compare(some(2))), -1)
 assert.strictEqual(pipe(some(1), O.compare(some(1))), 0)
+```
+
+Added in v3.0.0
+
+## liftShow
+
+**Signature**
+
+```ts
+export declare const liftShow: <A>(Show: any) => any
 ```
 
 Added in v3.0.0

@@ -418,11 +418,11 @@ describe("Result", () => {
   })
 
   it("getSemigroup", () => {
-    const S = _.getSemigroup(N.SemigroupSum)
-    U.deepStrictEqual(pipe(_.fail("a"), S.combine(_.fail("b"))), _.fail("a"))
-    U.deepStrictEqual(pipe(_.fail("a"), S.combine(_.succeed(2))), _.succeed(2))
-    U.deepStrictEqual(pipe(_.succeed(1), S.combine(_.fail("b"))), _.succeed(1))
-    U.deepStrictEqual(pipe(_.succeed(1), S.combine(_.succeed(2))), _.succeed(3))
+    const Semigroup = _.getSemigroup(N.SemigroupSum)<string>()
+    U.deepStrictEqual(pipe(_.fail("a"), Semigroup.combine(_.fail("b"))), _.fail("a"))
+    U.deepStrictEqual(pipe(_.fail("a"), Semigroup.combine(_.succeed(2))), _.succeed(2))
+    U.deepStrictEqual(pipe(_.succeed(1), Semigroup.combine(_.fail("b"))), _.succeed(1))
+    U.deepStrictEqual(pipe(_.succeed(1), Semigroup.combine(_.succeed(2))), _.succeed(3))
   })
 
   describe("getShow", () => {

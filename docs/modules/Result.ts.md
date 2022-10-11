@@ -900,7 +900,7 @@ combined using the provided `Semigroup`.
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A, E>(S: any) => any
+export declare const getSemigroup: <A>(Semigroup: any) => <E>() => any
 ```
 
 **Example**
@@ -910,7 +910,7 @@ import * as E from '@fp-ts/core/Result'
 import * as N from '@fp-ts/core/number'
 import { pipe } from '@fp-ts/core/Function'
 
-const S = E.getSemigroup<number, string>(N.SemigroupSum)
+const S = E.getSemigroup(N.SemigroupSum)<string>()
 assert.deepStrictEqual(pipe(E.fail('a'), S.combine(E.fail('b'))), E.fail('a'))
 assert.deepStrictEqual(pipe(E.fail('a'), S.combine(E.succeed(2))), E.succeed(2))
 assert.deepStrictEqual(pipe(E.succeed(1), S.combine(E.fail('b'))), E.succeed(1))
@@ -924,7 +924,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getShow: <E, A>(SE: any, SA: any) => any
+export declare const getShow: <E, A>(ShowE: any, ShowA: any) => any
 ```
 
 Added in v3.0.0

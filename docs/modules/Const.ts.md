@@ -26,13 +26,13 @@ Added in v3.0.0
   - [Functor](#functor)
   - [getApplicative](#getapplicative)
   - [getApply](#getapply)
-  - [getBounded](#getbounded)
   - [getFromIdentity](#getfromidentity)
-  - [getMonoid](#getmonoid)
-  - [getSemigroup](#getsemigroup)
-  - [getShow](#getshow)
+  - [liftBounded](#liftbounded)
   - [liftEq](#lifteq)
+  - [liftMonoid](#liftmonoid)
   - [liftOrd](#liftord)
+  - [liftSemigroup](#liftsemigroup)
+  - [liftShow](#liftshow)
 - [mapping](#mapping)
   - [contramap](#contramap)
   - [flap](#flap)
@@ -115,16 +115,6 @@ export declare const getApply: <S>(Semigroup: any) => any
 
 Added in v3.0.0
 
-## getBounded
-
-**Signature**
-
-```ts
-export declare const getBounded: <S>(B: any) => any
-```
-
-Added in v3.0.0
-
 ## getFromIdentity
 
 **Signature**
@@ -135,32 +125,12 @@ export declare const getFromIdentity: <S>(Monoid: any) => any
 
 Added in v3.0.0
 
-## getMonoid
+## liftBounded
 
 **Signature**
 
 ```ts
-export declare const getMonoid: <S>(M: any) => any
-```
-
-Added in v3.0.0
-
-## getSemigroup
-
-**Signature**
-
-```ts
-export declare const getSemigroup: <S>(S: any) => any
-```
-
-Added in v3.0.0
-
-## getShow
-
-**Signature**
-
-```ts
-export declare const getShow: <S>(S: any) => any
+export declare const liftBounded: <S>(Bounded: any) => any
 ```
 
 Added in v3.0.0
@@ -175,12 +145,42 @@ export declare const liftEq: <S>(E: any) => any
 
 Added in v3.0.0
 
+## liftMonoid
+
+**Signature**
+
+```ts
+export declare const liftMonoid: <S>(Monoid: any) => any
+```
+
+Added in v3.0.0
+
 ## liftOrd
 
 **Signature**
 
 ```ts
 export declare const liftOrd: <S>(O: any) => any
+```
+
+Added in v3.0.0
+
+## liftSemigroup
+
+**Signature**
+
+```ts
+export declare const liftSemigroup: <S>(Semigroup: any) => any
+```
+
+Added in v3.0.0
+
+## liftShow
+
+**Signature**
+
+```ts
+export declare const liftShow: <S>(Show: any) => any
 ```
 
 Added in v3.0.0
