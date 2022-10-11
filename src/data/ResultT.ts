@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
+import * as compactable from "@fp-ts/core/data/Compactable"
 import { flow, pipe } from "@fp-ts/core/data/Function"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Result } from "@fp-ts/core/data/Result"
@@ -10,8 +10,8 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Apply } from "@fp-ts/core/typeclasses/Apply"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
 import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
-import * as compactable from "@fp-ts/core/typeclasses/Compactable"
 import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
+import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import type { Monad } from "@fp-ts/core/typeclasses/Monad"

@@ -3,14 +3,14 @@
  *
  * @since 3.0.0
  */
+import type { Compactable } from "@fp-ts/core/data/Compactable"
+import * as compactable from "@fp-ts/core/data/Compactable"
 import { flow, pipe } from "@fp-ts/core/data/Function"
 import * as internal from "@fp-ts/core/data/internal"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Result } from "@fp-ts/core/data/Result"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Applicative } from "@fp-ts/core/typeclasses/Applicative"
-import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
-import * as compactable from "@fp-ts/core/typeclasses/Compactable"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 import type { Traversable } from "@fp-ts/core/typeclasses/Traversable"
 

@@ -1,6 +1,6 @@
 ---
-title: typeclasses/TraversableFilterable.ts
-nav_order: 77
+title: data/TraversableFilterable.ts
+nav_order: 47
 parent: Modules
 ---
 

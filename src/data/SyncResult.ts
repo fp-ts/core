@@ -7,7 +7,8 @@
  *
  * @since 3.0.0
  */
-import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import type { Compactable } from "@fp-ts/core/data/Compactable"
+import type * as filterable from "@fp-ts/core/data/Filterable"
 import * as fromResult_ from "@fp-ts/core/data/FromResult"
 import * as fromSync_ from "@fp-ts/core/data/FromSync"
 import { flow, identity, SK } from "@fp-ts/core/data/Function"
@@ -26,9 +27,8 @@ import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
 import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
-import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
-import type * as filterable from "@fp-ts/core/typeclasses/Filterable"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
 import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"

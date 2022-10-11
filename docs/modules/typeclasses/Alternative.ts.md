@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Alternative.ts
-nav_order: 50
+nav_order: 53
 parent: Modules
 ---
 

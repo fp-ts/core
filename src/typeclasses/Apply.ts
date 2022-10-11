@@ -18,6 +18,8 @@ import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
 import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
+// OK
+
 /**
  * @category model
  * @since 3.0.0

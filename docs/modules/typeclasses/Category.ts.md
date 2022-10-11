@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Category.ts
-nav_order: 55
+nav_order: 58
 parent: Modules
 ---
 
