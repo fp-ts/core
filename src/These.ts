@@ -248,11 +248,11 @@ export const traverse: <F extends TypeLambda>(
  * @category instances
  * @since 3.0.0
  */
-export const getShow = <E, A>(SE: Show<E>, SA: Show<A>): Show<These<E, A>> => ({
+export const getShow = <E, A>(ShowE: Show<E>, ShowA: Show<A>): Show<These<E, A>> => ({
   show: match(
-    (l) => `fail(${SE.show(l)})`,
-    (a) => `succeed(${SA.show(a)})`,
-    (l, a) => `both(${SE.show(l)}, ${SA.show(a)})`
+    (e) => `fail(${ShowE.show(e)})`,
+    (a) => `succeed(${ShowA.show(a)})`,
+    (e, a) => `both(${ShowE.show(e)}, ${ShowA.show(a)})`
   )
 })
 

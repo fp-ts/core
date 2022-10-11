@@ -301,8 +301,8 @@ describe("NonEmptyReadonlyArray", () => {
     U.deepStrictEqual(_.unappend([1, 2, 3, 4]), [[1, 2, 3], 4])
   })
 
-  it("getShow", () => {
-    const Sh = _.getShow(S.Show)
+  it("liftShow", () => {
+    const Sh = _.liftShow(S.Show)
     U.deepStrictEqual(Sh.show(["a"]), `["a"]`)
     U.deepStrictEqual(Sh.show(["a", "b", "c"]), `["a", "b", "c"]`)
   })

@@ -1525,8 +1525,8 @@ export const unfold: <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>) => Reado
  * @category instances
  * @since 3.0.0
  */
-export const getShow = <A>(S: Show<A>): Show<ReadonlyArray<A>> => ({
-  show: (as) => `[${as.map(S.show).join(", ")}]`
+export const liftShow = <A>(Show: Show<A>): Show<ReadonlyArray<A>> => ({
+  show: (as) => `[${as.map(Show.show).join(", ")}]`
 })
 
 /**

@@ -77,8 +77,8 @@ describe("Const", () => {
     U.deepStrictEqual(pipe(fa, F.ap(_.make("b"))), _.make("ab"))
   })
 
-  it("getShow", () => {
-    const Sh = _.getShow(string.Show)
+  it("liftShow", () => {
+    const Sh = _.liftShow(string.Show)
     const x = _.make("a")
     U.deepStrictEqual(Sh.show(x), `make("a")`)
   })

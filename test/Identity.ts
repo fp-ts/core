@@ -94,8 +94,8 @@ describe("Identity", () => {
     U.deepStrictEqual(E.equals(2)(1), false)
   })
 
-  it("getShow", () => {
-    const Sh = _.getShow(S.Show)
+  it("liftShow", () => {
+    const Sh = _.liftShow(S.Show)
     U.deepStrictEqual(Sh.show("a"), `"a"`)
   })
 
