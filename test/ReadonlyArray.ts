@@ -355,8 +355,8 @@ describe("ReadonlyArray", () => {
     U.strictEqual(pipe(M.empty, M.combine(x)), x)
   })
 
-  it("getEq", () => {
-    const O = _.getEq(string.Eq)
+  it("liftEq", () => {
+    const O = _.liftEq(string.Eq)
     U.deepStrictEqual(O.equals([])([]), true)
     U.deepStrictEqual(O.equals(["a"])(["a"]), true)
     U.deepStrictEqual(O.equals(["a", "b"])(["a", "b"]), true)

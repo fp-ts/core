@@ -176,8 +176,8 @@ describe("NonEmptyReadonlyArray", () => {
     U.deepStrictEqual(pipe([1, 2], S.combine([3, 4])), [1, 2, 3, 4])
   })
 
-  it("getEq", () => {
-    const S = _.getEq(N.Eq)
+  it("liftEq", () => {
+    const S = _.liftEq(N.Eq)
     U.deepStrictEqual(S.equals([1])([1]), true)
     U.deepStrictEqual(S.equals([1])([1, 2]), false)
   })

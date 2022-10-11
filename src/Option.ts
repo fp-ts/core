@@ -616,10 +616,10 @@ export const getShow = <A>(S: Show<A>): Show<Option<A>> => ({
 
 /**
  * @example
- * import { none, some, getEq } from '@fp-ts/core/Option'
+ * import { none, some, liftEq } from '@fp-ts/core/Option'
  * import * as N from '@fp-ts/core/number'
  *
- * const E = getEq(N.Eq)
+ * const E = liftEq(N.Eq)
  * assert.strictEqual(E.equals(none)(none), true)
  * assert.strictEqual(E.equals(none)(some(1)), false)
  * assert.strictEqual(E.equals(some(1))(none), false)
@@ -629,7 +629,7 @@ export const getShow = <A>(S: Show<A>): Show<Option<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const getEq = <A>(E: Eq<A>): Eq<Option<A>> =>
+export const liftEq = <A>(E: Eq<A>): Eq<Option<A>> =>
   eq.fromEquals(
     (that) =>
       (self) =>

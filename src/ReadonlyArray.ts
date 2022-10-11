@@ -1598,9 +1598,9 @@ export const getMonoid = <A>(): Monoid<ReadonlyArray<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const getEq = <A>(E: Eq<A>): Eq<ReadonlyArray<A>> =>
+export const liftEq = <A>(Eq: Eq<A>): Eq<ReadonlyArray<A>> =>
   eq.fromEquals((that) =>
-    (self) => self.length === that.length && self.every((x, i) => E.equals(that[i])(x))
+    (self) => self.length === that.length && self.every((x, i) => Eq.equals(that[i])(x))
   )
 
 /**
