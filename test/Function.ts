@@ -120,8 +120,8 @@ describe("Function", () => {
   })
 
   it("getMonoid", () => {
-    const getPredicateMonoidAll = _.getMonoid(B.MonoidAnd)
-    const getPredicateMonoidAny = _.getMonoid(B.MonoidOr)
+    const getPredicateMonoidAll = _.getMonoid(B.MonoidAll)
+    const getPredicateMonoidAny = _.getMonoid(B.MonoidAny)
 
     const isLessThan10 = (n: number) => n <= 10
     const isEven = (n: number) => n % 2 === 0
