@@ -50,8 +50,8 @@ describe("Const", () => {
     U.deepStrictEqual(O.compare(_.make(2))(_.make(1)), -1)
   })
 
-  it("getBounded", () => {
-    const B = _.getBounded(number.Bounded)
+  it("liftBounded", () => {
+    const B = _.liftBounded(number.Bounded)
     U.deepStrictEqual(B.compare(_.make(1))(_.make(1)), 0)
     U.deepStrictEqual(B.compare(_.make(1))(_.make(2)), 1)
     U.deepStrictEqual(B.compare(_.make(2))(_.make(1)), -1)
