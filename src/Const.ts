@@ -136,9 +136,9 @@ export const liftSemigroup = <S>(Semigroup: Semigroup<S>): Semigroup<Const<S, ne
  * @category instances
  * @since 3.0.0
  */
-export const getMonoid = <S>(M: Monoid<S>): Monoid<Const<S, never>> => ({
-  combine: liftSemigroup(M).combine,
-  empty: make(M.empty)
+export const liftMonoid = <S>(Monoid: Monoid<S>): Monoid<Const<S, never>> => ({
+  combine: liftSemigroup(Monoid).combine,
+  empty: make(Monoid.empty)
 })
 
 /**

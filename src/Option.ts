@@ -688,9 +688,10 @@ export const liftOrd = <A>(O: Ord<A>): Ord<Option<A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getMonoid = <A>(S: Semigroup<A>): Monoid<Option<A>> => ({
+export const getMonoid = <A>(Semigroup: Semigroup<A>): Monoid<Option<A>> => ({
   combine: (that) =>
-    (self) => isNone(self) ? that : isNone(that) ? self : some(S.combine(that.value)(self.value)),
+    (self) =>
+      isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(that.value)(self.value)),
   empty: none
 })
 

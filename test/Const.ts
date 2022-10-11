@@ -64,8 +64,8 @@ describe("Const", () => {
     U.deepStrictEqual(S.combine(_.make("b"))(_.make("a")), _.make("ab"))
   })
 
-  it("getMonoid", () => {
-    const M = _.getMonoid(string.Monoid)
+  it("liftMonoid", () => {
+    const M = _.liftMonoid(string.Monoid)
     U.deepStrictEqual(M.combine(_.make("b"))(_.make("a")), _.make("ab"))
     U.deepStrictEqual(M.combine(M.empty)(_.make("a")), _.make("a"))
     U.deepStrictEqual(M.combine(_.make("b"))(M.empty), _.make("b"))
