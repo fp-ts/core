@@ -8,7 +8,7 @@ import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
 import { deepStrictEqual } from "../util"
 
 describe("Applicative", () => {
-  it("getApplicativeMonoid", async () => {
+  it("liftMonoid", async () => {
     const log: Array<string> = []
 
     const right = (s: string, millis: number): TE.AsyncResult<string, string> =>
@@ -29,18 +29,14 @@ describe("Applicative", () => {
           })
         )
       )
-    const M1: Monoid<TE.AsyncResult<string, string>> = _.getApplicativeMonoid(TE.Applicative)(
-      S.Monoid
-    )
+    const M1: Monoid<TE.AsyncResult<string, string>> = _.liftMonoid(TE.Applicative)(S.Monoid)
     deepStrictEqual(await pipe(right("a", 20), M1.combine(right("b", 10)))(), E.succeed("ab"))
     deepStrictEqual(log, ["a", "b"])
 
     deepStrictEqual(await pipe(right("c", 10), M1.combine(left("d", 20)))(), E.fail("d"))
     deepStrictEqual(log, ["a", "b", "c", "d"])
 
-    const M2: Monoid<TE.AsyncResult<string, string>> = _.getApplicativeMonoid(TE.Applicative)(
-      S.Monoid
-    )
+    const M2: Monoid<TE.AsyncResult<string, string>> = _.liftMonoid(TE.Applicative)(S.Monoid)
     deepStrictEqual(await pipe(right("e", 20), M2.combine(right("f", 10)))(), E.succeed("ef"))
     deepStrictEqual(log, ["a", "b", "c", "d", "e", "f"])
 

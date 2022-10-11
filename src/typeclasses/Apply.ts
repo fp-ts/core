@@ -151,7 +151,7 @@ export const zipFlatten = <F extends TypeLambda>(F: Apply<F>) =>
  *
  * @since 3.0.0
  */
-export const getApplySemigroup = <F extends TypeLambda>(Apply: Apply<F>) =>
+export const liftSemigroup = <F extends TypeLambda>(Apply: Apply<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> => {
     const f = semigroup.reverse(Semigroup).combine
     return {
