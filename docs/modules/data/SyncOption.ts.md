@@ -1,6 +1,6 @@
 ---
 title: data/SyncOption.ts
-nav_order: 20
+nav_order: 41
 parent: Modules
 ---
 

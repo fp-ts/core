@@ -1,6 +1,6 @@
 ---
 title: HKT.ts
-nav_order: 26
+nav_order: 47
 parent: Modules
 ---
 
@@ -15,7 +15,6 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [utils](#utils)
-  - [HKD (type alias)](#hkd-type-alias)
   - [Kind (type alias)](#kind-type-alias)
   - [TypeClass (interface)](#typeclass-interface)
   - [TypeLambda (interface)](#typelambda-interface)
@@ -23,16 +22,6 @@ Added in v3.0.0
 ---
 
 # utils
-
-## HKD (type alias)
-
-**Signature**
-
-```ts
-export type HKD<F extends TypeLambda, A> = Kind<F, <S>(_: S) => S, unknown, never, never, A>
-```
-
-Added in v3.0.0
 
 ## Kind (type alias)
 

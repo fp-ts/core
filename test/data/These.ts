@@ -1,10 +1,10 @@
+import { identity, pipe } from "@fp-ts/core/data/Function"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
+import * as N from "@fp-ts/core/data/number"
+import * as O from "@fp-ts/core/data/Option"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
+import * as S from "@fp-ts/core/data/string"
 import * as _ from "@fp-ts/core/data/These"
-import { identity, pipe } from "@fp-ts/core/Function"
-import * as N from "@fp-ts/core/number"
-import * as O from "@fp-ts/core/Option"
-import * as S from "@fp-ts/core/string"
 import * as U from "../util"
 
 describe("These", () => {

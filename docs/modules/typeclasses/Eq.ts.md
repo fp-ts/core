@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Eq.ts
-nav_order: 54
+nav_order: 60
 parent: Modules
 ---
 
@@ -172,9 +172,9 @@ export declare const tuple: <A extends readonly unknown[]>(
 
 ```ts
 import { tuple } from '@fp-ts/core/typeclasses/Eq'
-import * as S from '@fp-ts/core/string'
-import * as N from '@fp-ts/core/number'
-import * as B from '@fp-ts/core/boolean'
+import * as S from '@fp-ts/core/data/string'
+import * as N from '@fp-ts/core/data/number'
+import * as B from '@fp-ts/core/data/boolean'
 
 const E = tuple(S.Eq, N.Eq, B.Eq)
 assert.strictEqual(E.equals(['a', 1, true])(['a', 1, true]), true)

@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 27
+nav_order: 48
 parent: Modules
 ---
 
@@ -13,37 +13,18 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [data types](#data-types)
-  - [async](#async)
-  - [asyncOption](#asyncoption)
-  - [asyncResult](#asyncresult)
-  - [asyncThese](#asyncthese)
-  - [const](#const)
   - [endomorphism](#endomorphism)
-  - [identity](#identity)
-  - [nonEmptyReadonlyArray](#nonemptyreadonlyarray)
   - [option](#option)
   - [reader](#reader)
-  - [readerAsync](#readerasync)
-  - [readerAsyncResult](#readerasyncresult)
-  - [readerAsyncWriter](#readerasyncwriter)
-  - [readerResult](#readerresult)
-  - [readerSync](#readersync)
-  - [readonlyArray](#readonlyarray)
   - [refinement](#refinement)
   - [result](#result)
   - [state](#state)
-  - [stateReaderAsyncResult](#statereaderasyncresult)
-  - [sync](#sync)
-  - [syncOption](#syncoption)
-  - [syncResult](#syncresult)
-  - [these](#these)
   - [writer](#writer)
 - [monad transformers](#monad-transformers)
   - [optionT](#optiont)
   - [readerT](#readert)
   - [resultT](#resultt)
   - [stateT](#statet)
-  - [theseT](#theset)
   - [writerT](#writert)
 - [type classes](#type-classes)
   - [alt](#alt)
@@ -61,14 +42,11 @@ Added in v3.0.0
   - [extendable](#extendable)
   - [filterable](#filterable)
   - [flattenable](#flattenable)
-  - [fromAsync](#fromasync)
   - [fromIdentity](#fromidentity)
   - [fromOption](#fromoption)
   - [fromReader](#fromreader)
   - [fromResult](#fromresult)
   - [fromState](#fromstate)
-  - [fromSync](#fromsync)
-  - [fromThese](#fromthese)
   - [fromWriter](#fromwriter)
   - [functor](#functor)
   - [invariant](#invariant)
@@ -95,82 +73,12 @@ Added in v3.0.0
 
 # data types
 
-## async
-
-**Signature**
-
-```ts
-export declare const async: any
-```
-
-Added in v3.0.0
-
-## asyncOption
-
-**Signature**
-
-```ts
-export declare const asyncOption: any
-```
-
-Added in v3.0.0
-
-## asyncResult
-
-**Signature**
-
-```ts
-export declare const asyncResult: any
-```
-
-Added in v3.0.0
-
-## asyncThese
-
-**Signature**
-
-```ts
-export declare const asyncThese: any
-```
-
-Added in v3.0.0
-
-## const
-
-**Signature**
-
-```ts
-export declare const const: any
-```
-
-Added in v3.0.0
-
 ## endomorphism
 
 **Signature**
 
 ```ts
 export declare const endomorphism: any
-```
-
-Added in v3.0.0
-
-## identity
-
-**Signature**
-
-```ts
-export declare const identity: any
-```
-
-Added in v3.0.0
-
-## nonEmptyReadonlyArray
-
-**Signature**
-
-```ts
-export declare const nonEmptyReadonlyArray: any
 ```
 
 Added in v3.0.0
@@ -191,66 +99,6 @@ Added in v3.0.0
 
 ```ts
 export declare const reader: any
-```
-
-Added in v3.0.0
-
-## readerAsync
-
-**Signature**
-
-```ts
-export declare const readerAsync: any
-```
-
-Added in v3.0.0
-
-## readerAsyncResult
-
-**Signature**
-
-```ts
-export declare const readerAsyncResult: any
-```
-
-Added in v3.0.0
-
-## readerAsyncWriter
-
-**Signature**
-
-```ts
-export declare const readerAsyncWriter: any
-```
-
-Added in v3.0.0
-
-## readerResult
-
-**Signature**
-
-```ts
-export declare const readerResult: any
-```
-
-Added in v3.0.0
-
-## readerSync
-
-**Signature**
-
-```ts
-export declare const readerSync: any
-```
-
-Added in v3.0.0
-
-## readonlyArray
-
-**Signature**
-
-```ts
-export declare const readonlyArray: any
 ```
 
 Added in v3.0.0
@@ -281,56 +129,6 @@ Added in v3.0.0
 
 ```ts
 export declare const state: any
-```
-
-Added in v3.0.0
-
-## stateReaderAsyncResult
-
-**Signature**
-
-```ts
-export declare const stateReaderAsyncResult: any
-```
-
-Added in v3.0.0
-
-## sync
-
-**Signature**
-
-```ts
-export declare const sync: any
-```
-
-Added in v3.0.0
-
-## syncOption
-
-**Signature**
-
-```ts
-export declare const syncOption: any
-```
-
-Added in v3.0.0
-
-## syncResult
-
-**Signature**
-
-```ts
-export declare const syncResult: any
-```
-
-Added in v3.0.0
-
-## these
-
-**Signature**
-
-```ts
-export declare const these: any
 ```
 
 Added in v3.0.0
@@ -383,16 +181,6 @@ Added in v3.0.0
 
 ```ts
 export declare const stateT: any
-```
-
-Added in v3.0.0
-
-## theseT
-
-**Signature**
-
-```ts
-export declare const theseT: any
 ```
 
 Added in v3.0.0
@@ -559,16 +347,6 @@ export declare const flattenable: any
 
 Added in v3.0.0
 
-## fromAsync
-
-**Signature**
-
-```ts
-export declare const fromAsync: any
-```
-
-Added in v3.0.0
-
 ## fromIdentity
 
 **Signature**
@@ -615,26 +393,6 @@ Added in v3.0.0
 
 ```ts
 export declare const fromState: any
-```
-
-Added in v3.0.0
-
-## fromSync
-
-**Signature**
-
-```ts
-export declare const fromSync: any
-```
-
-Added in v3.0.0
-
-## fromThese
-
-**Signature**
-
-```ts
-export declare const fromThese: any
 ```
 
 Added in v3.0.0

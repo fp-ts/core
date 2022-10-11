@@ -1,7 +1,7 @@
-import * as B from "@fp-ts/core/boolean"
-import { pipe } from "@fp-ts/core/Function"
-import * as N from "@fp-ts/core/number"
-import * as S from "@fp-ts/core/string"
+import * as B from "@fp-ts/core/data/boolean"
+import { pipe } from "@fp-ts/core/data/Function"
+import * as N from "@fp-ts/core/data/number"
+import * as S from "@fp-ts/core/data/string"
 import * as _ from "@fp-ts/core/typeclasses/Monoid"
 import * as U from "../util"
 

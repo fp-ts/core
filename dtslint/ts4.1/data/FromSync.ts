@@ -1,4 +1,4 @@
-import { pipe } from '../../../src/Function'
+import { pipe } from '../../../src/data/Function'
 import * as AR from '../../../src/data/AsyncResult'
 
 // $ExpectType AsyncResult<never, string>

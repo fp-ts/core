@@ -15,7 +15,7 @@
  *
  * @since 3.0.0
  */
-import * as internal from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/data/internal"
 import type { Bounded } from "@fp-ts/core/typeclasses/Bounded"
 import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
@@ -35,8 +35,8 @@ export interface Monoid<A> extends Semigroup<A> {
  *
  * @example
  * import { min } from '@fp-ts/core/typeclasses/Monoid'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const M = min(N.Bounded)
  *
@@ -57,8 +57,8 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  *
  * @example
  * import { max } from '@fp-ts/core/typeclasses/Monoid'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const M = max(N.Bounded)
  *
@@ -77,8 +77,8 @@ export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  *
  * @example
  * import { reverse } from '@fp-ts/core/typeclasses/Monoid'
- * import * as S from '@fp-ts/core/string'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as S from '@fp-ts/core/data/string'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const M = reverse(S.Monoid)
  * assert.deepStrictEqual(pipe('a', M.combine('b')), 'ba')
@@ -95,8 +95,8 @@ export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> => ({
  *
  * @example
  * import { struct } from '@fp-ts/core/typeclasses/Monoid'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * interface Point {
  *   readonly x: number
@@ -132,10 +132,10 @@ export const struct = <A>(
  *
  * @example
  * import { tuple } from '@fp-ts/core/typeclasses/Monoid'
- * import { pipe } from '@fp-ts/core/Function'
- * import * as B from '@fp-ts/core/boolean'
- * import * as N from '@fp-ts/core/number'
- * import * as S from '@fp-ts/core/string'
+ * import { pipe } from '@fp-ts/core/data/Function'
+ * import * as B from '@fp-ts/core/data/boolean'
+ * import * as N from '@fp-ts/core/data/number'
+ * import * as S from '@fp-ts/core/data/string'
  *
  * const M1 = tuple(S.Monoid, N.MonoidSum)
  * assert.deepStrictEqual(pipe(['a', 1], M1.combine(['b', 2])), ['ab', 3])
@@ -159,7 +159,7 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  *
  * @example
  * import { combineAll } from '@fp-ts/core/typeclasses/Monoid'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  *
  * assert.deepStrictEqual(combineAll(N.MonoidSum)([1, 2, 3]), 6)
  * assert.deepStrictEqual(combineAll(N.MonoidSum)([]), 0)

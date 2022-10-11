@@ -6,7 +6,7 @@
 import type { Async } from "@fp-ts/core/data/Async"
 import * as async from "@fp-ts/core/data/Async"
 import type { FromSync } from "@fp-ts/core/data/FromSync"
-import { pipe } from "@fp-ts/core/Function"
+import { pipe } from "@fp-ts/core/data/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
 

@@ -1,7 +1,7 @@
 import * as _ from '../../../src/data/ReaderResult'
-import * as R from '../../../src/Reader'
-import * as E from '../../../src/Result'
-import { pipe } from '../../../src/Function'
+import * as R from '../../../src/data/Reader'
+import * as E from '../../../src/data/Result'
+import { pipe } from '../../../src/data/Function'
 
 // -------------------------------------------------------------------------------------
 // ap widening

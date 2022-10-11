@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Comonad.ts
-nav_order: 50
+nav_order: 56
 parent: Modules
 ---
 

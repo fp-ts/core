@@ -1,6 +1,6 @@
 ---
 title: data/ReaderSync.ts
-nav_order: 16
+nav_order: 30
 parent: Modules
 ---
 

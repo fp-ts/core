@@ -1,8 +1,8 @@
 import * as _ from '../../../src/typeclasses/Semigroup'
-import { pipe } from '../../../src/Function'
-import * as S from '../../../src/string'
-import * as N from '../../../src/number'
-import * as B from '../../../src/boolean'
+import { pipe } from '../../../src/data/Function'
+import * as S from '../../../src/data/string'
+import * as N from '../../../src/data/number'
+import * as B from '../../../src/data/boolean'
 
 //
 // struct

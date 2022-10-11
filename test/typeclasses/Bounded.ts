@@ -1,4 +1,4 @@
-import * as N from "@fp-ts/core/number"
+import * as N from "@fp-ts/core/data/number"
 import * as _ from "@fp-ts/core/typeclasses/Bounded"
 import * as U from "../util"
 

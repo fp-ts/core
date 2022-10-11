@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Monoid.ts
-nav_order: 70
+nav_order: 71
 parent: Modules
 ---
 
@@ -57,8 +57,8 @@ export declare const max: <A>(Bounded: any) => Monoid<A>
 
 ```ts
 import { max } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const M = max(N.Bounded)
 
@@ -83,8 +83,8 @@ export declare const min: <A>(Bounded: any) => Monoid<A>
 
 ```ts
 import { min } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const M = min(N.Bounded)
 
@@ -125,7 +125,7 @@ export declare const combineAll: <A>(Monoid: Monoid<A>) => (collection: Iterable
 
 ```ts
 import { combineAll } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/number'
+import * as N from '@fp-ts/core/data/number'
 
 assert.deepStrictEqual(combineAll(N.MonoidSum)([1, 2, 3]), 6)
 assert.deepStrictEqual(combineAll(N.MonoidSum)([]), 0)
@@ -147,8 +147,8 @@ export declare const reverse: <A>(Monoid: Monoid<A>) => Monoid<A>
 
 ```ts
 import { reverse } from '@fp-ts/core/typeclasses/Monoid'
-import * as S from '@fp-ts/core/string'
-import { pipe } from '@fp-ts/core/Function'
+import * as S from '@fp-ts/core/data/string'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const M = reverse(S.Monoid)
 assert.deepStrictEqual(pipe('a', M.combine('b')), 'ba')
@@ -170,8 +170,8 @@ export declare const struct: <A>(monoids: { [K in keyof A]: Monoid<A[K]> }) => M
 
 ```ts
 import { struct } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 interface Point {
   readonly x: number
@@ -204,10 +204,10 @@ export declare const tuple: <A extends readonly unknown[]>(
 
 ```ts
 import { tuple } from '@fp-ts/core/typeclasses/Monoid'
-import { pipe } from '@fp-ts/core/Function'
-import * as B from '@fp-ts/core/boolean'
-import * as N from '@fp-ts/core/number'
-import * as S from '@fp-ts/core/string'
+import { pipe } from '@fp-ts/core/data/Function'
+import * as B from '@fp-ts/core/data/boolean'
+import * as N from '@fp-ts/core/data/number'
+import * as S from '@fp-ts/core/data/string'
 
 const M1 = tuple(S.Monoid, N.MonoidSum)
 assert.deepStrictEqual(pipe(['a', 1], M1.combine(['b', 2])), ['ab', 3])

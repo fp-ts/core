@@ -1,6 +1,6 @@
 ---
 title: data/These.ts
-nav_order: 22
+nav_order: 43
 parent: Modules
 ---
 
@@ -140,7 +140,7 @@ export declare const failureOrBoth: <E>(e: E) => <A>(ma: any) => any
 
 ```ts
 import { failureOrBoth, fail, both } from '@fp-ts/core/data/These'
-import { none, some } from '@fp-ts/core/Option'
+import { none, some } from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(failureOrBoth('a')(none), fail('a'))
 assert.deepStrictEqual(failureOrBoth('a')(some(1)), both('a', 1))
@@ -162,7 +162,7 @@ export declare const fromOptions: <E, A>(fe: any, fa: any) => any
 
 ```ts
 import { fromOptions, fail, succeed, both } from '@fp-ts/core/data/These'
-import { none, some } from '@fp-ts/core/Option'
+import { none, some } from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(fromOptions(none, none), none)
 assert.deepStrictEqual(fromOptions(some('a'), none), some(fail('a')))
@@ -194,7 +194,7 @@ export declare const successOrBoth: <A>(a: A) => <E>(me: any) => any
 
 ```ts
 import { successOrBoth, succeed, both } from '@fp-ts/core/data/These'
-import { none, some } from '@fp-ts/core/Option'
+import { none, some } from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(successOrBoth(1)(none), succeed(1))
 assert.deepStrictEqual(successOrBoth(1)(some('a')), both('a', 1))
@@ -784,7 +784,7 @@ export declare const getFailure: <E, A>(self: any) => any
 
 ```ts
 import * as T from '@fp-ts/core/data/These'
-import * as O from '@fp-ts/core/Option'
+import * as O from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(T.getFailure(T.succeed(1)), O.none)
 assert.deepStrictEqual(T.getFailure(T.fail('err')), O.some('err'))
@@ -807,7 +807,7 @@ export declare const getFailureOnly: <E, A>(fa: any) => any
 
 ```ts
 import { getFailureOnly, fail, succeed, both } from '@fp-ts/core/data/These'
-import { none, some } from '@fp-ts/core/Option'
+import { none, some } from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(getFailureOnly(fail('a')), some('a'))
 assert.deepStrictEqual(getFailureOnly(succeed(1)), none)
@@ -830,7 +830,7 @@ export declare const getSuccess: <E, A>(self: any) => any
 
 ```ts
 import * as T from '@fp-ts/core/data/These'
-import * as O from '@fp-ts/core/Option'
+import * as O from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(T.getSuccess(T.succeed(1)), O.some(1))
 assert.deepStrictEqual(T.getSuccess(T.fail('err')), O.none)
@@ -853,7 +853,7 @@ export declare const getSuccessOnly: <E, A>(fa: any) => any
 
 ```ts
 import { getSuccessOnly, fail, succeed, both } from '@fp-ts/core/data/These'
-import { none, some } from '@fp-ts/core/Option'
+import { none, some } from '@fp-ts/core/data/Option'
 
 assert.deepStrictEqual(getSuccessOnly(fail('a')), none)
 assert.deepStrictEqual(getSuccessOnly(succeed(1)), some(1))

@@ -19,15 +19,16 @@
  *
  * @since 3.0.0
  */
+import * as fromResult_ from "@fp-ts/core/data/FromResult"
 import type * as fromThese_ from "@fp-ts/core/data/FromThese"
+import { flow, identity, pipe, SK } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
-import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
+import type { Option } from "@fp-ts/core/data/Option"
+import type { Predicate } from "@fp-ts/core/data/Predicate"
+import type { Refinement } from "@fp-ts/core/data/Refinement"
+import type { Failure, Result, Success, ValidatedT } from "@fp-ts/core/data/Result"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import type { Option } from "@fp-ts/core/Option"
-import type { Predicate } from "@fp-ts/core/Predicate"
-import type { Refinement } from "@fp-ts/core/Refinement"
-import type { Failure, Result, Success, ValidatedT } from "@fp-ts/core/Result"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import type { Apply } from "@fp-ts/core/typeclasses/Apply"
 import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
@@ -35,7 +36,6 @@ import type { Eq } from "@fp-ts/core/typeclasses/Eq"
 import * as eq from "@fp-ts/core/typeclasses/Eq"
 import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
 import type * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import type { Monad } from "@fp-ts/core/typeclasses/Monad"
 import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
@@ -96,7 +96,7 @@ export const both = <E, A>(failure: E, success: A): These<E, A> => ({
 /**
  * @example
  * import { failureOrBoth, fail, both } from '@fp-ts/core/data/These'
- * import { none, some } from '@fp-ts/core/Option'
+ * import { none, some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(failureOrBoth('a')(none), fail('a'))
  * assert.deepStrictEqual(failureOrBoth('a')(some(1)), both('a', 1))
@@ -110,7 +110,7 @@ export const failureOrBoth = <E>(e: E) =>
 /**
  * @example
  * import { successOrBoth, succeed, both } from '@fp-ts/core/data/These'
- * import { none, some } from '@fp-ts/core/Option'
+ * import { none, some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(successOrBoth(1)(none), succeed(1))
  * assert.deepStrictEqual(successOrBoth(1)(some('a')), both('a', 1))
@@ -126,7 +126,7 @@ export const successOrBoth = <A>(a: A) =>
  *
  * @example
  * import { fromOptions, fail, succeed, both } from '@fp-ts/core/data/These'
- * import { none, some } from '@fp-ts/core/Option'
+ * import { none, some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(fromOptions(none, none), none)
  * assert.deepStrictEqual(fromOptions(some('a'), none), some(fail('a')))
@@ -610,7 +610,7 @@ export const toTuple2 = <E, A>(e: E, a: A) =>
  *
  * @example
  * import * as T from '@fp-ts/core/data/These'
- * import * as O from '@fp-ts/core/Option'
+ * import * as O from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(T.getFailure(T.succeed(1)), O.none)
  * assert.deepStrictEqual(T.getFailure(T.fail('err')), O.some('err'))
@@ -627,7 +627,7 @@ export const getFailure = <E, A>(
  *
  * @example
  * import * as T from '@fp-ts/core/data/These'
- * import * as O from '@fp-ts/core/Option'
+ * import * as O from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(T.getSuccess(T.succeed(1)), O.some(1))
  * assert.deepStrictEqual(T.getSuccess(T.fail('err')), O.none)
@@ -644,7 +644,7 @@ export const getSuccess = <E, A>(
  *
  * @example
  * import { getFailureOnly, fail, succeed, both } from '@fp-ts/core/data/These'
- * import { none, some } from '@fp-ts/core/Option'
+ * import { none, some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(getFailureOnly(fail('a')), some('a'))
  * assert.deepStrictEqual(getFailureOnly(succeed(1)), none)
@@ -661,7 +661,7 @@ export const getFailureOnly = <E, A>(
  *
  * @example
  * import { getSuccessOnly, fail, succeed, both } from '@fp-ts/core/data/These'
- * import { none, some } from '@fp-ts/core/Option'
+ * import { none, some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(getSuccessOnly(fail('a')), none)
  * assert.deepStrictEqual(getSuccessOnly(succeed(1)), some(1))

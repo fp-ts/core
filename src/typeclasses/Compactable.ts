@@ -3,11 +3,11 @@
  *
  * @since 3.0.0
  */
-import { pipe } from "@fp-ts/core/Function"
+import { pipe } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
+import type { Option } from "@fp-ts/core/data/Option"
+import type { Result } from "@fp-ts/core/data/Result"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import type { Option } from "@fp-ts/core/Option"
-import type { Result } from "@fp-ts/core/Result"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 
 /**

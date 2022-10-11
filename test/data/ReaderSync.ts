@@ -1,9 +1,9 @@
+import { pipe } from "@fp-ts/core/data/Function"
+import * as R from "@fp-ts/core/data/Reader"
 import * as _ from "@fp-ts/core/data/ReaderSync"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
+import * as S from "@fp-ts/core/data/string"
 import * as I from "@fp-ts/core/data/Sync"
-import { pipe } from "@fp-ts/core/Function"
-import * as R from "@fp-ts/core/Reader"
-import * as S from "@fp-ts/core/string"
 import * as U from "../util"
 
 describe("ReaderSync", () => {

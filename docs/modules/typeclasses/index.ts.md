@@ -1,6 +1,6 @@
 ---
 title: typeclasses/index.ts
-nav_order: 65
+nav_order: 66
 parent: Modules
 ---
 
@@ -28,15 +28,7 @@ Added in v3.0.0
   - [extendable](#extendable)
   - [filterable](#filterable)
   - [flattenable](#flattenable)
-  - [fromAsync](#fromasync)
   - [fromIdentity](#fromidentity)
-  - [fromOption](#fromoption)
-  - [fromReader](#fromreader)
-  - [fromResult](#fromresult)
-  - [fromState](#fromstate)
-  - [fromSync](#fromsync)
-  - [fromThese](#fromthese)
-  - [fromWriter](#fromwriter)
   - [functor](#functor)
   - [invariant](#invariant)
   - [kleisliCategory](#kleislicategory)
@@ -205,92 +197,12 @@ export declare const flattenable: any
 
 Added in v3.0.0
 
-## fromAsync
-
-**Signature**
-
-```ts
-export declare const fromAsync: any
-```
-
-Added in v3.0.0
-
 ## fromIdentity
 
 **Signature**
 
 ```ts
 export declare const fromIdentity: any
-```
-
-Added in v3.0.0
-
-## fromOption
-
-**Signature**
-
-```ts
-export declare const fromOption: any
-```
-
-Added in v3.0.0
-
-## fromReader
-
-**Signature**
-
-```ts
-export declare const fromReader: any
-```
-
-Added in v3.0.0
-
-## fromResult
-
-**Signature**
-
-```ts
-export declare const fromResult: any
-```
-
-Added in v3.0.0
-
-## fromState
-
-**Signature**
-
-```ts
-export declare const fromState: any
-```
-
-Added in v3.0.0
-
-## fromSync
-
-**Signature**
-
-```ts
-export declare const fromSync: any
-```
-
-Added in v3.0.0
-
-## fromThese
-
-**Signature**
-
-```ts
-export declare const fromThese: any
-```
-
-Added in v3.0.0
-
-## fromWriter
-
-**Signature**
-
-```ts
-export declare const fromWriter: any
 ```
 
 Added in v3.0.0

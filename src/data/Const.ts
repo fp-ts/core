@@ -7,7 +7,7 @@
  *
  * @since 3.0.0
  */
-import { constant, unsafeCoerce } from "@fp-ts/core/Function"
+import { constant, unsafeCoerce } from "@fp-ts/core/data/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Applicative } from "@fp-ts/core/typeclasses/Applicative"
 import type { Apply } from "@fp-ts/core/typeclasses/Apply"

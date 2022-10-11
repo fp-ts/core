@@ -1,4 +1,4 @@
-import * as O from "@fp-ts/core/Option"
+import * as O from "@fp-ts/core/data/Option"
 import * as _ from "@fp-ts/core/typeclasses/Alt"
 import * as U from "../util"
 

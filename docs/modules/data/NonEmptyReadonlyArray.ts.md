@@ -1,6 +1,6 @@
 ---
 title: data/NonEmptyReadonlyArray.ts
-nav_order: 11
+nav_order: 20
 parent: Modules
 ---
 
@@ -166,7 +166,7 @@ export declare const makeBy: <A>(f: (i: number) => A) => (n: number) => readonly
 
 ```ts
 import { makeBy } from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const double = (n: number): number => n * 2
 assert.deepStrictEqual(pipe(5, makeBy(double)), [0, 2, 4, 6, 8])
@@ -220,7 +220,7 @@ export declare const replicate: <A>(a: A) => (n: number) => readonly [A, ...A[]]
 
 ```ts
 import { replicate } from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(3, replicate('a')), ['a', 'a', 'a'])
 ```
@@ -720,7 +720,7 @@ export declare const flatMap: <A, B>(
 
 ```ts
 import * as RNEA from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(
   pipe(
@@ -1016,7 +1016,7 @@ export declare const group: <B>(
 
 ```ts
 import { group } from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import * as N from '@fp-ts/core/number'
+import * as N from '@fp-ts/core/data/number'
 
 assert.deepStrictEqual(group(N.Eq)([1, 2, 1, 1]), [[1], [2], [1, 1]])
 ```
@@ -1103,7 +1103,7 @@ export declare const intercalate: <A>(S: any) => (middle: A) => (as: readonly [A
 **Example**
 
 ```ts
-import * as S from '@fp-ts/core/string'
+import * as S from '@fp-ts/core/data/string'
 import { intercalate } from '@fp-ts/core/data/NonEmptyReadonlyArray'
 
 assert.deepStrictEqual(intercalate(S.Semigroup)('-')(['a', 'b', 'c']), 'a-b-c')
@@ -1125,7 +1125,7 @@ export declare const intersperse: <A>(middle: A) => (as: readonly [A, ...A[]]) =
 
 ```ts
 import { intersperse } from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe([1, 2, 3, 4], intersperse(9)), [1, 9, 2, 9, 3, 9, 4])
 ```
@@ -1230,7 +1230,7 @@ export declare const orElse: <B>(
 
 ```ts
 import * as RNEA from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe([1, 2, 3] as const, RNEA.orElse([4, 5])), [1, 2, 3, 4, 5])
 ```
@@ -1251,7 +1251,7 @@ export declare const prependAll: <A>(middle: A) => (as: readonly [A, ...A[]]) =>
 
 ```ts
 import { prependAll } from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe([1, 2, 3, 4], prependAll(9)), [9, 1, 9, 2, 9, 3, 9, 4])
 ```
@@ -1319,9 +1319,9 @@ export declare const sortBy: <B>(
 ```ts
 import * as RNEA from '@fp-ts/core/data/NonEmptyReadonlyArray'
 import { contramap } from '@fp-ts/core/typeclasses/Ord'
-import * as S from '@fp-ts/core/string'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as S from '@fp-ts/core/data/string'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 interface Person {
   name: string
@@ -1397,7 +1397,7 @@ export declare const tap: <A>(
 
 ```ts
 import * as RA from '@fp-ts/core/data/ReadonlyArray'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(
   pipe(
@@ -1424,8 +1424,8 @@ export declare const union: <A>(E: any) => any
 
 ```ts
 import { union } from '@fp-ts/core/data/ReadonlyArray'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe([1, 2], union(N.Eq)([2, 3])), [1, 2, 3])
 ```
@@ -1446,7 +1446,7 @@ export declare const uniq: <A>(Eq: any) => (self: readonly [A, ...A[]]) => reado
 
 ```ts
 import { uniq } from '@fp-ts/core/data/NonEmptyReadonlyArray'
-import * as N from '@fp-ts/core/number'
+import * as N from '@fp-ts/core/data/number'
 
 assert.deepStrictEqual(uniq(N.Eq)([1, 2, 1]), [1, 2])
 ```

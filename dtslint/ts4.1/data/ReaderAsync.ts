@@ -1,5 +1,5 @@
 import * as _ from '../../../src/data/ReaderAsync'
-import { pipe } from '../../../src/Function'
+import { pipe } from '../../../src/data/Function'
 import * as RIO from '../../../src/data/ReaderSync'
 
 // -------------------------------------------------------------------------------------

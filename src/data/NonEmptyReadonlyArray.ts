@@ -12,11 +12,11 @@
  *
  * @since 3.0.0
  */
-import type { Endomorphism } from "@fp-ts/core/Endomorphism"
-import { flow, identity, pipe } from "@fp-ts/core/Function"
+import type { Endomorphism } from "@fp-ts/core/data/Endomorphism"
+import { flow, identity, pipe } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
+import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import type { Option } from "@fp-ts/core/Option"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
@@ -74,7 +74,7 @@ export const fromReadonlyArray = <A>(as: ReadonlyArray<A>): Option<NonEmptyReado
  *
  * @example
  * import { makeBy } from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const double = (n: number): number => n * 2
  * assert.deepStrictEqual(pipe(5, makeBy(double)), [0, 2, 4, 6, 8])
@@ -99,7 +99,7 @@ export const makeBy = <A>(f: (i: number) => A) =>
  *
  * @example
  * import { replicate } from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe(3, replicate('a')), ['a', 'a', 'a'])
  *
@@ -194,7 +194,7 @@ export function concat<B>(
  *
  * @example
  * import { uniq } from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  *
  * assert.deepStrictEqual(uniq(N.Eq)([1, 2, 1]), [1, 2])
  *
@@ -222,9 +222,9 @@ export const uniq = <A>(Eq: Eq<A>) =>
  * @example
  * import * as RNEA from '@fp-ts/core/data/NonEmptyReadonlyArray'
  * import { contramap } from '@fp-ts/core/typeclasses/Ord'
- * import * as S from '@fp-ts/core/string'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as S from '@fp-ts/core/data/string'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * interface Person {
  *   name: string
@@ -268,8 +268,8 @@ export const sortBy = <B>(
  *
  * @example
  * import { union } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2], union(N.Eq)([2, 3])), [1, 2, 3])
  *
@@ -342,7 +342,7 @@ export const updateLast = <A>(a: A): ((as: NonEmptyReadonlyArray<A>) => NonEmpty
  * Places an element in between members of a `NonEmptyReadonlyArray`, then folds the results using the provided `Semigroup`.
  *
  * @example
- * import * as S from '@fp-ts/core/string'
+ * import * as S from '@fp-ts/core/data/string'
  * import { intercalate } from '@fp-ts/core/data/NonEmptyReadonlyArray'
  *
  * assert.deepStrictEqual(intercalate(S.Semigroup)('-')(['a', 'b', 'c']), 'a-b-c')
@@ -367,7 +367,7 @@ export const reverse = <A>(as: NonEmptyReadonlyArray<A>): NonEmptyReadonlyArray<
  *
  * @example
  * import { group } from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  *
  * assert.deepStrictEqual(group(N.Eq)([1, 2, 1, 1]), [
  *   [1],
@@ -513,7 +513,7 @@ export const unzip = <A, B>(
  *
  * @example
  * import { prependAll } from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3, 4], prependAll(9)), [9, 1, 9, 2, 9, 3, 9, 4])
  *
@@ -533,7 +533,7 @@ export const prependAll = <A>(middle: A) =>
  *
  * @example
  * import { intersperse } from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3, 4], intersperse(9)), [1, 9, 2, 9, 3, 9, 4])
  *
@@ -609,7 +609,7 @@ export const chunksOf = (
  *
  * @example
  * import * as RNEA from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -653,7 +653,7 @@ export const FromIdentity: fromIdentity.FromIdentity<NonEmptyReadonlyArrayTypeLa
 /**
  * @example
  * import * as RNEA from '@fp-ts/core/data/NonEmptyReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -978,7 +978,7 @@ export const Monad: monad.Monad<NonEmptyReadonlyArrayTypeLambda> = {
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(

@@ -1,10 +1,10 @@
+import { flow, pipe } from "@fp-ts/core/data/Function"
+import * as O from "@fp-ts/core/data/Option"
+import * as R from "@fp-ts/core/data/Reader"
 import * as _ from "@fp-ts/core/data/ReaderResult"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
-import { flow, pipe } from "@fp-ts/core/Function"
-import * as O from "@fp-ts/core/Option"
-import * as R from "@fp-ts/core/Reader"
-import * as E from "@fp-ts/core/Result"
-import * as S from "@fp-ts/core/string"
+import * as E from "@fp-ts/core/data/Result"
+import * as S from "@fp-ts/core/data/string"
 import * as U from "../util"
 
 describe("ReaderResult", () => {
