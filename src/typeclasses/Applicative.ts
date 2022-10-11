@@ -34,10 +34,10 @@ export interface Applicative<F extends TypeLambda> extends Apply<F>, FromIdentit
  *
  * @since 3.0.0
  */
-export const getApplicativeMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
+export const liftMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> => {
     return {
-      combine: apply.getApplySemigroup(Applicative)<A, S, R, O, E>(Monoid).combine,
+      combine: apply.liftSemigroup(Applicative)<A, S, R, O, E>(Monoid).combine,
       empty: Applicative.of(Monoid.empty)
     }
   }
