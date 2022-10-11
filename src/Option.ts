@@ -629,11 +629,11 @@ export const getShow = <A>(S: Show<A>): Show<Option<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const liftEq = <A>(E: Eq<A>): Eq<Option<A>> =>
+export const liftEq = <A>(Eq: Eq<A>): Eq<Option<A>> =>
   eq.fromEquals(
     (that) =>
       (self) =>
-        isNone(self) ? isNone(that) : isNone(that) ? false : E.equals(that.value)(self.value)
+        isNone(self) ? isNone(that) : isNone(that) ? false : Eq.equals(that.value)(self.value)
   )
 
 /**
