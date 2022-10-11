@@ -42,4 +42,18 @@ describe("Predicate", () => {
     U.deepStrictEqual(predicate(-2), false)
     U.deepStrictEqual(predicate(1), true)
   })
+
+  it("any", () => {
+    const predicate = _.any([isPositive, isNegative])
+    U.deepStrictEqual(predicate(0), false)
+    U.deepStrictEqual(predicate(-1), true)
+    U.deepStrictEqual(predicate(1), true)
+  })
+
+  it("all", () => {
+    const predicate = _.all([isPositive, lt2])
+    U.deepStrictEqual(predicate(0), false)
+    U.deepStrictEqual(predicate(-2), false)
+    U.deepStrictEqual(predicate(1), true)
+  })
 })
