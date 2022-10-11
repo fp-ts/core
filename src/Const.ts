@@ -110,10 +110,10 @@ export const liftOrd: <S>(O: Ord<S>) => Ord<Const<S, never>> = ord.contramap(exe
  * @category instances
  * @since 3.0.0
  */
-export const getBounded = <S>(B: Bounded<S>): Bounded<Const<S, never>> => ({
-  compare: liftOrd(B).compare,
-  top: make(B.top),
-  bottom: make(B.bottom)
+export const liftBounded = <S>(Bounded: Bounded<S>): Bounded<Const<S, never>> => ({
+  compare: liftOrd(Bounded).compare,
+  top: make(Bounded.top),
+  bottom: make(Bounded.bottom)
 })
 
 /**
