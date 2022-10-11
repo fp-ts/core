@@ -443,14 +443,14 @@ export const getEq = <E, A>(EE: eq.Eq<E>, EA: eq.Eq<A>): eq.Eq<Result<E, A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A, E>(S: Semigroup<A>): Semigroup<Result<E, A>> => ({
+export const getSemigroup = <A>(Semigroup: Semigroup<A>): Semigroup<Result<never, A>> => ({
   combine: (that) =>
     (self) =>
       isFailure(that) ?
         self :
         isFailure(self) ?
         that :
-        succeed(S.combine(that.success)(self.success))
+        succeed(Semigroup.combine(that.success)(self.success))
 })
 
 /**
