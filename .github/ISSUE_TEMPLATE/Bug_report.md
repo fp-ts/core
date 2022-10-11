@@ -1,6 +1,6 @@
 ---
 name: "\U0001F41B Bug report"
-about: Create a report to help make fp-ts better
+about: Create a report to help make `@fp-ts/core` better
 ---
 
 ## 🐛 Bug report
@@ -17,7 +17,7 @@ about: Create a report to help make fp-ts better
 
 ### Suggested solution(s)
 
-<!-- How could we solve this bug? What changes would need to made to fp-ts? -->
+<!-- How could we solve this bug? What changes would need to made to `@fp-ts/core`? -->
 
 ### Additional context
 
@@ -25,11 +25,11 @@ about: Create a report to help make fp-ts better
 
 ### Your environment
 
-Which versions of fp-ts are affected by this issue? Did this work in previous versions of fp-ts?
+Which versions of `@fp-ts/core` are affected by this issue? Did this work in previous versions of `@fp-ts/core`?
 
 <!-- PLEASE FILL THIS OUT -->
 
-| Software   | Version(s) |
-| ---------- | ---------- |
-| fp-ts      |            |
-| TypeScript |            |
+| Software    | Version(s) |
+| ----------- | ---------- |
+| @fp-ts/core |            |
+| TypeScript  |            |
