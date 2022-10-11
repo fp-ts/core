@@ -31,7 +31,7 @@ Added in v3.0.0
 - [model](#model)
   - [Applicative (interface)](#applicative-interface)
 - [utils](#utils)
-  - [getApplicativeMonoid](#getapplicativemonoid)
+  - [liftMonoid](#liftmonoid)
 
 ---
 
@@ -49,16 +49,14 @@ Added in v3.0.0
 
 # utils
 
-## getApplicativeMonoid
+## liftMonoid
 
 Lift a monoid into 'F', the inner values are combined using the provided `Monoid`.
 
 **Signature**
 
 ```ts
-export declare const getApplicativeMonoid: <F extends any>(
-  Applicative: Applicative<F>
-) => <A, S, R, O, E>(Monoid: any) => any
+export declare const liftMonoid: <F extends any>(Applicative: Applicative<F>) => <A, S, R, O, E>(Monoid: any) => any
 ```
 
 Added in v3.0.0

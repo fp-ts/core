@@ -45,8 +45,8 @@ Added in v3.0.0
   - [KleisliComposable](#kleislicomposable)
   - [Monad](#monad)
   - [Traversable](#traversable)
-  - [getEq](#geteq)
   - [getShow](#getshow)
+  - [liftEq](#lifteq)
 - [lifting](#lifting)
   - [lift2](#lift2)
   - [lift3](#lift3)
@@ -337,22 +337,22 @@ export declare const Traversable: any
 
 Added in v3.0.0
 
-## getEq
-
-**Signature**
-
-```ts
-export declare const getEq: <A>(E: any) => any
-```
-
-Added in v3.0.0
-
 ## getShow
 
 **Signature**
 
 ```ts
 export declare const getShow: <A>(S: any) => any
+```
+
+Added in v3.0.0
+
+## liftEq
+
+**Signature**
+
+```ts
+export declare const liftEq: <A>(E: any) => any
 ```
 
 Added in v3.0.0

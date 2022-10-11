@@ -12,8 +12,6 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Bifunctor](#bifunctor)
-  - [mapLeft](#mapleft)
 - [constructors](#constructors)
   - [tell](#tell)
 - [conversions](#conversions)
@@ -22,10 +20,12 @@ Added in v3.0.0
   - [foldMap](#foldmap)
   - [reduce](#reduce)
   - [reduceRight](#reduceright)
+- [getters](#getters)
+  - [left](#left)
+  - [right](#right)
 - [instances](#instances)
-  - [Bifunctor](#bifunctor-1)
+  - [Bifunctor](#bifunctor)
   - [Comonad](#comonad)
-  - [Composable](#composable)
   - [Functor](#functor)
   - [Traversable](#traversable)
   - [getApplicative](#getapplicative)
@@ -48,46 +48,30 @@ Added in v3.0.0
   - [traverseReadonlyArray](#traversereadonlyarray)
   - [traverseReadonlyArrayWithIndex](#traversereadonlyarraywithindex)
 - [type lambdas](#type-lambdas)
-  - [WriterFComposable (interface)](#writerfcomposable-interface)
-  - [WriterFFix (interface)](#writerffix-interface)
   - [WriterTypeLambda (interface)](#writertypelambda-interface)
+  - [WriterTypeLambdaFix (interface)](#writertypelambdafix-interface)
 - [utils](#utils)
   - [censor](#censor)
-  - [compose](#compose)
   - [duplicate](#duplicate)
   - [extend](#extend)
-  - [extract](#extract)
-  - [left](#left)
   - [listen](#listen)
   - [listens](#listens)
+  - [mapLeft](#mapleft)
   - [pass](#pass)
   - [reverse](#reverse)
-  - [right](#right)
 
 ---
-
-# Bifunctor
-
-## mapLeft
-
-**Signature**
-
-```ts
-export declare const mapLeft: <W, X>(f: (w: W) => X) => <A>(self: Writer<W, A>) => Writer<X, A>
-```
-
-Added in v3.0.0
 
 # constructors
 
 ## tell
 
-Appends a value to the accumulator
+Appends a value to the accumulator.
 
 **Signature**
 
 ```ts
-export declare const tell: <W>(w: W) => Writer<W, void>
+export declare const tell: <E>(e: E) => Writer<E, void>
 ```
 
 Added in v3.0.0
@@ -99,7 +83,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const toReadonlyArray: <W, A>(self: Writer<W, A>) => readonly A[]
+export declare const toReadonlyArray: <E, A>(self: Writer<E, A>) => readonly A[]
 ```
 
 Added in v3.0.0
@@ -111,7 +95,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const foldMap: <M>(_: any) => <A>(f: (a: A) => M) => <W>(self: Writer<W, A>) => M
+export declare const foldMap: <M>(_: any) => <A>(f: (a: A) => M) => <E>(self: Writer<E, A>) => M
 ```
 
 Added in v3.0.0
@@ -121,7 +105,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const reduce: <B, A>(b: B, f: (b: B, a: A) => B) => <W>(self: Writer<W, A>) => B
+export declare const reduce: <B, A>(b: B, f: (b: B, a: A) => B) => <E>(self: Writer<E, A>) => B
 ```
 
 Added in v3.0.0
@@ -131,7 +115,29 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const reduceRight: <B, A>(b: B, f: (a: A, b: B) => B) => <W>(self: Writer<W, A>) => B
+export declare const reduceRight: <B, A>(b: B, f: (a: A, b: B) => B) => <E>(self: Writer<E, A>) => B
+```
+
+Added in v3.0.0
+
+# getters
+
+## left
+
+**Signature**
+
+```ts
+export declare const left: <E, A>(self: Writer<E, A>) => E
+```
+
+Added in v3.0.0
+
+## right
+
+**Signature**
+
+```ts
+export declare const right: <E, A>(self: Writer<E, A>) => A
 ```
 
 Added in v3.0.0
@@ -154,16 +160,6 @@ Added in v3.0.0
 
 ```ts
 export declare const Comonad: any
-```
-
-Added in v3.0.0
-
-## Composable
-
-**Signature**
-
-```ts
-export declare const Composable: any
 ```
 
 Added in v3.0.0
@@ -193,7 +189,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getApplicative: <W>(Monoid: any) => any
+export declare const getApplicative: <E>(Monoid: any) => any
 ```
 
 Added in v3.0.0
@@ -203,7 +199,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getApply: <W>(Semigroup: any) => any
+export declare const getApply: <E>(Semigroup: any) => any
 ```
 
 Added in v3.0.0
@@ -213,7 +209,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getFlattenable: <W>(S: any) => any
+export declare const getFlattenable: <E>(S: any) => any
 ```
 
 Added in v3.0.0
@@ -223,7 +219,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getFromIdentity: <W>(M: any) => any
+export declare const getFromIdentity: <E>(Monoid: any) => any
 ```
 
 Added in v3.0.0
@@ -233,7 +229,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getMonad: <W>(M: any) => any
+export declare const getMonad: <E>(M: any) => any
 ```
 
 Added in v3.0.0
@@ -245,7 +241,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A>(a: A) => <W, B>(fab: Writer<W, (a: A) => B>) => Writer<W, B>
+export declare const flap: <A>(a: A) => <E, B>(fab: Writer<E, (a: A) => B>) => Writer<E, B>
 ```
 
 Added in v3.0.0
@@ -257,7 +253,7 @@ Returns an effect whose success is mapped by the specified `f` function.
 **Signature**
 
 ```ts
-export declare const map: <A, B>(f: (a: A) => B) => <W>(self: Writer<W, A>) => Writer<W, B>
+export declare const map: <A, B>(f: (a: A) => B) => <E>(self: Writer<E, A>) => Writer<E, B>
 ```
 
 Added in v3.0.0
@@ -270,7 +266,7 @@ the specified pair of functions, `f` and `g`.
 **Signature**
 
 ```ts
-export declare const mapBoth: <W, X, A, B>(f: (w: W) => X, g: (a: A) => B) => (self: Writer<W, A>) => Writer<X, B>
+export declare const mapBoth: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Writer<E, A>) => Writer<G, B>
 ```
 
 Added in v3.0.0
@@ -282,7 +278,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export type Writer<W, A> = readonly [W, A]
+export type Writer<E, A> = readonly [E, A]
 ```
 
 Added in v3.0.0
@@ -306,7 +302,9 @@ Equivalent to `ReadonlyArray#sequence(getApplicative(M))`.
 **Signature**
 
 ```ts
-export declare const sequenceReadonlyArray: <W>(M: any) => <A>(arr: readonly Writer<W, A>[]) => Writer<W, readonly A[]>
+export declare const sequenceReadonlyArray: <E>(
+  Monoid: any
+) => <A>(arr: readonly Writer<E, A>[]) => Writer<E, readonly A[]>
 ```
 
 Added in v3.0.0
@@ -318,7 +316,7 @@ Added in v3.0.0
 ```ts
 export declare const traverse: <F extends any>(
   F: any
-) => <A, S, R, O, E, B>(f: (a: A) => any) => <W>(self: Writer<W, A>) => any
+) => <A, S, R, O, FE, B>(f: (a: A) => any) => <E>(self: Writer<E, A>) => any
 ```
 
 Added in v3.0.0
@@ -330,9 +328,9 @@ Equivalent to `NonEmptyReadonlyArray#traverse(getApply(S))`.
 **Signature**
 
 ```ts
-export declare const traverseNonEmptyReadonlyArray: <W>(
-  S: any
-) => <A, B>(f: (a: A) => Writer<W, B>) => (as: any) => Writer<W, any>
+export declare const traverseNonEmptyReadonlyArray: <E>(
+  Semigroup: any
+) => <A, B>(f: (a: A) => Writer<E, B>) => (as: any) => Writer<E, any>
 ```
 
 Added in v3.0.0
@@ -344,9 +342,9 @@ Equivalent to `NonEmptyReadonlyArray#traverseWithIndex(getApply(M))`.
 **Signature**
 
 ```ts
-export declare const traverseNonEmptyReadonlyArrayWithIndex: <W>(
-  S: any
-) => <A, B>(f: (index: number, a: A) => Writer<W, B>) => (as: any) => Writer<W, any>
+export declare const traverseNonEmptyReadonlyArrayWithIndex: <E>(
+  Semigroup: any
+) => <A, B>(f: (index: number, a: A) => Writer<E, B>) => (as: any) => Writer<E, any>
 ```
 
 Added in v3.0.0
@@ -358,9 +356,9 @@ Equivalent to `ReadonlyArray#traverse(getApplicative(M))`.
 **Signature**
 
 ```ts
-export declare const traverseReadonlyArray: <W>(
-  M: any
-) => <A, B>(f: (a: A) => Writer<W, B>) => (as: readonly A[]) => Writer<W, readonly B[]>
+export declare const traverseReadonlyArray: <E>(
+  Monoid: any
+) => <A, B>(f: (a: A) => Writer<E, B>) => (as: readonly A[]) => Writer<E, readonly B[]>
 ```
 
 Added in v3.0.0
@@ -372,38 +370,14 @@ Equivalent to `ReadonlyArray#traverseWithIndex(getApplicative(M))`.
 **Signature**
 
 ```ts
-export declare const traverseReadonlyArrayWithIndex: <W>(
-  M: any
-) => <A, B>(f: (index: number, a: A) => Writer<W, B>) => (as: readonly A[]) => Writer<W, readonly B[]>
+export declare const traverseReadonlyArrayWithIndex: <E>(
+  Monoid: any
+) => <A, B>(f: (index: number, a: A) => Writer<E, B>) => (as: readonly A[]) => Writer<E, readonly B[]>
 ```
 
 Added in v3.0.0
 
 # type lambdas
-
-## WriterFComposable (interface)
-
-**Signature**
-
-```ts
-export interface WriterFComposable extends TypeLambda {
-  readonly type: Writer<this['In1'], this['Out1']>
-}
-```
-
-Added in v3.0.0
-
-## WriterFFix (interface)
-
-**Signature**
-
-```ts
-export interface WriterFFix<W> extends TypeLambda {
-  readonly type: Writer<W, this['Out1']>
-}
-```
-
-Added in v3.0.0
 
 ## WriterTypeLambda (interface)
 
@@ -417,26 +391,28 @@ export interface WriterTypeLambda extends TypeLambda {
 
 Added in v3.0.0
 
-# utils
-
-## censor
-
-Modify the final accumulator value by applying a function
+## WriterTypeLambdaFix (interface)
 
 **Signature**
 
 ```ts
-export declare const censor: <W>(f: (w: W) => W) => <A>(self: Writer<W, A>) => Writer<W, A>
+export interface WriterTypeLambdaFix<E> extends TypeLambda {
+  readonly type: Writer<E, this['Out1']>
+}
 ```
 
 Added in v3.0.0
 
-## compose
+# utils
+
+## censor
+
+Modify the final accumulator value by applying a function.
 
 **Signature**
 
 ```ts
-export declare const compose: <B, C>(bc: Writer<B, C>) => <A>(ab: Writer<A, B>) => Writer<A, C>
+export declare const censor: <E>(f: (e: E) => E) => <A>(self: Writer<E, A>) => Writer<E, A>
 ```
 
 Added in v3.0.0
@@ -446,7 +422,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const duplicate: <W, A>(self: Writer<W, A>) => Writer<W, Writer<W, A>>
+export declare const duplicate: <E, A>(self: Writer<E, A>) => Writer<E, Writer<E, A>>
 ```
 
 Added in v3.0.0
@@ -456,63 +432,53 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const extend: <W, A, B>(f: (self: Writer<W, A>) => B) => (self: Writer<W, A>) => Writer<W, B>
-```
-
-Added in v3.0.0
-
-## extract
-
-**Signature**
-
-```ts
-export declare const extract: <W, A>(self: Writer<W, A>) => A
-```
-
-Added in v3.0.0
-
-## left
-
-**Signature**
-
-```ts
-export declare const left: <W, A>(self: Writer<W, A>) => W
+export declare const extend: <E, A, B>(f: (self: Writer<E, A>) => B) => (self: Writer<E, A>) => Writer<E, B>
 ```
 
 Added in v3.0.0
 
 ## listen
 
-Modifies the result to include the changes to the accumulator
+Modifies the result to include the changes to the accumulator.
 
 **Signature**
 
 ```ts
-export declare const listen: <W, A>(self: Writer<W, A>) => Writer<W, readonly [W, A]>
+export declare const listen: <E, A>(self: Writer<E, A>) => Writer<E, readonly [E, A]>
 ```
 
 Added in v3.0.0
 
 ## listens
 
-Projects a value from modifications made to the accumulator during an action
+Projects a value from modifications made to the accumulator during an action.
 
 **Signature**
 
 ```ts
-export declare const listens: <W, B>(f: (w: W) => B) => <A>(self: Writer<W, A>) => Writer<W, readonly [A, B]>
+export declare const listens: <E, B>(f: (e: E) => B) => <A>(self: Writer<E, A>) => Writer<E, readonly [A, B]>
+```
+
+Added in v3.0.0
+
+## mapLeft
+
+**Signature**
+
+```ts
+export declare const mapLeft: <E, G>(f: (e: E) => G) => <A>(self: Writer<E, A>) => Writer<G, A>
 ```
 
 Added in v3.0.0
 
 ## pass
 
-Applies the returned function to the accumulator
+Applies the returned function to the accumulator.
 
 **Signature**
 
 ```ts
-export declare const pass: <W, A>(self: Writer<W, readonly [A, (w: W) => W]>) => Writer<W, A>
+export declare const pass: <E, A>(self: Writer<E, readonly [A, (e: E) => E]>) => Writer<E, A>
 ```
 
 Added in v3.0.0
@@ -522,17 +488,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const reverse: <W, A>(self: Writer<W, A>) => Writer<A, W>
-```
-
-Added in v3.0.0
-
-## right
-
-**Signature**
-
-```ts
-export declare const right: <W, A>(self: Writer<W, A>) => A
+export declare const reverse: <E, A>(self: Writer<E, A>) => Writer<A, E>
 ```
 
 Added in v3.0.0

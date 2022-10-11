@@ -104,14 +104,14 @@ export const liftEq: <S>(E: Eq<S>) => Eq<Const<S, never>> = eq.contramap(execute
  * @category instances
  * @since 3.0.0
  */
-export const getOrd: <S>(O: Ord<S>) => Ord<Const<S, never>> = ord.contramap(execute)
+export const liftOrd: <S>(O: Ord<S>) => Ord<Const<S, never>> = ord.contramap(execute)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const getBounded = <S>(B: Bounded<S>): Bounded<Const<S, never>> => ({
-  compare: getOrd(B).compare,
+  compare: liftOrd(B).compare,
   top: make(B.top),
   bottom: make(B.bottom)
 })

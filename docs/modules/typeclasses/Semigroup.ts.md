@@ -295,7 +295,7 @@ import * as S from '@fp-ts/core/string'
 const S1 = tuple(S.Semigroup, N.SemigroupSum)
 assert.deepStrictEqual(pipe(['a', 1], S1.combine(['b', 2])), ['ab', 3])
 
-const S2 = tuple(S.Semigroup, N.SemigroupSum, B.SemigroupAnd)
+const S2 = tuple(S.Semigroup, N.SemigroupSum, B.SemigroupAll)
 assert.deepStrictEqual(pipe(['a', 1, true], S2.combine(['b', 2, false])), ['ab', 3, false])
 ```
 

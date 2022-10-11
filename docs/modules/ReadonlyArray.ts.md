@@ -70,14 +70,14 @@ Added in v3.0.0
   - [Monad](#monad)
   - [Traversable](#traversable)
   - [TraversableFilterable](#traversablefilterable)
-  - [getEq](#geteq)
   - [getIntersectionSemigroup](#getintersectionsemigroup)
   - [getMonoid](#getmonoid)
-  - [getOrd](#getord)
   - [getSemigroup](#getsemigroup)
   - [getShow](#getshow)
   - [getUnionMonoid](#getunionmonoid)
   - [getUnionSemigroup](#getunionsemigroup)
+  - [liftEq](#lifteq)
+  - [liftOrd](#liftord)
 - [lifting](#lifting)
   - [lift2](#lift2)
   - [lift3](#lift3)
@@ -796,31 +796,6 @@ export declare const TraversableFilterable: any
 
 Added in v3.0.0
 
-## getEq
-
-Derives an `Eq` over the `ReadonlyArray` of a given element type from the `Eq` of that type. The derived `Eq` defines two
-`ReadonlyArray`s as equal if all elements of both `ReadonlyArray`s are compared equal pairwise with the given `E`. In case of `ReadonlyArray`s of
-different lengths, the result is non equality.
-
-**Signature**
-
-```ts
-export declare const getEq: <A>(E: any) => any
-```
-
-**Example**
-
-```ts
-import * as S from '@fp-ts/core/string'
-import { getEq } from '@fp-ts/core/ReadonlyArray'
-
-const E = getEq(S.Eq)
-assert.strictEqual(E.equals(['a', 'b'])(['a', 'b']), true)
-assert.strictEqual(E.equals(['a'])([]), false)
-```
-
-Added in v3.0.0
-
 ## getIntersectionSemigroup
 
 **Signature**
@@ -839,34 +814,6 @@ Returns a `Monoid` for `ReadonlyArray<A>`.
 
 ```ts
 export declare const getMonoid: <A>() => any
-```
-
-Added in v3.0.0
-
-## getOrd
-
-Derives an `Ord` over the `ReadonlyArray` of a given element type from the `Ord` of that type. The ordering between two such
-`ReadonlyArray`s is equal to: the first non equal comparison of each `ReadonlyArray`s elements taken pairwise in increasing order, in
-case of equality over all the pairwise elements; the longest `ReadonlyArray` is considered the greatest, if both `ReadonlyArray`s have
-the same length, the result is equality.
-
-**Signature**
-
-```ts
-export declare const getOrd: <A>(O: any) => any
-```
-
-**Example**
-
-```ts
-import { getOrd } from '@fp-ts/core/ReadonlyArray'
-import * as S from '@fp-ts/core/string'
-import { pipe } from '@fp-ts/core/Function'
-
-const O = getOrd(S.Ord)
-assert.strictEqual(pipe(['b'], O.compare(['a'])), 1)
-assert.strictEqual(pipe(['a'], O.compare(['a'])), 0)
-assert.strictEqual(pipe(['a'], O.compare(['b'])), -1)
 ```
 
 Added in v3.0.0
@@ -919,6 +866,59 @@ Added in v3.0.0
 
 ```ts
 export declare const getUnionSemigroup: <A>(E: any) => any
+```
+
+Added in v3.0.0
+
+## liftEq
+
+Derives an `Eq` over the `ReadonlyArray` of a given element type from the `Eq` of that type. The derived `Eq` defines two
+`ReadonlyArray`s as equal if all elements of both `ReadonlyArray`s are compared equal pairwise with the given `E`. In case of `ReadonlyArray`s of
+different lengths, the result is non equality.
+
+**Signature**
+
+```ts
+export declare const liftEq: <A>(Eq: any) => any
+```
+
+**Example**
+
+```ts
+import * as S from '@fp-ts/core/string'
+import { liftEq } from '@fp-ts/core/ReadonlyArray'
+
+const E = liftEq(S.Eq)
+assert.strictEqual(E.equals(['a', 'b'])(['a', 'b']), true)
+assert.strictEqual(E.equals(['a'])([]), false)
+```
+
+Added in v3.0.0
+
+## liftOrd
+
+Derives an `Ord` over the `ReadonlyArray` of a given element type from the `Ord` of that type. The ordering between two such
+`ReadonlyArray`s is equal to: the first non equal comparison of each `ReadonlyArray`s elements taken pairwise in increasing order, in
+case of equality over all the pairwise elements; the longest `ReadonlyArray` is considered the greatest, if both `ReadonlyArray`s have
+the same length, the result is equality.
+
+**Signature**
+
+```ts
+export declare const liftOrd: <A>(O: any) => any
+```
+
+**Example**
+
+```ts
+import { liftOrd } from '@fp-ts/core/ReadonlyArray'
+import * as S from '@fp-ts/core/string'
+import { pipe } from '@fp-ts/core/Function'
+
+const O = liftOrd(S.Ord)
+assert.strictEqual(pipe(['b'], O.compare(['a'])), 1)
+assert.strictEqual(pipe(['a'], O.compare(['a'])), 0)
+assert.strictEqual(pipe(['a'], O.compare(['b'])), -1)
 ```
 
 Added in v3.0.0

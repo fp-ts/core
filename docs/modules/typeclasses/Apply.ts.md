@@ -28,9 +28,9 @@ Added in v3.0.0
 - [utils](#utils)
   - [apComposition](#apcomposition)
   - [bindRight](#bindright)
-  - [getApplySemigroup](#getapplysemigroup)
   - [lift2](#lift2)
   - [lift3](#lift3)
+  - [liftSemigroup](#liftsemigroup)
   - [zipFlatten](#zipflatten)
   - [zipLeftPar](#zipleftpar)
   - [zipRightPar](#ziprightpar)
@@ -88,18 +88,6 @@ export declare const bindRight: <F extends any>(
 
 Added in v3.0.0
 
-## getApplySemigroup
-
-Lift a semigroup into 'F', the inner values are combined using the provided `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const getApplySemigroup: <F extends any>(Apply: Apply<F>) => <A, S, R, O, E>(Semigroup: any) => any
-```
-
-Added in v3.0.0
-
 ## lift2
 
 Lifts a binary function into `F`.
@@ -126,6 +114,18 @@ export declare const lift3: <F extends any>(
 ) => <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
 ) => <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(fa: any, fb: any, fc: any) => any
+```
+
+Added in v3.0.0
+
+## liftSemigroup
+
+Lift a semigroup into 'F', the inner values are combined using the provided `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const liftSemigroup: <F extends any>(Apply: Apply<F>) => <A, S, R, O, E>(Semigroup: any) => any
 ```
 
 Added in v3.0.0

@@ -101,12 +101,12 @@ import * as B from '@fp-ts/core/boolean'
 const f: Predicate<number> = (n) => n <= 2
 const g: Predicate<number> = (n) => n >= 0
 
-const M1 = getMonoid(B.MonoidAnd)<number>()
+const M1 = getMonoid(B.MonoidAll)<number>()
 
 assert.deepStrictEqual(pipe(f, M1.combine(g))(1), true)
 assert.deepStrictEqual(pipe(f, M1.combine(g))(3), false)
 
-const M2 = getMonoid(B.MonoidOr)<number>()
+const M2 = getMonoid(B.MonoidAny)<number>()
 
 assert.deepStrictEqual(pipe(f, M2.combine(g))(1), true)
 assert.deepStrictEqual(pipe(f, M2.combine(g))(3), true)
@@ -134,12 +134,12 @@ import * as B from '@fp-ts/core/boolean'
 const f: Predicate<number> = (n) => n <= 2
 const g: Predicate<number> = (n) => n >= 0
 
-const S1 = getSemigroup(B.SemigroupAnd)<number>()
+const S1 = getSemigroup(B.SemigroupAll)<number>()
 
 assert.deepStrictEqual(pipe(f, S1.combine(g))(1), true)
 assert.deepStrictEqual(pipe(f, S1.combine(g))(3), false)
 
-const S2 = getSemigroup(B.SemigroupOr)<number>()
+const S2 = getSemigroup(B.SemigroupAny)<number>()
 
 assert.deepStrictEqual(pipe(f, S2.combine(g))(1), true)
 assert.deepStrictEqual(pipe(f, S2.combine(g))(3), true)

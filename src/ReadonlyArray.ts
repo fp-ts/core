@@ -1589,9 +1589,9 @@ export const getMonoid = <A>(): Monoid<ReadonlyArray<A>> => ({
  *
  * @example
  * import * as S from '@fp-ts/core/string'
- * import { getEq } from '@fp-ts/core/ReadonlyArray'
+ * import { liftEq } from '@fp-ts/core/ReadonlyArray'
  *
- * const E = getEq(S.Eq)
+ * const E = liftEq(S.Eq)
  * assert.strictEqual(E.equals(['a', 'b'])(['a', 'b']), true)
  * assert.strictEqual(E.equals(['a'])([]), false)
  *
@@ -1610,11 +1610,11 @@ export const liftEq = <A>(Eq: Eq<A>): Eq<ReadonlyArray<A>> =>
  * the same length, the result is equality.
  *
  * @example
- * import { getOrd } from '@fp-ts/core/ReadonlyArray'
+ * import { liftOrd } from '@fp-ts/core/ReadonlyArray'
  * import * as S from '@fp-ts/core/string'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * const O = getOrd(S.Ord)
+ * const O = liftOrd(S.Ord)
  * assert.strictEqual(pipe(['b'], O.compare(['a'])), 1)
  * assert.strictEqual(pipe(['a'], O.compare(['a'])), 0)
  * assert.strictEqual(pipe(['a'], O.compare(['b'])), -1)
@@ -1622,7 +1622,7 @@ export const liftEq = <A>(Eq: Eq<A>): Eq<ReadonlyArray<A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getOrd = <A>(O: Ord<A>): Ord<ReadonlyArray<A>> =>
+export const liftOrd = <A>(O: Ord<A>): Ord<ReadonlyArray<A>> =>
   ord.fromCompare((that) =>
     (self) => {
       const aLen = self.length
