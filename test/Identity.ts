@@ -87,8 +87,8 @@ describe("Identity", () => {
     })
   })
 
-  it("getEq", () => {
-    const E = _.getEq(N.Eq)
+  it("liftEq", () => {
+    const E = _.liftEq(N.Eq)
     U.deepStrictEqual(E.equals(1)(1), true)
     U.deepStrictEqual(E.equals(1)(2), false)
     U.deepStrictEqual(E.equals(2)(1), false)

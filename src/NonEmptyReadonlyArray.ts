@@ -871,9 +871,9 @@ export const getSemigroup = <A>(): Semigroup<NonEmptyReadonlyArray<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const getEq = <A>(E: Eq<A>): Eq<NonEmptyReadonlyArray<A>> =>
+export const liftEq = <A>(Eq: Eq<A>): Eq<NonEmptyReadonlyArray<A>> =>
   eq.fromEquals((that) =>
-    (self) => self.length === that.length && self.every((a, i) => E.equals(that[i])(a))
+    (self) => self.length === that.length && self.every((a, i) => Eq.equals(that[i])(a))
   )
 
 /**

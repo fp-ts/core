@@ -256,8 +256,8 @@ describe("Option", () => {
     U.deepStrictEqual(pipe(O.none, O.getOrElse(0)), 0)
   })
 
-  it("getEq", () => {
-    const { equals } = O.getEq(N.Eq)
+  it("liftEq", () => {
+    const { equals } = O.liftEq(N.Eq)
     U.deepStrictEqual(equals(O.none)(O.none), true)
     U.deepStrictEqual(equals(O.none)(O.some(1)), false)
     U.deepStrictEqual(equals(O.some(1))(O.none), false)

@@ -56,7 +56,7 @@ export const getShow: <A>(S: Show<A>) => Show<Identity<A>> = identity
  * @category instances
  * @since 3.0.0
  */
-export const getEq: <A>(E: Eq<A>) => Eq<Identity<A>> = identity
+export const liftEq: <A>(E: Eq<A>) => Eq<Identity<A>> = identity
 
 /**
  * Returns an effect whose success is mapped by the specified `f` function.

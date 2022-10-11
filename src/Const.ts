@@ -98,7 +98,7 @@ export const execute = <S, A>(self: Const<S, A>): S => self.value
  * @category instances
  * @since 3.0.0
  */
-export const getEq: <S>(E: Eq<S>) => Eq<Const<S, never>> = eq.contramap(execute)
+export const liftEq: <S>(E: Eq<S>) => Eq<Const<S, never>> = eq.contramap(execute)
 
 /**
  * @category instances

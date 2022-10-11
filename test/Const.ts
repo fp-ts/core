@@ -37,8 +37,8 @@ describe("Const", () => {
     U.deepStrictEqual(F.of(1), _.make(""))
   })
 
-  it("getEq", () => {
-    const E = _.getEq(number.Eq)
+  it("liftEq", () => {
+    const E = _.liftEq(number.Eq)
     U.deepStrictEqual(E.equals(_.make(1))(_.make(1)), true)
     U.deepStrictEqual(E.equals(_.make(1))(_.make(2)), false)
   })
