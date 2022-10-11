@@ -18,3 +18,12 @@ Examples of **incorrect** code for this rule:
 ```ts
 declare const getEq: <E, A>(EE: Eq<E>, EA: Eq<A>) => Eq<Result<E, A>>;
 ```
+
+### remove esotic instances
+
+Examples of **correct** code for this rule:
+
+```diff
+-export const compose = <B, C>(bc: Writer<B, C>) =>
+-  <A>(ab: Writer<A, B>): Writer<A, C> => [left(ab), right(bc)]
+```
