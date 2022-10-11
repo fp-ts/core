@@ -1,6 +1,6 @@
 ---
 title: boolean.ts
-nav_order: 5
+nav_order: 1
 parent: Modules
 ---
 

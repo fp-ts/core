@@ -1,5 +1,5 @@
 import type { TypeLambda, HKD } from '../../src/HKT'
-import type * as identity from '../../src/Identity'
+import type * as identity from '../../src/data/Identity'
 import type * as option from '../../src/Option'
 import type * as result from '../../src/Result'
 

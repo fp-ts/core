@@ -1,17 +1,17 @@
 /**
  * @since 3.0.0
  */
-import type { Async } from "@fp-ts/core/Async"
+import type { Async } from "@fp-ts/core/data/Async"
+import type { FromAsync } from "@fp-ts/core/data/FromAsync"
+import type { FromSync } from "@fp-ts/core/data/FromSync"
+import type { Sync } from "@fp-ts/core/data/Sync"
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { Sync } from "@fp-ts/core/Sync"
 import type { Apply } from "@fp-ts/core/typeclasses/Apply"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
 import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
 import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"
-import type { FromAsync } from "@fp-ts/core/typeclasses/FromAsync"
 import type { FromIdentity } from "@fp-ts/core/typeclasses/FromIdentity"
-import type { FromSync } from "@fp-ts/core/typeclasses/FromSync"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"

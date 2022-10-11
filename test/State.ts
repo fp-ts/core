@@ -1,6 +1,6 @@
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
+import * as RA from "@fp-ts/core/data/ReadonlyArray"
 import { pipe } from "@fp-ts/core/Function"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
-import * as RA from "@fp-ts/core/ReadonlyArray"
 import * as _ from "@fp-ts/core/State"
 import * as U from "./util"
 

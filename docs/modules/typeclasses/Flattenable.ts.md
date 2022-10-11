@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Flattenable.ts
-nav_order: 54
+nav_order: 57
 parent: Modules
 ---
 

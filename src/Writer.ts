@@ -1,11 +1,11 @@
 /**
  * @since 3.0.0
  */
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
+import * as nonEmptyReadonlyArrayModule from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as internal from "@fp-ts/core/internal"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
-import * as nonEmptyReadonlyArrayModule from "@fp-ts/core/NonEmptyReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import type { Apply } from "@fp-ts/core/typeclasses/Apply"
 import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"

@@ -1,5 +1,5 @@
-import * as T from "@fp-ts/core/Async"
-import * as TE from "@fp-ts/core/AsyncResult"
+import * as T from "@fp-ts/core/data/Async"
+import * as TE from "@fp-ts/core/data/AsyncResult"
 import { pipe } from "@fp-ts/core/Function"
 import * as E from "@fp-ts/core/Result"
 import * as S from "@fp-ts/core/string"

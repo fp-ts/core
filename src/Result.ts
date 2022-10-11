@@ -13,10 +13,10 @@
  *
  * @since 3.0.0
  */
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as internal from "@fp-ts/core/internal"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
 import type { Refinement } from "@fp-ts/core/Refinement"
@@ -382,7 +382,7 @@ export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> = ex
  *
  * @example
  * import { pipe } from '@fp-ts/core/Function'
- * import * as RA from '@fp-ts/core/ReadonlyArray'
+ * import * as RA from '@fp-ts/core/data/ReadonlyArray'
  * import * as E from '@fp-ts/core/Result'
  * import * as O from '@fp-ts/core/Option'
  *

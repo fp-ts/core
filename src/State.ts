@@ -1,11 +1,11 @@
 /**
  * @since 3.0.0
  */
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import type { Endomorphism } from "@fp-ts/core/Endomorphism"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as internal from "@fp-ts/core/internal"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"

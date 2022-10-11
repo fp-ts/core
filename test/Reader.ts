@@ -1,6 +1,6 @@
+import * as RA from "@fp-ts/core/data/ReadonlyArray"
 import { flow, pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/Reader"
-import * as RA from "@fp-ts/core/ReadonlyArray"
 import * as S from "@fp-ts/core/string"
 import * as U from "./util"
 

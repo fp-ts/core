@@ -1,7 +1,7 @@
 import * as boolean from "@fp-ts/core/boolean"
+import { sort } from "@fp-ts/core/data/ReadonlyArray"
 import { pipe } from "@fp-ts/core/Function"
 import * as number from "@fp-ts/core/number"
-import { sort } from "@fp-ts/core/ReadonlyArray"
 import * as string from "@fp-ts/core/string"
 import { combineAll } from "@fp-ts/core/typeclasses/Monoid"
 import * as _ from "@fp-ts/core/typeclasses/Ord"

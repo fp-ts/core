@@ -1,6 +1,6 @@
+import * as RA from "@fp-ts/core/data/ReadonlyArray"
 import { pipe } from "@fp-ts/core/Function"
 import * as O from "@fp-ts/core/Option"
-import * as RA from "@fp-ts/core/ReadonlyArray"
 import * as _ from "@fp-ts/core/typeclasses/Traversable"
 import * as U from "../util"
 
