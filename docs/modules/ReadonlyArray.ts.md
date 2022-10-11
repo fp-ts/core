@@ -73,11 +73,11 @@ Added in v3.0.0
   - [getIntersectionSemigroup](#getintersectionsemigroup)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
-  - [getShow](#getshow)
   - [getUnionMonoid](#getunionmonoid)
   - [getUnionSemigroup](#getunionsemigroup)
   - [liftEq](#lifteq)
   - [liftOrd](#liftord)
+  - [liftShow](#liftshow)
 - [lifting](#lifting)
   - [lift2](#lift2)
   - [lift3](#lift3)
@@ -840,16 +840,6 @@ assert.deepStrictEqual(pipe([1, 2], S.combine([3, 4])), [1, 2, 3, 4])
 
 Added in v3.0.0
 
-## getShow
-
-**Signature**
-
-```ts
-export declare const getShow: <A>(S: any) => any
-```
-
-Added in v3.0.0
-
 ## getUnionMonoid
 
 **Signature**
@@ -919,6 +909,16 @@ const O = liftOrd(S.Ord)
 assert.strictEqual(pipe(['b'], O.compare(['a'])), 1)
 assert.strictEqual(pipe(['a'], O.compare(['a'])), 0)
 assert.strictEqual(pipe(['a'], O.compare(['b'])), -1)
+```
+
+Added in v3.0.0
+
+## liftShow
+
+**Signature**
+
+```ts
+export declare const liftShow: <A>(Show: any) => any
 ```
 
 Added in v3.0.0

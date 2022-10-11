@@ -429,7 +429,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <E, A>(SE: any, SA: any) => any
+export declare const getSemigroup: <E, A>(SemigroupE: any, SemigroupA: any) => any
 ```
 
 Added in v3.0.0
@@ -439,7 +439,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const getShow: <E, A>(SE: any, SA: any) => any
+export declare const getShow: <E, A>(ShowE: any, ShowA: any) => any
 ```
 
 Added in v3.0.0

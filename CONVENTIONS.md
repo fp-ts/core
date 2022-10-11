@@ -11,6 +11,7 @@ Examples of **correct** code for this rule:
 ```ts
 declare const liftEq: <A>(Eq: Eq<A>): Eq<Option<A>>
 declare const getMonoid: <A>(Semigroup: Semigroup<A>) => Monoid<Option<A>>
+declare const getSemigroup: <A>(Semigroup: Semigroup<A>) => <E>() => Semigroup<Result<E, A>>
 ```
 
 Examples of **incorrect** code for this rule:

@@ -58,8 +58,8 @@ Added in v3.0.0
   - [Monad](#monad)
   - [Traversable](#traversable)
   - [getSemigroup](#getsemigroup)
-  - [getShow](#getshow)
   - [liftEq](#lifteq)
+  - [liftShow](#liftshow)
 - [lifting](#lifting)
   - [lift2](#lift2)
   - [lift3](#lift3)
@@ -528,22 +528,22 @@ export declare const getSemigroup: <A>() => any
 
 Added in v3.0.0
 
-## getShow
-
-**Signature**
-
-```ts
-export declare const getShow: <A>(S: any) => any
-```
-
-Added in v3.0.0
-
 ## liftEq
 
 **Signature**
 
 ```ts
 export declare const liftEq: <A>(Eq: any) => any
+```
+
+Added in v3.0.0
+
+## liftShow
+
+**Signature**
+
+```ts
+export declare const liftShow: <A>(Show: any) => any
 ```
 
 Added in v3.0.0

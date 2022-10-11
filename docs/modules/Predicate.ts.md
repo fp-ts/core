@@ -14,16 +14,18 @@ Added in v3.0.0
 
 - [instances](#instances)
   - [Contravariant](#contravariant)
-  - [getMonoidAnd](#getmonoidand)
-  - [getMonoidOr](#getmonoidor)
-  - [getSemigroupAnd](#getsemigroupand)
-  - [getSemigroupOr](#getsemigroupor)
+  - [getMonoidAll](#getmonoidall)
+  - [getMonoidAny](#getmonoidany)
+  - [getSemigroupAll](#getsemigroupall)
+  - [getSemigroupAny](#getsemigroupany)
 - [model](#model)
   - [Predicate (interface)](#predicate-interface)
 - [type lambdas](#type-lambdas)
   - [PredicateTypeLambda (interface)](#predicatetypelambda-interface)
 - [utils](#utils)
+  - [all](#all)
   - [and](#and)
+  - [any](#any)
   - [contramap](#contramap)
   - [not](#not)
   - [or](#or)
@@ -42,42 +44,42 @@ export declare const Contravariant: any
 
 Added in v3.0.0
 
-## getMonoidAnd
+## getMonoidAll
 
 **Signature**
 
 ```ts
-export declare const getMonoidAnd: <A>() => any
+export declare const getMonoidAll: <A>() => any
 ```
 
 Added in v3.0.0
 
-## getMonoidOr
+## getMonoidAny
 
 **Signature**
 
 ```ts
-export declare const getMonoidOr: <A>() => any
+export declare const getMonoidAny: <A>() => any
 ```
 
 Added in v3.0.0
 
-## getSemigroupAnd
+## getSemigroupAll
 
 **Signature**
 
 ```ts
-export declare const getSemigroupAnd: <A>() => any
+export declare const getSemigroupAll: <A>() => any
 ```
 
 Added in v3.0.0
 
-## getSemigroupOr
+## getSemigroupAny
 
 **Signature**
 
 ```ts
-export declare const getSemigroupOr: <A>() => any
+export declare const getSemigroupAny: <A>() => any
 ```
 
 Added in v3.0.0
@@ -112,6 +114,16 @@ Added in v3.0.0
 
 # utils
 
+## all
+
+**Signature**
+
+```ts
+export declare const all: <A>(collection: Iterable<Predicate<A>>) => Predicate<A>
+```
+
+Added in v3.0.0
+
 ## and
 
 **Signature**
@@ -122,12 +134,22 @@ export declare const and: <A>(that: Predicate<A>) => (self: Predicate<A>) => Pre
 
 Added in v3.0.0
 
+## any
+
+**Signature**
+
+```ts
+export declare const any: <A>(collection: Iterable<Predicate<A>>) => Predicate<A>
+```
+
+Added in v3.0.0
+
 ## contramap
 
 **Signature**
 
 ```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (fa: Predicate<A>) => Predicate<B>
+export declare const contramap: <B, A>(f: (b: B) => A) => (self: Predicate<A>) => Predicate<B>
 ```
 
 Added in v3.0.0

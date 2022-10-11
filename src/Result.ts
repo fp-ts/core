@@ -438,7 +438,7 @@ export const getEq = <E, A>(EE: eq.Eq<E>, EA: eq.Eq<A>): eq.Eq<Result<E, A>> =>
  * import * as N from '@fp-ts/core/number'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * const S = E.getSemigroup<number, string>(N.SemigroupSum)
+ * const S = E.getSemigroup(N.SemigroupSum)<string>()
  * assert.deepStrictEqual(pipe(E.fail('a'), S.combine(E.fail('b'))), E.fail('a'))
  * assert.deepStrictEqual(pipe(E.fail('a'), S.combine(E.succeed(2))), E.succeed(2))
  * assert.deepStrictEqual(pipe(E.succeed(1), S.combine(E.fail('b'))), E.succeed(1))
@@ -447,15 +447,16 @@ export const getEq = <E, A>(EE: eq.Eq<E>, EA: eq.Eq<A>): eq.Eq<Result<E, A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(Semigroup: Semigroup<A>): Semigroup<Result<never, A>> => ({
-  combine: (that) =>
-    (self) =>
-      isFailure(that) ?
-        self :
-        isFailure(self) ?
-        that :
-        succeed(Semigroup.combine(that.success)(self.success))
-})
+export const getSemigroup = <A>(Semigroup: Semigroup<A>) =>
+  <E>(): Semigroup<Result<E, A>> => ({
+    combine: (that) =>
+      (self) =>
+        isFailure(that) ?
+          self :
+          isFailure(self) ?
+          that :
+          succeed(Semigroup.combine(that.success)(self.success))
+  })
 
 /**
  * @category filtering

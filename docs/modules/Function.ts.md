@@ -88,7 +88,7 @@ Unary functions form a monoid as long as you can provide a monoid for the codoma
 **Signature**
 
 ```ts
-export declare const getMonoid: <M>(M: any) => <A>() => any
+export declare const getMonoid: <M>(Monoid: any) => <A>() => any
 ```
 
 **Example**
@@ -121,7 +121,7 @@ Unary functions form a semigroup as long as you can provide a semigroup for the 
 **Signature**
 
 ```ts
-export declare const getSemigroup: <S>(S: any) => <A>() => any
+export declare const getSemigroup: <S>(Semigroup: any) => <A>() => any
 ```
 
 **Example**
