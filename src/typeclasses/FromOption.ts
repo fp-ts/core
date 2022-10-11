@@ -5,7 +5,7 @@
  */
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
 import type { Refinement } from "@fp-ts/core/Refinement"
@@ -29,7 +29,7 @@ export interface FromOption<F extends TypeLambda> extends TypeClass<F> {
  */
 export const fromNullable = <F extends TypeLambda>(F: FromOption<F>) =>
   <A, S>(a: A): Kind<F, S, unknown, never, never, NonNullable<A>> =>
-    F.fromOption(_.fromNullableToOption(a))
+    F.fromOption(internal.fromNullableToOption(a))
 
 // -------------------------------------------------------------------------------------
 // lifting
@@ -49,7 +49,7 @@ export const liftPredicate = <F extends TypeLambda>(
 } =>
   <B extends A, A = B>(predicate: Predicate<A>) =>
     <S>(b: B): Kind<F, S, unknown, never, never, B> =>
-      F.fromOption(predicate(b) ? _.some(b) : _.none)
+      F.fromOption(predicate(b) ? internal.some(b) : internal.none)
 
 /**
  * @category lifting

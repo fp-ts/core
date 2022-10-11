@@ -5,7 +5,7 @@ import * as async from "@fp-ts/core/Async"
 import type { Async } from "@fp-ts/core/Async"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
@@ -419,7 +419,7 @@ export const toTuple2: <E, A>(e: E, a: A) => (fa: AsyncThese<E, A>) => Async<rea
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: AsyncThese<never, readonly []> = succeed(_.empty)
+export const Zip: AsyncThese<never, readonly []> = succeed(internal.empty)
 
 // -------------------------------------------------------------------------------------
 // array utils
@@ -453,7 +453,7 @@ export const traverseReadonlyArrayWithIndexPar = <E>(S: Semigroup<E>) =>
     f: (index: number, a: A) => AsyncThese<E, B>
   ): ((as: ReadonlyArray<A>) => AsyncThese<E, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndexPar(S)(f)
-    return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+    return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
   }
 
 /**
@@ -509,7 +509,7 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
   <A, B>(f: (index: number, a: A) => AsyncThese<E, B>) =>
     (as: NonEmptyReadonlyArray<A>): AsyncThese<E, NonEmptyReadonlyArray<B>> =>
       () =>
-        _.tail(as).reduce<Promise<These<E, _.NonEmptyArray<B>>>>(
+        internal.tail(as).reduce<Promise<These<E, internal.NonEmptyArray<B>>>>(
           (acc, a, i) =>
             acc.then((ebs) =>
               these.isFailure(ebs)
@@ -529,7 +529,7 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
                   return ebs
                 })
             ),
-          f(0, _.head(as))().then(these.map(_.toNonEmptyArray))
+          f(0, internal.head(as))().then(these.map(internal.toNonEmptyArray))
         )
 
 /**
@@ -543,7 +543,7 @@ export const traverseReadonlyArrayWithIndex = <E>(S: Semigroup<E>) =>
     f: (index: number, a: A) => AsyncThese<E, B>
   ): ((as: ReadonlyArray<A>) => AsyncThese<E, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndex(S)(f)
-    return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+    return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
   }
 
 /**

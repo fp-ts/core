@@ -15,7 +15,7 @@
  */
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
@@ -99,7 +99,7 @@ export interface ValidatedT<F extends TypeLambda, E> extends TypeLambda {
  * @category refinements
  * @since 3.0.0
  */
-export const isFailure: <E, A>(self: Result<E, A>) => self is Failure<E> = _.isFailure
+export const isFailure: <E, A>(self: Result<E, A>) => self is Failure<E> = internal.isFailure
 
 /**
  * Returns `true` if the either is an instance of `Success`, `false` otherwise.
@@ -107,7 +107,7 @@ export const isFailure: <E, A>(self: Result<E, A>) => self is Failure<E> = _.isF
  * @category refinements
  * @since 3.0.0
  */
-export const isSuccess: <E, A>(self: Result<E, A>) => self is Success<A> = _.isSuccess
+export const isSuccess: <E, A>(self: Result<E, A>) => self is Success<A> = internal.isSuccess
 
 /**
  * Constructs a new `Result` holding a `Failure` value. This usually represents a failure, due to the right-bias of this
@@ -116,7 +116,7 @@ export const isSuccess: <E, A>(self: Result<E, A>) => self is Success<A> = _.isS
  * @category constructors
  * @since 3.0.0
  */
-export const fail: <E>(e: E) => Result<E, never> = _.fail
+export const fail: <E>(e: E) => Result<E, never> = internal.fail
 
 /**
  * Constructs a new `Result` holding a `Success` value. This usually represents a successful value due to the right bias
@@ -125,7 +125,7 @@ export const fail: <E>(e: E) => Result<E, never> = _.fail
  * @category constructors
  * @since 3.0.0
  */
-export const succeed: <A>(a: A) => Result<never, A> = _.succeed
+export const succeed: <A>(a: A) => Result<never, A> = internal.succeed
 
 // -------------------------------------------------------------------------------------
 // pattern matching
@@ -208,7 +208,7 @@ export const getOrElse = <B>(onError: B) =>
  * @since 3.0.0
  */
 export const fromNullable: <E>(onNullable: E) => <A>(a: A) => Result<E, NonNullable<A>> =
-  _.fromNullableToResult
+  internal.fromNullableToResult
 
 /**
  * @category lifting
@@ -458,7 +458,8 @@ export const getSemigroup = <A, E>(S: Semigroup<A>): Semigroup<Result<E, A>> => 
  * @since 3.0.0
  */
 export const compact: <E>(onNone: E) => <A>(self: Result<E, Option<A>>) => Result<E, A> = (e) =>
-  (self) => isFailure(self) ? self : _.isNone(self.success) ? fail(e) : succeed(self.success.value)
+  (self) =>
+    isFailure(self) ? self : internal.isNone(self.success) ? fail(e) : succeed(self.success.value)
 
 /**
  * @category filtering
@@ -862,7 +863,7 @@ export const tap: <A, E2>(
  * @since 3.0.0
  */
 export const toReadonlyArray = <E, A>(self: Result<E, A>): ReadonlyArray<A> =>
-  isFailure(self) ? _.empty : [self.success]
+  isFailure(self) ? internal.empty : [self.success]
 
 /**
  * @category folding
@@ -1009,7 +1010,8 @@ export const FromResult: fromResult_.FromResult<ResultTypeLambda> = {
  * @category conversions
  * @since 3.0.0
  */
-export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => Result<E, A> = _.fromOptionToResult
+export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => Result<E, A> =
+  internal.fromOptionToResult
 
 /**
  * Converts a `Result` to an `Option` discarding the success.
@@ -1024,7 +1026,7 @@ export const fromOption: <E>(onNone: E) => <A>(fa: Option<A>) => Result<E, A> = 
  * @category conversions
  * @since 3.0.0
  */
-export const getFailure: <E, A>(self: Result<E, A>) => Option<E> = _.getFailure
+export const getFailure: <E, A>(self: Result<E, A>) => Option<E> = internal.getFailure
 
 /**
  * Converts a `Result` to an `Option` discarding the error.
@@ -1039,7 +1041,7 @@ export const getFailure: <E, A>(self: Result<E, A>) => Option<E> = _.getFailure
  * @category conversions
  * @since 3.0.0
  */
-export const getSuccess: <E, A>(self: Result<E, A>) => Option<A> = _.getSuccess
+export const getSuccess: <E, A>(self: Result<E, A>) => Option<A> = internal.getSuccess
 
 /**
  * @category conversions
@@ -1212,7 +1214,7 @@ export const exists = <A>(predicate: Predicate<A>) =>
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Result<never, {}> = succeed(_.Do)
+export const Do: Result<never, {}> = succeed(internal.Do)
 
 /**
  * @category do notation
@@ -1271,7 +1273,7 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Result<never, readonly []> = succeed(_.empty)
+export const Zip: Result<never, readonly []> = succeed(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -1316,11 +1318,11 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, E, B>(
   f: (index: number, a: A) => Result<E, B>
 ) =>
   (as: NonEmptyReadonlyArray<A>): Result<E, NonEmptyReadonlyArray<B>> => {
-    const e = f(0, _.head(as))
+    const e = f(0, internal.head(as))
     if (isFailure(e)) {
       return e
     }
-    const out: _.NonEmptyArray<B> = [e.success]
+    const out: internal.NonEmptyArray<B> = [e.success]
     for (let i = 1; i < as.length; i++) {
       const e = f(i, as[i])
       if (isFailure(e)) {
@@ -1341,7 +1343,7 @@ export const traverseReadonlyArrayWithIndex = <A, E, B>(
   f: (index: number, a: A) => Result<E, B>
 ): ((as: ReadonlyArray<A>) => Result<E, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

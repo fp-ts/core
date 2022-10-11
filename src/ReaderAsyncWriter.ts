@@ -5,7 +5,7 @@ import type { Async } from "@fp-ts/core/Async"
 import * as async from "@fp-ts/core/Async"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import * as nonEmptyReadonlyArray from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Reader } from "@fp-ts/core/Reader"
@@ -452,7 +452,7 @@ export const traverseReadonlyArrayWithIndex = <W>(
   ): ((as: ReadonlyArray<A>) => ReaderAsyncWriter<R, W, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndex(Apply, Monoid)(f)
     const P = getFromIdentity(Monoid)
-    return (as) => (_.isNonEmpty(as) ? g(as) : P.of(_.empty))
+    return (as) => (internal.isNonEmpty(as) ? g(as) : P.of(internal.empty))
   }
 
 /**

@@ -5,7 +5,6 @@
  */
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
 import type { Reader } from "@fp-ts/core/Reader"
 import * as reader from "@fp-ts/core/Reader"
 import type { Flattenable } from "@fp-ts/core/typeclasses/Flattenable"

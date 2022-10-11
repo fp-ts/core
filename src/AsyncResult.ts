@@ -14,7 +14,7 @@ import type { AsyncOption } from "@fp-ts/core/AsyncOption"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
@@ -184,9 +184,9 @@ export const fromRejectable = <A, E>(
 ): AsyncResult<E, A> =>
   async () => {
     try {
-      return await f().then(_.succeed)
+      return await f().then(internal.succeed)
     } catch (reason) {
-      return _.fail(onRejected(reason))
+      return internal.fail(onRejected(reason))
     }
   }
 
@@ -936,7 +936,10 @@ export function taskify<L, R>(f: Function): () => AsyncResult<L, R> {
     const args = Array.prototype.slice.call(arguments)
     return () =>
       new Promise((resolve) => {
-        const cbResolver = (e: L, r: R) => (e != null ? resolve(_.fail(e)) : resolve(_.succeed(r)))
+        const cbResolver = (
+          e: L,
+          r: R
+        ) => (e != null ? resolve(internal.fail(e)) : resolve(internal.succeed(r)))
         f.apply(null, args.concat(cbResolver))
       })
   }
@@ -964,7 +967,7 @@ export const bracket: <E1, A, E2, B, E3>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: AsyncResult<never, {}> = succeed(_.Do)
+export const Do: AsyncResult<never, {}> = succeed(internal.Do)
 
 /**
  * @category do notation
@@ -1027,7 +1030,7 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: AsyncResult<never, readonly []> = succeed(_.empty)
+export const Zip: AsyncResult<never, readonly []> = succeed(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -1089,7 +1092,7 @@ export const traverseReadonlyArrayWithIndexPar = <A, E, B>(
   f: (index: number, a: A) => AsyncResult<E, B>
 ): ((as: ReadonlyArray<A>) => AsyncResult<E, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndexPar(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**
@@ -1139,20 +1142,20 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, E, B>(
 ) =>
   (as: NonEmptyReadonlyArray<A>): AsyncResult<E, NonEmptyReadonlyArray<B>> =>
     () =>
-      _.tail(as).reduce<Promise<Result<E, _.NonEmptyArray<B>>>>(
+      internal.tail(as).reduce<Promise<Result<E, internal.NonEmptyArray<B>>>>(
         (acc, a, i) =>
           acc.then((ebs) =>
-            _.isFailure(ebs)
+            internal.isFailure(ebs)
               ? acc
               : f(i + 1, a)().then((eb) => {
-                if (_.isFailure(eb)) {
+                if (internal.isFailure(eb)) {
                   return eb
                 }
                 ebs.success.push(eb.success)
                 return ebs
               })
           ),
-        f(0, _.head(as))().then(result.map(_.toNonEmptyArray))
+        f(0, internal.head(as))().then(result.map(internal.toNonEmptyArray))
       )
 
 /**
@@ -1165,7 +1168,7 @@ export const traverseReadonlyArrayWithIndex = <A, E, B>(
   f: (index: number, a: A) => AsyncResult<E, B>
 ): ((as: ReadonlyArray<A>) => AsyncResult<E, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

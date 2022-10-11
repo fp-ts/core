@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import type { Result } from "@fp-ts/core/Result"
 
@@ -20,7 +20,7 @@ export interface Refinement<A, B extends A> {
  * @since 3.0.0
  */
 export const liftOption = <A, B extends A>(f: (a: A) => Option<B>): Refinement<A, B> => {
-  return (a: A): a is B => _.isSome(f(a))
+  return (a: A): a is B => internal.isSome(f(a))
 }
 
 /**
@@ -28,7 +28,7 @@ export const liftOption = <A, B extends A>(f: (a: A) => Option<B>): Refinement<A
  * @since 3.0.0
  */
 export const liftResult = <A, B extends A>(f: (a: A) => Result<unknown, B>): Refinement<A, B> => {
-  return (a: A): a is B => _.isSuccess(f(a))
+  return (a: A): a is B => internal.isSuccess(f(a))
 }
 
 /**

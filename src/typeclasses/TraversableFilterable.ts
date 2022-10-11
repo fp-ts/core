@@ -5,7 +5,7 @@
  */
 import { flow, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import type { Result } from "@fp-ts/core/Result"
 import type { Applicative } from "@fp-ts/core/typeclasses/Applicative"
@@ -77,7 +77,7 @@ export const traverseFilter = <T extends TypeLambda>(
       TraversableFilterable.traverseFilterMap(Applicative)((b) =>
         pipe(
           predicate(b),
-          Applicative.map((ok) => (ok ? _.some(b) : _.none))
+          Applicative.map((ok) => (ok ? internal.some(b) : internal.none))
         )
       )
 
@@ -98,6 +98,6 @@ export const traversePartition = <T extends TypeLambda>(
       TraversableFilterable.traversePartitionMap(Applicative)((b) =>
         pipe(
           predicate(b),
-          Applicative.map((ok) => (ok ? _.succeed(b) : _.fail(b)))
+          Applicative.map((ok) => (ok ? internal.succeed(b) : internal.fail(b)))
         )
       )

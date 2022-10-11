@@ -3,7 +3,7 @@
  */
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import * as nonEmptyReadonlyArrayModule from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
@@ -369,7 +369,7 @@ export const traverseReadonlyArrayWithIndex = <W>(M: Monoid<W>) =>
     f: (index: number, a: A) => Writer<W, B>
   ): ((as: ReadonlyArray<A>) => Writer<W, ReadonlyArray<B>>) => {
     const g = traverseNonEmptyReadonlyArrayWithIndex(M)(f)
-    return (as) => (_.isNonEmpty(as) ? g(as) : [M.empty, _.empty])
+    return (as) => (internal.isNonEmpty(as) ? g(as) : [M.empty, internal.empty])
   }
 
 /**

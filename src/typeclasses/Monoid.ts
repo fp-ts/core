@@ -15,7 +15,7 @@
  *
  * @since 3.0.0
  */
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Bounded } from "@fp-ts/core/typeclasses/Bounded"
 import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
@@ -117,7 +117,7 @@ export const struct = <A>(
 ): Monoid<{ readonly [K in keyof A]: A[K] }> => {
   const empty: A = {} as any
   for (const k in monoids) {
-    if (_.has.call(monoids, k)) {
+    if (internal.has.call(monoids, k)) {
       empty[k] = monoids[k].empty
     }
   }

@@ -9,7 +9,7 @@
  */
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
@@ -723,7 +723,7 @@ export const bracket: <E1, A, E2, B, E3>(
  * @category do notation
  * @since 3.0.0
  */
-export const Do: SyncResult<never, {}> = succeed(_.Do)
+export const Do: SyncResult<never, {}> = succeed(internal.Do)
 
 /**
  * @category do notation
@@ -786,7 +786,7 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: SyncResult<never, readonly []> = succeed(_.empty)
+export const Zip: SyncResult<never, readonly []> = succeed(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -849,7 +849,7 @@ export const traverseReadonlyArrayWithIndexPar = <A, E, B>(
   f: (index: number, a: A) => SyncResult<E, B>
 ): ((as: ReadonlyArray<A>) => SyncResult<E, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndexPar(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**
@@ -899,19 +899,19 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, E, B>(
 ) =>
   (as: NonEmptyReadonlyArray<A>): SyncResult<E, NonEmptyReadonlyArray<B>> =>
     () => {
-      const e = f(0, _.head(as))()
-      if (_.isFailure(e)) {
+      const e = f(0, internal.head(as))()
+      if (internal.isFailure(e)) {
         return e
       }
-      const out: _.NonEmptyArray<B> = [e.success]
+      const out: internal.NonEmptyArray<B> = [e.success]
       for (let i = 1; i < as.length; i++) {
         const e = f(i, as[i])()
-        if (_.isFailure(e)) {
+        if (internal.isFailure(e)) {
           return e
         }
         out.push(e.success)
       }
-      return _.succeed(out)
+      return internal.succeed(out)
     }
 
 /**
@@ -924,7 +924,7 @@ export const traverseReadonlyArrayWithIndex = <A, E, B>(
   f: (index: number, a: A) => SyncResult<E, B>
 ): ((as: ReadonlyArray<A>) => SyncResult<E, ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

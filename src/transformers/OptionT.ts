@@ -4,7 +4,7 @@
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constant, flow, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { Option } from "@fp-ts/core/Option"
 import * as option from "@fp-ts/core/Option"
 import type { Result } from "@fp-ts/core/Result"
@@ -35,13 +35,14 @@ export interface OptionT<F extends TypeLambda> extends TypeLambda {
  */
 export const none = <F extends TypeLambda>(
   FromIdentity: FromIdentity<F>
-): (<S>() => Kind<OptionT<F>, S, unknown, never, never, never>) => constant(FromIdentity.of(_.none))
+): (<S>() => Kind<OptionT<F>, S, unknown, never, never, never>) =>
+  constant(FromIdentity.of(internal.none))
 
 /**
  * @since 3.0.0
  */
 export const some = <F extends TypeLambda>(FromIdentity: FromIdentity<F>) =>
-  <A, S>(a: A): Kind<OptionT<F>, S, unknown, never, never, A> => FromIdentity.of(_.some(a))
+  <A, S>(a: A): Kind<OptionT<F>, S, unknown, never, never, A> => FromIdentity.of(internal.some(a))
 
 /**
  * @since 3.0.0
@@ -49,7 +50,7 @@ export const some = <F extends TypeLambda>(FromIdentity: FromIdentity<F>) =>
 export const fromKind = <F extends TypeLambda>(
   Functor: Functor<F>
 ): (<S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<OptionT<F>, S, R, O, E, A>) =>
-  Functor.map(_.some)
+  Functor.map(internal.some)
 
 /**
  * @since 3.0.0
@@ -122,7 +123,7 @@ export const tapError = <F extends TypeLambda>(Monad: Monad<F>) => {
           option.match<Kind<F, S, R2, O2, E2, Option<A>>, A>(
             flow(
               () => onNone,
-              Monad.map(() => _.none)
+              Monad.map(() => internal.none)
             ),
             some_
           )

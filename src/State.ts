@@ -4,7 +4,7 @@
 import type { Endomorphism } from "@fp-ts/core/Endomorphism"
 import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
@@ -375,8 +375,8 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, S, B>(
 ) =>
   (as: NonEmptyReadonlyArray<A>): State<S, NonEmptyReadonlyArray<B>> => {
     return (s) => {
-      const [s2, b] = f(0, _.head(as))(s)
-      const bs: _.NonEmptyArray<B> = [b]
+      const [s2, b] = f(0, internal.head(as))(s)
+      const bs: internal.NonEmptyArray<B> = [b]
       let out = s2
       for (let i = 1; i < as.length; i++) {
         const [s2, b] = f(i, as[i])(out)
@@ -398,7 +398,7 @@ export const traverseReadonlyArrayWithIndex = <A, S, B>(
 ) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
   return (as: ReadonlyArray<A>): State<S, ReadonlyArray<B>> => {
-    return _.isNonEmpty(as) ? g(as) : of(_.empty)
+    return internal.isNonEmpty(as) ? g(as) : of(internal.empty)
   }
 }
 

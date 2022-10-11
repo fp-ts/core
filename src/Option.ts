@@ -15,7 +15,7 @@
 import type { LazyArg } from "@fp-ts/core/Function"
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Predicate } from "@fp-ts/core/Predicate"
 import type { Refinement } from "@fp-ts/core/Refinement"
@@ -96,7 +96,7 @@ export interface OptionTypeLambda extends TypeLambda {
  * @category refinements
  * @since 3.0.0
  */
-export const isNone: (fa: Option<unknown>) => fa is None = _.isNone
+export const isNone: (fa: Option<unknown>) => fa is None = internal.isNone
 
 /**
  * Returns `true` if the option is an instance of `Some`, `false` otherwise.
@@ -110,7 +110,7 @@ export const isNone: (fa: Option<unknown>) => fa is None = _.isNone
  * @category refinements
  * @since 3.0.0
  */
-export const isSome: <A>(fa: Option<A>) => fa is Some<A> = _.isSome
+export const isSome: <A>(fa: Option<A>) => fa is Some<A> = internal.isSome
 
 /**
  * `None` doesn't have a constructor, instead you can use it directly as a value. Represents a missing value.
@@ -118,7 +118,7 @@ export const isSome: <A>(fa: Option<A>) => fa is Some<A> = _.isSome
  * @category constructors
  * @since 3.0.0
  */
-export const none: Option<never> = _.none
+export const none: Option<never> = internal.none
 
 /**
  * Constructs a `Some`. Represents an optional value that exists.
@@ -126,7 +126,7 @@ export const none: Option<never> = _.none
  * @category constructors
  * @since 3.0.0
  */
-export const some: <A>(a: A) => Option<A> = _.some
+export const some: <A>(a: A) => Option<A> = internal.some
 
 /**
  * @category conversions
@@ -152,13 +152,14 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
  * @category conversions
  * @since 3.0.0
  */
-export const fromResult: <E, A>(self: Result<E, A>) => Option<A> = _.getSuccess
+export const fromResult: <E, A>(self: Result<E, A>) => Option<A> = internal.getSuccess
 
 /**
  * @category conversions
  * @since 3.0.0
  */
-export const toResult: <E>(onNone: E) => <A>(self: Option<A>) => Result<E, A> = _.fromOptionToResult
+export const toResult: <E>(onNone: E) => <A>(self: Option<A>) => Result<E, A> =
+  internal.fromOptionToResult
 
 /**
  * Takes a (lazy) default value, a function, and an `Option` value, if the `Option` value is `None` the default value is
@@ -269,7 +270,7 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
  * @category conversions
  * @since 3.0.0
  */
-export const fromNullable: <A>(a: A) => Option<NonNullable<A>> = _.fromNullableToOption
+export const fromNullable: <A>(a: A) => Option<NonNullable<A>> = internal.fromNullableToOption
 
 /**
  * Returns a *smart constructor* from a function that returns a nullable value.
@@ -573,7 +574,7 @@ const defaultSeparated = [none, none] as const
  * @since 3.0.0
  */
 export const separate: <A, B>(fe: Option<Result<A, B>>) => readonly [Option<A>, Option<B>] = (ma) =>
-  isNone(ma) ? defaultSeparated : [_.getFailure(ma.value), fromResult(ma.value)]
+  isNone(ma) ? defaultSeparated : [internal.getFailure(ma.value), fromResult(ma.value)]
 
 /**
  * @category filtering
@@ -785,7 +786,7 @@ export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Opti
  */
 export const toReadonlyArray = <A>(
   self: Option<A>
-): ReadonlyArray<A> => (isNone(self) ? _.empty : [self.value])
+): ReadonlyArray<A> => (isNone(self) ? internal.empty : [self.value])
 
 /**
  * @category folding
@@ -1062,7 +1063,7 @@ export const exists = <A>(predicate: Predicate<A>) =>
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Option<{}> = some(_.Do)
+export const Do: Option<{}> = some(internal.Do)
 
 /**
  * @category do notation
@@ -1116,7 +1117,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Option<readonly []> = some(_.empty)
+export const Zip: Option<readonly []> = some(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -1160,11 +1161,11 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(
   f: (index: number, a: A) => Option<B>
 ) =>
   (as: NonEmptyReadonlyArray<A>): Option<NonEmptyReadonlyArray<B>> => {
-    const o = f(0, _.head(as))
+    const o = f(0, internal.head(as))
     if (isNone(o)) {
       return none
     }
-    const out: _.NonEmptyArray<B> = [o.value]
+    const out: internal.NonEmptyArray<B> = [o.value]
     for (let i = 1; i < as.length; i++) {
       const o = f(i, as[i])
       if (isNone(o)) {
@@ -1185,7 +1186,7 @@ export const traverseReadonlyArrayWithIndex = <A, B>(
   f: (index: number, a: A) => Option<B>
 ): ((as: ReadonlyArray<A>) => Option<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**

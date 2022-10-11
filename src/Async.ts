@@ -13,7 +13,7 @@
  */
 import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as _ from "@fp-ts/core/internal"
+import * as internal from "@fp-ts/core/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/NonEmptyReadonlyArray"
 import type { Sync } from "@fp-ts/core/Sync"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
@@ -446,7 +446,7 @@ export const never: Async<never> = () => new Promise(() => undefined)
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Async<{}> = of(_.Do)
+export const Do: Async<{}> = of(internal.Do)
 
 /**
  * @category do notation
@@ -512,7 +512,7 @@ export const bindRightPar: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Async<readonly []> = of(_.empty)
+export const Zip: Async<readonly []> = of(internal.empty)
 
 /**
  * @category tuple sequencing
@@ -592,7 +592,7 @@ export const traverseReadonlyArrayWithIndexPar = <A, B>(
   f: (index: number, a: A) => Async<B>
 ): ((as: ReadonlyArray<A>) => Async<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndexPar(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**
@@ -642,7 +642,7 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(
 ) =>
   (as: NonEmptyReadonlyArray<A>): Async<NonEmptyReadonlyArray<B>> =>
     () =>
-      _.tail(as).reduce<Promise<_.NonEmptyArray<B>>>(
+      internal.tail(as).reduce<Promise<internal.NonEmptyArray<B>>>(
         (acc, a, i) =>
           acc.then((bs) =>
             Promise.resolve()
@@ -653,8 +653,8 @@ export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(
               })
           ),
         Promise.resolve()
-          .then(f(0, _.head(as)))
-          .then(_.toNonEmptyArray)
+          .then(f(0, internal.head(as)))
+          .then(internal.toNonEmptyArray)
       )
 
 /**
@@ -667,7 +667,7 @@ export const traverseReadonlyArrayWithIndex = <A, B>(
   f: (index: number, a: A) => Async<B>
 ): ((as: ReadonlyArray<A>) => Async<ReadonlyArray<B>>) => {
   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-  return (as) => (_.isNonEmpty(as) ? g(as) : Zip)
+  return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
 }
 
 /**
