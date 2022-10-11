@@ -42,7 +42,7 @@
     "autofix": "pnpm lint --fix",
     "tc": "tsc --noEmit",
     "docs": "docs-ts",
-    "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning packages/*/build/esm packages/*/build/test packages/*/build/examples",
+    "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning build/esm",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
