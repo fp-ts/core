@@ -7,57 +7,53 @@ import * as _ from "@fp-ts/core/Writer"
 import * as U from "./util"
 
 describe("Writer", () => {
-  // -------------------------------------------------------------------------------------
-  // constructors
-  // -------------------------------------------------------------------------------------
-
-  it("tell", () => {
-    U.deepStrictEqual(_.tell("w"), ["w", undefined])
+  it("right", () => {
+    U.deepStrictEqual(pipe(["e", "a"] as const, _.right), "a")
   })
 
-  // -------------------------------------------------------------------------------------
-  // combinators
-  // -------------------------------------------------------------------------------------
+  it("left", () => {
+    U.deepStrictEqual(pipe(["e", "a"] as const, _.left), "e")
+  })
 
-  it("swap", () => {
-    U.deepStrictEqual(_.reverse(["w", "a"]), ["a", "w"])
+  it("tell", () => {
+    U.deepStrictEqual(_.tell("e"), ["e", undefined])
+  })
+
+  it("reverse", () => {
+    U.deepStrictEqual(_.reverse(["e", "a"]), ["a", "e"])
   })
 
   it("listen", () => {
-    U.deepStrictEqual(_.listen(["w", "a"]), ["w", ["w", "a"]])
+    U.deepStrictEqual(_.listen(["e", "a"]), ["e", ["e", "a"]])
   })
 
   it("pass", () => {
-    U.deepStrictEqual(_.pass(["w", ["a", (w: string) => w + "b"] as const]), ["wb", "a"])
+    U.deepStrictEqual(_.pass(["e", ["a", (e: string) => e + "b"] as const]), ["eb", "a"])
   })
 
   it("listens", () => {
     U.deepStrictEqual(
       pipe(
-        ["w", "a"] as const,
-        _.listens((w) => w.length)
+        ["e", "a"] as const,
+        _.listens((e) => e.length)
       ),
-      ["w", ["a", 1]]
+      ["e", ["a", 1]]
     )
   })
 
   it("censor", () => {
-    const ws = ["w1", "w2"]
+    const es = ["e1", "e2"]
     U.deepStrictEqual(
       pipe(
-        [ws, "a"] as const,
-        _.censor((w) => w.filter((w) => w !== "w1"))
+        [es, "a"] as const,
+        _.censor((e) => e.filter((e) => e !== "e1"))
       ),
-      [["w2"], "a"]
+      [["e2"], "a"]
     )
   })
 
-  // -------------------------------------------------------------------------------------
-  // type class operations
-  // -------------------------------------------------------------------------------------
-
   it("map", () => {
-    U.deepStrictEqual(pipe(["w", 1] as const, _.map(U.double)), ["w", 2])
+    U.deepStrictEqual(pipe(["e", 1] as const, _.map(U.double)), ["e", 2])
   })
 
   it("mapLeft", () => {
@@ -65,50 +61,38 @@ describe("Writer", () => {
   })
 
   it("mapBoth", () => {
-    U.deepStrictEqual(pipe(["w", 1], _.mapBoth(S.size, U.double)), [1, 2])
-  })
-
-  it("extract", () => {
-    U.deepStrictEqual(pipe(["w", "a"] as const, _.extract), "a")
+    U.deepStrictEqual(pipe(["e", 1], _.mapBoth(S.size, U.double)), [1, 2])
   })
 
   it("extend", () => {
     const f = (fa: _.Writer<string, number>): number => _.left(fa).length + _.right(fa)
-    U.deepStrictEqual(pipe(["ww", 1], _.extend(f)), ["ww", 3])
+    U.deepStrictEqual(pipe(["ee", 1], _.extend(f)), ["ee", 3])
   })
 
   it("duplicate", () => {
-    U.deepStrictEqual(pipe(["w", "a"] as const, _.duplicate), ["w", ["w", "a"]])
+    U.deepStrictEqual(pipe(["e", "a"] as const, _.duplicate), ["e", ["e", "a"]])
   })
 
   it("traverse", () => {
     const traverse = _.traverse(O.Applicative)((n: number) => (n > 1 ? O.some(n) : O.none))
-    U.deepStrictEqual(traverse(["w", 2]), O.some(["w", 2] as const))
-    U.deepStrictEqual(traverse(["w", 1]), O.none)
+    U.deepStrictEqual(traverse(["e", 2]), O.some(["e", 2] as const))
+    U.deepStrictEqual(traverse(["e", 1]), O.none)
   })
 
   it("sequence", () => {
     const sequence = _.sequence(O.Applicative)
-    U.deepStrictEqual(sequence(["w", O.some("a")]), O.some(["w", "a"] as const))
-    U.deepStrictEqual(sequence(["w", O.none]), O.none)
+    U.deepStrictEqual(sequence(["e", O.some("a")]), O.some(["e", "a"] as const))
+    U.deepStrictEqual(sequence(["e", O.none]), O.none)
   })
-
-  it("compose", () => {
-    U.deepStrictEqual(pipe(["w", "a"] as const, _.compose(["a", "b"])), ["w", "b"])
-  })
-
-  // -------------------------------------------------------------------------------------
-  // instances
-  // -------------------------------------------------------------------------------------
 
   it("getApplicative", () => {
     const M = _.getApplicative(S.Monoid)
 
     U.deepStrictEqual(M.of("a"), ["", "a"])
 
-    const fab: _.Writer<string, (n: number) => number> = ["w1", (n: number) => n * 2]
-    const fa: _.Writer<string, number> = ["w2", 1]
-    U.deepStrictEqual(pipe(fab, M.ap(fa)), ["w1w2", 2])
+    const fab: _.Writer<string, (n: number) => number> = ["e1", (n: number) => n * 2]
+    const fa: _.Writer<string, number> = ["e2", 1]
+    U.deepStrictEqual(pipe(fab, M.ap(fa)), ["e1e2", 2])
   })
 
   it("getMonad", () => {
@@ -116,9 +100,9 @@ describe("Writer", () => {
 
     U.deepStrictEqual(M.of("a"), ["", "a"])
 
-    const fa: _.Writer<string, number> = ["w1", 1]
-    const f = (n: number): _.Writer<string, number> => ["w2", n * 2]
-    U.deepStrictEqual(pipe(fa, M.flatMap(f)), ["w1w2", 2])
+    const fa: _.Writer<string, number> = ["e1", 1]
+    const f = (n: number): _.Writer<string, number> => ["e2", n * 2]
+    U.deepStrictEqual(pipe(fa, M.flatMap(f)), ["e1e2", 2])
   })
 
   // -------------------------------------------------------------------------------------
