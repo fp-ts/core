@@ -5,6 +5,7 @@ import { constFalse, constTrue, flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
 import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
+import * as monoid from "@fp-ts/core/typeclasses/Monoid"
 import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 
 /**
@@ -15,10 +16,6 @@ export interface Predicate<A> {
   (a: A): boolean
 }
 
-// -------------------------------------------------------------------------------------
-// type lambdas
-// -------------------------------------------------------------------------------------
-
 /**
  * @category type lambdas
  * @since 3.0.0
@@ -27,9 +24,22 @@ export interface PredicateTypeLambda extends TypeLambda {
   readonly type: Predicate<this["In1"]>
 }
 
-// -------------------------------------------------------------------------------------
-// instances
-// -------------------------------------------------------------------------------------
+/**
+ * @since 3.0.0
+ */
+export const not = <A>(predicate: Predicate<A>): Predicate<A> => (a) => !predicate(a)
+
+/**
+ * @since 3.0.0
+ */
+export const or = <A>(that: Predicate<A>) =>
+  (self: Predicate<A>): Predicate<A> => (a) => self(a) || that(a)
+
+/**
+ * @since 3.0.0
+ */
+export const and = <A>(that: Predicate<A>) =>
+  (self: Predicate<A>): Predicate<A> => (a) => self(a) && that(a)
 
 /**
  * @category instances
@@ -68,8 +78,8 @@ export const getMonoidAll = <A>(): Monoid<Predicate<A>> => ({
 /**
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => (fa: Predicate<A>) => Predicate<B> = (f) =>
-  (predicate) => flow(f, predicate)
+export const contramap = <B, A>(f: (b: B) => A) =>
+  (self: Predicate<A>): Predicate<B> => flow(f, self)
 
 /**
  * @category instances
@@ -82,16 +92,13 @@ export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const not = <A>(predicate: Predicate<A>): Predicate<A> => (a) => !predicate(a)
+export const all: <A>(collection: Iterable<Predicate<A>>) => Predicate<A> = monoid.combineAll(
+  getMonoidAll()
+)
 
 /**
  * @since 3.0.0
  */
-export const or = <A>(that: Predicate<A>) =>
-  (self: Predicate<A>): Predicate<A> => (a) => self(a) || that(a)
-
-/**
- * @since 3.0.0
- */
-export const and = <A>(that: Predicate<A>) =>
-  (self: Predicate<A>): Predicate<A> => (a) => self(a) && that(a)
+export const any: <A>(collection: Iterable<Predicate<A>>) => Predicate<A> = monoid.combineAll(
+  getMonoidAny()
+)
