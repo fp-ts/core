@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Compactable.ts
-nav_order: 51
+nav_order: 57
 parent: Modules
 ---
 

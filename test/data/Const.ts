@@ -1,7 +1,7 @@
 import * as _ from "@fp-ts/core/data/Const"
-import { pipe } from "@fp-ts/core/Function"
-import * as number from "@fp-ts/core/number"
-import * as string from "@fp-ts/core/string"
+import { pipe } from "@fp-ts/core/data/Function"
+import * as number from "@fp-ts/core/data/number"
+import * as string from "@fp-ts/core/data/string"
 import * as U from "../util"
 
 describe("Const", () => {

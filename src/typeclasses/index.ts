@@ -17,11 +17,6 @@ import * as extendable from "@fp-ts/core/typeclasses/Extendable"
 import * as filterable from "@fp-ts/core/typeclasses/Filterable"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
 import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as fromOption from "@fp-ts/core/typeclasses/FromOption"
-import * as fromReader from "@fp-ts/core/typeclasses/FromReader"
-import * as fromResult from "@fp-ts/core/typeclasses/FromResult"
-import * as fromState from "@fp-ts/core/typeclasses/FromState"
-import * as fromWriter from "@fp-ts/core/typeclasses/FromWriter"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import * as invariant from "@fp-ts/core/typeclasses/Invariant"
 import * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
@@ -116,31 +111,6 @@ export {
    * @since 3.0.0
    */
   fromIdentity,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromOption,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromReader,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromResult,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromState,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromWriter,
   /**
    * @category type classes
    * @since 3.0.0

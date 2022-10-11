@@ -1,6 +1,6 @@
 ---
 title: data/Async.ts
-nav_order: 2
+nav_order: 1
 parent: Modules
 ---
 
@@ -354,7 +354,7 @@ export declare const getRaceMonoid: <A>() => any
 
 ```ts
 import * as T from '@fp-ts/core/data/Async'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 
 async function test() {
   const S = T.getRaceMonoid<string>()
@@ -844,7 +844,7 @@ export declare const delay: (duration: number) => <A>(self: Async<A>) => Async<A
 **Example**
 
 ```ts
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 import * as T from '@fp-ts/core/data/Async'
 
 async function test() {

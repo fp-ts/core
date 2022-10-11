@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import { flow, pipe } from "@fp-ts/core/Function"
+import { flow, pipe } from "@fp-ts/core/data/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Apply } from "@fp-ts/core/typeclasses/Apply"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"

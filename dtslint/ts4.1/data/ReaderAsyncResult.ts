@@ -1,10 +1,10 @@
 import * as _ from '../../../src/data/ReaderAsyncResult'
 import * as RIO from '../../../src/data/ReaderSync'
 import * as RT from '../../../src/data/ReaderAsync'
-import * as E from '../../../src/Result'
+import * as E from '../../../src/data/Result'
 import * as TE from '../../../src/data/AsyncResult'
 import * as IOE from '../../../src/data/SyncResult'
-import { pipe } from '../../../src/Function'
+import { pipe } from '../../../src/data/Function'
 
 // -------------------------------------------------------------------------------------
 // ap widening

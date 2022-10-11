@@ -13,11 +13,11 @@
  */
 import type * as fromAsync_ from "@fp-ts/core/data/FromAsync"
 import * as fromSync_ from "@fp-ts/core/data/FromSync"
+import { flow, identity, pipe, SK } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import type { Sync } from "@fp-ts/core/data/Sync"
-import { flow, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
@@ -60,7 +60,7 @@ export const fromSync: <A>(fa: Sync<A>) => Async<A> = (ma) => () => Promise.reso
  * Returns an effect that is delayed from this effect by the specified `duration` (in millis).
  *
  * @example
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  * import * as T from '@fp-ts/core/data/Async'
  *
  * async function test() {
@@ -153,7 +153,7 @@ export interface AsyncTypeLambda extends TypeLambda {
  *
  * @example
  * import * as T from '@fp-ts/core/data/Async'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * async function test() {
  *   const S = T.getRaceMonoid<string>()

@@ -1,7 +1,7 @@
 import * as _ from '../../../src/typeclasses/Monoid'
-import * as S from '../../../src/string'
-import * as N from '../../../src/number'
-import * as B from '../../../src/boolean'
+import * as S from '../../../src/data/string'
+import * as N from '../../../src/data/number'
+import * as B from '../../../src/data/boolean'
 
 //
 // struct

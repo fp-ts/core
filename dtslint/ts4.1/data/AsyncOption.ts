@@ -1,6 +1,6 @@
 import * as _ from '../../../src/data/AsyncOption'
 import * as T from '../../../src/data/Async'
-import { pipe } from '../../../src/Function'
+import { pipe } from '../../../src/data/Function'
 
 declare const n: number
 declare const sn: string | number

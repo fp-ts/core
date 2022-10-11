@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Composable.ts
-nav_order: 52
+nav_order: 58
 parent: Modules
 ---
 

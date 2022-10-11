@@ -1,18 +1,20 @@
 /**
  * @since 3.0.0
  */
+import type { Endomorphism } from "@fp-ts/core/data/Endomorphism"
+import * as fromOption_ from "@fp-ts/core/data/FromOption"
+import * as fromResult_ from "@fp-ts/core/data/FromResult"
+import type { LazyArg } from "@fp-ts/core/data/Function"
+import { identity, pipe } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
 import * as nonEmptyReadonlyArray from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
-import type { Endomorphism } from "@fp-ts/core/Endomorphism"
-import type { LazyArg } from "@fp-ts/core/Function"
-import { identity, pipe } from "@fp-ts/core/Function"
+import * as number from "@fp-ts/core/data/number"
+import type { Option } from "@fp-ts/core/data/Option"
+import type { Predicate } from "@fp-ts/core/data/Predicate"
+import type { Refinement } from "@fp-ts/core/data/Refinement"
+import type { Result } from "@fp-ts/core/data/Result"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import * as number from "@fp-ts/core/number"
-import type { Option } from "@fp-ts/core/Option"
-import type { Predicate } from "@fp-ts/core/Predicate"
-import type { Refinement } from "@fp-ts/core/Refinement"
-import type { Result } from "@fp-ts/core/Result"
 import type * as alt from "@fp-ts/core/typeclasses/Alt"
 import * as alternative from "@fp-ts/core/typeclasses/Alternative"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
@@ -24,8 +26,6 @@ import type * as extendable from "@fp-ts/core/typeclasses/Extendable"
 import * as filterable from "@fp-ts/core/typeclasses/Filterable"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
 import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as fromOption_ from "@fp-ts/core/typeclasses/FromOption"
-import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
 import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
@@ -63,7 +63,7 @@ export const fromIterable: <A>(collection: Iterable<A>) => ReadonlyArray<A> = in
  *
  * @example
  * import { makeBy } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const double = (n: number): number => n * 2
  * assert.deepStrictEqual(pipe(5, makeBy(double)), [0, 2, 4, 6, 8])
@@ -81,7 +81,7 @@ export const makeBy = <A>(f: (i: number) => A) =>
  *
  * @example
  * import { replicate } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe(3, replicate('a')), ['a', 'a', 'a'])
  *
@@ -247,8 +247,8 @@ export const isOutOfBound: <A>(i: number, as: ReadonlyArray<A>) => boolean =
  *
  * @example
  * import { lookup } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { some, none } from '@fp-ts/core/data/Option'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3], lookup(1)), some(2))
  * assert.deepStrictEqual(pipe([1, 2, 3], lookup(3)), none)
@@ -263,7 +263,7 @@ export const lookup = (i: number) =>
  *
  * @example
  * import { prepend } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3], prepend(0)), [0, 1, 2, 3])
  *
@@ -278,7 +278,7 @@ export const prepend: <B>(head: B) => <A>(tail: ReadonlyArray<A>) => NonEmptyRea
  *
  * @example
  * import { append } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3], append(4)), [1, 2, 3, 4])
  *
@@ -293,7 +293,7 @@ export const append: <B>(end: B) => <A>(init: ReadonlyArray<A>) => NonEmptyReado
  *
  * @example
  * import { head } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(head([1, 2, 3]), some(1))
  * assert.deepStrictEqual(head([]), none)
@@ -309,7 +309,7 @@ export const head = <A>(
  *
  * @example
  * import { last } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(last([1, 2, 3]), some(3))
  * assert.deepStrictEqual(last([]), none)
@@ -324,7 +324,7 @@ export const last = <A>(as: ReadonlyArray<A>): Option<A> =>
  *
  * @example
  * import { tail } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(tail([1, 2, 3]), some([2, 3]))
  * assert.deepStrictEqual(tail([]), none)
@@ -339,7 +339,7 @@ export const tail = <A>(as: ReadonlyArray<A>): Option<ReadonlyArray<A>> =>
  *
  * @example
  * import { init } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(init([1, 2, 3]), some([1, 2]))
  * assert.deepStrictEqual(init([]), none)
@@ -356,7 +356,7 @@ export const init = <A>(as: ReadonlyArray<A>): Option<ReadonlyArray<A>> =>
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const input: ReadonlyArray<number> = [1, 2, 3]
  * assert.deepStrictEqual(pipe(input, RA.takeLeft(2)), [1, 2])
@@ -378,7 +378,7 @@ export const takeLeft = (n: number) =>
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const input: ReadonlyArray<number> = [1, 2, 3]
  * assert.deepStrictEqual(pipe(input, RA.takeRight(2)), [2, 3])
@@ -473,7 +473,7 @@ export function spanLeft<A>(
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const input: ReadonlyArray<number> = [1, 2, 3]
  * assert.deepStrictEqual(pipe(input, RA.dropLeft(2)), [3])
@@ -493,7 +493,7 @@ export const dropLeft = (n: number) =>
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const input: ReadonlyArray<number> = [1, 2, 3]
  * assert.deepStrictEqual(pipe(input, RA.dropRight(2)), [1])
@@ -539,7 +539,7 @@ export function dropLeftWhile<A>(
  *
  * @example
  * import { findIndex } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(findIndex((n: number) => n === 2)([1, 2, 3]), some(1))
  * assert.deepStrictEqual(findIndex((n: number) => n === 2)([]), none)
@@ -562,7 +562,7 @@ export const findIndex = <A>(predicate: Predicate<A>) =>
  *
  * @example
  * import { findFirst } from '@fp-ts/core/data/ReadonlyArray'
- * import { some } from '@fp-ts/core/Option'
+ * import { some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(findFirst((x: { a: number, b: number }) => x.a === 1)([{ a: 1, b: 1 }, { a: 1, b: 2 }]), some({ a: 1, b: 1 }))
  *
@@ -592,7 +592,7 @@ export function findFirst<A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) =>
  *
  * @example
  * import { findFirstMap } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * interface Person {
  *   name: string
@@ -623,7 +623,7 @@ export const findFirstMap = <A, B>(f: (a: A) => Option<B>) =>
  *
  * @example
  * import { findLast } from '@fp-ts/core/data/ReadonlyArray'
- * import { some } from '@fp-ts/core/Option'
+ * import { some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(findLast((x: { a: number, b: number }) => x.a === 1)([{ a: 1, b: 1 }, { a: 1, b: 2 }]), some({ a: 1, b: 2 }))
  *
@@ -653,7 +653,7 @@ export function findLast<A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => 
  *
  * @example
  * import { findLastMap } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * interface Person {
  *   name: string
@@ -684,7 +684,7 @@ export const findLastMap = <A, B>(f: (a: A) => Option<B>) =>
  *
  * @example
  * import { findLastIndex } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * interface X {
  *   a: number
@@ -712,7 +712,7 @@ export const findLastIndex = <A>(predicate: Predicate<A>) =>
  *
  * @example
  * import { insertAt } from '@fp-ts/core/data/ReadonlyArray'
- * import { some } from '@fp-ts/core/Option'
+ * import { some } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(insertAt(2, 5)([1, 2, 3, 4]), some([1, 2, 5, 3, 4]))
  *
@@ -736,7 +736,7 @@ export const insertAt = <A>(i: number, a: A) =>
  *
  * @example
  * import { updateAt } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(updateAt(1, 1)([1, 2, 3]), some([1, 1, 3]))
  * assert.deepStrictEqual(updateAt(1, 1)([]), none)
@@ -754,7 +754,7 @@ export const updateAt = <A>(
  *
  * @example
  * import { modifyAt } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * const double = (x: number): number => x * 2
  * assert.deepStrictEqual(modifyAt(1, double)([1, 2, 3]), some([1, 4, 3]))
@@ -788,7 +788,7 @@ const unsafeDeleteAt = <A>(i: number, as: ReadonlyArray<A>): ReadonlyArray<A> =>
  *
  * @example
  * import { deleteAt } from '@fp-ts/core/data/ReadonlyArray'
- * import { some, none } from '@fp-ts/core/Option'
+ * import { some, none } from '@fp-ts/core/data/Option'
  *
  * assert.deepStrictEqual(deleteAt(0)([1, 2, 3]), some([2, 3]))
  * assert.deepStrictEqual(deleteAt(1)([]), none)
@@ -818,7 +818,7 @@ export const reverse = <A>(
  *
  * @example
  * import { successes } from '@fp-ts/core/data/ReadonlyArray'
- * import { succeed, fail } from '@fp-ts/core/Result'
+ * import { succeed, fail } from '@fp-ts/core/data/Result'
  *
  * assert.deepStrictEqual(successes([succeed(1), fail('foo'), succeed(2)]), [1, 2])
  *
@@ -841,7 +841,7 @@ export const successes = <E, A>(as: ReadonlyArray<Result<E, A>>): ReadonlyArray<
  *
  * @example
  * import { failures } from '@fp-ts/core/data/ReadonlyArray'
- * import { fail, succeed } from '@fp-ts/core/Result'
+ * import { fail, succeed } from '@fp-ts/core/data/Result'
  *
  * assert.deepStrictEqual(failures([succeed(1), fail('foo'), succeed(2)]), ['foo'])
  *
@@ -864,7 +864,7 @@ export const failures = <E, A>(as: ReadonlyArray<Result<E, A>>): ReadonlyArray<E
  *
  * @example
  * import { sort } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  *
  * assert.deepStrictEqual(sort(N.Ord)([3, 2, 1]), [1, 2, 3])
  *
@@ -880,7 +880,7 @@ export const sort = <B>(O: Ord<B>) =>
  *
  * @example
  * import { zipWith } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3], zipWith(['a', 'b', 'c', 'd'], (n, s) => s + n)), ['a1', 'b2', 'c3'])
  *
@@ -902,7 +902,7 @@ export const zipWith = <B, A, C>(fb: ReadonlyArray<B>, f: (a: A, b: B) => C) =>
  *
  * @example
  * import { zip } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3], zip(['a', 'b', 'c', 'd'])), [[1, 'a'], [2, 'b'], [3, 'c']])
  *
@@ -940,7 +940,7 @@ export const unzip = <A, B>(
  *
  * @example
  * import { prependAll } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3, 4], prependAll(9)), [9, 1, 9, 2, 9, 3, 9, 4])
  *
@@ -956,7 +956,7 @@ export const prependAll = <A>(middle: A): ((as: ReadonlyArray<A>) => ReadonlyArr
  *
  * @example
  * import { intersperse } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2, 3, 4], intersperse(9)), [1, 9, 2, 9, 3, 9, 4])
  *
@@ -988,8 +988,8 @@ export const rotate = (n: number): (<A>(as: ReadonlyArray<A>) => ReadonlyArray<A
  *
  * @example
  * import { elem } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.strictEqual(pipe([1, 2, 3], elem(N.Eq)(2)), true)
  * assert.strictEqual(pipe([1, 2, 3], elem(N.Eq)(0)), false)
@@ -1015,7 +1015,7 @@ export const elem = <A>(E: Eq<A>) =>
  *
  * @example
  * import { uniq } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  *
  * assert.deepStrictEqual(uniq(N.Eq)([1, 2, 1]), [1, 2])
  *
@@ -1033,9 +1033,9 @@ export const uniq = <A>(E: Eq<A>): ((self: ReadonlyArray<A>) => ReadonlyArray<A>
  * @example
  * import { sortBy } from '@fp-ts/core/data/ReadonlyArray'
  * import { contramap } from '@fp-ts/core/typeclasses/Ord'
- * import * as S from '@fp-ts/core/string'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as S from '@fp-ts/core/data/string'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * interface Person {
  *   name: string
@@ -1070,9 +1070,9 @@ export const sortBy = <B>(
  *
  * @example
  * import { Eq } from '@fp-ts/core/typeclasses/Eq'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const group = <A>(E: Eq<A>): ((as: ReadonlyArray<A>) => ReadonlyArray<ReadonlyArray<A>>) => {
  *   return RA.chop(as => pipe(as, RA.spanLeft(E.equals(as[0]))))
@@ -1136,8 +1136,8 @@ export const chunksOf = (
  *
  * @example
  * import { union } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2], union(N.Eq)([2, 3])), [1, 2, 3])
  *
@@ -1156,8 +1156,8 @@ export const union = <A>(E: Eq<A>): Semigroup<ReadonlyArray<A>>["combine"] => {
  *
  * @example
  * import { intersection } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2], intersection(N.Eq)([2, 3])), [2])
  *
@@ -1174,8 +1174,8 @@ export const intersection = <A>(E: Eq<A>): Semigroup<ReadonlyArray<A>>["combine"
  *
  * @example
  * import { difference } from '@fp-ts/core/data/ReadonlyArray'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe([1, 2], difference(N.Eq)([2, 3])), [1])
  *
@@ -1207,7 +1207,7 @@ export const empty: ReadonlyArray<never> = internal.empty
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -1242,7 +1242,7 @@ export const FromIdentity: fromIdentity.FromIdentity<ReadonlyArrayTypeLambda> = 
 /**
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -1559,7 +1559,7 @@ export const getIntersectionSemigroup = <A>(E: Eq<A>): Semigroup<ReadonlyArray<A
  *
  * @example
  * import { getSemigroup } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const S = getSemigroup<number>()
  * assert.deepStrictEqual(pipe([1, 2], S.combine([3, 4])), [1, 2, 3, 4])
@@ -1588,7 +1588,7 @@ export const getMonoid = <A>(): Monoid<ReadonlyArray<A>> => ({
  * different lengths, the result is non equality.
  *
  * @example
- * import * as S from '@fp-ts/core/string'
+ * import * as S from '@fp-ts/core/data/string'
  * import { liftEq } from '@fp-ts/core/data/ReadonlyArray'
  *
  * const E = liftEq(S.Eq)
@@ -1611,8 +1611,8 @@ export const liftEq = <A>(Eq: Eq<A>): Eq<ReadonlyArray<A>> =>
  *
  * @example
  * import { liftOrd } from '@fp-ts/core/data/ReadonlyArray'
- * import * as S from '@fp-ts/core/string'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as S from '@fp-ts/core/data/string'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const O = liftOrd(S.Ord)
  * assert.strictEqual(pipe(['b'], O.compare(['a'])), 1)
@@ -1726,7 +1726,7 @@ export const Monad: monad.Monad<ReadonlyArrayTypeLambda> = {
  *
  * @example
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -1972,7 +1972,7 @@ export const TraversableFilterable: traversableFilterable.TraversableFilterable<
  * Filter values inside a context.
  *
  * @example
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  * import * as RA from '@fp-ts/core/data/ReadonlyArray'
  * import * as T from '@fp-ts/core/data/Async'
  *
@@ -2082,7 +2082,7 @@ export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
  *
  * @example
  * import { every } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const isPositive = (n: number): boolean => n > 0
  *
@@ -2104,7 +2104,7 @@ export function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>> {
  *
  * @example
  * import { some } from '@fp-ts/core/data/ReadonlyArray'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const isPositive = (n: number): boolean => n > 0
  *
@@ -2128,7 +2128,7 @@ export const exists = some
  * using the specified separator.
  *
  * @example
- * import * as S from '@fp-ts/core/string'
+ * import * as S from '@fp-ts/core/data/string'
  * import { intercalate } from '@fp-ts/core/data/ReadonlyArray'
  *
  * assert.deepStrictEqual(intercalate(S.Monoid)('-')(['a', 'b', 'c']), 'a-b-c')

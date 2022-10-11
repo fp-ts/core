@@ -8,8 +8,8 @@
  *
  * @since 3.0.0
  */
+import * as internal from "@fp-ts/core/data/internal"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
 import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
 
 /**

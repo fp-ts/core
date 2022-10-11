@@ -1,5 +1,5 @@
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
-import * as E from "@fp-ts/core/Result"
+import * as E from "@fp-ts/core/data/Result"
 import * as _ from "@fp-ts/core/typeclasses/Compactable"
 import * as U from "../util"
 

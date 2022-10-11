@@ -1,9 +1,9 @@
 import * as _ from '../../../src/data/StateReaderAsyncResult'
-import * as E from '../../../src/Result'
+import * as E from '../../../src/data/Result'
 import * as TE from '../../../src/data/AsyncResult'
 import * as RTE from '../../../src/data/ReaderAsyncResult'
 import * as IOE from '../../../src/data/SyncResult'
-import { pipe } from '../../../src/Function'
+import { pipe } from '../../../src/data/Function'
 
 // -------------------------------------------------------------------------------------
 // ap widening

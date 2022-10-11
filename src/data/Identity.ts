@@ -5,9 +5,9 @@
  *
  * @since 3.0.0
  */
-import { flow, identity } from "@fp-ts/core/Function"
+import { flow, identity } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"

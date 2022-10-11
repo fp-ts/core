@@ -1,5 +1,5 @@
 import * as _ from '../../../src/data/Sync'
-import { pipe } from '../../../src/Function'
+import { pipe } from '../../../src/data/Function'
 
 //
 // Do

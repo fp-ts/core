@@ -7,7 +7,7 @@
  *
  * @since 3.0.0
  */
-import type { Endomorphism } from "@fp-ts/core/Endomorphism"
+import type { Endomorphism } from "@fp-ts/core/data/Endomorphism"
 import * as ord from "@fp-ts/core/typeclasses/Ord"
 import type { Ord } from "@fp-ts/core/typeclasses/Ord"
 

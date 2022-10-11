@@ -1,6 +1,6 @@
 ---
 title: data/AsyncResult.ts
-nav_order: 4
+nav_order: 3
 parent: Modules
 ---
 
@@ -365,8 +365,8 @@ export declare const catchAll: <E1, E2, B>(
 **Example**
 
 ```ts
-import * as R from '@fp-ts/core/Result'
-import { pipe } from '@fp-ts/core/Function'
+import * as R from '@fp-ts/core/data/Result'
+import { pipe } from '@fp-ts/core/data/Function'
 import * as AR from '@fp-ts/core/data/AsyncResult'
 
 async function test() {
@@ -484,8 +484,8 @@ export declare const orElse: <E2, B>(
 **Example**
 
 ```ts
-import * as E from '@fp-ts/core/Result'
-import { pipe } from '@fp-ts/core/Function'
+import * as E from '@fp-ts/core/data/Result'
+import { pipe } from '@fp-ts/core/data/Function'
 import * as TE from '@fp-ts/core/data/AsyncResult'
 
 async function test() {
@@ -759,9 +759,9 @@ export declare const fromRejectable: <A, E>(f: any, onRejected: (reason: unknown
 **Example**
 
 ```ts
-import * as E from '@fp-ts/core/Result'
+import * as E from '@fp-ts/core/data/Result'
 import * as TE from '@fp-ts/core/data/AsyncResult'
-import { identity } from '@fp-ts/core/Function'
+import { identity } from '@fp-ts/core/data/Function'
 
 async function test() {
   assert.deepStrictEqual(await TE.fromRejectable(() => Promise.resolve(1), identity)(), E.succeed(1))

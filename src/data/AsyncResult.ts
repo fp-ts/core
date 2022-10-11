@@ -12,20 +12,22 @@ import * as async from "@fp-ts/core/data/Async"
 import type { Async } from "@fp-ts/core/data/Async"
 import type { AsyncOption } from "@fp-ts/core/data/AsyncOption"
 import * as fromAsync_ from "@fp-ts/core/data/FromAsync"
+import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
+import * as fromResult_ from "@fp-ts/core/data/FromResult"
 import * as fromSync_ from "@fp-ts/core/data/FromSync"
+import type { LazyArg } from "@fp-ts/core/data/Function"
+import { flow, identity, SK } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
+import type { Option } from "@fp-ts/core/data/Option"
+import type { Predicate } from "@fp-ts/core/data/Predicate"
+import type { Refinement } from "@fp-ts/core/data/Refinement"
+import * as result from "@fp-ts/core/data/Result"
+import type { Result } from "@fp-ts/core/data/Result"
+import * as resultT from "@fp-ts/core/data/ResultT"
 import type { Sync } from "@fp-ts/core/data/Sync"
 import type { SyncResult } from "@fp-ts/core/data/SyncResult"
-import type { LazyArg } from "@fp-ts/core/Function"
-import { flow, identity, SK } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import type { Option } from "@fp-ts/core/Option"
-import type { Predicate } from "@fp-ts/core/Predicate"
-import type { Refinement } from "@fp-ts/core/Refinement"
-import * as result from "@fp-ts/core/Result"
-import type { Result } from "@fp-ts/core/Result"
-import * as resultT from "@fp-ts/core/transformers/ResultT"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
@@ -33,8 +35,6 @@ import type * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
 import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
 import type { Filterable } from "@fp-ts/core/typeclasses/Filterable"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
-import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as fromResult_ from "@fp-ts/core/typeclasses/FromResult"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
 import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
 import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
@@ -163,9 +163,9 @@ export const getOrElseAsync: <B>(
  * Converts a `Promise` that may reject to a `AsyncResult`.
  *
  * @example
- * import * as E from '@fp-ts/core/Result'
+ * import * as E from '@fp-ts/core/data/Result'
  * import * as TE from '@fp-ts/core/data/AsyncResult'
- * import { identity } from '@fp-ts/core/Function'
+ * import { identity } from '@fp-ts/core/data/Function'
  *
  * async function test() {
  *   assert.deepStrictEqual(await TE.fromRejectable(() => Promise.resolve(1), identity)(), E.succeed(1))
@@ -205,8 +205,8 @@ export const liftRejectable = <A extends ReadonlyArray<unknown>, B, E>(
  * Recovers from all errors.
  *
  * @example
- * import * as R from '@fp-ts/core/Result'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as R from '@fp-ts/core/data/Result'
+ * import { pipe } from '@fp-ts/core/data/Function'
  * import * as AR from '@fp-ts/core/data/AsyncResult'
  *
  * async function test() {
@@ -338,8 +338,8 @@ export const flatten: <E1, E2, A>(
  * In case of `AsyncResult` returns `self` if it is a `Success` or the value returned by `that` otherwise.
  *
  * @example
- * import * as E from '@fp-ts/core/Result'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as E from '@fp-ts/core/data/Result'
+ * import { pipe } from '@fp-ts/core/data/Function'
  * import * as TE from '@fp-ts/core/data/AsyncResult'
  *
  * async function test() {

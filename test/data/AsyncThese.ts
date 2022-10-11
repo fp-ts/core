@@ -1,12 +1,12 @@
 import * as T from "@fp-ts/core/data/Async"
 import * as _ from "@fp-ts/core/data/AsyncThese"
+import { pipe } from "@fp-ts/core/data/Function"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
+import * as E from "@fp-ts/core/data/Result"
+import * as S from "@fp-ts/core/data/string"
 import * as IO from "@fp-ts/core/data/Sync"
 import * as TH from "@fp-ts/core/data/These"
-import { pipe } from "@fp-ts/core/Function"
-import * as E from "@fp-ts/core/Result"
-import * as S from "@fp-ts/core/string"
 import * as U from "../util"
 
 describe("AsyncThese", () => {

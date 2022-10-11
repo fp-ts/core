@@ -1,7 +1,7 @@
 import * as _ from '../../../src/data/SyncResult'
 import * as IO from '../../../src/data/Sync'
-import * as E from '../../../src/Result'
-import { pipe } from '../../../src/Function'
+import * as E from '../../../src/data/Result'
+import { pipe } from '../../../src/data/Function'
 
 // -------------------------------------------------------------------------------------
 // ap widening

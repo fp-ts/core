@@ -1,10 +1,10 @@
 import * as T from '../../../src/data/Async'
-import { pipe } from '../../../src/Function'
-import * as N from '../../../src/number'
+import { pipe } from '../../../src/data/Function'
+import * as N from '../../../src/data/number'
 import type { Ord } from '../../../src/typeclasses/Ord'
 import * as ord from '../../../src/typeclasses/Ord'
 import * as _ from '../../../src/data/ReadonlyArray'
-import * as E from '../../../src/Result'
+import * as E from '../../../src/data/Result'
 
 declare const n: number
 declare const sn: string | number

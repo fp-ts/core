@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Bifunctor.ts
-nav_order: 47
+nav_order: 53
 parent: Modules
 ---
 

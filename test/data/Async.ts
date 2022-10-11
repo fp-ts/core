@@ -1,9 +1,9 @@
+import { flow, pipe } from "@fp-ts/core/data/Function"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
 import * as I from "@fp-ts/core/data/Sync"
-import { flow, pipe } from "@fp-ts/core/Function"
 // import * as RNEA from '@fp-ts/core/NonEmptyReadonlyArray'
 import * as _ from "@fp-ts/core/data/Async"
-import * as S from "@fp-ts/core/string"
+import * as S from "@fp-ts/core/data/string"
 import * as U from "../util"
 
 export const assertAsync = <A, B>(

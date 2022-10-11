@@ -11,7 +11,7 @@
  *
  * @since 3.0.0
  */
-import { apply, constant } from "@fp-ts/core/Function"
+import { apply, constant } from "@fp-ts/core/data/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**

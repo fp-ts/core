@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/Function"
+import { pipe } from "@fp-ts/core/data/Function"
 import * as _ from "@fp-ts/core/typeclasses/Ordering"
 import { deepStrictEqual } from "../util"
 

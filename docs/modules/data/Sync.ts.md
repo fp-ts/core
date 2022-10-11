@@ -1,6 +1,6 @@
 ---
 title: data/Sync.ts
-nav_order: 19
+nav_order: 40
 parent: Modules
 ---
 

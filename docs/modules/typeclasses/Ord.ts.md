@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Ord.ts
-nav_order: 71
+nav_order: 72
 parent: Modules
 ---
 
@@ -63,8 +63,8 @@ export declare const contramap: <B, A>(f: (b: B) => A) => (fa: Ord<A>) => Ord<B>
 ```ts
 import { contramap } from '@fp-ts/core/typeclasses/Ord'
 import { sort } from '@fp-ts/core/data/ReadonlyArray'
-import * as S from '@fp-ts/core/string'
-import { pipe } from '@fp-ts/core/Function'
+import * as S from '@fp-ts/core/data/string'
+import { pipe } from '@fp-ts/core/data/Function'
 
 type User = {
   readonly name: string
@@ -131,11 +131,11 @@ export declare const getMonoid: <A>() => any
 ```ts
 import { sort } from '@fp-ts/core/data/ReadonlyArray'
 import { contramap, reverse, getMonoid } from '@fp-ts/core/typeclasses/Ord'
-import { pipe } from '@fp-ts/core/Function'
+import { pipe } from '@fp-ts/core/data/Function'
 import { combineAll } from '@fp-ts/core/typeclasses/Monoid'
-import * as B from '@fp-ts/core/boolean'
-import * as N from '@fp-ts/core/number'
-import * as S from '@fp-ts/core/string'
+import * as B from '@fp-ts/core/data/boolean'
+import * as N from '@fp-ts/core/data/number'
+import * as S from '@fp-ts/core/data/string'
 
 interface User {
   id: number
@@ -256,8 +256,8 @@ export declare const between: <A>(O: Ord<A>) => (low: A, hi: A) => any
 
 ```ts
 import { between } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const f = between(N.Ord)(2, 4)
 assert.deepStrictEqual(pipe(1, f), false)
@@ -281,8 +281,8 @@ export declare const clamp: <A>(O: Ord<A>) => (low: A, hi: A) => any
 
 ```ts
 import { clamp } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const f = clamp(N.Ord)(2, 4)
 assert.deepStrictEqual(pipe(1, f), 2)
@@ -316,8 +316,8 @@ export declare const geq: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
 
 ```ts
 import { geq } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, geq(N.Ord)(4)), true)
 assert.deepStrictEqual(pipe(5, geq(N.Ord)(5)), true)
@@ -340,8 +340,8 @@ export declare const gt: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
 
 ```ts
 import { gt } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, gt(N.Ord)(4)), true)
 assert.deepStrictEqual(pipe(5, gt(N.Ord)(5)), false)
@@ -364,8 +364,8 @@ export declare const leq: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
 
 ```ts
 import { leq } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, leq(N.Ord)(4)), false)
 assert.deepStrictEqual(pipe(5, leq(N.Ord)(5)), true)
@@ -388,8 +388,8 @@ export declare const lt: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
 
 ```ts
 import { lt } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, lt(N.Ord)(4)), false)
 assert.deepStrictEqual(pipe(5, lt(N.Ord)(5)), false)
@@ -412,8 +412,8 @@ export declare const max: <A>(O: Ord<A>) => (that: A) => (self: A) => A
 
 ```ts
 import { max } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, max(N.Ord)(6)), 6)
 ```
@@ -434,8 +434,8 @@ export declare const min: <A>(O: Ord<A>) => (that: A) => (self: A) => A
 
 ```ts
 import { min } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, min(N.Ord)(6)), 5)
 ```
@@ -454,8 +454,8 @@ export declare const reverse: <A>(O: Ord<A>) => Ord<A>
 
 ```ts
 import { reverse } from '@fp-ts/core/typeclasses/Ord'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 assert.deepStrictEqual(pipe(5, N.Ord.compare(6)), -1)
 assert.deepStrictEqual(pipe(5, reverse(N.Ord).compare(6)), 1)
@@ -477,10 +477,10 @@ export declare const tuple: <A extends readonly unknown[]>(...ords: { [K in keyo
 
 ```ts
 import { tuple } from '@fp-ts/core/typeclasses/Ord'
-import * as B from '@fp-ts/core/boolean'
-import * as S from '@fp-ts/core/string'
-import * as N from '@fp-ts/core/number'
-import { pipe } from '@fp-ts/core/Function'
+import * as B from '@fp-ts/core/data/boolean'
+import * as S from '@fp-ts/core/data/string'
+import * as N from '@fp-ts/core/data/number'
+import { pipe } from '@fp-ts/core/data/Function'
 
 const O = tuple(S.Ord, N.Ord, B.Ord)
 assert.strictEqual(pipe(['a', 1, true], O.compare(['b', 2, true])), -1)

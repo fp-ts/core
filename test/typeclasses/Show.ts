@@ -1,5 +1,5 @@
-import * as N from "@fp-ts/core/number"
-import * as S from "@fp-ts/core/string"
+import * as N from "@fp-ts/core/data/number"
+import * as S from "@fp-ts/core/data/string"
 import * as _ from "@fp-ts/core/typeclasses/Show"
 import * as U from "../util"
 

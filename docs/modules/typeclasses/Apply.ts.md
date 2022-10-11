@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Apply.ts
-nav_order: 46
+nav_order: 52
 parent: Modules
 ---
 

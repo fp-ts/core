@@ -1,6 +1,6 @@
 ---
 title: data/StateReaderAsyncResult.ts
-nav_order: 18
+nav_order: 37
 parent: Modules
 ---
 

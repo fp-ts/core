@@ -1,13 +1,13 @@
 import * as T from "@fp-ts/core/data/Async"
+import { pipe } from "@fp-ts/core/data/Function"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
+import * as R from "@fp-ts/core/data/Reader"
 import * as RT from "@fp-ts/core/data/ReaderAsync"
 import * as _ from "@fp-ts/core/data/ReaderAsyncWriter"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
+import * as S from "@fp-ts/core/data/string"
 import * as IO from "@fp-ts/core/data/Sync"
-import { pipe } from "@fp-ts/core/Function"
-import * as R from "@fp-ts/core/Reader"
-import * as S from "@fp-ts/core/string"
-import * as W from "@fp-ts/core/Writer"
+import * as W from "@fp-ts/core/data/Writer"
 import * as U from "../util"
 
 const make = <W, A, R = unknown>(w: W, a: A): _.ReaderAsyncWriter<R, W, A> => RT.of([w, a])

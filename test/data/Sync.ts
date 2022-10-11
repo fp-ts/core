@@ -1,6 +1,6 @@
+import { flow, pipe } from "@fp-ts/core/data/Function"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
 import * as _ from "@fp-ts/core/data/Sync"
-import { flow, pipe } from "@fp-ts/core/Function"
 import * as U from "../util"
 
 describe("Sync", () => {

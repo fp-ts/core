@@ -15,8 +15,8 @@
  *
  * @since 3.0.0
  */
-import { identity } from "@fp-ts/core/Function"
-import * as internal from "@fp-ts/core/internal"
+import { identity } from "@fp-ts/core/data/Function"
+import * as internal from "@fp-ts/core/data/internal"
 import type { Ord } from "@fp-ts/core/typeclasses/Ord"
 import * as ord from "@fp-ts/core/typeclasses/Ord"
 
@@ -33,8 +33,8 @@ export interface Semigroup<A> {
  *
  * @example
  * import { min } from '@fp-ts/core/typeclasses/Semigroup'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const S = min(N.Ord)
  *
@@ -52,8 +52,8 @@ export const min = <A>(Ord: Ord<A>): Semigroup<A> => ({
  *
  * @example
  * import { max } from '@fp-ts/core/typeclasses/Semigroup'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * const S = max(N.Ord)
  *
@@ -79,8 +79,8 @@ export const constant = <S>(s: S): Semigroup<S> => ({
  *
  * @example
  * import { reverse } from '@fp-ts/core/typeclasses/Semigroup'
- * import * as S from '@fp-ts/core/string'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as S from '@fp-ts/core/data/string'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe('a', reverse(S.Semigroup).combine('b')), 'ba')
  *
@@ -95,8 +95,8 @@ export const reverse = <S>(Semigroup: Semigroup<S>): Semigroup<S> => ({
  *
  * @example
  * import { struct } from '@fp-ts/core/typeclasses/Semigroup'
- * import * as N from '@fp-ts/core/number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as N from '@fp-ts/core/data/number'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * interface Point {
  *   readonly x: number
@@ -134,10 +134,10 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
  *
  * @example
  * import { tuple } from '@fp-ts/core/typeclasses/Semigroup'
- * import { pipe } from '@fp-ts/core/Function'
- * import * as B from '@fp-ts/core/boolean'
- * import * as N from '@fp-ts/core/number'
- * import * as S from '@fp-ts/core/string'
+ * import { pipe } from '@fp-ts/core/data/Function'
+ * import * as B from '@fp-ts/core/data/boolean'
+ * import * as N from '@fp-ts/core/data/number'
+ * import * as S from '@fp-ts/core/data/string'
  *
  * const S1 = tuple(S.Semigroup, N.SemigroupSum)
  * assert.deepStrictEqual(pipe(['a', 1], S1.combine(['b', 2])), ['ab', 3])
@@ -158,8 +158,8 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  *
  * @example
  * import { intercalate } from '@fp-ts/core/typeclasses/Semigroup'
- * import { pipe } from '@fp-ts/core/Function'
- * import * as S from '@fp-ts/core/string'
+ * import { pipe } from '@fp-ts/core/data/Function'
+ * import * as S from '@fp-ts/core/data/string'
  *
  * const S1 = pipe(S.Semigroup, intercalate(' + '))
  *
@@ -182,7 +182,7 @@ export const intercalate = <A>(separator: A) =>
  *
  * @example
  * import * as S from '@fp-ts/core/typeclasses/Semigroup'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe(1, S.first<number>().combine(2)), 1)
  *
@@ -198,7 +198,7 @@ export const first = <A>(): Semigroup<A> => ({
  *
  * @example
  * import * as S from '@fp-ts/core/typeclasses/Semigroup'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from '@fp-ts/core/data/Function'
  *
  * assert.deepStrictEqual(pipe(1, S.last<number>().combine(2)), 2)
  *
@@ -216,7 +216,7 @@ export const last = <A>(): Semigroup<A> => ({
  *
  * @example
  * import { combineAll } from '@fp-ts/core/typeclasses/Semigroup'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/data/number'
  *
  * const sum = combineAll(N.SemigroupSum)(0)
  *

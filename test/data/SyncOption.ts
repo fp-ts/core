@@ -1,10 +1,10 @@
+import { pipe } from "@fp-ts/core/data/Function"
+import * as O from "@fp-ts/core/data/Option"
 import * as RA from "@fp-ts/core/data/ReadonlyArray"
+import * as E from "@fp-ts/core/data/Result"
 import * as I from "@fp-ts/core/data/Sync"
 import * as _ from "@fp-ts/core/data/SyncOption"
 import * as IE from "@fp-ts/core/data/SyncResult"
-import { pipe } from "@fp-ts/core/Function"
-import * as O from "@fp-ts/core/Option"
-import * as E from "@fp-ts/core/Result"
 import * as U from "../util"
 
 describe("SyncOption", () => {

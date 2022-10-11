@@ -1,5 +1,5 @@
-import { pipe } from "@fp-ts/core/Function"
-import * as O from "@fp-ts/core/Option"
+import { pipe } from "@fp-ts/core/data/Function"
+import * as O from "@fp-ts/core/data/Option"
 import * as U from "../util"
 
 describe("Functor", () => {
