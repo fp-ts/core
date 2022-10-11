@@ -3,28 +3,6 @@
  */
 
 import * as boolean from "@fp-ts/core/boolean"
-import * as async from "@fp-ts/core/data/Async"
-import * as asyncOption from "@fp-ts/core/data/AsyncOption"
-import * as asyncResult from "@fp-ts/core/data/AsyncResult"
-import * as asyncThese from "@fp-ts/core/data/AsyncThese"
-import * as const_ from "@fp-ts/core/data/Const"
-import * as fromAsync from "@fp-ts/core/data/FromAsync"
-import * as fromSync from "@fp-ts/core/data/FromSync"
-import * as fromThese from "@fp-ts/core/data/FromThese"
-import * as identity from "@fp-ts/core/data/Identity"
-import * as nonEmptyReadonlyArray from "@fp-ts/core/data/NonEmptyReadonlyArray"
-import * as readerAsync from "@fp-ts/core/data/ReaderAsync"
-import * as readerAsyncResult from "@fp-ts/core/data/ReaderAsyncResult"
-import * as readerAsyncWriter from "@fp-ts/core/data/ReaderAsyncWriter"
-import * as readerResult from "@fp-ts/core/data/ReaderResult"
-import * as readerSync from "@fp-ts/core/data/ReaderSync"
-import * as readonlyArray from "@fp-ts/core/data/ReadonlyArray"
-import * as stateReaderAsyncResult from "@fp-ts/core/data/StateReaderAsyncResult"
-import * as sync from "@fp-ts/core/data/Sync"
-import * as syncOption from "@fp-ts/core/data/SyncOption"
-import * as syncResult from "@fp-ts/core/data/SyncResult"
-import * as these from "@fp-ts/core/data/These"
-import * as theseT from "@fp-ts/core/data/transformers/TheseT"
 import * as endomorphism from "@fp-ts/core/Endomorphism"
 import * as function_ from "@fp-ts/core/Function"
 import * as hkt from "@fp-ts/core/HKT"
@@ -99,26 +77,6 @@ export {
    */
   apply,
   /**
-   * @category data types
-   * @since 3.0.0
-   */
-  async,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  asyncOption,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  asyncResult,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  asyncThese,
-  /**
    * @category type classes
    * @since 3.0.0
    */
@@ -153,11 +111,6 @@ export {
    */
   composable,
   /**
-   * @category data types
-   * @since 3.0.0
-   */
-  const_ as const,
-  /**
    * @category type classes
    * @since 3.0.0
    */
@@ -191,11 +144,6 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  fromAsync,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
   fromIdentity,
   /**
    * @category type classes
@@ -221,16 +169,6 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  fromSync,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromThese,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
   fromWriter,
   /**
    * @since 3.0.0
@@ -245,11 +183,6 @@ export {
    * @since 3.0.0
    */
   hkt,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  identity,
   /**
    * @category type classes
    * @since 3.0.0
@@ -279,11 +212,6 @@ export {
    * @since 3.0.0
    */
   monoid,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  nonEmptyReadonlyArray,
   /**
    * @since 3.0.0
    */
@@ -317,40 +245,10 @@ export {
    */
   reader,
   /**
-   * @category data types
-   * @since 3.0.0
-   */
-  readerAsync,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  readerAsyncResult,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  readerAsyncWriter,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  readerResult,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  readerSync,
-  /**
    * @category monad transformers
    * @since 3.0.0
    */
   readerT,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  readonlyArray,
   /**
    * @category data types
    * @since 3.0.0
@@ -382,11 +280,6 @@ export {
    */
   state,
   /**
-   * @category data types
-   * @since 3.0.0
-   */
-  stateReaderAsyncResult,
-  /**
    * @category monad transformers
    * @since 3.0.0
    */
@@ -395,31 +288,6 @@ export {
    * @since 3.0.0
    */
   string,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  sync,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  syncOption,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  syncResult,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  these,
-  /**
-   * @category monad transformers
-   * @since 3.0.0
-   */
-  theseT,
   /**
    * @category type classes
    * @since 3.0.0

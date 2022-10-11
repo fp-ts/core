@@ -1,9 +1,6 @@
 /**
  * @since 3.0.0
  */
-import * as fromAsync from "@fp-ts/core/data/FromAsync"
-import * as fromSync from "@fp-ts/core/data/FromSync"
-import * as fromThese from "@fp-ts/core/data/FromThese"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import * as alternative from "@fp-ts/core/typeclasses/Alternative"
 import * as applicative from "@fp-ts/core/typeclasses/Applicative"
@@ -118,11 +115,6 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  fromAsync,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
   fromIdentity,
   /**
    * @category type classes
@@ -144,16 +136,6 @@ export {
    * @since 3.0.0
    */
   fromState,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromSync,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromThese,
   /**
    * @category type classes
    * @since 3.0.0
