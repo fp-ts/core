@@ -44,7 +44,7 @@ describe("Const", () => {
   })
 
   it("getOrd", () => {
-    const O = _.getOrd(number.Ord)
+    const O = _.liftOrd(number.Ord)
     U.deepStrictEqual(O.compare(_.make(1))(_.make(1)), 0)
     U.deepStrictEqual(O.compare(_.make(1))(_.make(2)), 1)
     U.deepStrictEqual(O.compare(_.make(2))(_.make(1)), -1)

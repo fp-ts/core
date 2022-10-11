@@ -267,7 +267,7 @@ describe("Option", () => {
   })
 
   it("getOrd", () => {
-    const OS = O.getOrd(S.Ord)
+    const OS = O.liftOrd(S.Ord)
     U.deepStrictEqual(pipe(O.none, OS.compare(O.none)), 0)
     U.deepStrictEqual(pipe(O.some("a"), OS.compare(O.none)), 1)
     U.deepStrictEqual(pipe(O.none, OS.compare(O.some("a"))), -1)

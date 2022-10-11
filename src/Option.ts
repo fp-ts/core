@@ -644,11 +644,11 @@ export const liftEq = <A>(E: Eq<A>): Eq<Option<A>> =>
  * `None` is considered to be less than any `Some` value.
  *
  * @example
- * import { none, some, getOrd } from '@fp-ts/core/Option'
+ * import { none, some, liftOrd } from '@fp-ts/core/Option'
  * import * as N from '@fp-ts/core/number'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * const O = getOrd(N.Ord)
+ * const O = liftOrd(N.Ord)
  * assert.strictEqual(pipe(none, O.compare(none)), 0)
  * assert.strictEqual(pipe(none, O.compare(some(1))), -1)
  * assert.strictEqual(pipe(some(1), O.compare(none)), 1)
@@ -658,7 +658,7 @@ export const liftEq = <A>(E: Eq<A>): Eq<Option<A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getOrd = <A>(O: Ord<A>): Ord<Option<A>> =>
+export const liftOrd = <A>(O: Ord<A>): Ord<Option<A>> =>
   ord.fromCompare((that) =>
     (self) => isSome(self) ? (isSome(that) ? O.compare(that.value)(self.value) : 1) : -1
   )

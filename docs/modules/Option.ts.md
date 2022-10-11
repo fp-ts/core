@@ -79,10 +79,10 @@ Added in v3.0.0
   - [Monad](#monad)
   - [Traversable](#traversable)
   - [TraversableFilterable](#traversablefilterable)
-  - [getEq](#geteq)
   - [getMonoid](#getmonoid)
-  - [getOrd](#getord)
   - [getShow](#getshow)
+  - [liftEq](#lifteq)
+  - [liftOrd](#liftord)
 - [interop](#interop)
   - [fromThrowable](#fromthrowable)
   - [liftThrowable](#liftthrowable)
@@ -754,30 +754,6 @@ export declare const TraversableFilterable: any
 
 Added in v3.0.0
 
-## getEq
-
-**Signature**
-
-```ts
-export declare const getEq: <A>(E: any) => any
-```
-
-**Example**
-
-```ts
-import { none, some, getEq } from '@fp-ts/core/Option'
-import * as N from '@fp-ts/core/number'
-
-const E = getEq(N.Eq)
-assert.strictEqual(E.equals(none)(none), true)
-assert.strictEqual(E.equals(none)(some(1)), false)
-assert.strictEqual(E.equals(some(1))(none), false)
-assert.strictEqual(E.equals(some(1))(some(2)), false)
-assert.strictEqual(E.equals(some(1))(some(1)), true)
-```
-
-Added in v3.0.0
-
 ## getMonoid
 
 Monoid returning the left-most non-`None` value. If both operands are `Some`s then the inner values are
@@ -812,7 +788,41 @@ assert.deepStrictEqual(pipe(some(1), M.combine(some(2))), some(3))
 
 Added in v3.0.0
 
-## getOrd
+## getShow
+
+**Signature**
+
+```ts
+export declare const getShow: <A>(S: any) => any
+```
+
+Added in v3.0.0
+
+## liftEq
+
+**Signature**
+
+```ts
+export declare const liftEq: <A>(E: any) => any
+```
+
+**Example**
+
+```ts
+import { none, some, liftEq } from '@fp-ts/core/Option'
+import * as N from '@fp-ts/core/number'
+
+const E = liftEq(N.Eq)
+assert.strictEqual(E.equals(none)(none), true)
+assert.strictEqual(E.equals(none)(some(1)), false)
+assert.strictEqual(E.equals(some(1))(none), false)
+assert.strictEqual(E.equals(some(1))(some(2)), false)
+assert.strictEqual(E.equals(some(1))(some(1)), true)
+```
+
+Added in v3.0.0
+
+## liftOrd
 
 The `Ord` instance allows `Option` values to be compared with
 `compare`, whenever there is an `Ord` instance for
@@ -823,32 +833,22 @@ the type the `Option` contains.
 **Signature**
 
 ```ts
-export declare const getOrd: <A>(O: any) => any
+export declare const liftOrd: <A>(O: any) => any
 ```
 
 **Example**
 
 ```ts
-import { none, some, getOrd } from '@fp-ts/core/Option'
+import { none, some, liftOrd } from '@fp-ts/core/Option'
 import * as N from '@fp-ts/core/number'
 import { pipe } from '@fp-ts/core/Function'
 
-const O = getOrd(N.Ord)
+const O = liftOrd(N.Ord)
 assert.strictEqual(pipe(none, O.compare(none)), 0)
 assert.strictEqual(pipe(none, O.compare(some(1))), -1)
 assert.strictEqual(pipe(some(1), O.compare(none)), 1)
 assert.strictEqual(pipe(some(1), O.compare(some(2))), -1)
 assert.strictEqual(pipe(some(1), O.compare(some(1))), 0)
-```
-
-Added in v3.0.0
-
-## getShow
-
-**Signature**
-
-```ts
-export declare const getShow: <A>(S: any) => any
 ```
 
 Added in v3.0.0

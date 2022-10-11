@@ -368,7 +368,7 @@ describe("ReadonlyArray", () => {
   })
 
   it("getOrd", () => {
-    const O = _.getOrd(string.Ord)
+    const O = _.liftOrd(string.Ord)
     U.deepStrictEqual(pipe([], O.compare([])), 0)
     U.deepStrictEqual(pipe(["a"], O.compare(["a"])), 0)
 
