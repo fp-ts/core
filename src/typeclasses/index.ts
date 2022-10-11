@@ -1,6 +1,9 @@
 /**
  * @since 3.0.0
  */
+import * as compactable from "@fp-ts/core/data/Compactable"
+import * as filterable from "@fp-ts/core/data/Filterable"
+import * as traversableFilterable from "@fp-ts/core/data/TraversableFilterable"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import * as alternative from "@fp-ts/core/typeclasses/Alternative"
 import * as applicative from "@fp-ts/core/typeclasses/Applicative"
@@ -9,12 +12,10 @@ import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
 import * as bounded from "@fp-ts/core/typeclasses/Bounded"
 import * as category from "@fp-ts/core/typeclasses/Category"
 import * as comonad from "@fp-ts/core/typeclasses/Comonad"
-import * as compactable from "@fp-ts/core/typeclasses/Compactable"
 import * as composable from "@fp-ts/core/typeclasses/Composable"
 import * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
 import * as eq from "@fp-ts/core/typeclasses/Eq"
 import * as extendable from "@fp-ts/core/typeclasses/Extendable"
-import * as filterable from "@fp-ts/core/typeclasses/Filterable"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
 import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
@@ -28,7 +29,6 @@ import * as ordering from "@fp-ts/core/typeclasses/Ordering"
 import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
 import * as show from "@fp-ts/core/typeclasses/Show"
 import * as traversable from "@fp-ts/core/typeclasses/Traversable"
-import * as traversableFilterable from "@fp-ts/core/typeclasses/TraversableFilterable"
 
 export {
   /**

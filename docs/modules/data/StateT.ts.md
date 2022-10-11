@@ -1,6 +1,6 @@
 ---
 title: data/StateT.ts
-nav_order: 38
+nav_order: 40
 parent: Modules
 ---
 

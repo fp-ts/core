@@ -1,6 +1,6 @@
 ---
 title: data/ReaderAsync.ts
-nav_order: 26
+nav_order: 28
 parent: Modules
 ---
 

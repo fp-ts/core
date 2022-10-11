@@ -13,6 +13,8 @@
  *
  * @since 3.0.0
  */
+import type { Compactable } from "@fp-ts/core/data/Compactable"
+import type * as filterable from "@fp-ts/core/data/Filterable"
 import * as fromResult_ from "@fp-ts/core/data/FromResult"
 import { flow, identity, pipe, SK } from "@fp-ts/core/data/Function"
 import * as internal from "@fp-ts/core/data/internal"
@@ -20,15 +22,14 @@ import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArr
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Predicate } from "@fp-ts/core/data/Predicate"
 import type { Refinement } from "@fp-ts/core/data/Refinement"
+import type { TraversableFilterable } from "@fp-ts/core/data/TraversableFilterable"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
 import * as apply from "@fp-ts/core/typeclasses/Apply"
 import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
-import type { Compactable } from "@fp-ts/core/typeclasses/Compactable"
 import * as eq from "@fp-ts/core/typeclasses/Eq"
 import type * as extendable from "@fp-ts/core/typeclasses/Extendable"
-import type * as filterable from "@fp-ts/core/typeclasses/Filterable"
 import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
 import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
 import * as functor from "@fp-ts/core/typeclasses/Functor"
@@ -39,7 +40,6 @@ import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
 import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
 import type { Show } from "@fp-ts/core/typeclasses/Show"
 import * as traversable from "@fp-ts/core/typeclasses/Traversable"
-import type { TraversableFilterable } from "@fp-ts/core/typeclasses/TraversableFilterable"
 
 /**
  * @category model

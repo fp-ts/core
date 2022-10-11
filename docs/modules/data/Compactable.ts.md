@@ -1,6 +1,6 @@
 ---
-title: typeclasses/Compactable.ts
-nav_order: 57
+title: data/Compactable.ts
+nav_order: 6
 parent: Modules
 ---
 

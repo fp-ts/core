@@ -5,6 +5,8 @@ import { identity } from "@fp-ts/core/data/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Functor } from "@fp-ts/core/typeclasses/Functor"
 
+// OK
+
 /**
  * @category model
  * @since 3.0.0
