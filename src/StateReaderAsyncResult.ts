@@ -942,7 +942,13 @@ const let_: <N extends string, A extends object, B>(
   { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }
 > = functor.let(Functor)
 
-export { let_ as let }
+export {
+  /**
+   * @category do notation
+   * @since 3.0.0
+   */
+  let_ as let
+}
 
 /**
  * @category do notation
