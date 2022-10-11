@@ -9,14 +9,14 @@ import * as B from '../../src/boolean'
 //
 
 // $ExpectType Semigroup<{ readonly a: string; readonly b: number; readonly c: boolean; }>
-_.struct({ a: S.Semigroup, b: N.SemigroupSum, c: B.SemigroupAnd })
+_.struct({ a: S.Semigroup, b: N.SemigroupSum, c: B.SemigroupAll })
 
 //
 // tuple
 //
 
 // $ExpectType Semigroup<readonly [string, number, boolean]>
-_.tuple(S.Semigroup, N.SemigroupSum, B.SemigroupAnd)
+_.tuple(S.Semigroup, N.SemigroupSum, B.SemigroupAll)
 
 //
 // concatAll
