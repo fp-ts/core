@@ -82,10 +82,6 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
 } as any)
 
 /**
- * Given a sequence of `as`, combine them and return the total.
- *
- * If `as` is empty, return the monoid `empty` value.
- *
  * @since 3.0.0
  */
 export const combineAll = <A>(Monoid: Monoid<A>) =>

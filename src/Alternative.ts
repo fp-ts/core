@@ -1,15 +1,14 @@
 /**
  * @since 3.0.0
  */
+import type { FirstSuccessOf } from "@fp-ts/core/FirstSuccessOf"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { OrElse } from "@fp-ts/core/OrElse"
-import * as alt from "@fp-ts/core/OrElse"
 
 /**
  * @category model
  * @since 3.0.0
  */
-export interface Alternative<F extends TypeLambda> extends OrElse<F> {
+export interface Alternative<F extends TypeLambda> extends FirstSuccessOf<F> {
   readonly none: <S>() => Kind<F, S, unknown, never, never, never>
 }
 
@@ -20,4 +19,4 @@ export interface Alternative<F extends TypeLambda> extends OrElse<F> {
  */
 export const firstSuccessOf = <G extends TypeLambda>(Alternative: Alternative<G>) =>
   <S, R, O, E, A>(collection: Iterable<Kind<G, S, R, O, E, A>>): Kind<G, S, R, O, E, A> =>
-    alt.firstSuccessOf(Alternative)<S, R, O, E, A>(Alternative.none())(collection)
+    Alternative.firstSuccessOf(Alternative.none(), ...collection)
