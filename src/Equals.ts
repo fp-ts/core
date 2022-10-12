@@ -37,7 +37,7 @@ export const fromEquals = <A>(equals: (a1: A, a2: A) => boolean): Equals<A> => (
  * @since 3.0.0
  */
 export const fromCompare = <A>(Compare: Compare<A>): Equals<A> =>
-  fromEquals((a1, a2) => Compare.compare(a2)(a1) === 0)
+  fromEquals((a1, a2) => Compare.compare(a1, a2) === 0)
 
 /**
  * @since 3.0.0

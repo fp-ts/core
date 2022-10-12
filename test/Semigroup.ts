@@ -14,14 +14,22 @@ export const SemigroupSum: _.Semigroup<number> = _.fromCombine((x, y) => x + y)
  */
 export const SemigroupString: _.Semigroup<string> = _.fromCombine((x, y) => x + y)
 
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const CompareNumber: compare.Compare<number> = compare.fromCompare((a1, a2) =>
+  a1 < a2 ? -1 : a1 > a2 ? 1 : 0
+)
+
 describe("Semigroup", () => {
   it("min", () => {
-    const Semigroup = _.min(compare.CompareNumber)
+    const Semigroup = _.min(CompareNumber)
     U.deepStrictEqual(Semigroup.combine(1, 2), 1)
   })
 
   it("max", () => {
-    const Semigroup = _.max(compare.CompareNumber)
+    const Semigroup = _.max(CompareNumber)
     U.deepStrictEqual(Semigroup.combine(1, 2), 2)
   })
 

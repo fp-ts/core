@@ -13,15 +13,15 @@ import type { Semigroup } from "@fp-ts/core/Semigroup"
  * @since 3.0.0
  */
 export interface Compare<A> {
-  readonly compare: (that: A) => (self: A) => Ordering
+  readonly compare: (a1: A, a2: A) => Ordering
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fromCompare = <A>(compare: Compare<A>["compare"]): Compare<A> => ({
-  compare: (that) => (self) => self === that ? 0 : compare(that)(self)
+export const fromCompare = <A>(compare: (a1: A, a2: A) => Ordering): Compare<A> => ({
+  compare: (a1, a2) => a1 === a2 ? 0 : compare(a1, a2)
 })
 
 /**
@@ -29,16 +29,8 @@ export const fromCompare = <A>(compare: Compare<A>["compare"]): Compare<A> => ({
  * @since 3.0.0
  */
 export const trivial: Compare<unknown> = {
-  compare: () => () => 0
+  compare: () => 0
 }
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export const CompareNumber: Compare<number> = fromCompare((that) =>
-  (self) => self < that ? -1 : self > that ? 1 : 0
-)
 
 /**
  * Given a tuple of `Ord`s returns an `Ord` for the tuple.
@@ -48,31 +40,28 @@ export const CompareNumber: Compare<number> = fromCompare((that) =>
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...ords: { [K in keyof A]: Compare<A[K]> }
 ): Compare<Readonly<A>> =>
-  fromCompare((that) =>
-    (self) => {
-      let i = 0
-      for (; i < ords.length - 1; i++) {
-        const r = ords[i].compare(that[i])(self[i])
-        if (r !== 0) {
-          return r
-        }
+  fromCompare((a1, a2) => {
+    let i = 0
+    for (; i < ords.length - 1; i++) {
+      const r = ords[i].compare(a1[i], a2[i])
+      if (r !== 0) {
+        return r
       }
-      return ords[i].compare(that[i])(self[i])
     }
-  )
+    return ords[i].compare(a1[i], a2[i])
+  })
 
 /**
  * @since 3.0.0
  */
-export const reverse = <A>(O: Compare<A>): Compare<A> =>
-  fromCompare((that) => (self) => O.compare(self)(that))
+export const reverse = <A>(O: Compare<A>): Compare<A> => fromCompare((a1, a2) => O.compare(a2, a1))
 
 /**
  * @category Contravariant
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => (fa: Compare<A>) => Compare<B> = (f) =>
-  (fa) => fromCompare((that) => (self) => fa.compare(f(that))(f(self)))
+export const contramap = <B, A>(f: (b: B) => A) =>
+  (self: Compare<A>): Compare<B> => fromCompare((a1, a2) => self.compare(f(a1), f(a2)))
 
 // -------------------------------------------------------------------------------------
 // type lambdas
@@ -99,12 +88,10 @@ export interface OrdTypeLambda extends TypeLambda {
  */
 export const getSemigroup = <A>(): Semigroup<Compare<A>> => {
   const combine = (Compare1: Compare<A>, Compare2: Compare<A>) =>
-    fromCompare((a2: A) =>
-      (a1: A) => {
-        const ordering = Compare1.compare(a2)(a1)
-        return ordering !== 0 ? ordering : Compare2.compare(a2)(a1)
-      }
-    )
+    fromCompare((a1: A, a2: A) => {
+      const ordering = Compare1.compare(a1, a2)
+      return ordering !== 0 ? ordering : Compare2.compare(a1, a2)
+    })
   return {
     combine,
     combineAll: (a, collection) => Array.from(collection).reduce((acc, a) => combine(acc, a), a)
@@ -122,7 +109,7 @@ export const getSemigroup = <A>(): Semigroup<Compare<A>> => {
  */
 export const getMonoid = <A>(): Monoid<Compare<A>> => ({
   ...getSemigroup<A>(),
-  empty: fromCompare(() => () => 0)
+  empty: fromCompare(() => 0)
 })
 
 /**
@@ -139,7 +126,7 @@ export const Contravariant: contravariant.Contravariant<OrdTypeLambda> = {
  * @since 3.0.0
  */
 export const lt = <A>(O: Compare<A>) =>
-  (that: A) => (self: A): boolean => O.compare(that)(self) === -1
+  (that: A) => (self: A): boolean => O.compare(self, that) === -1
 
 /**
  * Test whether one value is _strictly greater than_ another.
@@ -147,7 +134,7 @@ export const lt = <A>(O: Compare<A>) =>
  * @since 3.0.0
  */
 export const gt = <A>(O: Compare<A>) =>
-  (that: A) => (self: A): boolean => O.compare(that)(self) === 1
+  (that: A) => (self: A): boolean => O.compare(self, that) === 1
 
 /**
  * Test whether one value is _non-strictly less than_ another.
@@ -155,7 +142,7 @@ export const gt = <A>(O: Compare<A>) =>
  * @since 3.0.0
  */
 export const leq = <A>(O: Compare<A>) =>
-  (that: A) => (self: A): boolean => O.compare(that)(self) !== 1
+  (that: A) => (self: A): boolean => O.compare(self, that) !== 1
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
@@ -163,7 +150,7 @@ export const leq = <A>(O: Compare<A>) =>
  * @since 3.0.0
  */
 export const geq = <A>(O: Compare<A>) =>
-  (that: A) => (self: A): boolean => O.compare(that)(self) !== -1
+  (that: A) => (self: A): boolean => O.compare(self, that) !== -1
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
@@ -171,7 +158,7 @@ export const geq = <A>(O: Compare<A>) =>
  * @since 3.0.0
  */
 export const min = <A>(O: Compare<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(that)(self) < 1 ? self : that
+  (that: A) => (self: A): A => self === that || O.compare(self, that) < 1 ? self : that
 
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
@@ -179,7 +166,7 @@ export const min = <A>(O: Compare<A>) =>
  * @since 3.0.0
  */
 export const max = <A>(O: Compare<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(that)(self) > -1 ? self : that
+  (that: A) => (self: A): A => self === that || O.compare(self, that) > -1 ? self : that
 
 /**
  * Clamp a value between a minimum and a maximum.

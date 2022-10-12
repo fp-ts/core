@@ -550,8 +550,8 @@ export const liftEq = <A>(Equals: Equals<A>): Equals<Option<A>> =>
  * @since 3.0.0
  */
 export const liftOrd = <A>(O: compare.Compare<A>): compare.Compare<Option<A>> =>
-  compare.fromCompare((that) =>
-    (self) => isSome(self) ? (isSome(that) ? O.compare(that.value)(self.value) : 1) : -1
+  compare.fromCompare((o1, o2) =>
+    isSome(o1) ? (isSome(o2) ? O.compare(o1.value, o2.value) : 1) : -1
   )
 
 /**
