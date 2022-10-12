@@ -73,10 +73,6 @@ Added in v3.0.0
 
 ## combineAll
 
-Given a sequence of `as`, combine them and return the total.
-
-If `as` is empty, return the monoid `empty` value.
-
 **Signature**
 
 ```ts

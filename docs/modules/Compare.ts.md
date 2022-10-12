@@ -28,7 +28,6 @@ Added in v3.0.0
 - [utils](#utils)
   - [between](#between)
   - [clamp](#clamp)
-  - [equals](#equals)
   - [geq](#geq)
   - [gt](#gt)
   - [leq](#leq)
@@ -47,7 +46,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (fa: Compare<A>) => Compare<B>
+export declare const contramap: <B, A>(f: (b: B) => A) => (self: Compare<A>) => Compare<B>
 ```
 
 Added in v3.0.0
@@ -59,7 +58,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (that: A) => (self: A) => any) => Compare<A>
+export declare const fromCompare: <A>(compare: (a1: A, a2: A) => any) => Compare<A>
 ```
 
 Added in v3.0.0
@@ -122,7 +121,7 @@ Added in v3.0.0
 
 ```ts
 export interface Compare<A> {
-  readonly compare: (that: A) => (self: A) => Ordering
+  readonly compare: (a1: A, a2: A) => Ordering
 }
 ```
 
@@ -164,16 +163,6 @@ Clamp a value between a minimum and a maximum.
 
 ```ts
 export declare const clamp: <A>(O: Compare<A>) => (low: A, hi: A) => (a: A) => A
-```
-
-Added in v3.0.0
-
-## equals
-
-**Signature**
-
-```ts
-export declare const equals: <A>(O: Compare<A>) => any
 ```
 
 Added in v3.0.0
