@@ -17,8 +17,6 @@
 import * as internal from "@fp-ts/core/data/internal"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
-// OK
-
 /**
  * @category model
  * @since 3.0.0
