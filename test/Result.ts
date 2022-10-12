@@ -28,6 +28,7 @@ import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as alt from "@fp-ts/core/OrElse"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
+import * as semigroup from "@fp-ts/core/Semigroup"
 import type { Show } from "@fp-ts/core/Show"
 import * as fromIdentity from "@fp-ts/core/Succeed"
 import * as traversable from "@fp-ts/core/Traverse"
@@ -440,15 +441,15 @@ export const getEq = <E, A>(EE: eq.Equals<E>, EA: eq.Equals<A>): eq.Equals<Resul
  * @since 3.0.0
  */
 export const getSemigroup = <A>(Semigroup: Semigroup<A>) =>
-  <E>(): Semigroup<Result<E, A>> => ({
-    combine: (that) =>
-      (self) =>
-        isFailure(that) ?
-          self :
-          isFailure(self) ?
-          that :
-          succeed(Semigroup.combine(that.success)(self.success))
-  })
+  <E>(): Semigroup<Result<E, A>> =>
+    semigroup.fromCombine(
+      (r1, r2) =>
+        isFailure(r2) ?
+          r1 :
+          isFailure(r1) ?
+          r2 :
+          succeed(Semigroup.combineAll(r1.success, r2.success))
+    )
 
 /**
  * @category filtering
@@ -742,15 +743,15 @@ export const getValidatedApplicative = <E>(
   Semigroup: Semigroup<E>
 ): applicative.Applicative<ValidatedT<ResultTypeLambda, E>> => ({
   map,
-  ap: (fa) =>
-    (fab) =>
-      isFailure(fab)
-        ? isFailure(fa)
-          ? fail(Semigroup.combine(fa.failure)(fab.failure))
-          : fab
-        : isFailure(fa)
-        ? fa
-        : succeed(fab.success(fa.success)),
+  ap: (that) =>
+    (self) =>
+      isFailure(self)
+        ? isFailure(that)
+          ? fail(Semigroup.combineAll(self.failure, that.failure))
+          : self
+        : isFailure(that)
+        ? that
+        : succeed(self.success(that.success)),
   succeed
 })
 
@@ -897,7 +898,7 @@ export const getValidatedAlt = <E>(
       if (isSuccess(self)) {
         return self
       }
-      return isFailure(that) ? fail(Semigroup.combine(that.failure)(self.failure)) : that
+      return isFailure(that) ? fail(Semigroup.combineAll(self.failure, that.failure)) : that
     }
 })
 

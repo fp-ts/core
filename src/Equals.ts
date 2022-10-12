@@ -7,6 +7,7 @@ import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
+import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category model
@@ -96,16 +97,17 @@ export const EqStrict: Equals<unknown> = {
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Equals<A>> => ({
-  combine: (that) => (self) => fromEquals((b) => (a) => self.equals(b)(a) && that.equals(b)(a))
-})
+export const getSemigroup = <A>(): Semigroup<Equals<A>> =>
+  semigroup.fromCombine(
+    (self, that) => fromEquals((b) => (a) => self.equals(b)(a) && that.equals(b)(a))
+  )
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const getMonoid = <A>(): Monoid<Equals<A>> => ({
-  combine: getSemigroup<A>().combine,
+  combineAll: getSemigroup<A>().combineAll,
   empty: {
     equals: () => () => true
   }

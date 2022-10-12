@@ -141,12 +141,10 @@ export const zipFlatten = <F extends TypeLambda>(Ap: Ap<F>) =>
  * @since 3.0.0
  */
 export const liftSemigroup = <F extends TypeLambda>(Ap: Ap<F>) =>
-  <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> => {
-    const f = semigroup.reverse(Semigroup).combine
-    return {
-      combine: (that) => (self) => pipe(self, Ap.map(f), Ap.ap(that))
-    }
-  }
+  <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> =>
+    semigroup.fromCombine<Kind<F, S, R, O, E, A>>(
+      lift2(Ap)((x: A, y: A) => Semigroup.combineAll(y, x))
+    )
 
 /**
  * Lifts a binary function into `F`.

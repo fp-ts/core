@@ -643,12 +643,24 @@ export const liftOrd = <A>(O: compare.Compare<A>): compare.Compare<Option<A>> =>
  */
 export const getMonoid = <A>(
   Semigroup: semigroup.Semigroup<A>
-): monoid.Monoid<Option<A>> => ({
-  combine: (that) =>
-    (self) =>
-      isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(that.value)(self.value)),
-  empty: none
-})
+): monoid.Monoid<Option<A>> => {
+  return ({
+    combineAll: (head, ...tail) => {
+      if (isNone(head)) {
+        return none
+      }
+      let a: A = head.value
+      for (const o of tail) {
+        if (isNone(o)) {
+          return none
+        }
+        a = Semigroup.combineAll(a, o.value)
+      }
+      return some(a)
+    },
+    empty: none
+  })
+}
 
 /**
  * @category instances

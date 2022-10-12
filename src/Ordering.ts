@@ -3,7 +3,7 @@
  */
 import * as eq from "@fp-ts/core/Equals"
 import type * as monoid from "@fp-ts/core/Monoid"
-import type * as semigroup from "@fp-ts/core/Semigroup"
+import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category model
@@ -44,16 +44,16 @@ export const Eq: eq.Equals<Ordering> = eq.EqStrict
  * @category instances
  * @since 3.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = {
-  combine: (that) => (self) => self !== 0 ? self : that
-}
+export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombine((self, that) =>
+  self !== 0 ? self : that
+)
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const Monoid: monoid.Monoid<Ordering> = {
-  combine: Semigroup.combine,
+  combineAll: Semigroup.combineAll,
   empty: 0
 }
 
