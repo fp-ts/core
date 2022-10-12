@@ -13,24 +13,24 @@
  *
  * @since 3.0.0
  */
-import * as alt from "@fp-ts/core/Alt"
+import * as apply from "@fp-ts/core/Ap"
 import type * as applicative from "@fp-ts/core/Applicative"
-import * as apply from "@fp-ts/core/Apply"
-import * as bifunctor from "@fp-ts/core/Bifunctor"
-import * as eq from "@fp-ts/core/Eq"
-import type * as extendable from "@fp-ts/core/Extendable"
-import * as flattenable from "@fp-ts/core/Flattenable"
-import * as fromIdentity from "@fp-ts/core/FromIdentity"
+import type * as kleisliComposable from "@fp-ts/core/ComposeKleisli"
+import * as functor from "@fp-ts/core/Covariant"
+import * as eq from "@fp-ts/core/Equals"
+import type * as extendable from "@fp-ts/core/Extend"
+import * as flattenable from "@fp-ts/core/FlatMap"
 import { flow, pipe } from "@fp-ts/core/Function"
-import * as functor from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
-import type * as kleisliComposable from "@fp-ts/core/KleisliComposable"
+import * as bifunctor from "@fp-ts/core/MapBoth"
 import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import * as alt from "@fp-ts/core/OrElse"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 import type { Show } from "@fp-ts/core/Show"
-import * as traversable from "@fp-ts/core/Traversable"
+import * as fromIdentity from "@fp-ts/core/Succeed"
+import * as traversable from "@fp-ts/core/Traverse"
 
 /**
  * @category model
@@ -394,7 +394,7 @@ export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> = ex
 export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
   <A, FS, FR, FO, FE, B>(f: (a: A) => Kind<F, FS, FR, FO, FE, B>) =>
     <E>(ta: Result<E, A>): Kind<F, FS, FR, FO, FE, Result<E, B>> =>
-      isFailure(ta) ? F.of(fail(ta.failure)) : pipe(f(ta.success), F.map(succeed))
+      isFailure(ta) ? F.succeed(fail(ta.failure)) : pipe(f(ta.success), F.map(succeed))
 
 /**
  * @category instances
@@ -412,7 +412,7 @@ export const getShow = <E, A>(ShowE: Show<E>, ShowA: Show<A>): Show<Result<E, A>
  * @category instances
  * @since 3.0.0
  */
-export const getEq = <E, A>(EE: eq.Eq<E>, EA: eq.Eq<A>): eq.Eq<Result<E, A>> =>
+export const getEq = <E, A>(EE: eq.Equals<E>, EA: eq.Equals<A>): eq.Equals<Result<E, A>> =>
   eq.fromEquals(
     (that) =>
       (self) =>
@@ -485,7 +485,7 @@ export const traversePartitionMap = <F extends TypeLambda>(
  * @category instances
  * @since 3.0.0
  */
-export const Bifunctor: bifunctor.Bifunctor<ResultTypeLambda> = {
+export const Bifunctor: bifunctor.MapBoth<ResultTypeLambda> = {
   mapBoth
 }
 
@@ -513,7 +513,7 @@ export const map: <A, B>(f: (a: A) => B) => <E>(fa: Result<E, A>) => Result<E, B
  * @category instances
  * @since 3.0.0
  */
-export const Functor: functor.Functor<ResultTypeLambda> = {
+export const Functor: functor.Covariant<ResultTypeLambda> = {
   map
 }
 
@@ -545,8 +545,8 @@ export const unit: <E>(self: Result<E, unknown>) => Result<E, void> = functor.un
  * @category instances
  * @since 3.0.0
  */
-export const FromIdentity: fromIdentity.FromIdentity<ResultTypeLambda> = {
-  of: succeed
+export const FromIdentity: fromIdentity.Succeed<ResultTypeLambda> = {
+  succeed
 }
 
 /**
@@ -579,7 +579,7 @@ export const flatten: <E1, E2, A>(mma: Result<E1, Result<E2, A>>) => Result<E1 |
  * @category instances
  * @since 3.0.0
  */
-export const Flattenable: flattenable.Flattenable<ResultTypeLambda> = {
+export const Flattenable: flattenable.FlatMap<ResultTypeLambda> = {
   map,
   flatMap
 }
@@ -596,7 +596,7 @@ export const composeKleisli: <B, E2, C>(
  * @category instances
  * @since 3.0.0
  */
-export const KleisliComposable: kleisliComposable.KleisliComposable<ResultTypeLambda> = {
+export const KleisliComposable: kleisliComposable.ComposeKleisli<ResultTypeLambda> = {
   composeKleisli
 }
 
@@ -646,7 +646,7 @@ export const ap: <E2, A>(
  * @category instances
  * @since 3.0.0
  */
-export const Apply: apply.Apply<ResultTypeLambda> = {
+export const Apply: apply.Ap<ResultTypeLambda> = {
   map,
   ap
 }
@@ -682,7 +682,7 @@ export const lift3: <A, B, C, D>(
 export const Applicative: applicative.Applicative<ResultTypeLambda> = {
   map,
   ap,
-  of: succeed
+  succeed
 }
 
 /**
@@ -751,7 +751,7 @@ export const getValidatedApplicative = <E>(
         : isFailure(fa)
         ? fa
         : succeed(fab.success(fa.success)),
-  of: succeed
+  succeed
 })
 
 /**
@@ -760,7 +760,7 @@ export const getValidatedApplicative = <E>(
  */
 export const Monad: monad.Monad<ResultTypeLambda> = {
   map,
-  of: succeed,
+  succeed,
   flatMap
 }
 
@@ -823,7 +823,7 @@ export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
  * @category instances
  * @since 3.0.0
  */
-export const Traversable: traversable.Traversable<ResultTypeLambda> = {
+export const Traversable: traversable.Traverse<ResultTypeLambda> = {
   traverse
 }
 
@@ -841,7 +841,7 @@ export const sequence: <F extends TypeLambda>(
  * @category instances
  * @since 3.0.0
  */
-export const Alt: alt.Alt<ResultTypeLambda> = {
+export const Alt: alt.OrElse<ResultTypeLambda> = {
   orElse
 }
 
@@ -891,7 +891,7 @@ export const firstSuccessOf: <E, A>(
  */
 export const getValidatedAlt = <E>(
   Semigroup: Semigroup<E>
-): alt.Alt<ValidatedT<ResultTypeLambda, E>> => ({
+): alt.OrElse<ValidatedT<ResultTypeLambda, E>> => ({
   orElse: (that) =>
     (self) => {
       if (isSuccess(self)) {
@@ -905,7 +905,7 @@ export const getValidatedAlt = <E>(
  * @category instances
  * @since 3.0.0
  */
-export const Extendable: extendable.Extendable<ResultTypeLambda> = {
+export const Extendable: extendable.Extend<ResultTypeLambda> = {
   map,
   extend
 }
@@ -927,7 +927,7 @@ export const toUndefined: <E, A>(self: Result<E, A>) => A | undefined = getOrEls
  *
  * @since 3.0.0
  */
-export const elem = <A>(E: eq.Eq<A>) =>
+export const elem = <A>(E: eq.Equals<A>) =>
   (a: A) => <E>(ma: Result<E, A>): boolean => isFailure(ma) ? false : E.equals(ma.success)(a)
 
 /**

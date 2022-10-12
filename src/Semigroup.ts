@@ -15,9 +15,9 @@
  *
  * @since 3.0.0
  */
+import type { Compare } from "@fp-ts/core/Compare"
+import * as ord from "@fp-ts/core/Compare"
 import { identity } from "@fp-ts/core/Function"
-import type { Ord } from "@fp-ts/core/Ord"
-import * as ord from "@fp-ts/core/Ord"
 
 /**
  * @category model
@@ -33,7 +33,7 @@ export interface Semigroup<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const min = <A>(Ord: Ord<A>): Semigroup<A> => ({
+export const min = <A>(Ord: Compare<A>): Semigroup<A> => ({
   combine: ord.min(Ord)
 })
 
@@ -43,7 +43,7 @@ export const min = <A>(Ord: Ord<A>): Semigroup<A> => ({
  * @category constructors
  * @since 3.0.0
  */
-export const max = <A>(Ord: Ord<A>): Semigroup<A> => ({
+export const max = <A>(Ord: Compare<A>): Semigroup<A> => ({
   combine: ord.max(Ord)
 })
 

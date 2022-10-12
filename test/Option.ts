@@ -12,25 +12,25 @@
  *
  * @since 3.0.0
  */
-import type * as alt from "@fp-ts/core/Alt"
 import * as alternative from "@fp-ts/core/Alternative"
+import * as ap_ from "@fp-ts/core/Ap"
 import type * as applicative from "@fp-ts/core/Applicative"
-import * as apply from "@fp-ts/core/Apply"
-import * as eq from "@fp-ts/core/Eq"
-import type * as extendable from "@fp-ts/core/Extendable"
-import * as flattenable from "@fp-ts/core/Flattenable"
-import * as fromIdentity from "@fp-ts/core/FromIdentity"
+import * as compare from "@fp-ts/core/Compare"
+import type * as composeKleisli_ from "@fp-ts/core/ComposeKleisli"
+import * as covariant from "@fp-ts/core/Covariant"
+import * as equals from "@fp-ts/core/Equals"
+import type * as extend_ from "@fp-ts/core/Extend"
+import * as flatMap_ from "@fp-ts/core/FlatMap"
 import { pipe } from "@fp-ts/core/Function"
-import * as functor from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
-import type * as kleisliComposable from "@fp-ts/core/KleisliComposable"
 import type * as monad from "@fp-ts/core/Monad"
 import type * as monoid from "@fp-ts/core/Monoid"
-import * as ord from "@fp-ts/core/Ord"
+import type * as orElse_ from "@fp-ts/core/OrElse"
 import type * as semigroup from "@fp-ts/core/Semigroup"
 import type * as show from "@fp-ts/core/Show"
-import * as traversable from "@fp-ts/core/Traversable"
+import * as succeed_ from "@fp-ts/core/Succeed"
+import * as traverse_ from "@fp-ts/core/Traverse"
 
 /**
  * @category model
@@ -376,8 +376,8 @@ export const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> = (f) =
  * @category instances
  * @since 3.0.0
  */
-export const FromIdentity: fromIdentity.FromIdentity<OptionTypeLambda> = {
-  of: some
+export const FromIdentity: succeed_.Succeed<OptionTypeLambda> = {
+  succeed: some
 }
 
 /**
@@ -391,7 +391,7 @@ export const flatMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Opt
  * @category instances
  * @since 3.0.0
  */
-export const Flattenable: flattenable.Flattenable<OptionTypeLambda> = {
+export const Flattenable: flatMap_.FlatMap<OptionTypeLambda> = {
   map,
   flatMap
 }
@@ -401,7 +401,7 @@ export const Flattenable: flattenable.Flattenable<OptionTypeLambda> = {
  */
 export const composeKleisli: <B, C>(
   bfc: (b: B) => Option<C>
-) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flattenable.composeKleisli(
+) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKleisli(
   Flattenable
 )
 
@@ -409,14 +409,14 @@ export const composeKleisli: <B, C>(
  * @category instances
  * @since 3.0.0
  */
-export const KleisliComposable: kleisliComposable.KleisliComposable<OptionTypeLambda> = {
+export const KleisliComposable: composeKleisli_.ComposeKleisli<OptionTypeLambda> = {
   composeKleisli
 }
 
 /**
  * @since 3.0.0
  */
-export const idKleisli: <A>() => (a: A) => Option<A> = fromIdentity.idKleisli(FromIdentity)
+export const idKleisli: <A>() => (a: A) => Option<A> = succeed_.idKleisli(FromIdentity)
 
 /**
  * @category instances
@@ -434,7 +434,7 @@ export const CategoryKind: kleisliCategory.KleisliCategory<OptionTypeLambda> = {
  * @category sequencing
  * @since 3.0.0
  */
-export const zipLeft: (that: Option<unknown>) => <A>(self: Option<A>) => Option<A> = flattenable
+export const zipLeft: (that: Option<unknown>) => <A>(self: Option<A>) => Option<A> = flatMap_
   .zipLeft(Flattenable)
 
 /**
@@ -443,13 +443,13 @@ export const zipLeft: (that: Option<unknown>) => <A>(self: Option<A>) => Option<
  * @category sequencing
  * @since 3.0.0
  */
-export const zipRight: <A>(that: Option<A>) => (self: Option<unknown>) => Option<A> = flattenable
+export const zipRight: <A>(that: Option<A>) => (self: Option<unknown>) => Option<A> = flatMap_
   .zipRight(Flattenable)
 
 /**
  * @since 3.0.0
  */
-export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = flattenable
+export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = flatMap_
   .ap(
     Flattenable
   )
@@ -553,7 +553,7 @@ export const traverse: <F extends TypeLambda>(
 ) => <A, S, R, O, E, B>(
   f: (a: A) => Kind<F, S, R, O, E, B>
 ) => (ta: Option<A>) => Kind<F, S, R, O, E, Option<B>> = (F) =>
-  (f) => (ta) => isNone(ta) ? F.of(none) : pipe(f(ta.value), F.map(some))
+  (f) => (ta) => isNone(ta) ? F.succeed(none) : pipe(f(ta.value), F.map(some))
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -582,8 +582,8 @@ export const liftShow = <A>(Show: show.Show<A>): show.Show<Option<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const liftEq = <A>(Eq: eq.Eq<A>): eq.Eq<Option<A>> =>
-  eq.fromEquals(
+export const liftEq = <A>(Eq: equals.Equals<A>): equals.Equals<Option<A>> =>
+  equals.fromEquals(
     (that) =>
       (self) =>
         isNone(self) ? isNone(that) : isNone(that) ? false : Eq.equals(that.value)(self.value)
@@ -611,8 +611,8 @@ export const liftEq = <A>(Eq: eq.Eq<A>): eq.Eq<Option<A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const liftOrd = <A>(O: ord.Ord<A>): ord.Ord<Option<A>> =>
-  ord.fromCompare((that) =>
+export const liftOrd = <A>(O: compare.Compare<A>): compare.Compare<Option<A>> =>
+  compare.fromCompare((that) =>
     (self) => isSome(self) ? (isSome(that) ? O.compare(that.value)(self.value) : 1) : -1
   )
 
@@ -654,7 +654,7 @@ export const getMonoid = <A>(
  * @category instances
  * @since 3.0.0
  */
-export const Functor: functor.Functor<OptionTypeLambda> = {
+export const Functor: covariant.Covariant<OptionTypeLambda> = {
   map
 }
 
@@ -662,7 +662,7 @@ export const Functor: functor.Functor<OptionTypeLambda> = {
  * @category mapping
  * @since 3.0.0
  */
-export const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B> = functor.flap(
+export const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B> = covariant.flap(
   Functor
 )
 
@@ -672,7 +672,7 @@ export const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B> = fun
  * @category mapping
  * @since 3.0.0
  */
-export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = functor.as(Functor)
+export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = covariant.as(Functor)
 
 /**
  * Returns the effect resulting from mapping the success of this effect to unit.
@@ -680,13 +680,13 @@ export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = functor.as(
  * @category mapping
  * @since 3.0.0
  */
-export const unit: (self: Option<unknown>) => Option<void> = functor.unit(Functor)
+export const unit: (self: Option<unknown>) => Option<void> = covariant.unit(Functor)
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const Apply: apply.Apply<OptionTypeLambda> = {
+export const Apply: ap_.Ap<OptionTypeLambda> = {
   map,
   ap
 }
@@ -698,7 +698,7 @@ export const Apply: apply.Apply<OptionTypeLambda> = {
  * @since 3.0.0
  */
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  apply.lift2(Apply)
+  ap_.lift2(Apply)
 
 /**
  * Lifts a ternary function into `Option`.
@@ -708,7 +708,7 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Optio
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = apply.lift3(Apply)
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = ap_.lift3(Apply)
 
 /**
  * @category instances
@@ -717,7 +717,7 @@ export const lift3: <A, B, C, D>(
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   map,
   ap,
-  of: some
+  succeed: some
 }
 
 /**
@@ -726,7 +726,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
  */
 export const Monad: monad.Monad<OptionTypeLambda> = {
   map,
-  of: some,
+  succeed: some,
   flatMap
 }
 
@@ -735,7 +735,7 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
  *
  * @since 3.0.0
  */
-export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flattenable
+export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flatMap_
   .tap(Flattenable)
 
 /**
@@ -771,7 +771,7 @@ export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
  * @category instances
  * @since 3.0.0
  */
-export const Alt: alt.Alt<OptionTypeLambda> = {
+export const Alt: orElse_.OrElse<OptionTypeLambda> = {
   orElse
 }
 
@@ -797,7 +797,7 @@ export const firstSuccessOf: <A>(collection: Iterable<Option<A>>) => Option<A> =
  * @category instances
  * @since 3.0.0
  */
-export const Extendable: extendable.Extendable<OptionTypeLambda> = {
+export const Extendable: extend_.Extend<OptionTypeLambda> = {
   map,
   extend
 }
@@ -806,7 +806,7 @@ export const Extendable: extendable.Extendable<OptionTypeLambda> = {
  * @category instances
  * @since 3.0.0
  */
-export const Traversable: traversable.Traversable<OptionTypeLambda> = {
+export const Traversable: traverse_.Traverse<OptionTypeLambda> = {
   traverse
 }
 
@@ -817,7 +817,7 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <S, R, O, E, A>(fas: Option<Kind<F, S, R, O, E, A>>) => Kind<F, S, R, O, E, Option<A>> =
-  traversable.sequence(Traversable)
+  traverse_.sequence(Traversable)
 
 /**
  * Tests whether a value is a member of a `Option`.
@@ -833,7 +833,7 @@ export const sequence: <F extends TypeLambda>(
  *
  * @since 3.0.0
  */
-export const elem = <A>(E: eq.Eq<A>) =>
+export const elem = <A>(E: equals.Equals<A>) =>
   (a: A) => (ma: Option<A>): boolean => isNone(ma) ? false : E.equals(ma.value)(a)
 
 /**
@@ -886,13 +886,13 @@ export const Do: Option<{}> = some({})
  */
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = functor.bindTo(Functor)
+) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = covariant.bindTo(Functor)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  functor.let(Functor)
+  covariant.let(Functor)
 
 export { let_ as let }
 
@@ -904,7 +904,7 @@ export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  flattenable.bind(Flattenable)
+  flatMap_.bind(Flattenable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -916,7 +916,7 @@ export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  apply.bindRight(Apply)
+  ap_.bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -932,7 +932,7 @@ export const Zip: Option<readonly []> = some([])
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupled(Functor)
+export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tupled(Functor)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -942,7 +942,7 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupl
  */
 export const zipFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = apply
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = ap_
   .zipFlatten(Apply)
 
 /**
@@ -954,4 +954,4 @@ export const zipFlatten: <B>(
 export const zipWith: <B, A, C>(
   that: Option<B>,
   f: (a: A, b: B) => C
-) => (self: Option<A>) => Option<C> = apply.zipWith(Apply)
+) => (self: Option<A>) => Option<C> = ap_.zipWith(Apply)

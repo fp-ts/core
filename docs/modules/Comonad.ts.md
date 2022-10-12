@@ -1,6 +1,6 @@
 ---
 title: Comonad.ts
-nav_order: 8
+nav_order: 6
 parent: Modules
 ---
 
@@ -24,7 +24,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Comonad<F extends TypeLambda> extends Extendable<F> {
+export interface Comonad<F extends TypeLambda> extends Extend<F> {
   readonly extract: <S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => A
 }
 ```

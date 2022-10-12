@@ -1,10 +1,10 @@
 ---
-title: Ord.ts
-nav_order: 24
+title: Compare.ts
+nav_order: 7
 parent: Modules
 ---
 
-## Ord overview
+## Compare overview
 
 The `Ord` type class represents types which support comparisons with a _total order_.
 
@@ -30,7 +30,7 @@ Added in v3.0.0
   - [getSemigroup](#getsemigroup)
   - [trivial](#trivial)
 - [model](#model)
-  - [Ord (interface)](#ord-interface)
+  - [Compare (interface)](#compare-interface)
 - [type lambdas](#type-lambdas)
   - [OrdTypeLambda (interface)](#ordtypelambda-interface)
 - [utils](#utils)
@@ -55,7 +55,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (fa: Ord<A>) => Ord<B>
+export declare const contramap: <B, A>(f: (b: B) => A) => (fa: Compare<A>) => Compare<B>
 ```
 
 Added in v3.0.0
@@ -67,7 +67,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (that: A) => (self: A) => any) => Ord<A>
+export declare const fromCompare: <A>(compare: (that: A) => (self: A) => any) => Compare<A>
 ```
 
 Added in v3.0.0
@@ -117,19 +117,19 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const trivial: Ord<unknown>
+export declare const trivial: Compare<unknown>
 ```
 
 Added in v3.0.0
 
 # model
 
-## Ord (interface)
+## Compare (interface)
 
 **Signature**
 
 ```ts
-export interface Ord<A> {
+export interface Compare<A> {
   readonly compare: (that: A) => (self: A) => Ordering
 }
 ```
@@ -144,7 +144,7 @@ Added in v3.0.0
 
 ```ts
 export interface OrdTypeLambda extends TypeLambda {
-  readonly type: Ord<this['In1']>
+  readonly type: Compare<this['In1']>
 }
 ```
 
@@ -159,7 +159,7 @@ Test whether a value is between a minimum and a maximum (inclusive).
 **Signature**
 
 ```ts
-export declare const between: <A>(O: Ord<A>) => (low: A, hi: A) => (a: A) => boolean
+export declare const between: <A>(O: Compare<A>) => (low: A, hi: A) => (a: A) => boolean
 ```
 
 Added in v3.0.0
@@ -171,7 +171,7 @@ Clamp a value between a minimum and a maximum.
 **Signature**
 
 ```ts
-export declare const clamp: <A>(O: Ord<A>) => (low: A, hi: A) => (a: A) => A
+export declare const clamp: <A>(O: Compare<A>) => (low: A, hi: A) => (a: A) => A
 ```
 
 Added in v3.0.0
@@ -181,7 +181,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const equals: <A>(O: Ord<A>) => any
+export declare const equals: <A>(O: Compare<A>) => any
 ```
 
 Added in v3.0.0
@@ -193,7 +193,7 @@ Test whether one value is _non-strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const geq: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
+export declare const geq: <A>(O: Compare<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -205,7 +205,7 @@ Test whether one value is _strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const gt: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
+export declare const gt: <A>(O: Compare<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -217,7 +217,7 @@ Test whether one value is _non-strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const leq: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
+export declare const leq: <A>(O: Compare<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -229,7 +229,7 @@ Test whether one value is _strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const lt: <A>(O: Ord<A>) => (that: A) => (self: A) => boolean
+export declare const lt: <A>(O: Compare<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -241,7 +241,7 @@ Take the maximum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const max: <A>(O: Ord<A>) => (that: A) => (self: A) => A
+export declare const max: <A>(O: Compare<A>) => (that: A) => (self: A) => A
 ```
 
 Added in v3.0.0
@@ -253,7 +253,7 @@ Take the minimum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const min: <A>(O: Ord<A>) => (that: A) => (self: A) => A
+export declare const min: <A>(O: Compare<A>) => (that: A) => (self: A) => A
 ```
 
 Added in v3.0.0
@@ -263,7 +263,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const reverse: <A>(O: Ord<A>) => Ord<A>
+export declare const reverse: <A>(O: Compare<A>) => Compare<A>
 ```
 
 Added in v3.0.0
@@ -275,7 +275,9 @@ Given a tuple of `Ord`s returns an `Ord` for the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly unknown[]>(...ords: { [K in keyof A]: Ord<A[K]> }) => Ord<Readonly<A>>
+export declare const tuple: <A extends readonly unknown[]>(
+  ...ords: { [K in keyof A]: Compare<A[K]> }
+) => Compare<Readonly<A>>
 ```
 
 Added in v3.0.0

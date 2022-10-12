@@ -9,18 +9,18 @@
  *
  * @since 3.0.0
  */
+import type { Compare } from "@fp-ts/core/Compare"
 import type * as contravariant from "@fp-ts/core/Contravariant"
 import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
-import type { Ord } from "@fp-ts/core/Ord"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 
 /**
  * @category model
  * @since 3.0.0
  */
-export interface Eq<A> {
+export interface Equals<A> {
   readonly equals: (that: A) => (self: A) => boolean
 }
 
@@ -28,7 +28,7 @@ export interface Eq<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const fromEquals = <A>(equals: Eq<A>["equals"]): Eq<A> => ({
+export const fromEquals = <A>(equals: Equals<A>["equals"]): Equals<A> => ({
   equals: (that) => {
     const predicate = equals(that)
     return (self) => self === that || predicate(self)
@@ -39,15 +39,15 @@ export const fromEquals = <A>(equals: Eq<A>["equals"]): Eq<A> => ({
  * @category constructors
  * @since 3.0.0
  */
-export const fromOrd = <A>(O: Ord<A>): Eq<A> =>
-  fromEquals((that) => (self) => O.compare(that)(self) === 0)
+export const fromOrd = <A>(Ord: Compare<A>): Equals<A> =>
+  fromEquals((that) => (self) => Ord.compare(that)(self) === 0)
 
 /**
  * @since 3.0.0
  */
 export const struct = <A>(
-  eqs: { [K in keyof A]: Eq<A[K]> }
-): Eq<{ readonly [K in keyof A]: A[K] }> =>
+  eqs: { [K in keyof A]: Equals<A[K]> }
+): Equals<{ readonly [K in keyof A]: A[K] }> =>
   fromEquals((that) =>
     (self) => {
       for (const key in eqs) {
@@ -65,15 +65,15 @@ export const struct = <A>(
  * @since 3.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
-  ...eqs: { [K in keyof A]: Eq<A[K]> }
-): Eq<Readonly<Readonly<A>>> =>
+  ...eqs: { [K in keyof A]: Equals<A[K]> }
+): Equals<Readonly<Readonly<A>>> =>
   fromEquals((that) => (self) => eqs.every((E, i) => E.equals(that[i])(self[i])))
 
 /**
  * @category Contravariant
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => (self: Eq<A>) => Eq<B> = (f) =>
+export const contramap: <B, A>(f: (b: B) => A) => (self: Equals<A>) => Equals<B> = (f) =>
   (self) => fromEquals((that) => flow(f, self.equals(f(that))))
 
 // -------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ export const contramap: <B, A>(f: (b: B) => A) => (self: Eq<A>) => Eq<B> = (f) =
  * @since 3.0.0
  */
 export interface EqTypeLambda extends TypeLambda {
-  readonly type: Eq<this["In1"]>
+  readonly type: Equals<this["In1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ export interface EqTypeLambda extends TypeLambda {
  * @category instances
  * @since 3.0.0
  */
-export const EqStrict: Eq<unknown> = {
+export const EqStrict: Equals<unknown> = {
   equals: (that) => (self) => self === that
 }
 
@@ -104,7 +104,7 @@ export const EqStrict: Eq<unknown> = {
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Eq<A>> => ({
+export const getSemigroup = <A>(): Semigroup<Equals<A>> => ({
   combine: (that) => (self) => fromEquals((b) => (a) => self.equals(b)(a) && that.equals(b)(a))
 })
 
@@ -112,7 +112,7 @@ export const getSemigroup = <A>(): Semigroup<Eq<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const getMonoid = <A>(): Monoid<Eq<A>> => ({
+export const getMonoid = <A>(): Monoid<Equals<A>> => ({
   combine: getSemigroup<A>().combine,
   empty: {
     equals: () => () => true

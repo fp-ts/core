@@ -20,7 +20,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
  * @category model
  * @since 3.0.0
  */
-export interface Alt<F extends TypeLambda> extends TypeClass<F> {
+export interface OrElse<F extends TypeLambda> extends TypeClass<F> {
   readonly orElse: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -34,7 +34,7 @@ export interface Alt<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 3.0.0
  */
-export const firstSuccessOf = <G extends TypeLambda>(Alt: Alt<G>) =>
+export const firstSuccessOf = <G extends TypeLambda>(Alt: OrElse<G>) =>
   <S, R, O, E, A>(startWith: Kind<G, S, R, O, E, A>) =>
     (collection: Iterable<Kind<G, S, R, O, E, A>>): Kind<G, S, R, O, E, A> =>
       Array.from(collection).reduce((acc, ga) => Alt.orElse(ga)(acc), startWith)

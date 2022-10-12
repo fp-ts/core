@@ -1,6 +1,6 @@
 ---
 title: Bounded.ts
-nav_order: 6
+nav_order: 4
 parent: Modules
 ---
 
@@ -33,7 +33,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Bounded<A> extends Ord<A> {
+export interface Bounded<A> extends Compare<A> {
   readonly top: A
   readonly bottom: A
 }
@@ -62,7 +62,7 @@ Reverses the `Ord` of a `Bounded` and flips `top` and `bottom` values.
 **Signature**
 
 ```ts
-export declare const reverse: <A>(B: Bounded<A>) => Bounded<A>
+export declare const reverse: <A>(Bounded: Bounded<A>) => Bounded<A>
 ```
 
 Added in v3.0.0

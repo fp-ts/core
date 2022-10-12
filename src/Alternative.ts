@@ -11,15 +11,15 @@
  *
  * @since 3.0.0
  */
-import type { Alt } from "@fp-ts/core/Alt"
-import * as alt from "@fp-ts/core/Alt"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { OrElse } from "@fp-ts/core/OrElse"
+import * as alt from "@fp-ts/core/OrElse"
 
 /**
  * @category model
  * @since 3.0.0
  */
-export interface Alternative<F extends TypeLambda> extends Alt<F> {
+export interface Alternative<F extends TypeLambda> extends OrElse<F> {
   readonly none: <S>() => Kind<F, S, unknown, never, never, never>
 }
 

@@ -1,10 +1,10 @@
 ---
-title: Functor.ts
-nav_order: 16
+title: Covariant.ts
+nav_order: 11
 parent: Modules
 ---
 
-## Functor overview
+## Covariant overview
 
 A `Functor` is a type constructor which supports a mapping operation `map`.
 
@@ -30,7 +30,7 @@ Added in v3.0.0
   - [flap](#flap)
   - [unit](#unit)
 - [model](#model)
-  - [Functor (interface)](#functor-interface)
+  - [Covariant (interface)](#covariant-interface)
 - [tuple sequencing](#tuple-sequencing)
   - [tupled](#tupled)
 - [utils](#utils)
@@ -46,7 +46,7 @@ Added in v3.0.0
 
 ```ts
 export declare const bindTo: <F extends any>(
-  Functor: Functor<F>
+  Covariant: Covariant<F>
 ) => <N extends string>(name: N) => <S, R, O, E, A>(self: any) => any
 ```
 
@@ -58,7 +58,7 @@ Added in v3.0.0
 
 ```ts
 export declare const let: <F extends any>(
-  F: Functor<F>
+  F: Covariant<F>
 ) => <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
@@ -74,7 +74,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const as: <F extends any>(Functor: Functor<F>) => <B>(b: B) => <S, R, O, E>(self: any) => any
+export declare const as: <F extends any>(Covariant: Covariant<F>) => <B>(b: B) => <S, R, O, E>(self: any) => any
 ```
 
 Added in v3.0.0
@@ -84,7 +84,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const flap: <F extends any>(Functor: Functor<F>) => <A>(a: A) => <S, R, O, E, B>(self: any) => any
+export declare const flap: <F extends any>(Covariant: Covariant<F>) => <A>(a: A) => <S, R, O, E, B>(self: any) => any
 ```
 
 Added in v3.0.0
@@ -94,19 +94,19 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const unit: <F extends any>(Functor: Functor<F>) => <S, R, O, E>(self: any) => any
+export declare const unit: <F extends any>(Covariant: Covariant<F>) => <S, R, O, E>(self: any) => any
 ```
 
 Added in v3.0.0
 
 # model
 
-## Functor (interface)
+## Covariant (interface)
 
 **Signature**
 
 ```ts
-export interface Functor<F extends TypeLambda> extends TypeClass<F> {
+export interface Covariant<F extends TypeLambda> extends TypeClass<F> {
   readonly map: <A, B>(f: (a: A) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
 }
 ```
@@ -120,7 +120,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const tupled: <F extends any>(Functor: Functor<F>) => <S, R, O, E, A>(self: any) => any
+export declare const tupled: <F extends any>(Covariant: Covariant<F>) => <S, R, O, E, A>(self: any) => any
 ```
 
 Added in v3.0.0
@@ -135,8 +135,8 @@ Returns a default `map` composition.
 
 ```ts
 export declare const mapComposition: <F extends any, G extends any>(
-  FunctorF: Functor<F>,
-  FunctorG: Functor<G>
+  CovariantF: Covariant<F>,
+  CovariantG: Covariant<G>
 ) => <A, B>(f: (a: A) => B) => <FS, FR, FO, FE, GS, GR, GO, GE>(self: any) => any
 ```
 

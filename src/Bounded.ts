@@ -7,14 +7,14 @@
  *
  * @since 3.0.0
  */
-import * as ord from "@fp-ts/core/Ord"
-import type { Ord } from "@fp-ts/core/Ord"
+import * as ord from "@fp-ts/core/Compare"
+import type { Compare } from "@fp-ts/core/Compare"
 
 /**
  * @category model
  * @since 3.0.0
  */
-export interface Bounded<A> extends Ord<A> {
+export interface Bounded<A> extends Compare<A> {
   readonly top: A
   readonly bottom: A
 }
@@ -31,8 +31,8 @@ export const clamp = <A>(B: Bounded<A>): (a: A) => A => ord.clamp(B)(B.bottom, B
  *
  * @since 3.0.0
  */
-export const reverse = <A>(B: Bounded<A>): Bounded<A> => ({
-  compare: ord.reverse(B).compare,
-  top: B.bottom,
-  bottom: B.top
+export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> => ({
+  compare: ord.reverse(Bounded).compare,
+  top: Bounded.bottom,
+  bottom: Bounded.top
 })
