@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Semigroup.ts
-nav_order: 75
+nav_order: 27
 parent: Modules
 ---
 
@@ -66,18 +66,6 @@ Get a semigroup where `combine` will return the maximum, based on the provided o
 export declare const max: <A>(Ord: any) => Semigroup<A>
 ```
 
-**Example**
-
-```ts
-import { max } from '@fp-ts/core/typeclasses/Semigroup'
-import * as N from '@fp-ts/core/data/number'
-import { pipe } from '@fp-ts/core/data/Function'
-
-const S = max(N.Ord)
-
-assert.deepStrictEqual(pipe(1, S.combine(2)), 2)
-```
-
 Added in v3.0.0
 
 ## min
@@ -88,18 +76,6 @@ Get a semigroup where `combine` will return the minimum, based on the provided o
 
 ```ts
 export declare const min: <A>(Ord: any) => Semigroup<A>
-```
-
-**Example**
-
-```ts
-import { min } from '@fp-ts/core/typeclasses/Semigroup'
-import * as N from '@fp-ts/core/data/number'
-import { pipe } from '@fp-ts/core/data/Function'
-
-const S = min(N.Ord)
-
-assert.deepStrictEqual(pipe(1, S.combine(2)), 1)
 ```
 
 Added in v3.0.0
@@ -116,15 +92,6 @@ Always return the first argument.
 export declare const first: <A>() => Semigroup<A>
 ```
 
-**Example**
-
-```ts
-import * as S from '@fp-ts/core/typeclasses/Semigroup'
-import { pipe } from '@fp-ts/core/data/Function'
-
-assert.deepStrictEqual(pipe(1, S.first<number>().combine(2)), 1)
-```
-
 Added in v3.0.0
 
 ## last
@@ -135,15 +102,6 @@ Always return the last argument.
 
 ```ts
 export declare const last: <A>() => Semigroup<A>
-```
-
-**Example**
-
-```ts
-import * as S from '@fp-ts/core/typeclasses/Semigroup'
-import { pipe } from '@fp-ts/core/data/Function'
-
-assert.deepStrictEqual(pipe(1, S.last<number>().combine(2)), 2)
 ```
 
 Added in v3.0.0
@@ -176,18 +134,6 @@ If `as` is empty, return the provided `startWith` value.
 export declare const combineAll: <S>(Semigroup: Semigroup<S>) => (startWith: S) => (collection: Iterable<S>) => S
 ```
 
-**Example**
-
-```ts
-import { combineAll } from '@fp-ts/core/typeclasses/Semigroup'
-import * as N from '@fp-ts/core/data/number'
-
-const sum = combineAll(N.SemigroupSum)(0)
-
-assert.deepStrictEqual(sum([1, 2, 3]), 6)
-assert.deepStrictEqual(sum([]), 0)
-```
-
 Added in v3.0.0
 
 ## intercalate
@@ -200,19 +146,6 @@ You can glue items between and stay associative.
 export declare const intercalate: <A>(separator: A) => (Semigroup: Semigroup<A>) => Semigroup<A>
 ```
 
-**Example**
-
-```ts
-import { intercalate } from '@fp-ts/core/typeclasses/Semigroup'
-import { pipe } from '@fp-ts/core/data/Function'
-import * as S from '@fp-ts/core/data/string'
-
-const S1 = pipe(S.Semigroup, intercalate(' + '))
-
-assert.strictEqual(pipe('a', S1.combine('b')), 'a + b')
-assert.strictEqual(pipe('a', S1.combine('b'), S1.combine('c')), 'a + b + c')
-```
-
 Added in v3.0.0
 
 ## reverse
@@ -223,16 +156,6 @@ The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
 
 ```ts
 export declare const reverse: <S>(Semigroup: Semigroup<S>) => Semigroup<S>
-```
-
-**Example**
-
-```ts
-import { reverse } from '@fp-ts/core/typeclasses/Semigroup'
-import * as S from '@fp-ts/core/data/string'
-import { pipe } from '@fp-ts/core/data/Function'
-
-assert.deepStrictEqual(pipe('a', reverse(S.Semigroup).combine('b')), 'ba')
 ```
 
 Added in v3.0.0
@@ -249,26 +172,6 @@ export declare const struct: <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }
 }>
 ```
 
-**Example**
-
-```ts
-import { struct } from '@fp-ts/core/typeclasses/Semigroup'
-import * as N from '@fp-ts/core/data/number'
-import { pipe } from '@fp-ts/core/data/Function'
-
-interface Point {
-  readonly x: number
-  readonly y: number
-}
-
-const S = struct<Point>({
-  x: N.SemigroupSum,
-  y: N.SemigroupSum,
-})
-
-assert.deepStrictEqual(pipe({ x: 1, y: 2 }, S.combine({ x: 3, y: 4 })), { x: 4, y: 6 })
-```
-
 Added in v3.0.0
 
 ## tuple
@@ -281,22 +184,6 @@ Given a tuple of semigroups returns a semigroup for the tuple.
 export declare const tuple: <A extends readonly unknown[]>(
   ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
 ) => Semigroup<Readonly<A>>
-```
-
-**Example**
-
-```ts
-import { tuple } from '@fp-ts/core/typeclasses/Semigroup'
-import { pipe } from '@fp-ts/core/data/Function'
-import * as B from '@fp-ts/core/data/boolean'
-import * as N from '@fp-ts/core/data/number'
-import * as S from '@fp-ts/core/data/string'
-
-const S1 = tuple(S.Semigroup, N.SemigroupSum)
-assert.deepStrictEqual(pipe(['a', 1], S1.combine(['b', 2])), ['ab', 3])
-
-const S2 = tuple(S.Semigroup, N.SemigroupSum, B.SemigroupAll)
-assert.deepStrictEqual(pipe(['a', 1, true], S2.combine(['b', 2, false])), ['ab', 3, false])
 ```
 
 Added in v3.0.0

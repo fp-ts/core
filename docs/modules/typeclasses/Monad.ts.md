@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Monad.ts
-nav_order: 71
+nav_order: 23
 parent: Modules
 ---
 

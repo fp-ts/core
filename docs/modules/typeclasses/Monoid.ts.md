@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Monoid.ts
-nav_order: 72
+nav_order: 24
 parent: Modules
 ---
 
@@ -53,18 +53,6 @@ The `empty` value is the `bottom` value.
 export declare const max: <A>(Bounded: any) => Monoid<A>
 ```
 
-**Example**
-
-```ts
-import { max } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/data/number'
-import { pipe } from '@fp-ts/core/data/Function'
-
-const M = max(N.Bounded)
-
-assert.deepStrictEqual(pipe(1, M.combine(2)), 2)
-```
-
 Added in v3.0.0
 
 ## min
@@ -77,18 +65,6 @@ The `empty` value is the `top` value.
 
 ```ts
 export declare const min: <A>(Bounded: any) => Monoid<A>
-```
-
-**Example**
-
-```ts
-import { min } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/data/number'
-import { pipe } from '@fp-ts/core/data/Function'
-
-const M = min(N.Bounded)
-
-assert.deepStrictEqual(pipe(1, M.combine(2)), 1)
 ```
 
 Added in v3.0.0
@@ -121,16 +97,6 @@ If `as` is empty, return the monoid `empty` value.
 export declare const combineAll: <A>(Monoid: Monoid<A>) => (collection: Iterable<A>) => A
 ```
 
-**Example**
-
-```ts
-import { combineAll } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/data/number'
-
-assert.deepStrictEqual(combineAll(N.MonoidSum)([1, 2, 3]), 6)
-assert.deepStrictEqual(combineAll(N.MonoidSum)([]), 0)
-```
-
 Added in v3.0.0
 
 ## reverse
@@ -141,17 +107,6 @@ The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
 
 ```ts
 export declare const reverse: <A>(Monoid: Monoid<A>) => Monoid<A>
-```
-
-**Example**
-
-```ts
-import { reverse } from '@fp-ts/core/typeclasses/Monoid'
-import * as S from '@fp-ts/core/data/string'
-import { pipe } from '@fp-ts/core/data/Function'
-
-const M = reverse(S.Monoid)
-assert.deepStrictEqual(pipe('a', M.combine('b')), 'ba')
 ```
 
 Added in v3.0.0
@@ -166,26 +121,6 @@ Given a struct of monoids returns a monoid for the struct.
 export declare const struct: <A>(monoids: { [K in keyof A]: Monoid<A[K]> }) => Monoid<{ readonly [K in keyof A]: A[K] }>
 ```
 
-**Example**
-
-```ts
-import { struct } from '@fp-ts/core/typeclasses/Monoid'
-import * as N from '@fp-ts/core/data/number'
-import { pipe } from '@fp-ts/core/data/Function'
-
-interface Point {
-  readonly x: number
-  readonly y: number
-}
-
-const M = struct<Point>({
-  x: N.MonoidSum,
-  y: N.MonoidSum,
-})
-
-assert.deepStrictEqual(pipe({ x: 1, y: 2 }, M.combine({ x: 3, y: 4 })), { x: 4, y: 6 })
-```
-
 Added in v3.0.0
 
 ## tuple
@@ -198,22 +133,6 @@ Given a tuple of monoids returns a monoid for the tuple.
 export declare const tuple: <A extends readonly unknown[]>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ) => Monoid<Readonly<A>>
-```
-
-**Example**
-
-```ts
-import { tuple } from '@fp-ts/core/typeclasses/Monoid'
-import { pipe } from '@fp-ts/core/data/Function'
-import * as B from '@fp-ts/core/data/boolean'
-import * as N from '@fp-ts/core/data/number'
-import * as S from '@fp-ts/core/data/string'
-
-const M1 = tuple(S.Monoid, N.MonoidSum)
-assert.deepStrictEqual(pipe(['a', 1], M1.combine(['b', 2])), ['ab', 3])
-
-const M2 = tuple(S.Monoid, N.MonoidSum, B.MonoidAll)
-assert.deepStrictEqual(pipe(['a', 1, true], M2.combine(['b', 2, false])), ['ab', 3, false])
 ```
 
 Added in v3.0.0

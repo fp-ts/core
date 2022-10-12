@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Extendable.ts
-nav_order: 63
+nav_order: 16
 parent: Modules
 ---
 

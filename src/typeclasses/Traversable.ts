@@ -6,7 +6,7 @@
  *
  * @since 3.0.0
  */
-import { identity } from "@fp-ts/core/data/Function"
+import { identity } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Applicative } from "@fp-ts/core/typeclasses/Applicative"
 

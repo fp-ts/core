@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Functor.ts
-nav_order: 66
+nav_order: 19
 parent: Modules
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 51
+nav_order: 3
 parent: Modules
 ---
 
@@ -12,20 +12,6 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [data types](#data-types)
-  - [endomorphism](#endomorphism)
-  - [option](#option)
-  - [reader](#reader)
-  - [refinement](#refinement)
-  - [result](#result)
-  - [state](#state)
-  - [writer](#writer)
-- [monad transformers](#monad-transformers)
-  - [optionT](#optiont)
-  - [readerT](#readert)
-  - [resultT](#resultt)
-  - [stateT](#statet)
-  - [writerT](#writert)
 - [type classes](#type-classes)
   - [alt](#alt)
   - [alternative](#alternative)
@@ -35,19 +21,12 @@ Added in v3.0.0
   - [bounded](#bounded)
   - [category](#category)
   - [comonad](#comonad)
-  - [compactable](#compactable)
   - [composable](#composable)
   - [contravariant](#contravariant)
   - [eq](#eq)
   - [extendable](#extendable)
-  - [filterable](#filterable)
   - [flattenable](#flattenable)
   - [fromIdentity](#fromidentity)
-  - [fromOption](#fromoption)
-  - [fromReader](#fromreader)
-  - [fromResult](#fromresult)
-  - [fromState](#fromstate)
-  - [fromWriter](#fromwriter)
   - [functor](#functor)
   - [invariant](#invariant)
   - [kleisliCategory](#kleislicategory)
@@ -58,142 +37,12 @@ Added in v3.0.0
   - [semigroup](#semigroup)
   - [show](#show)
   - [traversable](#traversable)
-  - [traversableFilterable](#traversablefilterable)
 - [utils](#utils)
-  - [boolean](#boolean)
   - [function](#function)
   - [hkt](#hkt)
-  - [json](#json)
-  - [number](#number)
   - [ordering](#ordering)
-  - [predicate](#predicate)
-  - [string](#string)
 
 ---
-
-# data types
-
-## endomorphism
-
-**Signature**
-
-```ts
-export declare const endomorphism: any
-```
-
-Added in v3.0.0
-
-## option
-
-**Signature**
-
-```ts
-export declare const option: any
-```
-
-Added in v3.0.0
-
-## reader
-
-**Signature**
-
-```ts
-export declare const reader: any
-```
-
-Added in v3.0.0
-
-## refinement
-
-**Signature**
-
-```ts
-export declare const refinement: any
-```
-
-Added in v3.0.0
-
-## result
-
-**Signature**
-
-```ts
-export declare const result: any
-```
-
-Added in v3.0.0
-
-## state
-
-**Signature**
-
-```ts
-export declare const state: any
-```
-
-Added in v3.0.0
-
-## writer
-
-**Signature**
-
-```ts
-export declare const writer: any
-```
-
-Added in v3.0.0
-
-# monad transformers
-
-## optionT
-
-**Signature**
-
-```ts
-export declare const optionT: any
-```
-
-Added in v3.0.0
-
-## readerT
-
-**Signature**
-
-```ts
-export declare const readerT: any
-```
-
-Added in v3.0.0
-
-## resultT
-
-**Signature**
-
-```ts
-export declare const resultT: any
-```
-
-Added in v3.0.0
-
-## stateT
-
-**Signature**
-
-```ts
-export declare const stateT: any
-```
-
-Added in v3.0.0
-
-## writerT
-
-**Signature**
-
-```ts
-export declare const writerT: any
-```
-
-Added in v3.0.0
 
 # type classes
 
@@ -277,16 +126,6 @@ export declare const comonad: any
 
 Added in v3.0.0
 
-## compactable
-
-**Signature**
-
-```ts
-export declare const compactable: any
-```
-
-Added in v3.0.0
-
 ## composable
 
 **Signature**
@@ -327,16 +166,6 @@ export declare const extendable: any
 
 Added in v3.0.0
 
-## filterable
-
-**Signature**
-
-```ts
-export declare const filterable: any
-```
-
-Added in v3.0.0
-
 ## flattenable
 
 **Signature**
@@ -353,56 +182,6 @@ Added in v3.0.0
 
 ```ts
 export declare const fromIdentity: any
-```
-
-Added in v3.0.0
-
-## fromOption
-
-**Signature**
-
-```ts
-export declare const fromOption: any
-```
-
-Added in v3.0.0
-
-## fromReader
-
-**Signature**
-
-```ts
-export declare const fromReader: any
-```
-
-Added in v3.0.0
-
-## fromResult
-
-**Signature**
-
-```ts
-export declare const fromResult: any
-```
-
-Added in v3.0.0
-
-## fromState
-
-**Signature**
-
-```ts
-export declare const fromState: any
-```
-
-Added in v3.0.0
-
-## fromWriter
-
-**Signature**
-
-```ts
-export declare const fromWriter: any
 ```
 
 Added in v3.0.0
@@ -507,27 +286,7 @@ export declare const traversable: any
 
 Added in v3.0.0
 
-## traversableFilterable
-
-**Signature**
-
-```ts
-export declare const traversableFilterable: any
-```
-
-Added in v3.0.0
-
 # utils
-
-## boolean
-
-**Signature**
-
-```ts
-export declare const boolean: any
-```
-
-Added in v3.0.0
 
 ## function
 
@@ -549,52 +308,12 @@ export declare const hkt: any
 
 Added in v3.0.0
 
-## json
-
-**Signature**
-
-```ts
-export declare const json: any
-```
-
-Added in v3.0.0
-
-## number
-
-**Signature**
-
-```ts
-export declare const number: any
-```
-
-Added in v3.0.0
-
 ## ordering
 
 **Signature**
 
 ```ts
 export declare const ordering: any
-```
-
-Added in v3.0.0
-
-## predicate
-
-**Signature**
-
-```ts
-export declare const predicate: any
-```
-
-Added in v3.0.0
-
-## string
-
-**Signature**
-
-```ts
-export declare const string: any
 ```
 
 Added in v3.0.0

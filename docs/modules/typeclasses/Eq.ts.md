@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Eq.ts
-nav_order: 62
+nav_order: 15
 parent: Modules
 ---
 
@@ -166,21 +166,6 @@ Given a tuple of `Eq`s returns a `Eq` for the tuple
 export declare const tuple: <A extends readonly unknown[]>(
   ...eqs: { [K in keyof A]: Eq<A[K]> }
 ) => Eq<Readonly<Readonly<A>>>
-```
-
-**Example**
-
-```ts
-import { tuple } from '@fp-ts/core/typeclasses/Eq'
-import * as S from '@fp-ts/core/data/string'
-import * as N from '@fp-ts/core/data/number'
-import * as B from '@fp-ts/core/data/boolean'
-
-const E = tuple(S.Eq, N.Eq, B.Eq)
-assert.strictEqual(E.equals(['a', 1, true])(['a', 1, true]), true)
-assert.strictEqual(E.equals(['a', 1, true])(['b', 1, true]), false)
-assert.strictEqual(E.equals(['a', 1, true])(['a', 2, true]), false)
-assert.strictEqual(E.equals(['a', 1, true])(['a', 1, false]), false)
 ```
 
 Added in v3.0.0

@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Applicative.ts
-nav_order: 54
+nav_order: 7
 parent: Modules
 ---
 

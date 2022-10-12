@@ -1,6 +1,6 @@
 ---
 title: typeclasses/KleisliCategory.ts
-nav_order: 69
+nav_order: 21
 parent: Modules
 ---
 

@@ -2,32 +2,7 @@
  * @since 3.0.0
  */
 
-import * as boolean from "@fp-ts/core/data/boolean"
-import * as compactable from "@fp-ts/core/data/Compactable"
-import * as endomorphism from "@fp-ts/core/data/Endomorphism"
-import * as filterable from "@fp-ts/core/data/Filterable"
-import * as fromOption from "@fp-ts/core/data/FromOption"
-import * as fromReader from "@fp-ts/core/data/FromReader"
-import * as fromResult from "@fp-ts/core/data/FromResult"
-import * as fromState from "@fp-ts/core/data/FromState"
-import * as fromWriter from "@fp-ts/core/data/FromWriter"
-import * as function_ from "@fp-ts/core/data/Function"
-import * as json from "@fp-ts/core/data/Json"
-import * as number from "@fp-ts/core/data/number"
-import * as option from "@fp-ts/core/data/Option"
-import * as optionT from "@fp-ts/core/data/OptionT"
-import * as predicate from "@fp-ts/core/data/Predicate"
-import * as reader from "@fp-ts/core/data/Reader"
-import * as readerT from "@fp-ts/core/data/ReaderT"
-import * as refinement from "@fp-ts/core/data/Refinement"
-import * as result from "@fp-ts/core/data/Result"
-import * as resultT from "@fp-ts/core/data/ResultT"
-import * as state from "@fp-ts/core/data/State"
-import * as stateT from "@fp-ts/core/data/StateT"
-import * as string from "@fp-ts/core/data/string"
-import * as traversableFilterable from "@fp-ts/core/data/TraversableFilterable"
-import * as writer from "@fp-ts/core/data/Writer"
-import * as writerT from "@fp-ts/core/data/WriterT"
+import * as function_ from "@fp-ts/core/Function"
 import * as hkt from "@fp-ts/core/HKT"
 import * as alt from "@fp-ts/core/typeclasses/Alt"
 import * as alternative from "@fp-ts/core/typeclasses/Alternative"
@@ -82,10 +57,6 @@ export {
    */
   bifunctor,
   /**
-   * @since 3.0.0
-   */
-  boolean,
-  /**
    * @category type classes
    * @since 3.0.0
    */
@@ -104,22 +75,12 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  compactable,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
   composable,
   /**
    * @category type classes
    * @since 3.0.0
    */
   contravariant,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  endomorphism,
   /**
    * @category type classes
    * @since 3.0.0
@@ -134,42 +95,12 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  filterable,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
   flattenable,
   /**
    * @category type classes
    * @since 3.0.0
    */
   fromIdentity,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromOption,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromReader,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromResult,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromState,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  fromWriter,
   /**
    * @since 3.0.0
    */
@@ -188,10 +119,6 @@ export {
    * @since 3.0.0
    */
   invariant,
-  /**
-   * @since 3.0.0
-   */
-  json,
   /**
    * @category type classes
    * @since 3.0.0
@@ -213,20 +140,6 @@ export {
    */
   monoid,
   /**
-   * @since 3.0.0
-   */
-  number,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  option,
-  /**
-   * @category monad transformers
-   * @since 3.0.0
-   */
-  optionT,
-  /**
    * @category type classes
    * @since 3.0.0
    */
@@ -235,35 +148,6 @@ export {
    * @since 3.0.0
    */
   ordering,
-  /**
-   * @since 3.0.0
-   */
-  predicate,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  reader,
-  /**
-   * @category monad transformers
-   * @since 3.0.0
-   */
-  readerT,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  refinement,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  result,
-  /**
-   * @category monad transformers
-   * @since 3.0.0
-   */
-  resultT,
   /**
    * @category type classes
    * @since 3.0.0
@@ -275,37 +159,8 @@ export {
    */
   show,
   /**
-   * @category data types
-   * @since 3.0.0
-   */
-  state,
-  /**
-   * @category monad transformers
-   * @since 3.0.0
-   */
-  stateT,
-  /**
-   * @since 3.0.0
-   */
-  string,
-  /**
    * @category type classes
    * @since 3.0.0
    */
-  traversable,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  traversableFilterable,
-  /**
-   * @category data types
-   * @since 3.0.0
-   */
-  writer,
-  /**
-   * @category monad transformers
-   * @since 3.0.0
-   */
-  writerT
+  traversable
 }

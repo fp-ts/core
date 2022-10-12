@@ -7,7 +7,6 @@
  *
  * @since 3.0.0
  */
-import type { Endomorphism } from "@fp-ts/core/data/Endomorphism"
 import * as ord from "@fp-ts/core/typeclasses/Ord"
 import type { Ord } from "@fp-ts/core/typeclasses/Ord"
 
@@ -25,7 +24,7 @@ export interface Bounded<A> extends Ord<A> {
  *
  * @since 3.0.0
  */
-export const clamp = <A>(B: Bounded<A>): Endomorphism<A> => ord.clamp(B)(B.bottom, B.top)
+export const clamp = <A>(B: Bounded<A>): (a: A) => A => ord.clamp(B)(B.bottom, B.top)
 
 /**
  * Reverses the `Ord` of a `Bounded` and flips `top` and `bottom` values.

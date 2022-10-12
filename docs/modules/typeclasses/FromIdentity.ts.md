@@ -1,6 +1,6 @@
 ---
 title: typeclasses/FromIdentity.ts
-nav_order: 65
+nav_order: 18
 parent: Modules
 ---
 

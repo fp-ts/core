@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Ordering.ts
-nav_order: 74
+nav_order: 26
 parent: Modules
 ---
 
