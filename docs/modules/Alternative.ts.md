@@ -6,16 +6,6 @@ parent: Modules
 
 ## Alternative overview
 
-TODO: description
-
-`Alternative` instances should satisfy the following laws in addition to the `Alt` laws:
-
-1. Left identity: `none |> orElse(fa) <-> fa`
-2. Right identity: `fa |> orElse(none) <-> fa`
-3. Annihilation1: `none |> map(f) <-> none`
-4. Distributivity: `fab |> orElse(gab) |> ap(fa) <-> fab |> ap(fa) |> orElse(gab |> A.ap(fa))`
-5. Annihilation2: `none |> ap(fa) <-> none`
-
 Added in v3.0.0
 
 ---

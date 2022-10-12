@@ -1,12 +1,4 @@
 /**
- * The `Ord` type class represents types which support comparisons with a _total order_.
- *
- * Instances should satisfy the laws of total orderings:
- *
- * 1. Reflexivity: `a |> compare(a) <= 0`
- * 2. Antisymmetry: if `a |> compare(b) <= 0` and `b |> compare(a) <= 0` then `a <-> b`
- * 3. Transitivity: if `a |> compare(b) <= 0` and `b |> S.compare(c) <= 0` then `a |> compare(c) <= 0`
- *
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"

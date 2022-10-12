@@ -6,8 +6,6 @@ parent: Modules
 
 ## ComposeKleisli overview
 
-Kleisli arrows composition.
-
 Added in v3.0.0
 
 ---

@@ -6,11 +6,6 @@ parent: Modules
 
 ## Traverse overview
 
-`Traversable` represents data structures which can be _traversed_ accumulating results and effects in some
-`Applicative` functor.
-
-- `traverse` runs an action for every element in a data structure, and accumulates the results
-
 Added in v3.0.0
 
 ---

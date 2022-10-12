@@ -13,30 +13,30 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [type classes](#type-classes)
-  - [alt](#alt)
   - [alternative](#alternative)
+  - [ap](#ap)
   - [applicative](#applicative)
-  - [apply](#apply)
-  - [bifunctor](#bifunctor)
   - [bounded](#bounded)
   - [category](#category)
   - [comonad](#comonad)
-  - [composable](#composable)
+  - [compare](#compare)
+  - [compose](#compose)
+  - [composeKleisli](#composekleisli)
   - [contravariant](#contravariant)
-  - [eq](#eq)
-  - [extendable](#extendable)
-  - [flattenable](#flattenable)
-  - [fromIdentity](#fromidentity)
-  - [functor](#functor)
+  - [covariant](#covariant)
+  - [equals](#equals)
+  - [extend](#extend)
+  - [flatMap](#flatmap)
   - [invariant](#invariant)
   - [kleisliCategory](#kleislicategory)
-  - [kleisliComposable](#kleislicomposable)
+  - [mapBoth](#mapboth)
   - [monad](#monad)
   - [monoid](#monoid)
-  - [ord](#ord)
+  - [orElse](#orelse)
   - [semigroup](#semigroup)
   - [show](#show)
-  - [traversable](#traversable)
+  - [succeed](#succeed)
+  - [traverse](#traverse)
 - [utils](#utils)
   - [hkt](#hkt)
   - [ordering](#ordering)
@@ -44,16 +44,6 @@ Added in v3.0.0
 ---
 
 # type classes
-
-## alt
-
-**Signature**
-
-```ts
-export declare const alt: any
-```
-
-Added in v3.0.0
 
 ## alternative
 
@@ -65,32 +55,22 @@ export declare const alternative: any
 
 Added in v3.0.0
 
+## ap
+
+**Signature**
+
+```ts
+export declare const ap: any
+```
+
+Added in v3.0.0
+
 ## applicative
 
 **Signature**
 
 ```ts
 export declare const applicative: any
-```
-
-Added in v3.0.0
-
-## apply
-
-**Signature**
-
-```ts
-export declare const apply: any
-```
-
-Added in v3.0.0
-
-## bifunctor
-
-**Signature**
-
-```ts
-export declare const bifunctor: any
 ```
 
 Added in v3.0.0
@@ -125,12 +105,32 @@ export declare const comonad: any
 
 Added in v3.0.0
 
-## composable
+## compare
 
 **Signature**
 
 ```ts
-export declare const composable: any
+export declare const compare: any
+```
+
+Added in v3.0.0
+
+## compose
+
+**Signature**
+
+```ts
+export declare const compose: any
+```
+
+Added in v3.0.0
+
+## composeKleisli
+
+**Signature**
+
+```ts
+export declare const composeKleisli: any
 ```
 
 Added in v3.0.0
@@ -145,52 +145,42 @@ export declare const contravariant: any
 
 Added in v3.0.0
 
-## eq
+## covariant
 
 **Signature**
 
 ```ts
-export declare const eq: any
+export declare const covariant: any
 ```
 
 Added in v3.0.0
 
-## extendable
+## equals
 
 **Signature**
 
 ```ts
-export declare const extendable: any
+export declare const equals: any
 ```
 
 Added in v3.0.0
 
-## flattenable
+## extend
 
 **Signature**
 
 ```ts
-export declare const flattenable: any
+export declare const extend: any
 ```
 
 Added in v3.0.0
 
-## fromIdentity
+## flatMap
 
 **Signature**
 
 ```ts
-export declare const fromIdentity: any
-```
-
-Added in v3.0.0
-
-## functor
-
-**Signature**
-
-```ts
-export declare const functor: any
+export declare const flatMap: any
 ```
 
 Added in v3.0.0
@@ -215,12 +205,12 @@ export declare const kleisliCategory: any
 
 Added in v3.0.0
 
-## kleisliComposable
+## mapBoth
 
 **Signature**
 
 ```ts
-export declare const kleisliComposable: any
+export declare const mapBoth: any
 ```
 
 Added in v3.0.0
@@ -245,12 +235,12 @@ export declare const monoid: any
 
 Added in v3.0.0
 
-## ord
+## orElse
 
 **Signature**
 
 ```ts
-export declare const ord: any
+export declare const orElse: any
 ```
 
 Added in v3.0.0
@@ -275,12 +265,22 @@ export declare const show: any
 
 Added in v3.0.0
 
-## traversable
+## succeed
 
 **Signature**
 
 ```ts
-export declare const traversable: any
+export declare const succeed: any
+```
+
+Added in v3.0.0
+
+## traverse
+
+**Signature**
+
+```ts
+export declare const traverse: any
 ```
 
 Added in v3.0.0

@@ -1,9 +1,4 @@
 /**
- * `Traversable` represents data structures which can be _traversed_ accumulating results and effects in some
- * `Applicative` functor.
- *
- * - `traverse` runs an action for every element in a data structure, and accumulates the results
- *
  * @since 3.0.0
  */
 import type { Applicative } from "@fp-ts/core/Applicative"
