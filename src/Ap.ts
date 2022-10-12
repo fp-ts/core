@@ -143,7 +143,7 @@ export const zipFlatten = <F extends TypeLambda>(Ap: Ap<F>) =>
 export const liftSemigroup = <F extends TypeLambda>(Ap: Ap<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> =>
     semigroup.fromCombine<Kind<F, S, R, O, E, A>>(
-      lift2(Ap)((x: A, y: A) => Semigroup.combineAll(y, x))
+      lift2(Ap)((x: A, y: A) => Semigroup.combine(y, x))
     )
 
 /**

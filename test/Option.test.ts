@@ -7,13 +7,12 @@ const p = (n: number): boolean => n > 2
 describe("Option", () => {
   describe("firstSuccessOf", () => {
     it("baseline", () => {
-      U.deepStrictEqual(O.firstSuccessOf(O.none), O.none)
-      U.deepStrictEqual(O.firstSuccessOf(O.none, O.some(1)), O.some(1))
+      U.deepStrictEqual(O.firstSuccessOf(O.none, [O.some(1)]), O.some(1))
     })
 
-    // it("should accept an Iterable", () => {
-    //   U.deepStrictEqual(O.firstSuccessOf(new Set([O.none, O.some(1)])), O.some(1))
-    // })
+    it("should accept an Iterable", () => {
+      U.deepStrictEqual(O.firstSuccessOf(O.none, new Set([O.some(1), O.some(2)])), O.some(1))
+    })
   })
 
   it("reduce", () => {

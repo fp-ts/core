@@ -107,7 +107,8 @@ export const getSemigroup = <A>(): Semigroup<Compare<A>> => {
       }
     )
   return {
-    combineAll: (head, ...tail) => tail.reduce((acc, a) => combine(acc, a), head)
+    combine,
+    combineAll: (a, collection) => Array.from(collection).reduce((acc, a) => combine(acc, a), a)
   }
 }
 
@@ -121,7 +122,7 @@ export const getSemigroup = <A>(): Semigroup<Compare<A>> => {
  * @since 3.0.0
  */
 export const getMonoid = <A>(): Monoid<Compare<A>> => ({
-  combineAll: getSemigroup<A>().combineAll,
+  ...getSemigroup<A>(),
   empty: fromCompare(() => () => 0)
 })
 

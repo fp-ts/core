@@ -53,7 +53,7 @@ export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombine((s
  * @since 3.0.0
  */
 export const Monoid: monoid.Monoid<Ordering> = {
-  combineAll: Semigroup.combineAll,
+  ...Semigroup,
   empty: 0
 }
 

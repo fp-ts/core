@@ -130,7 +130,7 @@ export const liftSemigroup = <F extends TypeLambda>(Zip: Zip<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> => {
     const zip = zipWith(Zip)
     return semigroup.fromCombine((fa1, fa2) =>
-      pipe(fa1, zip(fa2, (a1, a2) => Semigroup.combineAll(a1, a2)))
+      pipe(fa1, zip(fa2, (a1, a2) => Semigroup.combine(a1, a2)))
     )
   }
 

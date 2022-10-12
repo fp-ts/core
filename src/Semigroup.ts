@@ -10,7 +10,7 @@ import * as compare from "@fp-ts/core/Compare"
  */
 export interface Semigroup<A> {
   readonly combine: (a1: A, a2: A) => A
-  readonly combineAll: (a: A, collection: Iterable<A>) => A
+  readonly combineAll: (startWith: A, collection: Iterable<A>) => A
 }
 
 /**
@@ -19,8 +19,11 @@ export interface Semigroup<A> {
  */
 export const fromCombine = <A>(combine: (a1: A, a2: A) => A): Semigroup<A> => ({
   combine,
-  combineAll: (a, collection) =>
-    Array.from(collection).reduce((accumulator, element) => combine(accumulator, element), a)
+  combineAll: (startWith, collection) =>
+    Array.from(collection).reduce(
+      (accumulator, element) => combine(accumulator, element),
+      startWith
+    )
 })
 
 /**
@@ -57,7 +60,7 @@ export const constant = <A>(a: A): Semigroup<A> => fromCombine(() => a)
  * @since 3.0.0
  */
 export const reverse = <A>(Semigroup: Semigroup<A>): Semigroup<A> =>
-  fromCombine((x, y) => Semigroup.combine(y, x))
+  fromCombine((a1, a2) => Semigroup.combine(a2, a1))
 
 /**
  * Given a struct of semigroups returns a semigroup for the struct.
@@ -69,11 +72,11 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
     readonly [K in keyof A]: A[K]
   }
 > =>
-  fromCombine((x, y) => {
+  fromCombine((a1, a2) => {
     const r: A = {} as any
     for (const k in semigroups) {
       if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
-        r[k] = semigroups[k].combine(x[k], y[k])
+        r[k] = semigroups[k].combine(a1[k], a2[k])
       }
     }
     return r
@@ -87,8 +90,8 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
 ): Semigroup<Readonly<A>> =>
-  fromCombine((x: any, y: any) =>
-    semigroups.map((Semigroup, i) => Semigroup.combine(x[i], y[i]))
+  fromCombine((a1: any, a2: any) =>
+    semigroups.map((Semigroup, i) => Semigroup.combine(a1[i], a2[i]))
   ) as any
 
 /**
@@ -99,7 +102,7 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
 export const intercalate = <A>(separator: A) =>
   (Semigroup: Semigroup<A>): Semigroup<A> =>
     fromCombine(
-      (x, y) => Semigroup.combineAll(x, [separator, y])
+      (a1, a2) => Semigroup.combineAll(a1, [separator, a2])
     )
 
 /**
@@ -110,7 +113,7 @@ export const intercalate = <A>(separator: A) =>
  */
 export const first = <A>(): Semigroup<A> => ({
   combine: (a1, _) => a1,
-  combineAll: (head) => head
+  combineAll: (startWith) => startWith
 })
 
 /**
@@ -121,8 +124,8 @@ export const first = <A>(): Semigroup<A> => ({
  */
 export const last = <A>(): Semigroup<A> => ({
   combine: (_, a2) => a2,
-  combineAll: (_, tail) => {
-    const as = Array.from(tail)
+  combineAll: (_, collection) => {
+    const as = Array.from(collection)
     return as[as.length - 1]
   }
 })
