@@ -20,13 +20,13 @@ import type * as composeKleisli_ from "@fp-ts/core/ComposeKleisli"
 import * as covariant from "@fp-ts/core/Covariant"
 import * as equals from "@fp-ts/core/Equals"
 import type * as extend_ from "@fp-ts/core/Extend"
-import * as orElse_ from "@fp-ts/core/FirstSuccessOf"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import type * as orElse_ from "@fp-ts/core/OrElse"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 import type * as show from "@fp-ts/core/Show"
 import * as succeed_ from "@fp-ts/core/Succeed"
@@ -584,7 +584,8 @@ export const getMonoid = <A>(
   Semigroup: Semigroup<A>
 ): Monoid<Option<A>> => {
   return ({
-    combineAll: (head, ...tail) => {
+    combine: (a1, a2) => isNone(a1) ? a2 : a1,
+    combineAll: (head, tail) => {
       if (isNone(head)) {
         return none
       }
@@ -593,7 +594,7 @@ export const getMonoid = <A>(
         if (isNone(o)) {
           return none
         }
-        a = Semigroup.combineAll(a, o.value)
+        a = Semigroup.combine(a, o.value)
       }
       return some(a)
     },
@@ -725,13 +726,13 @@ export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
  * @since 3.0.0
  */
 export const firstSuccessOf = <A, B>(
-  head: Option<A>,
-  ...tail: ReadonlyArray<Option<B>>
+  startWith: Option<A>,
+  collection: Iterable<Option<B>>
 ): Option<A | B> => {
-  if (isSome(head)) {
-    return head
+  if (isSome(startWith)) {
+    return startWith
   }
-  for (const o of tail) {
+  for (const o of collection) {
     if (isSome(o)) {
       return o
     }
@@ -740,12 +741,13 @@ export const firstSuccessOf = <A, B>(
 }
 
 /**
- * @category instances
+ * Lazy version of `orElse`.
+ *
+ * @category error handling
  * @since 3.0.0
  */
-export const FirstSuccessOf: orElse_.FirstSuccessOf<OptionTypeLambda> = {
-  firstSuccessOf
-}
+export const catchAll = <B>(that: () => Option<B>) =>
+  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 /**
  * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
@@ -796,22 +798,24 @@ export const FirstSuccessOf: orElse_.FirstSuccessOf<OptionTypeLambda> = {
  * @category error handling
  * @since 3.0.0
  */
-export const orElse = orElse_.orElse(FirstSuccessOf)
+export const orElse = <B>(that: Option<B>): <A>(self: Option<A>) => Option<A | B> =>
+  catchAll(() => that)
 
 /**
- * Lazy version of `orElse`.
- *
- * @category error handling
+ * @category instances
  * @since 3.0.0
  */
-export const catchAll = <B>(that: () => Option<B>) =>
-  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
+export const FirstSuccessOf: orElse_.OrElse<OptionTypeLambda> = {
+  orElse,
+  firstSuccessOf
+}
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
+  orElse,
   firstSuccessOf,
   none: () => none
 }

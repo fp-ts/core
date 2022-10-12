@@ -107,7 +107,7 @@ export const getSemigroup = <A>(): Semigroup<Equals<A>> =>
  * @since 3.0.0
  */
 export const getMonoid = <A>(): Monoid<Equals<A>> => ({
-  combineAll: getSemigroup<A>().combineAll,
+  ...getSemigroup<A>(),
   empty: {
     equals: () => () => true
   }

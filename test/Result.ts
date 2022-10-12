@@ -19,7 +19,6 @@ import type * as kleisliComposable from "@fp-ts/core/ComposeKleisli"
 import * as functor from "@fp-ts/core/Covariant"
 import * as eq from "@fp-ts/core/Equals"
 import type * as extendable from "@fp-ts/core/Extend"
-import type * as orElse_ from "@fp-ts/core/FirstSuccessOf"
 import * as flattenable from "@fp-ts/core/FlatMap"
 import { flow, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -27,6 +26,7 @@ import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import * as bifunctor from "@fp-ts/core/MapBoth"
 import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import type * as orElse_ from "@fp-ts/core/OrElse"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import type { Show } from "@fp-ts/core/Show"
@@ -448,7 +448,7 @@ export const getSemigroup = <A>(Semigroup: Semigroup<A>) =>
           r1 :
           isFailure(r1) ?
           r2 :
-          succeed(Semigroup.combineAll(r1.success, r2.success))
+          succeed(Semigroup.combine(r1.success, r2.success))
     )
 
 /**
@@ -747,7 +747,7 @@ export const getValidatedApplicative = <E>(
     (self) =>
       isFailure(self)
         ? isFailure(that)
-          ? fail(Semigroup.combineAll(self.failure, that.failure))
+          ? fail(Semigroup.combine(self.failure, that.failure))
           : self
         : isFailure(that)
         ? that
@@ -845,25 +845,28 @@ export const sequence: <F extends TypeLambda>(
  * @since 3.0.0
  */
 export const firstSuccessOf = <E1, A, E2, B>(
-  head: Result<E1, A>,
-  ...tail: ReadonlyArray<Result<E2, B>>
+  startWith: Result<E1, A>,
+  collection: Iterable<Result<E2, B>>
 ): Result<E1 | E2, A | B> => {
-  if (isSuccess(head)) {
-    return head
+  let last: Result<E1 | E2, A | B> = startWith
+  if (isSuccess(startWith)) {
+    return startWith
   }
-  for (const r of tail) {
+  for (const r of collection) {
     if (isSuccess(r)) {
       return r
     }
+    last = r
   }
-  return tail[tail.length - 1]
+  return last
 }
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const FirstSuccessOf: orElse_.FirstSuccessOf<ResultTypeLambda> = {
+export const FirstSuccessOf: orElse_.OrElse<ResultTypeLambda> = {
+  orElse,
   firstSuccessOf
 }
 
@@ -903,17 +906,24 @@ export const FirstSuccessOf: orElse_.FirstSuccessOf<ResultTypeLambda> = {
  */
 export const getValidatedOrElse = <E>(
   Semigroup: Semigroup<E>
-): orElse_.FirstSuccessOf<ValidatedT<ResultTypeLambda, E>> => ({
-  firstSuccessOf: (head, ...tail) => {
-    if (isSuccess(head)) {
-      return head
+): orElse_.OrElse<ValidatedT<ResultTypeLambda, E>> => ({
+  orElse: that =>
+    self => {
+      if (isSuccess(self)) {
+        return self
+      }
+      return isSuccess(that) ? that : fail(Semigroup.combine(self.failure, that.failure))
+    },
+  firstSuccessOf: (a, collection) => {
+    if (isSuccess(a)) {
+      return a
     }
-    let e: E = head.failure
-    for (const r of tail) {
+    let e: E = a.failure
+    for (const r of collection) {
       if (isSuccess(r)) {
         return r
       }
-      e = Semigroup.combineAll(e, r.failure)
+      e = Semigroup.combine(e, r.failure)
     }
     return fail(e)
   }

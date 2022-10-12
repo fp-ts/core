@@ -21,7 +21,7 @@ export interface Applicative<F extends TypeLambda> extends Ap<F>, Succeed<F> {}
 export const liftMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> => {
     return {
-      combineAll: apply.liftSemigroup(Applicative)<A, S, R, O, E>(Monoid).combineAll,
+      ...apply.liftSemigroup(Applicative)<A, S, R, O, E>(Monoid),
       empty: Applicative.succeed(Monoid.empty)
     }
   }
