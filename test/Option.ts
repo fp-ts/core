@@ -18,6 +18,7 @@ import type * as applicative from "@fp-ts/core/Applicative"
 import * as compare from "@fp-ts/core/Compare"
 import type * as composeKleisli_ from "@fp-ts/core/ComposeKleisli"
 import * as covariant from "@fp-ts/core/Covariant"
+import type { Equals } from "@fp-ts/core/Equals"
 import * as equals from "@fp-ts/core/Equals"
 import type * as extend_ from "@fp-ts/core/Extend"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
@@ -521,11 +522,9 @@ export const liftShow = <A>(Show: show.Show<A>): show.Show<Option<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const liftEq = <A>(Eq: equals.Equals<A>): equals.Equals<Option<A>> =>
+export const liftEq = <A>(Equals: Equals<A>): Equals<Option<A>> =>
   equals.fromEquals(
-    (that) =>
-      (self) =>
-        isNone(self) ? isNone(that) : isNone(that) ? false : Eq.equals(that.value)(self.value)
+    (o1, o2) => isNone(o1) ? isNone(o2) : isNone(o2) ? false : Equals.equals(o1.value, o2.value)
   )
 
 /**
@@ -861,7 +860,7 @@ export const sequence: <F extends TypeLambda>(
  * @since 3.0.0
  */
 export const elem = <A>(E: equals.Equals<A>) =>
-  (a: A) => (ma: Option<A>): boolean => isNone(ma) ? false : E.equals(ma.value)(a)
+  (a: A) => (self: Option<A>): boolean => isNone(self) ? false : E.equals(a, self.value)
 
 /**
  * Returns `true` if the predicate is satisfied by the wrapped value
