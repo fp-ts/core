@@ -16,6 +16,7 @@ import * as covariant from "@fp-ts/core/Covariant"
 import * as equals from "@fp-ts/core/Equals"
 import * as extend from "@fp-ts/core/Extend"
 import * as flatMap from "@fp-ts/core/FlatMap"
+import * as foldable from "@fp-ts/core/Foldable"
 import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
 import * as kleisliCategory from "@fp-ts/core/KleisliCategory"
@@ -100,6 +101,11 @@ export {
    * @since 3.0.0
    */
   flatMap,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  foldable,
   /**
    * @since 3.0.0
    */

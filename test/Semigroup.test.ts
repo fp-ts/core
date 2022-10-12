@@ -2,22 +2,10 @@ import * as compare from "@fp-ts/core/Compare"
 import * as _ from "@fp-ts/core/Semigroup"
 import * as U from "./util"
 
-/**
- * @category instances
- * @since 3.0.0
- */
 export const SemigroupSum: _.Semigroup<number> = _.fromCombine((x, y) => x + y)
 
-/**
- * @category instances
- * @since 3.0.0
- */
 export const SemigroupString: _.Semigroup<string> = _.fromCombine((x, y) => x + y)
 
-/**
- * @category instances
- * @since 3.0.0
- */
 export const CompareNumber: compare.Compare<number> = compare.fromCompare((a1, a2) =>
   a1 < a2 ? -1 : a1 > a2 ? 1 : 0
 )
