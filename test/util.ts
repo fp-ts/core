@@ -1,6 +1,6 @@
+import type { Eq } from "@fp-ts/core/Eq"
 import { pipe } from "@fp-ts/core/Function"
-import type { Eq } from "@fp-ts/core/typeclasses/Eq"
-import type * as Se from "@fp-ts/core/typeclasses/Semigroup"
+import type * as Se from "@fp-ts/core/Semigroup"
 import * as assert from "assert"
 import * as fc from "fast-check"
 

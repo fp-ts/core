@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 3
+nav_order: 18
 parent: Modules
 ---
 
@@ -38,7 +38,6 @@ Added in v3.0.0
   - [show](#show)
   - [traversable](#traversable)
 - [utils](#utils)
-  - [function](#function)
   - [hkt](#hkt)
   - [ordering](#ordering)
 
@@ -287,16 +286,6 @@ export declare const traversable: any
 Added in v3.0.0
 
 # utils
-
-## function
-
-**Signature**
-
-```ts
-export declare const function: any
-```
-
-Added in v3.0.0
 
 ## hkt
 

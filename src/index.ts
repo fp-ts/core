@@ -2,33 +2,32 @@
  * @since 3.0.0
  */
 
-import * as function_ from "@fp-ts/core/Function"
+import * as alt from "@fp-ts/core/Alt"
+import * as alternative from "@fp-ts/core/Alternative"
+import * as applicative from "@fp-ts/core/Applicative"
+import * as apply from "@fp-ts/core/Apply"
+import * as bifunctor from "@fp-ts/core/Bifunctor"
+import * as bounded from "@fp-ts/core/Bounded"
+import * as category from "@fp-ts/core/Category"
+import * as comonad from "@fp-ts/core/Comonad"
+import * as composable from "@fp-ts/core/Composable"
+import * as contravariant from "@fp-ts/core/Contravariant"
+import * as eq from "@fp-ts/core/Eq"
+import * as extendable from "@fp-ts/core/Extendable"
+import * as flattenable from "@fp-ts/core/Flattenable"
+import * as fromIdentity from "@fp-ts/core/FromIdentity"
+import * as functor from "@fp-ts/core/Functor"
 import * as hkt from "@fp-ts/core/HKT"
-import * as alt from "@fp-ts/core/typeclasses/Alt"
-import * as alternative from "@fp-ts/core/typeclasses/Alternative"
-import * as applicative from "@fp-ts/core/typeclasses/Applicative"
-import * as apply from "@fp-ts/core/typeclasses/Apply"
-import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
-import * as bounded from "@fp-ts/core/typeclasses/Bounded"
-import * as category from "@fp-ts/core/typeclasses/Category"
-import * as comonad from "@fp-ts/core/typeclasses/Comonad"
-import * as composable from "@fp-ts/core/typeclasses/Composable"
-import * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
-import * as eq from "@fp-ts/core/typeclasses/Eq"
-import * as extendable from "@fp-ts/core/typeclasses/Extendable"
-import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
-import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as functor from "@fp-ts/core/typeclasses/Functor"
-import * as invariant from "@fp-ts/core/typeclasses/Invariant"
-import * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
-import * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
-import * as monad from "@fp-ts/core/typeclasses/Monad"
-import * as monoid from "@fp-ts/core/typeclasses/Monoid"
-import * as ord from "@fp-ts/core/typeclasses/Ord"
-import * as ordering from "@fp-ts/core/typeclasses/Ordering"
-import * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
-import * as show from "@fp-ts/core/typeclasses/Show"
-import * as traversable from "@fp-ts/core/typeclasses/Traversable"
+import * as invariant from "@fp-ts/core/Invariant"
+import * as kleisliCategory from "@fp-ts/core/KleisliCategory"
+import * as kleisliComposable from "@fp-ts/core/KleisliComposable"
+import * as monad from "@fp-ts/core/Monad"
+import * as monoid from "@fp-ts/core/Monoid"
+import * as ord from "@fp-ts/core/Ord"
+import * as ordering from "@fp-ts/core/Ordering"
+import * as semigroup from "@fp-ts/core/Semigroup"
+import * as show from "@fp-ts/core/Show"
+import * as traversable from "@fp-ts/core/Traversable"
 
 export {
   /**
@@ -101,10 +100,6 @@ export {
    * @since 3.0.0
    */
   fromIdentity,
-  /**
-   * @since 3.0.0
-   */
-  function_ as function,
   /**
    * @category type classes
    * @since 3.0.0
