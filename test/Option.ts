@@ -12,7 +12,7 @@
  *
  * @since 3.0.0
  */
-import * as alternative from "@fp-ts/core/Alternative"
+import type * as alternative from "@fp-ts/core/Alternative"
 import * as ap_ from "@fp-ts/core/Ap"
 import type * as applicative from "@fp-ts/core/Applicative"
 import * as compare from "@fp-ts/core/Compare"
@@ -20,14 +20,14 @@ import type * as composeKleisli_ from "@fp-ts/core/ComposeKleisli"
 import * as covariant from "@fp-ts/core/Covariant"
 import * as equals from "@fp-ts/core/Equals"
 import type * as extend_ from "@fp-ts/core/Extend"
+import * as orElse_ from "@fp-ts/core/FirstSuccessOf"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import type * as monad from "@fp-ts/core/Monad"
-import type * as monoid from "@fp-ts/core/Monoid"
-import type * as orElse_ from "@fp-ts/core/OrElse"
-import type * as semigroup from "@fp-ts/core/Semigroup"
+import type { Monoid } from "@fp-ts/core/Monoid"
+import type { Semigroup } from "@fp-ts/core/Semigroup"
 import type * as show from "@fp-ts/core/Show"
 import * as succeed_ from "@fp-ts/core/Succeed"
 import * as traverse_ from "@fp-ts/core/Traverse"
@@ -460,67 +460,6 @@ export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B
 export const flatten: <A>(mma: Option<Option<A>>) => Option<A> = flatMap(o => o)
 
 /**
- * Lazy version of `orElse`.
- *
- * @category error handling
- * @since 3.0.0
- */
-export const catchAll = <B>(that: () => Option<B>) =>
-  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
-
-/**
- * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
- * types of kind `* -> *`.
- *
- * In case of `Option` returns the left-most non-`None` value.
- *
- * | x       | y       | pipe(x, orElse(y) |
- * | ------- | ------- | ------------------|
- * | none    | none    | none              |
- * | some(a) | none    | some(a)           |
- * | none    | some(b) | some(b)           |
- * | some(a) | some(b) | some(a)           |
- *
- * @example
- * import * as O from '@fp-ts/core/data/Option'
- * import { pipe } from '@fp-ts/core/data/Function'
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     O.none,
- *     O.orElse(O.none)
- *   ),
- *   O.none
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     O.some('a'),
- *     O.orElse<string>(O.none)
- *   ),
- *   O.some('a')
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     O.none,
- *     O.orElse(O.some('b'))
- *   ),
- *   O.some('b')
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     O.some('a'),
- *     O.orElse(O.some('b'))
- *   ),
- *   O.some('a')
- * )
- *
- * @category instance operations
- * @since 3.0.0
- */
-export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
-  catchAll(() => that)
-
-/**
  * @since 3.0.0
  */
 export const extend: <A, B>(f: (wa: Option<A>) => B) => (wa: Option<A>) => Option<B> = (f) =>
@@ -642,8 +581,8 @@ export const liftOrd = <A>(O: compare.Compare<A>): compare.Compare<Option<A>> =>
  * @since 3.0.0
  */
 export const getMonoid = <A>(
-  Semigroup: semigroup.Semigroup<A>
-): monoid.Monoid<Option<A>> => {
+  Semigroup: Semigroup<A>
+): Monoid<Option<A>> => {
   return ({
     combineAll: (head, ...tail) => {
       if (isNone(head)) {
@@ -769,7 +708,7 @@ export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
  * @category folding
  * @since 3.0.0
  */
-export const foldMap = <M>(Monoid: monoid.Monoid<M>) =>
+export const foldMap = <M>(Monoid: Monoid<M>) =>
   <A>(f: (a: A) => M) => (self: Option<A>): M => isNone(self) ? Monoid.empty : f(self.value)
 
 /**
@@ -780,30 +719,102 @@ export const reduceRight = <B, A>(b: B, f: (a: A, b: B) => B) =>
   (self: Option<A>): B => isNone(self) ? b : f(self.value, b)
 
 /**
+ * Returns an effect that runs each of the specified effects in order until one of them succeeds.
+ *
+ * @category error handling
+ * @since 3.0.0
+ */
+export const firstSuccessOf = <A, B>(
+  head: Option<A>,
+  ...tail: ReadonlyArray<Option<B>>
+): Option<A | B> => {
+  if (isSome(head)) {
+    return head
+  }
+  for (const o of tail) {
+    if (isSome(o)) {
+      return o
+    }
+  }
+  return none
+}
+
+/**
  * @category instances
  * @since 3.0.0
  */
-export const Alt: orElse_.OrElse<OptionTypeLambda> = {
-  orElse
+export const FirstSuccessOf: orElse_.FirstSuccessOf<OptionTypeLambda> = {
+  firstSuccessOf
 }
+
+/**
+ * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
+ * types of kind `* -> *`.
+ *
+ * In case of `Option` returns the left-most non-`None` value.
+ *
+ * | x       | y       | pipe(x, orElse(y) |
+ * | ------- | ------- | ------------------|
+ * | none    | none    | none              |
+ * | some(a) | none    | some(a)           |
+ * | none    | some(b) | some(b)           |
+ * | some(a) | some(b) | some(a)           |
+ *
+ * @example
+ * import * as O from '@fp-ts/core/data/Option'
+ * import { pipe } from '@fp-ts/core/data/Function'
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.none,
+ *     O.orElse(O.none)
+ *   ),
+ *   O.none
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.some('a'),
+ *     O.orElse<string>(O.none)
+ *   ),
+ *   O.some('a')
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.none,
+ *     O.orElse(O.some('b'))
+ *   ),
+ *   O.some('b')
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.some('a'),
+ *     O.orElse(O.some('b'))
+ *   ),
+ *   O.some('a')
+ * )
+ *
+ * @category error handling
+ * @since 3.0.0
+ */
+export const orElse = orElse_.orElse(FirstSuccessOf)
+
+/**
+ * Lazy version of `orElse`.
+ *
+ * @category error handling
+ * @since 3.0.0
+ */
+export const catchAll = <B>(that: () => Option<B>) =>
+  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
-  orElse,
+  firstSuccessOf,
   none: () => none
 }
-
-/**
- * Returns an effect that runs each of the specified effects in order until one of them succeeds.
- *
- * @category error handling
- * @since 3.0.0
- */
-export const firstSuccessOf: <A>(collection: Iterable<Option<A>>) => Option<A> = alternative
-  .firstSuccessOf(Alternative)
 
 /**
  * @category instances

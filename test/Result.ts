@@ -19,6 +19,7 @@ import type * as kleisliComposable from "@fp-ts/core/ComposeKleisli"
 import * as functor from "@fp-ts/core/Covariant"
 import * as eq from "@fp-ts/core/Equals"
 import type * as extendable from "@fp-ts/core/Extend"
+import type * as orElse_ from "@fp-ts/core/FirstSuccessOf"
 import * as flattenable from "@fp-ts/core/FlatMap"
 import { flow, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -26,7 +27,6 @@ import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import * as bifunctor from "@fp-ts/core/MapBoth"
 import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
-import * as alt from "@fp-ts/core/OrElse"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import type { Show } from "@fp-ts/core/Show"
@@ -839,22 +839,33 @@ export const sequence: <F extends TypeLambda>(
 ) => Kind<F, FS, FR, FO, FE, Result<E, A>> = traversable.sequence(Traversable)
 
 /**
- * @category instances
- * @since 3.0.0
- */
-export const Alt: alt.OrElse<ResultTypeLambda> = {
-  orElse
-}
-
-/**
  * Returns an effect that runs each of the specified effects in order until one of them succeeds.
  *
  * @category error handling
  * @since 3.0.0
  */
-export const firstSuccessOf: <E, A>(
-  startWith: Result<E, A>
-) => (collection: Iterable<Result<E, A>>) => Result<E, A> = alt.firstSuccessOf(Alt)
+export const firstSuccessOf = <E1, A, E2, B>(
+  head: Result<E1, A>,
+  ...tail: ReadonlyArray<Result<E2, B>>
+): Result<E1 | E2, A | B> => {
+  if (isSuccess(head)) {
+    return head
+  }
+  for (const r of tail) {
+    if (isSuccess(r)) {
+      return r
+    }
+  }
+  return tail[tail.length - 1]
+}
+
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const FirstSuccessOf: orElse_.FirstSuccessOf<ResultTypeLambda> = {
+  firstSuccessOf
+}
 
 /**
  * The default [`Alt`](#semigroupkind) instance returns the last error, if you want to
@@ -890,16 +901,22 @@ export const firstSuccessOf: <E, A>(
  * @category error handling
  * @since 3.0.0
  */
-export const getValidatedAlt = <E>(
+export const getValidatedOrElse = <E>(
   Semigroup: Semigroup<E>
-): alt.OrElse<ValidatedT<ResultTypeLambda, E>> => ({
-  orElse: (that) =>
-    (self) => {
-      if (isSuccess(self)) {
-        return self
-      }
-      return isFailure(that) ? fail(Semigroup.combineAll(self.failure, that.failure)) : that
+): orElse_.FirstSuccessOf<ValidatedT<ResultTypeLambda, E>> => ({
+  firstSuccessOf: (head, ...tail) => {
+    if (isSuccess(head)) {
+      return head
     }
+    let e: E = head.failure
+    for (const r of tail) {
+      if (isSuccess(r)) {
+        return r
+      }
+      e = Semigroup.combineAll(e, r.failure)
+    }
+    return fail(e)
+  }
 })
 
 /**
