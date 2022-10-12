@@ -34,6 +34,14 @@ export const trivial: Compare<unknown> = {
 }
 
 /**
+ * @category instances
+ * @since 3.0.0
+ */
+export const CompareNumber: Compare<number> = fromCompare((that) =>
+  (self) => self < that ? -1 : self > that ? 1 : 0
+)
+
+/**
  * Given a tuple of `Ord`s returns an `Ord` for the tuple.
  *
  * @since 3.0.0
@@ -90,16 +98,18 @@ export interface OrdTypeLambda extends TypeLambda {
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Compare<A>> => ({
-  combine: (that) =>
-    (self) =>
-      fromCompare((a2) =>
-        (a1) => {
-          const ox = self.compare(a2)(a1)
-          return ox !== 0 ? ox : that.compare(a2)(a1)
-        }
-      )
-})
+export const getSemigroup = <A>(): Semigroup<Compare<A>> => {
+  const combine = (Compare1: Compare<A>, Compare2: Compare<A>) =>
+    fromCompare((a2: A) =>
+      (a1: A) => {
+        const ordering = Compare1.compare(a2)(a1)
+        return ordering !== 0 ? ordering : Compare2.compare(a2)(a1)
+      }
+    )
+  return {
+    combineAll: (head, ...tail) => tail.reduce((acc, a) => combine(acc, a), head)
+  }
+}
 
 /**
  * Returns a `Monoid` such that:
@@ -111,7 +121,7 @@ export const getSemigroup = <A>(): Semigroup<Compare<A>> => ({
  * @since 3.0.0
  */
 export const getMonoid = <A>(): Monoid<Compare<A>> => ({
-  combine: getSemigroup<A>().combine,
+  combineAll: getSemigroup<A>().combineAll,
   empty: fromCompare(() => () => 0)
 })
 

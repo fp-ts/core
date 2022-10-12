@@ -22,7 +22,7 @@ export interface Monoid<A> extends Semigroup<A> {
  * @since 3.0.0
  */
 export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  combine: semigroup.min(Bounded).combine,
+  combineAll: semigroup.min(Bounded).combineAll,
   empty: Bounded.top
 })
 
@@ -35,7 +35,7 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  * @since 3.0.0
  */
 export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  combine: semigroup.max(Bounded).combine,
+  combineAll: semigroup.max(Bounded).combineAll,
   empty: Bounded.bottom
 })
 
@@ -45,7 +45,7 @@ export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  * @since 3.0.0
  */
 export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> => ({
-  combine: semigroup.reverse(Monoid).combine,
+  combineAll: semigroup.reverse(Monoid).combineAll,
   empty: Monoid.empty
 })
 
@@ -64,7 +64,7 @@ export const struct = <A>(
     }
   }
   return {
-    combine: semigroup.struct(monoids).combine,
+    combineAll: semigroup.struct(monoids).combineAll,
     empty
   }
 }
@@ -77,7 +77,7 @@ export const struct = <A>(
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<Readonly<A>> => ({
-  combine: semigroup.tuple(...monoids).combine,
+  combineAll: semigroup.tuple(...monoids).combineAll,
   empty: monoids.map((m) => m.empty)
 } as any)
 
@@ -88,5 +88,5 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  *
  * @since 3.0.0
  */
-export const combineAll = <A>(Monoid: Monoid<A>): ((collection: Iterable<A>) => A) =>
-  semigroup.combineAll(Monoid)(Monoid.empty)
+export const combineAll = <A>(Monoid: Monoid<A>) =>
+  (collection: Iterable<A>): A => Monoid.combineAll(Monoid.empty, ...collection)

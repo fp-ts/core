@@ -2,16 +2,35 @@
  * @since 3.0.0
  */
 import type { Compare } from "@fp-ts/core/Compare"
-import * as ord from "@fp-ts/core/Compare"
-import { identity } from "@fp-ts/core/Function"
+import * as compare from "@fp-ts/core/Compare"
 
 /**
  * @category model
  * @since 3.0.0
  */
 export interface Semigroup<A> {
-  readonly combine: (that: A) => (self: A) => A
+  readonly combineAll: (head: A, ...tail: ReadonlyArray<A>) => A
 }
+
+/**
+ * @category constructors
+ * @since 3.0.0
+ */
+export const fromCombine = <A>(combine: (x: A, y: A) => A): Semigroup<A> => ({
+  combineAll: (head, ...tail) => tail.reduce((acc, a) => combine(acc, a), head)
+})
+
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const sum: Semigroup<number> = fromCombine((x, y) => x + y)
+
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const string: Semigroup<string> = fromCombine((x, y) => x + y)
 
 /**
  * Get a semigroup where `combine` will return the minimum, based on the provided order.
@@ -19,9 +38,10 @@ export interface Semigroup<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const min = <A>(Ord: Compare<A>): Semigroup<A> => ({
-  combine: ord.min(Ord)
-})
+export const min = <A>(Compare: Compare<A>): Semigroup<A> => {
+  const min = compare.min(Compare)
+  return fromCombine((x, y) => min(y)(x))
+}
 
 /**
  * Get a semigroup where `combine` will return the maximum, based on the provided order.
@@ -29,16 +49,17 @@ export const min = <A>(Ord: Compare<A>): Semigroup<A> => ({
  * @category constructors
  * @since 3.0.0
  */
-export const max = <A>(Ord: Compare<A>): Semigroup<A> => ({
-  combine: ord.max(Ord)
-})
+export const max = <A>(Compare: Compare<A>): Semigroup<A> => {
+  const max = compare.max(Compare)
+  return fromCombine((x, y) => max(y)(x))
+}
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const constant = <S>(s: S): Semigroup<S> => ({
-  combine: () => () => s
+export const constant = <A>(a: A): Semigroup<A> => ({
+  combineAll: () => a
 })
 
 /**
@@ -46,9 +67,8 @@ export const constant = <S>(s: S): Semigroup<S> => ({
  *
  * @since 3.0.0
  */
-export const reverse = <S>(Semigroup: Semigroup<S>): Semigroup<S> => ({
-  combine: (that) => (self) => Semigroup.combine(self)(that)
-})
+export const reverse = <A>(Semigroup: Semigroup<A>): Semigroup<A> =>
+  fromCombine((x, y) => Semigroup.combineAll(y, x))
 
 /**
  * Given a struct of semigroups returns a semigroup for the struct.
@@ -59,18 +79,16 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
   {
     readonly [K in keyof A]: A[K]
   }
-> => ({
-  combine: (that) =>
-    (self) => {
-      const r: A = {} as any
-      for (const k in semigroups) {
-        if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
-          r[k] = semigroups[k].combine(that[k])(self[k])
-        }
+> =>
+  fromCombine((x, y) => {
+    const r: A = {} as any
+    for (const k in semigroups) {
+      if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
+        r[k] = semigroups[k].combineAll(x[k], y[k])
       }
-      return r
     }
-})
+    return r
+  })
 
 /**
  * Given a tuple of semigroups returns a semigroup for the tuple.
@@ -79,9 +97,10 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
-): Semigroup<Readonly<A>> => ({
-  combine: (that) => (self) => semigroups.map((s, i) => s.combine(that[i])(self[i])) as any
-})
+): Semigroup<Readonly<A>> =>
+  fromCombine((x: any, y: any) =>
+    semigroups.map((Semigroup, i) => Semigroup.combineAll(x[i], y[i]))
+  ) as any
 
 /**
  * You can glue items between and stay associative.
@@ -89,13 +108,10 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  * @since 3.0.0
  */
 export const intercalate = <A>(separator: A) =>
-  (Semigroup: Semigroup<A>): Semigroup<A> => ({
-    combine: (that) => (self) => Semigroup.combine(Semigroup.combine(that)(separator))(self)
-  })
-
-// -------------------------------------------------------------------------------------
-// instances
-// -------------------------------------------------------------------------------------
+  (Semigroup: Semigroup<A>): Semigroup<A> =>
+    fromCombine(
+      (x, y) => Semigroup.combineAll(x, separator, y)
+    )
 
 /**
  * Always return the first argument.
@@ -104,7 +120,7 @@ export const intercalate = <A>(separator: A) =>
  * @since 3.0.0
  */
 export const first = <A>(): Semigroup<A> => ({
-  combine: () => identity
+  combineAll: (head) => head
 })
 
 /**
@@ -114,22 +130,5 @@ export const first = <A>(): Semigroup<A> => ({
  * @since 3.0.0
  */
 export const last = <A>(): Semigroup<A> => ({
-  combine: (a) => () => a
+  combineAll: (_, ...rest) => rest[rest.length - 1]
 })
-
-/**
- * Given a sequence of `as`, combine them and return the total.
- *
- * If `as` is empty, return the provided `startWith` value.
- *
- * @since 3.0.0
- */
-export const combineAll = <S>(Semigroup: Semigroup<S>) =>
-  (startWith: S) =>
-    (collection: Iterable<S>): S => {
-      let out: S = startWith
-      for (const s of collection) {
-        out = Semigroup.combine(s)(out)
-      }
-      return out
-    }

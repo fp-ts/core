@@ -6,6 +6,7 @@ import type { Covariant } from "@fp-ts/core/Covariant"
 import { identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
+import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category model
@@ -128,10 +129,9 @@ export const zipFlatten = <F extends TypeLambda>(Zip: Zip<F>) =>
 export const liftSemigroup = <F extends TypeLambda>(Zip: Zip<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> => {
     const zip = zipWith(Zip)
-    return {
-      combine: (that) =>
-        (self) => pipe(self, zip(that, (that, self) => Semigroup.combine(that)(self)))
-    }
+    return semigroup.fromCombine((fa1, fa2) =>
+      pipe(fa1, zip(fa2, (a1, a2) => Semigroup.combineAll(a1, a2)))
+    )
   }
 
 /**
