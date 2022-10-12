@@ -1,6 +1,6 @@
 ---
 title: Monad.ts
-nav_order: 22
+nav_order: 21
 parent: Modules
 ---
 
@@ -34,7 +34,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Monad<F extends TypeLambda> extends FromIdentity<F>, Flattenable<F> {}
+export interface Monad<F extends TypeLambda> extends Succeed<F>, FlatMap<F> {}
 ```
 
 Added in v3.0.0

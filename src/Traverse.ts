@@ -14,7 +14,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
  * @category model
  * @since 3.0.0
  */
-export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
+export interface Traverse<T extends TypeLambda> extends TypeClass<T> {
   readonly traverse: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(
@@ -30,8 +30,8 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
  * @since 3.0.0
  */
 export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
-  TraversableF: Traversable<F>,
-  TraversableG: Traversable<G>
+  TraversableF: Traverse<F>,
+  TraversableG: Traverse<G>
 ) =>
   <H extends TypeLambda>(H: Applicative<H>) =>
     <A, S, R, O, E, B>(
@@ -44,7 +44,7 @@ export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
 /**
  * @since 3.0.0
  */
-export const sequence = <T extends TypeLambda>(Traversable: Traversable<T>) =>
+export const sequence = <T extends TypeLambda>(Traversable: Traverse<T>) =>
   <F extends TypeLambda>(
     G: Applicative<F>
   ): (<TS, TR, TO, TE, S, R, O, E, A>(

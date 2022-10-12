@@ -35,7 +35,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Zip<F extends TypeLambda> extends Functor<F> {
+export interface Zip<F extends TypeLambda> extends Covariant<F> {
   readonly zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
     fa: Kind<F, S, R1, O1, E1, A>,
     fb: Kind<F, S, R2, O2, E2, B>

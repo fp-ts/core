@@ -1,10 +1,10 @@
 ---
-title: Eq.ts
-nav_order: 11
+title: Equals.ts
+nav_order: 12
 parent: Modules
 ---
 
-## Eq overview
+## Equals overview
 
 The `Eq` type class represents types which support decidable equality.
 
@@ -31,7 +31,7 @@ Added in v3.0.0
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
 - [model](#model)
-  - [Eq (interface)](#eq-interface)
+  - [Equals (interface)](#equals-interface)
 - [type lambdas](#type-lambdas)
   - [EqTypeLambda (interface)](#eqtypelambda-interface)
 - [utils](#utils)
@@ -47,7 +47,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (self: Eq<A>) => Eq<B>
+export declare const contramap: <B, A>(f: (b: B) => A) => (self: Equals<A>) => Equals<B>
 ```
 
 Added in v3.0.0
@@ -59,7 +59,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromEquals: <A>(equals: (that: A) => (self: A) => boolean) => Eq<A>
+export declare const fromEquals: <A>(equals: (that: A) => (self: A) => boolean) => Equals<A>
 ```
 
 Added in v3.0.0
@@ -69,7 +69,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromOrd: <A>(O: any) => Eq<A>
+export declare const fromOrd: <A>(Ord: any) => Equals<A>
 ```
 
 Added in v3.0.0
@@ -91,7 +91,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const EqStrict: Eq<unknown>
+export declare const EqStrict: Equals<unknown>
 ```
 
 Added in v3.0.0
@@ -118,12 +118,12 @@ Added in v3.0.0
 
 # model
 
-## Eq (interface)
+## Equals (interface)
 
 **Signature**
 
 ```ts
-export interface Eq<A> {
+export interface Equals<A> {
   readonly equals: (that: A) => (self: A) => boolean
 }
 ```
@@ -138,7 +138,7 @@ Added in v3.0.0
 
 ```ts
 export interface EqTypeLambda extends TypeLambda {
-  readonly type: Eq<this['In1']>
+  readonly type: Equals<this['In1']>
 }
 ```
 
@@ -151,7 +151,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const struct: <A>(eqs: { [K in keyof A]: Eq<A[K]> }) => Eq<{ readonly [K in keyof A]: A[K] }>
+export declare const struct: <A>(eqs: { [K in keyof A]: Equals<A[K]> }) => Equals<{ readonly [K in keyof A]: A[K] }>
 ```
 
 Added in v3.0.0
@@ -164,8 +164,8 @@ Given a tuple of `Eq`s returns a `Eq` for the tuple
 
 ```ts
 export declare const tuple: <A extends readonly unknown[]>(
-  ...eqs: { [K in keyof A]: Eq<A[K]> }
-) => Eq<Readonly<Readonly<A>>>
+  ...eqs: { [K in keyof A]: Equals<A[K]> }
+) => Equals<Readonly<Readonly<A>>>
 ```
 
 Added in v3.0.0

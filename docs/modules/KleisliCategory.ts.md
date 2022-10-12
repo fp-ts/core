@@ -1,6 +1,6 @@
 ---
 title: KleisliCategory.ts
-nav_order: 20
+nav_order: 19
 parent: Modules
 ---
 
@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface KleisliCategory<F extends TypeLambda> extends KleisliComposable<F> {
+export interface KleisliCategory<F extends TypeLambda> extends ComposeKleisli<F> {
   readonly idKleisli: <A>() => <S>(a: A) => Kind<F, S, unknown, never, never, A>
 }
 ```

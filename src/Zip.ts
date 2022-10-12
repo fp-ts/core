@@ -1,9 +1,9 @@
 /**
  * @since 3.0.0
  */
-import type { Apply } from "@fp-ts/core/Apply"
+import type { Ap } from "@fp-ts/core/Ap"
+import type { Covariant } from "@fp-ts/core/Covariant"
 import { identity, pipe } from "@fp-ts/core/Function"
-import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 
@@ -11,7 +11,7 @@ import type { Semigroup } from "@fp-ts/core/Semigroup"
  * @category model
  * @since 3.0.0
  */
-export interface Zip<F extends TypeLambda> extends Functor<F> {
+export interface Zip<F extends TypeLambda> extends Covariant<F> {
   readonly zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
     fa: Kind<F, S, R1, O1, E1, A>,
     fb: Kind<F, S, R2, O2, E2, B>
@@ -21,7 +21,7 @@ export interface Zip<F extends TypeLambda> extends Functor<F> {
 /**
  * @since 3.0.0
  */
-export const ap = <F extends TypeLambda>(Zip: Zip<F>): Apply<F>["ap"] =>
+export const ap = <F extends TypeLambda>(Zip: Zip<F>): Ap<F>["ap"] =>
   fa => fab => pipe(Zip.zip(fa, fab), Zip.map(([a, f]) => f(a)))
 
 /**

@@ -10,7 +10,7 @@
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
-import type { Eq } from "@fp-ts/core/Eq"
+import type { Equals } from "@fp-ts/core/Equals"
 import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
@@ -21,7 +21,7 @@ import type { Semigroup } from "@fp-ts/core/Semigroup"
  * @category model
  * @since 3.0.0
  */
-export interface Ord<A> {
+export interface Compare<A> {
   readonly compare: (that: A) => (self: A) => Ordering
 }
 
@@ -29,7 +29,7 @@ export interface Ord<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const fromCompare = <A>(compare: Ord<A>["compare"]): Ord<A> => ({
+export const fromCompare = <A>(compare: Compare<A>["compare"]): Compare<A> => ({
   compare: (that) => (self) => self === that ? 0 : compare(that)(self)
 })
 
@@ -37,7 +37,7 @@ export const fromCompare = <A>(compare: Ord<A>["compare"]): Ord<A> => ({
  * @category instances
  * @since 3.0.0
  */
-export const trivial: Ord<unknown> = {
+export const trivial: Compare<unknown> = {
   compare: () => () => 0
 }
 
@@ -47,8 +47,8 @@ export const trivial: Ord<unknown> = {
  * @since 3.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
-  ...ords: { [K in keyof A]: Ord<A[K]> }
-): Ord<Readonly<A>> =>
+  ...ords: { [K in keyof A]: Compare<A[K]> }
+): Compare<Readonly<A>> =>
   fromCompare((that) =>
     (self) => {
       let i = 0
@@ -65,14 +65,14 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
 /**
  * @since 3.0.0
  */
-export const reverse = <A>(O: Ord<A>): Ord<A> =>
+export const reverse = <A>(O: Compare<A>): Compare<A> =>
   fromCompare((that) => (self) => O.compare(self)(that))
 
 /**
  * @category Contravariant
  * @since 3.0.0
  */
-export const contramap: <B, A>(f: (b: B) => A) => (fa: Ord<A>) => Ord<B> = (f) =>
+export const contramap: <B, A>(f: (b: B) => A) => (fa: Compare<A>) => Compare<B> = (f) =>
   (fa) => fromCompare((that) => (self) => fa.compare(f(that))(f(self)))
 
 // -------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ export const contramap: <B, A>(f: (b: B) => A) => (fa: Ord<A>) => Ord<B> = (f) =
  * @since 3.0.0
  */
 export interface OrdTypeLambda extends TypeLambda {
-  readonly type: Ord<this["In1"]>
+  readonly type: Compare<this["In1"]>
 }
 
 // -------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ export interface OrdTypeLambda extends TypeLambda {
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Ord<A>> => ({
+export const getSemigroup = <A>(): Semigroup<Compare<A>> => ({
   combine: (that) =>
     (self) =>
       fromCompare((a2) =>
@@ -118,7 +118,7 @@ export const getSemigroup = <A>(): Semigroup<Ord<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const getMonoid = <A>(): Monoid<Ord<A>> => ({
+export const getMonoid = <A>(): Monoid<Compare<A>> => ({
   combine: getSemigroup<A>().combine,
   empty: fromCompare(() => () => 0)
 })
@@ -134,7 +134,7 @@ export const Contravariant: contravariant.Contravariant<OrdTypeLambda> = {
 /**
  * @since 3.0.0
  */
-export const equals = <A>(O: Ord<A>): Eq<A>["equals"] =>
+export const equals = <A>(O: Compare<A>): Equals<A>["equals"] =>
   (that: A) => (self: A) => self === that || O.compare(that)(self) === 0
 
 /**
@@ -142,35 +142,39 @@ export const equals = <A>(O: Ord<A>): Eq<A>["equals"] =>
  *
  * @since 3.0.0
  */
-export const lt = <A>(O: Ord<A>) => (that: A) => (self: A): boolean => O.compare(that)(self) === -1
+export const lt = <A>(O: Compare<A>) =>
+  (that: A) => (self: A): boolean => O.compare(that)(self) === -1
 
 /**
  * Test whether one value is _strictly greater than_ another.
  *
  * @since 3.0.0
  */
-export const gt = <A>(O: Ord<A>) => (that: A) => (self: A): boolean => O.compare(that)(self) === 1
+export const gt = <A>(O: Compare<A>) =>
+  (that: A) => (self: A): boolean => O.compare(that)(self) === 1
 
 /**
  * Test whether one value is _non-strictly less than_ another.
  *
  * @since 3.0.0
  */
-export const leq = <A>(O: Ord<A>) => (that: A) => (self: A): boolean => O.compare(that)(self) !== 1
+export const leq = <A>(O: Compare<A>) =>
+  (that: A) => (self: A): boolean => O.compare(that)(self) !== 1
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
  *
  * @since 3.0.0
  */
-export const geq = <A>(O: Ord<A>) => (that: A) => (self: A): boolean => O.compare(that)(self) !== -1
+export const geq = <A>(O: Compare<A>) =>
+  (that: A) => (self: A): boolean => O.compare(that)(self) !== -1
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
  *
  * @since 3.0.0
  */
-export const min = <A>(O: Ord<A>) =>
+export const min = <A>(O: Compare<A>) =>
   (that: A) => (self: A): A => self === that || O.compare(that)(self) < 1 ? self : that
 
 /**
@@ -178,7 +182,7 @@ export const min = <A>(O: Ord<A>) =>
  *
  * @since 3.0.0
  */
-export const max = <A>(O: Ord<A>) =>
+export const max = <A>(O: Compare<A>) =>
   (that: A) => (self: A): A => self === that || O.compare(that)(self) > -1 ? self : that
 
 /**
@@ -186,7 +190,7 @@ export const max = <A>(O: Ord<A>) =>
  *
  * @since 3.0.0
  */
-export const clamp = <A>(O: Ord<A>): ((low: A, hi: A) => (a: A) => A) => {
+export const clamp = <A>(O: Compare<A>): ((low: A, hi: A) => (a: A) => A) => {
   const minO = min(O)
   const maxO = max(O)
   return (low, hi) => flow(minO(hi), maxO(low))
@@ -197,7 +201,7 @@ export const clamp = <A>(O: Ord<A>): ((low: A, hi: A) => (a: A) => A) => {
  *
  * @since 3.0.0
  */
-export const between = <A>(O: Ord<A>): ((low: A, hi: A) => (a: A) => boolean) => {
+export const between = <A>(O: Compare<A>): ((low: A, hi: A) => (a: A) => boolean) => {
   const ltO = lt(O)
   const gtO = gt(O)
   return (low, hi) => (a) => ltO(low)(a) || gtO(hi)(a) ? false : true

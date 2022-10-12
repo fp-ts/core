@@ -1,10 +1,10 @@
 ---
-title: Alt.ts
-nav_order: 1
+title: OrElse.ts
+nav_order: 24
 parent: Modules
 ---
 
-## Alt overview
+## OrElse overview
 
 `Alt` has a very similar structure to `Semigroup`, the difference is that `Alt` operates on type
 constructors of one argument. So, for example, whereas you can find a `Semigroup` for types which are fully
@@ -26,7 +26,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [model](#model)
-  - [Alt (interface)](#alt-interface)
+  - [OrElse (interface)](#orelse-interface)
 - [utils](#utils)
   - [firstSuccessOf](#firstsuccessof)
 
@@ -34,12 +34,12 @@ Added in v3.0.0
 
 # model
 
-## Alt (interface)
+## OrElse (interface)
 
 **Signature**
 
 ```ts
-export interface Alt<F extends TypeLambda> extends TypeClass<F> {
+export interface OrElse<F extends TypeLambda> extends TypeClass<F> {
   readonly orElse: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A | B>
@@ -59,7 +59,7 @@ each of the specified effects in order until one of them succeeds.
 
 ```ts
 export declare const firstSuccessOf: <G extends any>(
-  Alt: Alt<G>
+  Alt: OrElse<G>
 ) => <S, R, O, E, A>(startWith: any) => (collection: Iterable<any>) => any
 ```
 

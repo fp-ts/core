@@ -1,10 +1,10 @@
 ---
-title: Flattenable.ts
-nav_order: 13
+title: FlatMap.ts
+nav_order: 14
 parent: Modules
 ---
 
-## Flattenable overview
+## FlatMap overview
 
 Added in v3.0.0
 
@@ -15,7 +15,7 @@ Added in v3.0.0
 - [do notation](#do-notation)
   - [bind](#bind)
 - [model](#model)
-  - [Flattenable (interface)](#flattenable-interface)
+  - [FlatMap (interface)](#flatmap-interface)
 - [sequencing](#sequencing)
   - [zipLeft](#zipleft)
   - [zipRight](#zipright)
@@ -34,7 +34,7 @@ Added in v3.0.0
 
 ```ts
 export declare const bind: <M extends any>(
-  Flattenable: Flattenable<M>
+  FlatMap: FlatMap<M>
 ) => <N extends string, A extends object, S, R2, O2, E2, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => any
@@ -45,12 +45,12 @@ Added in v3.0.0
 
 # model
 
-## Flattenable (interface)
+## FlatMap (interface)
 
 **Signature**
 
 ```ts
-export interface Flattenable<M extends TypeLambda> extends Functor<M> {
+export interface FlatMap<M extends TypeLambda> extends Covariant<M> {
   readonly flatMap: <A, S, R2, O2, E2, B>(
     f: (a: A) => Kind<M, S, R2, O2, E2, B>
   ) => <R1, O1, E1>(self: Kind<M, S, R1, O1, E1, A>) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, B>
@@ -70,7 +70,7 @@ produced by the effect.
 
 ```ts
 export declare const zipLeft: <F extends any>(
-  Flattenable: Flattenable<F>
+  FlatMap: FlatMap<F>
 ) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
 ```
 
@@ -84,7 +84,7 @@ A variant of `flatMap` that ignores the value produced by this effect.
 
 ```ts
 export declare const zipRight: <F extends any>(
-  Flattenable: Flattenable<F>
+  FlatMap: FlatMap<F>
 ) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
@@ -97,7 +97,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const ap: <F extends any>(Flattenable: Flattenable<F>) => any
+export declare const ap: <F extends any>(FlatMap: FlatMap<F>) => any
 ```
 
 Added in v3.0.0
@@ -107,7 +107,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const composeKleisli: <F extends any>(Flattenable: Flattenable<F>) => any
+export declare const composeKleisli: <F extends any>(Flattenable: FlatMap<F>) => any
 ```
 
 Added in v3.0.0
@@ -120,7 +120,7 @@ Returns an effect that effectfully "peeks" at the success of this effect.
 
 ```ts
 export declare const tap: <F extends any>(
-  Flattenable: Flattenable<F>
+  FlatMap: FlatMap<F>
 ) => <A, S, R2, O2, E2>(f: (a: A) => any) => <R1, O1, E1>(self: any) => any
 ```
 

@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import * as eq from "@fp-ts/core/Eq"
+import * as eq from "@fp-ts/core/Equals"
 import type * as monoid from "@fp-ts/core/Monoid"
 import type * as semigroup from "@fp-ts/core/Semigroup"
 
@@ -38,7 +38,7 @@ export const match = <A, B, C = B>(
  * @category instances
  * @since 3.0.0
  */
-export const Eq: eq.Eq<Ordering> = eq.EqStrict
+export const Eq: eq.Equals<Ordering> = eq.EqStrict
 
 /**
  * @category instances

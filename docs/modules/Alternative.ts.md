@@ -1,6 +1,6 @@
 ---
 title: Alternative.ts
-nav_order: 2
+nav_order: 1
 parent: Modules
 ---
 
@@ -36,7 +36,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Alternative<F extends TypeLambda> extends Alt<F> {
+export interface Alternative<F extends TypeLambda> extends OrElse<F> {
   readonly none: <S>() => Kind<F, S, unknown, never, never, never>
 }
 ```

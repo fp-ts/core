@@ -42,7 +42,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Applicative<F extends TypeLambda> extends Apply<F>, FromIdentity<F> {}
+export interface Applicative<F extends TypeLambda> extends Ap<F>, Succeed<F> {}
 ```
 
 Added in v3.0.0

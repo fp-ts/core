@@ -1,0 +1,34 @@
+---
+title: Extend.ts
+nav_order: 13
+parent: Modules
+---
+
+## Extend overview
+
+Added in v3.0.0
+
+---
+
+<h2 class="text-delta">Table of contents</h2>
+
+- [model](#model)
+  - [Extend (interface)](#extend-interface)
+
+---
+
+# model
+
+## Extend (interface)
+
+**Signature**
+
+```ts
+export interface Extend<F extends TypeLambda> extends Covariant<F> {
+  readonly extend: <S, R, O, E, A, B>(
+    f: (self: Kind<F, S, R, O, E, A>) => B
+  ) => (self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+}
+```
+
+Added in v3.0.0

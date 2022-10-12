@@ -1,6 +1,6 @@
 ---
 title: Category.ts
-nav_order: 7
+nav_order: 5
 parent: Modules
 ---
 
@@ -24,7 +24,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Category<F extends TypeLambda> extends Composable<F> {
+export interface Category<F extends TypeLambda> extends Compose<F> {
   readonly id: <S, R>() => Kind<F, S, R, never, never, R>
 }
 ```
