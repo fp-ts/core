@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Alt.ts
-nav_order: 52
+nav_order: 5
 parent: Modules
 ---
 

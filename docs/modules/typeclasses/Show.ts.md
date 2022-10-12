@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Show.ts
-nav_order: 76
+nav_order: 28
 parent: Modules
 ---
 

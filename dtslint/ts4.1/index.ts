@@ -1,5 +1,4 @@
 import * as _ from '../../src/HKT'
-import * as T from '../../src/data/Async'
 
 // issue #536
 function testIssue536<F extends _.TypeLambda, G extends _.TypeLambda, S, R, W, E, A>(
@@ -8,11 +7,3 @@ function testIssue536<F extends _.TypeLambda, G extends _.TypeLambda, S, R, W, E
   // $ExpectError
   return x
 }
-
-const testURI = <F extends _.TypeLambda>(ma: T.Async<number>): _.Kind<F, unknown, unknown, never, never, number> => {
-  // $ExpectError
-  return ma
-}
-
-// $ExpectError
-type HKT1 = _.Kind<'a', string>

@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import type { LazyArg } from "@fp-ts/core/data/Function"
+import type { LazyArg } from "@fp-ts/core/Function"
 import * as eq from "@fp-ts/core/typeclasses/Eq"
 import type * as monoid from "@fp-ts/core/typeclasses/Monoid"
 import type * as semigroup from "@fp-ts/core/typeclasses/Semigroup"

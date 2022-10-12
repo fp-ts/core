@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Bounded.ts
-nav_order: 57
+nav_order: 10
 parent: Modules
 ---
 
@@ -50,7 +50,7 @@ Clamp a value between `bottom` and `top` values.
 **Signature**
 
 ```ts
-export declare const clamp: <A>(B: Bounded<A>) => any
+export declare const clamp: <A>(B: Bounded<A>) => (a: A) => A
 ```
 
 Added in v3.0.0

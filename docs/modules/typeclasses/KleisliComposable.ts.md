@@ -1,6 +1,6 @@
 ---
 title: typeclasses/KleisliComposable.ts
-nav_order: 70
+nav_order: 22
 parent: Modules
 ---
 

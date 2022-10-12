@@ -1,6 +1,6 @@
 ---
 title: typeclasses/Traversable.ts
-nav_order: 77
+nav_order: 29
 parent: Modules
 ---
 

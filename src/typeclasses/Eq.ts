@@ -9,7 +9,7 @@
  *
  * @since 3.0.0
  */
-import { flow } from "@fp-ts/core/data/Function"
+import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type * as contravariant from "@fp-ts/core/typeclasses/Contravariant"
 import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
@@ -61,18 +61,6 @@ export const struct = <A>(
 
 /**
  * Given a tuple of `Eq`s returns a `Eq` for the tuple
- *
- * @example
- * import { tuple } from '@fp-ts/core/typeclasses/Eq'
- * import * as S from '@fp-ts/core/data/string'
- * import * as N from '@fp-ts/core/data/number'
- * import * as B from '@fp-ts/core/data/boolean'
- *
- * const E = tuple(S.Eq, N.Eq, B.Eq)
- * assert.strictEqual(E.equals(['a', 1, true])(['a', 1, true]), true)
- * assert.strictEqual(E.equals(['a', 1, true])(['b', 1, true]), false)
- * assert.strictEqual(E.equals(['a', 1, true])(['a', 2, true]), false)
- * assert.strictEqual(E.equals(['a', 1, true])(['a', 1, false]), false)
  *
  * @since 3.0.0
  */
