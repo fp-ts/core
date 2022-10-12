@@ -15,8 +15,8 @@ Added in v3.0.0
 - [Contravariant](#contravariant)
   - [contramap](#contramap)
 - [constructors](#constructors)
+  - [fromCompare](#fromcompare)
   - [fromEquals](#fromequals)
-  - [fromOrd](#fromord)
 - [instances](#instances)
   - [Contravariant](#contravariant-1)
   - [EqStrict](#eqstrict)
@@ -46,22 +46,22 @@ Added in v3.0.0
 
 # constructors
 
+## fromCompare
+
+**Signature**
+
+```ts
+export declare const fromCompare: <A>(Compare: any) => Equals<A>
+```
+
+Added in v3.0.0
+
 ## fromEquals
 
 **Signature**
 
 ```ts
-export declare const fromEquals: <A>(equals: (that: A) => (self: A) => boolean) => Equals<A>
-```
-
-Added in v3.0.0
-
-## fromOrd
-
-**Signature**
-
-```ts
-export declare const fromOrd: <A>(Ord: any) => Equals<A>
+export declare const fromEquals: <A>(equals: (a1: A, a2: A) => boolean) => Equals<A>
 ```
 
 Added in v3.0.0
@@ -116,7 +116,7 @@ Added in v3.0.0
 
 ```ts
 export interface Equals<A> {
-  readonly equals: (that: A) => (self: A) => boolean
+  readonly equals: (a1: A, a2: A) => boolean
 }
 ```
 
@@ -143,7 +143,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const struct: <A>(eqs: { [K in keyof A]: Equals<A[K]> }) => Equals<{ readonly [K in keyof A]: A[K] }>
+export declare const struct: <A>(equals: { [K in keyof A]: Equals<A[K]> }) => Equals<{ readonly [K in keyof A]: A[K] }>
 ```
 
 Added in v3.0.0

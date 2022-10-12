@@ -27,7 +27,7 @@ Added in v3.0.0
 
 ```ts
 export interface Alternative<F extends TypeLambda> extends OrElse<F> {
-  readonly none: <S>() => Kind<F, S, unknown, never, never, never>
+  readonly never: <S>() => Kind<F, S, unknown, never, never, never>
 }
 ```
 

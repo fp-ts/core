@@ -14,6 +14,7 @@ Added in v3.0.0
 
 - [constructors](#constructors)
   - [constant](#constant)
+  - [fromCombine](#fromcombine)
   - [max](#max)
   - [min](#min)
 - [instances](#instances)
@@ -22,7 +23,6 @@ Added in v3.0.0
 - [model](#model)
   - [Semigroup (interface)](#semigroup-interface)
 - [utils](#utils)
-  - [combineAll](#combineall)
   - [intercalate](#intercalate)
   - [reverse](#reverse)
   - [struct](#struct)
@@ -37,7 +37,17 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const constant: <S>(s: S) => Semigroup<S>
+export declare const constant: <A>(a: A) => Semigroup<A>
+```
+
+Added in v3.0.0
+
+## fromCombine
+
+**Signature**
+
+```ts
+export declare const fromCombine: <A>(combine: (a1: A, a2: A) => A) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -49,7 +59,7 @@ Get a semigroup where `combine` will return the maximum, based on the provided o
 **Signature**
 
 ```ts
-export declare const max: <A>(Ord: any) => Semigroup<A>
+export declare const max: <A>(Compare: any) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -61,7 +71,7 @@ Get a semigroup where `combine` will return the minimum, based on the provided o
 **Signature**
 
 ```ts
-export declare const min: <A>(Ord: any) => Semigroup<A>
+export declare const min: <A>(Compare: any) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -100,27 +110,14 @@ Added in v3.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (that: A) => (self: A) => A
+  readonly combine: (a1: A, a2: A) => A
+  readonly combineAll: (startWith: A, collection: Iterable<A>) => A
 }
 ```
 
 Added in v3.0.0
 
 # utils
-
-## combineAll
-
-Given a sequence of `as`, combine them and return the total.
-
-If `as` is empty, return the provided `startWith` value.
-
-**Signature**
-
-```ts
-export declare const combineAll: <S>(Semigroup: Semigroup<S>) => (startWith: S) => (collection: Iterable<S>) => S
-```
-
-Added in v3.0.0
 
 ## intercalate
 
@@ -141,7 +138,7 @@ The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
 **Signature**
 
 ```ts
-export declare const reverse: <S>(Semigroup: Semigroup<S>) => Semigroup<S>
+export declare const reverse: <A>(Semigroup: Semigroup<A>) => Semigroup<A>
 ```
 
 Added in v3.0.0
