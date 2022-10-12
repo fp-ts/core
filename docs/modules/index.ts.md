@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 17
+nav_order: 18
 parent: Modules
 ---
 
@@ -27,6 +27,7 @@ Added in v3.0.0
   - [equals](#equals)
   - [extend](#extend)
   - [flatMap](#flatmap)
+  - [foldable](#foldable)
   - [invariant](#invariant)
   - [kleisliCategory](#kleislicategory)
   - [mapBoth](#mapboth)
@@ -181,6 +182,16 @@ Added in v3.0.0
 
 ```ts
 export declare const flatMap: any
+```
+
+Added in v3.0.0
+
+## foldable
+
+**Signature**
+
+```ts
+export declare const foldable: any
 ```
 
 Added in v3.0.0
