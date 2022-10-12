@@ -817,7 +817,7 @@ export const FirstSuccessOf: orElse_.OrElse<OptionTypeLambda> = {
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
   orElse,
   firstSuccessOf,
-  none: () => none
+  never: () => none
 }
 
 /**
