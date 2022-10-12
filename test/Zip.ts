@@ -1,6 +1,6 @@
 import { pipe } from "@fp-ts/core/Function"
+import * as _ from "@fp-ts/core/Zip"
 import * as O from "./Option"
-import * as _ from "@fp-ts/core/typeclasses/Zip"
 import * as U from "./util"
 
 const Zip: _.Zip<O.OptionTypeLambda> = {

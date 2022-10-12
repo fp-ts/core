@@ -13,25 +13,24 @@
  *
  * @since 3.0.0
  */
-import { flow, identity, pipe } from "@fp-ts/core/Function"
+import * as alt from "@fp-ts/core/Alt"
+import type * as applicative from "@fp-ts/core/Applicative"
+import * as apply from "@fp-ts/core/Apply"
+import * as bifunctor from "@fp-ts/core/Bifunctor"
+import * as eq from "@fp-ts/core/Eq"
+import type * as extendable from "@fp-ts/core/Extendable"
+import * as flattenable from "@fp-ts/core/Flattenable"
+import * as fromIdentity from "@fp-ts/core/FromIdentity"
+import { flow, pipe } from "@fp-ts/core/Function"
+import * as functor from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import * as alt from "@fp-ts/core/typeclasses/Alt"
-import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
-import * as apply from "@fp-ts/core/typeclasses/Apply"
-import * as bifunctor from "@fp-ts/core/typeclasses/Bifunctor"
-import * as eq from "@fp-ts/core/typeclasses/Eq"
-import type * as extendable from "@fp-ts/core/typeclasses/Extendable"
-import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
-import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as functor from "@fp-ts/core/typeclasses/Functor"
-import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
-import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
-import type * as monad from "@fp-ts/core/typeclasses/Monad"
-import type { Monoid } from "@fp-ts/core/typeclasses/Monoid"
-import type { Semigroup } from "@fp-ts/core/typeclasses/Semigroup"
-import type { Show } from "@fp-ts/core/typeclasses/Show"
-import * as traversable from "@fp-ts/core/typeclasses/Traversable"
+import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/KleisliComposable"
+import type * as monad from "@fp-ts/core/Monad"
+import type { Monoid } from "@fp-ts/core/Monoid"
+import type { Semigroup } from "@fp-ts/core/Semigroup"
+import type { Show } from "@fp-ts/core/Show"
+import * as traversable from "@fp-ts/core/Traversable"
 
 /**
  * @category model
@@ -273,7 +272,7 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
  * @category conversions
  * @since 3.0.0
  */
-export const toUnion: <E, A>(fa: Result<E, A>) => E | A = match(identity, identity)
+export const toUnion: <E, A>(fa: Result<E, A>) => E | A = match(e => e, a => a)
 
 /**
  * @since 3.0.0
@@ -368,7 +367,7 @@ export const extend: <E, A, B>(f: (wa: Result<E, A>) => B) => (wa: Result<E, A>)
 /**
  * @since 3.0.0
  */
-export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> = extend(identity)
+export const duplicate: <E, A>(ma: Result<E, A>) => Result<E, Result<E, A>> = extend(r => r)
 
 /**
  * Map each element of a structure to an action, evaluate these actions from left to right, and collect the results.
@@ -573,7 +572,7 @@ export const flatMap: <A, E2, B>(
  * @since 3.0.0
  */
 export const flatten: <E1, E2, A>(mma: Result<E1, Result<E2, A>>) => Result<E1 | E2, A> = flatMap(
-  identity
+  r => r
 )
 
 /**
@@ -796,7 +795,7 @@ export const tap: <A, E2>(
  * @since 3.0.0
  */
 export const toReadonlyArray = <E, A>(self: Result<E, A>): ReadonlyArray<A> =>
-  isFailure(self) ? internal.empty : [self.success]
+  isFailure(self) ? [] : [self.success]
 
 /**
  * @category folding
@@ -956,7 +955,7 @@ export const exists = <A>(predicate: (a: A) => boolean) =>
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Result<never, {}> = succeed(internal.Do)
+export const Do: Result<never, {}> = succeed({})
 
 /**
  * @category do notation
@@ -1009,7 +1008,7 @@ export const bindRight: <N extends string, A extends object, E2, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Result<never, readonly []> = succeed(internal.empty)
+export const Zip: Result<never, readonly []> = succeed([])
 
 /**
  * @category tuple sequencing

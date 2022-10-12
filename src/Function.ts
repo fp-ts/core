@@ -1,154 +1,11 @@
 /**
  * @since 3.0.0
  */
-import type { TypeLambda } from "@fp-ts/core/HKT"
-import type * as category from "@fp-ts/core/typeclasses/Category"
-import type * as composable from "@fp-ts/core/typeclasses/Composable"
-import type * as monoid from "@fp-ts/core/typeclasses/Monoid"
-import type * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
-
-// -------------------------------------------------------------------------------------
-// type lambdas
-// -------------------------------------------------------------------------------------
-
-/**
- * @category type lambdas
- * @since 3.0.0
- */
-export interface FunctionTypeLambda extends TypeLambda {
-  readonly type: (a: this["In1"]) => this["Out1"]
-}
-
-/**
- * @category constructors
- * @since 3.0.0
- */
-export const id: <A>() => (a: A) => A = () => identity
-
-/**
- * @since 3.0.0
- */
-export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C = (bc) =>
-  (ab) => flow(ab, bc)
-
-// -------------------------------------------------------------------------------------
-// instances
-// -------------------------------------------------------------------------------------
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export const Composable: composable.Composable<FunctionTypeLambda> = {
-  compose
-}
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export const Category: category.Category<FunctionTypeLambda> = {
-  compose,
-  id
-}
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export const getSemigroup = <S>(Semigroup: semigroup.Semigroup<S>) =>
-  <A>(): semigroup.Semigroup<(a: A) => S> => ({
-    combine: (that) => (self) => (a) => Semigroup.combine(that(a))(self(a))
-  })
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export const getMonoid = <M>(Monoid: monoid.Monoid<M>) =>
-  <A>(): monoid.Monoid<(a: A) => M> => ({
-    combine: getSemigroup(Monoid)<A>().combine,
-    empty: () => Monoid.empty
-  })
-
-/**
- * @since 3.0.0
- */
-export const apply = <A>(a: A) => <B>(f: (a: A) => B): B => f(a)
-
-/**
- * A lazy argument
- *
- * @since 3.0.0
- */
-export interface LazyArg<A> {
-  (): A
-}
-
-/**
- * @since 3.0.0
- */
-export interface FunctionN<A extends ReadonlyArray<unknown>, B> {
-  (...args: A): B
-}
 
 /**
  * @since 3.0.0
  */
 export const identity = <A>(a: A): A => a
-
-/**
- * @since 3.0.0
- */
-export const unsafeCoerce: <A, B>(a: A) => B = identity as any
-
-/**
- * @since 3.0.0
- */
-export const constant = <A>(a: A): LazyArg<A> => () => a
-
-/**
- * A thunk that returns always `true`.
- *
- * @since 3.0.0
- */
-export const constTrue: LazyArg<boolean> = constant(true)
-
-/**
- * A thunk that returns always `false`.
- *
- * @since 3.0.0
- */
-export const constFalse: LazyArg<boolean> = constant(false)
-
-/**
- * A thunk that returns always `null`.
- *
- * @since 3.0.0
- */
-export const constNull: LazyArg<null> = constant(null)
-
-/**
- * A thunk that returns always `undefined`.
- *
- * @since 3.0.0
- */
-export const constUndefined: LazyArg<undefined> = constant(undefined)
-
-/**
- * A thunk that returns always `void`.
- *
- * @since 3.0.0
- */
-export const constVoid: LazyArg<void> = constUndefined
-
-/**
- * Flips the arguments of a curried function.
- *
- * @since 3.0.0
- */
-export const flip = <A, B, C>(f: (a: A) => (b: B) => C): ((b: B) => (a: A) => C) =>
-  (b) => (a) => f(a)(b)
 
 /**
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
@@ -266,39 +123,6 @@ export function flow(
   }
   return
 }
-
-/**
- * @since 3.0.0
- */
-export const increment = (n: number): number => n + 1
-
-/**
- * @since 3.0.0
- */
-export const decrement = (n: number): number => n - 1
-
-/**
- * @since 3.0.0
- */
-export const absurd = <A>(_: never): A => {
-  throw new Error("Called `absurd` function which should be uncallable")
-}
-
-/**
- * Creates a tupled version of this function: instead of `n` arguments, it accepts a single tuple argument.
- *
- * @since 3.0.0
- */
-export const tupled = <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => B): ((a: A) => B) =>
-  (a) => f(...a)
-
-/**
- * Inverse function of `tupled`
- *
- * @since 3.0.0
- */
-export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): ((...a: A) => B) =>
-  (...a) => f(a)
 
 /**
  * Pipes the value of an expression into a pipeline of functions.
@@ -586,17 +410,3 @@ export function pipe(
     }
   }
 }
-
-/**
- * Type hole simulation
- *
- * @since 3.0.0
- */
-export const hole: <T>() => T = absurd as any
-
-/**
- * `SK` function (SKI combinator calculus).
- *
- * @since 3.0.0
- */
-export const SK = <A, B>(_: A, b: B): B => b

@@ -12,27 +12,25 @@
  *
  * @since 3.0.0
  */
-import type { LazyArg } from "@fp-ts/core/Function"
-import { identity, pipe } from "@fp-ts/core/Function"
+import type * as alt from "@fp-ts/core/Alt"
+import * as alternative from "@fp-ts/core/Alternative"
+import type * as applicative from "@fp-ts/core/Applicative"
+import * as apply from "@fp-ts/core/Apply"
+import * as eq from "@fp-ts/core/Eq"
+import type * as extendable from "@fp-ts/core/Extendable"
+import * as flattenable from "@fp-ts/core/Flattenable"
+import * as fromIdentity from "@fp-ts/core/FromIdentity"
+import { pipe } from "@fp-ts/core/Function"
+import * as functor from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal"
-import type * as alt from "@fp-ts/core/typeclasses/Alt"
-import * as alternative from "@fp-ts/core/typeclasses/Alternative"
-import type * as applicative from "@fp-ts/core/typeclasses/Applicative"
-import * as apply from "@fp-ts/core/typeclasses/Apply"
-import * as eq from "@fp-ts/core/typeclasses/Eq"
-import type * as extendable from "@fp-ts/core/typeclasses/Extendable"
-import * as flattenable from "@fp-ts/core/typeclasses/Flattenable"
-import * as fromIdentity from "@fp-ts/core/typeclasses/FromIdentity"
-import * as functor from "@fp-ts/core/typeclasses/Functor"
-import type * as kleisliCategory from "@fp-ts/core/typeclasses/KleisliCategory"
-import type * as kleisliComposable from "@fp-ts/core/typeclasses/KleisliComposable"
-import type * as monad from "@fp-ts/core/typeclasses/Monad"
-import type * as monoid from "@fp-ts/core/typeclasses/Monoid"
-import * as ord from "@fp-ts/core/typeclasses/Ord"
-import type * as semigroup from "@fp-ts/core/typeclasses/Semigroup"
-import type * as show from "@fp-ts/core/typeclasses/Show"
-import * as traversable from "@fp-ts/core/typeclasses/Traversable"
+import type * as kleisliCategory from "@fp-ts/core/KleisliCategory"
+import type * as kleisliComposable from "@fp-ts/core/KleisliComposable"
+import type * as monad from "@fp-ts/core/Monad"
+import type * as monoid from "@fp-ts/core/Monoid"
+import * as ord from "@fp-ts/core/Ord"
+import type * as semigroup from "@fp-ts/core/Semigroup"
+import type * as show from "@fp-ts/core/Show"
+import * as traversable from "@fp-ts/core/Traversable"
 
 /**
  * @category model
@@ -155,7 +153,7 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
  * @category pattern matching
  * @since 3.0.0
  */
-export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
+export const match = <B, A, C = B>(onNone: () => B, onSome: (a: A) => C) =>
   (ma: Option<A>): B | C => isNone(ma) ? onNone() : onSome(ma.value)
 
 /**
@@ -459,7 +457,7 @@ export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B
 /**
  * @since 3.0.0
  */
-export const flatten: <A>(mma: Option<Option<A>>) => Option<A> = flatMap(identity)
+export const flatten: <A>(mma: Option<Option<A>>) => Option<A> = flatMap(o => o)
 
 /**
  * Lazy version of `orElse`.
@@ -467,7 +465,7 @@ export const flatten: <A>(mma: Option<Option<A>>) => Option<A> = flatMap(identit
  * @category error handling
  * @since 3.0.0
  */
-export const catchAll = <B>(that: LazyArg<Option<B>>) =>
+export const catchAll = <B>(that: () => Option<B>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 /**
@@ -531,7 +529,7 @@ export const extend: <A, B>(f: (wa: Option<A>) => B) => (wa: Option<A>) => Optio
 /**
  * @since 3.0.0
  */
-export const duplicate: <A>(ma: Option<A>) => Option<Option<A>> = extend(identity)
+export const duplicate: <A>(ma: Option<A>) => Option<Option<A>> = extend(o => o)
 
 /**
  * @category filtering
@@ -746,7 +744,7 @@ export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Opti
  */
 export const toReadonlyArray = <A>(
   self: Option<A>
-): ReadonlyArray<A> => (isNone(self) ? internal.empty : [self.value])
+): ReadonlyArray<A> => (isNone(self) ? [] : [self.value])
 
 /**
  * @category folding
@@ -880,7 +878,7 @@ export const exists = <A>(predicate: (a: A) => boolean) =>
  * @category do notation
  * @since 3.0.0
  */
-export const Do: Option<{}> = some(internal.Do)
+export const Do: Option<{}> = some({})
 
 /**
  * @category do notation
@@ -928,7 +926,7 @@ export const bindRight: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 3.0.0
  */
-export const Zip: Option<readonly []> = some(internal.empty)
+export const Zip: Option<readonly []> = some([])
 
 /**
  * @category tuple sequencing
