@@ -1,14 +1,4 @@
 /**
- * A `Functor` is a type constructor which supports a mapping operation `map`.
- *
- * `map` can be used to turn functions `A -> B` into functions `F<A> -> F<B>` whose argument and return types use the type
- * constructor `F` to represent some computational context.
- *
- * Instances must satisfy the following laws:
- *
- * 1. Identity: `map(identity) <-> identity`
- * 2. Composition: `map(flow(ab, bc)) <-> flow(map(ab), map(bc))`
- *
  * @since 3.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"

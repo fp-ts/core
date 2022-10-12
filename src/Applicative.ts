@@ -1,20 +1,4 @@
 /**
- * The `Applicative` type class extends the `Apply` type class with a `of` function, which can be used to create values
- * of type `f a` from values of type `a`.
- *
- * Where `Apply` provides the ability to lift functions of two or more arguments to functions whose arguments are
- * wrapped using `f`, and `Functor` provides the ability to lift functions of one argument, `of` can be seen as the
- * function which lifts functions of _zero_ arguments. That is, `Applicative` functors support a lifting operation for
- * any number of function arguments.
- *
- * Instances must satisfy the following laws in addition to the `Apply` laws:
- *
- * 1. Identity: `of(identity) |> ap(fa) <-> fa`
- * 2. Homomorphism: `of(ab) |> ap(a) <-> of(ab(a))`
- * 3. Interchange: `fab |> ap(of(a)) <-> of(ab => ab(a)) |> ap(fab)`
- *
- * Note. `Functor`'s `map` can be derived: `map = f => fa => of(f) |> ap(fa)`
- *
  * @since 3.0.0
  */
 import * as apply from "@fp-ts/core/Ap"

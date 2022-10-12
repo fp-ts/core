@@ -6,14 +6,6 @@ parent: Modules
 
 ## Equals overview
 
-The `Eq` type class represents types which support decidable equality.
-
-Instances must satisfy the following laws:
-
-1. Reflexivity: `a |> equals(a) === true`
-2. Symmetry: `a |> equals(b) === b |> equals(a)`
-3. Transitivity: if `a |> equals(b) === true` and `b |> equals(c) === true`, then `a |> equals(c) === true`
-
 Added in v3.0.0
 
 ---

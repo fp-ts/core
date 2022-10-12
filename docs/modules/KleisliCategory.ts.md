@@ -6,8 +6,6 @@ parent: Modules
 
 ## KleisliCategory overview
 
-Kleisli category.
-
 Added in v3.0.0
 
 ---

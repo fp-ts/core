@@ -1,6 +1,4 @@
 /**
- * Kleisli category.
- *
  * @since 3.0.0
  */
 import type { ComposeKleisli } from "@fp-ts/core/ComposeKleisli"

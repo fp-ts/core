@@ -1,6 +1,4 @@
 /**
- * Kleisli arrows composition.
- *
  * @since 3.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"

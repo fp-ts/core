@@ -3,38 +3,33 @@
  */
 
 import * as alternative from "@fp-ts/core/Alternative"
-import * as apply from "@fp-ts/core/Ap"
+import * as ap from "@fp-ts/core/Ap"
 import * as applicative from "@fp-ts/core/Applicative"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
 import * as comonad from "@fp-ts/core/Comonad"
-import * as ord from "@fp-ts/core/Compare"
-import * as composable from "@fp-ts/core/Compose"
-import * as kleisliComposable from "@fp-ts/core/ComposeKleisli"
+import * as compare from "@fp-ts/core/Compare"
+import * as compose from "@fp-ts/core/Compose"
+import * as composeKleisli from "@fp-ts/core/ComposeKleisli"
 import * as contravariant from "@fp-ts/core/Contravariant"
-import * as functor from "@fp-ts/core/Covariant"
-import * as eq from "@fp-ts/core/Equals"
-import * as extendable from "@fp-ts/core/Extend"
-import * as flattenable from "@fp-ts/core/FlatMap"
+import * as covariant from "@fp-ts/core/Covariant"
+import * as equals from "@fp-ts/core/Equals"
+import * as extend from "@fp-ts/core/Extend"
+import * as flatMap from "@fp-ts/core/FlatMap"
 import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
 import * as kleisliCategory from "@fp-ts/core/KleisliCategory"
-import * as bifunctor from "@fp-ts/core/MapBoth"
+import * as mapBoth from "@fp-ts/core/MapBoth"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
 import * as ordering from "@fp-ts/core/Ordering"
-import * as alt from "@fp-ts/core/OrElse"
+import * as orElse from "@fp-ts/core/OrElse"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as show from "@fp-ts/core/Show"
-import * as fromIdentity from "@fp-ts/core/Succeed"
-import * as traversable from "@fp-ts/core/Traverse"
+import * as succeed from "@fp-ts/core/Succeed"
+import * as traverse from "@fp-ts/core/Traverse"
 
 export {
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  alt,
   /**
    * @category type classes
    * @since 3.0.0
@@ -44,17 +39,12 @@ export {
    * @category type classes
    * @since 3.0.0
    */
+  ap,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
   applicative,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  apply,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  bifunctor,
   /**
    * @category type classes
    * @since 3.0.0
@@ -74,7 +64,17 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  composable,
+  compare,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  compose,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  composeKleisli,
   /**
    * @category type classes
    * @since 3.0.0
@@ -84,27 +84,22 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  eq,
+  covariant,
   /**
    * @category type classes
    * @since 3.0.0
    */
-  extendable,
+  equals,
   /**
    * @category type classes
    * @since 3.0.0
    */
-  flattenable,
+  extend,
   /**
    * @category type classes
    * @since 3.0.0
    */
-  fromIdentity,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  functor,
+  flatMap,
   /**
    * @since 3.0.0
    */
@@ -123,7 +118,7 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  kleisliComposable,
+  mapBoth,
   /**
    * @category type classes
    * @since 3.0.0
@@ -135,14 +130,14 @@ export {
    */
   monoid,
   /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  ord,
-  /**
    * @since 3.0.0
    */
   ordering,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  orElse,
   /**
    * @category type classes
    * @since 3.0.0
@@ -157,5 +152,10 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  traversable
+  succeed,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  traverse
 }

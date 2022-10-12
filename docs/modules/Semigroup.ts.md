@@ -6,20 +6,6 @@ parent: Modules
 
 ## Semigroup overview
 
-If a type `A` can form a `Semigroup` it has an **associative** binary operation.
-
-```ts
-interface Semigroup<A> {
-  readonly combine: (that: A) => (self: A) => A
-}
-```
-
-Associativity means the following equality must hold for any choice of `x`, `y`, and `z`.
-
-```ts
-(x |> combine(y)) |> combine(z) <-> x |> combine(y |> combine(z))
-```
-
 Added in v3.0.0
 
 ---

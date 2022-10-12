@@ -6,20 +6,6 @@ parent: Modules
 
 ## Monoid overview
 
-`Monoid` extends the power of `Semigroup` by providing an additional `empty` value.
-
-```ts
-interface Monoid<A> extends Semigroup<A> {
-  readonly empty: A
-}
-```
-
-This `empty` value should be an identity for the `combine` operation, which means the following equalities hold for any choice of `a`.
-
-```ts
-a |> combine(empty) = empty |> combine(a) <-> a
-```
-
 Added in v3.0.0
 
 ---

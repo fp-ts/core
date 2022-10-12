@@ -1,11 +1,4 @@
 /**
- * The `Show` type class represents those types which can be converted into
- * a human-readable `string` representation.
- *
- * While not required, it is recommended that for any expression `x`, the
- * string `show(x)` be executable TypeScript code which evaluates to the same
- * value as the expression `x`.
- *
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
