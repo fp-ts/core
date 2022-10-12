@@ -1,4 +1,5 @@
 import * as foldable from "@fp-ts/core/Foldable"
+import { pipe } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
@@ -21,6 +22,6 @@ export const MonoidSum: Monoid<number> = {
 describe("Foldable", () => {
   it("foldMap", () => {
     const foldMap = foldable.foldMap(FoldableReadonlyArray)
-    U.deepStrictEqual(foldMap(MonoidSum)(U.double)([1, 2, 3]), 12)
+    U.deepStrictEqual(pipe([1, 2, 3], foldMap(MonoidSum)(U.double)), 12)
   })
 })
