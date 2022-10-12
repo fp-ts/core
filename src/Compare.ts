@@ -2,7 +2,6 @@
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
-import type { Equals } from "@fp-ts/core/Equals"
 import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
@@ -133,12 +132,6 @@ export const getMonoid = <A>(): Monoid<Compare<A>> => ({
 export const Contravariant: contravariant.Contravariant<OrdTypeLambda> = {
   contramap
 }
-
-/**
- * @since 3.0.0
- */
-export const equals = <A>(O: Compare<A>): Equals<A>["equals"] =>
-  (that: A) => (self: A) => self === that || O.compare(that)(self) === 0
 
 /**
  * Test whether one value is _strictly less than_ another.

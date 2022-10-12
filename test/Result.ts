@@ -17,7 +17,8 @@ import * as apply from "@fp-ts/core/Ap"
 import type * as applicative from "@fp-ts/core/Applicative"
 import type * as kleisliComposable from "@fp-ts/core/ComposeKleisli"
 import * as functor from "@fp-ts/core/Covariant"
-import * as eq from "@fp-ts/core/Equals"
+import type { Equals } from "@fp-ts/core/Equals"
+import * as equals from "@fp-ts/core/Equals"
 import type * as extendable from "@fp-ts/core/Extend"
 import * as flattenable from "@fp-ts/core/FlatMap"
 import { flow, pipe } from "@fp-ts/core/Function"
@@ -413,13 +414,15 @@ export const getShow = <E, A>(ShowE: Show<E>, ShowA: Show<A>): Show<Result<E, A>
  * @category instances
  * @since 3.0.0
  */
-export const getEq = <E, A>(EE: eq.Equals<E>, EA: eq.Equals<A>): eq.Equals<Result<E, A>> =>
-  eq.fromEquals(
-    (that) =>
-      (self) =>
-        isFailure(self)
-          ? isFailure(that) && EE.equals(that.failure)(self.failure)
-          : isSuccess(that) && EA.equals(that.success)(self.success)
+export const getEq = <E, A>(
+  EqualsE: Equals<E>,
+  EqualsA: Equals<A>
+): equals.Equals<Result<E, A>> =>
+  equals.fromEquals(
+    (r1, r2) =>
+      isFailure(r1)
+        ? isFailure(r2) && EqualsE.equals(r1.failure, r2.failure)
+        : isSuccess(r2) && EqualsA.equals(r1.success, r2.success)
   )
 
 /**
@@ -955,8 +958,8 @@ export const toUndefined: <E, A>(self: Result<E, A>) => A | undefined = getOrEls
  *
  * @since 3.0.0
  */
-export const elem = <A>(E: eq.Equals<A>) =>
-  (a: A) => <E>(ma: Result<E, A>): boolean => isFailure(ma) ? false : E.equals(ma.success)(a)
+export const elem = <A>(E: equals.Equals<A>) =>
+  (a: A) => <E>(self: Result<E, A>): boolean => isFailure(self) ? false : E.equals(a, self.success)
 
 /**
  * Returns `false` if `Failure` or returns the result of the application of the given predicate to the `Success` value.
