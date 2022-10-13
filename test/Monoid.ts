@@ -4,28 +4,18 @@ import * as string from "./data/string"
 import * as U from "./util"
 
 describe("Monoid", () => {
-  describe("combineAll", () => {
-    it("baseline", () => {
-      U.deepStrictEqual(monoid.combineAll(number.MonoidSum)([1, 2, 3]), 6)
-    })
-
-    it("should accept an Iterable", () => {
-      U.deepStrictEqual(monoid.combineAll(number.MonoidSum)(new Set([1, 2, 3])), 6)
-    })
-  })
-
   it("min", () => {
     const M = monoid.min(number.Bounded)
-    U.deepStrictEqual(monoid.combineAll(M)([]), +Infinity)
-    U.deepStrictEqual(monoid.combineAll(M)([1]), 1)
-    U.deepStrictEqual(monoid.combineAll(M)([1, -1]), -1)
+    U.deepStrictEqual(M.combine(M.empty), +Infinity)
+    U.deepStrictEqual(M.combine(M.empty, 1), 1)
+    U.deepStrictEqual(M.combine(M.empty, 1, -1), -1)
   })
 
   it("max", () => {
     const M = monoid.max(number.Bounded)
-    U.deepStrictEqual(monoid.combineAll(M)([]), -Infinity)
-    U.deepStrictEqual(monoid.combineAll(M)([1]), 1)
-    U.deepStrictEqual(monoid.combineAll(M)([1, -1]), 1)
+    U.deepStrictEqual(M.combine(M.empty), -Infinity)
+    U.deepStrictEqual(M.combine(M.empty, 1), 1)
+    U.deepStrictEqual(M.combine(M.empty, 1, -1), 1)
   })
 
   it("reverse", () => {

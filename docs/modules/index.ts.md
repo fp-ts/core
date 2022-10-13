@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 19
+nav_order: 20
 parent: Modules
 ---
 
@@ -26,6 +26,7 @@ Added in v3.0.0
   - [covariant](#covariant)
   - [equals](#equals)
   - [extend](#extend)
+  - [firstSuccessOf](#firstsuccessof)
   - [flatMap](#flatmap)
   - [foldable](#foldable)
   - [foldableWithIndex](#foldablewithindex)
@@ -34,7 +35,6 @@ Added in v3.0.0
   - [mapBoth](#mapboth)
   - [monad](#monad)
   - [monoid](#monoid)
-  - [orElse](#orelse)
   - [semigroup](#semigroup)
   - [show](#show)
   - [succeed](#succeed)
@@ -177,6 +177,16 @@ export declare const extend: any
 
 Added in v3.0.0
 
+## firstSuccessOf
+
+**Signature**
+
+```ts
+export declare const firstSuccessOf: any
+```
+
+Added in v3.0.0
+
 ## flatMap
 
 **Signature**
@@ -253,16 +263,6 @@ Added in v3.0.0
 
 ```ts
 export declare const monoid: any
-```
-
-Added in v3.0.0
-
-## orElse
-
-**Signature**
-
-```ts
-export declare const orElse: any
 ```
 
 Added in v3.0.0

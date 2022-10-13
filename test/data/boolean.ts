@@ -6,7 +6,7 @@ export const Compare: compare.Compare<boolean> = compare.fromCompare((a1, a2) =>
   a1 < a2 ? -1 : a1 > a2 ? 1 : 0
 )
 
-export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.fromCombineAll(
+export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.fromCombineIterable(
   (head, tail) => {
     if (head === false) {
       return false
@@ -20,7 +20,7 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.fromCombineA
   }
 )
 
-export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.fromCombineAll(
+export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.fromCombineIterable(
   (head, tail) => {
     if (head === true) {
       return true

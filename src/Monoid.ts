@@ -80,9 +80,3 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
   ...semigroup.fromBinary(semigroup.tuple(...monoids).combine),
   empty: monoids.map((m) => m.empty)
 } as any)
-
-/**
- * @since 3.0.0
- */
-export const combineAll = <A>(Monoid: Monoid<A>) =>
-  (collection: Iterable<A>): A => Monoid.combineAll(Monoid.empty, collection)
