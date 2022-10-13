@@ -25,8 +25,8 @@ export interface Traverse<T extends TypeLambda> extends TypeClass<T> {
  * @since 3.0.0
  */
 export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
-  TraversableF: Traverse<F>,
-  TraversableG: Traverse<G>
+  TraverseF: Traverse<F>,
+  TraverseG: Traverse<G>
 ) =>
   <H extends TypeLambda>(H: Applicative<H>) =>
     <A, S, R, O, E, B>(
@@ -34,14 +34,14 @@ export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
     ): (<FS, FR, FO, FE, GS, GR, GO, GE>(
       fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
     ) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>) =>
-      TraversableF.traverse(H)(TraversableG.traverse(H)(f))
+      TraverseF.traverse(H)(TraverseG.traverse(H)(f))
 
 /**
  * @since 3.0.0
  */
-export const sequence = <T extends TypeLambda>(Traversable: Traverse<T>) =>
+export const sequence = <T extends TypeLambda>(Traverse: Traverse<T>) =>
   <F extends TypeLambda>(
     G: Applicative<F>
   ): (<TS, TR, TO, TE, S, R, O, E, A>(
     self: Kind<T, TS, TR, TO, TE, Kind<F, S, R, O, E, A>>
-  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, A>>) => Traversable.traverse(G)(identity)
+  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, A>>) => Traverse.traverse(G)(identity)
