@@ -10,16 +10,16 @@ import { identity } from "@fp-ts/core/Function"
  */
 export interface Semigroup<A> {
   readonly combine: (head: A, ...tail: ReadonlyArray<A>) => A
-  readonly combineOf: (head: A, tail: Iterable<A>) => A
+  readonly combineAll: (head: A, tail: Iterable<A>) => A
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fromCombineOf = <A>(combineOf: (head: A, tail: Iterable<A>) => A): Semigroup<A> => ({
-  combine: (head, ...tail) => combineOf(head, tail),
-  combineOf
+export const fromCombineAll = <A>(combineAll: (head: A, tail: Iterable<A>) => A): Semigroup<A> => ({
+  combine: (head, ...tail) => combineAll(head, tail),
+  combineAll
 })
 
 /**
@@ -27,7 +27,7 @@ export const fromCombineOf = <A>(combineOf: (head: A, tail: Iterable<A>) => A): 
  * @since 3.0.0
  */
 export const fromBinary = <A>(combine: (a1: A, a2: A) => A): Semigroup<A> =>
-  fromCombineOf((head, tail) => {
+  fromCombineAll((head, tail) => {
     let out: A = head
     for (const a of tail) {
       out = combine(out, a)
@@ -57,7 +57,7 @@ export const max = <A>(Compare: Compare<A>): Semigroup<A> =>
  * @category constructors
  * @since 3.0.0
  */
-export const constant = <A>(a: A): Semigroup<A> => fromCombineOf(() => a)
+export const constant = <A>(a: A): Semigroup<A> => fromCombineAll(() => a)
 
 /**
  * The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
@@ -114,7 +114,7 @@ export const intercalate = <A>(separator: A) =>
  * @category instances
  * @since 3.0.0
  */
-export const first = <A>(): Semigroup<A> => fromCombineOf(identity)
+export const first = <A = never>(): Semigroup<A> => fromCombineAll(identity)
 
 /**
  * Always return the last argument.
@@ -122,10 +122,16 @@ export const first = <A>(): Semigroup<A> => fromCombineOf(identity)
  * @category instances
  * @since 3.0.0
  */
-export const last = <A>(): Semigroup<A> =>
-  fromCombineOf((head, tail) => {
+export const last = <A = never>(): Semigroup<A> =>
+  fromCombineAll((head, tail) => {
     let out: A = head
     // eslint-disable-next-line no-empty
     for (out of tail) {}
     return out
   })
+
+/**
+ * @since 3.0.0
+ */
+export const combineAll = <A>(Semigroup: Semigroup<A>) =>
+  (startWith: A) => (collection: Iterable<A>): A => Semigroup.combineAll(startWith, collection)

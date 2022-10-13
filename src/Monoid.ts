@@ -85,4 +85,4 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  * @since 3.0.0
  */
 export const combineAll = <A>(Monoid: Monoid<A>) =>
-  (collection: Iterable<A>): A => Monoid.combineOf(Monoid.empty, collection)
+  (collection: Iterable<A>): A => Monoid.combineAll(Monoid.empty, collection)
