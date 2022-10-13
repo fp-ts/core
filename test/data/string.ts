@@ -3,7 +3,7 @@ import type * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import type * as show from "@fp-ts/core/Show"
 
-export const Semigroup: semigroup.Semigroup<string> = semigroup.fromCombine((x, y) => x + y)
+export const Semigroup: semigroup.Semigroup<string> = semigroup.fromBinary((x, y) => x + y)
 
 export const Monoid: monoid.Monoid<string> = {
   ...Semigroup,

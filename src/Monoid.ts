@@ -22,7 +22,7 @@ export interface Monoid<A> extends Semigroup<A> {
  * @since 3.0.0
  */
 export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  ...semigroup.fromCombine(semigroup.min(Bounded).combine),
+  ...semigroup.fromBinary(semigroup.min(Bounded).combine),
   empty: Bounded.top
 })
 
@@ -35,7 +35,7 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  * @since 3.0.0
  */
 export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  ...semigroup.fromCombine(semigroup.max(Bounded).combine),
+  ...semigroup.fromBinary(semigroup.max(Bounded).combine),
   empty: Bounded.bottom
 })
 
@@ -45,7 +45,7 @@ export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  * @since 3.0.0
  */
 export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> => ({
-  ...semigroup.fromCombine((a1, a2) => Monoid.combine(a2, a1)),
+  ...semigroup.fromBinary((a1, a2) => Monoid.combine(a2, a1)),
   empty: Monoid.empty
 })
 
@@ -64,7 +64,7 @@ export const struct = <A>(
     }
   }
   return {
-    ...semigroup.fromCombine(semigroup.struct(monoids).combine),
+    ...semigroup.fromBinary(semigroup.struct(monoids).combine),
     empty
   }
 }
@@ -77,7 +77,7 @@ export const struct = <A>(
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<Readonly<A>> => ({
-  ...semigroup.fromCombine(semigroup.tuple(...monoids).combine),
+  ...semigroup.fromBinary(semigroup.tuple(...monoids).combine),
   empty: monoids.map((m) => m.empty)
 } as any)
 
@@ -85,4 +85,4 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  * @since 3.0.0
  */
 export const combineAll = <A>(Monoid: Monoid<A>) =>
-  (collection: Iterable<A>): A => Monoid.combineAll(Monoid.empty, collection)
+  (collection: Iterable<A>): A => Monoid.combineOf(Monoid.empty, collection)

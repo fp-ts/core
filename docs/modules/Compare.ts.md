@@ -12,12 +12,11 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Contravariant](#contravariant)
-  - [contramap](#contramap)
 - [constructors](#constructors)
   - [fromCompare](#fromcompare)
 - [instances](#instances)
-  - [Contravariant](#contravariant-1)
+  - [Contravariant](#contravariant)
+  - [getEquals](#getequals)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
   - [trivial](#trivial)
@@ -28,6 +27,7 @@ Added in v3.0.0
 - [utils](#utils)
   - [between](#between)
   - [clamp](#clamp)
+  - [contramap](#contramap)
   - [geq](#geq)
   - [gt](#gt)
   - [leq](#leq)
@@ -38,18 +38,6 @@ Added in v3.0.0
   - [tuple](#tuple)
 
 ---
-
-# Contravariant
-
-## contramap
-
-**Signature**
-
-```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (self: Compare<A>) => Compare<B>
-```
-
-Added in v3.0.0
 
 # constructors
 
@@ -75,12 +63,17 @@ export declare const Contravariant: any
 
 Added in v3.0.0
 
+## getEquals
+
+**Signature**
+
+```ts
+export declare const getEquals: <A>(Compare: Compare<A>) => any
+```
+
+Added in v3.0.0
+
 ## getMonoid
-
-Returns a `Monoid` such that:
-
-- `pipe(ord1, combine(ord2))` will order first by `ord1`, and then by `ord2`
-- its `empty` value is an `Ord` that always considers compared elements equal
 
 **Signature**
 
@@ -91,9 +84,6 @@ export declare const getMonoid: <A>() => any
 Added in v3.0.0
 
 ## getSemigroup
-
-Returns a `Semigroup` such that `pipe(ord1, combine(ord2))` will order first by `ord1`,
-and then by `ord2`
 
 **Signature**
 
@@ -163,6 +153,16 @@ Clamp a value between a minimum and a maximum.
 
 ```ts
 export declare const clamp: <A>(O: Compare<A>) => (low: A, hi: A) => (a: A) => A
+```
+
+Added in v3.0.0
+
+## contramap
+
+**Signature**
+
+```ts
+export declare const contramap: <B, A>(f: (b: B) => A) => (self: Compare<A>) => Compare<B>
 ```
 
 Added in v3.0.0
@@ -251,13 +251,13 @@ Added in v3.0.0
 
 ## tuple
 
-Given a tuple of `Ord`s returns an `Ord` for the tuple.
+Given a tuple of `Compare`s returns a `Compare` for the tuple.
 
 **Signature**
 
 ```ts
 export declare const tuple: <A extends readonly unknown[]>(
-  ...ords: { [K in keyof A]: Compare<A[K]> }
+  ...compares: { [K in keyof A]: Compare<A[K]> }
 ) => Compare<Readonly<A>>
 ```
 

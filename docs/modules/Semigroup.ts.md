@@ -14,7 +14,8 @@ Added in v3.0.0
 
 - [constructors](#constructors)
   - [constant](#constant)
-  - [fromCombine](#fromcombine)
+  - [fromBinary](#frombinary)
+  - [fromCombineOf](#fromcombineof)
   - [max](#max)
   - [min](#min)
 - [instances](#instances)
@@ -42,12 +43,22 @@ export declare const constant: <A>(a: A) => Semigroup<A>
 
 Added in v3.0.0
 
-## fromCombine
+## fromBinary
 
 **Signature**
 
 ```ts
-export declare const fromCombine: <A>(combine: (a1: A, a2: A) => A) => Semigroup<A>
+export declare const fromBinary: <A>(combine: (a1: A, a2: A) => A) => Semigroup<A>
+```
+
+Added in v3.0.0
+
+## fromCombineOf
+
+**Signature**
+
+```ts
+export declare const fromCombineOf: <A>(combineOf: (head: A, tail: Iterable<A>) => A) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -110,8 +121,8 @@ Added in v3.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (a1: A, a2: A) => A
-  readonly combineAll: (startWith: A, collection: Iterable<A>) => A
+  readonly combine: (head: A, ...tail: ReadonlyArray<A>) => A
+  readonly combineOf: (head: A, tail: Iterable<A>) => A
 }
 ```
 
@@ -120,8 +131,6 @@ Added in v3.0.0
 # utils
 
 ## intercalate
-
-You can glue items between and stay associative.
 
 **Signature**
 

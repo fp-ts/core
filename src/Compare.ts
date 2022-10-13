@@ -2,11 +2,13 @@
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
+import type { Equals } from "@fp-ts/core/Equals"
 import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
+import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category type class
@@ -41,22 +43,22 @@ export const trivial: Compare<unknown> = {
 }
 
 /**
- * Given a tuple of `Ord`s returns an `Ord` for the tuple.
+ * Given a tuple of `Compare`s returns a `Compare` for the tuple.
  *
  * @since 3.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
-  ...ords: { [K in keyof A]: Compare<A[K]> }
+  ...compares: { [K in keyof A]: Compare<A[K]> }
 ): Compare<Readonly<A>> =>
   fromCompare((a1, a2) => {
     let i = 0
-    for (; i < ords.length - 1; i++) {
-      const r = ords[i].compare(a1[i], a2[i])
+    for (; i < compares.length - 1; i++) {
+      const r = compares[i].compare(a1[i], a2[i])
       if (r !== 0) {
         return r
       }
     }
-    return ords[i].compare(a1[i], a2[i])
+    return compares[i].compare(a1[i], a2[i])
   })
 
 /**
@@ -65,43 +67,47 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
 export const reverse = <A>(O: Compare<A>): Compare<A> => fromCompare((a1, a2) => O.compare(a2, a1))
 
 /**
- * @category Contravariant
  * @since 3.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
   (self: Compare<A>): Compare<B> => fromCompare((a1, a2) => self.compare(f(a1), f(a2)))
 
 /**
- * Returns a `Semigroup` such that `pipe(ord1, combine(ord2))` will order first by `ord1`,
- * and then by `ord2`
- *
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Compare<A>> => {
-  const combine = (Compare1: Compare<A>, Compare2: Compare<A>) =>
-    fromCompare((a1: A, a2: A) => {
-      const ordering = Compare1.compare(a1, a2)
-      return ordering !== 0 ? ordering : Compare2.compare(a1, a2)
+export const getSemigroup = <A>(): Semigroup<Compare<A>> =>
+  semigroup.fromCombineOf((head, tail) =>
+    fromCompare((a1, a2) => {
+      let out = head.compare(a1, a2)
+      if (out !== 0) {
+        return out
+      }
+      for (const compare of tail) {
+        out = compare.compare(a1, a2)
+        if (out !== 0) {
+          return out
+        }
+      }
+      return out
     })
-  return {
-    combine,
-    combineAll: (a, collection) => Array.from(collection).reduce((acc, a) => combine(acc, a), a)
-  }
-}
+  )
 
 /**
- * Returns a `Monoid` such that:
- *
- * - `pipe(ord1, combine(ord2))` will order first by `ord1`, and then by `ord2`
- * - its `empty` value is an `Ord` that always considers compared elements equal
- *
  * @category instances
  * @since 3.0.0
  */
 export const getMonoid = <A>(): Monoid<Compare<A>> => ({
   ...getSemigroup<A>(),
   empty: fromCompare(() => 0)
+})
+
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const getEquals = <A>(Compare: Compare<A>): Equals<A> => ({
+  equals: (a1: A, a2: A) => a1 === a2 || Compare.compare(a1, a2) === 0
 })
 
 /**

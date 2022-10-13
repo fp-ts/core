@@ -76,7 +76,7 @@ export const contramap = <B, A>(f: (b: B) => A) =>
  * @since 3.0.0
  */
 export const getSemigroup = <A>(): Semigroup<Equals<A>> =>
-  semigroup.fromCombine(
+  semigroup.fromBinary(
     (self, that) => fromEquals((a1, a2) => self.equals(a1, a2) && that.equals(a1, a2))
   )
 
