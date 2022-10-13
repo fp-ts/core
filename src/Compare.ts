@@ -34,14 +34,6 @@ export const fromCompare = <A>(compare: (a1: A, a2: A) => Ordering): Compare<A> 
 })
 
 /**
- * @category instances
- * @since 3.0.0
- */
-export const trivial: Compare<unknown> = {
-  compare: () => 0
-}
-
-/**
  * Given a tuple of `Compare`s returns a `Compare` for the tuple.
  *
  * @since 3.0.0

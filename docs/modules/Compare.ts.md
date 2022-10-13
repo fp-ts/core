@@ -18,7 +18,6 @@ Added in v3.0.0
   - [Contravariant](#contravariant)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
-  - [trivial](#trivial)
 - [type class](#type-class)
   - [Compare (interface)](#compare-interface)
 - [type lambdas](#type-lambdas)
@@ -78,16 +77,6 @@ Added in v3.0.0
 
 ```ts
 export declare const getSemigroup: <A>() => any
-```
-
-Added in v3.0.0
-
-## trivial
-
-**Signature**
-
-```ts
-export declare const trivial: Compare<unknown>
 ```
 
 Added in v3.0.0
