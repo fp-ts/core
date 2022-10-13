@@ -20,6 +20,6 @@ export interface Alternative<F extends TypeLambda> extends OrElse<F> {
  *
  * @since 3.0.0
  */
-export const firstSuccessOf = <G extends TypeLambda>(Alternative: Alternative<G>) =>
-  <S, R, O, E, A>(collection: Iterable<Kind<G, S, R, O, E, A>>): Kind<G, S, R, O, E, A> =>
+export const firstSuccessOf = <F extends TypeLambda>(Alternative: Alternative<F>) =>
+  <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>): Kind<F, S, R, O, E, A> =>
     Alternative.firstSuccessOf(Alternative.never(), collection)
