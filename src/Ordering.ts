@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import * as eq from "@fp-ts/core/Equals"
+import type * as eq from "@fp-ts/core/Equals"
 import type * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 
@@ -30,15 +30,13 @@ export const match = <A, B, C = B>(
   onGreaterThan: () => C
 ) => (o: Ordering): A | B | C => o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan()
 
-// -------------------------------------------------------------------------------------
-// instances
-// -------------------------------------------------------------------------------------
-
 /**
  * @category instances
  * @since 3.0.0
  */
-export const Eq: eq.Equals<Ordering> = eq.EqStrict
+export const Equals: eq.Equals<Ordering> = {
+  equals: (a1, a2) => a1 === a2
+}
 
 /**
  * @category instances

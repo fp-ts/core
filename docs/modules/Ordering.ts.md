@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [instances](#instances)
-  - [Eq](#eq)
+  - [Equals](#equals)
   - [Monoid](#monoid)
   - [Semigroup](#semigroup)
 - [model](#model)
@@ -28,12 +28,12 @@ Added in v3.0.0
 
 # instances
 
-## Eq
+## Equals
 
 **Signature**
 
 ```ts
-export declare const Eq: any
+export declare const Equals: any
 ```
 
 Added in v3.0.0

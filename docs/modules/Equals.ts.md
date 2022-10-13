@@ -19,7 +19,6 @@ Added in v3.0.0
   - [fromEquals](#fromequals)
 - [instances](#instances)
   - [Contravariant](#contravariant-1)
-  - [EqStrict](#eqstrict)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
 - [model](#model)
@@ -74,16 +73,6 @@ Added in v3.0.0
 
 ```ts
 export declare const Contravariant: any
-```
-
-Added in v3.0.0
-
-## EqStrict
-
-**Signature**
-
-```ts
-export declare const EqStrict: Equals<unknown>
 ```
 
 Added in v3.0.0
