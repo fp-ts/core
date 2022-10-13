@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import * as ord from "@fp-ts/core/Compare"
+import * as compare from "@fp-ts/core/Compare"
 import type { Compare } from "@fp-ts/core/Compare"
 
 /**
@@ -18,7 +18,7 @@ export interface Bounded<A> extends Compare<A> {
  *
  * @since 3.0.0
  */
-export const clamp = <A>(B: Bounded<A>): (a: A) => A => ord.clamp(B)(B.bottom, B.top)
+export const clamp = <A>(B: Bounded<A>): (a: A) => A => compare.clamp(B)(B.bottom, B.top)
 
 /**
  * Reverses the `Ord` of a `Bounded` and flips `top` and `bottom` values.
@@ -26,7 +26,7 @@ export const clamp = <A>(B: Bounded<A>): (a: A) => A => ord.clamp(B)(B.bottom, B
  * @since 3.0.0
  */
 export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> => ({
-  compare: ord.reverse(Bounded).compare,
+  compare: compare.reverse(Bounded).compare,
   top: Bounded.bottom,
   bottom: Bounded.top
 })

@@ -1,3 +1,4 @@
+import type { Compare } from "@fp-ts/core/Compare"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import type { TypeLambda } from "@fp-ts/core/HKT"
@@ -27,3 +28,7 @@ export const isNonEmpty = <A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyA
 export const head = <A>(
   self: ReadonlyArray<A>
 ): O.Option<A> => (isNonEmpty(self) ? O.some(self[0]) : O.none)
+
+export const sort = <B>(Compare: Compare<B>) =>
+  <A extends B>(as: ReadonlyArray<A>): ReadonlyArray<A> =>
+    as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a1, a2))

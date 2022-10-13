@@ -42,7 +42,7 @@ export const Equals: eq.Equals<Ordering> = {
  * @category instances
  * @since 3.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombine((self, that) =>
+export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromBinary((self, that) =>
   self !== 0 ? self : that
 )
 

@@ -27,6 +27,9 @@ Added in v3.0.0
 
 ```ts
 export interface Alternative<F extends TypeLambda> extends OrElse<F> {
+  /**
+   * Returns a effect that will never produce anything.
+   */
   readonly never: <S>() => Kind<F, S, unknown, never, never, never>
 }
 ```
