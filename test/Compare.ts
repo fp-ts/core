@@ -117,8 +117,4 @@ describe("Ord", () => {
     const second = { a: 1 }
     U.strictEqual(pipe(first, max(second)), first)
   })
-
-  it("trivial", () => {
-    U.deepStrictEqual(sort(_.trivial)(["b", "a"]), ["b", "a"])
-  })
 })
