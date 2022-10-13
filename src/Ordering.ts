@@ -33,8 +33,19 @@ export const match = <A, B, C = B>(
  * @category instances
  * @since 3.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromBinary((self, that) =>
-  self !== 0 ? self : that
+export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombineIterable(
+  (head, tail) => {
+    let out = head
+    if (out !== 0) {
+      return out
+    }
+    for (out of tail) {
+      if (out !== 0) {
+        return out
+      }
+    }
+    return out
+  }
 )
 
 /**
