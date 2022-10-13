@@ -22,7 +22,7 @@ export interface Monoid<A> extends Semigroup<A> {
  * @since 3.0.0
  */
 export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  ...semigroup.fromBinary(semigroup.min(Bounded).combine),
+  ...semigroup.min(Bounded),
   empty: Bounded.top
 })
 
@@ -35,7 +35,7 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  * @since 3.0.0
  */
 export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  ...semigroup.fromBinary(semigroup.max(Bounded).combine),
+  ...semigroup.max(Bounded),
   empty: Bounded.bottom
 })
 
@@ -64,7 +64,7 @@ export const struct = <A>(
     }
   }
   return {
-    ...semigroup.fromBinary(semigroup.struct(monoids).combine),
+    ...semigroup.struct(monoids),
     empty
   }
 }
@@ -77,6 +77,6 @@ export const struct = <A>(
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<Readonly<A>> => ({
-  ...semigroup.fromBinary(semigroup.tuple(...monoids).combine),
+  ...semigroup.tuple(...monoids),
   empty: monoids.map((m) => m.empty)
 } as any)
