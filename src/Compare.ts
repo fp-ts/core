@@ -2,7 +2,6 @@
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
-import type { Equals } from "@fp-ts/core/Equals"
 import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
@@ -100,14 +99,6 @@ export const getSemigroup = <A>(): Semigroup<Compare<A>> =>
 export const getMonoid = <A>(): Monoid<Compare<A>> => ({
   ...getSemigroup<A>(),
   empty: fromCompare(() => 0)
-})
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export const getEquals = <A>(Compare: Compare<A>): Equals<A> => ({
-  equals: (a1: A, a2: A) => a1 === a2 || Compare.compare(a1, a2) === 0
 })
 
 /**

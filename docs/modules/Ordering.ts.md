@@ -1,6 +1,6 @@
 ---
 title: Ordering.ts
-nav_order: 26
+nav_order: 25
 parent: Modules
 ---
 
@@ -13,7 +13,6 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [instances](#instances)
-  - [Equals](#equals)
   - [Monoid](#monoid)
   - [Semigroup](#semigroup)
 - [pattern matching](#pattern-matching)
@@ -27,16 +26,6 @@ Added in v3.0.0
 ---
 
 # instances
-
-## Equals
-
-**Signature**
-
-```ts
-export declare const Equals: any
-```
-
-Added in v3.0.0
 
 ## Monoid
 

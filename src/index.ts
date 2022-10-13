@@ -13,7 +13,6 @@ import * as compose from "@fp-ts/core/Compose"
 import * as composeKleisli from "@fp-ts/core/ComposeKleisli"
 import * as contravariant from "@fp-ts/core/Contravariant"
 import * as covariant from "@fp-ts/core/Covariant"
-import * as equals from "@fp-ts/core/Equals"
 import * as extend from "@fp-ts/core/Extend"
 import * as firstSuccessOf from "@fp-ts/core/FirstSuccessOf"
 import * as flatMap from "@fp-ts/core/FlatMap"
@@ -88,11 +87,6 @@ export {
    * @since 3.0.0
    */
   covariant,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  equals,
   /**
    * @category type classes
    * @since 3.0.0

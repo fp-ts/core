@@ -118,12 +118,6 @@ describe("Ord", () => {
     U.strictEqual(pipe(first, max(second)), first)
   })
 
-  it("getEquals", () => {
-    const Equals = _.getEquals(number.Compare)
-    U.deepStrictEqual(Equals.equals(1, 1), true)
-    U.deepStrictEqual(Equals.equals(1, 2), false)
-  })
-
   it("trivial", () => {
     U.deepStrictEqual(sort(_.trivial)(["b", "a"]), ["b", "a"])
   })

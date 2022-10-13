@@ -16,7 +16,6 @@ Added in v3.0.0
   - [fromCompare](#fromcompare)
 - [instances](#instances)
   - [Contravariant](#contravariant)
-  - [getEquals](#getequals)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
   - [trivial](#trivial)
@@ -59,16 +58,6 @@ Added in v3.0.0
 
 ```ts
 export declare const Contravariant: any
-```
-
-Added in v3.0.0
-
-## getEquals
-
-**Signature**
-
-```ts
-export declare const getEquals: <A>(Compare: Compare<A>) => any
 ```
 
 Added in v3.0.0
