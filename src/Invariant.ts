@@ -4,7 +4,7 @@
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Invariant<F extends TypeLambda> extends TypeClass<F> {

@@ -21,7 +21,7 @@ Added in v3.0.0
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
   - [trivial](#trivial)
-- [model](#model)
+- [type class](#type-class)
   - [Compare (interface)](#compare-interface)
 - [type lambdas](#type-lambdas)
   - [CompareTypeLambda (interface)](#comparetypelambda-interface)
@@ -113,7 +113,7 @@ export declare const trivial: Compare<unknown>
 
 Added in v3.0.0
 
-# model
+# type class
 
 ## Compare (interface)
 

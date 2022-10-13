@@ -5,7 +5,7 @@ import type { Compare } from "@fp-ts/core/Compare"
 import * as compare from "@fp-ts/core/Compare"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Semigroup<A> {

@@ -6,7 +6,7 @@ import type * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export type Ordering = -1 | 0 | 1

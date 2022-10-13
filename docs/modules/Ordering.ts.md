@@ -16,10 +16,10 @@ Added in v3.0.0
   - [Equals](#equals)
   - [Monoid](#monoid)
   - [Semigroup](#semigroup)
-- [model](#model)
-  - [Ordering (type alias)](#ordering-type-alias)
 - [pattern matching](#pattern-matching)
   - [match](#match)
+- [type class](#type-class)
+  - [Ordering (type alias)](#ordering-type-alias)
 - [utils](#utils)
   - [reverse](#reverse)
   - [sign](#sign)
@@ -58,18 +58,6 @@ export declare const Semigroup: any
 
 Added in v3.0.0
 
-# model
-
-## Ordering (type alias)
-
-**Signature**
-
-```ts
-export type Ordering = -1 | 0 | 1
-```
-
-Added in v3.0.0
-
 # pattern matching
 
 ## match
@@ -82,6 +70,18 @@ export declare const match: <A, B, C = B>(
   onEqual: () => B,
   onGreaterThan: () => C
 ) => (o: Ordering) => A | B | C
+```
+
+Added in v3.0.0
+
+# type class
+
+## Ordering (type alias)
+
+**Signature**
+
+```ts
+export type Ordering = -1 | 0 | 1
 ```
 
 Added in v3.0.0

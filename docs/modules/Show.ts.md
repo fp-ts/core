@@ -14,7 +14,7 @@ Added in v3.0.0
 
 - [instances](#instances)
   - [Contravariant](#contravariant)
-- [model](#model)
+- [type class](#type-class)
   - [Show (interface)](#show-interface)
 - [type lambdas](#type-lambdas)
   - [ShowTypeLambda (interface)](#showtypelambda-interface)
@@ -37,7 +37,7 @@ export declare const Contravariant: any
 
 Added in v3.0.0
 
-# model
+# type class
 
 ## Show (interface)
 

@@ -5,7 +5,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { OrElse } from "@fp-ts/core/OrElse"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Alternative<F extends TypeLambda> extends OrElse<F> {

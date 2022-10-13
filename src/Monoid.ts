@@ -6,7 +6,7 @@ import type { Semigroup } from "@fp-ts/core/Semigroup"
 import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Monoid<A> extends Semigroup<A> {

@@ -8,7 +8,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Ap<F extends TypeLambda> extends Covariant<F> {

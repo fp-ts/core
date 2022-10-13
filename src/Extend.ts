@@ -5,7 +5,7 @@ import type { Covariant } from "@fp-ts/core/Covariant"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Extend<F extends TypeLambda> extends Covariant<F> {

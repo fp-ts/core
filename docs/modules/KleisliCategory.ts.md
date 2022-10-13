@@ -12,12 +12,12 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [type class](#type-class)
   - [KleisliCategory (interface)](#kleislicategory-interface)
 
 ---
 
-# model
+# type class
 
 ## KleisliCategory (interface)
 

@@ -12,7 +12,7 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [type class](#type-class)
   - [Ap (interface)](#ap-interface)
 - [utils](#utils)
   - [apComposition](#apcomposition)
@@ -27,7 +27,7 @@ Added in v3.0.0
 
 ---
 
-# model
+# type class
 
 ## Ap (interface)
 

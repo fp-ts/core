@@ -14,11 +14,11 @@ Added in v3.0.0
 
 - [do notation](#do-notation)
   - [bind](#bind)
-- [model](#model)
-  - [FlatMap (interface)](#flatmap-interface)
 - [sequencing](#sequencing)
   - [zipLeft](#zipleft)
   - [zipRight](#zipright)
+- [type class](#type-class)
+  - [FlatMap (interface)](#flatmap-interface)
 - [utils](#utils)
   - [ap](#ap)
   - [composeKleisli](#composekleisli)
@@ -39,22 +39,6 @@ export declare const bind: <M extends any>(
   name: Exclude<N, keyof A>,
   f: (a: A) => any
 ) => <R1, O1, E1>(self: any) => any
-```
-
-Added in v3.0.0
-
-# model
-
-## FlatMap (interface)
-
-**Signature**
-
-```ts
-export interface FlatMap<M extends TypeLambda> extends Covariant<M> {
-  readonly flatMap: <A, S, R2, O2, E2, B>(
-    f: (a: A) => Kind<M, S, R2, O2, E2, B>
-  ) => <R1, O1, E1>(self: Kind<M, S, R1, O1, E1, A>) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, B>
-}
 ```
 
 Added in v3.0.0
@@ -86,6 +70,22 @@ A variant of `flatMap` that ignores the value produced by this effect.
 export declare const zipRight: <F extends any>(
   FlatMap: FlatMap<F>
 ) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
+```
+
+Added in v3.0.0
+
+# type class
+
+## FlatMap (interface)
+
+**Signature**
+
+```ts
+export interface FlatMap<M extends TypeLambda> extends Covariant<M> {
+  readonly flatMap: <A, S, R2, O2, E2, B>(
+    f: (a: A) => Kind<M, S, R2, O2, E2, B>
+  ) => <R1, O1, E1>(self: Kind<M, S, R1, O1, E1, A>) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, B>
+}
 ```
 
 Added in v3.0.0
