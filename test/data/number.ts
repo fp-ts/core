@@ -6,6 +6,22 @@ import * as semigroup from "@fp-ts/core/Semigroup"
 
 export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromBinary((x, y) => x + y)
 
+export const SemigroupMultiply: semigroup.Semigroup<number> = semigroup.fromCombineAll(
+  (head, tail) => {
+    let out: number = head
+    if (out === 0) {
+      return 0
+    }
+    for (const n of tail) {
+      if (n === 0) {
+        return 0
+      }
+      out = out * n
+    }
+    return out
+  }
+)
+
 export const MonoidSum: Monoid<number> = {
   ...SemigroupSum,
   empty: 0
