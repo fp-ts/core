@@ -12,7 +12,7 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [type class](#type-class)
   - [Zip (interface)](#zip-interface)
 - [utils](#utils)
   - [ap](#ap)
@@ -28,7 +28,7 @@ Added in v3.0.0
 
 ---
 
-# model
+# type class
 
 ## Zip (interface)
 

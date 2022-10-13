@@ -9,7 +9,7 @@ import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Compare<A> {

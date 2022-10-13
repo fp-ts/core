@@ -5,7 +5,7 @@ import type { Compose } from "@fp-ts/core/Compose"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Category<F extends TypeLambda> extends Compose<F> {

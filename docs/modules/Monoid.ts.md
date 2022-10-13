@@ -15,7 +15,7 @@ Added in v3.0.0
 - [constructors](#constructors)
   - [max](#max)
   - [min](#min)
-- [model](#model)
+- [type class](#type-class)
   - [Monoid (interface)](#monoid-interface)
 - [utils](#utils)
   - [combineAll](#combineall)
@@ -55,7 +55,7 @@ export declare const min: <A>(Bounded: any) => Monoid<A>
 
 Added in v3.0.0
 
-# model
+# type class
 
 ## Monoid (interface)
 

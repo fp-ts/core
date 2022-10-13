@@ -8,7 +8,7 @@ import type { Monoid } from "@fp-ts/core/Monoid"
 import type { Succeed } from "@fp-ts/core/Succeed"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Applicative<F extends TypeLambda> extends Ap<F>, Succeed<F> {}

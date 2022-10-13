@@ -5,7 +5,7 @@ import type { ComposeKleisli } from "@fp-ts/core/ComposeKleisli"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface KleisliCategory<F extends TypeLambda> extends ComposeKleisli<F> {

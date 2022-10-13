@@ -8,7 +8,7 @@ import { flow, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface FlatMap<M extends TypeLambda> extends Covariant<M> {

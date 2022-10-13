@@ -5,7 +5,7 @@ import * as ord from "@fp-ts/core/Compare"
 import type { Compare } from "@fp-ts/core/Compare"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Bounded<A> extends Compare<A> {

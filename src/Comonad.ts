@@ -5,7 +5,7 @@ import type { Extend } from "@fp-ts/core/Extend"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Comonad<F extends TypeLambda> extends Extend<F> {

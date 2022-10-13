@@ -6,7 +6,7 @@ import { identity } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface MapBoth<F extends TypeLambda> extends TypeClass<F> {

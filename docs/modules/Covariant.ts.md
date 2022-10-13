@@ -19,10 +19,10 @@ Added in v3.0.0
   - [as](#as)
   - [flap](#flap)
   - [unit](#unit)
-- [model](#model)
-  - [Covariant (interface)](#covariant-interface)
 - [tuple sequencing](#tuple-sequencing)
   - [tupled](#tupled)
+- [type class](#type-class)
+  - [Covariant (interface)](#covariant-interface)
 - [utils](#utils)
   - [mapComposition](#mapcomposition)
 
@@ -89,7 +89,19 @@ export declare const unit: <F extends any>(Covariant: Covariant<F>) => <S, R, O,
 
 Added in v3.0.0
 
-# model
+# tuple sequencing
+
+## tupled
+
+**Signature**
+
+```ts
+export declare const tupled: <F extends any>(Covariant: Covariant<F>) => <S, R, O, E, A>(self: any) => any
+```
+
+Added in v3.0.0
+
+# type class
 
 ## Covariant (interface)
 
@@ -99,18 +111,6 @@ Added in v3.0.0
 export interface Covariant<F extends TypeLambda> extends TypeClass<F> {
   readonly map: <A, B>(f: (a: A) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
 }
-```
-
-Added in v3.0.0
-
-# tuple sequencing
-
-## tupled
-
-**Signature**
-
-```ts
-export declare const tupled: <F extends any>(Covariant: Covariant<F>) => <S, R, O, E, A>(self: any) => any
 ```
 
 Added in v3.0.0

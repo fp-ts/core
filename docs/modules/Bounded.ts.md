@@ -12,7 +12,7 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [type class](#type-class)
   - [Bounded (interface)](#bounded-interface)
 - [utils](#utils)
   - [clamp](#clamp)
@@ -20,7 +20,7 @@ Added in v3.0.0
 
 ---
 
-# model
+# type class
 
 ## Bounded (interface)
 

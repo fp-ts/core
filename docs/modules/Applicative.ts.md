@@ -12,14 +12,14 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [type class](#type-class)
   - [Applicative (interface)](#applicative-interface)
 - [utils](#utils)
   - [liftMonoid](#liftmonoid)
 
 ---
 
-# model
+# type class
 
 ## Applicative (interface)
 

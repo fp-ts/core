@@ -6,7 +6,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F> {

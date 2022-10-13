@@ -12,14 +12,14 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [model](#model)
+- [type class](#type-class)
   - [FoldableWithIndex (interface)](#foldablewithindex-interface)
 - [utils](#utils)
   - [foldMapWithIndex](#foldmapwithindex)
 
 ---
 
-# model
+# type class
 
 ## FoldableWithIndex (interface)
 

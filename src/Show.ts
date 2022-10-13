@@ -5,7 +5,7 @@ import type * as contravariant from "@fp-ts/core/Contravariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 
 /**
- * @category model
+ * @category type class
  * @since 3.0.0
  */
 export interface Show<A> {

@@ -20,7 +20,7 @@ Added in v3.0.0
 - [instances](#instances)
   - [first](#first)
   - [last](#last)
-- [model](#model)
+- [type class](#type-class)
   - [Semigroup (interface)](#semigroup-interface)
 - [utils](#utils)
   - [intercalate](#intercalate)
@@ -102,7 +102,7 @@ export declare const last: <A>() => Semigroup<A>
 
 Added in v3.0.0
 
-# model
+# type class
 
 ## Semigroup (interface)
 

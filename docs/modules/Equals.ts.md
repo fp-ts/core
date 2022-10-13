@@ -21,7 +21,7 @@ Added in v3.0.0
   - [Contravariant](#contravariant-1)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
-- [model](#model)
+- [type class](#type-class)
   - [Equals (interface)](#equals-interface)
 - [type lambdas](#type-lambdas)
   - [EqTypeLambda (interface)](#eqtypelambda-interface)
@@ -97,7 +97,7 @@ export declare const getSemigroup: <A>() => any
 
 Added in v3.0.0
 
-# model
+# type class
 
 ## Equals (interface)
 
