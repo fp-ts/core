@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 20
+nav_order: 19
 parent: Modules
 ---
 
@@ -24,7 +24,6 @@ Added in v3.0.0
   - [composeKleisli](#composekleisli)
   - [contravariant](#contravariant)
   - [covariant](#covariant)
-  - [equals](#equals)
   - [extend](#extend)
   - [firstSuccessOf](#firstsuccessof)
   - [flatMap](#flatmap)
@@ -154,16 +153,6 @@ Added in v3.0.0
 
 ```ts
 export declare const covariant: any
-```
-
-Added in v3.0.0
-
-## equals
-
-**Signature**
-
-```ts
-export declare const equals: any
 ```
 
 Added in v3.0.0
