@@ -24,7 +24,7 @@ Added in v3.0.0
 - [model](#model)
   - [Compare (interface)](#compare-interface)
 - [type lambdas](#type-lambdas)
-  - [OrdTypeLambda (interface)](#ordtypelambda-interface)
+  - [CompareTypeLambda (interface)](#comparetypelambda-interface)
 - [utils](#utils)
   - [between](#between)
   - [clamp](#clamp)
@@ -129,12 +129,12 @@ Added in v3.0.0
 
 # type lambdas
 
-## OrdTypeLambda (interface)
+## CompareTypeLambda (interface)
 
 **Signature**
 
 ```ts
-export interface OrdTypeLambda extends TypeLambda {
+export interface CompareTypeLambda extends TypeLambda {
   readonly type: Compare<this['In1']>
 }
 ```

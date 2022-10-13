@@ -1,6 +1,8 @@
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
+import * as O from "./Option"
 
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Out1"]>
@@ -18,3 +20,10 @@ export const FoldableWithIndexReadonlyArray: foldableWithIndex.FoldableWithIndex
   reduceWithIndex: (b, f) => self => self.reduce((b, a, i) => f(b, a, i), b),
   reduceRightWithIndex: (b, f) => self => self.reduceRight((b, a, i) => f(b, a, i), b)
 }
+
+export const isNonEmpty = <A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A> =>
+  self.length > 0
+
+export const head = <A>(
+  self: ReadonlyArray<A>
+): O.Option<A> => (isNonEmpty(self) ? O.some(self[0]) : O.none)

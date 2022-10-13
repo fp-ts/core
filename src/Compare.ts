@@ -17,6 +17,14 @@ export interface Compare<A> {
 }
 
 /**
+ * @category type lambdas
+ * @since 3.0.0
+ */
+export interface CompareTypeLambda extends TypeLambda {
+  readonly type: Compare<this["In1"]>
+}
+
+/**
  * @category constructors
  * @since 3.0.0
  */
@@ -63,22 +71,6 @@ export const reverse = <A>(O: Compare<A>): Compare<A> => fromCompare((a1, a2) =>
 export const contramap = <B, A>(f: (b: B) => A) =>
   (self: Compare<A>): Compare<B> => fromCompare((a1, a2) => self.compare(f(a1), f(a2)))
 
-// -------------------------------------------------------------------------------------
-// type lambdas
-// -------------------------------------------------------------------------------------
-
-/**
- * @category type lambdas
- * @since 3.0.0
- */
-export interface OrdTypeLambda extends TypeLambda {
-  readonly type: Compare<this["In1"]>
-}
-
-// -------------------------------------------------------------------------------------
-// instances
-// -------------------------------------------------------------------------------------
-
 /**
  * Returns a `Semigroup` such that `pipe(ord1, combine(ord2))` will order first by `ord1`,
  * and then by `ord2`
@@ -116,7 +108,7 @@ export const getMonoid = <A>(): Monoid<Compare<A>> => ({
  * @category instances
  * @since 3.0.0
  */
-export const Contravariant: contravariant.Contravariant<OrdTypeLambda> = {
+export const Contravariant: contravariant.Contravariant<CompareTypeLambda> = {
   contramap
 }
 
