@@ -34,6 +34,7 @@ Added in v3.0.0
   - [mapBoth](#mapboth)
   - [monad](#monad)
   - [monoid](#monoid)
+  - [monoidal](#monoidal)
   - [semigroup](#semigroup)
   - [show](#show)
   - [succeed](#succeed)
@@ -253,6 +254,16 @@ Added in v3.0.0
 
 ```ts
 export declare const monoid: any
+```
+
+Added in v3.0.0
+
+## monoidal
+
+**Signature**
+
+```ts
+export declare const monoidal: any
 ```
 
 Added in v3.0.0

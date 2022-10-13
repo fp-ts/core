@@ -24,6 +24,7 @@ import * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import * as mapBoth from "@fp-ts/core/MapBoth"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
+import * as monoidal from "@fp-ts/core/Monoidal"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as show from "@fp-ts/core/Show"
@@ -141,6 +142,11 @@ export {
    * @since 3.0.0
    */
   monoid,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  monoidal,
   /**
    * @since 3.0.0
    */
