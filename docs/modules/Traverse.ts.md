@@ -46,7 +46,7 @@ Added in v3.0.0
 
 ```ts
 export declare const sequence: <T extends any>(
-  Traversable: Traverse<T>
+  Traverse: Traverse<T>
 ) => <F extends any>(G: any) => <TS, TR, TO, TE, S, R, O, E, A>(self: any) => any
 ```
 
@@ -60,8 +60,8 @@ Returns a default `traverse` composition.
 
 ```ts
 export declare const traverseComposition: <F extends any, G extends any>(
-  TraversableF: Traverse<F>,
-  TraversableG: Traverse<G>
+  TraverseF: Traverse<F>,
+  TraverseG: Traverse<G>
 ) => <H extends any>(
   H: any
 ) => <A, S, R, O, E, B>(f: (a: A) => any) => <FS, FR, FO, FE, GS, GR, GO, GE>(fga: any) => any

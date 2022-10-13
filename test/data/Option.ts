@@ -1,3 +1,4 @@
+import type { applicative } from "@fp-ts/core"
 import type * as alternative from "@fp-ts/core/Alternative"
 import * as ap_ from "@fp-ts/core/Ap"
 import * as covariant from "@fp-ts/core/Covariant"
@@ -78,6 +79,12 @@ export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B
 export const Ap: ap_.Ap<OptionTypeLambda> = {
   map,
   ap
+}
+
+export const Applicative: applicative.Applicative<OptionTypeLambda> = {
+  map,
+  ap,
+  succeed: some
 }
 
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =

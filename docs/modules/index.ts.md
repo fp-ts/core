@@ -39,6 +39,7 @@ Added in v3.0.0
   - [show](#show)
   - [succeed](#succeed)
   - [traverse](#traverse)
+  - [traverseWithIndex](#traversewithindex)
 - [utils](#utils)
   - [hkt](#hkt)
   - [ordering](#ordering)
@@ -303,6 +304,16 @@ Added in v3.0.0
 
 ```ts
 export declare const traverse: any
+```
+
+Added in v3.0.0
+
+## traverseWithIndex
+
+**Signature**
+
+```ts
+export declare const traverseWithIndex: any
 ```
 
 Added in v3.0.0

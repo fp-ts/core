@@ -30,6 +30,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
 import * as show from "@fp-ts/core/Show"
 import * as succeed from "@fp-ts/core/Succeed"
 import * as traverse from "@fp-ts/core/Traverse"
+import * as traverseWithIndex from "@fp-ts/core/TraverseWithIndex"
 
 export {
   /**
@@ -169,5 +170,10 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  traverse
+  traverse,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  traverseWithIndex
 }
