@@ -12,16 +12,6 @@ describe("Semigroup", () => {
     })
   })
 
-  describe("combineAll", () => {
-    it("baseline", () => {
-      U.deepStrictEqual(semigroup.combineAll(number.MonoidSum)(0)([1, 2, 3]), 6)
-    })
-
-    it("should accept an Iterable", () => {
-      U.deepStrictEqual(semigroup.combineAll(number.MonoidSum)(0)(new Set([1, 2, 3])), 6)
-    })
-  })
-
   it("min", () => {
     const S = semigroup.min(number.Compare)
     U.deepStrictEqual(S.combine(1, 3, 2), 1)
@@ -59,8 +49,8 @@ describe("Semigroup", () => {
   it("last", () => {
     const S = semigroup.last<number>()
     U.deepStrictEqual(S.combine(1), 1)
-    U.deepStrictEqual(S.combineAll(1, []), 1)
+    U.deepStrictEqual(S.combineIterable(1, []), 1)
     U.deepStrictEqual(S.combine(1, 2, 3, 4, 5, 6), 6)
-    U.deepStrictEqual(S.combineAll(1, [2, 3, 4, 5, 6]), 6)
+    U.deepStrictEqual(S.combineIterable(1, [2, 3, 4, 5, 6]), 6)
   })
 })

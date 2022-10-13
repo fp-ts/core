@@ -1,11 +1,11 @@
 import type * as alternative from "@fp-ts/core/Alternative"
 import * as ap_ from "@fp-ts/core/Ap"
 import * as covariant from "@fp-ts/core/Covariant"
+import type * as firstSuccessOf_ from "@fp-ts/core/FirstSuccessOf"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
-import type * as orElse_ from "@fp-ts/core/OrElse"
 import type * as succeed_ from "@fp-ts/core/Succeed"
 
 export interface None {
@@ -137,7 +137,7 @@ export const catchAll = <B>(that: () => Option<B>) =>
 export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
   catchAll(() => that)
 
-export const firstSuccessOf = <A, B>(
+export const firstSuccessOfIterable = <A, B>(
   head: Option<A>,
   tail: Iterable<Option<B>>
 ): Option<A | B> => {
@@ -153,12 +153,17 @@ export const firstSuccessOf = <A, B>(
   return none
 }
 
-export const OrElse: orElse_.OrElse<OptionTypeLambda> = {
-  orElse,
-  firstSuccessOf
+export const firstSuccessOf = <A, B>(
+  head: Option<A>,
+  ...tail: ReadonlyArray<Option<B>>
+): Option<A | B> => firstSuccessOfIterable(head, tail)
+
+export const FirstSuccessOf: firstSuccessOf_.FirstSuccessOf<OptionTypeLambda> = {
+  firstSuccessOf,
+  firstSuccessOfIterable
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
-  ...OrElse,
+  ...FirstSuccessOf,
   never: () => none
 }

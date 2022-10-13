@@ -1,6 +1,6 @@
 ---
 title: Monoid.ts
-nav_order: 24
+nav_order: 25
 parent: Modules
 ---
 
@@ -18,7 +18,6 @@ Added in v3.0.0
 - [type class](#type-class)
   - [Monoid (interface)](#monoid-interface)
 - [utils](#utils)
-  - [combineAll](#combineall)
   - [reverse](#reverse)
   - [struct](#struct)
   - [tuple](#tuple)
@@ -70,16 +69,6 @@ export interface Monoid<A> extends Semigroup<A> {
 Added in v3.0.0
 
 # utils
-
-## combineAll
-
-**Signature**
-
-```ts
-export declare const combineAll: <A>(Monoid: Monoid<A>) => (collection: Iterable<A>) => A
-```
-
-Added in v3.0.0
 
 ## reverse
 

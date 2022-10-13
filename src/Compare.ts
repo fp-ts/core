@@ -77,7 +77,7 @@ export const contramap = <B, A>(f: (b: B) => A) =>
  * @since 3.0.0
  */
 export const getSemigroup = <A>(): Semigroup<Compare<A>> =>
-  semigroup.fromCombineAll((head, tail) =>
+  semigroup.fromCombineIterable((head, tail) =>
     fromCompare((a1, a2) => {
       let out = head.compare(a1, a2)
       if (out !== 0) {
