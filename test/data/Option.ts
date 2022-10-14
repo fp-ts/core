@@ -4,7 +4,7 @@ import * as apply from "@fp-ts/core/Apply"
 import type * as failable from "@fp-ts/core/Failable"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
-import * as covariant from "@fp-ts/core/Functor"
+import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as succeed_ from "@fp-ts/core/Succeed"
@@ -96,19 +96,19 @@ export const lift3: <A, B, C, D>(
 
 export const Do: Option<{}> = some({})
 
-export const Covariant: covariant.Functor<OptionTypeLambda> = {
+export const Covariant: functor.Functor<OptionTypeLambda> = {
   map
 }
 
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = covariant.bindTo(Covariant)
+) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = functor.bindTo(Covariant)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  covariant.let(Covariant)
+  functor.let(Covariant)
 
 export { let_ as let }
 
@@ -126,7 +126,7 @@ export const bindRight: <N extends string, A extends object, B>(
 
 export const Zip: Option<readonly []> = some([])
 
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tupled(Covariant)
+export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupled(Covariant)
 
 export const zipFlatten: <B>(
   fb: Option<B>

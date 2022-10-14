@@ -31,6 +31,7 @@ import * as sortable from "@fp-ts/core/Sortable"
 import * as succeed from "@fp-ts/core/Succeed"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
+import * as zippable from "@fp-ts/core/Zippable"
 
 export {
   /**
@@ -143,6 +144,7 @@ export {
    */
   monoidal,
   /**
+   * @category data types
    * @since 3.0.0
    */
   ordering,
@@ -175,5 +177,10 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  traversableWithIndex
+  traversableWithIndex,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  zippable
 }

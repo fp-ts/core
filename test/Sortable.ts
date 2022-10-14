@@ -6,7 +6,7 @@ import { sort } from "./data/ReadonlyArray"
 import * as string from "./data/string"
 import * as U from "./util"
 
-describe("Ord", () => {
+describe("Sortable", () => {
   it("tuple", () => {
     const O = _.tuple(string.Compare, number.Compare, boolean.Compare)
     U.deepStrictEqual(O.compare(["a", 1, true], ["b", 2, true]), -1)

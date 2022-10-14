@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Monoidal<F extends TypeLambda> extends Zip<F>, Succeed<F> {}
+export interface Monoidal<F extends TypeLambda> extends Zippable<F>, Succeed<F> {}
 ```
 
 Added in v3.0.0
