@@ -95,8 +95,14 @@ export const bind: <N extends string, A extends object, B>(
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
+export const zip = <A, B>(
+  fa: Option<A>,
+  fb: Option<B>
+): Option<readonly [A, B]> => isNone(fa) ? none : isNone(fb) ? none : some([fa.value, fb.value])
+
 export const Zippable: zippable.Zippable<OptionTypeLambda> = zippable.fromFunctor(
   Functor,
+  zip,
   <A>(start: Option<A>, others: Iterable<Option<A>>) => {
     if (isNone(start)) {
       return start
@@ -111,11 +117,6 @@ export const Zippable: zippable.Zippable<OptionTypeLambda> = zippable.fromFuncto
     return some(out)
   }
 )
-
-export const zip: <A, B>(
-  fa: Option<A>,
-  fb: Option<B>
-) => Option<readonly [A, B]> = zippable.zip(Zippable)
 
 export const zip3: <A, B, C>(
   fa: Option<A>,
@@ -164,15 +165,15 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
 export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
   catchAll(() => that)
 
-export const firstSuccessOfAllWith = <A, B>(
-  head: Option<A>,
-  tail: Iterable<Option<B>>
-): Option<A | B> => {
-  let out: Option<A | B> = head
+export const firstSuccessOfMany = <A>(
+  start: Option<A>,
+  others: Iterable<Option<A>>
+): Option<A> => {
+  let out = start
   if (isSome(out)) {
     return out
   }
-  for (out of tail) {
+  for (out of others) {
     if (isSome(out)) {
       return out
     }
@@ -181,13 +182,13 @@ export const firstSuccessOfAllWith = <A, B>(
 }
 
 export const firstSuccessOf = <A, B>(
-  head: Option<A>,
-  ...tail: ReadonlyArray<Option<B>>
-): Option<A | B> => firstSuccessOfAllWith(head, tail)
+  first: Option<A>,
+  second: Option<B>
+): Option<A | B> => isSome(first) ? first : second
 
 export const Retryable: retryable.Retryable<OptionTypeLambda> = {
   firstSuccessOf,
-  firstSuccessOfMany: firstSuccessOfAllWith
+  firstSuccessOfMany
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative

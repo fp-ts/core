@@ -28,6 +28,7 @@ Added in v3.0.0
 ```ts
 export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
   readonly reduce: <A, B>(b: B, f: (b: B, a: A) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => B
+
   readonly reduceRight: <A, B>(b: B, f: (b: B, a: A) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => B
 }
 ```

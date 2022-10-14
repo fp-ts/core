@@ -31,6 +31,7 @@ export interface Alternative<F extends TypeLambda> extends Retryable<F> {
    * Returns a effect that will never produce anything.
    */
   readonly none: <S>() => Kind<F, S, unknown, never, never, never>
+
   readonly firstSuccessOfAll: <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) => Kind<F, S, R, O, E, A>
 }
 ```

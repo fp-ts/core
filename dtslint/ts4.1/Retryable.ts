@@ -12,10 +12,7 @@ export interface ReaderAsyncWriterTypeLambda extends TypeLambda {
 export declare const Retryable: retryable.Retryable<ReaderAsyncWriterTypeLambda>
 
 declare const fa: ReaderAsyncWriter<{ a: string }, "a", string>
-declare const fb1: ReaderAsyncWriter<{ b: string }, "b", number>
-declare const fb2: ReaderAsyncWriter<{ b: string }, "b", number>
+declare const fb: ReaderAsyncWriter<{ b: number }, "b", number>
 
-// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: string; }, "a" | "b", string | number>
-Retryable.firstSuccessOf(fa, fb1)
-// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: string; }, "a" | "b", string | number>
-Retryable.firstSuccessOfMany(fa, [fb1, fb2])
+// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "a" | "b", string | number>
+Retryable.firstSuccessOf(fa, fb)

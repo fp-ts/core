@@ -33,8 +33,15 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
   map
 }
 
+export const zip = <E1, A, E2, B>(
+  fa: Result<E1, A>,
+  fb: Result<E2, B>
+): Result<E1 | E2, readonly [A, B]> =>
+  isFailure(fa) ? fa : isFailure(fb) ? fb : succeed([fa.success, fb.success])
+
 export const Zippable: zippable.Zippable<ResultTypeLambda> = zippable.fromFunctor(
   Functor,
+  zip,
   <E, A>(start: Result<E, A>, others: Iterable<Result<E, A>>) => {
     if (isFailure(start)) {
       return start
@@ -49,11 +56,6 @@ export const Zippable: zippable.Zippable<ResultTypeLambda> = zippable.fromFuncto
     return succeed(out)
   }
 )
-
-export const zip: <E1, A, E2, B>(
-  fa: Result<E1, A>,
-  fb: Result<E2, B>
-) => Result<E1 | E2, readonly [A, B]> = zippable.zip(Zippable)
 
 export const zip3: <E1, A, E2, B, E3, C>(
   fa: Result<E1, A>,

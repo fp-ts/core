@@ -17,7 +17,7 @@ export interface Semigroup<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const fromCombine = <A>(combine: (first: A, second: A) => A): Semigroup<A> => ({
+export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> => ({
   combine,
   combineMany: (start, others) => {
     let out: A = start

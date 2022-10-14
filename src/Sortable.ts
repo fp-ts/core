@@ -29,7 +29,7 @@ export interface SortableTypeLambda extends TypeLambda {
  * @category constructors
  * @since 3.0.0
  */
-export const fromCompare = <A>(compare: (first: A, second: A) => Ordering): Sortable<A> => ({
+export const fromCompare = <A>(compare: Sortable<A>["compare"]): Sortable<A> => ({
   compare: (first, second) => first === second ? 0 : compare(first, second)
 })
 
