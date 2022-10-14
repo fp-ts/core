@@ -9,7 +9,7 @@ export interface ReaderAsyncWriterTypeLambda extends TypeLambda {
   readonly type: ReaderAsyncWriter<this["In1"], this["Out2"], this["Out1"]>
 }
 
-export declare const Retryable: retryable.Failable<ReaderAsyncWriterTypeLambda>
+export declare const Retryable: retryable.Retryable<ReaderAsyncWriterTypeLambda>
 
 declare const a: ReaderAsyncWriter<{ a: string }, "a", string>
 declare const b: ReaderAsyncWriter<{ b: string }, "b", number>

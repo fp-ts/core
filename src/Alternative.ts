@@ -2,13 +2,13 @@
  * @since 3.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { Failable } from "@fp-ts/core/Retryable"
+import type { Retryable } from "@fp-ts/core/Retryable"
 
 /**
  * @category type class
  * @since 3.0.0
  */
-export interface Alternative<F extends TypeLambda> extends Failable<F> {
+export interface Alternative<F extends TypeLambda> extends Retryable<F> {
   /**
    * Returns a effect that will never produce anything.
    */
@@ -21,15 +21,15 @@ export interface Alternative<F extends TypeLambda> extends Failable<F> {
 /**
  * @since 3.0.0
  */
-export const fromFailable = <F extends TypeLambda>(
-  Failable: Failable<F>,
+export const fromRetryable = <F extends TypeLambda>(
+  Retryable: Retryable<F>,
   none: <S>() => Kind<F, S, unknown, never, never, never>
 ): Alternative<F> => {
   return {
-    ...Failable,
+    ...Retryable,
     none,
     firstSuccessOfAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => Failable.firstSuccessOfMany(none<S>(), collection)
+    ) => Retryable.firstSuccessOfMany(none<S>(), collection)
   }
 }
