@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 17
+nav_order: 16
 parent: Modules
 ---
 
@@ -24,7 +24,6 @@ Added in v3.0.0
   - [composable](#composable)
   - [contravariant](#contravariant)
   - [extendable](#extendable)
-  - [firstSuccessOf](#firstsuccessof)
   - [flatMap](#flatmap)
   - [foldable](#foldable)
   - [foldableWithIndex](#foldablewithindex)
@@ -34,6 +33,7 @@ Added in v3.0.0
   - [kleisliComposable](#kleislicomposable)
   - [monad](#monad)
   - [monoid](#monoid)
+  - [retryable](#retryable)
   - [semigroup](#semigroup)
   - [show](#show)
   - [sortable](#sortable)
@@ -150,16 +150,6 @@ export declare const extendable: any
 
 Added in v3.0.0
 
-## firstSuccessOf
-
-**Signature**
-
-```ts
-export declare const firstSuccessOf: any
-```
-
-Added in v3.0.0
-
 ## flatMap
 
 **Signature**
@@ -246,6 +236,16 @@ Added in v3.0.0
 
 ```ts
 export declare const monoid: any
+```
+
+Added in v3.0.0
+
+## retryable
+
+**Signature**
+
+```ts
+export declare const retryable: any
 ```
 
 Added in v3.0.0

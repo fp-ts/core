@@ -1,11 +1,11 @@
 import * as alternative from "@fp-ts/core/Alternative"
 import type * as applicative from "@fp-ts/core/Applicative"
-import type * as failable from "@fp-ts/core/Failable"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import type * as retryable from "@fp-ts/core/Retryable"
 import type * as succeed_ from "@fp-ts/core/Succeed"
 import * as zippable from "@fp-ts/core/Zippable"
 
@@ -160,10 +160,10 @@ export const firstSuccessOf = <A, B>(
   ...tail: ReadonlyArray<Option<B>>
 ): Option<A | B> => firstSuccessOfAllWith(head, tail)
 
-export const Failable: failable.Failable<OptionTypeLambda> = {
+export const Retryable: retryable.Failable<OptionTypeLambda> = {
   firstSuccessOf,
   firstSuccessOfMany: firstSuccessOfAllWith
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromFailable(Failable, () => none)
+  .fromFailable(Retryable, () => none)
