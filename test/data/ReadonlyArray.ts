@@ -1,11 +1,11 @@
 import type * as applicative from "@fp-ts/core/Applicative"
-import type { Compare } from "@fp-ts/core/Compare"
+import type { Comparable } from "@fp-ts/core/Comparable"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type * as traverse_ from "@fp-ts/core/Traverse"
-import type * as traverseWithIndex_ from "@fp-ts/core/TraverseWithIndex"
+import type * as traverse_ from "@fp-ts/core/Traversable"
+import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
 import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
 
@@ -41,7 +41,7 @@ export const head = <A>(
   self: ReadonlyArray<A>
 ): O.Option<A> => (isNonEmpty(self) ? O.some(self[0]) : O.none)
 
-export const sort = <B>(Compare: Compare<B>) =>
+export const sort = <B>(Compare: Comparable<B>) =>
   <A extends B>(as: ReadonlyArray<A>): ReadonlyArray<A> =>
     as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a1, a2))
 
@@ -85,11 +85,11 @@ export const traverse = <F extends TypeLambda>(
   ): (self: ReadonlyArray<A>) => Kind<F, S, R, O, E, ReadonlyArray<B>> =>
     traverseWithIndex(Applicative)((a) => f(a))
 
-export const Traverse: traverse_.Traverse<ReadonlyArrayTypeLambda> = {
+export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
   traverse
 }
 
-export const TraverseWithIndex: traverseWithIndex_.TraverseWithIndex<
+export const TraverseWithIndex: traverseWithIndex_.TraversableWithIndex<
   ReadonlyArrayTypeLambda,
   number
 > = {

@@ -1,17 +1,17 @@
 /**
  * @since 3.0.0
  */
-import type { Ap } from "@fp-ts/core/Ap"
-import type { ComposeKleisli } from "@fp-ts/core/ComposeKleisli"
-import type { Covariant } from "@fp-ts/core/Covariant"
+import type { Apply } from "@fp-ts/core/Apply"
 import { flow, pipe } from "@fp-ts/core/Function"
+import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { KleisliComposable } from "@fp-ts/core/KleisliComposable"
 
 /**
  * @category type class
  * @since 3.0.0
  */
-export interface FlatMap<M extends TypeLambda> extends Covariant<M> {
+export interface FlatMap<M extends TypeLambda> extends Functor<M> {
   readonly flatMap: <A, S, R2, O2, E2, B>(
     f: (a: A) => Kind<M, S, R2, O2, E2, B>
   ) => <R1, O1, E1>(self: Kind<M, S, R1, O1, E1, A>) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, B>
@@ -87,7 +87,7 @@ export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
 /**
  * @since 3.0.0
  */
-export const ap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Ap<F>["ap"] =>
+export const ap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Apply<F>["ap"] =>
   (fa) =>
     (fab) =>
       pipe(
@@ -100,7 +100,7 @@ export const ap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Ap<F>["ap"] =>
  */
 export const composeKleisli = <F extends TypeLambda>(
   Flattenable: FlatMap<F>
-): ComposeKleisli<F>["composeKleisli"] => (bc) => (ab) => flow(ab, Flattenable.flatMap(bc))
+): KleisliComposable<F>["composeKleisli"] => (bc) => (ab) => flow(ab, Flattenable.flatMap(bc))
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.

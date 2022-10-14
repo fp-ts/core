@@ -5,6 +5,7 @@ import type * as contravariant from "@fp-ts/core/Contravariant"
 import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import * as monoid from "@fp-ts/core/Monoid"
 import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 import * as semigroup from "@fp-ts/core/Semigroup"
@@ -13,7 +14,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
  * @category type class
  * @since 3.0.0
  */
-export interface Compare<A> {
+export interface Comparable<A> {
   readonly compare: (a1: A, a2: A) => Ordering
 }
 
@@ -21,15 +22,15 @@ export interface Compare<A> {
  * @category type lambdas
  * @since 3.0.0
  */
-export interface CompareTypeLambda extends TypeLambda {
-  readonly type: Compare<this["In1"]>
+export interface ComparableTypeLambda extends TypeLambda {
+  readonly type: Comparable<this["In1"]>
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fromCompare = <A>(compare: (a1: A, a2: A) => Ordering): Compare<A> => ({
+export const fromCompare = <A>(compare: (a1: A, a2: A) => Ordering): Comparable<A> => ({
   compare: (a1, a2) => a1 === a2 ? 0 : compare(a1, a2)
 })
 
@@ -39,8 +40,8 @@ export const fromCompare = <A>(compare: (a1: A, a2: A) => Ordering): Compare<A> 
  * @since 3.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
-  ...compares: { [K in keyof A]: Compare<A[K]> }
-): Compare<Readonly<A>> =>
+  ...compares: { [K in keyof A]: Comparable<A[K]> }
+): Comparable<Readonly<A>> =>
   fromCompare((a1, a2) => {
     let i = 0
     for (; i < compares.length - 1; i++) {
@@ -55,26 +56,27 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
 /**
  * @since 3.0.0
  */
-export const reverse = <A>(O: Compare<A>): Compare<A> => fromCompare((a1, a2) => O.compare(a2, a1))
+export const reverse = <A>(Comparable: Comparable<A>): Comparable<A> =>
+  fromCompare((a1, a2) => Comparable.compare(a2, a1))
 
 /**
  * @since 3.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Compare<A>): Compare<B> => fromCompare((a1, a2) => self.compare(f(a1), f(a2)))
+  (self: Comparable<A>): Comparable<B> => fromCompare((a1, a2) => self.compare(f(a1), f(a2)))
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Compare<A>> =>
-  semigroup.fromCombineIterable((head, tail) =>
+export const getSemigroup = <A>(): Semigroup<Comparable<A>> =>
+  semigroup.fromCombineAllWith((start, all) =>
     fromCompare((a1, a2) => {
-      let out = head.compare(a1, a2)
+      let out = start.compare(a1, a2)
       if (out !== 0) {
         return out
       }
-      for (const compare of tail) {
+      for (const compare of all) {
         out = compare.compare(a1, a2)
         if (out !== 0) {
           return out
@@ -88,16 +90,14 @@ export const getSemigroup = <A>(): Semigroup<Compare<A>> =>
  * @category instances
  * @since 3.0.0
  */
-export const getMonoid = <A>(): Monoid<Compare<A>> => ({
-  ...getSemigroup<A>(),
-  empty: fromCompare(() => 0)
-})
+export const getMonoid = <A>(): Monoid<Comparable<A>> =>
+  monoid.fromSemigroup(getSemigroup<A>(), fromCompare(() => 0))
 
 /**
  * @category instances
  * @since 3.0.0
  */
-export const Contravariant: contravariant.Contravariant<CompareTypeLambda> = {
+export const Contravariant: contravariant.Contravariant<ComparableTypeLambda> = {
   contramap
 }
 
@@ -106,7 +106,7 @@ export const Contravariant: contravariant.Contravariant<CompareTypeLambda> = {
  *
  * @since 3.0.0
  */
-export const lt = <A>(O: Compare<A>) =>
+export const lt = <A>(O: Comparable<A>) =>
   (that: A) => (self: A): boolean => O.compare(self, that) === -1
 
 /**
@@ -114,7 +114,7 @@ export const lt = <A>(O: Compare<A>) =>
  *
  * @since 3.0.0
  */
-export const gt = <A>(O: Compare<A>) =>
+export const gt = <A>(O: Comparable<A>) =>
   (that: A) => (self: A): boolean => O.compare(self, that) === 1
 
 /**
@@ -122,7 +122,7 @@ export const gt = <A>(O: Compare<A>) =>
  *
  * @since 3.0.0
  */
-export const leq = <A>(O: Compare<A>) =>
+export const leq = <A>(O: Comparable<A>) =>
   (that: A) => (self: A): boolean => O.compare(self, that) !== 1
 
 /**
@@ -130,7 +130,7 @@ export const leq = <A>(O: Compare<A>) =>
  *
  * @since 3.0.0
  */
-export const geq = <A>(O: Compare<A>) =>
+export const geq = <A>(O: Comparable<A>) =>
   (that: A) => (self: A): boolean => O.compare(self, that) !== -1
 
 /**
@@ -138,7 +138,7 @@ export const geq = <A>(O: Compare<A>) =>
  *
  * @since 3.0.0
  */
-export const min = <A>(O: Compare<A>) =>
+export const min = <A>(O: Comparable<A>) =>
   (that: A) => (self: A): A => self === that || O.compare(self, that) < 1 ? self : that
 
 /**
@@ -146,7 +146,7 @@ export const min = <A>(O: Compare<A>) =>
  *
  * @since 3.0.0
  */
-export const max = <A>(O: Compare<A>) =>
+export const max = <A>(O: Comparable<A>) =>
   (that: A) => (self: A): A => self === that || O.compare(self, that) > -1 ? self : that
 
 /**
@@ -154,7 +154,7 @@ export const max = <A>(O: Compare<A>) =>
  *
  * @since 3.0.0
  */
-export const clamp = <A>(O: Compare<A>): ((low: A, hi: A) => (a: A) => A) => {
+export const clamp = <A>(O: Comparable<A>): ((low: A, hi: A) => (a: A) => A) => {
   const minO = min(O)
   const maxO = max(O)
   return (low, hi) => flow(minO(hi), maxO(low))
@@ -165,7 +165,7 @@ export const clamp = <A>(O: Compare<A>): ((low: A, hi: A) => (a: A) => A) => {
  *
  * @since 3.0.0
  */
-export const between = <A>(O: Compare<A>): ((low: A, hi: A) => (a: A) => boolean) => {
+export const between = <A>(O: Comparable<A>): ((low: A, hi: A) => (a: A) => boolean) => {
   const ltO = lt(O)
   const gtO = gt(O)
   return (low, hi) => (a) => ltO(low)(a) || gtO(hi)(a) ? false : true

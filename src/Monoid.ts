@@ -11,7 +11,18 @@ import * as semigroup from "@fp-ts/core/Semigroup"
  */
 export interface Monoid<A> extends Semigroup<A> {
   readonly empty: A
+  readonly combineAll: (all: Iterable<A>) => A
 }
+
+/**
+ * @category constructors
+ * @since 3.0.0
+ */
+export const fromSemigroup = <A>(Semigroup: Semigroup<A>, empty: A): Monoid<A> => ({
+  ...Semigroup,
+  empty,
+  combineAll: (all) => Semigroup.combineAllWith(empty, all)
+})
 
 /**
  * Get a monoid where `combine` will return the minimum, based on the provided bounded order.
@@ -21,10 +32,8 @@ export interface Monoid<A> extends Semigroup<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  ...semigroup.min(Bounded),
-  empty: Bounded.top
-})
+export const min = <A>(Bounded: Bounded<A>): Monoid<A> =>
+  fromSemigroup(semigroup.min(Bounded), Bounded.top)
 
 /**
  * Get a monoid where `combine` will return the maximum, based on the provided bounded order.
@@ -34,20 +43,16 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> => ({
  * @category constructors
  * @since 3.0.0
  */
-export const max = <A>(Bounded: Bounded<A>): Monoid<A> => ({
-  ...semigroup.max(Bounded),
-  empty: Bounded.bottom
-})
+export const max = <A>(Bounded: Bounded<A>): Monoid<A> =>
+  fromSemigroup(semigroup.max(Bounded), Bounded.bottom)
 
 /**
  * The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
  *
  * @since 3.0.0
  */
-export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> => ({
-  ...semigroup.fromBinary((a1, a2) => Monoid.combine(a2, a1)),
-  empty: Monoid.empty
-})
+export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> =>
+  fromSemigroup(semigroup.fromBinary((a1, a2) => Monoid.combine(a2, a1)), Monoid.empty)
 
 /**
  * Given a struct of monoids returns a monoid for the struct.
@@ -63,10 +68,7 @@ export const struct = <A>(
       empty[k] = monoids[k].empty
     }
   }
-  return {
-    ...semigroup.struct(monoids),
-    empty
-  }
+  return fromSemigroup(semigroup.struct(monoids), empty)
 }
 
 /**
@@ -76,7 +78,7 @@ export const struct = <A>(
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
-): Monoid<Readonly<A>> => ({
-  ...semigroup.tuple(...monoids),
-  empty: monoids.map((m) => m.empty)
-} as any)
+): Monoid<Readonly<A>> => {
+  const empty: A = monoids.map((m) => m.empty) as any
+  return fromSemigroup(semigroup.tuple(...monoids), empty)
+}

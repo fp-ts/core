@@ -1,6 +1,6 @@
 ---
 title: FlatMap.ts
-nav_order: 14
+nav_order: 13
 parent: Modules
 ---
 
@@ -81,7 +81,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface FlatMap<M extends TypeLambda> extends Covariant<M> {
+export interface FlatMap<M extends TypeLambda> extends Functor<M> {
   readonly flatMap: <A, S, R2, O2, E2, B>(
     f: (a: A) => Kind<M, S, R2, O2, E2, B>
   ) => <R1, O1, E1>(self: Kind<M, S, R1, O1, E1, A>) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, B>

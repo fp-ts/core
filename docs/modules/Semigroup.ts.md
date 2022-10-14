@@ -15,7 +15,7 @@ Added in v3.0.0
 - [constructors](#constructors)
   - [constant](#constant)
   - [fromBinary](#frombinary)
-  - [fromCombineIterable](#fromcombineiterable)
+  - [fromCombineAllWith](#fromcombineallwith)
   - [max](#max)
   - [min](#min)
 - [instances](#instances)
@@ -53,12 +53,12 @@ export declare const fromBinary: <A>(combine: (a1: A, a2: A) => A) => Semigroup<
 
 Added in v3.0.0
 
-## fromCombineIterable
+## fromCombineAllWith
 
 **Signature**
 
 ```ts
-export declare const fromCombineIterable: <A>(combineIterable: (head: A, tail: Iterable<A>) => A) => Semigroup<A>
+export declare const fromCombineAllWith: <A>(combineAllWith: (start: A, all: Iterable<A>) => A) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -70,7 +70,7 @@ Get a semigroup where `combine` will return the maximum, based on the provided o
 **Signature**
 
 ```ts
-export declare const max: <A>(Compare: any) => Semigroup<A>
+export declare const max: <A>(Comparable: any) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -82,7 +82,7 @@ Get a semigroup where `combine` will return the minimum, based on the provided o
 **Signature**
 
 ```ts
-export declare const min: <A>(Compare: any) => Semigroup<A>
+export declare const min: <A>(Comparable: any) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -122,7 +122,7 @@ Added in v3.0.0
 ```ts
 export interface Semigroup<A> {
   readonly combine: (head: A, ...tail: ReadonlyArray<A>) => A
-  readonly combineIterable: (head: A, tail: Iterable<A>) => A
+  readonly combineAllWith: (start: A, all: Iterable<A>) => A
 }
 ```
 

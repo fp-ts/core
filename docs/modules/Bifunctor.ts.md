@@ -1,10 +1,10 @@
 ---
-title: MapBoth.ts
-nav_order: 22
+title: Bifunctor.ts
+nav_order: 4
 parent: Modules
 ---
 
-## MapBoth overview
+## Bifunctor overview
 
 Added in v3.0.0
 
@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [type class](#type-class)
-  - [MapBoth (interface)](#mapboth-interface)
+  - [Bifunctor (interface)](#bifunctor-interface)
 - [utils](#utils)
   - [map](#map)
   - [mapBothComposition](#mapbothcomposition)
@@ -23,12 +23,12 @@ Added in v3.0.0
 
 # type class
 
-## MapBoth (interface)
+## Bifunctor (interface)
 
 **Signature**
 
 ```ts
-export interface MapBoth<F extends TypeLambda> extends TypeClass<F> {
+export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
   readonly mapBoth: <E, G, A, B>(
     f: (e: E) => G,
     g: (a: A) => B
@@ -47,7 +47,7 @@ Returns a default `map` implementation.
 **Signature**
 
 ```ts
-export declare const map: <F extends any>(MapBoth: MapBoth<F>) => any
+export declare const map: <F extends any>(Bifunctor: Bifunctor<F>) => any
 ```
 
 Added in v3.0.0
@@ -61,7 +61,7 @@ Returns a default `mapBoth` composition.
 ```ts
 export declare const mapBothComposition: <F extends any, G extends any>(
   FunctorF: any,
-  MapBothG: MapBoth<G>
+  BifunctorG: Bifunctor<G>
 ) => <GE, GG, A, B>(f: (e: GE) => GG, g: (a: A) => B) => <FS, FR, FO, FE, GS, GR, GO>(self: any) => any
 ```
 
@@ -73,7 +73,7 @@ Added in v3.0.0
 
 ```ts
 export declare const mapLeft: <F extends any>(
-  MapBoth: MapBoth<F>
+  Bifunctor: Bifunctor<F>
 ) => <E, G>(f: (e: E) => G) => <S, R, O, A>(self: any) => any
 ```
 

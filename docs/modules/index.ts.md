@@ -16,30 +16,30 @@ Added in v3.0.0
   - [alternative](#alternative)
   - [ap](#ap)
   - [applicative](#applicative)
+  - [bifunctor](#bifunctor)
   - [bounded](#bounded)
   - [category](#category)
   - [comonad](#comonad)
-  - [compare](#compare)
-  - [compose](#compose)
-  - [composeKleisli](#composekleisli)
+  - [comparable](#comparable)
+  - [composable](#composable)
   - [contravariant](#contravariant)
-  - [covariant](#covariant)
-  - [extend](#extend)
+  - [extendable](#extendable)
   - [firstSuccessOf](#firstsuccessof)
   - [flatMap](#flatmap)
   - [foldable](#foldable)
   - [foldableWithIndex](#foldablewithindex)
+  - [functor](#functor)
   - [invariant](#invariant)
   - [kleisliCategory](#kleislicategory)
-  - [mapBoth](#mapboth)
+  - [kleisliComposable](#kleislicomposable)
   - [monad](#monad)
   - [monoid](#monoid)
   - [monoidal](#monoidal)
   - [semigroup](#semigroup)
   - [show](#show)
   - [succeed](#succeed)
-  - [traverse](#traverse)
-  - [traverseWithIndex](#traversewithindex)
+  - [traversable](#traversable)
+  - [traversableWithIndex](#traversablewithindex)
 - [utils](#utils)
   - [hkt](#hkt)
   - [ordering](#ordering)
@@ -78,6 +78,16 @@ export declare const applicative: any
 
 Added in v3.0.0
 
+## bifunctor
+
+**Signature**
+
+```ts
+export declare const bifunctor: any
+```
+
+Added in v3.0.0
+
 ## bounded
 
 **Signature**
@@ -108,32 +118,22 @@ export declare const comonad: any
 
 Added in v3.0.0
 
-## compare
+## comparable
 
 **Signature**
 
 ```ts
-export declare const compare: any
+export declare const comparable: any
 ```
 
 Added in v3.0.0
 
-## compose
+## composable
 
 **Signature**
 
 ```ts
-export declare const compose: any
-```
-
-Added in v3.0.0
-
-## composeKleisli
-
-**Signature**
-
-```ts
-export declare const composeKleisli: any
+export declare const composable: any
 ```
 
 Added in v3.0.0
@@ -148,22 +148,12 @@ export declare const contravariant: any
 
 Added in v3.0.0
 
-## covariant
+## extendable
 
 **Signature**
 
 ```ts
-export declare const covariant: any
-```
-
-Added in v3.0.0
-
-## extend
-
-**Signature**
-
-```ts
-export declare const extend: any
+export declare const extendable: any
 ```
 
 Added in v3.0.0
@@ -208,6 +198,16 @@ export declare const foldableWithIndex: any
 
 Added in v3.0.0
 
+## functor
+
+**Signature**
+
+```ts
+export declare const functor: any
+```
+
+Added in v3.0.0
+
 ## invariant
 
 **Signature**
@@ -228,12 +228,12 @@ export declare const kleisliCategory: any
 
 Added in v3.0.0
 
-## mapBoth
+## kleisliComposable
 
 **Signature**
 
 ```ts
-export declare const mapBoth: any
+export declare const kleisliComposable: any
 ```
 
 Added in v3.0.0
@@ -298,22 +298,22 @@ export declare const succeed: any
 
 Added in v3.0.0
 
-## traverse
+## traversable
 
 **Signature**
 
 ```ts
-export declare const traverse: any
+export declare const traversable: any
 ```
 
 Added in v3.0.0
 
-## traverseWithIndex
+## traversableWithIndex
 
 **Signature**
 
 ```ts
-export declare const traverseWithIndex: any
+export declare const traversableWithIndex: any
 ```
 
 Added in v3.0.0

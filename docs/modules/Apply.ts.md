@@ -1,10 +1,10 @@
 ---
-title: Ap.ts
-nav_order: 2
+title: Apply.ts
+nav_order: 3
 parent: Modules
 ---
 
-## Ap overview
+## Apply overview
 
 Added in v3.0.0
 
@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [type class](#type-class)
-  - [Ap (interface)](#ap-interface)
+  - [Apply (interface)](#apply-interface)
 - [utils](#utils)
   - [apComposition](#apcomposition)
   - [bindRight](#bindright)
@@ -29,12 +29,12 @@ Added in v3.0.0
 
 # type class
 
-## Ap (interface)
+## Apply (interface)
 
 **Signature**
 
 ```ts
-export interface Ap<F extends TypeLambda> extends Covariant<F> {
+export interface Apply<F extends TypeLambda> extends Functor<F> {
   readonly ap: <S, R2, O2, E2, A>(
     fa: Kind<F, S, R2, O2, E2, A>
   ) => <R1, O1, E1, B>(self: Kind<F, S, R1, O1, E1, (a: A) => B>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B>
@@ -53,8 +53,8 @@ Returns a default `ap` composition.
 
 ```ts
 export declare const apComposition: <F extends any, G extends any>(
-  ApF: Ap<F>,
-  ApG: Ap<G>
+  ApF: Apply<F>,
+  ApG: Apply<G>
 ) => <FS, FR2, FO2, FE2, GS, GR2, GO2, GE2, A>(fa: any) => <FR1, FO1, FE1, GR1, GO1, GE1, B>(self: any) => any
 ```
 
@@ -68,7 +68,7 @@ A variant of `Flattenable.bind` that sequentially ignores the scope.
 
 ```ts
 export declare const bindRight: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <N extends string, A extends object, S, R2, O2, E2, B>(
   name: Exclude<N, keyof A>,
   fb: any
@@ -85,7 +85,7 @@ Lifts a binary function into `F`.
 
 ```ts
 export declare const lift2: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <A, B, C>(f: (a: A, b: B) => C) => <S, R1, O1, E1, R2, O2, E2>(fa: any, fb: any) => any
 ```
 
@@ -99,7 +99,7 @@ Lifts a ternary function into 'F'.
 
 ```ts
 export declare const lift3: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
 ) => <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(fa: any, fb: any, fc: any) => any
@@ -114,7 +114,7 @@ Lift a semigroup into 'F', the inner values are combined using the provided `Sem
 **Signature**
 
 ```ts
-export declare const liftSemigroup: <F extends any>(Ap: Ap<F>) => <A, S, R, O, E>(Semigroup: any) => any
+export declare const liftSemigroup: <F extends any>(Ap: Apply<F>) => <A, S, R, O, E>(Semigroup: any) => any
 ```
 
 Added in v3.0.0
@@ -127,7 +127,7 @@ Zips this effect with the specified effect.
 
 ```ts
 export declare const zipFlatten: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <S, R2, O2, E2, B>(that: any) => <R1, O1, E1, A extends readonly unknown[]>(self: any) => any
 ```
 
@@ -143,7 +143,7 @@ other side will **NOT** be interrupted.
 
 ```ts
 export declare const zipLeftPar: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
 ```
 
@@ -159,7 +159,7 @@ then the other side will **NOT** be interrupted.
 
 ```ts
 export declare const zipRightPar: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
@@ -174,7 +174,7 @@ specified combiner function.
 
 ```ts
 export declare const zipWith: <F extends any>(
-  Ap: Ap<F>
+  Ap: Apply<F>
 ) => <S, R2, O2, E2, B, A, C>(that: any, f: (a: A, b: B) => C) => <R1, O1, E1>(self: any) => any
 ```
 

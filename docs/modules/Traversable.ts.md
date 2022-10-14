@@ -1,10 +1,10 @@
 ---
-title: Traverse.ts
+title: Traversable.ts
 nav_order: 30
 parent: Modules
 ---
 
-## Traverse overview
+## Traversable overview
 
 Added in v3.0.0
 
@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [type class](#type-class)
-  - [Traverse (interface)](#traverse-interface)
+  - [Traversable (interface)](#traversable-interface)
 - [utils](#utils)
   - [sequence](#sequence)
   - [traverseComposition](#traversecomposition)
@@ -22,12 +22,12 @@ Added in v3.0.0
 
 # type class
 
-## Traverse (interface)
+## Traversable (interface)
 
 **Signature**
 
 ```ts
-export interface Traverse<T extends TypeLambda> extends TypeClass<T> {
+export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
   readonly traverse: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(
@@ -46,7 +46,7 @@ Added in v3.0.0
 
 ```ts
 export declare const sequence: <T extends any>(
-  Traverse: Traverse<T>
+  Traversable: Traversable<T>
 ) => <F extends any>(G: any) => <TS, TR, TO, TE, S, R, O, E, A>(self: any) => any
 ```
 
@@ -60,8 +60,8 @@ Returns a default `traverse` composition.
 
 ```ts
 export declare const traverseComposition: <F extends any, G extends any>(
-  TraverseF: Traverse<F>,
-  TraverseG: Traverse<G>
+  TraversableF: Traversable<F>,
+  TraversableG: Traversable<G>
 ) => <H extends any>(
   H: any
 ) => <A, S, R, O, E, B>(f: (a: A) => any) => <FS, FR, FO, FE, GS, GR, GO, GE>(fga: any) => any
