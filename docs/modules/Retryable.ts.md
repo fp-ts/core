@@ -1,10 +1,10 @@
 ---
-title: Failable.ts
-nav_order: 10
+title: Retryable.ts
+nav_order: 23
 parent: Modules
 ---
 
-## Failable overview
+## Retryable overview
 
 Added in v3.0.0
 

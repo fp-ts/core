@@ -11,7 +11,6 @@ import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
 import * as contravariant from "@fp-ts/core/Contravariant"
 import * as extendable from "@fp-ts/core/Extendable"
-import * as firstSuccessOf from "@fp-ts/core/Failable"
 import * as flatMap from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
@@ -23,6 +22,7 @@ import * as kleisliComposable from "@fp-ts/core/KleisliComposable"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
 import * as ordering from "@fp-ts/core/Ordering"
+import * as retryable from "@fp-ts/core/Retryable"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as show from "@fp-ts/core/Show"
 import * as sortable from "@fp-ts/core/Sortable"
@@ -81,11 +81,6 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  firstSuccessOf,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
   flatMap,
   /**
    * @category type classes
@@ -136,6 +131,11 @@ export {
    * @since 3.0.0
    */
   ordering,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  retryable,
   /**
    * @category type classes
    * @since 3.0.0
