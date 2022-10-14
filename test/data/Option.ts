@@ -54,28 +54,30 @@ export const foldMap: <M>(
 export const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> = (f) =>
   (fa) => isNone(fa) ? none : some(f(fa.value))
 
+export const Functor: functor.Functor<OptionTypeLambda> = {
+  map
+}
+
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = functor.bindTo(Functor)
+
+const let_: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
+  functor.let(Functor)
+
+export { let_ as let }
+
+export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupled(Functor)
+
 export const flatMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B> = (f) =>
   (self) => isNone(self) ? none : f(self.value)
 
 export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
   map,
   flatMap
-}
-
-export const zip: <A, B>(
-  fa: Option<A>,
-  fb: Option<B>
-) => Option<readonly [A, B]> = flatMap_.zip(FlatMap)
-
-export const Zippable: zippable.Zippable<OptionTypeLambda> = {
-  map,
-  zip
-}
-
-export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  map,
-  zip,
-  succeed: some
 }
 
 export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flatMap_
@@ -86,6 +88,22 @@ export const composeKleisli: <B, C>(
 ) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKleisli(
   FlatMap
 )
+
+export const zip: <A, B>(
+  fa: Option<A>,
+  fb: Option<B>
+) => Option<readonly [A, B]> = flatMap_.zip(FlatMap)
+
+export const bind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => Option<B>
+) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
+  flatMap_.bind(FlatMap)
+
+export const Zippable: zippable.Zippable<OptionTypeLambda> = {
+  map,
+  zip
+}
 
 export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = zippable
   .ap(
@@ -99,39 +117,11 @@ export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
 ) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = zippable.lift3(Zippable)
 
-export const Do: Option<{}> = some({})
-
-export const Covariant: functor.Functor<OptionTypeLambda> = {
-  map
-}
-
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = functor.bindTo(Covariant)
-
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  functor.let(Covariant)
-
-export { let_ as let }
-
-export const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Option<B>
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  flatMap_.bind(FlatMap)
-
 export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   zippable.bindRight(Zippable)
-
-export const Zip: Option<readonly []> = some([])
-
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupled(Covariant)
 
 export const zipFlatten: <B>(
   fb: Option<B>
@@ -145,6 +135,14 @@ export const zipWith: <B, A, C>(
 
 export const catchAll = <B>(that: () => Option<B>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
+
+export const Do: Option<{}> = some({})
+
+export const Applicative: applicative.Applicative<OptionTypeLambda> = {
+  map,
+  zip,
+  succeed: some
+}
 
 export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
   catchAll(() => that)
