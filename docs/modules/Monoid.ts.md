@@ -74,7 +74,7 @@ Added in v3.0.0
 ```ts
 export interface Monoid<A> extends Semigroup<A> {
   readonly empty: A
-  readonly combineAll: (all: Iterable<A>) => A
+  readonly combineAll: (collection: Iterable<A>) => A
 }
 ```
 

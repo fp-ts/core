@@ -31,7 +31,7 @@ export interface Failable<F extends TypeLambda> extends TypeClass<F> {
     head: Kind<F, S, R1, O1, E1, A>,
     ...tail: ReadonlyArray<Kind<F, S, R2, O2, E2, B>>
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A | B>
-  readonly firstSuccessOfAllWith: <S, R1, O1, E1, A, R2, O2, E2, B>(
+  readonly firstSuccessOfMany: <S, R1, O1, E1, A, R2, O2, E2, B>(
     head: Kind<F, S, R1, O1, E1, A>,
     tail: Iterable<Kind<F, S, R2, O2, E2, B>>
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A | B>

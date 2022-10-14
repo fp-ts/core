@@ -3,7 +3,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
 import type * as show from "@fp-ts/core/Show"
 import type * as compare from "@fp-ts/core/Sortable"
 
-export const Semigroup: semigroup.Semigroup<string> = semigroup.fromBinary((s1, s2) => s1 + s2)
+export const Semigroup: semigroup.Semigroup<string> = semigroup.fromCombine((s1, s2) => s1 + s2)
 
 export const Monoid: monoid.Monoid<string> = monoid.fromSemigroup(Semigroup, "")
 

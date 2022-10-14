@@ -4,32 +4,32 @@ import * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as compare from "@fp-ts/core/Sortable"
 
-export const sum = (n1: number, n2: number): number => n1 + n2
+export const sum = (first: number, second: number): number => first + second
 
-export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromBinary(sum)
+export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromCombine(sum)
 
 export const MonoidSum: Monoid<number> = monoid.fromSemigroup(SemigroupSum, 0)
 
-export const multiply = (n1: number, n2: number): number => n1 * n2
+export const multiply = (first: number, second: number): number => first * second
 
 export const SemigroupMultiply: semigroup.Semigroup<number> = {
-  combine2: multiply,
-  combine: (start, all) => {
-    let out: number = start
-    if (out === 0) {
+  combine: multiply,
+  combineMany: (start, others) => {
+    let multiplication: number = start
+    if (multiplication === 0) {
       return 0
     }
-    for (const n of all) {
+    for (const n of others) {
       if (n === 0) {
         return 0
       }
-      out = out * n
+      multiplication = multiplication * n
     }
-    return out
+    return multiplication
   }
 }
 
-export const Compare: compare.Sortable<number> = compare.fromBinary((a1, a2) =>
+export const Compare: compare.Sortable<number> = compare.fromCompare((a1, a2) =>
   a1 < a2 ? -1 : a1 > a2 ? 1 : 0
 )
 

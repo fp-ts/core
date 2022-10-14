@@ -30,6 +30,6 @@ export const fromFailable = <F extends TypeLambda>(
     none,
     firstSuccessOfAll: <S, R, O, E, A>(
       iterable: Iterable<Kind<F, S, R, O, E, A>>
-    ) => Failable.firstSuccessOfAllWith(none<S>(), iterable)
+    ) => Failable.firstSuccessOfMany(none<S>(), iterable)
   }
 }

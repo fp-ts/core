@@ -11,7 +11,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
  */
 export interface Monoid<A> extends Semigroup<A> {
   readonly empty: A
-  readonly combineAll: (all: Iterable<A>) => A
+  readonly combineAll: (collection: Iterable<A>) => A
 }
 
 /**
@@ -21,7 +21,7 @@ export interface Monoid<A> extends Semigroup<A> {
 export const fromSemigroup = <A>(Semigroup: Semigroup<A>, empty: A): Monoid<A> => ({
   ...Semigroup,
   empty,
-  combineAll: (all) => Semigroup.combine(empty, all)
+  combineAll: (collection) => Semigroup.combineMany(empty, collection)
 })
 
 /**
