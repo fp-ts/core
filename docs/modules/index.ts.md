@@ -12,6 +12,8 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [data types](#data-types)
+  - [ordering](#ordering)
 - [type classes](#type-classes)
   - [alternative](#alternative)
   - [ap](#ap)
@@ -40,11 +42,23 @@ Added in v3.0.0
   - [succeed](#succeed)
   - [traversable](#traversable)
   - [traversableWithIndex](#traversablewithindex)
+  - [zippable](#zippable)
 - [utils](#utils)
   - [hkt](#hkt)
-  - [ordering](#ordering)
 
 ---
+
+# data types
+
+## ordering
+
+**Signature**
+
+```ts
+export declare const ordering: any
+```
+
+Added in v3.0.0
 
 # type classes
 
@@ -318,6 +332,16 @@ export declare const traversableWithIndex: any
 
 Added in v3.0.0
 
+## zippable
+
+**Signature**
+
+```ts
+export declare const zippable: any
+```
+
+Added in v3.0.0
+
 # utils
 
 ## hkt
@@ -326,16 +350,6 @@ Added in v3.0.0
 
 ```ts
 export declare const hkt: any
-```
-
-Added in v3.0.0
-
-## ordering
-
-**Signature**
-
-```ts
-export declare const ordering: any
 ```
 
 Added in v3.0.0

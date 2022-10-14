@@ -4,7 +4,7 @@ import * as O from "./data/Option"
 import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"
 
-describe("TraverseWithIndex", () => {
+describe("TraversableWithIndex", () => {
   it("traverseWithIndexComposition", () => {
     const traverseWithIndex = traverseWithIndex_.traverseWithIndexComposition(
       RA.TraverseWithIndex,
