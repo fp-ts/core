@@ -6,6 +6,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
+import * as zippable from "@fp-ts/core/Zippable"
 import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
 
@@ -68,7 +69,10 @@ export const traverseWithIndex = <F extends TypeLambda>(Applicative: applicative
         reduceWithIndex<A, Kind<F, S, R, O, E, ReadonlyArray<B>>>(
           Applicative.succeed([]),
           (fbs, a, i) =>
-            pipe(Applicative.zip(fbs, f(a, i)), Applicative.map(([bs, b]) => append(b)(bs)))
+            pipe(
+              zippable.zip(Applicative)(fbs, f(a, i)),
+              Applicative.map(([bs, b]) => append(b)(bs))
+            )
         )
       )
     }
