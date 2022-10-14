@@ -58,8 +58,7 @@ export function concat<B>(
 
 export const traverseWithIndex = <F extends TypeLambda>(Applicative: applicative.Applicative<F>) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
-    (self: ReadonlyArray<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> =>
-      Applicative.zipAll(self.map(f))
+    (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> => Applicative.zipAllWith(self, f)
 
 export const traverse = <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>

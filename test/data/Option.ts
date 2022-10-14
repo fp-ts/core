@@ -100,19 +100,6 @@ export const zip = <A, B>(
   fb: Option<B>
 ): Option<readonly [A, B]> => isNone(fa) ? none : isNone(fb) ? none : some([fa.value, fb.value])
 
-export const zipAll = <A>(
-  collection: Iterable<Option<A>>
-): Option<ReadonlyArray<A>> => {
-  const out = []
-  for (const o of collection) {
-    if (isNone(o)) {
-      return none
-    }
-    out.push(o.value)
-  }
-  return some(out)
-}
-
 export const zipMany = <A>(
   start: Option<A>,
   others: Iterable<Option<A>>
@@ -126,6 +113,35 @@ export const zipMany = <A>(
       return none
     }
     out.push(o.value)
+  }
+  return some(out)
+}
+
+export const zipAll = <A>(
+  collection: Iterable<Option<A>>
+): Option<ReadonlyArray<A>> => {
+  const out = []
+  for (const o of collection) {
+    if (isNone(o)) {
+      return none
+    }
+    out.push(o.value)
+  }
+  return some(out)
+}
+
+export const zipAllWith = <A, B>(
+  collection: Iterable<A>,
+  f: (a: A, i: number) => Option<B>
+): Option<ReadonlyArray<B>> => {
+  const out = []
+  let i = 0
+  for (const a of collection) {
+    const ob = f(a, i++)
+    if (isNone(ob)) {
+      return none
+    }
+    out.push(ob.value)
   }
   return some(out)
 }
@@ -179,8 +195,9 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   map,
   succeed: some,
   zip,
+  zipMany,
   zipAll,
-  zipMany
+  zipAllWith
 }
 
 export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
