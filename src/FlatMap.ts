@@ -6,6 +6,7 @@ import { flow, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { KleisliComposable } from "@fp-ts/core/KleisliComposable"
+import type { Zippable } from "@fp-ts/core/Zippable"
 
 /**
  * @category type class
@@ -16,10 +17,6 @@ export interface FlatMap<M extends TypeLambda> extends Functor<M> {
     f: (a: A) => Kind<M, S, R2, O2, E2, B>
   ) => <R1, O1, E1>(self: Kind<M, S, R1, O1, E1, A>) => Kind<M, S, R1 & R2, O1 | O2, E1 | E2, B>
 }
-
-// -------------------------------------------------------------------------------------
-// sequencing
-// -------------------------------------------------------------------------------------
 
 /**
  * Sequences the specified effect after this effect, but ignores the value
@@ -54,10 +51,6 @@ export const zipRight = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
     return FlatMap.flatMap(() => that)
   }
 }
-
-// -------------------------------------------------------------------------------------
-// do notation
-// -------------------------------------------------------------------------------------
 
 /**
  * @category do notation
@@ -94,6 +87,12 @@ export const ap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Apply<F>["ap"] =>
         fab,
         FlatMap.flatMap((f) => pipe(fa, FlatMap.map(f)))
       )
+
+/**
+ * @since 3.0.0
+ */
+export const zip = <F extends TypeLambda>(FlatMap: FlatMap<F>): Zippable<F>["zip"] =>
+  (fa, fb) => pipe(fa, FlatMap.flatMap(a => pipe(fb, FlatMap.map(b => [a, b]))))
 
 /**
  * @since 3.0.0
