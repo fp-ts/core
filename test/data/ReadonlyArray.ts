@@ -1,9 +1,9 @@
 import type * as applicative from "@fp-ts/core/Applicative"
-import type { Comparable } from "@fp-ts/core/Comparable"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
 import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
@@ -41,7 +41,7 @@ export const head = <A>(
   self: ReadonlyArray<A>
 ): O.Option<A> => (isNonEmpty(self) ? O.some(self[0]) : O.none)
 
-export const sort = <B>(Compare: Comparable<B>) =>
+export const sort = <B>(Compare: Sortable<B>) =>
   <A extends B>(as: ReadonlyArray<A>): ReadonlyArray<A> =>
     as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a1, a2))
 

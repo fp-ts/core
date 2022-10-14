@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
-import type { Comparable } from "@fp-ts/core/Comparable"
 import { identity } from "@fp-ts/core/Function"
+import type { Sortable } from "@fp-ts/core/Sortable"
 
 /**
  * @category type class
@@ -43,8 +43,8 @@ export const fromBinary = <A>(combine: (a1: A, a2: A) => A): Semigroup<A> =>
  * @category constructors
  * @since 3.0.0
  */
-export const min = <A>(Comparable: Comparable<A>): Semigroup<A> =>
-  fromBinary((a1, a2) => Comparable.compare(a1, a2) === -1 ? a1 : a2)
+export const min = <A>(Sortable: Sortable<A>): Semigroup<A> =>
+  fromBinary((a1, a2) => Sortable.compare(a1, a2) === -1 ? a1 : a2)
 
 /**
  * Get a semigroup where `combine` will return the maximum, based on the provided order.
@@ -52,8 +52,8 @@ export const min = <A>(Comparable: Comparable<A>): Semigroup<A> =>
  * @category constructors
  * @since 3.0.0
  */
-export const max = <A>(Comparable: Comparable<A>): Semigroup<A> =>
-  fromBinary((a1, a2) => Comparable.compare(a1, a2) === 1 ? a1 : a2)
+export const max = <A>(Sortable: Sortable<A>): Semigroup<A> =>
+  fromBinary((a1, a2) => Sortable.compare(a1, a2) === 1 ? a1 : a2)
 
 /**
  * @category constructors

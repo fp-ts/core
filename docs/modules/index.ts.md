@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 19
+nav_order: 18
 parent: Modules
 ---
 
@@ -20,7 +20,6 @@ Added in v3.0.0
   - [bounded](#bounded)
   - [category](#category)
   - [comonad](#comonad)
-  - [comparable](#comparable)
   - [composable](#composable)
   - [contravariant](#contravariant)
   - [extendable](#extendable)
@@ -37,6 +36,7 @@ Added in v3.0.0
   - [monoidal](#monoidal)
   - [semigroup](#semigroup)
   - [show](#show)
+  - [sortable](#sortable)
   - [succeed](#succeed)
   - [traversable](#traversable)
   - [traversableWithIndex](#traversablewithindex)
@@ -114,16 +114,6 @@ Added in v3.0.0
 
 ```ts
 export declare const comonad: any
-```
-
-Added in v3.0.0
-
-## comparable
-
-**Signature**
-
-```ts
-export declare const comparable: any
 ```
 
 Added in v3.0.0
@@ -284,6 +274,16 @@ Added in v3.0.0
 
 ```ts
 export declare const show: any
+```
+
+Added in v3.0.0
+
+## sortable
+
+**Signature**
+
+```ts
+export declare const sortable: any
 ```
 
 Added in v3.0.0

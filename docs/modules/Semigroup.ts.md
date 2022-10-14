@@ -1,6 +1,6 @@
 ---
 title: Semigroup.ts
-nav_order: 27
+nav_order: 26
 parent: Modules
 ---
 
@@ -70,7 +70,7 @@ Get a semigroup where `combine` will return the maximum, based on the provided o
 **Signature**
 
 ```ts
-export declare const max: <A>(Comparable: any) => Semigroup<A>
+export declare const max: <A>(Sortable: any) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -82,7 +82,7 @@ Get a semigroup where `combine` will return the minimum, based on the provided o
 **Signature**
 
 ```ts
-export declare const min: <A>(Comparable: any) => Semigroup<A>
+export declare const min: <A>(Sortable: any) => Semigroup<A>
 ```
 
 Added in v3.0.0

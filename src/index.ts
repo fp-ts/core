@@ -9,7 +9,6 @@ import * as bifunctor from "@fp-ts/core/Bifunctor"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
 import * as comonad from "@fp-ts/core/Comonad"
-import * as comparable from "@fp-ts/core/Comparable"
 import * as composable from "@fp-ts/core/Composable"
 import * as contravariant from "@fp-ts/core/Contravariant"
 import * as extendable from "@fp-ts/core/Extendable"
@@ -28,6 +27,7 @@ import * as monoidal from "@fp-ts/core/Monoidal"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as show from "@fp-ts/core/Show"
+import * as sortable from "@fp-ts/core/Sortable"
 import * as succeed from "@fp-ts/core/Succeed"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
@@ -68,11 +68,6 @@ export {
    * @since 3.0.0
    */
   comonad,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  comparable,
   /**
    * @category type classes
    * @since 3.0.0
@@ -161,6 +156,11 @@ export {
    * @since 3.0.0
    */
   show,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  sortable,
   /**
    * @category type classes
    * @since 3.0.0
