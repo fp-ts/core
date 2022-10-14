@@ -68,11 +68,7 @@ export const traverseWithIndex = <F extends TypeLambda>(Applicative: applicative
         reduceWithIndex<A, Kind<F, S, R, O, E, ReadonlyArray<B>>>(
           Applicative.succeed([]),
           (fbs, a, i) =>
-            pipe(
-              fbs,
-              Applicative.map((bs) => (b: B) => append(b)(bs)),
-              Applicative.ap(f(a, i))
-            )
+            pipe(Applicative.zip(fbs, f(a, i)), Applicative.map(([bs, b]) => append(b)(bs)))
         )
       )
     }

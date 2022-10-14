@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 18
+nav_order: 17
 parent: Modules
 ---
 
@@ -16,7 +16,6 @@ Added in v3.0.0
   - [ordering](#ordering)
 - [type classes](#type-classes)
   - [alternative](#alternative)
-  - [ap](#ap)
   - [applicative](#applicative)
   - [bifunctor](#bifunctor)
   - [bounded](#bounded)
@@ -35,7 +34,6 @@ Added in v3.0.0
   - [kleisliComposable](#kleislicomposable)
   - [monad](#monad)
   - [monoid](#monoid)
-  - [monoidal](#monoidal)
   - [semigroup](#semigroup)
   - [show](#show)
   - [sortable](#sortable)
@@ -68,16 +66,6 @@ Added in v3.0.0
 
 ```ts
 export declare const alternative: any
-```
-
-Added in v3.0.0
-
-## ap
-
-**Signature**
-
-```ts
-export declare const ap: any
 ```
 
 Added in v3.0.0
@@ -258,16 +246,6 @@ Added in v3.0.0
 
 ```ts
 export declare const monoid: any
-```
-
-Added in v3.0.0
-
-## monoidal
-
-**Signature**
-
-```ts
-export declare const monoidal: any
 ```
 
 Added in v3.0.0

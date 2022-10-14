@@ -1,6 +1,6 @@
 ---
 title: FlatMap.ts
-nav_order: 12
+nav_order: 11
 parent: Modules
 ---
 
@@ -20,7 +20,6 @@ Added in v3.0.0
 - [type class](#type-class)
   - [FlatMap (interface)](#flatmap-interface)
 - [utils](#utils)
-  - [ap](#ap)
   - [composeKleisli](#composekleisli)
   - [tap](#tap)
   - [zip](#zip)
@@ -92,16 +91,6 @@ export interface FlatMap<M extends TypeLambda> extends Functor<M> {
 Added in v3.0.0
 
 # utils
-
-## ap
-
-**Signature**
-
-```ts
-export declare const ap: <F extends any>(FlatMap: FlatMap<F>) => any
-```
-
-Added in v3.0.0
 
 ## composeKleisli
 

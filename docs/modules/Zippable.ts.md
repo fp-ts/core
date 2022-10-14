@@ -1,6 +1,6 @@
 ---
 title: Zippable.ts
-nav_order: 33
+nav_order: 31
 parent: Modules
 ---
 
@@ -52,7 +52,9 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const ap: <F extends any>(Zippable: Zippable<F>) => any
+export declare const ap: <F extends any>(
+  Zippable: Zippable<F>
+) => <S, R2, O2, E2, A>(fa: any) => <R1, O1, E1, B>(self: any) => any
 ```
 
 Added in v3.0.0

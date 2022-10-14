@@ -1,7 +1,6 @@
 /**
  * @since 3.0.0
  */
-import type { Apply } from "@fp-ts/core/Apply"
 import { identity, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -22,7 +21,11 @@ export interface Zippable<F extends TypeLambda> extends Functor<F> {
 /**
  * @since 3.0.0
  */
-export const ap = <F extends TypeLambda>(Zippable: Zippable<F>): Apply<F>["ap"] =>
+export const ap = <F extends TypeLambda>(Zippable: Zippable<F>): <S, R2, O2, E2, A>(
+  fa: Kind<F, S, R2, O2, E2, A>
+) => <R1, O1, E1, B>(
+  self: Kind<F, S, R1, O1, E1, (a: A) => B>
+) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B> =>
   fa => fab => pipe(Zippable.zip(fa, fab), Zippable.map(([a, f]) => f(a)))
 
 /**
