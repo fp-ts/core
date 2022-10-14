@@ -28,8 +28,8 @@ Added in v3.0.0
 ```ts
 export interface Failable<F extends TypeLambda> extends TypeClass<F> {
   readonly firstSuccessOf: <S, R1, O1, E1, A, R2, O2, E2, B>(
-    head: Kind<F, S, R1, O1, E1, A>,
-    ...tail: ReadonlyArray<Kind<F, S, R2, O2, E2, B>>
+    first: Kind<F, S, R1, O1, E1, A>,
+    second: Kind<F, S, R2, O2, E2, B>
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A | B>
   readonly firstSuccessOfMany: <S, R1, O1, E1, A, R2, O2, E2, B>(
     head: Kind<F, S, R1, O1, E1, A>,
