@@ -29,7 +29,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromSortable: <A>(Sortable: any, top: A, bottom: A) => Bounded<A>
+export declare const fromSortable: <A>(Sortable: any, maximum: A, minimum: A) => Bounded<A>
 ```
 
 Added in v3.0.0
@@ -42,8 +42,8 @@ Added in v3.0.0
 
 ```ts
 export interface Bounded<A> extends Sortable<A> {
-  readonly top: A
-  readonly bottom: A
+  readonly maximum: A
+  readonly minimum: A
 }
 ```
 
@@ -53,7 +53,7 @@ Added in v3.0.0
 
 ## clamp
 
-Clamp a value between `bottom` and `top` values.
+Clamp a value between `minimum` and `maximum` values.
 
 **Signature**
 
@@ -65,7 +65,7 @@ Added in v3.0.0
 
 ## reverse
 
-Reverses the `Ord` of a `Bounded` and flips `top` and `bottom` values.
+Reverses the `Ord` of a `Bounded` and flips `maximum` and `minimum` values.
 
 **Signature**
 
