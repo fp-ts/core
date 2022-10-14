@@ -160,10 +160,10 @@ export const firstSuccessOf = <A, B>(
   ...tail: ReadonlyArray<Option<B>>
 ): Option<A | B> => firstSuccessOfAllWith(head, tail)
 
-export const Retryable: retryable.Failable<OptionTypeLambda> = {
+export const Retryable: retryable.Retryable<OptionTypeLambda> = {
   firstSuccessOf,
   firstSuccessOfMany: firstSuccessOfAllWith
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromFailable(Retryable, () => none)
+  .fromRetryable(Retryable, () => none)

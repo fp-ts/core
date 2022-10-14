@@ -15,7 +15,7 @@ Added in v3.0.0
 - [type class](#type-class)
   - [Alternative (interface)](#alternative-interface)
 - [utils](#utils)
-  - [fromFailable](#fromfailable)
+  - [fromRetryable](#fromretryable)
 
 ---
 
@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Alternative<F extends TypeLambda> extends Failable<F> {
+export interface Alternative<F extends TypeLambda> extends Retryable<F> {
   /**
    * Returns a effect that will never produce anything.
    */
@@ -39,12 +39,12 @@ Added in v3.0.0
 
 # utils
 
-## fromFailable
+## fromRetryable
 
 **Signature**
 
 ```ts
-export declare const fromFailable: <F extends any>(Failable: any, none: <S>() => any) => Alternative<F>
+export declare const fromRetryable: <F extends any>(Retryable: any, none: <S>() => any) => Alternative<F>
 ```
 
 Added in v3.0.0
