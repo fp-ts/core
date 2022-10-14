@@ -89,21 +89,13 @@ export const composeKleisli: <B, C>(
   FlatMap
 )
 
-export const zip: <A, B>(
-  fa: Option<A>,
-  fb: Option<B>
-) => Option<readonly [A, B]> = flatMap_.zip(FlatMap)
-
 export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
-export const Zippable: zippable.Zippable<OptionTypeLambda> = {
-  map,
-  zip
-}
+export const Zippable: zippable.Zippable<OptionTypeLambda> = zippable.fromFlatMap(FlatMap)
 
 export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = zippable
   .ap(
@@ -140,7 +132,7 @@ export const Do: Option<{}> = some({})
 
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   map,
-  zip,
+  zip: Zippable.zip,
   succeed: some
 }
 
