@@ -3,7 +3,7 @@ import * as monoid from "@fp-ts/core/Monoid"
 import type * as semigroup from "@fp-ts/core/Semigroup"
 import * as compare from "@fp-ts/core/Sortable"
 
-export const Compare: compare.Sortable<boolean> = compare.fromCompare((a1, a2) =>
+export const Compare: compare.Sortable<boolean> = compare.fromBinary((a1, a2) =>
   a1 < a2 ? -1 : a1 > a2 ? 1 : 0
 )
 
