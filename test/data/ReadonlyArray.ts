@@ -56,22 +56,10 @@ export function concat<B>(
   return <A>(self: NonEmptyReadonlyArray<A | B>) => self.concat(that)
 }
 
-export const append = <B>(end: B) =>
-  <A>(init: ReadonlyArray<A>): NonEmptyReadonlyArray<A | B> => concat([end])(init)
-
-const unsafeUnprepend = <A>(
-  as: ReadonlyArray<A>
-): readonly [A, ReadonlyArray<A>] => [as[0], as.slice(1)]
-
 export const traverseWithIndex = <F extends TypeLambda>(Applicative: applicative.Applicative<F>) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
-    (self: ReadonlyArray<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> => {
-      if (isNonEmpty(self)) {
-        const [head, tail] = unsafeUnprepend(self.map(f))
-        return Applicative.zipMany(head, tail)
-      }
-      return Applicative.succeed([])
-    }
+    (self: ReadonlyArray<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> =>
+      Applicative.zipAll(self.map(f))
 
 export const traverse = <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>

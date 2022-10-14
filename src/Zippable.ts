@@ -24,22 +24,6 @@ export interface Zippable<F extends TypeLambda> extends Functor<F> {
 }
 
 /**
- * @category constructors
- * @since 3.0.0
- */
-export const fromFunctor = <F extends TypeLambda>(
-  Functor: Functor<F>,
-  zip: Zippable<F>["zip"],
-  zipMany: Zippable<F>["zipMany"]
-): Zippable<F> => {
-  return {
-    ...Functor,
-    zip,
-    zipMany
-  }
-}
-
-/**
  * @since 3.0.0
  */
 export const zip3 = <F extends TypeLambda>(Zippable: Zippable<F>) =>
@@ -181,6 +165,21 @@ export const liftSemigroup = <F extends TypeLambda>(Zippable: Zippable<F>) =>
     const zip = zipWith(Zippable)
     return semigroup.fromCombine((first, second) => pipe(first, zip(second, Semigroup.combine)))
   }
+
+// /**
+//  * Lifts a n-ary function into `F`.
+//  *
+//  * @since 3.0.0
+//  */
+// export const liftN = <F extends TypeLambda>(Zippable: Zippable<F>) =>
+//   <A extends ReadonlyArray<unknown>, B>(
+//     f: (...a: A) => B
+//   ) =>
+//     <S, R, O, E>(
+//       ...fa: { [I in keyof A]: Kind<F, S, R, O, E, A[I]> }
+//     ): Kind<F, S, R, O, E, B> => {
+//       const x = Zippable.zipMany(fa[0], fa.slice(1))
+//     }
 
 /**
  * Lifts a binary function into `F`.

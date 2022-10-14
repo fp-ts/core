@@ -100,23 +100,41 @@ export const zip = <A, B>(
   fb: Option<B>
 ): Option<readonly [A, B]> => isNone(fa) ? none : isNone(fb) ? none : some([fa.value, fb.value])
 
-export const Zippable: zippable.Zippable<OptionTypeLambda> = zippable.fromFunctor(
-  Functor,
-  zip,
-  <A>(start: Option<A>, others: Iterable<Option<A>>) => {
-    if (isNone(start)) {
-      return start
+export const zipAll = <A>(
+  collection: Iterable<Option<A>>
+): Option<ReadonlyArray<A>> => {
+  const out = []
+  for (const o of collection) {
+    if (isNone(o)) {
+      return none
     }
-    const out: [A, ...Array<A>] = [start.value]
-    for (const o of others) {
-      if (isNone(o)) {
-        return o
-      }
-      out.push(o.value)
-    }
-    return some(out)
+    out.push(o.value)
   }
-)
+  return some(out)
+}
+
+export const zipMany = <A>(
+  start: Option<A>,
+  others: Iterable<Option<A>>
+): Option<[A, ...ReadonlyArray<A>]> => {
+  if (isNone(start)) {
+    return none
+  }
+  const out: [A, ...Array<A>] = [start.value]
+  for (const o of others) {
+    if (isNone(o)) {
+      return none
+    }
+    out.push(o.value)
+  }
+  return some(out)
+}
+
+export const Zippable: zippable.Zippable<OptionTypeLambda> = {
+  map,
+  zip,
+  zipMany
+}
 
 export const zip3: <A, B, C>(
   fa: Option<A>,
@@ -158,12 +176,20 @@ export const catchAll = <B>(that: () => Option<B>) =>
 export const Do: Option<{}> = some({})
 
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  ...Zippable,
-  succeed: some
+  map,
+  succeed: some,
+  zip,
+  zipAll,
+  zipMany
 }
 
 export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
   catchAll(() => that)
+
+export const firstSuccessOf = <A, B>(
+  first: Option<A>,
+  second: Option<B>
+): Option<A | B> => isSome(first) ? first : second
 
 export const firstSuccessOfMany = <A>(
   start: Option<A>,
@@ -180,11 +206,6 @@ export const firstSuccessOfMany = <A>(
   }
   return none
 }
-
-export const firstSuccessOf = <A, B>(
-  first: Option<A>,
-  second: Option<B>
-): Option<A | B> => isSome(first) ? first : second
 
 export const Retryable: retryable.Retryable<OptionTypeLambda> = {
   firstSuccessOf,
