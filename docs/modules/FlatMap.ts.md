@@ -23,6 +23,7 @@ Added in v3.0.0
   - [ap](#ap)
   - [composeKleisli](#composekleisli)
   - [tap](#tap)
+  - [zip](#zip)
 
 ---
 
@@ -122,6 +123,16 @@ Returns an effect that effectfully "peeks" at the success of this effect.
 export declare const tap: <F extends any>(
   FlatMap: FlatMap<F>
 ) => <A, S, R2, O2, E2>(f: (a: A) => any) => <R1, O1, E1>(self: any) => any
+```
+
+Added in v3.0.0
+
+## zip
+
+**Signature**
+
+```ts
+export declare const zip: <F extends any>(FlatMap: FlatMap<F>) => any
 ```
 
 Added in v3.0.0
