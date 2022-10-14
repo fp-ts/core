@@ -162,7 +162,7 @@ export const firstSuccessOf = <A, B>(
 
 export const Failable: failable.Failable<OptionTypeLambda> = {
   firstSuccessOf,
-  firstSuccessOfAllWith
+  firstSuccessOfMany: firstSuccessOfAllWith
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative

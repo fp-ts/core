@@ -20,9 +20,9 @@ describe("Monoid", () => {
 
   it("reverse", () => {
     const M = monoid.reverse(string.Monoid)
-    U.deepStrictEqual(M.combine("a", "b"), "ba")
-    U.deepStrictEqual(M.combine("a", M.empty), "a")
-    U.deepStrictEqual(M.combine(M.empty, "a"), "a")
+    U.deepStrictEqual(M.combineMany("a", "b"), "ba")
+    U.deepStrictEqual(M.combineMany("a", M.empty), "a")
+    U.deepStrictEqual(M.combineMany(M.empty, "a"), "a")
   })
 
   describe("struct", () => {
@@ -32,7 +32,7 @@ describe("Monoid", () => {
         age: number.MonoidSum
       })
       U.deepStrictEqual(M.empty, { name: "", age: 0 })
-      U.deepStrictEqual(M.combine2({ name: "a", age: 10 }, { name: "b", age: 20 }), {
+      U.deepStrictEqual(M.combine({ name: "a", age: 10 }, { name: "b", age: 20 }), {
         name: "ab",
         age: 30
       })
@@ -51,6 +51,6 @@ describe("Monoid", () => {
       number.MonoidSum
     )
     U.deepStrictEqual(M.empty, ["", 0])
-    U.deepStrictEqual(M.combine2(["a", 10], ["b", 20]), ["ab", 30])
+    U.deepStrictEqual(M.combine(["a", 10], ["b", 20]), ["ab", 30])
   })
 })

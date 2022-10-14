@@ -34,18 +34,18 @@ export const match = <A, B, C = B>(
  * @since 3.0.0
  */
 export const Semigroup: semigroup.Semigroup<Ordering> = {
-  combine2: (o1, o2) => o1 !== 0 ? o1 : o2,
-  combine: (start, all) => {
-    let out = start
-    if (out !== 0) {
-      return out
+  combine: (o1, o2) => o1 !== 0 ? o1 : o2,
+  combineMany: (start, others) => {
+    let ordering = start
+    if (ordering !== 0) {
+      return ordering
     }
-    for (out of all) {
-      if (out !== 0) {
-        return out
+    for (ordering of others) {
+      if (ordering !== 0) {
+        return ordering
       }
     }
-    return out
+    return ordering
   }
 }
 

@@ -28,4 +28,4 @@ export const foldMapWithIndex = <F extends TypeLambda, I>(
 ) =>
   <M>(Monoid: Monoid<M>) =>
     <A>(f: (a: A, i: I) => M): <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => M =>
-      FoldableWithIndex.reduceWithIndex(Monoid.empty, (m, a, i) => Monoid.combine2(m, f(a, i)))
+      FoldableWithIndex.reduceWithIndex(Monoid.empty, (m, a, i) => Monoid.combine(m, f(a, i)))

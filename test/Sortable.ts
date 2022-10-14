@@ -32,7 +32,7 @@ describe("Sortable", () => {
       _.contramap((x: T) => x[1])
     )
     //                  v-- left unit
-    const O1 = M.combine(M.empty, [sortByFst, sortBySnd])
+    const O1 = M.combineMany(M.empty, [sortByFst, sortBySnd])
     U.deepStrictEqual(sort(O1)(tuples), [
       [1, "b"],
       [1, "c"],
@@ -40,7 +40,7 @@ describe("Sortable", () => {
       [2, "c"]
     ])
     //                           right unit --v
-    const O2 = M.combine(sortBySnd, [sortByFst, M.empty])
+    const O2 = M.combineMany(sortBySnd, [sortByFst, M.empty])
     U.deepStrictEqual(sort(O2)(tuples), [
       [2, "a"],
       [1, "b"],

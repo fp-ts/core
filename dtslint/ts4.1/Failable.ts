@@ -18,4 +18,4 @@ declare const c: ReaderAsyncWriter<{ b: string }, "b", number>
 // $ExpectType ReaderAsyncWriter<{ a: string; } & { b: string; }, "a" | "b", string | number>
 Failable.firstSuccessOf(a, b, c)
 // $ExpectType ReaderAsyncWriter<{ a: string; } & { b: string; }, "a" | "b", string | number>
-Failable.firstSuccessOfAllWith(a, [b, c])
+Failable.firstSuccessOfMany(a, [b, c])

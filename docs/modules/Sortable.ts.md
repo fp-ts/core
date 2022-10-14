@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [fromBinary](#frombinary)
+  - [fromCompare](#fromcompare)
 - [instances](#instances)
   - [Contravariant](#contravariant)
   - [getMonoid](#getmonoid)
@@ -39,12 +39,12 @@ Added in v3.0.0
 
 # constructors
 
-## fromBinary
+## fromCompare
 
 **Signature**
 
 ```ts
-export declare const fromBinary: <A>(compare: (a1: A, a2: A) => any) => Sortable<A>
+export declare const fromCompare: <A>(compare: (first: A, second: A) => any) => Sortable<A>
 ```
 
 Added in v3.0.0
@@ -89,7 +89,7 @@ Added in v3.0.0
 
 ```ts
 export interface Sortable<A> {
-  readonly compare: (a1: A, a2: A) => Ordering
+  readonly compare: (first: A, second: A) => Ordering
 }
 ```
 

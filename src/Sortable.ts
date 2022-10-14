@@ -14,7 +14,7 @@ import type { Semigroup } from "@fp-ts/core/Semigroup"
  * @since 3.0.0
  */
 export interface Sortable<A> {
-  readonly compare: (a1: A, a2: A) => Ordering
+  readonly compare: (first: A, second: A) => Ordering
 }
 
 /**
@@ -29,8 +29,8 @@ export interface SortableTypeLambda extends TypeLambda {
  * @category constructors
  * @since 3.0.0
  */
-export const fromBinary = <A>(compare: (a1: A, a2: A) => Ordering): Sortable<A> => ({
-  compare: (a1, a2) => a1 === a2 ? 0 : compare(a1, a2)
+export const fromCompare = <A>(compare: (first: A, second: A) => Ordering): Sortable<A> => ({
+  compare: (first, second) => first === second ? 0 : compare(first, second)
 })
 
 /**
@@ -41,50 +41,51 @@ export const fromBinary = <A>(compare: (a1: A, a2: A) => Ordering): Sortable<A> 
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...compares: { [K in keyof A]: Sortable<A[K]> }
 ): Sortable<Readonly<A>> =>
-  fromBinary((a1, a2) => {
+  fromCompare((first, second) => {
     let i = 0
     for (; i < compares.length - 1; i++) {
-      const r = compares[i].compare(a1[i], a2[i])
+      const r = compares[i].compare(first[i], second[i])
       if (r !== 0) {
         return r
       }
     }
-    return compares[i].compare(a1[i], a2[i])
+    return compares[i].compare(first[i], second[i])
   })
 
 /**
  * @since 3.0.0
  */
 export const reverse = <A>(Sortable: Sortable<A>): Sortable<A> =>
-  fromBinary((a1, a2) => Sortable.compare(a2, a1))
+  fromCompare((first, second) => Sortable.compare(second, first))
 
 /**
  * @since 3.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Sortable<A>): Sortable<B> => fromBinary((a1, a2) => self.compare(f(a1), f(a2)))
+  (self: Sortable<A>): Sortable<B> =>
+    fromCompare((first, second) => self.compare(f(first), f(second)))
 
 /**
  * @category instances
  * @since 3.0.0
  */
 export const getSemigroup = <A>(): Semigroup<Sortable<A>> => ({
-  combine2: (s1, s2) =>
-    fromBinary((a1, a2) => {
-      const out = s1.compare(a1, a2)
+  combine: (s1, s2) =>
+    fromCompare((first, second) => {
+      const out = s1.compare(first, second)
       if (out !== 0) {
         return out
       }
-      return s2.compare(a1, a2)
+      return s2.compare(first, second)
     }),
-  combine: (start, all) =>
-    fromBinary((a1, a2) => {
-      let out = start.compare(a1, a2)
+  combineMany: (start, others) =>
+    fromCompare((first, second) => {
+      let out = start.compare(first, second)
       if (out !== 0) {
         return out
       }
-      for (const compare of all) {
-        out = compare.compare(a1, a2)
+      for (const sortable of others) {
+        out = sortable.compare(first, second)
         if (out !== 0) {
           return out
         }
@@ -98,7 +99,7 @@ export const getSemigroup = <A>(): Semigroup<Sortable<A>> => ({
  * @since 3.0.0
  */
 export const getMonoid = <A>(): Monoid<Sortable<A>> =>
-  monoid.fromSemigroup(getSemigroup<A>(), fromBinary(() => 0))
+  monoid.fromSemigroup(getSemigroup<A>(), fromCompare(() => 0))
 
 /**
  * @category instances

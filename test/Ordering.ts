@@ -3,8 +3,8 @@ import { deepStrictEqual } from "./util"
 
 describe("Ordering", () => {
   it("Semigroup", () => {
-    deepStrictEqual(_.Monoid.combine(0, [1, -1]), 1)
-    deepStrictEqual(_.Monoid.combine(1, [-1, -1]), 1)
+    deepStrictEqual(_.Monoid.combineMany(0, [1, -1]), 1)
+    deepStrictEqual(_.Monoid.combineMany(1, [-1, -1]), 1)
   })
 
   it("match", () => {
