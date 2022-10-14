@@ -12,6 +12,9 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [fromBinary](#frombinary)
+  - [fromFlatMap](#fromflatmap)
 - [type class](#type-class)
   - [Zippable (interface)](#zippable-interface)
 - [utils](#utils)
@@ -27,6 +30,31 @@ Added in v3.0.0
   - [zipWith](#zipwith)
 
 ---
+
+# constructors
+
+## fromBinary
+
+**Signature**
+
+```ts
+export declare const fromBinary: <F extends any>(
+  Functor: any,
+  zip: <S, R1, O1, E1, A, R2, O2, E2, B>(fa: any, fb: any) => any
+) => Zippable<F>
+```
+
+Added in v3.0.0
+
+## fromFlatMap
+
+**Signature**
+
+```ts
+export declare const fromFlatMap: <F extends any>(FlatMap: any) => Zippable<F>
+```
+
+Added in v3.0.0
 
 # type class
 

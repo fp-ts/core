@@ -5,7 +5,6 @@ import { flow, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { KleisliComposable } from "@fp-ts/core/KleisliComposable"
-import type { Zippable } from "@fp-ts/core/Zippable"
 
 /**
  * @category type class
@@ -75,12 +74,6 @@ export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
         FlatMap.map((b) => Object.assign({}, a, { [name]: b }) as any)
       )
     )
-
-/**
- * @since 3.0.0
- */
-export const zip = <F extends TypeLambda>(FlatMap: FlatMap<F>): Zippable<F>["zip"] =>
-  (fa, fb) => pipe(fa, FlatMap.flatMap(a => pipe(fb, FlatMap.map(b => [a, b]))))
 
 /**
  * @since 3.0.0

@@ -1,6 +1,7 @@
 /**
  * @since 3.0.0
  */
+import type { FlatMap } from "@fp-ts/core/FlatMap"
 import { identity, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -17,6 +18,33 @@ export interface Zippable<F extends TypeLambda> extends Functor<F> {
     fb: Kind<F, S, R2, O2, E2, B>
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
 }
+
+/**
+ * @category constructors
+ * @since 3.0.0
+ */
+export const fromBinary = <F extends TypeLambda>(
+  Functor: Functor<F>,
+  zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
+    fa: Kind<F, S, R1, O1, E1, A>,
+    fb: Kind<F, S, R2, O2, E2, B>
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+): Zippable<F> => {
+  return {
+    map: Functor.map,
+    zip
+  }
+}
+
+/**
+ * @category constructors
+ * @since 3.0.0
+ */
+export const fromFlatMap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Zippable<F> =>
+  fromBinary(
+    FlatMap,
+    (fa, fb) => pipe(fa, FlatMap.flatMap(a => pipe(fb, FlatMap.map(b => [a, b]))))
+  )
 
 /**
  * @since 3.0.0
