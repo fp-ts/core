@@ -95,7 +95,33 @@ export const bind: <N extends string, A extends object, B>(
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
-export const Zippable: zippable.Zippable<OptionTypeLambda> = zippable.fromFlatMap(FlatMap)
+export const Zippable: zippable.Zippable<OptionTypeLambda> = zippable.fromFunctor(
+  Functor,
+  <A>(start: Option<A>, others: Iterable<Option<A>>) => {
+    if (isNone(start)) {
+      return start
+    }
+    const out: [A, ...Array<A>] = [start.value]
+    for (const o of others) {
+      if (isNone(o)) {
+        return o
+      }
+      out.push(o.value)
+    }
+    return some(out)
+  }
+)
+
+export const zip: <A, B>(
+  fa: Option<A>,
+  fb: Option<B>
+) => Option<readonly [A, B]> = zippable.zip(Zippable)
+
+export const zip3: <A, B, C>(
+  fa: Option<A>,
+  fb: Option<B>,
+  fc: Option<C>
+) => Option<readonly [A, B, C]> = zippable.zip3(Zippable)
 
 export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = zippable
   .ap(
@@ -131,8 +157,7 @@ export const catchAll = <B>(that: () => Option<B>) =>
 export const Do: Option<{}> = some({})
 
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  map,
-  zip: Zippable.zip,
+  ...Zippable,
   succeed: some
 }
 

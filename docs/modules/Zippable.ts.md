@@ -13,8 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [fromBinary](#frombinary)
-  - [fromFlatMap](#fromflatmap)
+  - [fromFunctor](#fromfunctor)
 - [type class](#type-class)
   - [Zippable (interface)](#zippable-interface)
 - [utils](#utils)
@@ -23,9 +22,11 @@ Added in v3.0.0
   - [lift2](#lift2)
   - [lift3](#lift3)
   - [liftSemigroup](#liftsemigroup)
-  - [zipComposition](#zipcomposition)
+  - [zip](#zip)
+  - [zip3](#zip3)
   - [zipFlatten](#zipflatten)
   - [zipLeftPar](#zipleftpar)
+  - [zipManyComposition](#zipmanycomposition)
   - [zipRightPar](#ziprightpar)
   - [zipWith](#zipwith)
 
@@ -33,25 +34,15 @@ Added in v3.0.0
 
 # constructors
 
-## fromBinary
+## fromFunctor
 
 **Signature**
 
 ```ts
-export declare const fromBinary: <F extends any>(
+export declare const fromFunctor: <F extends any>(
   Functor: any,
-  zip: <S, R1, O1, E1, A, R2, O2, E2, B>(fa: any, fb: any) => any
+  zipMany: <S, R, O, E, A>(start: any, others: Iterable<any>) => any
 ) => Zippable<F>
-```
-
-Added in v3.0.0
-
-## fromFlatMap
-
-**Signature**
-
-```ts
-export declare const fromFlatMap: <F extends any>(FlatMap: any) => Zippable<F>
 ```
 
 Added in v3.0.0
@@ -64,10 +55,10 @@ Added in v3.0.0
 
 ```ts
 export interface Zippable<F extends TypeLambda> extends Functor<F> {
-  readonly zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
-    fa: Kind<F, S, R1, O1, E1, A>,
-    fb: Kind<F, S, R2, O2, E2, B>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+  readonly zipMany: <S, R, O, E, A>(
+    start: Kind<F, S, R, O, E, A>,
+    others: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
 ```
 
@@ -146,17 +137,26 @@ export declare const liftSemigroup: <F extends any>(Zippable: Zippable<F>) => <A
 
 Added in v3.0.0
 
-## zipComposition
-
-Returns a default `zip` composition.
+## zip
 
 **Signature**
 
 ```ts
-export declare const zipComposition: <F extends any, G extends any>(
-  ZippableF: Zippable<F>,
-  ZippableG: Zippable<G>
-) => <FS, FR1, FO1, FE1, GS, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B>(fa: any, fb: any) => any
+export declare const zip: <F extends any>(
+  Zippable: Zippable<F>
+) => <S, R1, O1, E1, A, R2, O2, E2, B>(fa: any, fb: any) => any
+```
+
+Added in v3.0.0
+
+## zip3
+
+**Signature**
+
+```ts
+export declare const zip3: <F extends any>(
+  Zippable: Zippable<F>
+) => <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C>(fa: any, fb: any, fc: any) => any
 ```
 
 Added in v3.0.0
@@ -187,6 +187,21 @@ other side will **NOT** be interrupted.
 export declare const zipLeftPar: <F extends any>(
   Zippable: Zippable<F>
 ) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
+```
+
+Added in v3.0.0
+
+## zipManyComposition
+
+Returns a default `zip` composition.
+
+**Signature**
+
+```ts
+export declare const zipManyComposition: <F extends any, G extends any>(
+  ZippableF: Zippable<F>,
+  ZippableG: Zippable<G>
+) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(start: any, others: Iterable<any>) => any
 ```
 
 Added in v3.0.0

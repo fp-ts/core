@@ -1,9 +1,21 @@
 import { pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/Zippable"
 import * as O from "./data/Option"
+import * as R from "./data/Result"
 import * as U from "./util"
 
 describe("Zippable", () => {
+  it("zipMany", () => {
+    U.deepStrictEqual(O.zip(O.some("a"), O.some(1)), O.some(["a", 1] as const))
+    U.deepStrictEqual(O.zip3(O.some("a"), O.some(1), O.some(true)), O.some(["a", 1, true] as const))
+
+    U.deepStrictEqual(R.zip(R.succeed("a"), R.succeed(1)), R.succeed(["a", 1] as const))
+    U.deepStrictEqual(
+      R.zip3(R.succeed("a"), R.succeed(1), R.succeed(true)),
+      R.succeed(["a", 1, true] as const)
+    )
+  })
+
   it("ap", () => {
     const ap = _.ap(O.Zippable)
     const double = (n: number) => n * 2
@@ -13,18 +25,15 @@ describe("Zippable", () => {
     U.deepStrictEqual(pipe(O.some(double), ap(O.some(1))), O.some(2))
   })
 
-  it("zipComposition", () => {
-    const zip: <A, B>(
-      fa: O.Option<O.Option<A>>,
-      fb: O.Option<O.Option<B>>
-    ) => O.Option<O.Option<readonly [A, B]>> = _.zipComposition(O.Zippable, O.Zippable)
-    U.deepStrictEqual(zip(O.none, O.none), O.none)
-    U.deepStrictEqual(zip(O.some(O.none), O.none), O.none)
-    U.deepStrictEqual(zip(O.some(O.none), O.some(O.none)), O.some(O.none))
-    U.deepStrictEqual(zip(O.some(O.none), O.some(O.some("a"))), O.some(O.none))
+  it("zipManyComposition", () => {
+    const zipMany = _.zipManyComposition(O.Zippable, O.Zippable)
+    U.deepStrictEqual(zipMany(O.none, [O.none]), O.none)
+    U.deepStrictEqual(zipMany(O.some(O.none), [O.none]), O.none)
+    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.none)]), O.some(O.none))
+    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.some("a"))]), O.some(O.none))
     U.deepStrictEqual(
-      zip(O.some(O.some(1)), O.some(O.some("a"))),
-      O.some(O.some([1, "a"] as const))
+      zipMany(O.some(O.some(1)), [O.some(O.some(2))]),
+      O.some(O.some([1, 2] as const))
     )
   })
 

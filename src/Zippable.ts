@@ -1,7 +1,6 @@
 /**
  * @since 3.0.0
  */
-import type { FlatMap } from "@fp-ts/core/FlatMap"
 import { identity, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -13,38 +12,49 @@ import * as semigroup from "@fp-ts/core/Semigroup"
  * @since 3.0.0
  */
 export interface Zippable<F extends TypeLambda> extends Functor<F> {
-  readonly zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
-    fa: Kind<F, S, R1, O1, E1, A>,
-    fb: Kind<F, S, R2, O2, E2, B>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+  readonly zipMany: <S, R, O, E, A>(
+    start: Kind<F, S, R, O, E, A>,
+    others: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fromBinary = <F extends TypeLambda>(
+export const fromFunctor = <F extends TypeLambda>(
   Functor: Functor<F>,
-  zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
-    fa: Kind<F, S, R1, O1, E1, A>,
-    fb: Kind<F, S, R2, O2, E2, B>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+  zipMany: <S, R, O, E, A>(
+    start: Kind<F, S, R, O, E, A>,
+    others: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 ): Zippable<F> => {
   return {
-    map: Functor.map,
-    zip
+    ...Functor,
+    zipMany
   }
 }
 
 /**
- * @category constructors
  * @since 3.0.0
  */
-export const fromFlatMap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Zippable<F> =>
-  fromBinary(
-    FlatMap,
-    (fa, fb) => pipe(fa, FlatMap.flatMap(a => pipe(fb, FlatMap.map(b => [a, b]))))
-  )
+export const zip = <F extends TypeLambda>(Zippable: Zippable<F>) =>
+  <S, R1, O1, E1, A, R2, O2, E2, B>(
+    fa: Kind<F, S, R1, O1, E1, A>,
+    fb: Kind<F, S, R2, O2, E2, B>
+  ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]> =>
+    Zippable.zipMany(fa, [fb] as any) as any
+
+/**
+ * @since 3.0.0
+ */
+export const zip3 = <F extends TypeLambda>(Zippable: Zippable<F>) =>
+  <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C>(
+    fa: Kind<F, S, R1, O1, E1, A>,
+    fb: Kind<F, S, R2, O2, E2, B>,
+    fc: Kind<F, S, R3, O3, E3, C>
+  ): Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, readonly [A, B, C]> =>
+    Zippable.zipMany(fa, [fb, fc] as any) as any
 
 /**
  * @since 3.0.0
@@ -54,28 +64,25 @@ export const ap = <F extends TypeLambda>(Zippable: Zippable<F>): <S, R2, O2, E2,
 ) => <R1, O1, E1, B>(
   self: Kind<F, S, R1, O1, E1, (a: A) => B>
 ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B> =>
-  fa => fab => pipe(Zippable.zip(fa, fab), Zippable.map(([a, f]) => f(a)))
+  fa => fab => pipe(zip(Zippable)(fa, fab), Zippable.map(([a, f]) => f(a)))
 
 /**
  * Returns a default `zip` composition.
  *
  * @since 3.0.0
  */
-export const zipComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const zipManyComposition = <F extends TypeLambda, G extends TypeLambda>(
   ZippableF: Zippable<F>,
   ZippableG: Zippable<G>
 ) =>
-  <FS, FR1, FO1, FE1, GS, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B>(
-    fa: Kind<F, FS, FR1, FO1, FE1, Kind<G, GS, GR1, GO1, GE1, A>>,
-    fb: Kind<F, FS, FR2, FO2, FE2, Kind<G, GS, GR2, GO2, GE2, B>>
-  ): Kind<
-    F,
-    FS,
-    FR1 & FR2,
-    FO1 | FO2,
-    FE1 | FE2,
-    Kind<G, GS, GR1 & GR2, GO1 | GO2, GE1 | GE2, readonly [A, B]>
-  > => pipe(ZippableF.zip(fa, fb), ZippableF.map(([ga, gb]) => ZippableG.zip(ga, gb)))
+  <FS, FR, FO, FE, GS, GR, GO, GE, A>(
+    start: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>,
+    others: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
+  ): Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, readonly [A, ...ReadonlyArray<A>]>> =>
+    pipe(
+      ZippableF.zipMany(start, others),
+      ZippableF.map(([ga, ...gas]) => ZippableG.zipMany(ga, gas))
+    )
 
 /**
  * Zips this effect with the specified effect using the
@@ -87,7 +94,7 @@ export const zipWith = <F extends TypeLambda>(Zippable: Zippable<F>) =>
   <S, R2, O2, E2, B, A, C>(that: Kind<F, S, R2, O2, E2, B>, f: (a: A, b: B) => C) =>
     <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> =>
       pipe(
-        Zippable.zip(self, that),
+        zip(Zippable)(self, that),
         Zippable.map(([a, b]) => f(a, b))
       )
 
@@ -188,6 +195,6 @@ export const lift3 = <F extends TypeLambda>(Zippable: Zippable<F>) =>
       fc: Kind<F, S, R3, O3, E3, C>
     ): Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D> =>
       pipe(
-        Zippable.zip(Zippable.zip(fa, fb), fc),
-        Zippable.map(([[a, b], c]) => f(a, b, c))
+        zip3(Zippable)(fa, fb, fc),
+        Zippable.map(([a, b, c]) => f(a, b, c))
       )
