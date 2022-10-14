@@ -12,7 +12,11 @@ import * as zippable from "@fp-ts/core/Zippable"
  * @category type class
  * @since 3.0.0
  */
-export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {}
+export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
+  readonly zipAll: <S, R, O, E, A>(
+    collection: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, ReadonlyArray<A>>
+}
 
 /**
  * Lift a monoid into 'F', the inner values are combined using the provided `Monoid`.

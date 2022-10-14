@@ -26,7 +26,11 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {}
+export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
+  readonly zipAll: <S, R, O, E, A>(
+    collection: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, ReadonlyArray<A>>
+}
 ```
 
 Added in v3.0.0
