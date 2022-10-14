@@ -1,4 +1,4 @@
-import * as _ from "@fp-ts/core/Compare"
+import * as _ from "@fp-ts/core/Comparable"
 import { pipe } from "@fp-ts/core/Function"
 import * as boolean from "./data/boolean"
 import * as number from "./data/number"

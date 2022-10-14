@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import type * as monoid from "@fp-ts/core/Monoid"
+import * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
@@ -33,13 +33,13 @@ export const match = <A, B, C = B>(
  * @category instances
  * @since 3.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombineIterable(
-  (head, tail) => {
-    let out = head
+export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombineAllWith(
+  (start, all) => {
+    let out = start
     if (out !== 0) {
       return out
     }
-    for (out of tail) {
+    for (out of all) {
       if (out !== 0) {
         return out
       }
@@ -52,10 +52,7 @@ export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombineIte
  * @category instances
  * @since 3.0.0
  */
-export const Monoid: monoid.Monoid<Ordering> = {
-  ...Semigroup,
-  empty: 0
-}
+export const Monoid: monoid.Monoid<Ordering> = monoid.fromSemigroup(Semigroup, 0)
 
 /**
  * @since 3.0.0

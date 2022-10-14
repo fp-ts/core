@@ -1,10 +1,10 @@
 ---
-title: TraverseWithIndex.ts
+title: TraversableWithIndex.ts
 nav_order: 31
 parent: Modules
 ---
 
-## TraverseWithIndex overview
+## TraversableWithIndex overview
 
 Added in v3.0.0
 
@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [type class](#type-class)
-  - [TraverseWithIndex (interface)](#traversewithindex-interface)
+  - [TraversableWithIndex (interface)](#traversablewithindex-interface)
 - [utils](#utils)
   - [traverseWithIndexComposition](#traversewithindexcomposition)
 
@@ -21,12 +21,12 @@ Added in v3.0.0
 
 # type class
 
-## TraverseWithIndex (interface)
+## TraversableWithIndex (interface)
 
 **Signature**
 
 ```ts
-export interface TraverseWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
+export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
   readonly traverseWithIndex: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(
@@ -47,8 +47,8 @@ Returns a default `traverseWithIndex` composition.
 
 ```ts
 export declare const traverseWithIndexComposition: <F extends any, I, G extends any, J>(
-  TraverseWithIndexF: TraverseWithIndex<F, I>,
-  TraverseWithIndexG: TraverseWithIndex<G, J>
+  TraversableWithIndexF: TraversableWithIndex<F, I>,
+  TraversableWithIndexG: TraversableWithIndex<G, J>
 ) => <H extends any>(
   H: any
 ) => <A, S, R, O, E, B>(f: (a: A, ij: readonly [I, J]) => any) => <FS, FR, FO, FE, GS, GR, GO, GE>(fga: any) => any

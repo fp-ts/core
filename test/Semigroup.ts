@@ -49,8 +49,8 @@ describe("Semigroup", () => {
   it("last", () => {
     const S = semigroup.last<number>()
     U.deepStrictEqual(S.combine(1), 1)
-    U.deepStrictEqual(S.combineIterable(1, []), 1)
+    U.deepStrictEqual(S.combineAllWith(1, []), 1)
     U.deepStrictEqual(S.combine(1, 2, 3, 4, 5, 6), 6)
-    U.deepStrictEqual(S.combineIterable(1, [2, 3, 4, 5, 6]), 6)
+    U.deepStrictEqual(S.combineAllWith(1, [2, 3, 4, 5, 6]), 6)
   })
 })

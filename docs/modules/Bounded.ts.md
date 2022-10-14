@@ -1,6 +1,6 @@
 ---
 title: Bounded.ts
-nav_order: 4
+nav_order: 5
 parent: Modules
 ---
 
@@ -12,6 +12,8 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [fromComparable](#fromcomparable)
 - [type class](#type-class)
   - [Bounded (interface)](#bounded-interface)
 - [utils](#utils)
@@ -20,6 +22,18 @@ Added in v3.0.0
 
 ---
 
+# constructors
+
+## fromComparable
+
+**Signature**
+
+```ts
+export declare const fromComparable: <A>(Comparable: any, top: A, bottom: A) => Bounded<A>
+```
+
+Added in v3.0.0
+
 # type class
 
 ## Bounded (interface)
@@ -27,7 +41,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Bounded<A> extends Compare<A> {
+export interface Bounded<A> extends Comparable<A> {
   readonly top: A
   readonly bottom: A
 }

@@ -1,10 +1,10 @@
-import type { applicative } from "@fp-ts/core"
-import type * as alternative from "@fp-ts/core/Alternative"
-import * as ap_ from "@fp-ts/core/Ap"
-import * as covariant from "@fp-ts/core/Covariant"
-import type * as firstSuccessOf_ from "@fp-ts/core/FirstSuccessOf"
+import * as alternative from "@fp-ts/core/Alternative"
+import type * as applicative from "@fp-ts/core/Applicative"
+import * as apply from "@fp-ts/core/Apply"
+import type * as failable from "@fp-ts/core/Failable"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
+import * as covariant from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as succeed_ from "@fp-ts/core/Succeed"
@@ -76,7 +76,7 @@ export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B
     FlatMap
   )
 
-export const Ap: ap_.Ap<OptionTypeLambda> = {
+export const Ap: apply.Apply<OptionTypeLambda> = {
   map,
   ap
 }
@@ -88,15 +88,15 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
 }
 
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  ap_.lift2(Ap)
+  apply.lift2(Ap)
 
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = ap_.lift3(Ap)
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = apply.lift3(Ap)
 
 export const Do: Option<{}> = some({})
 
-export const Covariant: covariant.Covariant<OptionTypeLambda> = {
+export const Covariant: covariant.Functor<OptionTypeLambda> = {
   map
 }
 
@@ -122,7 +122,7 @@ export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  ap_.bindRight(Ap)
+  apply.bindRight(Ap)
 
 export const Zip: Option<readonly []> = some([])
 
@@ -130,13 +130,13 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tu
 
 export const zipFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = ap_
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = apply
   .zipFlatten(Ap)
 
 export const zipWith: <B, A, C>(
   that: Option<B>,
   f: (a: A, b: B) => C
-) => (self: Option<A>) => Option<C> = ap_.zipWith(Ap)
+) => (self: Option<A>) => Option<C> = apply.zipWith(Ap)
 
 export const catchAll = <B>(that: () => Option<B>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
@@ -144,7 +144,7 @@ export const catchAll = <B>(that: () => Option<B>) =>
 export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
   catchAll(() => that)
 
-export const firstSuccessOfIterable = <A, B>(
+export const firstSuccessOfAllWith = <A, B>(
   head: Option<A>,
   tail: Iterable<Option<B>>
 ): Option<A | B> => {
@@ -163,14 +163,12 @@ export const firstSuccessOfIterable = <A, B>(
 export const firstSuccessOf = <A, B>(
   head: Option<A>,
   ...tail: ReadonlyArray<Option<B>>
-): Option<A | B> => firstSuccessOfIterable(head, tail)
+): Option<A | B> => firstSuccessOfAllWith(head, tail)
 
-export const FirstSuccessOf: firstSuccessOf_.FirstSuccessOf<OptionTypeLambda> = {
+export const Failable: failable.Failable<OptionTypeLambda> = {
   firstSuccessOf,
-  firstSuccessOfIterable
+  firstSuccessOfAllWith
 }
 
-export const Alternative: alternative.Alternative<OptionTypeLambda> = {
-  ...FirstSuccessOf,
-  never: () => none
-}
+export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
+  .fromFailable(Failable, () => none)

@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import type { Compare } from "@fp-ts/core/Compare"
+import type { Comparable } from "@fp-ts/core/Comparable"
 import { identity } from "@fp-ts/core/Function"
 
 /**
@@ -10,18 +10,18 @@ import { identity } from "@fp-ts/core/Function"
  */
 export interface Semigroup<A> {
   readonly combine: (head: A, ...tail: ReadonlyArray<A>) => A
-  readonly combineIterable: (head: A, tail: Iterable<A>) => A
+  readonly combineAllWith: (start: A, all: Iterable<A>) => A
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fromCombineIterable = <A>(
-  combineIterable: (head: A, tail: Iterable<A>) => A
+export const fromCombineAllWith = <A>(
+  combineAllWith: (start: A, all: Iterable<A>) => A
 ): Semigroup<A> => ({
-  combine: (head, ...tail) => combineIterable(head, tail),
-  combineIterable
+  combine: (head, ...tail) => combineAllWith(head, tail),
+  combineAllWith
 })
 
 /**
@@ -29,9 +29,9 @@ export const fromCombineIterable = <A>(
  * @since 3.0.0
  */
 export const fromBinary = <A>(combine: (a1: A, a2: A) => A): Semigroup<A> =>
-  fromCombineIterable((head, tail) => {
-    let out: A = head
-    for (const a of tail) {
+  fromCombineAllWith((start, all) => {
+    let out: A = start
+    for (const a of all) {
       out = combine(out, a)
     }
     return out
@@ -43,8 +43,8 @@ export const fromBinary = <A>(combine: (a1: A, a2: A) => A): Semigroup<A> =>
  * @category constructors
  * @since 3.0.0
  */
-export const min = <A>(Compare: Compare<A>): Semigroup<A> =>
-  fromBinary((a1, a2) => Compare.compare(a1, a2) === -1 ? a1 : a2)
+export const min = <A>(Comparable: Comparable<A>): Semigroup<A> =>
+  fromBinary((a1, a2) => Comparable.compare(a1, a2) === -1 ? a1 : a2)
 
 /**
  * Get a semigroup where `combine` will return the maximum, based on the provided order.
@@ -52,14 +52,14 @@ export const min = <A>(Compare: Compare<A>): Semigroup<A> =>
  * @category constructors
  * @since 3.0.0
  */
-export const max = <A>(Compare: Compare<A>): Semigroup<A> =>
-  fromBinary((a1, a2) => Compare.compare(a1, a2) === 1 ? a1 : a2)
+export const max = <A>(Comparable: Comparable<A>): Semigroup<A> =>
+  fromBinary((a1, a2) => Comparable.compare(a1, a2) === 1 ? a1 : a2)
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const constant = <A>(a: A): Semigroup<A> => fromCombineIterable(() => a)
+export const constant = <A>(a: A): Semigroup<A> => fromCombineAllWith(() => a)
 
 /**
  * The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
@@ -116,7 +116,7 @@ export const intercalate = <A>(separator: A) =>
  * @category instances
  * @since 3.0.0
  */
-export const first = <A = never>(): Semigroup<A> => fromCombineIterable(identity)
+export const first = <A = never>(): Semigroup<A> => fromCombineAllWith(identity)
 
 /**
  * Always return the last argument.
@@ -125,9 +125,9 @@ export const first = <A = never>(): Semigroup<A> => fromCombineIterable(identity
  * @since 3.0.0
  */
 export const last = <A = never>(): Semigroup<A> =>
-  fromCombineIterable((head, tail) => {
-    let out: A = head
+  fromCombineAllWith((start, all) => {
+    let out: A = start
     // eslint-disable-next-line no-empty
-    for (out of tail) {}
+    for (out of all) {}
     return out
   })

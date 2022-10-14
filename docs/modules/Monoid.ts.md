@@ -13,6 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
+  - [fromSemigroup](#fromsemigroup)
   - [max](#max)
   - [min](#min)
 - [type class](#type-class)
@@ -25,6 +26,16 @@ Added in v3.0.0
 ---
 
 # constructors
+
+## fromSemigroup
+
+**Signature**
+
+```ts
+export declare const fromSemigroup: <A>(Semigroup: any, empty: A) => Monoid<A>
+```
+
+Added in v3.0.0
 
 ## max
 
@@ -63,6 +74,7 @@ Added in v3.0.0
 ```ts
 export interface Monoid<A> extends Semigroup<A> {
   readonly empty: A
+  readonly combineAll: (all: Iterable<A>) => A
 }
 ```
 

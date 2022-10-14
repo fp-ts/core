@@ -1,17 +1,18 @@
-import * as compare from "@fp-ts/core/Compare"
+import * as compare from "@fp-ts/core/Comparable"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 
-export const Compare: compare.Compare<boolean> = compare.fromCompare((a1, a2) =>
+export const Compare: compare.Comparable<boolean> = compare.fromCompare((a1, a2) =>
   a1 < a2 ? -1 : a1 > a2 ? 1 : 0
 )
 
-export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.fromCombineIterable(
-  (head, tail) => {
-    if (head === false) {
+export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.fromCombineAllWith(
+  (start, all) => {
+    if (start === false) {
       return false
     }
-    for (const n of tail) {
+    for (const n of all) {
       if (n === false) {
         return false
       }
@@ -20,12 +21,12 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.fromCombineI
   }
 )
 
-export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.fromCombineIterable(
-  (head, tail) => {
-    if (head === true) {
+export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.fromCombineAllWith(
+  (start, all) => {
+    if (start === true) {
       return true
     }
-    for (const b of tail) {
+    for (const b of all) {
       if (b === true) {
         return true
       }
@@ -34,7 +35,4 @@ export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.fromCombineI
   }
 )
 
-export const MonoidAll: Monoid<boolean> = {
-  ...SemigroupAll,
-  empty: true
-}
+export const MonoidAll: Monoid<boolean> = monoid.fromSemigroup(SemigroupAll, true)

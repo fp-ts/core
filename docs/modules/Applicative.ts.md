@@ -1,6 +1,6 @@
 ---
 title: Applicative.ts
-nav_order: 3
+nav_order: 2
 parent: Modules
 ---
 
@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Applicative<F extends TypeLambda> extends Ap<F>, Succeed<F> {}
+export interface Applicative<F extends TypeLambda> extends Apply<F>, Succeed<F> {}
 ```
 
 Added in v3.0.0

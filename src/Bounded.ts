@@ -1,17 +1,27 @@
 /**
  * @since 3.0.0
  */
-import * as compare from "@fp-ts/core/Compare"
-import type { Compare } from "@fp-ts/core/Compare"
+import * as compare from "@fp-ts/core/Comparable"
+import type { Comparable } from "@fp-ts/core/Comparable"
 
 /**
  * @category type class
  * @since 3.0.0
  */
-export interface Bounded<A> extends Compare<A> {
+export interface Bounded<A> extends Comparable<A> {
   readonly top: A
   readonly bottom: A
 }
+
+/**
+ * @category constructors
+ * @since 3.0.0
+ */
+export const fromComparable = <A>(Comparable: Comparable<A>, top: A, bottom: A): Bounded<A> => ({
+  ...Comparable,
+  top,
+  bottom
+})
 
 /**
  * Clamp a value between `bottom` and `top` values.
