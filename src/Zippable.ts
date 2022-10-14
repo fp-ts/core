@@ -161,7 +161,7 @@ export const liftSemigroup = <F extends TypeLambda>(Zippable: Zippable<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> => {
     const zip = zipWith(Zippable)
     return semigroup.fromBinary((fa1, fa2) =>
-      pipe(fa1, zip(fa2, (a1, a2) => Semigroup.combine(a1, a2)))
+      pipe(fa1, zip(fa2, (a1, a2) => Semigroup.combine2(a1, a2)))
     )
   }
 

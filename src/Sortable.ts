@@ -8,7 +8,6 @@ import type { Monoid } from "@fp-ts/core/Monoid"
 import * as monoid from "@fp-ts/core/Monoid"
 import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
-import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category type class
@@ -69,8 +68,16 @@ export const contramap = <B, A>(f: (b: B) => A) =>
  * @category instances
  * @since 3.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Sortable<A>> =>
-  semigroup.fromCombineAllWith((start, all) =>
+export const getSemigroup = <A>(): Semigroup<Sortable<A>> => ({
+  combine2: (s1, s2) =>
+    fromCompare((a1, a2) => {
+      const out = s1.compare(a1, a2)
+      if (out !== 0) {
+        return out
+      }
+      return s2.compare(a1, a2)
+    }),
+  combine: (start, all) =>
     fromCompare((a1, a2) => {
       let out = start.compare(a1, a2)
       if (out !== 0) {
@@ -84,7 +91,7 @@ export const getSemigroup = <A>(): Semigroup<Sortable<A>> =>
       }
       return out
     })
-  )
+})
 
 /**
  * @category instances

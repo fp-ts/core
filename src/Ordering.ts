@@ -2,7 +2,7 @@
  * @since 3.0.0
  */
 import * as monoid from "@fp-ts/core/Monoid"
-import * as semigroup from "@fp-ts/core/Semigroup"
+import type * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category type class
@@ -33,8 +33,9 @@ export const match = <A, B, C = B>(
  * @category instances
  * @since 3.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombineAllWith(
-  (start, all) => {
+export const Semigroup: semigroup.Semigroup<Ordering> = {
+  combine2: (o1, o2) => o1 !== 0 ? o1 : o2,
+  combine: (start, all) => {
     let out = start
     if (out !== 0) {
       return out
@@ -46,7 +47,7 @@ export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.fromCombineAll
     }
     return out
   }
-)
+}
 
 /**
  * @category instances

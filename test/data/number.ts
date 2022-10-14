@@ -6,8 +6,9 @@ import * as compare from "@fp-ts/core/Sortable"
 
 export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromBinary((x, y) => x + y)
 
-export const SemigroupMultiply: semigroup.Semigroup<number> = semigroup.fromCombineAllWith(
-  (start, all) => {
+export const SemigroupMultiply: semigroup.Semigroup<number> = {
+  combine2: (n1, n2) => n1 * n2,
+  combine: (start, all) => {
     let out: number = start
     if (out === 0) {
       return 0
@@ -20,7 +21,7 @@ export const SemigroupMultiply: semigroup.Semigroup<number> = semigroup.fromComb
     }
     return out
   }
-)
+}
 
 export const MonoidSum: Monoid<number> = monoid.fromSemigroup(SemigroupSum, 0)
 

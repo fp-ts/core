@@ -21,7 +21,7 @@ export interface Monoid<A> extends Semigroup<A> {
 export const fromSemigroup = <A>(Semigroup: Semigroup<A>, empty: A): Monoid<A> => ({
   ...Semigroup,
   empty,
-  combineAll: (all) => Semigroup.combineAllWith(empty, all)
+  combineAll: (all) => Semigroup.combine(empty, all)
 })
 
 /**
@@ -52,7 +52,7 @@ export const max = <A>(Bounded: Bounded<A>): Monoid<A> =>
  * @since 3.0.0
  */
 export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> =>
-  fromSemigroup(semigroup.fromBinary((a1, a2) => Monoid.combine(a2, a1)), Monoid.empty)
+  fromSemigroup(semigroup.reverse(Monoid), Monoid.empty)
 
 /**
  * Given a struct of monoids returns a monoid for the struct.

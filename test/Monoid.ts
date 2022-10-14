@@ -6,16 +6,16 @@ import * as U from "./util"
 describe("Monoid", () => {
   it("min", () => {
     const M = monoid.min(number.Bounded)
-    U.deepStrictEqual(M.combine(M.empty), +Infinity)
-    U.deepStrictEqual(M.combine(M.empty, 1), 1)
-    U.deepStrictEqual(M.combine(M.empty, 1, -1), -1)
+    U.deepStrictEqual(M.combineAll([]), +Infinity)
+    U.deepStrictEqual(M.combineAll([1]), 1)
+    U.deepStrictEqual(M.combineAll([1, -1]), -1)
   })
 
   it("max", () => {
     const M = monoid.max(number.Bounded)
-    U.deepStrictEqual(M.combine(M.empty), -Infinity)
-    U.deepStrictEqual(M.combine(M.empty, 1), 1)
-    U.deepStrictEqual(M.combine(M.empty, 1, -1), 1)
+    U.deepStrictEqual(M.combineAll([]), -Infinity)
+    U.deepStrictEqual(M.combineAll([1]), 1)
+    U.deepStrictEqual(M.combineAll([1, -1]), 1)
   })
 
   it("reverse", () => {
@@ -32,7 +32,7 @@ describe("Monoid", () => {
         age: number.MonoidSum
       })
       U.deepStrictEqual(M.empty, { name: "", age: 0 })
-      U.deepStrictEqual(M.combine({ name: "a", age: 10 }, { name: "b", age: 20 }), {
+      U.deepStrictEqual(M.combine2({ name: "a", age: 10 }, { name: "b", age: 20 }), {
         name: "ab",
         age: 30
       })
@@ -51,6 +51,6 @@ describe("Monoid", () => {
       number.MonoidSum
     )
     U.deepStrictEqual(M.empty, ["", 0])
-    U.deepStrictEqual(M.combine(["a", 10], ["b", 20]), ["ab", 30])
+    U.deepStrictEqual(M.combine2(["a", 10], ["b", 20]), ["ab", 30])
   })
 })

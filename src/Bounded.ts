@@ -35,8 +35,9 @@ export const clamp = <A>(B: Bounded<A>): (a: A) => A => compare.clamp(B)(B.botto
  *
  * @since 3.0.0
  */
-export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> => ({
-  compare: compare.reverse(Bounded).compare,
-  top: Bounded.bottom,
-  bottom: Bounded.top
-})
+export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> =>
+  fromSortable(
+    compare.reverse(Bounded),
+    Bounded.bottom,
+    Bounded.top
+  )
