@@ -1,6 +1,6 @@
 ---
 title: FlatMap.ts
-nav_order: 13
+nav_order: 12
 parent: Modules
 ---
 

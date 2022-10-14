@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [fromComparable](#fromcomparable)
+  - [fromSortable](#fromsortable)
 - [type class](#type-class)
   - [Bounded (interface)](#bounded-interface)
 - [utils](#utils)
@@ -24,12 +24,12 @@ Added in v3.0.0
 
 # constructors
 
-## fromComparable
+## fromSortable
 
 **Signature**
 
 ```ts
-export declare const fromComparable: <A>(Comparable: any, top: A, bottom: A) => Bounded<A>
+export declare const fromSortable: <A>(Sortable: any, top: A, bottom: A) => Bounded<A>
 ```
 
 Added in v3.0.0
@@ -41,7 +41,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Bounded<A> extends Comparable<A> {
+export interface Bounded<A> extends Sortable<A> {
   readonly top: A
   readonly bottom: A
 }

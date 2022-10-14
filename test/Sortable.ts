@@ -1,5 +1,5 @@
-import * as _ from "@fp-ts/core/Comparable"
 import { pipe } from "@fp-ts/core/Function"
+import * as _ from "@fp-ts/core/Sortable"
 import * as boolean from "./data/boolean"
 import * as number from "./data/number"
 import { sort } from "./data/ReadonlyArray"

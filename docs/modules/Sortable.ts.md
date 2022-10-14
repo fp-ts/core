@@ -1,10 +1,10 @@
 ---
-title: Comparable.ts
-nav_order: 8
+title: Sortable.ts
+nav_order: 28
 parent: Modules
 ---
 
-## Comparable overview
+## Sortable overview
 
 Added in v3.0.0
 
@@ -19,9 +19,9 @@ Added in v3.0.0
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
 - [type class](#type-class)
-  - [Comparable (interface)](#comparable-interface)
+  - [Sortable (interface)](#sortable-interface)
 - [type lambdas](#type-lambdas)
-  - [ComparableTypeLambda (interface)](#comparabletypelambda-interface)
+  - [SortableTypeLambda (interface)](#sortabletypelambda-interface)
 - [utils](#utils)
   - [between](#between)
   - [clamp](#clamp)
@@ -44,7 +44,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (a1: A, a2: A) => any) => Comparable<A>
+export declare const fromCompare: <A>(compare: (a1: A, a2: A) => any) => Sortable<A>
 ```
 
 Added in v3.0.0
@@ -83,12 +83,12 @@ Added in v3.0.0
 
 # type class
 
-## Comparable (interface)
+## Sortable (interface)
 
 **Signature**
 
 ```ts
-export interface Comparable<A> {
+export interface Sortable<A> {
   readonly compare: (a1: A, a2: A) => Ordering
 }
 ```
@@ -97,13 +97,13 @@ Added in v3.0.0
 
 # type lambdas
 
-## ComparableTypeLambda (interface)
+## SortableTypeLambda (interface)
 
 **Signature**
 
 ```ts
-export interface ComparableTypeLambda extends TypeLambda {
-  readonly type: Comparable<this['In1']>
+export interface SortableTypeLambda extends TypeLambda {
+  readonly type: Sortable<this['In1']>
 }
 ```
 
@@ -118,7 +118,7 @@ Test whether a value is between a minimum and a maximum (inclusive).
 **Signature**
 
 ```ts
-export declare const between: <A>(O: Comparable<A>) => (low: A, hi: A) => (a: A) => boolean
+export declare const between: <A>(O: Sortable<A>) => (low: A, hi: A) => (a: A) => boolean
 ```
 
 Added in v3.0.0
@@ -130,7 +130,7 @@ Clamp a value between a minimum and a maximum.
 **Signature**
 
 ```ts
-export declare const clamp: <A>(O: Comparable<A>) => (low: A, hi: A) => (a: A) => A
+export declare const clamp: <A>(O: Sortable<A>) => (low: A, hi: A) => (a: A) => A
 ```
 
 Added in v3.0.0
@@ -140,7 +140,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (self: Comparable<A>) => Comparable<B>
+export declare const contramap: <B, A>(f: (b: B) => A) => (self: Sortable<A>) => Sortable<B>
 ```
 
 Added in v3.0.0
@@ -152,7 +152,7 @@ Test whether one value is _non-strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const geq: <A>(O: Comparable<A>) => (that: A) => (self: A) => boolean
+export declare const geq: <A>(O: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -164,7 +164,7 @@ Test whether one value is _strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const gt: <A>(O: Comparable<A>) => (that: A) => (self: A) => boolean
+export declare const gt: <A>(O: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -176,7 +176,7 @@ Test whether one value is _non-strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const leq: <A>(O: Comparable<A>) => (that: A) => (self: A) => boolean
+export declare const leq: <A>(O: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -188,7 +188,7 @@ Test whether one value is _strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const lt: <A>(O: Comparable<A>) => (that: A) => (self: A) => boolean
+export declare const lt: <A>(O: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v3.0.0
@@ -200,7 +200,7 @@ Take the maximum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const max: <A>(O: Comparable<A>) => (that: A) => (self: A) => A
+export declare const max: <A>(O: Sortable<A>) => (that: A) => (self: A) => A
 ```
 
 Added in v3.0.0
@@ -212,7 +212,7 @@ Take the minimum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const min: <A>(O: Comparable<A>) => (that: A) => (self: A) => A
+export declare const min: <A>(O: Sortable<A>) => (that: A) => (self: A) => A
 ```
 
 Added in v3.0.0
@@ -222,7 +222,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const reverse: <A>(Comparable: Comparable<A>) => Comparable<A>
+export declare const reverse: <A>(Sortable: Sortable<A>) => Sortable<A>
 ```
 
 Added in v3.0.0
@@ -235,8 +235,8 @@ Given a tuple of `Compare`s returns a `Compare` for the tuple.
 
 ```ts
 export declare const tuple: <A extends readonly unknown[]>(
-  ...compares: { [K in keyof A]: Comparable<A[K]> }
-) => Comparable<Readonly<A>>
+  ...compares: { [K in keyof A]: Sortable<A[K]> }
+) => Sortable<Readonly<A>>
 ```
 
 Added in v3.0.0

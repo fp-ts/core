@@ -1,14 +1,14 @@
 /**
  * @since 3.0.0
  */
-import * as compare from "@fp-ts/core/Comparable"
-import type { Comparable } from "@fp-ts/core/Comparable"
+import * as compare from "@fp-ts/core/Sortable"
+import type { Sortable } from "@fp-ts/core/Sortable"
 
 /**
  * @category type class
  * @since 3.0.0
  */
-export interface Bounded<A> extends Comparable<A> {
+export interface Bounded<A> extends Sortable<A> {
   readonly top: A
   readonly bottom: A
 }
@@ -17,8 +17,8 @@ export interface Bounded<A> extends Comparable<A> {
  * @category constructors
  * @since 3.0.0
  */
-export const fromComparable = <A>(Comparable: Comparable<A>, top: A, bottom: A): Bounded<A> => ({
-  ...Comparable,
+export const fromSortable = <A>(Sortable: Sortable<A>, top: A, bottom: A): Bounded<A> => ({
+  ...Sortable,
   top,
   bottom
 })
