@@ -1,12 +1,10 @@
 import type * as applicative from "@fp-ts/core/Applicative"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
-import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
-import * as zippable from "@fp-ts/core/Zippable"
 import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
 
@@ -61,20 +59,18 @@ export function concat<B>(
 export const append = <B>(end: B) =>
   <A>(init: ReadonlyArray<A>): NonEmptyReadonlyArray<A | B> => concat([end])(init)
 
+const unsafeUnprepend = <A>(
+  as: ReadonlyArray<A>
+): readonly [A, ReadonlyArray<A>] => [as[0], as.slice(1)]
+
 export const traverseWithIndex = <F extends TypeLambda>(Applicative: applicative.Applicative<F>) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
     (self: ReadonlyArray<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> => {
-      return pipe(
-        self,
-        reduceWithIndex<A, Kind<F, S, R, O, E, ReadonlyArray<B>>>(
-          Applicative.succeed([]),
-          (fbs, a, i) =>
-            pipe(
-              zippable.zip(Applicative)(fbs, f(a, i)),
-              Applicative.map(([bs, b]) => append(b)(bs))
-            )
-        )
-      )
+      if (isNonEmpty(self)) {
+        const [head, tail] = unsafeUnprepend(self.map(f))
+        return Applicative.zipMany(head, tail)
+      }
+      return Applicative.succeed([])
     }
 
 export const traverse = <F extends TypeLambda>(

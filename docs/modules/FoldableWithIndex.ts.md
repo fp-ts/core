@@ -28,6 +28,7 @@ Added in v3.0.0
 ```ts
 export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F> {
   readonly reduceWithIndex: <A, B>(b: B, f: (b: B, a: A, i: I) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => B
+
   readonly reduceRightWithIndex: <A, B>(
     b: B,
     f: (b: B, a: A, i: I) => B

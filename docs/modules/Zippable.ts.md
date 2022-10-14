@@ -22,8 +22,8 @@ Added in v3.0.0
   - [lift2](#lift2)
   - [lift3](#lift3)
   - [liftSemigroup](#liftsemigroup)
-  - [zip](#zip)
   - [zip3](#zip3)
+  - [zipComposition](#zipcomposition)
   - [zipFlatten](#zipflatten)
   - [zipLeftPar](#zipleftpar)
   - [zipManyComposition](#zipmanycomposition)
@@ -41,6 +41,7 @@ Added in v3.0.0
 ```ts
 export declare const fromFunctor: <F extends any>(
   Functor: any,
+  zip: <S, R1, O1, E1, A, R2, O2, E2, B>(fa: any, fb: any) => any,
   zipMany: <S, R, O, E, A>(start: any, others: Iterable<any>) => any
 ) => Zippable<F>
 ```
@@ -55,6 +56,11 @@ Added in v3.0.0
 
 ```ts
 export interface Zippable<F extends TypeLambda> extends Functor<F> {
+  readonly zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
+    fa: Kind<F, S, R1, O1, E1, A>,
+    fb: Kind<F, S, R2, O2, E2, B>
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+
   readonly zipMany: <S, R, O, E, A>(
     start: Kind<F, S, R, O, E, A>,
     others: Iterable<Kind<F, S, R, O, E, A>>
@@ -80,7 +86,7 @@ Added in v3.0.0
 
 ## bindRight
 
-A variant of `Flattenable.bind` that sequentially ignores the scope.
+A variant of `FlatMap.bind` that sequentially ignores the scope.
 
 **Signature**
 
@@ -137,18 +143,6 @@ export declare const liftSemigroup: <F extends any>(Zippable: Zippable<F>) => <A
 
 Added in v3.0.0
 
-## zip
-
-**Signature**
-
-```ts
-export declare const zip: <F extends any>(
-  Zippable: Zippable<F>
-) => <S, R1, O1, E1, A, R2, O2, E2, B>(fa: any, fb: any) => any
-```
-
-Added in v3.0.0
-
 ## zip3
 
 **Signature**
@@ -157,6 +151,21 @@ Added in v3.0.0
 export declare const zip3: <F extends any>(
   Zippable: Zippable<F>
 ) => <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C>(fa: any, fb: any, fc: any) => any
+```
+
+Added in v3.0.0
+
+## zipComposition
+
+Returns a default `zip` composition.
+
+**Signature**
+
+```ts
+export declare const zipComposition: <F extends any, G extends any>(
+  ZippableF: Zippable<F>,
+  ZippableG: Zippable<G>
+) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(fga: any, fgb: any) => any
 ```
 
 Added in v3.0.0
@@ -193,7 +202,7 @@ Added in v3.0.0
 
 ## zipManyComposition
 
-Returns a default `zip` composition.
+Returns a default `zipMany` composition.
 
 **Signature**
 
