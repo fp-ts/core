@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Applicative<F extends TypeLambda> extends Apply<F>, Succeed<F> {}
+export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {}
 ```
 
 Added in v3.0.0

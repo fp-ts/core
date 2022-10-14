@@ -1,6 +1,5 @@
 import * as alternative from "@fp-ts/core/Alternative"
 import type * as applicative from "@fp-ts/core/Applicative"
-import * as apply from "@fp-ts/core/Apply"
 import type * as failable from "@fp-ts/core/Failable"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
@@ -8,6 +7,7 @@ import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as succeed_ from "@fp-ts/core/Succeed"
+import * as zippable from "@fp-ts/core/Zippable"
 
 export interface None {
   readonly _tag: "None"
@@ -62,6 +62,22 @@ export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
   flatMap
 }
 
+export const zip: <A, B>(
+  fa: Option<A>,
+  fb: Option<B>
+) => Option<readonly [A, B]> = flatMap_.zip(FlatMap)
+
+export const Zippable: zippable.Zippable<OptionTypeLambda> = {
+  map,
+  zip
+}
+
+export const Applicative: applicative.Applicative<OptionTypeLambda> = {
+  map,
+  zip,
+  succeed: some
+}
+
 export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flatMap_
   .tap(FlatMap)
 
@@ -71,28 +87,17 @@ export const composeKleisli: <B, C>(
   FlatMap
 )
 
-export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = flatMap_
+export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = zippable
   .ap(
-    FlatMap
+    Zippable
   )
 
-export const Ap: apply.Apply<OptionTypeLambda> = {
-  map,
-  ap
-}
-
-export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  map,
-  ap,
-  succeed: some
-}
-
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  apply.lift2(Ap)
+  zippable.lift2(Zippable)
 
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = apply.lift3(Ap)
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = zippable.lift3(Zippable)
 
 export const Do: Option<{}> = some({})
 
@@ -122,7 +127,7 @@ export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  apply.bindRight(Ap)
+  zippable.bindRight(Zippable)
 
 export const Zip: Option<readonly []> = some([])
 
@@ -130,13 +135,13 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupl
 
 export const zipFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = apply
-  .zipFlatten(Ap)
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = zippable
+  .zipFlatten(Zippable)
 
 export const zipWith: <B, A, C>(
   that: Option<B>,
   f: (a: A, b: B) => C
-) => (self: Option<A>) => Option<C> = apply.zipWith(Ap)
+) => (self: Option<A>) => Option<C> = zippable.zipWith(Zippable)
 
 export const catchAll = <B>(that: () => Option<B>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self

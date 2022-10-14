@@ -1,7 +1,6 @@
 /**
  * @since 3.0.0
  */
-import type { Apply } from "@fp-ts/core/Apply"
 import { flow, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -76,17 +75,6 @@ export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
         FlatMap.map((b) => Object.assign({}, a, { [name]: b }) as any)
       )
     )
-
-/**
- * @since 3.0.0
- */
-export const ap = <F extends TypeLambda>(FlatMap: FlatMap<F>): Apply<F>["ap"] =>
-  (fa) =>
-    (fab) =>
-      pipe(
-        fab,
-        FlatMap.flatMap((f) => pipe(fa, FlatMap.map(f)))
-      )
 
 /**
  * @since 3.0.0
