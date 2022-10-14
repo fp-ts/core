@@ -9,35 +9,35 @@ import type { Sortable } from "@fp-ts/core/Sortable"
  * @since 3.0.0
  */
 export interface Bounded<A> extends Sortable<A> {
-  readonly top: A
-  readonly bottom: A
+  readonly maximum: A
+  readonly minimum: A
 }
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const fromSortable = <A>(Sortable: Sortable<A>, top: A, bottom: A): Bounded<A> => ({
+export const fromSortable = <A>(Sortable: Sortable<A>, maximum: A, minimum: A): Bounded<A> => ({
   ...Sortable,
-  top,
-  bottom
+  maximum,
+  minimum
 })
 
 /**
- * Clamp a value between `bottom` and `top` values.
+ * Clamp a value between `minimum` and `maximum` values.
  *
  * @since 3.0.0
  */
-export const clamp = <A>(B: Bounded<A>): (a: A) => A => compare.clamp(B)(B.bottom, B.top)
+export const clamp = <A>(B: Bounded<A>): (a: A) => A => compare.clamp(B)(B.minimum, B.maximum)
 
 /**
- * Reverses the `Ord` of a `Bounded` and flips `top` and `bottom` values.
+ * Reverses the `Ord` of a `Bounded` and flips `maximum` and `minimum` values.
  *
  * @since 3.0.0
  */
 export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> =>
   fromSortable(
     compare.reverse(Bounded),
-    Bounded.bottom,
-    Bounded.top
+    Bounded.minimum,
+    Bounded.maximum
   )

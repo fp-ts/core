@@ -41,7 +41,7 @@ Added in v3.0.0
 
 Get a monoid where `combine` will return the maximum, based on the provided bounded order.
 
-The `empty` value is the `bottom` value.
+The `empty` value is the `minimum` value.
 
 **Signature**
 
@@ -55,7 +55,7 @@ Added in v3.0.0
 
 Get a monoid where `combine` will return the minimum, based on the provided bounded order.
 
-The `empty` value is the `top` value.
+The `empty` value is the `maximum` value.
 
 **Signature**
 
