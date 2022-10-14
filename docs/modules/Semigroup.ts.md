@@ -15,7 +15,6 @@ Added in v3.0.0
 - [constructors](#constructors)
   - [constant](#constant)
   - [fromBinary](#frombinary)
-  - [fromCombineAllWith](#fromcombineallwith)
   - [max](#max)
   - [min](#min)
 - [instances](#instances)
@@ -48,17 +47,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromBinary: <A>(combine: (a1: A, a2: A) => A) => Semigroup<A>
-```
-
-Added in v3.0.0
-
-## fromCombineAllWith
-
-**Signature**
-
-```ts
-export declare const fromCombineAllWith: <A>(combineAllWith: (start: A, all: Iterable<A>) => A) => Semigroup<A>
+export declare const fromBinary: <A>(combine2: (a1: A, a2: A) => A) => Semigroup<A>
 ```
 
 Added in v3.0.0
@@ -121,8 +110,8 @@ Added in v3.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (head: A, ...tail: ReadonlyArray<A>) => A
-  readonly combineAllWith: (start: A, all: Iterable<A>) => A
+  readonly combine2: (a1: A, a2: A) => A
+  readonly combine: (start: A, all: Iterable<A>) => A
 }
 ```
 
