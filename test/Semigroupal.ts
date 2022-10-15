@@ -1,4 +1,4 @@
-import { identity, pipe } from "@fp-ts/core/Function"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Semigroupal"
 import * as O from "./data/Option"
 import * as U from "./util"

@@ -2,8 +2,8 @@
  * @since 3.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
-import { flow } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import { pipe } from "@fp-ts/core/internal/Function"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as monoid from "@fp-ts/core/Monoid"
 import type { Ordering } from "@fp-ts/core/Ordering"
@@ -165,7 +165,7 @@ export const max = <A>(O: Sortable<A>) =>
 export const clamp = <A>(O: Sortable<A>): ((low: A, hi: A) => (a: A) => A) => {
   const minO = min(O)
   const maxO = max(O)
-  return (low, hi) => flow(minO(hi), maxO(low))
+  return (low, hi) => a => pipe(a, minO(hi), maxO(low))
 }
 
 /**

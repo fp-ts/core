@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Sortable"
 import * as boolean from "./data/boolean"
 import * as number from "./data/number"

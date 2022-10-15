@@ -1,8 +1,8 @@
 /**
  * @since 3.0.0
  */
-import { identity } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import { identity } from "@fp-ts/core/internal/Function"
 import type { Monoidal } from "@fp-ts/core/Monoidal"
 
 /**
