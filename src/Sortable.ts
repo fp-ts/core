@@ -3,7 +3,6 @@
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as monoid from "@fp-ts/core/Monoid"
 import type { Ordering } from "@fp-ts/core/Ordering"
@@ -114,58 +113,60 @@ export const Contravariant: contravariant.Contravariant<SortableTypeLambda> = {
  *
  * @since 3.0.0
  */
-export const lt = <A>(O: Sortable<A>) =>
-  (that: A) => (self: A): boolean => O.compare(self, that) === -1
+export const lt = <A>(Sortable: Sortable<A>) =>
+  (first: A, second: A) => Sortable.compare(first, second) === -1
 
 /**
  * Test whether one value is _strictly greater than_ another.
  *
  * @since 3.0.0
  */
-export const gt = <A>(O: Sortable<A>) =>
-  (that: A) => (self: A): boolean => O.compare(self, that) === 1
+export const gt = <A>(Sortable: Sortable<A>) =>
+  (first: A, second: A) => Sortable.compare(first, second) === 1
 
 /**
  * Test whether one value is _non-strictly less than_ another.
  *
  * @since 3.0.0
  */
-export const leq = <A>(O: Sortable<A>) =>
-  (that: A) => (self: A): boolean => O.compare(self, that) !== 1
+export const leq = <A>(Sortable: Sortable<A>) =>
+  (first: A, second: A) => Sortable.compare(first, second) !== 1
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
  *
  * @since 3.0.0
  */
-export const geq = <A>(O: Sortable<A>) =>
-  (that: A) => (self: A): boolean => O.compare(self, that) !== -1
+export const geq = <A>(Sortable: Sortable<A>) =>
+  (first: A, second: A) => Sortable.compare(first, second) !== -1
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
  *
  * @since 3.0.0
  */
-export const min = <A>(O: Sortable<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(self, that) < 1 ? self : that
+export const min = <A>(Sortable: Sortable<A>) =>
+  (first: A, second: A): A =>
+    first === second || Sortable.compare(first, second) < 1 ? first : second
 
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
  *
  * @since 3.0.0
  */
-export const max = <A>(O: Sortable<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(self, that) > -1 ? self : that
+export const max = <A>(Sortable: Sortable<A>) =>
+  (first: A, second: A): A =>
+    first === second || Sortable.compare(first, second) > -1 ? first : second
 
 /**
  * Clamp a value between a minimum and a maximum.
  *
  * @since 3.0.0
  */
-export const clamp = <A>(O: Sortable<A>): ((low: A, hi: A) => (a: A) => A) => {
-  const minO = min(O)
-  const maxO = max(O)
-  return (low, hi) => a => pipe(a, minO(hi), maxO(low))
+export const clamp = <A>(Sortable: Sortable<A>) => {
+  const min_ = min(Sortable)
+  const max_ = max(Sortable)
+  return (minimum: A, maximum: A) => (a: A) => min_(maximum, max_(minimum, a))
 }
 
 /**
@@ -173,8 +174,8 @@ export const clamp = <A>(O: Sortable<A>): ((low: A, hi: A) => (a: A) => A) => {
  *
  * @since 3.0.0
  */
-export const between = <A>(O: Sortable<A>): ((low: A, hi: A) => (a: A) => boolean) => {
-  const ltO = lt(O)
-  const gtO = gt(O)
-  return (low, hi) => (a) => ltO(low)(a) || gtO(hi)(a) ? false : true
+export const between = <A>(Sortable: Sortable<A>) => {
+  const lt_ = lt(Sortable)
+  const gt_ = gt(Sortable)
+  return (minimum: A, maximum: A) => (a: A): boolean => !lt_(a, minimum) && !gt_(a, maximum)
 }
