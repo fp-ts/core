@@ -1,17 +1,17 @@
-import { identity, pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Semigroupal"
 import * as O from "./data/Option"
 import * as U from "./util"
 
 describe("Semigroupal", () => {
-  it("zipManyWithComposition", () => {
-    const zipManyWith = _.zipManyWithComposition(O.Semigroupal, O.Semigroupal)
-    U.deepStrictEqual(zipManyWith(O.none, [O.none], identity), O.none)
-    U.deepStrictEqual(zipManyWith(O.some(O.none), [O.none], identity), O.none)
-    U.deepStrictEqual(zipManyWith(O.some(O.none), [O.some(O.none)], identity), O.some(O.none))
-    U.deepStrictEqual(zipManyWith(O.some(O.none), [O.some(O.some("a"))], identity), O.some(O.none))
+  it("zipManyComposition", () => {
+    const zipMany = _.zipManyComposition(O.Semigroupal, O.Semigroupal)
+    U.deepStrictEqual(zipMany(O.none, [O.none]), O.none)
+    U.deepStrictEqual(zipMany(O.some(O.none), [O.none]), O.none)
+    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.none)]), O.some(O.none))
+    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.some("a"))]), O.some(O.none))
     U.deepStrictEqual(
-      zipManyWith(O.some(O.some(1)), [O.some(O.some(2))], identity),
+      zipMany(O.some(O.some(1)), [O.some(O.some(2))]),
       O.some(O.some([1, 2]))
     )
   })

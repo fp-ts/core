@@ -23,7 +23,7 @@ Added in v3.0.0
   - [zip](#zip)
   - [zipFlatten](#zipflatten)
   - [zipLeftPar](#zipleftpar)
-  - [zipManyWithComposition](#zipmanywithcomposition)
+  - [zipManyComposition](#zipmanycomposition)
   - [zipRightPar](#ziprightpar)
   - [zipWith](#zipwith)
   - [zipWithComposition](#zipwithcomposition)
@@ -48,11 +48,10 @@ export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
     f: (a: A, b: B) => C
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 
-  readonly zipManyWith: <S, R, O, E, A, B>(
+  readonly zipMany: <S, R, O, E, A>(
     start: Kind<F, S, R, O, E, A>,
-    others: Iterable<Kind<F, S, R, O, E, A>>,
-    f: (as: [A, ...ReadonlyArray<A>]) => B
-  ) => Kind<F, S, R, O, E, B>
+    others: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, [A, ...ReadonlyArray<A>]>
 }
 ```
 
@@ -175,17 +174,17 @@ export declare const zipLeftPar: <F extends any>(
 
 Added in v3.0.0
 
-## zipManyWithComposition
+## zipManyComposition
 
 Returns a default `zipMany` composition.
 
 **Signature**
 
 ```ts
-export declare const zipManyWithComposition: <F extends any, G extends any>(
+export declare const zipManyComposition: <F extends any, G extends any>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
-) => <FS, FR, FO, FE, GS, GR, GO, GE, A, B>(start: any, others: Iterable<any>, f: (results: [A, ...A[]]) => B) => any
+) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(start: any, others: Iterable<any>) => any
 ```
 
 Added in v3.0.0
