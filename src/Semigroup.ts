@@ -1,7 +1,7 @@
 /**
  * @since 3.0.0
  */
-import { identity } from "@fp-ts/core/Function"
+import { identity } from "@fp-ts/core/internal/Function"
 import type { Sortable } from "@fp-ts/core/Sortable"
 
 /**

@@ -1,9 +1,9 @@
 /**
  * @since 3.0.0
  */
-import { identity, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 import * as semigroup from "@fp-ts/core/Semigroup"
 

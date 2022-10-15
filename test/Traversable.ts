@@ -1,5 +1,5 @@
 import * as traverse_ from "@fp-ts/core/Traversable"
-import { pipe } from "../src/Function"
+import { pipe } from "../src/internal/Function"
 import * as O from "./data/Option"
 import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"

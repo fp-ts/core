@@ -1,5 +1,5 @@
 import * as foldable from "@fp-ts/core/Foldable"
-import { pipe } from "@fp-ts/core/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as monoidTests from "./data/number"
 import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"
