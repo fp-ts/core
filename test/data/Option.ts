@@ -1,16 +1,13 @@
-import * as alternative from "@fp-ts/core/Alternative"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
-import { pipe } from "@fp-ts/core/Function"
 import * as functor from "@fp-ts/core/Functor"
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as monoidal from "@fp-ts/core/Monoidal"
-import * as retryable from "@fp-ts/core/Retryable"
+import * as monoidKind from "@fp-ts/core/MonoidKind"
+import type * as semigroupKind from "@fp-ts/core/SemigroupKind"
 import type * as succeed_ from "@fp-ts/core/Succeed"
 import * as zippable from "@fp-ts/core/Zippable"
-import type { Result } from "./Result"
-import { fail, succeed } from "./Result"
 
 export interface None {
   readonly _tag: "None"
@@ -181,12 +178,12 @@ export const Monoidal: monoidal.Monoidal<OptionTypeLambda> = {
   zipAllWith
 }
 
-const firstSuccessOf = <A, B>(
+const combineKind = <A, B>(
   first: Option<A>,
   second: Option<B>
 ): Option<A | B> => isSome(first) ? first : isSome(second) ? second : none
 
-export const firstSuccessOfMany = <A>(
+export const combineKindMany = <A>(
   start: Option<A>,
   others: Iterable<Option<A>>
 ): Option<A> => {
@@ -202,28 +199,11 @@ export const firstSuccessOfMany = <A>(
   return none
 }
 
-export const Retryable: retryable.Retryable<OptionTypeLambda> = {
+export const SemigroupKind: semigroupKind.SemigroupKind<OptionTypeLambda> = {
   map,
-  firstSuccessOf,
-  firstSuccessOfMany
+  combineKind,
+  combineKindMany
 }
 
-export const orElse: <B>(
-  that: Option<B>
-) => <A>(self: Option<A>) => Option<B | A> = retryable.orElse(Retryable)
-
-export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromRetryable(Retryable, () => none)
-
-export const orElseResultF = <F extends TypeLambda>(
-  Retryable: retryable.Retryable<F>
-) =>
-  <S, R2, O2, E2, B>(that: Kind<F, S, R2, O2, E2, B>) =>
-    <R1, O1, E1, A>(
-      self: Kind<F, S, R1, O1, E1, A>
-    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, Result<A, B>> =>
-      Retryable.firstSuccessOf(pipe(self, Retryable.map(fail)), pipe(that, Retryable.map(succeed)))
-
-export const orElseResult: <B>(
-  that: Option<B>
-) => <A>(self: Option<A>) => Option<Result<A, B>> = orElseResultF(Retryable)
+export const MonoidKind: monoidKind.MonoidKind<OptionTypeLambda> = monoidKind
+  .fromSemigroupKind(SemigroupKind, () => none)
