@@ -20,13 +20,14 @@ Added in v3.0.0
   - [lift2](#lift2)
   - [lift3](#lift3)
   - [liftSemigroup](#liftsemigroup)
-  - [zip3](#zip3)
-  - [zipComposition](#zipcomposition)
+  - [zip](#zip)
+  - [zip3With](#zip3with)
   - [zipFlatten](#zipflatten)
   - [zipLeftPar](#zipleftpar)
   - [zipManyComposition](#zipmanycomposition)
   - [zipRightPar](#ziprightpar)
   - [zipWith](#zipwith)
+  - [zipWithComposition](#zipwithcomposition)
 
 ---
 
@@ -38,10 +39,15 @@ Added in v3.0.0
 
 ```ts
 export interface Zippable<F extends TypeLambda> extends Functor<F> {
-  readonly zip: <S, R1, O1, E1, A, R2, O2, E2, B>(
+  /**
+   * Zips this effect with the specified effect using the
+   * specified combiner function.
+   */
+  readonly zipWith: <S, R1, O1, E1, A, R2, O2, E2, B, C>(
     fa: Kind<F, S, R1, O1, E1, A>,
-    fb: Kind<F, S, R2, O2, E2, B>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+    fb: Kind<F, S, R2, O2, E2, B>,
+    f: (a: A, b: B) => C
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 
   readonly zipMany: <S, R, O, E, A>(
     start: Kind<F, S, R, O, E, A>,
@@ -125,29 +131,26 @@ export declare const liftSemigroup: <F extends any>(Zippable: Zippable<F>) => <A
 
 Added in v3.0.0
 
-## zip3
+## zip
 
 **Signature**
 
 ```ts
-export declare const zip3: <F extends any>(
+export declare const zip: <F extends any>(
   Zippable: Zippable<F>
-) => <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C>(fa: any, fb: any, fc: any) => any
+) => <S, R2, O2, E2, B, A>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
 Added in v3.0.0
 
-## zipComposition
-
-Returns a default `zip` composition.
+## zip3With
 
 **Signature**
 
 ```ts
-export declare const zipComposition: <F extends any, G extends any>(
-  ZippableF: Zippable<F>,
-  ZippableG: Zippable<G>
-) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(fga: any, fgb: any) => any
+export declare const zip3With: <F extends any>(
+  Zippable: Zippable<F>
+) => <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C, D>(fa: any, fb: any, fc: any, f: (a: A, b: B, c: C) => D) => any
 ```
 
 Added in v3.0.0
@@ -224,6 +227,25 @@ specified combiner function.
 export declare const zipWith: <F extends any>(
   Zippable: Zippable<F>
 ) => <S, R2, O2, E2, B, A, C>(that: any, f: (a: A, b: B) => C) => <R1, O1, E1>(self: any) => any
+```
+
+Added in v3.0.0
+
+## zipWithComposition
+
+Returns a default `zipWith` composition.
+
+**Signature**
+
+```ts
+export declare const zipWithComposition: <F extends any, G extends any>(
+  ZippableF: Zippable<F>,
+  ZippableG: Zippable<G>
+) => <FS, FR1, FO1, FE1, GS, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B, C>(
+  fga: any,
+  fgb: any,
+  f: (a: A, b: B) => C
+) => any
 ```
 
 Added in v3.0.0

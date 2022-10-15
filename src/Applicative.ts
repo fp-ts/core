@@ -13,10 +13,12 @@ import * as zippable from "@fp-ts/core/Zippable"
  * @since 3.0.0
  */
 export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
+  /** sequence */
   readonly zipAll: <S, R, O, E, A>(
     collection: Iterable<Kind<F, S, R, O, E, A>>
   ) => Kind<F, S, R, O, E, ReadonlyArray<A>>
 
+  /** traverseWithIndex */
   readonly zipAllWith: <S, R, O, E, A, B>(
     collection: Iterable<A>,
     f: (a: A, i: number) => Kind<F, S, R, O, E, B>

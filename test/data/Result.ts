@@ -33,12 +33,6 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
   map
 }
 
-export const zip = <E1, A, E2, B>(
-  fa: Result<E1, A>,
-  fb: Result<E2, B>
-): Result<E1 | E2, readonly [A, B]> =>
-  isFailure(fa) ? fa : isFailure(fb) ? fb : succeed([fa.success, fb.success])
-
 const zipMany = <E, A>(start: Result<E, A>, others: Iterable<Result<E, A>>) => {
   if (isFailure(start)) {
     return start
@@ -55,14 +49,23 @@ const zipMany = <E, A>(start: Result<E, A>, others: Iterable<Result<E, A>>) => {
 
 export const Zippable: zippable.Zippable<ResultTypeLambda> = {
   map,
-  zip,
+  zipWith: (fa, fb, f) =>
+    isFailure(fa) ? fa : isFailure(fb) ? fb : succeed(f(fa.success, fb.success)),
   zipMany
 }
 
-// const f = zippable.liftN(Zippable)((_a: string, _b: number, _c: boolean): number => _b)
+export const zip: <E2, B, A>(
+  that: Result<E2, B>
+) => <E1>(self: Result<E1, A>) => Result<E2 | E1, readonly [A, B]> = zippable.zip(Zippable)
 
-export const zip3: <E1, A, E2, B, E3, C>(
+export const zipWith: <E2, B, A, C>(
+  that: Result<E2, B>,
+  f: (a: A, b: B) => C
+) => <E1>(self: Result<E1, A>) => Result<E2 | E1, C> = zippable.zipWith(Zippable)
+
+export const zip3: <E1, A, E2, B, E3, C, D>(
   fa: Result<E1, A>,
   fb: Result<E2, B>,
-  fc: Result<E3, C>
-) => Result<E1 | E2 | E3, readonly [A, B, C]> = zippable.zip3(Zippable)
+  fc: Result<E3, C>,
+  f: (a: A, b: B, c: C) => D
+) => Result<E1 | E2 | E3, D> = zippable.zip3With(Zippable)

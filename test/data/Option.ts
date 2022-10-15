@@ -95,12 +95,7 @@ export const bind: <N extends string, A extends object, B>(
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
-export const zip = <A, B>(
-  fa: Option<A>,
-  fb: Option<B>
-): Option<readonly [A, B]> => isNone(fa) ? none : isNone(fb) ? none : some([fa.value, fb.value])
-
-export const zipMany = <A>(
+const zipMany = <A>(
   start: Option<A>,
   others: Iterable<Option<A>>
 ): Option<[A, ...ReadonlyArray<A>]> => {
@@ -117,46 +112,27 @@ export const zipMany = <A>(
   return some(out)
 }
 
-export const zipAll = <A>(
-  collection: Iterable<Option<A>>
-): Option<ReadonlyArray<A>> => {
-  const out = []
-  for (const o of collection) {
-    if (isNone(o)) {
-      return none
-    }
-    out.push(o.value)
-  }
-  return some(out)
-}
-
-export const zipAllWith = <A, B>(
-  collection: Iterable<A>,
-  f: (a: A, i: number) => Option<B>
-): Option<ReadonlyArray<B>> => {
-  const out = []
-  let i = 0
-  for (const a of collection) {
-    const ob = f(a, i++)
-    if (isNone(ob)) {
-      return none
-    }
-    out.push(ob.value)
-  }
-  return some(out)
-}
-
 export const Zippable: zippable.Zippable<OptionTypeLambda> = {
   map,
-  zip,
+  zipWith: (fa, fb, f) => isNone(fa) ? none : isNone(fb) ? none : some(f(fa.value, fb.value)),
   zipMany
 }
 
-export const zip3: <A, B, C>(
+export const zip: <B, A>(
+  that: Option<B>
+) => (self: Option<A>) => Option<readonly [A, B]> = zippable.zip(Zippable)
+
+export const zipWith: <B, A, C>(
+  that: Option<B>,
+  f: (a: A, b: B) => C
+) => (self: Option<A>) => Option<C> = zippable.zipWith(Zippable)
+
+export const zip3With: <A, B, C, D>(
   fa: Option<A>,
   fb: Option<B>,
-  fc: Option<C>
-) => Option<readonly [A, B, C]> = zippable.zip3(Zippable)
+  fc: Option<C>,
+  f: (a: A, b: B, c: C) => D
+) => Option<D> = zippable.zip3With(Zippable)
 
 export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = zippable
   .ap(
@@ -181,21 +157,43 @@ export const zipFlatten: <B>(
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = zippable
   .zipFlatten(Zippable)
 
-export const zipWith: <B, A, C>(
-  that: Option<B>,
-  f: (a: A, b: B) => C
-) => (self: Option<A>) => Option<C> = zippable.zipWith(Zippable)
-
 export const catchAll = <B>(that: () => Option<B>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 export const Do: Option<{}> = some({})
 
+const zipAll = <A>(
+  collection: Iterable<Option<A>>
+): Option<ReadonlyArray<A>> => {
+  const out = []
+  for (const o of collection) {
+    if (isNone(o)) {
+      return none
+    }
+    out.push(o.value)
+  }
+  return some(out)
+}
+
+const zipAllWith = <A, B>(
+  collection: Iterable<A>,
+  f: (a: A, i: number) => Option<B>
+): Option<ReadonlyArray<B>> => {
+  const out = []
+  let i = 0
+  for (const a of collection) {
+    const ob = f(a, i++)
+    if (isNone(ob)) {
+      return none
+    }
+    out.push(ob.value)
+  }
+  return some(out)
+}
+
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  map,
+  ...Zippable,
   succeed: some,
-  zip,
-  zipMany,
   zipAll,
   zipAllWith
 }
