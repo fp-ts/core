@@ -95,11 +95,10 @@ export const bind: <N extends string, A extends object, B>(
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
-const zipManyWith = <A, B>(
+const zipMany = <A>(
   start: Option<A>,
-  others: Iterable<Option<A>>,
-  f: (as: [A, ...ReadonlyArray<A>]) => B
-): Option<B> => {
+  others: Iterable<Option<A>>
+): Option<[A, ...ReadonlyArray<A>]> => {
   if (isNone(start)) {
     return none
   }
@@ -110,13 +109,13 @@ const zipManyWith = <A, B>(
     }
     out.push(o.value)
   }
-  return some(f(out))
+  return some(out)
 }
 
 export const Semigroupal: semigroupal.Semigroupal<OptionTypeLambda> = {
   map,
   zipWith: (fa, fb, f) => isNone(fa) ? none : isNone(fb) ? none : some(f(fa.value, fb.value)),
-  zipManyWith
+  zipMany
 }
 
 export const zip: <B, A>(
@@ -156,18 +155,15 @@ export const catchAll = <B>(that: () => Option<B>) =>
 
 export const Do: Option<{}> = some({})
 
-const zipAllWith = <A, B>(
-  collection: Iterable<A>,
-  f: (a: A, i: number) => Option<B>
-): Option<ReadonlyArray<B>> => {
+const zipAll = <A>(
+  collection: Iterable<Option<A>>
+): Option<ReadonlyArray<A>> => {
   const out = []
-  let i = 0
-  for (const a of collection) {
-    const ob = f(a, i++)
-    if (isNone(ob)) {
+  for (const oa of collection) {
+    if (isNone(oa)) {
       return none
     }
-    out.push(ob.value)
+    out.push(oa.value)
   }
   return some(out)
 }
@@ -175,7 +171,7 @@ const zipAllWith = <A, B>(
 export const Monoidal: monoidal.Monoidal<OptionTypeLambda> = {
   ...Semigroupal,
   succeed: some,
-  zipAllWith
+  zipAll
 }
 
 const combineKind = <A, B>(

@@ -16,10 +16,10 @@
 | **Invariant**            | `imap`                                    |                              |
 | **Monad**                |                                           | **Succeed**, **FlatMap**     |
 | **Monoid**               | `empty`, `combineAll`                     | **Semigroup**                |
-| **Monoidal**             | `zipAllWith`                              | **Semigroupal**, **Succeed** |
+| **Monoidal**             | `zipAll`                                  | **Semigroupal**, **Succeed** |
 | **MonoidKind**           | `emptyKind`, `combineKindAll`             | **SemigroupKind**            |
 | **Semigroup**            | `combine`, `combineMany`                  |                              |
-| **Semigroupal**          | `zipWith`, `zipManyWith`                  | **Functor**                  |
+| **Semigroupal**          | `zipWith`, `zipMany`                      | **Functor**                  |
 | **SemigroupKind**        | `combineKind`, `combineKindMany`          | **Functor**                  |
 | **Show**                 | `show`                                    |                              |
 | **Sortable**             | `compare`                                 |                              |

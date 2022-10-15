@@ -58,7 +58,8 @@ export function concat<B>(
 
 export const traverseWithIndex = <F extends TypeLambda>(Monoidal: monoidal.Monoidal<F>) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
-    (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> => Monoidal.zipAllWith(self, f)
+    (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> =>
+      Monoidal.zipAll(Array.from(self).map((a, i) => f(a, i)))
 
 export const traverse = <F extends TypeLambda>(
   Monoidal: monoidal.Monoidal<F>

@@ -22,11 +22,10 @@ export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
     f: (a: A, b: B) => C
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 
-  readonly zipManyWith: <S, R, O, E, A, B>(
+  readonly zipMany: <S, R, O, E, A>(
     start: Kind<F, S, R, O, E, A>,
-    others: Iterable<Kind<F, S, R, O, E, A>>,
-    f: (as: [A, ...ReadonlyArray<A>]) => B
-  ) => Kind<F, S, R, O, E, B>
+    others: Iterable<Kind<F, S, R, O, E, A>>
+  ) => Kind<F, S, R, O, E, [A, ...ReadonlyArray<A>]>
 }
 
 /**
@@ -59,16 +58,18 @@ export const zipWithComposition = <F extends TypeLambda, G extends TypeLambda>(
  *
  * @since 3.0.0
  */
-export const zipManyWithComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const zipManyComposition = <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
 ) =>
-  <FS, FR, FO, FE, GS, GR, GO, GE, A, B>(
+  <FS, FR, FO, FE, GS, GR, GO, GE, A>(
     start: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>,
-    others: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>,
-    f: (results: [A, ...ReadonlyArray<A>]) => B
-  ): Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>> =>
-    SemigroupalF.zipManyWith(start, others, ([ga, ...gas]) => SemigroupalG.zipManyWith(ga, gas, f))
+    others: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
+  ): Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, [A, ...ReadonlyArray<A>]>> =>
+    pipe(
+      SemigroupalF.zipMany(start, others),
+      SemigroupalF.map(([ga, ...gas]) => SemigroupalG.zipMany(ga, gas))
+    )
 
 /**
  * @since 3.0.0
@@ -197,10 +198,12 @@ const zip3With = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
     fc: Kind<F, S, R3, O3, E3, C>,
     f: (a: A, b: B, c: C) => D
   ): Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D> =>
-    Semigroupal.zipManyWith<S, R1, O1, E1, any, D>(
-      fa,
-      [fb, fc] as any,
-      ([a, b, c]) => f(a, b, c)
+    pipe(
+      Semigroupal.zipMany<S, R1, O1, E1, any>(
+        fa,
+        [fb, fc] as any
+      ),
+      Semigroupal.map(([a, b, c]) => f(a, b, c))
     )
 
 /**
