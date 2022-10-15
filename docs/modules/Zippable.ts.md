@@ -21,10 +21,9 @@ Added in v3.0.0
   - [lift3](#lift3)
   - [liftSemigroup](#liftsemigroup)
   - [zip](#zip)
-  - [zip3With](#zip3with)
   - [zipFlatten](#zipflatten)
   - [zipLeftPar](#zipleftpar)
-  - [zipManyComposition](#zipmanycomposition)
+  - [zipManyWithComposition](#zipmanywithcomposition)
   - [zipRightPar](#ziprightpar)
   - [zipWith](#zipwith)
   - [zipWithComposition](#zipwithcomposition)
@@ -49,10 +48,11 @@ export interface Zippable<F extends TypeLambda> extends Functor<F> {
     f: (a: A, b: B) => C
   ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 
-  readonly zipMany: <S, R, O, E, A>(
+  readonly zipManyWith: <S, R, O, E, A, B>(
     start: Kind<F, S, R, O, E, A>,
-    others: Iterable<Kind<F, S, R, O, E, A>>
-  ) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
+    others: Iterable<Kind<F, S, R, O, E, A>>,
+    f: (as: [A, ...ReadonlyArray<A>]) => B
+  ) => Kind<F, S, R, O, E, B>
 }
 ```
 
@@ -143,18 +143,6 @@ export declare const zip: <F extends any>(
 
 Added in v3.0.0
 
-## zip3With
-
-**Signature**
-
-```ts
-export declare const zip3With: <F extends any>(
-  Zippable: Zippable<F>
-) => <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C, D>(fa: any, fb: any, fc: any, f: (a: A, b: B, c: C) => D) => any
-```
-
-Added in v3.0.0
-
 ## zipFlatten
 
 Zips this effect with the specified effect.
@@ -185,17 +173,17 @@ export declare const zipLeftPar: <F extends any>(
 
 Added in v3.0.0
 
-## zipManyComposition
+## zipManyWithComposition
 
 Returns a default `zipMany` composition.
 
 **Signature**
 
 ```ts
-export declare const zipManyComposition: <F extends any, G extends any>(
+export declare const zipManyWithComposition: <F extends any, G extends any>(
   ZippableF: Zippable<F>,
   ZippableG: Zippable<G>
-) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(start: any, others: Iterable<any>) => any
+) => <FS, FR, FO, FE, GS, GR, GO, GE, A, B>(start: any, others: Iterable<any>, f: (results: [A, ...A[]]) => B) => any
 ```
 
 Added in v3.0.0

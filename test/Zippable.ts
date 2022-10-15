@@ -1,18 +1,18 @@
-import { pipe } from "@fp-ts/core/Function"
+import { identity, pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/Zippable"
 import * as O from "./data/Option"
 import * as U from "./util"
 
 describe("Zippable", () => {
-  it("zipManyComposition", () => {
-    const zipMany = _.zipManyComposition(O.Zippable, O.Zippable)
-    U.deepStrictEqual(zipMany(O.none, [O.none]), O.none)
-    U.deepStrictEqual(zipMany(O.some(O.none), [O.none]), O.none)
-    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.none)]), O.some(O.none))
-    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.some("a"))]), O.some(O.none))
+  it("zipManyWithComposition", () => {
+    const zipManyWith = _.zipManyWithComposition(O.Zippable, O.Zippable)
+    U.deepStrictEqual(zipManyWith(O.none, [O.none], identity), O.none)
+    U.deepStrictEqual(zipManyWith(O.some(O.none), [O.none], identity), O.none)
+    U.deepStrictEqual(zipManyWith(O.some(O.none), [O.some(O.none)], identity), O.some(O.none))
+    U.deepStrictEqual(zipManyWith(O.some(O.none), [O.some(O.some("a"))], identity), O.some(O.none))
     U.deepStrictEqual(
-      zipMany(O.some(O.some(1)), [O.some(O.some(2))]),
-      O.some(O.some([1, 2] as const))
+      zipManyWith(O.some(O.some(1)), [O.some(O.some(2))], identity),
+      O.some(O.some([1, 2]))
     )
   })
 
