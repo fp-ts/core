@@ -1,11 +1,11 @@
 import * as alternative from "@fp-ts/core/Alternative"
-import type * as applicative from "@fp-ts/core/Applicative"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import { pipe } from "@fp-ts/core/Function"
 import * as functor from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import type * as monoidal from "@fp-ts/core/Monoidal"
 import * as retryable from "@fp-ts/core/Retryable"
 import type * as succeed_ from "@fp-ts/core/Succeed"
 import * as zippable from "@fp-ts/core/Zippable"
@@ -175,7 +175,7 @@ const zipAllWith = <A, B>(
   return some(out)
 }
 
-export const Applicative: applicative.Applicative<OptionTypeLambda> = {
+export const Monoidal: monoidal.Monoidal<OptionTypeLambda> = {
   ...Zippable,
   succeed: some,
   zipAllWith

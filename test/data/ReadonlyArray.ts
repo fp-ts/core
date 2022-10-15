@@ -1,7 +1,7 @@
-import type * as applicative from "@fp-ts/core/Applicative"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type * as monoidal from "@fp-ts/core/Monoidal"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
@@ -56,17 +56,17 @@ export function concat<B>(
   return <A>(self: NonEmptyReadonlyArray<A | B>) => self.concat(that)
 }
 
-export const traverseWithIndex = <F extends TypeLambda>(Applicative: applicative.Applicative<F>) =>
+export const traverseWithIndex = <F extends TypeLambda>(Monoidal: monoidal.Monoidal<F>) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
-    (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> => Applicative.zipAllWith(self, f)
+    (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> => Monoidal.zipAllWith(self, f)
 
 export const traverse = <F extends TypeLambda>(
-  Applicative: applicative.Applicative<F>
+  Monoidal: monoidal.Monoidal<F>
 ) =>
   <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>
   ): (self: ReadonlyArray<A>) => Kind<F, S, R, O, E, ReadonlyArray<B>> =>
-    traverseWithIndex(Applicative)((a) => f(a))
+    traverseWithIndex(Monoidal)((a) => f(a))
 
 export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
   traverse

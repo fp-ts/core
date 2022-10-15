@@ -28,7 +28,7 @@ Added in v3.0.0
 ```ts
 export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
   readonly traverseWithIndex: <F extends TypeLambda>(
-    Applicative: Applicative<F>
+    Monoidal: Monoidal<F>
   ) => <A, S, R, O, E, B>(
     f: (a: A, i: I) => Kind<F, S, R, O, E, B>
   ) => <TS, TR, TO, TE>(self: Kind<T, TS, TR, TO, TE, A>) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>

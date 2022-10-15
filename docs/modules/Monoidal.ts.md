@@ -1,10 +1,10 @@
 ---
-title: Applicative.ts
-nav_order: 2
+title: Monoidal.ts
+nav_order: 21
 parent: Modules
 ---
 
-## Applicative overview
+## Monoidal overview
 
 Added in v3.0.0
 
@@ -13,7 +13,7 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [type class](#type-class)
-  - [Applicative (interface)](#applicative-interface)
+  - [Monoidal (interface)](#monoidal-interface)
 - [utils](#utils)
   - [liftMonoid](#liftmonoid)
 
@@ -21,12 +21,12 @@ Added in v3.0.0
 
 # type class
 
-## Applicative (interface)
+## Monoidal (interface)
 
 **Signature**
 
 ```ts
-export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
+export interface Monoidal<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
   /** traverseWithIndex */
   readonly zipAllWith: <S, R, O, E, A, B>(
     collection: Iterable<A>,
@@ -46,7 +46,7 @@ Lift a monoid into 'F', the inner values are combined using the provided `Monoid
 **Signature**
 
 ```ts
-export declare const liftMonoid: <F extends any>(Applicative: Applicative<F>) => <A, S, R, O, E>(Monoid: any) => any
+export declare const liftMonoid: <F extends any>(Monoidal: Monoidal<F>) => <A, S, R, O, E>(Monoid: any) => any
 ```
 
 Added in v3.0.0

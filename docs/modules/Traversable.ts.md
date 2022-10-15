@@ -29,7 +29,7 @@ Added in v3.0.0
 ```ts
 export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
   readonly traverse: <F extends TypeLambda>(
-    Applicative: Applicative<F>
+    Monoidal: Monoidal<F>
   ) => <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>
   ) => <TS, TR, TO, TE>(self: Kind<T, TS, TR, TO, TE, A>) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>
