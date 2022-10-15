@@ -95,10 +95,11 @@ export const bind: <N extends string, A extends object, B>(
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
-const zipMany = <A>(
+const zipManyWith = <A, B>(
   start: Option<A>,
-  others: Iterable<Option<A>>
-): Option<[A, ...ReadonlyArray<A>]> => {
+  others: Iterable<Option<A>>,
+  f: (as: [A, ...ReadonlyArray<A>]) => B
+): Option<B> => {
   if (isNone(start)) {
     return none
   }
@@ -109,13 +110,13 @@ const zipMany = <A>(
     }
     out.push(o.value)
   }
-  return some(out)
+  return some(f(out))
 }
 
 export const Zippable: zippable.Zippable<OptionTypeLambda> = {
   map,
   zipWith: (fa, fb, f) => isNone(fa) ? none : isNone(fb) ? none : some(f(fa.value, fb.value)),
-  zipMany
+  zipManyWith
 }
 
 export const zip: <B, A>(
@@ -126,13 +127,6 @@ export const zipWith: <B, A, C>(
   that: Option<B>,
   f: (a: A, b: B) => C
 ) => (self: Option<A>) => Option<C> = zippable.zipWith(Zippable)
-
-export const zip3With: <A, B, C, D>(
-  fa: Option<A>,
-  fb: Option<B>,
-  fc: Option<C>,
-  f: (a: A, b: B, c: C) => D
-) => Option<D> = zippable.zip3With(Zippable)
 
 export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = zippable
   .ap(
