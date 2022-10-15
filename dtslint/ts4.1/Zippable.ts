@@ -16,4 +16,4 @@ declare const fc: ReaderAsyncWriter<{ c: boolean }, "c", boolean>
 export declare const Zippable: zippable.Zippable<ReaderAsyncWriterTypeLambda>
 
 // $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", readonly [string, number, boolean]>
-zippable.zip3(Zippable)(fa, fb, fc)
+zippable.zip3With(Zippable)(fa, fb, fc, (a, b, c) => [a, b, c] as const)
