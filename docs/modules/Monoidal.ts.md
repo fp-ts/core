@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Monoidal<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
+export interface Monoidal<F extends TypeLambda> extends Semigroupal<F>, Succeed<F> {
   /** traverseWithIndex */
   readonly zipAllWith: <S, R, O, E, A, B>(
     collection: Iterable<A>,

@@ -23,13 +23,13 @@ import * as monoidal from "@fp-ts/core/Monoidal"
 import * as monoidKind from "@fp-ts/core/MonoidKind"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as semigroup from "@fp-ts/core/Semigroup"
+import * as semigroupal from "@fp-ts/core/Semigroupal"
 import * as semigroupKind from "@fp-ts/core/SemigroupKind"
 import * as show from "@fp-ts/core/Show"
 import * as sortable from "@fp-ts/core/Sortable"
 import * as succeed from "@fp-ts/core/Succeed"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
-import * as zippable from "@fp-ts/core/Zippable"
 
 export {
   /**
@@ -140,6 +140,11 @@ export {
    * @category type classes
    * @since 3.0.0
    */
+  semigroupal,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
   semigroupKind,
   /**
    * @category type classes
@@ -165,10 +170,5 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  traversableWithIndex,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  zippable
+  traversableWithIndex
 }
