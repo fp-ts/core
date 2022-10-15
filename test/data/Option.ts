@@ -86,9 +86,9 @@ export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
 export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flatMap_
   .tap(FlatMap)
 
-export const composeKleisli: <B, C>(
+export const composeKind: <B, C>(
   bfc: (b: B) => Option<C>
-) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKleisli(
+) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKind(
   FlatMap
 )
 

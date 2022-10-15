@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface CategoryKind<F extends TypeLambda> extends KleisliComposable<F> {
+export interface CategoryKind<F extends TypeLambda> extends ComposableKind<F> {
   readonly idKind: <A>() => <S>(a: A) => Kind<F, S, unknown, never, never, A>
 }
 ```
