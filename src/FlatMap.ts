@@ -1,10 +1,10 @@
 /**
  * @since 3.0.0
  */
+import type { ComposableKind } from "@fp-ts/core/ComposableKind"
 import { flow, pipe } from "@fp-ts/core/Function"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { KleisliComposable } from "@fp-ts/core/KleisliComposable"
 
 /**
  * @category type class
@@ -78,9 +78,9 @@ export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
 /**
  * @since 3.0.0
  */
-export const composeKleisli = <F extends TypeLambda>(
-  Flattenable: FlatMap<F>
-): KleisliComposable<F>["composeKleisli"] => (bc) => (ab) => flow(ab, Flattenable.flatMap(bc))
+export const composeKind = <F extends TypeLambda>(
+  FlatMap: FlatMap<F>
+): ComposableKind<F>["composeKind"] => (bc) => (ab) => flow(ab, FlatMap.flatMap(bc))
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.

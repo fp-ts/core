@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 16
+nav_order: 17
 parent: Modules
 ---
 
@@ -22,6 +22,7 @@ Added in v3.0.0
   - [categoryKind](#categorykind)
   - [comonad](#comonad)
   - [composable](#composable)
+  - [composableKind](#composablekind)
   - [contravariant](#contravariant)
   - [extendable](#extendable)
   - [flatMap](#flatmap)
@@ -29,7 +30,6 @@ Added in v3.0.0
   - [foldableWithIndex](#foldablewithindex)
   - [functor](#functor)
   - [invariant](#invariant)
-  - [kleisliComposable](#kleislicomposable)
   - [monad](#monad)
   - [monoid](#monoid)
   - [monoidal](#monoidal)
@@ -130,6 +130,16 @@ export declare const composable: any
 
 Added in v3.0.0
 
+## composableKind
+
+**Signature**
+
+```ts
+export declare const composableKind: any
+```
+
+Added in v3.0.0
+
 ## contravariant
 
 **Signature**
@@ -196,16 +206,6 @@ Added in v3.0.0
 
 ```ts
 export declare const invariant: any
-```
-
-Added in v3.0.0
-
-## kleisliComposable
-
-**Signature**
-
-```ts
-export declare const kleisliComposable: any
 ```
 
 Added in v3.0.0

@@ -1,6 +1,6 @@
 ---
 title: FlatMap.ts
-nav_order: 10
+nav_order: 11
 parent: Modules
 ---
 
@@ -20,7 +20,7 @@ Added in v3.0.0
 - [type class](#type-class)
   - [FlatMap (interface)](#flatmap-interface)
 - [utils](#utils)
-  - [composeKleisli](#composekleisli)
+  - [composeKind](#composekind)
   - [tap](#tap)
 
 ---
@@ -91,12 +91,12 @@ Added in v3.0.0
 
 # utils
 
-## composeKleisli
+## composeKind
 
 **Signature**
 
 ```ts
-export declare const composeKleisli: <F extends any>(Flattenable: FlatMap<F>) => any
+export declare const composeKind: <F extends any>(FlatMap: FlatMap<F>) => any
 ```
 
 Added in v3.0.0
