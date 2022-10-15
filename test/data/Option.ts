@@ -2,12 +2,15 @@ import * as alternative from "@fp-ts/core/Alternative"
 import type * as applicative from "@fp-ts/core/Applicative"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
+import { pipe } from "@fp-ts/core/Function"
 import * as functor from "@fp-ts/core/Functor"
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
-import type * as retryable from "@fp-ts/core/Retryable"
+import * as retryable from "@fp-ts/core/Retryable"
 import type * as succeed_ from "@fp-ts/core/Succeed"
 import * as zippable from "@fp-ts/core/Zippable"
+import type { Result } from "./Result"
+import { fail, succeed } from "./Result"
 
 export interface None {
   readonly _tag: "None"
@@ -178,13 +181,10 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   zipAllWith
 }
 
-export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
-  catchAll(() => that)
-
-export const firstSuccessOf = <A, B>(
+const firstSuccessOf = <A, B>(
   first: Option<A>,
   second: Option<B>
-): Option<A | B> => isSome(first) ? first : second
+): Option<A | B> => isSome(first) ? first : isSome(second) ? second : none
 
 export const firstSuccessOfMany = <A>(
   start: Option<A>,
@@ -203,9 +203,27 @@ export const firstSuccessOfMany = <A>(
 }
 
 export const Retryable: retryable.Retryable<OptionTypeLambda> = {
+  map,
   firstSuccessOf,
   firstSuccessOfMany
 }
 
+export const orElse: <B>(
+  that: Option<B>
+) => <A>(self: Option<A>) => Option<B | A> = retryable.orElse(Retryable)
+
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
   .fromRetryable(Retryable, () => none)
+
+export const orElseResultF = <F extends TypeLambda>(
+  Retryable: retryable.Retryable<F>
+) =>
+  <S, R2, O2, E2, B>(that: Kind<F, S, R2, O2, E2, B>) =>
+    <R1, O1, E1, A>(
+      self: Kind<F, S, R1, O1, E1, A>
+    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, Result<A, B>> =>
+      Retryable.firstSuccessOf(pipe(self, Retryable.map(fail)), pipe(that, Retryable.map(succeed)))
+
+export const orElseResult: <B>(
+  that: Option<B>
+) => <A>(self: Option<A>) => Option<Result<A, B>> = orElseResultF(Retryable)

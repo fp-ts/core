@@ -26,7 +26,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export interface Retryable<F extends TypeLambda> extends TypeClass<F> {
+export interface Retryable<F extends TypeLambda> extends Functor<F> {
   readonly firstSuccessOf: <S, R1, O1, E1, A, R2, O2, E2, B>(
     first: Kind<F, S, R1, O1, E1, A>,
     second: Kind<F, S, R2, O2, E2, B>
