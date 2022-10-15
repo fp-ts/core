@@ -35,12 +35,12 @@ Added in v3.0.0
   - [monoidal](#monoidal)
   - [semigroup](#semigroup)
   - [semigroupKind](#semigroupkind)
+  - [semigroupal](#semigroupal)
   - [show](#show)
   - [sortable](#sortable)
   - [succeed](#succeed)
   - [traversable](#traversable)
   - [traversableWithIndex](#traversablewithindex)
-  - [zippable](#zippable)
 - [utils](#utils)
   - [hkt](#hkt)
 
@@ -260,6 +260,16 @@ export declare const semigroupKind: any
 
 Added in v3.0.0
 
+## semigroupal
+
+**Signature**
+
+```ts
+export declare const semigroupal: any
+```
+
+Added in v3.0.0
+
 ## show
 
 **Signature**
@@ -306,16 +316,6 @@ Added in v3.0.0
 
 ```ts
 export declare const traversableWithIndex: any
-```
-
-Added in v3.0.0
-
-## zippable
-
-**Signature**
-
-```ts
-export declare const zippable: any
 ```
 
 Added in v3.0.0

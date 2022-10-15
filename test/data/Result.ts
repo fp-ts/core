@@ -1,6 +1,6 @@
 import type * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as zippable from "@fp-ts/core/Zippable"
+import * as semigroupal from "@fp-ts/core/Semigroupal"
 
 export interface Failure<E> {
   readonly _tag: "Failure"
@@ -51,7 +51,7 @@ const zipManyWith = <E, A, B>(
   return succeed(f(out))
 }
 
-export const Zippable: zippable.Zippable<ResultTypeLambda> = {
+export const Semigroupal: semigroupal.Semigroupal<ResultTypeLambda> = {
   map,
   zipWith: (fa, fb, f) =>
     isFailure(fa) ? fa : isFailure(fb) ? fb : succeed(f(fa.success, fb.success)),
@@ -60,9 +60,9 @@ export const Zippable: zippable.Zippable<ResultTypeLambda> = {
 
 export const zip: <E2, B, A>(
   that: Result<E2, B>
-) => <E1>(self: Result<E1, A>) => Result<E2 | E1, readonly [A, B]> = zippable.zip(Zippable)
+) => <E1>(self: Result<E1, A>) => Result<E2 | E1, readonly [A, B]> = semigroupal.zip(Semigroupal)
 
 export const zipWith: <E2, B, A, C>(
   that: Result<E2, B>,
   f: (a: A, b: B) => C
-) => <E1>(self: Result<E1, A>) => Result<E2 | E1, C> = zippable.zipWith(Zippable)
+) => <E1>(self: Result<E1, A>) => Result<E2 | E1, C> = semigroupal.zipWith(Semigroupal)
