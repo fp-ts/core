@@ -156,19 +156,6 @@ export const catchAll = <B>(that: () => Option<B>) =>
 
 export const Do: Option<{}> = some({})
 
-const zipAll = <A>(
-  collection: Iterable<Option<A>>
-): Option<ReadonlyArray<A>> => {
-  const out = []
-  for (const o of collection) {
-    if (isNone(o)) {
-      return none
-    }
-    out.push(o.value)
-  }
-  return some(out)
-}
-
 const zipAllWith = <A, B>(
   collection: Iterable<A>,
   f: (a: A, i: number) => Option<B>
@@ -188,7 +175,6 @@ const zipAllWith = <A, B>(
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   ...Zippable,
   succeed: some,
-  zipAll,
   zipAllWith
 }
 
