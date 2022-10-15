@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.0.3
+
+### Patch Changes
+
+- [#12](https://github.com/fp-ts/core/pull/12) [`7c6fa2c4`](https://github.com/fp-ts/core/commit/7c6fa2c4992dd3aeffbd1e7a9aeb564a62c5f149) Thanks [@mikearnaldi](https://github.com/mikearnaldi)! - type class refactoring
+
 ## 0.0.2
 
 ### Patch Changes
