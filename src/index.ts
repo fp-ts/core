@@ -6,6 +6,7 @@ import * as alternative from "@fp-ts/core/Alternative"
 import * as bifunctor from "@fp-ts/core/Bifunctor"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
+import * as categoryKind from "@fp-ts/core/CategoryKind"
 import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
 import * as contravariant from "@fp-ts/core/Contravariant"
@@ -16,7 +17,6 @@ import * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
 import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
-import * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import * as kleisliComposable from "@fp-ts/core/KleisliComposable"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
@@ -52,6 +52,11 @@ export {
    * @since 3.0.0
    */
   category,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  categoryKind,
   /**
    * @category type classes
    * @since 3.0.0
@@ -101,11 +106,6 @@ export {
    * @since 3.0.0
    */
   invariant,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  kleisliCategory,
   /**
    * @category type classes
    * @since 3.0.0
