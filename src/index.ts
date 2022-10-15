@@ -2,7 +2,6 @@
  * @since 3.0.0
  */
 
-import * as alternative from "@fp-ts/core/Alternative"
 import * as bifunctor from "@fp-ts/core/Bifunctor"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
@@ -21,9 +20,10 @@ import * as invariant from "@fp-ts/core/Invariant"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
 import * as monoidal from "@fp-ts/core/Monoidal"
+import * as monoidKind from "@fp-ts/core/MonoidKind"
 import * as ordering from "@fp-ts/core/Ordering"
-import * as retryable from "@fp-ts/core/Retryable"
 import * as semigroup from "@fp-ts/core/Semigroup"
+import * as semigroupKind from "@fp-ts/core/SemigroupKind"
 import * as show from "@fp-ts/core/Show"
 import * as sortable from "@fp-ts/core/Sortable"
 import * as succeed from "@fp-ts/core/Succeed"
@@ -32,11 +32,6 @@ import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
 import * as zippable from "@fp-ts/core/Zippable"
 
 export {
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  alternative,
   /**
    * @category type classes
    * @since 3.0.0
@@ -127,6 +122,11 @@ export {
    */
   monoidal,
   /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  monoidKind,
+  /**
    * @category data types
    * @since 3.0.0
    */
@@ -135,12 +135,12 @@ export {
    * @category type classes
    * @since 3.0.0
    */
-  retryable,
+  semigroup,
   /**
    * @category type classes
    * @since 3.0.0
    */
-  semigroup,
+  semigroupKind,
   /**
    * @category type classes
    * @since 3.0.0

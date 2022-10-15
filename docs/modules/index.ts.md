@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 17
+nav_order: 16
 parent: Modules
 ---
 
@@ -15,7 +15,6 @@ Added in v3.0.0
 - [data types](#data-types)
   - [ordering](#ordering)
 - [type classes](#type-classes)
-  - [alternative](#alternative)
   - [bifunctor](#bifunctor)
   - [bounded](#bounded)
   - [category](#category)
@@ -32,9 +31,10 @@ Added in v3.0.0
   - [invariant](#invariant)
   - [monad](#monad)
   - [monoid](#monoid)
+  - [monoidKind](#monoidkind)
   - [monoidal](#monoidal)
-  - [retryable](#retryable)
   - [semigroup](#semigroup)
+  - [semigroupKind](#semigroupkind)
   - [show](#show)
   - [sortable](#sortable)
   - [succeed](#succeed)
@@ -59,16 +59,6 @@ export declare const ordering: any
 Added in v3.0.0
 
 # type classes
-
-## alternative
-
-**Signature**
-
-```ts
-export declare const alternative: any
-```
-
-Added in v3.0.0
 
 ## bifunctor
 
@@ -230,6 +220,16 @@ export declare const monoid: any
 
 Added in v3.0.0
 
+## monoidKind
+
+**Signature**
+
+```ts
+export declare const monoidKind: any
+```
+
+Added in v3.0.0
+
 ## monoidal
 
 **Signature**
@@ -240,22 +240,22 @@ export declare const monoidal: any
 
 Added in v3.0.0
 
-## retryable
-
-**Signature**
-
-```ts
-export declare const retryable: any
-```
-
-Added in v3.0.0
-
 ## semigroup
 
 **Signature**
 
 ```ts
 export declare const semigroup: any
+```
+
+Added in v3.0.0
+
+## semigroupKind
+
+**Signature**
+
+```ts
+export declare const semigroupKind: any
 ```
 
 Added in v3.0.0
