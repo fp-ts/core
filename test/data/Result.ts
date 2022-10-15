@@ -33,11 +33,10 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
   map
 }
 
-const zipManyWith = <E, A, B>(
+const zipMany = <E, A>(
   start: Result<E, A>,
-  others: Iterable<Result<E, A>>,
-  f: (as: [A, ...ReadonlyArray<A>]) => B
-): Result<E, B> => {
+  others: Iterable<Result<E, A>>
+): Result<E, [A, ...ReadonlyArray<A>]> => {
   if (isFailure(start)) {
     return start
   }
@@ -48,14 +47,14 @@ const zipManyWith = <E, A, B>(
     }
     out.push(r.success)
   }
-  return succeed(f(out))
+  return succeed(out)
 }
 
 export const Semigroupal: semigroupal.Semigroupal<ResultTypeLambda> = {
   map,
   zipWith: (fa, fb, f) =>
     isFailure(fa) ? fa : isFailure(fb) ? fb : succeed(f(fa.success, fb.success)),
-  zipManyWith
+  zipMany
 }
 
 export const zip: <E2, B, A>(
