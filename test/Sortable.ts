@@ -75,17 +75,17 @@ describe("Sortable", () => {
   })
 
   it("leq", () => {
-    const f = _.leq(number.Compare)
-    U.deepStrictEqual(pipe(0, f(1)), true)
-    U.deepStrictEqual(pipe(1, f(1)), true)
-    U.deepStrictEqual(pipe(2, f(1)), false)
+    const leq = _.leq(number.Compare)
+    U.deepStrictEqual(leq(0, 1), true)
+    U.deepStrictEqual(leq(1, 1), true)
+    U.deepStrictEqual(leq(2, 1), false)
   })
 
   it("geq", () => {
-    const f = _.geq(number.Compare)
-    U.deepStrictEqual(pipe(0, f(1)), false)
-    U.deepStrictEqual(pipe(1, f(1)), true)
-    U.deepStrictEqual(pipe(2, f(1)), true)
+    const geq = _.geq(number.Compare)
+    U.deepStrictEqual(geq(0, 1), false)
+    U.deepStrictEqual(geq(1, 1), true)
+    U.deepStrictEqual(geq(2, 1), true)
   })
 
   it("min", () => {
@@ -96,11 +96,11 @@ describe("Sortable", () => {
         _.contramap((a: A) => a.a)
       )
     )
-    U.deepStrictEqual(pipe({ a: 1 }, min({ a: 2 })), { a: 1 })
-    U.deepStrictEqual(pipe({ a: 2 }, min({ a: 1 })), { a: 1 })
+    U.deepStrictEqual(min({ a: 1 }, { a: 2 }), { a: 1 })
+    U.deepStrictEqual(min({ a: 2 }, { a: 1 }), { a: 1 })
     const first = { a: 1 }
     const second = { a: 1 }
-    U.strictEqual(pipe(first, min(second)), first)
+    U.strictEqual(min(first, second), first)
   })
 
   it("max", () => {
@@ -111,10 +111,10 @@ describe("Sortable", () => {
         _.contramap((a: A) => a.a)
       )
     )
-    U.deepStrictEqual(pipe({ a: 1 }, max({ a: 2 })), { a: 2 })
-    U.deepStrictEqual(pipe({ a: 2 }, max({ a: 1 })), { a: 2 })
+    U.deepStrictEqual(max({ a: 1 }, { a: 2 }), { a: 2 })
+    U.deepStrictEqual(max({ a: 2 }, { a: 1 }), { a: 2 })
     const first = { a: 1 }
     const second = { a: 1 }
-    U.strictEqual(pipe(first, max(second)), first)
+    U.strictEqual(max(first, second), first)
   })
 })
