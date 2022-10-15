@@ -3,7 +3,6 @@
  */
 
 import * as alternative from "@fp-ts/core/Alternative"
-import * as applicative from "@fp-ts/core/Applicative"
 import * as bifunctor from "@fp-ts/core/Bifunctor"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
@@ -21,6 +20,7 @@ import * as kleisliCategory from "@fp-ts/core/KleisliCategory"
 import * as kleisliComposable from "@fp-ts/core/KleisliComposable"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
+import * as monoidal from "@fp-ts/core/Monoidal"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as retryable from "@fp-ts/core/Retryable"
 import * as semigroup from "@fp-ts/core/Semigroup"
@@ -37,11 +37,6 @@ export {
    * @since 3.0.0
    */
   alternative,
-  /**
-   * @category type classes
-   * @since 3.0.0
-   */
-  applicative,
   /**
    * @category type classes
    * @since 3.0.0
@@ -126,6 +121,11 @@ export {
    * @since 3.0.0
    */
   monoid,
+  /**
+   * @category type classes
+   * @since 3.0.0
+   */
+  monoidal,
   /**
    * @category data types
    * @since 3.0.0

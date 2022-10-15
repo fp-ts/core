@@ -12,7 +12,7 @@ import * as zippable from "@fp-ts/core/Zippable"
  * @category type class
  * @since 3.0.0
  */
-export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
+export interface Monoidal<F extends TypeLambda> extends Zippable<F>, Succeed<F> {
   /** traverseWithIndex */
   readonly zipAllWith: <S, R, O, E, A, B>(
     collection: Iterable<A>,
@@ -25,9 +25,9 @@ export interface Applicative<F extends TypeLambda> extends Zippable<F>, Succeed<
  *
  * @since 3.0.0
  */
-export const liftMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
+export const liftMonoid = <F extends TypeLambda>(Monoidal: Monoidal<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
     monoid.fromSemigroup(
-      zippable.liftSemigroup(Applicative)<A, S, R, O, E>(Monoid),
-      Applicative.succeed(Monoid.empty)
+      zippable.liftSemigroup(Monoidal)<A, S, R, O, E>(Monoid),
+      Monoidal.succeed(Monoid.empty)
     )
