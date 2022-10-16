@@ -25,7 +25,6 @@ import * as ordering from "@fp-ts/core/Ordering"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as semigroupal from "@fp-ts/core/Semigroupal"
 import * as semigroupKind from "@fp-ts/core/SemigroupKind"
-import * as show from "@fp-ts/core/Show"
 import * as sortable from "@fp-ts/core/Sortable"
 import * as succeed from "@fp-ts/core/Succeed"
 import * as traversable from "@fp-ts/core/Traversable"
@@ -146,11 +145,6 @@ export {
    * @since 1.0.0
    */
   semigroupKind,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  show,
   /**
    * @category type classes
    * @since 1.0.0
