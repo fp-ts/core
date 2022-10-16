@@ -21,7 +21,6 @@ Added in v1.0.0
   - [Ordering (type alias)](#ordering-type-alias)
 - [utils](#utils)
   - [reverse](#reverse)
-  - [sign](#sign)
 
 ---
 
@@ -83,16 +82,6 @@ Added in v1.0.0
 
 ```ts
 export declare const reverse: (o: Ordering) => Ordering
-```
-
-Added in v1.0.0
-
-## sign
-
-**Signature**
-
-```ts
-export declare const sign: (n: number) => Ordering
 ```
 
 Added in v1.0.0
