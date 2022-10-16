@@ -34,7 +34,7 @@ export const mapLeft = <F extends TypeLambda>(
  */
 export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>["map"] =>
   <A, B>(f: (a: A) => B): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
-    Bifunctor.mapBoth(e => e, f)
+    Bifunctor.mapBoth(identity, f)
 
 /**
  * Returns a default `mapBoth` composition.

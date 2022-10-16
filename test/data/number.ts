@@ -2,7 +2,7 @@ import * as bounded from "@fp-ts/core/Bounded"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
-import * as compare from "@fp-ts/core/Sortable"
+import * as sortable from "@fp-ts/core/Sortable"
 
 export const sum = (first: number, second: number): number => first + second
 
@@ -29,8 +29,8 @@ export const SemigroupMultiply: semigroup.Semigroup<number> = {
   }
 }
 
-export const Compare: compare.Sortable<number> = compare.fromCompare((a1, a2) =>
+export const Sortable: sortable.Sortable<number> = sortable.fromCompare((a1, a2) =>
   a1 < a2 ? -1 : a1 > a2 ? 1 : 0
 )
 
-export const Bounded: bounded.Bounded<number> = bounded.fromSortable(Compare, Infinity, -Infinity)
+export const Bounded: bounded.Bounded<number> = bounded.fromSortable(Sortable, Infinity, -Infinity)

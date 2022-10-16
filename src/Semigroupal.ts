@@ -79,7 +79,7 @@ export const ap = <F extends TypeLambda>(Semigroupal: Semigroupal<F>): <S, R2, O
 ) => <R1, O1, E1, B>(
   self: Kind<F, S, R1, O1, E1, (a: A) => B>
 ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B> =>
-  fa => fab => Semigroupal.zipWith(fa, fab, (a, f) => f(a))
+  (fa) => (fab) => Semigroupal.zipWith(fa, fab, (a, f) => f(a))
 
 /**
  * @since 1.0.0
