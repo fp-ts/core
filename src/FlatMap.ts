@@ -23,16 +23,12 @@ export interface FlatMap<M extends TypeLambda> extends Functor<M> {
  * @category sequencing
  * @since 1.0.0
  */
-export const zipLeft = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
-  const tap_ = tap(FlatMap)
-  return <S, R2, O2, E2>(
+export const zipLeft = <F extends TypeLambda>(FlatMap: FlatMap<F>) =>
+  <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
   ): (<R1, O1, E1, A>(
     self: Kind<F, S, R1, O1, E1, A>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => {
-    return tap_(() => that)
-  }
-}
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => tap(FlatMap)(() => that)
 
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
@@ -40,15 +36,12 @@ export const zipLeft = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
  * @category sequencing
  * @since 1.0.0
  */
-export const zipRight = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
-  return <S, R2, O2, E2, A>(
+export const zipRight = <F extends TypeLambda>(FlatMap: FlatMap<F>) =>
+  <S, R2, O2, E2, A>(
     that: Kind<F, S, R2, O2, E2, A>
   ): (<R1, O1, E1>(
     self: Kind<F, S, R1, O1, E1, unknown>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => {
-    return FlatMap.flatMap(() => that)
-  }
-}
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => FlatMap.flatMap(() => that)
 
 /**
  * @category do notation

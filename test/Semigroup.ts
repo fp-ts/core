@@ -1,4 +1,6 @@
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as semigroup from "@fp-ts/core/Semigroup"
+import * as sortable from "@fp-ts/core/Sortable"
 import * as number from "./data/number"
 import * as string from "./data/string"
 import * as U from "./util"
@@ -10,14 +12,32 @@ describe("Semigroup", () => {
     U.deepStrictEqual(S.combineMany("a", ["b"]), "ab")
   })
 
-  it("min", () => {
-    const S = semigroup.min(number.Compare)
-    U.deepStrictEqual(S.combineMany(1, [3, 2]), 1)
+  describe("min", () => {
+    it("should return the minimum", () => {
+      const S = semigroup.min(number.Sortable)
+      U.deepStrictEqual(S.combineMany(1, [3, 2]), 1)
+    })
+
+    it("should return the last minimum", () => {
+      type Item = { a: number }
+      const S = semigroup.min(pipe(number.Sortable, sortable.contramap((_: Item) => _.a)))
+      const item: Item = { a: 1 }
+      U.strictEqual(S.combineMany({ a: 2 }, [{ a: 1 }, item]), item)
+    })
   })
 
-  it("max", () => {
-    const S = semigroup.max(number.Compare)
-    U.deepStrictEqual(S.combineMany(1, [3, 2]), 3)
+  describe("max", () => {
+    it("should return the maximum", () => {
+      const S = semigroup.max(number.Sortable)
+      U.deepStrictEqual(S.combineMany(1, [3, 2]), 3)
+    })
+
+    it("should return the last minimum", () => {
+      type Item = { a: number }
+      const S = semigroup.max(pipe(number.Sortable, sortable.contramap((_: Item) => _.a)))
+      const item: Item = { a: 2 }
+      U.strictEqual(S.combineMany({ a: 1 }, [{ a: 2 }, item]), item)
+    })
   })
 
   it("struct", () => {

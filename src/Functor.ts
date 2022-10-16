@@ -74,9 +74,8 @@ const let_ = <F extends TypeLambda>(
   f: (a: A) => B
 ) => <S, R, O, E>(
   self: Kind<F, S, R, O, E, A>
-) => Kind<F, S, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) => {
-  return (name, f) => F.map((a) => Object.assign({}, a, { [name]: f(a) }) as any)
-}
+) => Kind<F, S, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
+  (name, f) => F.map((a) => Object.assign({}, a, { [name]: f(a) }) as any)
 
 export {
   /**

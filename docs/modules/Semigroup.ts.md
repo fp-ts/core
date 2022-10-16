@@ -54,7 +54,7 @@ Added in v1.0.0
 
 ## max
 
-Get a semigroup where `combine` will return the maximum, based on the provided order.
+`Semigroup` that returns last maximum of elements.
 
 **Signature**
 
@@ -66,7 +66,7 @@ Added in v1.0.0
 
 ## min
 
-Get a semigroup where `combine` will return the minimum, based on the provided order.
+`Semigroup` that returns last minimum of elements.
 
 **Signature**
 

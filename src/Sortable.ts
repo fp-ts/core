@@ -163,19 +163,14 @@ export const max = <A>(Sortable: Sortable<A>) =>
  *
  * @since 1.0.0
  */
-export const clamp = <A>(Sortable: Sortable<A>) => {
-  const min_ = min(Sortable)
-  const max_ = max(Sortable)
-  return (minimum: A, maximum: A) => (a: A) => min_(maximum, max_(minimum, a))
-}
+export const clamp = <A>(Sortable: Sortable<A>) =>
+  (minimum: A, maximum: A) => (a: A) => min(Sortable)(maximum, max(Sortable)(minimum, a))
 
 /**
  * Test whether a value is between a minimum and a maximum (inclusive).
  *
  * @since 1.0.0
  */
-export const between = <A>(Sortable: Sortable<A>) => {
-  const lt_ = lt(Sortable)
-  const gt_ = gt(Sortable)
-  return (minimum: A, maximum: A) => (a: A): boolean => !lt_(a, minimum) && !gt_(a, maximum)
-}
+export const between = <A>(Sortable: Sortable<A>) =>
+  (minimum: A, maximum: A) =>
+    (a: A): boolean => !lt(Sortable)(a, minimum) && !gt(Sortable)(a, maximum)
