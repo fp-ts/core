@@ -24,10 +24,4 @@ describe("Ordering", () => {
     deepStrictEqual(_.reverse(0), 0)
     deepStrictEqual(_.reverse(1), -1)
   })
-
-  it("sign", () => {
-    deepStrictEqual(_.sign(10), 1)
-    deepStrictEqual(_.sign(0), 0)
-    deepStrictEqual(_.sign(-10), -1)
-  })
 })

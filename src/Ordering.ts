@@ -51,8 +51,3 @@ export const Semigroup: semigroup.Semigroup<Ordering> = {
  * @since 1.0.0
  */
 export const Monoid: monoid.Monoid<Ordering> = monoid.fromSemigroup(Semigroup, 0)
-
-/**
- * @since 1.0.0
- */
-export const sign = (n: number): Ordering => (n <= -1 ? -1 : n >= 1 ? 1 : 0)
