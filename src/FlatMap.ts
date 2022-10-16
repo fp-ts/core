@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { ComposableKind } from "@fp-ts/core/ComposableKind"
 import type { Functor } from "@fp-ts/core/Functor"
@@ -8,7 +8,7 @@ import { pipe } from "@fp-ts/core/internal/Function"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface FlatMap<M extends TypeLambda> extends Functor<M> {
   readonly flatMap: <A, S, R2, O2, E2, B>(
@@ -21,7 +21,7 @@ export interface FlatMap<M extends TypeLambda> extends Functor<M> {
  * produced by the effect.
  *
  * @category sequencing
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipLeft = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
   const tap_ = tap(FlatMap)
@@ -38,7 +38,7 @@ export const zipLeft = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
  * A variant of `flatMap` that ignores the value produced by this effect.
  *
  * @category sequencing
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipRight = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
   return <S, R2, O2, E2, A>(
@@ -52,7 +52,7 @@ export const zipRight = <F extends TypeLambda>(FlatMap: FlatMap<F>) => {
 
 /**
  * @category do notation
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
   <N extends string, A extends object, S, R2, O2, E2, B>(
@@ -76,7 +76,7 @@ export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
     )
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const composeKind = <F extends TypeLambda>(
   FlatMap: FlatMap<F>
@@ -85,7 +85,7 @@ export const composeKind = <F extends TypeLambda>(
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const tap = <F extends TypeLambda>(FlatMap: FlatMap<F>) =>
   <A, S, R2, O2, E2>(

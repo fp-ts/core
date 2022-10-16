@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -9,7 +9,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
   /**
@@ -31,7 +31,7 @@ export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
 /**
  * Returns a default `zipWith` composition.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipWithComposition = <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalF: Semigroupal<F>,
@@ -56,7 +56,7 @@ export const zipWithComposition = <F extends TypeLambda, G extends TypeLambda>(
 /**
  * Returns a default `zipMany` composition.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipManyComposition = <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalF: Semigroupal<F>,
@@ -72,7 +72,7 @@ export const zipManyComposition = <F extends TypeLambda, G extends TypeLambda>(
     )
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const ap = <F extends TypeLambda>(Semigroupal: Semigroupal<F>): <S, R2, O2, E2, A>(
   fa: Kind<F, S, R2, O2, E2, A>
@@ -82,7 +82,7 @@ export const ap = <F extends TypeLambda>(Semigroupal: Semigroupal<F>): <S, R2, O
   fa => fab => Semigroupal.zipWith(fa, fab, (a, f) => f(a))
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zip = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R2, O2, E2, B, A>(that: Kind<F, S, R2, O2, E2, B>) =>
@@ -95,7 +95,7 @@ export const zip = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
  * Zips this effect with the specified effect using the
  * specified combiner function.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipWith = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R2, O2, E2, B, A, C>(that: Kind<F, S, R2, O2, E2, B>, f: (a: A, b: B) => C) =>
@@ -107,7 +107,7 @@ export const zipWith = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
  * in parallel, this effect result returned. If either side fails, then the
  * other side will **NOT** be interrupted.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipLeftPar = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R2, O2, E2>(
@@ -122,7 +122,7 @@ export const zipLeftPar = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
  * in parallel, returning result of provided effect. If either side fails,
  * then the other side will **NOT** be interrupted.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipRightPar = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R2, O2, E2, A>(
@@ -135,7 +135,7 @@ export const zipRightPar = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =
 /**
  * A variant of `FlatMap.bind` that sequentially ignores the scope.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const bindRight = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <N extends string, A extends object, S, R2, O2, E2, B>(
@@ -156,7 +156,7 @@ export const bindRight = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
 /**
  * Zips this effect with the specified effect.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const zipFlatten = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R2, O2, E2, B>(
@@ -170,7 +170,7 @@ export const zipFlatten = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
 /**
  * Lift a semigroup into 'F', the inner values are combined using the provided `Semigroup`.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const liftSemigroup = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> =>
@@ -179,7 +179,7 @@ export const liftSemigroup = <F extends TypeLambda>(Semigroupal: Semigroupal<F>)
 /**
  * Lifts a binary function into `F`.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const lift2 = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <A, B, C>(f: (a: A, b: B) => C) =>
@@ -189,7 +189,7 @@ export const lift2 = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> => Semigroupal.zipWith(fa, fb, f)
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 const zip3With = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R1, O1, E1, A, R2, O2, E2, B, R3, O3, E3, C, D>(
@@ -209,7 +209,7 @@ const zip3With = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
 /**
  * Lifts a ternary function into 'F'.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const lift3 = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>

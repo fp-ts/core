@@ -1,21 +1,21 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export declare const URI: unique symbol
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface TypeClass<F extends TypeLambda> {
   readonly [URI]?: F
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface TypeLambda {
   readonly InOut1: unknown
@@ -26,7 +26,7 @@ export interface TypeLambda {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export type Kind<F extends TypeLambda, InOut1, In1, Out3, Out2, Out1> = F extends {
   readonly type: unknown

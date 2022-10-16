@@ -6,7 +6,7 @@ parent: Modules
 
 ## FlatMap overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -40,7 +40,7 @@ export declare const bind: <M extends any>(
 ) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # sequencing
 
@@ -57,7 +57,7 @@ export declare const zipLeft: <F extends any>(
 ) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipRight
 
@@ -71,7 +71,7 @@ export declare const zipRight: <F extends any>(
 ) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -87,7 +87,7 @@ export interface FlatMap<M extends TypeLambda> extends Functor<M> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -99,7 +99,7 @@ Added in v3.0.0
 export declare const composeKind: <F extends any>(FlatMap: FlatMap<F>) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## tap
 
@@ -113,4 +113,4 @@ export declare const tap: <F extends any>(
 ) => <A, S, R2, O2, E2>(f: (a: A) => any) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

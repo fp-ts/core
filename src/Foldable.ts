@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
@@ -7,7 +7,7 @@ import type { Monoid } from "@fp-ts/core/Monoid"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
   readonly reduce: <A, B>(
@@ -22,7 +22,7 @@ export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const foldMap = <F extends TypeLambda>(Foldable: Foldable<F>) =>
   <M>(Monoid: Monoid<M>) =>

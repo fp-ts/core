@@ -1,12 +1,12 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { SemigroupKind } from "@fp-ts/core/SemigroupKind"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface MonoidKind<F extends TypeLambda> extends SemigroupKind<F> {
   /**
@@ -20,7 +20,7 @@ export interface MonoidKind<F extends TypeLambda> extends SemigroupKind<F> {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const fromSemigroupKind = <F extends TypeLambda>(
   SemigroupKind: SemigroupKind<F>,

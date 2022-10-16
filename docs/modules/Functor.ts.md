@@ -6,7 +6,7 @@ parent: Modules
 
 ## Functor overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -40,7 +40,7 @@ export declare const bindTo: <F extends any>(
 ) => <N extends string>(name: N) => <S, R, O, E, A>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## let
 
@@ -55,7 +55,7 @@ export declare const let: <F extends any>(
 ) => <S, R, O, E>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # mapping
 
@@ -67,7 +67,7 @@ Added in v3.0.0
 export declare const as: <F extends any>(Functor: Functor<F>) => <B>(b: B) => <S, R, O, E>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## flap
 
@@ -77,7 +77,7 @@ Added in v3.0.0
 export declare const flap: <F extends any>(Functor: Functor<F>) => <A>(a: A) => <S, R, O, E, B>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## unit
 
@@ -87,7 +87,7 @@ Added in v3.0.0
 export declare const unit: <F extends any>(Functor: Functor<F>) => <S, R, O, E>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # tuple sequencing
 
@@ -99,7 +99,7 @@ Added in v3.0.0
 export declare const tupled: <F extends any>(Functor: Functor<F>) => <S, R, O, E, A>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -113,7 +113,7 @@ export interface Functor<F extends TypeLambda> extends TypeClass<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -130,4 +130,4 @@ export declare const mapComposition: <F extends any, G extends any>(
 ) => <A, B>(f: (a: A) => B) => <FS, FR, FO, FE, GS, GR, GO, GE>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

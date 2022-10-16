@@ -6,7 +6,7 @@ parent: Modules
 
 ## MonoidKind overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -36,7 +36,7 @@ export interface MonoidKind<F extends TypeLambda> extends SemigroupKind<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -48,4 +48,4 @@ Added in v3.0.0
 export declare const fromSemigroupKind: <F extends any>(SemigroupKind: any, emptyKind: <S>() => any) => MonoidKind<F>
 ```
 
-Added in v3.0.0
+Added in v1.0.0

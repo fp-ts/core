@@ -8,7 +8,7 @@ parent: Modules
 
 Kleisli categories.
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -31,4 +31,4 @@ export interface CategoryKind<F extends TypeLambda> extends ComposableKind<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

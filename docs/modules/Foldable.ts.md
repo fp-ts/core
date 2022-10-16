@@ -6,7 +6,7 @@ parent: Modules
 
 ## Foldable overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -33,7 +33,7 @@ export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -47,4 +47,4 @@ export declare const foldMap: <F extends any>(
 ) => <M>(Monoid: any) => <A>(f: (a: A) => M) => <S, R, O, E>(self: any) => M
 ```
 
-Added in v3.0.0
+Added in v1.0.0

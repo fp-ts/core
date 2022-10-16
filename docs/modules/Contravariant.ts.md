@@ -6,7 +6,7 @@ parent: Modules
 
 ## Contravariant overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -29,4 +29,4 @@ export interface Contravariant<F extends TypeLambda> extends TypeClass<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

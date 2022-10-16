@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
@@ -10,7 +10,7 @@ import type { Semigroup } from "@fp-ts/core/Semigroup"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Sortable<A> {
   readonly compare: (first: A, second: A) => Ordering
@@ -18,7 +18,7 @@ export interface Sortable<A> {
 
 /**
  * @category type lambdas
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface SortableTypeLambda extends TypeLambda {
   readonly type: Sortable<this["In1"]>
@@ -26,7 +26,7 @@ export interface SortableTypeLambda extends TypeLambda {
 
 /**
  * @category constructors
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const fromCompare = <A>(compare: Sortable<A>["compare"]): Sortable<A> => ({
   compare: (first, second) => first === second ? 0 : compare(first, second)
@@ -35,7 +35,7 @@ export const fromCompare = <A>(compare: Sortable<A>["compare"]): Sortable<A> => 
 /**
  * Given a tuple of `Compare`s returns a `Compare` for the tuple.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...compares: { [K in keyof A]: Sortable<A[K]> }
@@ -52,13 +52,13 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
   })
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const reverse = <A>(Sortable: Sortable<A>): Sortable<A> =>
   fromCompare((first, second) => Sortable.compare(second, first))
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
   (self: Sortable<A>): Sortable<B> =>
@@ -66,7 +66,7 @@ export const contramap = <B, A>(f: (b: B) => A) =>
 
 /**
  * @category instances
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const getSemigroup = <A>(): Semigroup<Sortable<A>> => ({
   combine: (s1, s2) =>
@@ -95,14 +95,14 @@ export const getSemigroup = <A>(): Semigroup<Sortable<A>> => ({
 
 /**
  * @category instances
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const getMonoid = <A>(): Monoid<Sortable<A>> =>
   monoid.fromSemigroup(getSemigroup<A>(), fromCompare(() => 0))
 
 /**
  * @category instances
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const Contravariant: contravariant.Contravariant<SortableTypeLambda> = {
   contramap
@@ -111,7 +111,7 @@ export const Contravariant: contravariant.Contravariant<SortableTypeLambda> = {
 /**
  * Test whether one value is _strictly less than_ another.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const lt = <A>(Sortable: Sortable<A>) =>
   (first: A, second: A) => Sortable.compare(first, second) === -1
@@ -119,7 +119,7 @@ export const lt = <A>(Sortable: Sortable<A>) =>
 /**
  * Test whether one value is _strictly greater than_ another.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const gt = <A>(Sortable: Sortable<A>) =>
   (first: A, second: A) => Sortable.compare(first, second) === 1
@@ -127,7 +127,7 @@ export const gt = <A>(Sortable: Sortable<A>) =>
 /**
  * Test whether one value is _non-strictly less than_ another.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const leq = <A>(Sortable: Sortable<A>) =>
   (first: A, second: A) => Sortable.compare(first, second) !== 1
@@ -135,7 +135,7 @@ export const leq = <A>(Sortable: Sortable<A>) =>
 /**
  * Test whether one value is _non-strictly greater than_ another.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const geq = <A>(Sortable: Sortable<A>) =>
   (first: A, second: A) => Sortable.compare(first, second) !== -1
@@ -143,7 +143,7 @@ export const geq = <A>(Sortable: Sortable<A>) =>
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const min = <A>(Sortable: Sortable<A>) =>
   (first: A, second: A): A =>
@@ -152,7 +152,7 @@ export const min = <A>(Sortable: Sortable<A>) =>
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const max = <A>(Sortable: Sortable<A>) =>
   (first: A, second: A): A =>
@@ -161,7 +161,7 @@ export const max = <A>(Sortable: Sortable<A>) =>
 /**
  * Clamp a value between a minimum and a maximum.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const clamp = <A>(Sortable: Sortable<A>) => {
   const min_ = min(Sortable)
@@ -172,7 +172,7 @@ export const clamp = <A>(Sortable: Sortable<A>) => {
 /**
  * Test whether a value is between a minimum and a maximum (inclusive).
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const between = <A>(Sortable: Sortable<A>) => {
   const lt_ = lt(Sortable)

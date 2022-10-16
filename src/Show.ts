@@ -1,12 +1,12 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type * as contravariant from "@fp-ts/core/Contravariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Show<A> {
   readonly show: (a: A) => string
@@ -18,7 +18,7 @@ export interface Show<A> {
 
 /**
  * @category type lambdas
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface ShowTypeLambda extends TypeLambda {
   readonly type: Show<this["In1"]>
@@ -29,7 +29,7 @@ export interface ShowTypeLambda extends TypeLambda {
 // -------------------------------------------------------------------------------------
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const contramap: <B, A>(f: (b: B) => A) => (self: Show<A>) => Show<B> = (f) =>
   (self) => ({
@@ -38,14 +38,14 @@ export const contramap: <B, A>(f: (b: B) => A) => (self: Show<A>) => Show<B> = (
 
 /**
  * @category instances
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const Contravariant: contravariant.Contravariant<ShowTypeLambda> = {
   contramap
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const struct = <A>(
   shows: { [K in keyof A]: Show<A[K]> }
@@ -66,7 +66,7 @@ export const struct = <A>(
 })
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...shows: { [K in keyof A]: Show<A[K]> }

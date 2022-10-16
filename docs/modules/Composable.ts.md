@@ -6,7 +6,7 @@ parent: Modules
 
 ## Composable overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -31,4 +31,4 @@ export interface Composable<F extends TypeLambda> extends TypeClass<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

@@ -6,7 +6,7 @@ parent: Modules
 
 ## Show overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -35,7 +35,7 @@ Added in v3.0.0
 export declare const Contravariant: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -49,7 +49,7 @@ export interface Show<A> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type lambdas
 
@@ -63,7 +63,7 @@ export interface ShowTypeLambda extends TypeLambda {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -75,7 +75,7 @@ Added in v3.0.0
 export declare const contramap: <B, A>(f: (b: B) => A) => (self: Show<A>) => Show<B>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## struct
 
@@ -85,7 +85,7 @@ Added in v3.0.0
 export declare const struct: <A>(shows: { [K in keyof A]: Show<A[K]> }) => Show<{ readonly [K in keyof A]: A[K] }>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## tuple
 
@@ -97,4 +97,4 @@ export declare const tuple: <A extends readonly unknown[]>(
 ) => Show<Readonly<A>>
 ```
 
-Added in v3.0.0
+Added in v1.0.0

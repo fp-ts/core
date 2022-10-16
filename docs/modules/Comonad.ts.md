@@ -6,7 +6,7 @@ parent: Modules
 
 ## Comonad overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -29,4 +29,4 @@ export interface Comonad<F extends TypeLambda> extends Extendable<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

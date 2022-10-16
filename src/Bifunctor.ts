@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
@@ -7,7 +7,7 @@ import { identity } from "@fp-ts/core/internal/Function"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
   readonly mapBoth: <E, G, A, B>(
@@ -17,7 +17,7 @@ export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const mapLeft = <F extends TypeLambda>(
   Bifunctor: Bifunctor<F>
@@ -30,7 +30,7 @@ export const mapLeft = <F extends TypeLambda>(
 /**
  * Returns a default `map` implementation.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>["map"] =>
   <A, B>(f: (a: A) => B): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
@@ -39,7 +39,7 @@ export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>["
 /**
  * Returns a default `mapBoth` composition.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const mapBothComposition = <F extends TypeLambda, G extends TypeLambda>(
   FunctorF: Functor<F>,
