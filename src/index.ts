@@ -22,11 +22,11 @@ import * as monoid from "@fp-ts/core/Monoid"
 import * as monoidal from "@fp-ts/core/Monoidal"
 import * as monoidKind from "@fp-ts/core/MonoidKind"
 import * as ordering from "@fp-ts/core/Ordering"
+import * as pointed from "@fp-ts/core/Pointed"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as semigroupal from "@fp-ts/core/Semigroupal"
 import * as semigroupKind from "@fp-ts/core/SemigroupKind"
 import * as sortable from "@fp-ts/core/Sortable"
-import * as succeed from "@fp-ts/core/Succeed"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
 
@@ -134,6 +134,11 @@ export {
    * @category type classes
    * @since 1.0.0
    */
+  pointed,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
   semigroup,
   /**
    * @category type classes
@@ -150,11 +155,6 @@ export {
    * @since 1.0.0
    */
   sortable,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  succeed,
   /**
    * @category type classes
    * @since 1.0.0

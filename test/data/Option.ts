@@ -5,9 +5,9 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as monoidal from "@fp-ts/core/Monoidal"
 import * as monoidKind from "@fp-ts/core/MonoidKind"
+import type * as pointed from "@fp-ts/core/Pointed"
 import * as semigroupal from "@fp-ts/core/Semigroupal"
 import type * as semigroupKind from "@fp-ts/core/SemigroupKind"
-import type * as succeed_ from "@fp-ts/core/Succeed"
 
 export interface None {
   readonly _tag: "None"
@@ -32,8 +32,8 @@ export const none: Option<never> = { _tag: "None" }
 
 export const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
-export const Succeed: succeed_.Succeed<OptionTypeLambda> = {
-  succeed: some
+export const Pointed: pointed.Pointed<OptionTypeLambda> = {
+  of: some
 }
 
 export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
@@ -171,7 +171,7 @@ const zipAll = <A>(
 
 export const Monoidal: monoidal.Monoidal<OptionTypeLambda> = {
   ...Semigroupal,
-  succeed: some,
+  of: some,
   zipAll
 }
 

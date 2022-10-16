@@ -24,7 +24,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Monad<F extends TypeLambda> extends Succeed<F>, FlatMap<F> {}
+export interface Monad<F extends TypeLambda> extends Pointed<F>, FlatMap<F> {}
 ```
 
 Added in v1.0.0
