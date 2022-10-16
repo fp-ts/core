@@ -36,7 +36,6 @@ Added in v1.0.0
   - [semigroup](#semigroup)
   - [semigroupKind](#semigroupkind)
   - [semigroupal](#semigroupal)
-  - [show](#show)
   - [sortable](#sortable)
   - [succeed](#succeed)
   - [traversable](#traversable)
@@ -266,16 +265,6 @@ Added in v1.0.0
 
 ```ts
 export declare const semigroupal: any
-```
-
-Added in v1.0.0
-
-## show
-
-**Signature**
-
-```ts
-export declare const show: any
 ```
 
 Added in v1.0.0

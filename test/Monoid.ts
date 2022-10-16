@@ -20,9 +20,9 @@ describe("Monoid", () => {
 
   it("reverse", () => {
     const M = monoid.reverse(string.Monoid)
-    U.deepStrictEqual(M.combineMany("a", "b"), "ba")
-    U.deepStrictEqual(M.combineMany("a", M.empty), "a")
-    U.deepStrictEqual(M.combineMany(M.empty, "a"), "a")
+    U.deepStrictEqual(M.combineMany("a", ["b"]), "ba")
+    U.deepStrictEqual(M.combineMany("a", [M.empty]), "a")
+    U.deepStrictEqual(M.combineMany(M.empty, ["a"]), "a")
   })
 
   describe("struct", () => {
