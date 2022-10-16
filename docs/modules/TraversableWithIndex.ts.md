@@ -6,7 +6,7 @@ parent: Modules
 
 ## TraversableWithIndex overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -35,7 +35,7 @@ export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -54,4 +54,4 @@ export declare const traverseWithIndexComposition: <F extends any, I, G extends 
 ) => <A, S, R, O, E, B>(f: (a: A, ij: readonly [I, J]) => any) => <FS, FR, FO, FE, GS, GR, GO, GE>(fga: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

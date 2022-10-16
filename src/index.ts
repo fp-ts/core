@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 
 import * as bifunctor from "@fp-ts/core/Bifunctor"
@@ -34,141 +34,141 @@ import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
 export {
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   bifunctor,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   bounded,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   category,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   categoryKind,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   comonad,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   composable,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   composableKind,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   contravariant,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   extendable,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   flatMap,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   foldable,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   foldableWithIndex,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   functor,
   /**
-   * @since 3.0.0
+   * @since 1.0.0
    */
   hkt,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   invariant,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   monad,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   monoid,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   monoidal,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   monoidKind,
   /**
    * @category data types
-   * @since 3.0.0
+   * @since 1.0.0
    */
   ordering,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   semigroup,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   semigroupal,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   semigroupKind,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   show,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   sortable,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   succeed,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   traversable,
   /**
    * @category type classes
-   * @since 3.0.0
+   * @since 1.0.0
    */
   traversableWithIndex
 }

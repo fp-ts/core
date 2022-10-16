@@ -6,7 +6,7 @@ parent: Modules
 
 ## Monoid overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -35,7 +35,7 @@ Added in v3.0.0
 export declare const fromSemigroup: <A>(Semigroup: any, empty: A) => Monoid<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## max
 
@@ -49,7 +49,7 @@ The `empty` value is the `minimum` value.
 export declare const max: <A>(Bounded: any) => Monoid<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## min
 
@@ -63,7 +63,7 @@ The `empty` value is the `maximum` value.
 export declare const min: <A>(Bounded: any) => Monoid<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -78,7 +78,7 @@ export interface Monoid<A> extends Semigroup<A> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -92,7 +92,7 @@ The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
 export declare const reverse: <A>(Monoid: Monoid<A>) => Monoid<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## struct
 
@@ -104,7 +104,7 @@ Given a struct of monoids returns a monoid for the struct.
 export declare const struct: <A>(monoids: { [K in keyof A]: Monoid<A[K]> }) => Monoid<{ readonly [K in keyof A]: A[K] }>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## tuple
 
@@ -118,4 +118,4 @@ export declare const tuple: <A extends readonly unknown[]>(
 ) => Monoid<Readonly<A>>
 ```
 
-Added in v3.0.0
+Added in v1.0.0

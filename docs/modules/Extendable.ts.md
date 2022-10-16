@@ -6,7 +6,7 @@ parent: Modules
 
 ## Extendable overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -31,4 +31,4 @@ export interface Extendable<F extends TypeLambda> extends Functor<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

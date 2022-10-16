@@ -1,11 +1,11 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Functor<F extends TypeLambda> extends TypeClass<F> {
   readonly map: <A, B>(
@@ -16,7 +16,7 @@ export interface Functor<F extends TypeLambda> extends TypeClass<F> {
 /**
  * Returns a default `map` composition.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
   FunctorF: Functor<F>,
@@ -29,7 +29,7 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
 
 /**
  * @category mapping
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const flap = <F extends TypeLambda>(Functor: Functor<F>) =>
   <A>(a: A): (<S, R, O, E, B>(self: Kind<F, S, R, O, E, (a: A) => B>) => Kind<F, S, R, O, E, B>) =>
@@ -37,7 +37,7 @@ export const flap = <F extends TypeLambda>(Functor: Functor<F>) =>
 
 /**
  * @category mapping
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const as = <F extends TypeLambda>(Functor: Functor<F>) =>
   <B>(b: B): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, B>) =>
@@ -45,7 +45,7 @@ export const as = <F extends TypeLambda>(Functor: Functor<F>) =>
 
 /**
  * @category mapping
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const unit = <F extends TypeLambda>(
   Functor: Functor<F>
@@ -58,7 +58,7 @@ export const unit = <F extends TypeLambda>(
 
 /**
  * @category do notation
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const bindTo = <F extends TypeLambda>(Functor: Functor<F>) =>
   <N extends string>(
@@ -81,7 +81,7 @@ const let_ = <F extends TypeLambda>(
 export {
   /**
    * @category do notation
-   * @since 3.0.0
+   * @since 1.0.0
    */
   let_ as let
 }
@@ -92,7 +92,7 @@ export {
 
 /**
  * @category tuple sequencing
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const tupled = <F extends TypeLambda>(
   Functor: Functor<F>

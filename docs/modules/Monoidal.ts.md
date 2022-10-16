@@ -6,7 +6,7 @@ parent: Modules
 
 ## Monoidal overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -34,7 +34,7 @@ export interface Monoidal<F extends TypeLambda> extends Semigroupal<F>, Succeed<
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -48,4 +48,4 @@ Lift a monoid into 'F', the inner values are combined using the provided `Monoid
 export declare const liftMonoid: <F extends any>(Monoidal: Monoidal<F>) => <A, S, R, O, E>(Monoid: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

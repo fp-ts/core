@@ -6,7 +6,7 @@ parent: Modules
 
 ## index overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -56,7 +56,7 @@ Added in v3.0.0
 export declare const ordering: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type classes
 
@@ -68,7 +68,7 @@ Added in v3.0.0
 export declare const bifunctor: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## bounded
 
@@ -78,7 +78,7 @@ Added in v3.0.0
 export declare const bounded: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## category
 
@@ -88,7 +88,7 @@ Added in v3.0.0
 export declare const category: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## categoryKind
 
@@ -98,7 +98,7 @@ Added in v3.0.0
 export declare const categoryKind: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## comonad
 
@@ -108,7 +108,7 @@ Added in v3.0.0
 export declare const comonad: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## composable
 
@@ -118,7 +118,7 @@ Added in v3.0.0
 export declare const composable: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## composableKind
 
@@ -128,7 +128,7 @@ Added in v3.0.0
 export declare const composableKind: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## contravariant
 
@@ -138,7 +138,7 @@ Added in v3.0.0
 export declare const contravariant: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## extendable
 
@@ -148,7 +148,7 @@ Added in v3.0.0
 export declare const extendable: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## flatMap
 
@@ -158,7 +158,7 @@ Added in v3.0.0
 export declare const flatMap: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## foldable
 
@@ -168,7 +168,7 @@ Added in v3.0.0
 export declare const foldable: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## foldableWithIndex
 
@@ -178,7 +178,7 @@ Added in v3.0.0
 export declare const foldableWithIndex: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## functor
 
@@ -188,7 +188,7 @@ Added in v3.0.0
 export declare const functor: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## invariant
 
@@ -198,7 +198,7 @@ Added in v3.0.0
 export declare const invariant: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## monad
 
@@ -208,7 +208,7 @@ Added in v3.0.0
 export declare const monad: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## monoid
 
@@ -218,7 +218,7 @@ Added in v3.0.0
 export declare const monoid: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## monoidKind
 
@@ -228,7 +228,7 @@ Added in v3.0.0
 export declare const monoidKind: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## monoidal
 
@@ -238,7 +238,7 @@ Added in v3.0.0
 export declare const monoidal: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## semigroup
 
@@ -248,7 +248,7 @@ Added in v3.0.0
 export declare const semigroup: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## semigroupKind
 
@@ -258,7 +258,7 @@ Added in v3.0.0
 export declare const semigroupKind: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## semigroupal
 
@@ -268,7 +268,7 @@ Added in v3.0.0
 export declare const semigroupal: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## show
 
@@ -278,7 +278,7 @@ Added in v3.0.0
 export declare const show: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## sortable
 
@@ -288,7 +288,7 @@ Added in v3.0.0
 export declare const sortable: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## succeed
 
@@ -298,7 +298,7 @@ Added in v3.0.0
 export declare const succeed: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## traversable
 
@@ -308,7 +308,7 @@ Added in v3.0.0
 export declare const traversable: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## traversableWithIndex
 
@@ -318,7 +318,7 @@ Added in v3.0.0
 export declare const traversableWithIndex: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -330,4 +330,4 @@ Added in v3.0.0
 export declare const hkt: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

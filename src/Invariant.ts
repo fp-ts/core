@@ -1,11 +1,11 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
   readonly imap: <S, T>(

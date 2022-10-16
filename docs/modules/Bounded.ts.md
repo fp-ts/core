@@ -6,7 +6,7 @@ parent: Modules
 
 ## Bounded overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -32,7 +32,7 @@ Added in v3.0.0
 export declare const fromSortable: <A>(Sortable: any, maximum: A, minimum: A) => Bounded<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -47,7 +47,7 @@ export interface Bounded<A> extends Sortable<A> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -61,7 +61,7 @@ Clamp a value between `minimum` and `maximum` values.
 export declare const clamp: <A>(B: Bounded<A>) => (a: A) => A
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## reverse
 
@@ -73,4 +73,4 @@ Reverses the `Ord` of a `Bounded` and flips `maximum` and `minimum` values.
 export declare const reverse: <A>(Bounded: Bounded<A>) => Bounded<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0

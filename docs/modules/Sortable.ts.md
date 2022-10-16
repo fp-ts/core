@@ -6,7 +6,7 @@ parent: Modules
 
 ## Sortable overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -47,7 +47,7 @@ Added in v3.0.0
 export declare const fromCompare: <A>(compare: (first: A, second: A) => any) => Sortable<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # instances
 
@@ -59,7 +59,7 @@ Added in v3.0.0
 export declare const Contravariant: any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## getMonoid
 
@@ -69,7 +69,7 @@ Added in v3.0.0
 export declare const getMonoid: <A>() => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## getSemigroup
 
@@ -79,7 +79,7 @@ Added in v3.0.0
 export declare const getSemigroup: <A>() => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -93,7 +93,7 @@ export interface Sortable<A> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type lambdas
 
@@ -107,7 +107,7 @@ export interface SortableTypeLambda extends TypeLambda {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -121,7 +121,7 @@ Test whether a value is between a minimum and a maximum (inclusive).
 export declare const between: <A>(Sortable: Sortable<A>) => (minimum: A, maximum: A) => (a: A) => boolean
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## clamp
 
@@ -133,7 +133,7 @@ Clamp a value between a minimum and a maximum.
 export declare const clamp: <A>(Sortable: Sortable<A>) => (minimum: A, maximum: A) => (a: A) => A
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## contramap
 
@@ -143,7 +143,7 @@ Added in v3.0.0
 export declare const contramap: <B, A>(f: (b: B) => A) => (self: Sortable<A>) => Sortable<B>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## geq
 
@@ -155,7 +155,7 @@ Test whether one value is _non-strictly greater than_ another.
 export declare const geq: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## gt
 
@@ -167,7 +167,7 @@ Test whether one value is _strictly greater than_ another.
 export declare const gt: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## leq
 
@@ -179,7 +179,7 @@ Test whether one value is _non-strictly less than_ another.
 export declare const leq: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## lt
 
@@ -191,7 +191,7 @@ Test whether one value is _strictly less than_ another.
 export declare const lt: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## max
 
@@ -203,7 +203,7 @@ Take the maximum of two values. If they are considered equal, the first argument
 export declare const max: <A>(Sortable: Sortable<A>) => (first: A, second: A) => A
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## min
 
@@ -215,7 +215,7 @@ Take the minimum of two values. If they are considered equal, the first argument
 export declare const min: <A>(Sortable: Sortable<A>) => (first: A, second: A) => A
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## reverse
 
@@ -225,7 +225,7 @@ Added in v3.0.0
 export declare const reverse: <A>(Sortable: Sortable<A>) => Sortable<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## tuple
 
@@ -239,4 +239,4 @@ export declare const tuple: <A extends readonly unknown[]>(
 ) => Sortable<Readonly<A>>
 ```
 
-Added in v3.0.0
+Added in v1.0.0

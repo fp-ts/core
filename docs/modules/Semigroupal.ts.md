@@ -6,7 +6,7 @@ parent: Modules
 
 ## Semigroupal overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -55,7 +55,7 @@ export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -69,7 +69,7 @@ export declare const ap: <F extends any>(
 ) => <S, R2, O2, E2, A>(fa: any) => <R1, O1, E1, B>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## bindRight
 
@@ -86,7 +86,7 @@ export declare const bindRight: <F extends any>(
 ) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## lift2
 
@@ -100,7 +100,7 @@ export declare const lift2: <F extends any>(
 ) => <A, B, C>(f: (a: A, b: B) => C) => <S, R1, O1, E1, R2, O2, E2>(fa: any, fb: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## lift3
 
@@ -116,7 +116,7 @@ export declare const lift3: <F extends any>(
 ) => <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(fa: any, fb: any, fc: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## liftSemigroup
 
@@ -130,7 +130,7 @@ export declare const liftSemigroup: <F extends any>(
 ) => <A, S, R, O, E>(Semigroup: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zip
 
@@ -142,7 +142,7 @@ export declare const zip: <F extends any>(
 ) => <S, R2, O2, E2, B, A>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipFlatten
 
@@ -156,7 +156,7 @@ export declare const zipFlatten: <F extends any>(
 ) => <S, R2, O2, E2, B>(that: any) => <R1, O1, E1, A extends readonly unknown[]>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipLeftPar
 
@@ -172,7 +172,7 @@ export declare const zipLeftPar: <F extends any>(
 ) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipManyComposition
 
@@ -187,7 +187,7 @@ export declare const zipManyComposition: <F extends any, G extends any>(
 ) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(start: any, others: Iterable<any>) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipRightPar
 
@@ -203,7 +203,7 @@ export declare const zipRightPar: <F extends any>(
 ) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipWith
 
@@ -218,7 +218,7 @@ export declare const zipWith: <F extends any>(
 ) => <S, R2, O2, E2, B, A, C>(that: any, f: (a: A, b: B) => C) => <R1, O1, E1>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## zipWithComposition
 
@@ -237,4 +237,4 @@ export declare const zipWithComposition: <F extends any, G extends any>(
 ) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

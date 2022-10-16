@@ -1,5 +1,5 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
@@ -7,7 +7,7 @@ import type { Monoidal } from "@fp-ts/core/Monoidal"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
   readonly traverse: <F extends TypeLambda>(
@@ -22,7 +22,7 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
 /**
  * Returns a default `traverse` composition.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
   TraversableF: Traversable<F>,
@@ -37,7 +37,7 @@ export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
       TraversableF.traverse(H)(TraversableG.traverse(H)(f))
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const sequence = <T extends TypeLambda>(Traversable: Traversable<T>) =>
   <F extends TypeLambda>(

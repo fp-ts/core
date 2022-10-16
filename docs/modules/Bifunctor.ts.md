@@ -6,7 +6,7 @@ parent: Modules
 
 ## Bifunctor overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -36,7 +36,7 @@ export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -50,7 +50,7 @@ Returns a default `map` implementation.
 export declare const map: <F extends any>(Bifunctor: Bifunctor<F>) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## mapBothComposition
 
@@ -65,7 +65,7 @@ export declare const mapBothComposition: <F extends any, G extends any>(
 ) => <GE, GG, A, B>(f: (e: GE) => GG, g: (a: A) => B) => <FS, FR, FO, FE, GS, GR, GO>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## mapLeft
 
@@ -77,4 +77,4 @@ export declare const mapLeft: <F extends any>(
 ) => <E, G>(f: (e: E) => G) => <S, R, O, A>(self: any) => any
 ```
 
-Added in v3.0.0
+Added in v1.0.0

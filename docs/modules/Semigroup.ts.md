@@ -6,7 +6,7 @@ parent: Modules
 
 ## Semigroup overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -40,7 +40,7 @@ Added in v3.0.0
 export declare const constant: <A>(a: A) => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## fromCombine
 
@@ -50,7 +50,7 @@ Added in v3.0.0
 export declare const fromCombine: <A>(combine: (first: A, second: A) => A) => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## max
 
@@ -62,7 +62,7 @@ Get a semigroup where `combine` will return the maximum, based on the provided o
 export declare const max: <A>(Sortable: any) => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## min
 
@@ -74,7 +74,7 @@ Get a semigroup where `combine` will return the minimum, based on the provided o
 export declare const min: <A>(Sortable: any) => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # instances
 
@@ -88,7 +88,7 @@ Always return the first argument.
 export declare const first: <A = never>() => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## last
 
@@ -100,7 +100,7 @@ Always return the last argument.
 export declare const last: <A = never>() => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # type class
 
@@ -115,7 +115,7 @@ export interface Semigroup<A> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -127,7 +127,7 @@ Added in v3.0.0
 export declare const intercalate: <A>(separator: A) => (Semigroup: Semigroup<A>) => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## reverse
 
@@ -139,7 +139,7 @@ The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
 export declare const reverse: <A>(Semigroup: Semigroup<A>) => Semigroup<A>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## struct
 
@@ -153,7 +153,7 @@ export declare const struct: <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }
 }>
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 ## tuple
 
@@ -167,4 +167,4 @@ export declare const tuple: <A extends readonly unknown[]>(
 ) => Semigroup<Readonly<A>>
 ```
 
-Added in v3.0.0
+Added in v1.0.0

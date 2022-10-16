@@ -1,17 +1,17 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import * as monoid from "@fp-ts/core/Monoid"
 import type * as semigroup from "@fp-ts/core/Semigroup"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export type Ordering = -1 | 0 | 1
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const reverse = (o: Ordering): Ordering => (o === -1 ? 1 : o === 1 ? -1 : 0)
 
@@ -21,7 +21,7 @@ export const reverse = (o: Ordering): Ordering => (o === -1 ? 1 : o === 1 ? -1 :
 
 /**
  * @category pattern matching
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const match = <A, B, C = B>(
   onLessThan: () => A,
@@ -31,7 +31,7 @@ export const match = <A, B, C = B>(
 
 /**
  * @category instances
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const Semigroup: semigroup.Semigroup<Ordering> = {
   combine: (o1, o2) => o1 !== 0 ? o1 : o2,
@@ -51,11 +51,11 @@ export const Semigroup: semigroup.Semigroup<Ordering> = {
 
 /**
  * @category instances
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const Monoid: monoid.Monoid<Ordering> = monoid.fromSemigroup(Semigroup, 0)
 
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const sign = (n: number): Ordering => (n <= -1 ? -1 : n >= 1 ? 1 : 0)

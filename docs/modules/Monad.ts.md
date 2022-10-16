@@ -6,7 +6,7 @@ parent: Modules
 
 ## Monad overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -27,4 +27,4 @@ Added in v3.0.0
 export interface Monad<F extends TypeLambda> extends Succeed<F>, FlatMap<F> {}
 ```
 
-Added in v3.0.0
+Added in v1.0.0

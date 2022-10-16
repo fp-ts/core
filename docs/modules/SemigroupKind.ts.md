@@ -6,7 +6,7 @@ parent: Modules
 
 ## SemigroupKind overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -37,4 +37,4 @@ export interface SemigroupKind<F extends TypeLambda> extends Functor<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

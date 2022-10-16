@@ -1,12 +1,12 @@
 /**
- * @since 3.0.0
+ * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoidal } from "@fp-ts/core/Monoidal"
 
 /**
  * @category type class
- * @since 3.0.0
+ * @since 1.0.0
  */
 export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
   readonly traverseWithIndex: <F extends TypeLambda>(
@@ -21,7 +21,7 @@ export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass
 /**
  * Returns a default `traverseWithIndex` composition.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
   TraversableWithIndexF: TraversableWithIndex<F, I>,

@@ -6,7 +6,7 @@ parent: Modules
 
 ## Invariant overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -32,4 +32,4 @@ export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0

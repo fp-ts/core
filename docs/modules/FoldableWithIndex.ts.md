@@ -6,7 +6,7 @@ parent: Modules
 
 ## FoldableWithIndex overview
 
-Added in v3.0.0
+Added in v1.0.0
 
 ---
 
@@ -36,7 +36,7 @@ export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F>
 }
 ```
 
-Added in v3.0.0
+Added in v1.0.0
 
 # utils
 
@@ -50,4 +50,4 @@ export declare const foldMapWithIndex: <F extends any, I>(
 ) => <M>(Monoid: any) => <A>(f: (a: A, i: I) => M) => <S, R, O, E>(self: any) => M
 ```
 
-Added in v3.0.0
+Added in v1.0.0
