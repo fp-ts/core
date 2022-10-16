@@ -16,16 +16,14 @@ export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
    * Zips this effect with the specified effect using the
    * specified combiner function.
    */
-  readonly zipWith: <S, R1, O1, E1, A, R2, O2, E2, B, C>(
-    fa: Kind<F, S, R1, O1, E1, A>,
-    fb: Kind<F, S, R2, O2, E2, B>,
+  readonly zipWith: <S, R2, O2, E2, B, A, C>(
+    that: Kind<F, S, R2, O2, E2, B>,
     f: (a: A, b: B) => C
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
+  ) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 
   readonly zipMany: <S, R, O, E, A>(
-    start: Kind<F, S, R, O, E, A>,
-    others: Iterable<Kind<F, S, R, O, E, A>>
-  ) => Kind<F, S, R, O, E, [A, ...ReadonlyArray<A>]>
+    collection: Iterable<Kind<F, S, R, O, E, A>>
+  ) => (self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
 
 /**
@@ -37,21 +35,20 @@ export const zipWithComposition = <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
 ) =>
-  <FS, FR1, FO1, FE1, GS, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B, C>(
-    fga: Kind<F, FS, FR1, FO1, FE1, Kind<G, GS, GR1, GO1, GE1, A>>,
-    fgb: Kind<F, FS, FR2, FO2, FE2, Kind<G, GS, GR2, GO2, GE2, B>>,
+  <FS, FR2, FO2, FE2, GS, GR2, GO2, GE2, B, A, C>(
+    that: Kind<F, FS, FR2, FO2, FE2, Kind<G, GS, GR2, GO2, GE2, B>>,
     f: (a: A, b: B) => C
-  ): Kind<
-    F,
-    FS,
-    FR1 & FR2,
-    FO1 | FO2,
-    FE1 | FE2,
-    Kind<G, GS, GR1 & GR2, GO1 | GO2, GE1 | GE2, C>
-  > =>
-    pipe(
-      SemigroupalF.zipWith(fga, fgb, (ga, gb) => SemigroupalG.zipWith(ga, gb, f))
-    )
+  ) =>
+    <FR1, FO1, FE1, GR1, GO1, GE1>(
+      self: Kind<F, FS, FR1, FO1, FE1, Kind<G, GS, GR1, GO1, GE1, A>>
+    ): Kind<
+      F,
+      FS,
+      FR1 & FR2,
+      FO1 | FO2,
+      FE1 | FE2,
+      Kind<G, GS, GR1 & GR2, GO1 | GO2, GE1 | GE2, C>
+    > => pipe(self, SemigroupalF.zipWith(that, (ga, gb) => pipe(ga, SemigroupalG.zipWith(gb, f))))
 
 /**
  * Returns a default `zipMany` composition.
@@ -63,23 +60,28 @@ export const zipManyComposition = <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalG: Semigroupal<G>
 ) =>
   <FS, FR, FO, FE, GS, GR, GO, GE, A>(
-    start: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>,
-    others: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
-  ): Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, [A, ...ReadonlyArray<A>]>> =>
-    pipe(
-      SemigroupalF.zipMany(start, others),
-      SemigroupalF.map(([ga, ...gas]) => SemigroupalG.zipMany(ga, gas))
-    )
+    collection: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
+  ) =>
+    (
+      self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+    ): Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, readonly [A, ...ReadonlyArray<A>]>> =>
+      pipe(
+        self,
+        SemigroupalF.zipMany(collection),
+        SemigroupalF.map(([ga, ...gas]) => SemigroupalG.zipMany(gas)(ga))
+      )
 
 /**
  * @since 1.0.0
  */
-export const ap = <F extends TypeLambda>(Semigroupal: Semigroupal<F>): <S, R2, O2, E2, A>(
-  fa: Kind<F, S, R2, O2, E2, A>
-) => <R1, O1, E1, B>(
-  self: Kind<F, S, R1, O1, E1, (a: A) => B>
-) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B> =>
-  (fa) => (fab) => Semigroupal.zipWith(fa, fab, (a, f) => f(a))
+export const ap = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
+  <S, R2, O2, E2, A>(
+    fa: Kind<F, S, R2, O2, E2, A>
+  ) =>
+    <R1, O1, E1, B>(
+      self: Kind<F, S, R1, O1, E1, (a: A) => B>
+    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B> =>
+      pipe(self, Semigroupal.zipWith(fa, (f, a) => f(a)))
 
 /**
  * @since 1.0.0
@@ -89,7 +91,7 @@ export const zip = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
     <R1, O1, E1>(
       self: Kind<F, S, R1, O1, E1, A>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]> =>
-      Semigroupal.zipWith(self, that, (a, b) => [a, b])
+      pipe(self, Semigroupal.zipWith(that, (a, b) => [a, b]))
 
 /**
  * Zips this effect with the specified effect using the
@@ -100,7 +102,7 @@ export const zip = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
 export const zipWith = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <S, R2, O2, E2, B, A, C>(that: Kind<F, S, R2, O2, E2, B>, f: (a: A, b: B) => C) =>
     <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> =>
-      Semigroupal.zipWith(self, that, f)
+      pipe(self, Semigroupal.zipWith(that, f))
 
 /**
  * Returns an effect that executes both this effect and the specified effect,
@@ -115,7 +117,7 @@ export const zipLeftPar = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   ) =>
     <R1, O1, E1, A>(
       self: Kind<F, S, R1, O1, E1, A>
-    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A> => Semigroupal.zipWith(self, that, identity)
+    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A> => pipe(self, Semigroupal.zipWith(that, identity))
 
 /**
  * Returns an effect that executes both this effect and the specified effect,
@@ -130,7 +132,8 @@ export const zipRightPar = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =
   ) =>
     <R1, O1, E1>(
       self: Kind<F, S, R1, O1, E1, unknown>
-    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A> => Semigroupal.zipWith(self, that, (_, a) => a)
+    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A> =>
+      pipe(self, Semigroupal.zipWith(that, (_, a) => a))
 
 /**
  * A variant of `FlatMap.bind` that sequentially ignores the scope.
@@ -151,7 +154,7 @@ export const bindRight = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
       O1 | O2,
       E1 | E2,
       { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
-    > => Semigroupal.zipWith(self, fb, (a, b) => Object.assign({}, a, { [name]: b }) as any)
+    > => pipe(self, Semigroupal.zipWith(fb, (a, b) => Object.assign({}, a, { [name]: b }) as any))
 
 /**
  * Zips this effect with the specified effect.
@@ -165,7 +168,7 @@ export const zipFlatten = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
     <R1, O1, E1, A extends ReadonlyArray<unknown>>(
       self: Kind<F, S, R1, O1, E1, A>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [...A, B]> =>
-      Semigroupal.zipWith(self, that, (a, b) => [...a, b] as const)
+      pipe(self, Semigroupal.zipWith(that, (a, b) => [...a, b] as const))
 
 /**
  * Lift a semigroup into 'F', the inner values are combined using the provided `Semigroup`.
@@ -174,7 +177,9 @@ export const zipFlatten = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
  */
 export const liftSemigroup = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
   <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> =>
-    semigroup.fromCombine((first, second) => Semigroupal.zipWith(first, second, Semigroup.combine))
+    semigroup.fromCombine((that) =>
+      (self) => pipe(self, Semigroupal.zipWith(that, (a1, a2) => Semigroup.combine(a2)(a1)))
+    )
 
 /**
  * Lifts a binary function into `F`.
@@ -186,7 +191,7 @@ export const lift2 = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
     <S, R1, O1, E1, R2, O2, E2>(
       fa: Kind<F, S, R1, O1, E1, A>,
       fb: Kind<F, S, R2, O2, E2, B>
-    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> => Semigroupal.zipWith(fa, fb, f)
+    ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> => pipe(fa, Semigroupal.zipWith(fb, f))
 
 /**
  * @since 1.0.0
@@ -199,8 +204,8 @@ const zip3With = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
     f: (a: A, b: B, c: C) => D
   ): Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D> =>
     pipe(
+      fa,
       Semigroupal.zipMany<S, R1, O1, E1, any>(
-        fa,
         [fb, fc] as any
       ),
       Semigroupal.map(([a, b, c]) => f(a, b, c))

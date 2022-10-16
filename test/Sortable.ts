@@ -9,9 +9,9 @@ import * as U from "./util"
 describe("Sortable", () => {
   it("tuple", () => {
     const O = _.tuple(string.Sortable, number.Sortable, boolean.Sortable)
-    U.deepStrictEqual(O.compare(["a", 1, true], ["b", 2, true]), -1)
-    U.deepStrictEqual(O.compare(["a", 1, true], ["a", 2, true]), -1)
-    U.deepStrictEqual(O.compare(["a", 1, true], ["a", 1, false]), 1)
+    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["b", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 1, false])), 1)
   })
 
   it("getMonoid", () => {
@@ -31,16 +31,14 @@ describe("Sortable", () => {
       string.Sortable,
       _.contramap((x: T) => x[1])
     )
-    //                  v-- left unit
-    const O1 = M.combineMany(M.empty, [sortByFst, sortBySnd])
+    const O1 = pipe(M.empty, M.combineMany([sortByFst, sortBySnd]))
     U.deepStrictEqual(sort(O1)(tuples), [
       [1, "b"],
       [1, "c"],
       [2, "a"],
       [2, "c"]
     ])
-    //                           right unit --v
-    const O2 = M.combineMany(sortBySnd, [sortByFst, M.empty])
+    const O2 = pipe(sortBySnd, M.combineMany([sortByFst, M.empty]))
     U.deepStrictEqual(sort(O2)(tuples), [
       [2, "a"],
       [1, "b"],
@@ -69,23 +67,23 @@ describe("Sortable", () => {
 
   it("reverse", () => {
     const Compare = _.reverse(number.Sortable)
-    U.deepStrictEqual(Compare.compare(1, 2), 1)
-    U.deepStrictEqual(Compare.compare(2, 1), -1)
-    U.deepStrictEqual(Compare.compare(2, 2), 0)
+    U.deepStrictEqual(pipe(1, Compare.compare(2)), 1)
+    U.deepStrictEqual(pipe(2, Compare.compare(1)), -1)
+    U.deepStrictEqual(pipe(2, Compare.compare(2)), 0)
   })
 
   it("leq", () => {
     const leq = _.leq(number.Sortable)
-    U.deepStrictEqual(leq(0, 1), true)
-    U.deepStrictEqual(leq(1, 1), true)
-    U.deepStrictEqual(leq(2, 1), false)
+    U.deepStrictEqual(pipe(0, leq(1)), true)
+    U.deepStrictEqual(pipe(1, leq(1)), true)
+    U.deepStrictEqual(pipe(2, leq(1)), false)
   })
 
   it("geq", () => {
     const geq = _.geq(number.Sortable)
-    U.deepStrictEqual(geq(0, 1), false)
-    U.deepStrictEqual(geq(1, 1), true)
-    U.deepStrictEqual(geq(2, 1), true)
+    U.deepStrictEqual(pipe(0, geq(1)), false)
+    U.deepStrictEqual(pipe(1, geq(1)), true)
+    U.deepStrictEqual(pipe(2, geq(1)), true)
   })
 
   it("min", () => {
@@ -96,11 +94,11 @@ describe("Sortable", () => {
         _.contramap((a: A) => a.a)
       )
     )
-    U.deepStrictEqual(min({ a: 1 }, { a: 2 }), { a: 1 })
-    U.deepStrictEqual(min({ a: 2 }, { a: 1 }), { a: 1 })
+    U.deepStrictEqual(pipe({ a: 1 }, min({ a: 2 })), { a: 1 })
+    U.deepStrictEqual(pipe({ a: 2 }, min({ a: 1 })), { a: 1 })
     const first = { a: 1 }
     const second = { a: 1 }
-    U.strictEqual(min(first, second), first)
+    U.strictEqual(pipe(first, min(second)), first)
   })
 
   it("max", () => {
@@ -111,10 +109,10 @@ describe("Sortable", () => {
         _.contramap((a: A) => a.a)
       )
     )
-    U.deepStrictEqual(max({ a: 1 }, { a: 2 }), { a: 2 })
-    U.deepStrictEqual(max({ a: 2 }, { a: 1 }), { a: 2 })
+    U.deepStrictEqual(pipe({ a: 1 }, max({ a: 2 })), { a: 2 })
+    U.deepStrictEqual(pipe({ a: 2 }, max({ a: 1 })), { a: 2 })
     const first = { a: 1 }
     const second = { a: 1 }
-    U.strictEqual(max(first, second), first)
+    U.strictEqual(pipe(first, max(second)), first)
   })
 })

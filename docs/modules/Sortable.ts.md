@@ -44,7 +44,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (first: A, second: A) => any) => Sortable<A>
+export declare const fromCompare: <A>(compare: (that: A) => (self: A) => any) => Sortable<A>
 ```
 
 Added in v1.0.0
@@ -89,7 +89,7 @@ Added in v1.0.0
 
 ```ts
 export interface Sortable<A> {
-  readonly compare: (first: A, second: A) => Ordering
+  readonly compare: (that: A) => (self: A) => Ordering
 }
 ```
 
@@ -152,7 +152,7 @@ Test whether one value is _non-strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const geq: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
+export declare const geq: <A>(Sortable: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v1.0.0
@@ -164,7 +164,7 @@ Test whether one value is _strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const gt: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
+export declare const gt: <A>(Sortable: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v1.0.0
@@ -176,7 +176,7 @@ Test whether one value is _non-strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const leq: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
+export declare const leq: <A>(Sortable: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v1.0.0
@@ -188,7 +188,7 @@ Test whether one value is _strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const lt: <A>(Sortable: Sortable<A>) => (first: A, second: A) => boolean
+export declare const lt: <A>(Sortable: Sortable<A>) => (that: A) => (self: A) => boolean
 ```
 
 Added in v1.0.0
@@ -200,7 +200,7 @@ Take the maximum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const max: <A>(Sortable: Sortable<A>) => (first: A, second: A) => A
+export declare const max: <A>(Sortable: Sortable<A>) => (that: A) => (self: A) => A
 ```
 
 Added in v1.0.0
@@ -212,7 +212,7 @@ Take the minimum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const min: <A>(Sortable: Sortable<A>) => (first: A, second: A) => A
+export declare const min: <A>(Sortable: Sortable<A>) => (that: A) => (self: A) => A
 ```
 
 Added in v1.0.0

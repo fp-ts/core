@@ -31,6 +31,6 @@ export const fromSemigroupKind = <F extends TypeLambda>(
     emptyKind,
     combineKindAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => SemigroupKind.combineKindMany(emptyKind<S>(), collection)
+    ) => SemigroupKind.combineKindMany(collection)(emptyKind<S>())
   }
 }

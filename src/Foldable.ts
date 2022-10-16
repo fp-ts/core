@@ -24,7 +24,20 @@ export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
 /**
  * @since 1.0.0
  */
+export const toReadonlyArrayWith = <F extends TypeLambda>(
+  Foldable: Foldable<F>
+) =>
+  <S, R, O, E, A, B>(self: Kind<F, S, R, O, E, A>, f: (a: A) => B): ReadonlyArray<B> =>
+    Foldable.reduce<A, Array<B>>([], (out, a) => {
+      out.push(f(a))
+      return out
+    })(self)
+
+/**
+ * @since 1.0.0
+ */
 export const foldMap = <F extends TypeLambda>(Foldable: Foldable<F>) =>
   <M>(Monoid: Monoid<M>) =>
-    <A>(f: (a: A) => M): <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => M =>
-      Foldable.reduce(Monoid.empty, (m, a) => Monoid.combine(m, f(a)))
+    <A>(f: (a: A) => M) =>
+      <S, R, O, E>(self: Kind<F, S, R, O, E, A>): M =>
+        Monoid.combineAll(toReadonlyArrayWith(Foldable)(self, f))

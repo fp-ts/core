@@ -9,8 +9,8 @@ import type { Sortable } from "@fp-ts/core/Sortable"
  * @since 1.0.0
  */
 export interface Semigroup<A> {
-  readonly combine: (first: A, second: A) => A
-  readonly combineMany: (start: A, others: Iterable<A>) => A
+  readonly combine: (that: A) => (self: A) => A
+  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 
 /**
@@ -19,13 +19,14 @@ export interface Semigroup<A> {
  */
 export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> => ({
   combine,
-  combineMany: (start, others) => {
-    let out: A = start
-    for (const a of others) {
-      out = combine(out, a)
+  combineMany: (collection) =>
+    (self) => {
+      let out: A = self
+      for (const a of collection) {
+        out = combine(a)(out)
+      }
+      return out
     }
-    return out
-  }
 })
 
 /**
@@ -35,7 +36,7 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
  * @since 1.0.0
  */
 export const min = <A>(Sortable: Sortable<A>): Semigroup<A> =>
-  fromCombine((first, second) => Sortable.compare(first, second) === -1 ? first : second)
+  fromCombine((that) => (self) => Sortable.compare(that)(self) === -1 ? self : that)
 
 /**
  * `Semigroup` that returns last maximum of elements.
@@ -44,15 +45,15 @@ export const min = <A>(Sortable: Sortable<A>): Semigroup<A> =>
  * @since 1.0.0
  */
 export const max = <A>(Sortable: Sortable<A>): Semigroup<A> =>
-  fromCombine((first, second) => Sortable.compare(first, second) === 1 ? first : second)
+  fromCombine((that) => (self) => Sortable.compare(that)(self) === 1 ? self : that)
 
 /**
  * @category constructors
  * @since 1.0.0
  */
 export const constant = <A>(a: A): Semigroup<A> => ({
-  combine: () => a,
-  combineMany: () => a
+  combine: () => () => a,
+  combineMany: () => () => a
 })
 
 /**
@@ -61,16 +62,16 @@ export const constant = <A>(a: A): Semigroup<A> => ({
  * @since 1.0.0
  */
 export const reverse = <A>(Semigroup: Semigroup<A>): Semigroup<A> => ({
-  combine: (first, second) => Semigroup.combine(second, first),
-  combineMany: (start, others) => {
-    const reversed = Array.from(others).reverse()
-    return reversed.length === 0 ?
-      start :
-      Semigroup.combine(
-        reversed.reduceRight((first, second) => Semigroup.combine(first, second)),
-        start
-      )
-  }
+  combine: (that) => (self) => Semigroup.combine(that)(self),
+  combineMany: (collection) =>
+    (self) => {
+      const reversed = Array.from(collection).reverse()
+      return reversed.length === 0 ?
+        self :
+        Semigroup.combine(self)(
+          reversed.reduceRight((first, second) => Semigroup.combine(second)(first))
+        )
+    }
 })
 
 /**
@@ -83,15 +84,17 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
     readonly [K in keyof A]: A[K]
   }
 > =>
-  fromCombine((first, second) => {
-    const r = {} as any
-    for (const k in semigroups) {
-      if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
-        r[k] = semigroups[k].combine(first[k], second[k])
+  fromCombine((that) =>
+    (self) => {
+      const r = {} as any
+      for (const k in semigroups) {
+        if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
+          r[k] = semigroups[k].combine(that[k])(self[k])
+        }
       }
+      return r
     }
-    return r
-  })
+  )
 
 /**
  * Given a tuple of semigroups returns a semigroup for the tuple.
@@ -101,8 +104,8 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
 ): Semigroup<Readonly<A>> =>
-  fromCombine((first, second) =>
-    semigroups.map((Semigroup, i) => Semigroup.combine(first[i], second[i])) as any
+  fromCombine((that) =>
+    (self) => semigroups.map((Semigroup, i) => Semigroup.combine(that[i])(self[i])) as any
   )
 
 /**
@@ -111,7 +114,7 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
 export const intercalate = <A>(separator: A) =>
   (Semigroup: Semigroup<A>): Semigroup<A> =>
     fromCombine(
-      (first, second) => Semigroup.combineMany(first, [separator, second])
+      (that) => Semigroup.combineMany([separator, that])
     )
 
 /**
@@ -121,8 +124,8 @@ export const intercalate = <A>(separator: A) =>
  * @since 1.0.0
  */
 export const first = <A = never>(): Semigroup<A> => ({
-  combine: identity,
-  combineMany: identity
+  combine: () => identity,
+  combineMany: () => identity
 })
 
 /**
@@ -132,11 +135,12 @@ export const first = <A = never>(): Semigroup<A> => ({
  * @since 1.0.0
  */
 export const last = <A = never>(): Semigroup<A> => ({
-  combine: (_, second) => second,
-  combineMany: (start, others) => {
-    let a: A = start
-    // eslint-disable-next-line no-empty
-    for (a of others) {}
-    return a
-  }
+  combine: (second) => () => second,
+  combineMany: (collection) =>
+    (self) => {
+      let a: A = self
+      // eslint-disable-next-line no-empty
+      for (a of collection) {}
+      return a
+    }
 })

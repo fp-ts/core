@@ -42,16 +42,14 @@ export interface Semigroupal<F extends TypeLambda> extends Functor<F> {
    * Zips this effect with the specified effect using the
    * specified combiner function.
    */
-  readonly zipWith: <S, R1, O1, E1, A, R2, O2, E2, B, C>(
-    fa: Kind<F, S, R1, O1, E1, A>,
-    fb: Kind<F, S, R2, O2, E2, B>,
+  readonly zipWith: <S, R2, O2, E2, B, A, C>(
+    that: Kind<F, S, R2, O2, E2, B>,
     f: (a: A, b: B) => C
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
+  ) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 
   readonly zipMany: <S, R, O, E, A>(
-    start: Kind<F, S, R, O, E, A>,
-    others: Iterable<Kind<F, S, R, O, E, A>>
-  ) => Kind<F, S, R, O, E, [A, ...ReadonlyArray<A>]>
+    collection: Iterable<Kind<F, S, R, O, E, A>>
+  ) => (self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
 ```
 
@@ -184,7 +182,7 @@ Returns a default `zipMany` composition.
 export declare const zipManyComposition: <F extends any, G extends any>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
-) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(start: any, others: Iterable<any>) => any
+) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(collection: Iterable<any>) => (self: any) => any
 ```
 
 Added in v1.0.0
@@ -230,11 +228,10 @@ Returns a default `zipWith` composition.
 export declare const zipWithComposition: <F extends any, G extends any>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
-) => <FS, FR1, FO1, FE1, GS, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B, C>(
-  fga: any,
-  fgb: any,
+) => <FS, FR2, FO2, FE2, GS, GR2, GO2, GE2, B, A, C>(
+  that: any,
   f: (a: A, b: B) => C
-) => any
+) => <FR1, FO1, FE1, GR1, GO1, GE1>(self: any) => any
 ```
 
 Added in v1.0.0

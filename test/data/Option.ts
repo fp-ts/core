@@ -96,25 +96,26 @@ export const bind: <N extends string, A extends object, B>(
   flatMap_.bind(FlatMap)
 
 const zipMany = <A>(
-  start: Option<A>,
-  others: Iterable<Option<A>>
-): Option<[A, ...ReadonlyArray<A>]> => {
-  if (isNone(start)) {
-    return none
-  }
-  const out: [A, ...Array<A>] = [start.value]
-  for (const o of others) {
-    if (isNone(o)) {
+  collection: Iterable<Option<A>>
+) =>
+  (self: Option<A>): Option<[A, ...ReadonlyArray<A>]> => {
+    if (isNone(self)) {
       return none
     }
-    out.push(o.value)
+    const out: [A, ...Array<A>] = [self.value]
+    for (const o of collection) {
+      if (isNone(o)) {
+        return none
+      }
+      out.push(o.value)
+    }
+    return some(out)
   }
-  return some(out)
-}
 
 export const Semigroupal: semigroupal.Semigroupal<OptionTypeLambda> = {
   map,
-  zipWith: (fa, fb, f) => isNone(fa) ? none : isNone(fb) ? none : some(f(fa.value, fb.value)),
+  zipWith: (that, f) =>
+    (self) => isNone(self) ? none : isNone(that) ? none : some(f(self.value, that.value)),
   zipMany
 }
 
@@ -174,26 +175,25 @@ export const Monoidal: monoidal.Monoidal<OptionTypeLambda> = {
   zipAll
 }
 
-const combineKind = <A, B>(
-  first: Option<A>,
-  second: Option<B>
-): Option<A | B> => isSome(first) ? first : isSome(second) ? second : none
+const combineKind = <B>(
+  that: Option<B>
+) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
 
 export const combineKindMany = <A>(
-  start: Option<A>,
-  others: Iterable<Option<A>>
-): Option<A> => {
-  let out = start
-  if (isSome(out)) {
-    return out
-  }
-  for (out of others) {
+  collection: Iterable<Option<A>>
+) =>
+  (self: Option<A>): Option<A> => {
+    let out = self
     if (isSome(out)) {
       return out
     }
+    for (out of collection) {
+      if (isSome(out)) {
+        return out
+      }
+    }
+    return none
   }
-  return none
-}
 
 export const SemigroupKind: semigroupKind.SemigroupKind<OptionTypeLambda> = {
   map,

@@ -6,13 +6,13 @@ import * as U from "./util"
 describe("Semigroupal", () => {
   it("zipManyComposition", () => {
     const zipMany = _.zipManyComposition(O.Semigroupal, O.Semigroupal)
-    U.deepStrictEqual(zipMany(O.none, [O.none]), O.none)
-    U.deepStrictEqual(zipMany(O.some(O.none), [O.none]), O.none)
-    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.none)]), O.some(O.none))
-    U.deepStrictEqual(zipMany(O.some(O.none), [O.some(O.some("a"))]), O.some(O.none))
+    U.deepStrictEqual(pipe(O.none, zipMany([O.none])), O.none)
+    U.deepStrictEqual(pipe(O.some(O.none), zipMany([O.none])), O.none)
+    U.deepStrictEqual(pipe(O.some(O.none), zipMany([O.some(O.none)])), O.some(O.none))
+    U.deepStrictEqual(pipe(O.some(O.none), zipMany([O.some(O.some("a"))])), O.some(O.none))
     U.deepStrictEqual(
-      zipMany(O.some(O.some(1)), [O.some(O.some(2))]),
-      O.some(O.some([1, 2]))
+      pipe(O.some(O.some(1)), zipMany([O.some(O.some(2))])),
+      O.some(O.some([1, 2] as const))
     )
   })
 

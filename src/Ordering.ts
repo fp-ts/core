@@ -30,19 +30,20 @@ export const match = <A, B, C = B>(
  * @since 1.0.0
  */
 export const Semigroup: semigroup.Semigroup<Ordering> = {
-  combine: (o1, o2) => o1 !== 0 ? o1 : o2,
-  combineMany: (start, others) => {
-    let ordering = start
-    if (ordering !== 0) {
-      return ordering
-    }
-    for (ordering of others) {
+  combine: (that) => (self) => self !== 0 ? self : that,
+  combineMany: (collection) =>
+    (self) => {
+      let ordering = self
       if (ordering !== 0) {
         return ordering
       }
+      for (ordering of collection) {
+        if (ordering !== 0) {
+          return ordering
+        }
+      }
+      return ordering
     }
-    return ordering
-  }
 }
 
 /**

@@ -34,26 +34,27 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
 }
 
 const zipMany = <E, A>(
-  start: Result<E, A>,
-  others: Iterable<Result<E, A>>
-): Result<E, [A, ...ReadonlyArray<A>]> => {
-  if (isFailure(start)) {
-    return start
-  }
-  const out: [A, ...Array<A>] = [start.success]
-  for (const r of others) {
-    if (isFailure(r)) {
-      return r
+  collection: Iterable<Result<E, A>>
+) =>
+  (self: Result<E, A>): Result<E, [A, ...ReadonlyArray<A>]> => {
+    if (isFailure(self)) {
+      return self
     }
-    out.push(r.success)
+    const out: [A, ...Array<A>] = [self.success]
+    for (const r of collection) {
+      if (isFailure(r)) {
+        return r
+      }
+      out.push(r.success)
+    }
+    return succeed(out)
   }
-  return succeed(out)
-}
 
 export const Semigroupal: semigroupal.Semigroupal<ResultTypeLambda> = {
   map,
-  zipWith: (fa, fb, f) =>
-    isFailure(fa) ? fa : isFailure(fb) ? fb : succeed(f(fa.success, fb.success)),
+  zipWith: (that, f) =>
+    (self) =>
+      isFailure(self) ? self : isFailure(that) ? that : succeed(f(self.success, that.success)),
   zipMany
 }
 

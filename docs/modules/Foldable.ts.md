@@ -16,6 +16,7 @@ Added in v1.0.0
   - [Foldable (interface)](#foldable-interface)
 - [utils](#utils)
   - [foldMap](#foldmap)
+  - [toReadonlyArrayWith](#toreadonlyarraywith)
 
 ---
 
@@ -45,6 +46,18 @@ Added in v1.0.0
 export declare const foldMap: <F extends any>(
   Foldable: Foldable<F>
 ) => <M>(Monoid: any) => <A>(f: (a: A) => M) => <S, R, O, E>(self: any) => M
+```
+
+Added in v1.0.0
+
+## toReadonlyArrayWith
+
+**Signature**
+
+```ts
+export declare const toReadonlyArrayWith: <F extends any>(
+  Foldable: Foldable<F>
+) => <S, R, O, E, A, B>(self: any, f: (a: A) => B) => readonly B[]
 ```
 
 Added in v1.0.0
