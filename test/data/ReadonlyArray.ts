@@ -42,7 +42,7 @@ export const head = <A>(
 
 export const sort = <B>(Compare: Sortable<B>) =>
   <A extends B>(as: ReadonlyArray<A>): ReadonlyArray<A> =>
-    as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a1, a2))
+    as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a2)(a1))
 
 export function concat<B>(
   that: NonEmptyReadonlyArray<B>

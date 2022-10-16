@@ -47,7 +47,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromCombine: <A>(combine: (first: A, second: A) => A) => Semigroup<A>
+export declare const fromCombine: <A>(combine: (that: A) => (self: A) => A) => Semigroup<A>
 ```
 
 Added in v1.0.0
@@ -110,8 +110,8 @@ Added in v1.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (first: A, second: A) => A
-  readonly combineMany: (start: A, others: Iterable<A>) => A
+  readonly combine: (that: A) => (self: A) => A
+  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 ```
 

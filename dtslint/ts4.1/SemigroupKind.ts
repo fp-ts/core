@@ -1,5 +1,6 @@
 import * as semigroupKind from "@fp-ts/core/SemigroupKind"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import { pipe } from "@fp-ts/core/internal/Function"
 
 export interface ReaderAsyncWriter<R, E, A> {
   (r: R): () => Promise<[E, A]>
@@ -15,4 +16,4 @@ declare const fb: ReaderAsyncWriter<{ b: number }, "b", number>
 export declare const SemigroupKind: semigroupKind.SemigroupKind<ReaderAsyncWriterTypeLambda>
 
 // $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "a" | "b", string | number>
-SemigroupKind.combineKind(fa, fb)
+pipe(fa, SemigroupKind.combineKind(fb))

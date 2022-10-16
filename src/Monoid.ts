@@ -21,7 +21,7 @@ export interface Monoid<A> extends Semigroup<A> {
 export const fromSemigroup = <A>(Semigroup: Semigroup<A>, empty: A): Monoid<A> => ({
   ...Semigroup,
   empty,
-  combineAll: (collection) => Semigroup.combineMany(empty, collection)
+  combineAll: (collection) => Semigroup.combineMany(collection)(empty)
 })
 
 /**

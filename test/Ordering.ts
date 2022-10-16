@@ -1,10 +1,11 @@
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Ordering"
 import { deepStrictEqual } from "./util"
 
 describe("Ordering", () => {
   it("Semigroup", () => {
-    deepStrictEqual(_.Monoid.combineMany(0, [1, -1]), 1)
-    deepStrictEqual(_.Monoid.combineMany(1, [-1, -1]), 1)
+    deepStrictEqual(pipe(0, _.Monoid.combineMany([1, -1])), 1)
+    deepStrictEqual(pipe(1, _.Monoid.combineMany([-1, -1])), 1)
   })
 
   it("match", () => {
