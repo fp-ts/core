@@ -33,11 +33,11 @@ Added in v1.0.0
   - [monoid](#monoid)
   - [monoidKind](#monoidkind)
   - [monoidal](#monoidal)
+  - [pointed](#pointed)
   - [semigroup](#semigroup)
   - [semigroupKind](#semigroupkind)
   - [semigroupal](#semigroupal)
   - [sortable](#sortable)
-  - [succeed](#succeed)
   - [traversable](#traversable)
   - [traversableWithIndex](#traversablewithindex)
 - [utils](#utils)
@@ -239,6 +239,16 @@ export declare const monoidal: any
 
 Added in v1.0.0
 
+## pointed
+
+**Signature**
+
+```ts
+export declare const pointed: any
+```
+
+Added in v1.0.0
+
 ## semigroup
 
 **Signature**
@@ -275,16 +285,6 @@ Added in v1.0.0
 
 ```ts
 export declare const sortable: any
-```
-
-Added in v1.0.0
-
-## succeed
-
-**Signature**
-
-```ts
-export declare const succeed: any
 ```
 
 Added in v1.0.0

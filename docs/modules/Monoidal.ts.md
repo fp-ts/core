@@ -26,7 +26,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Monoidal<F extends TypeLambda> extends Semigroupal<F>, Succeed<F> {
+export interface Monoidal<F extends TypeLambda> extends Semigroupal<F>, Pointed<F> {
   readonly zipAll: <S, R, O, E, A>(
     collection: Iterable<Kind<F, S, R, O, E, A>>
   ) => Kind<F, S, R, O, E, ReadonlyArray<A>>
