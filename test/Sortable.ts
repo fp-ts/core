@@ -8,10 +8,54 @@ import * as U from "./util"
 
 describe("Sortable", () => {
   it("tuple", () => {
-    const O = _.tuple(string.Sortable, number.Sortable, boolean.Sortable)
-    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["b", 2, true])), -1)
-    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 2, true])), -1)
-    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 1, false])), 1)
+    const S = _.tuple(string.Sortable, number.Sortable, boolean.Sortable)
+    U.deepStrictEqual(pipe(["a", 1, true], S.compare(["b", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], S.compare(["a", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], S.compare(["a", 1, false])), 1)
+  })
+
+  it("Contravariant", () => {
+    const S = pipe(number.Sortable, _.Contravariant.contramap((s: string) => s.length))
+    U.deepStrictEqual(pipe("a", S.compare("b")), 0)
+    U.deepStrictEqual(pipe("a", S.compare("bb")), -1)
+    U.deepStrictEqual(pipe("aa", S.compare("b")), 1)
+  })
+
+  it("getSemigroup", () => {
+    type T = readonly [number, string]
+    const tuples: ReadonlyArray<T> = [
+      [2, "c"],
+      [1, "b"],
+      [2, "a"],
+      [1, "c"]
+    ]
+    const S = _.getSemigroup<T>()
+    const sortByFst = pipe(
+      number.Sortable,
+      _.contramap((x: T) => x[0])
+    )
+    const sortBySnd = pipe(
+      string.Sortable,
+      _.contramap((x: T) => x[1])
+    )
+    U.deepStrictEqual(sort(pipe(sortByFst, S.combine(sortBySnd)))(tuples), [
+      [1, "b"],
+      [1, "c"],
+      [2, "a"],
+      [2, "c"]
+    ])
+    U.deepStrictEqual(sort(pipe(sortBySnd, S.combine(sortByFst)))(tuples), [
+      [2, "a"],
+      [1, "b"],
+      [1, "c"],
+      [2, "c"]
+    ])
+    U.deepStrictEqual(sort(pipe(sortBySnd, S.combineMany([])))(tuples), [
+      [2, "a"],
+      [1, "b"],
+      [2, "c"],
+      [1, "c"]
+    ])
   })
 
   it("getMonoid", () => {
@@ -31,15 +75,13 @@ describe("Sortable", () => {
       string.Sortable,
       _.contramap((x: T) => x[1])
     )
-    const O1 = pipe(M.empty, M.combineMany([sortByFst, sortBySnd]))
-    U.deepStrictEqual(sort(O1)(tuples), [
+    U.deepStrictEqual(sort(pipe(M.empty, M.combineMany([sortByFst, sortBySnd])))(tuples), [
       [1, "b"],
       [1, "c"],
       [2, "a"],
       [2, "c"]
     ])
-    const O2 = pipe(sortBySnd, M.combineMany([sortByFst, M.empty]))
-    U.deepStrictEqual(sort(O2)(tuples), [
+    U.deepStrictEqual(sort(pipe(sortBySnd, M.combineMany([sortByFst, M.empty])))(tuples), [
       [2, "a"],
       [1, "b"],
       [1, "c"],
@@ -72,11 +114,25 @@ describe("Sortable", () => {
     U.deepStrictEqual(pipe(2, Compare.compare(2)), 0)
   })
 
+  it("lt", () => {
+    const lt = _.lt(number.Sortable)
+    U.deepStrictEqual(pipe(0, lt(1)), true)
+    U.deepStrictEqual(pipe(1, lt(1)), false)
+    U.deepStrictEqual(pipe(2, lt(1)), false)
+  })
+
   it("leq", () => {
     const leq = _.leq(number.Sortable)
     U.deepStrictEqual(pipe(0, leq(1)), true)
     U.deepStrictEqual(pipe(1, leq(1)), true)
     U.deepStrictEqual(pipe(2, leq(1)), false)
+  })
+
+  it("gt", () => {
+    const gt = _.gt(number.Sortable)
+    U.deepStrictEqual(pipe(0, gt(1)), false)
+    U.deepStrictEqual(pipe(1, gt(1)), false)
+    U.deepStrictEqual(pipe(2, gt(1)), true)
   })
 
   it("geq", () => {

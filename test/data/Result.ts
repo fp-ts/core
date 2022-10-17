@@ -61,8 +61,3 @@ export const Semigroupal: semigroupal.Semigroupal<ResultTypeLambda> = {
 export const zip: <E2, B, A>(
   that: Result<E2, B>
 ) => <E1>(self: Result<E1, A>) => Result<E2 | E1, readonly [A, B]> = semigroupal.zip(Semigroupal)
-
-export const zipWith: <E2, B, A, C>(
-  that: Result<E2, B>,
-  f: (a: A, b: B) => C
-) => <E1>(self: Result<E1, A>) => Result<E2 | E1, C> = semigroupal.zipWith(Semigroupal)

@@ -135,11 +135,6 @@ export const zip: <B, A>(
   that: Option<B>
 ) => (self: Option<A>) => Option<readonly [A, B]> = semigroupal.zip(Semigroupal)
 
-export const zipWith: <B, A, C>(
-  that: Option<B>,
-  f: (a: A, b: B) => C
-) => (self: Option<A>) => Option<C> = semigroupal.zipWith(Semigroupal)
-
 export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = semigroupal
   .ap(
     Semigroupal
