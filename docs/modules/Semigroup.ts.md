@@ -59,7 +59,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const max: <A>(Sortable: any) => Semigroup<A>
+export declare const max: <A>(Sortable: Sortable<A>) => Semigroup<A>
 ```
 
 Added in v1.0.0
@@ -71,7 +71,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const min: <A>(Sortable: any) => Semigroup<A>
+export declare const min: <A>(Sortable: Sortable<A>) => Semigroup<A>
 ```
 
 Added in v1.0.0

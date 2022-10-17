@@ -45,9 +45,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sequence: <T extends any>(
+export declare const sequence: <T extends TypeLambda>(
   Traversable: Traversable<T>
-) => <F extends any>(G: any) => <TS, TR, TO, TE, S, R, O, E, A>(self: any) => any
+) => <F extends TypeLambda>(
+  G: Monoidal<F>
+) => <TS, TR, TO, TE, S, R, O, E, A>(
+  self: Kind<T, TS, TR, TO, TE, Kind<F, S, R, O, E, A>>
+) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, A>>
 ```
 
 Added in v1.0.0
@@ -59,12 +63,16 @@ Returns a default `traverse` composition.
 **Signature**
 
 ```ts
-export declare const traverseComposition: <F extends any, G extends any>(
+export declare const traverseComposition: <F extends TypeLambda, G extends TypeLambda>(
   TraversableF: Traversable<F>,
   TraversableG: Traversable<G>
-) => <H extends any>(
-  H: any
-) => <A, S, R, O, E, B>(f: (a: A) => any) => <FS, FR, FO, FE, GS, GR, GO, GE>(fga: any) => any
+) => <H extends TypeLambda>(
+  H: Monoidal<H>
+) => <A, S, R, O, E, B>(
+  f: (a: A) => Kind<H, S, R, O, E, B>
+) => <FS, FR, FO, FE, GS, GR, GO, GE>(
+  fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>
 ```
 
 Added in v1.0.0

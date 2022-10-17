@@ -44,7 +44,9 @@ Lift a monoid into 'F', the inner values are combined using the provided `Monoid
 **Signature**
 
 ```ts
-export declare const liftMonoid: <F extends any>(Monoidal: Monoidal<F>) => <A, S, R, O, E>(Monoid: any) => any
+export declare const liftMonoid: <F extends TypeLambda>(
+  Monoidal: Monoidal<F>
+) => <A, S, R, O, E>(Monoid: Monoid<A>) => Monoid<Kind<F, S, R, O, E, A>>
 ```
 
 Added in v1.0.0

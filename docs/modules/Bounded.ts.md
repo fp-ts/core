@@ -29,7 +29,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromSortable: <A>(Sortable: any, maximum: A, minimum: A) => Bounded<A>
+export declare const fromSortable: <A>(Sortable: compare.Sortable<A>, maximum: A, minimum: A) => Bounded<A>
 ```
 
 Added in v1.0.0

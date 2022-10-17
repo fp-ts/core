@@ -43,9 +43,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMap: <F extends any>(
+export declare const foldMap: <F extends TypeLambda>(
   Foldable: Foldable<F>
-) => <M>(Monoid: any) => <A>(f: (a: A) => M) => <S, R, O, E>(self: any) => M
+) => <M>(Monoid: Monoid<M>) => <A>(f: (a: A) => M) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => M
 ```
 
 Added in v1.0.0
@@ -55,9 +55,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toReadonlyArrayWith: <F extends any>(
+export declare const toReadonlyArrayWith: <F extends TypeLambda>(
   Foldable: Foldable<F>
-) => <S, R, O, E, A, B>(self: any, f: (a: A) => B) => readonly B[]
+) => <S, R, O, E, A, B>(self: Kind<F, S, R, O, E, A>, f: (a: A) => B) => readonly B[]
 ```
 
 Added in v1.0.0

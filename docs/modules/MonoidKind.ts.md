@@ -45,7 +45,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromSemigroupKind: <F extends any>(SemigroupKind: any, emptyKind: <S>() => any) => MonoidKind<F>
+export declare const fromSemigroupKind: <F extends TypeLambda>(
+  SemigroupKind: SemigroupKind<F>,
+  emptyKind: <S>() => Kind<F, S, unknown, never, never, never>
+) => MonoidKind<F>
 ```
 
 Added in v1.0.0
