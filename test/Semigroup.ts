@@ -11,13 +11,14 @@ describe("Semigroup", () => {
     U.deepStrictEqual(pipe("a", S.combine("b")), "ba")
     U.deepStrictEqual(pipe("a", S.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "ba")
+    U.deepStrictEqual(pipe("a", S.combineMany(["b", "c", "d"])), "dcba")
   })
 
   it("constant", () => {
-    const S = _.constant("c")
-    U.deepStrictEqual(pipe("a", S.combine("b")), "c")
-    U.deepStrictEqual(pipe("a", S.combineMany([])), "c")
-    U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "c")
+    const S = _.constant("-")
+    U.deepStrictEqual(pipe("a", S.combine("b")), "-")
+    U.deepStrictEqual(pipe("a", S.combineMany([])), "-")
+    U.deepStrictEqual(pipe("a", S.combineMany(["b", "c", "d"])), "-")
   })
 
   it("intercalate", () => {
@@ -25,6 +26,7 @@ describe("Semigroup", () => {
     U.deepStrictEqual(pipe("a", S.combine("b")), "a|b")
     U.deepStrictEqual(pipe("a", S.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "a|b")
+    U.deepStrictEqual(pipe("a", S.combineMany(["b", "c", "d"])), "a|b|c|d")
   })
 
   describe("min", () => {
