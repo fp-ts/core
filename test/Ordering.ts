@@ -3,11 +3,6 @@ import * as _ from "@fp-ts/core/Ordering"
 import { deepStrictEqual } from "./util"
 
 describe("Ordering", () => {
-  it("combineMany", () => {
-    deepStrictEqual(pipe(0, _.Monoid.combineMany([1, -1])), 1)
-    deepStrictEqual(pipe(1, _.Monoid.combineMany([-1, -1])), 1)
-  })
-
   it("match", () => {
     const f = _.match(
       () => "lt",

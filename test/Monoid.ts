@@ -21,7 +21,11 @@ describe("Monoid", () => {
 
   it("reverse", () => {
     const M = monoid.reverse(string.Monoid)
-    U.deepStrictEqual(pipe("a", M.combineMany(["b"])), "ba")
+    U.deepStrictEqual(pipe("a", M.combine("b")), "ba")
+    U.deepStrictEqual(pipe("a", M.combine(M.empty)), "a")
+    U.deepStrictEqual(pipe(M.empty, M.combine("a")), "a")
+    U.deepStrictEqual(pipe("a", M.combineMany([])), "a")
+    U.deepStrictEqual(pipe("a", M.combineMany(["b", "c", "d"])), "dcba")
     U.deepStrictEqual(pipe("a", M.combineMany([M.empty])), "a")
     U.deepStrictEqual(pipe(M.empty, M.combineMany(["a"])), "a")
   })
