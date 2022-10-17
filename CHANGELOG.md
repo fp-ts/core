@@ -1,5 +1,21 @@
 # @fp-ts/core
 
+## 0.0.5
+
+### Patch Changes
+
+- [#18](https://github.com/fp-ts/core/pull/18) [`be638f44`](https://github.com/fp-ts/core/commit/be638f44764484c8d93943d916d3fc0285466cbd) Thanks [@gcanti](https://github.com/gcanti)! - Semigroup: fix reverse implementation
+
+- [#18](https://github.com/fp-ts/core/pull/18) [`ae9715f6`](https://github.com/fp-ts/core/commit/ae9715f6670fda76e25c955cdaab17c65af098ba) Thanks [@gcanti](https://github.com/gcanti)! - Foldable / FoldableWithIndex: add compositions
+
+- [#18](https://github.com/fp-ts/core/pull/18) [`ba899d76`](https://github.com/fp-ts/core/commit/ba899d76debfd15031d0fff9079332fd33394f9b) Thanks [@gcanti](https://github.com/gcanti)! - Foldable / FlodableWithIndex: curry toReadonlyArrayWith and add toReadonlyArray
+
+- [#18](https://github.com/fp-ts/core/pull/18) [`2d30a185`](https://github.com/fp-ts/core/commit/2d30a1852227ac4f5279ebafef46ac527f5048ee) Thanks [@gcanti](https://github.com/gcanti)! - add FunctorWithIndex module
+
+- [#18](https://github.com/fp-ts/core/pull/18) [`9c531794`](https://github.com/fp-ts/core/commit/9c531794ca69346f38740e002687e4bd55fcb6b9) Thanks [@gcanti](https://github.com/gcanti)! - Semigroupal: remove useless zipWith export
+
+- [#18](https://github.com/fp-ts/core/pull/18) [`9683f82d`](https://github.com/fp-ts/core/commit/9683f82d68e35bfa471a6b39d59830b078d868c9) Thanks [@gcanti](https://github.com/gcanti)! - Bounded: swap maximum, minimum arguments in fromSortable
+
 ## 0.0.4
 
 ### Patch Changes
