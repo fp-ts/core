@@ -1,5 +1,7 @@
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
+import type * as functor from "@fp-ts/core/Functor"
+import type * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type * as monoidal from "@fp-ts/core/Monoidal"
 import type { Sortable } from "@fp-ts/core/Sortable"
@@ -11,6 +13,15 @@ import * as O from "./Option"
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Out1"]>
 }
+
+export const Functor: functor.Functor<ReadonlyArrayTypeLambda> = {
+  map: (f) => (self) => self.map(a => f(a))
+}
+
+export const FunctorWithIndex: functorWithIndex.FunctorWithIndex<ReadonlyArrayTypeLambda, number> =
+  {
+    mapWithIndex: (f) => (self) => self.map((a, i) => f(a, i))
+  }
 
 export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
   reduce: (b, f) => self => self.reduce((b, a) => f(b, a), b),
