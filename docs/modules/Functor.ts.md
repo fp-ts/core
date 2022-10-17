@@ -35,9 +35,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bindTo: <F extends any>(
+export declare const bindTo: <F extends TypeLambda>(
   Functor: Functor<F>
-) => <N extends string>(name: N) => <S, R, O, E, A>(self: any) => any
+) => <N extends string>(
+  name: N
+) => <S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, { readonly [K in N]: A }>
 ```
 
 Added in v1.0.0
@@ -47,12 +49,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const let: <F extends any>(
+export declare const let: <F extends TypeLambda>(
   F: Functor<F>
 ) => <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <S, R, O, E>(self: any) => any
+) => <S, R, O, E>(
+  self: Kind<F, S, R, O, E, A>
+) => Kind<F, S, R, O, E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0
@@ -64,7 +68,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const as: <F extends any>(Functor: Functor<F>) => <B>(b: B) => <S, R, O, E>(self: any) => any
+export declare const as: <F extends TypeLambda>(
+  Functor: Functor<F>
+) => <B>(b: B) => <S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -74,7 +80,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <F extends any>(Functor: Functor<F>) => <A>(a: A) => <S, R, O, E, B>(self: any) => any
+export declare const flap: <F extends TypeLambda>(
+  Functor: Functor<F>
+) => <A>(a: A) => <S, R, O, E, B>(self: Kind<F, S, R, O, E, (a: A) => B>) => Kind<F, S, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -84,7 +92,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const unit: <F extends any>(Functor: Functor<F>) => <S, R, O, E>(self: any) => any
+export declare const unit: <F extends TypeLambda>(
+  Functor: Functor<F>
+) => <S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, void>
 ```
 
 Added in v1.0.0
@@ -96,7 +106,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const tupled: <F extends any>(Functor: Functor<F>) => <S, R, O, E, A>(self: any) => any
+export declare const tupled: <F extends TypeLambda>(
+  Functor: Functor<F>
+) => <S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A]>
 ```
 
 Added in v1.0.0
@@ -124,10 +136,14 @@ Returns a default `map` composition.
 **Signature**
 
 ```ts
-export declare const mapComposition: <F extends any, G extends any>(
+export declare const mapComposition: <F extends TypeLambda, G extends TypeLambda>(
   FunctorF: Functor<F>,
   FunctorG: Functor<G>
-) => <A, B>(f: (a: A) => B) => <FS, FR, FO, FE, GS, GR, GO, GE>(self: any) => any
+) => <A, B>(
+  f: (a: A) => B
+) => <FS, FR, FO, FE, GS, GR, GO, GE>(
+  self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>
 ```
 
 Added in v1.0.0

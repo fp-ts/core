@@ -46,12 +46,16 @@ Returns a default `traverseWithIndex` composition.
 **Signature**
 
 ```ts
-export declare const traverseWithIndexComposition: <F extends any, I, G extends any, J>(
+export declare const traverseWithIndexComposition: <F extends TypeLambda, I, G extends TypeLambda, J>(
   TraversableWithIndexF: TraversableWithIndex<F, I>,
   TraversableWithIndexG: TraversableWithIndex<G, J>
-) => <H extends any>(
-  H: any
-) => <A, S, R, O, E, B>(f: (a: A, ij: readonly [I, J]) => any) => <FS, FR, FO, FE, GS, GR, GO, GE>(fga: any) => any
+) => <H extends TypeLambda>(
+  H: Monoidal<H>
+) => <A, S, R, O, E, B>(
+  f: (a: A, ij: readonly [I, J]) => Kind<H, S, R, O, E, B>
+) => <FS, FR, FO, FE, GS, GR, GO, GE>(
+  fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>
 ```
 
 Added in v1.0.0

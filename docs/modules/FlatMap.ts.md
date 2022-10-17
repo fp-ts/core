@@ -32,12 +32,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bind: <M extends any>(
+export declare const bind: <M extends TypeLambda>(
   FlatMap: FlatMap<M>
 ) => <N extends string, A extends object, S, R2, O2, E2, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => any
-) => <R1, O1, E1>(self: any) => any
+  f: (a: A) => Kind<M, S, R2, O2, E2, B>
+) => <R1, O1, E1>(
+  self: Kind<M, S, R1, O1, E1, A>
+) => Kind<M, S, R1 & R2, O2 | O1, E2 | E1, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0
@@ -52,9 +54,11 @@ produced by the effect.
 **Signature**
 
 ```ts
-export declare const zipLeft: <F extends any>(
+export declare const zipLeft: <F extends TypeLambda>(
   FlatMap: FlatMap<F>
-) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
+) => <S, R2, O2, E2>(
+  that: Kind<F, S, R2, O2, E2, unknown>
+) => <R1, O1, E1, A>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, A>
 ```
 
 Added in v1.0.0
@@ -66,9 +70,11 @@ A variant of `flatMap` that ignores the value produced by this effect.
 **Signature**
 
 ```ts
-export declare const zipRight: <F extends any>(
+export declare const zipRight: <F extends TypeLambda>(
   FlatMap: FlatMap<F>
-) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
+) => <S, R2, O2, E2, A>(
+  that: Kind<F, S, R2, O2, E2, A>
+) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, unknown>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, A>
 ```
 
 Added in v1.0.0
@@ -96,7 +102,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composeKind: <F extends any>(FlatMap: FlatMap<F>) => any
+export declare const composeKind: <F extends TypeLambda>(
+  FlatMap: FlatMap<F>
+) => <B, S, R2, O2, E2, C>(
+  bfc: (b: B) => Kind<F, S, R2, O2, E2, C>
+) => <A, R1, O1, E1>(afb: (a: A) => Kind<F, S, R1, O1, E1, B>) => (a: A) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, C>
 ```
 
 Added in v1.0.0
@@ -108,9 +118,11 @@ Returns an effect that effectfully "peeks" at the success of this effect.
 **Signature**
 
 ```ts
-export declare const tap: <F extends any>(
+export declare const tap: <F extends TypeLambda>(
   FlatMap: FlatMap<F>
-) => <A, S, R2, O2, E2>(f: (a: A) => any) => <R1, O1, E1>(self: any) => any
+) => <A, S, R2, O2, E2>(
+  f: (a: A) => Kind<F, S, R2, O2, E2, unknown>
+) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, A>
 ```
 
 Added in v1.0.0

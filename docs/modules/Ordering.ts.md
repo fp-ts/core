@@ -31,7 +31,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Monoid: any
+export declare const Monoid: monoid.Monoid<Ordering>
 ```
 
 Added in v1.0.0
@@ -41,7 +41,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Semigroup: any
+export declare const Semigroup: semigroup.Semigroup<Ordering>
 ```
 
 Added in v1.0.0

@@ -47,7 +47,9 @@ Returns a default `map` implementation.
 **Signature**
 
 ```ts
-export declare const map: <F extends any>(Bifunctor: Bifunctor<F>) => any
+export declare const map: <F extends TypeLambda>(
+  Bifunctor: Bifunctor<F>
+) => <A, B>(f: (a: A) => B) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -59,10 +61,15 @@ Returns a default `mapBoth` composition.
 **Signature**
 
 ```ts
-export declare const mapBothComposition: <F extends any, G extends any>(
-  FunctorF: any,
+export declare const mapBothComposition: <F extends TypeLambda, G extends TypeLambda>(
+  FunctorF: Functor<F>,
   BifunctorG: Bifunctor<G>
-) => <GE, GG, A, B>(f: (e: GE) => GG, g: (a: A) => B) => <FS, FR, FO, FE, GS, GR, GO>(self: any) => any
+) => <GE, GG, A, B>(
+  f: (e: GE) => GG,
+  g: (a: A) => B
+) => <FS, FR, FO, FE, GS, GR, GO>(
+  self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GG, B>>
 ```
 
 Added in v1.0.0
@@ -72,9 +79,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const mapLeft: <F extends any>(
+export declare const mapLeft: <F extends TypeLambda>(
   Bifunctor: Bifunctor<F>
-) => <E, G>(f: (e: E) => G) => <S, R, O, A>(self: any) => any
+) => <E, G>(f: (e: E) => G) => <S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>
 ```
 
 Added in v1.0.0

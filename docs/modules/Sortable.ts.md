@@ -44,7 +44,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (that: A) => (self: A) => any) => Sortable<A>
+export declare const fromCompare: <A>(compare: (that: A) => (self: A) => Ordering) => Sortable<A>
 ```
 
 Added in v1.0.0
@@ -56,7 +56,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Contravariant: any
+export declare const Contravariant: contravariant.Contravariant<SortableTypeLambda>
 ```
 
 Added in v1.0.0
@@ -66,7 +66,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>() => any
+export declare const getMonoid: <A>() => Monoid<Sortable<A>>
 ```
 
 Added in v1.0.0
@@ -76,7 +76,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A>() => any
+export declare const getSemigroup: <A>() => Semigroup<Sortable<A>>
 ```
 
 Added in v1.0.0

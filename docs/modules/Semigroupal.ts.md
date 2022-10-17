@@ -62,9 +62,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <F extends any>(
+export declare const ap: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <S, R2, O2, E2, A>(fa: any) => <R1, O1, E1, B>(self: any) => any
+) => <S, R2, O2, E2, A>(
+  fa: Kind<F, S, R2, O2, E2, A>
+) => <R1, O1, E1, B>(self: Kind<F, S, R1, O1, E1, (a: A) => B>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, B>
 ```
 
 Added in v1.0.0
@@ -76,12 +78,14 @@ A variant of `FlatMap.bind` that sequentially ignores the scope.
 **Signature**
 
 ```ts
-export declare const bindRight: <F extends any>(
+export declare const bindRight: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
 ) => <N extends string, A extends object, S, R2, O2, E2, B>(
   name: Exclude<N, keyof A>,
-  fb: any
-) => <R1, O1, E1>(self: any) => any
+  fb: Kind<F, S, R2, O2, E2, B>
+) => <R1, O1, E1>(
+  self: Kind<F, S, R1, O1, E1, A>
+) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0
@@ -93,9 +97,14 @@ Lifts a binary function into `F`.
 **Signature**
 
 ```ts
-export declare const lift2: <F extends any>(
+export declare const lift2: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <A, B, C>(f: (a: A, b: B) => C) => <S, R1, O1, E1, R2, O2, E2>(fa: any, fb: any) => any
+) => <A, B, C>(
+  f: (a: A, b: B) => C
+) => <S, R1, O1, E1, R2, O2, E2>(
+  fa: Kind<F, S, R1, O1, E1, A>,
+  fb: Kind<F, S, R2, O2, E2, B>
+) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C>
 ```
 
 Added in v1.0.0
@@ -107,11 +116,15 @@ Lifts a ternary function into 'F'.
 **Signature**
 
 ```ts
-export declare const lift3: <F extends any>(
+export declare const lift3: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
 ) => <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(fa: any, fb: any, fc: any) => any
+) => <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(
+  fa: Kind<F, S, R1, O1, E1, A>,
+  fb: Kind<F, S, R2, O2, E2, B>,
+  fc: Kind<F, S, R3, O3, E3, C>
+) => Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D>
 ```
 
 Added in v1.0.0
@@ -123,9 +136,9 @@ Lift a semigroup into 'F', the inner values are combined using the provided `Sem
 **Signature**
 
 ```ts
-export declare const liftSemigroup: <F extends any>(
+export declare const liftSemigroup: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <A, S, R, O, E>(Semigroup: any) => any
+) => <A, S, R, O, E>(Semigroup: Semigroup<A>) => Semigroup<Kind<F, S, R, O, E, A>>
 ```
 
 Added in v1.0.0
@@ -135,9 +148,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const zip: <F extends any>(
+export declare const zip: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <S, R2, O2, E2, B, A>(that: any) => <R1, O1, E1>(self: any) => any
+) => <S, R2, O2, E2, B, A>(
+  that: Kind<F, S, R2, O2, E2, B>
+) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, readonly [A, B]>
 ```
 
 Added in v1.0.0
@@ -149,9 +164,13 @@ Zips this effect with the specified effect.
 **Signature**
 
 ```ts
-export declare const zipFlatten: <F extends any>(
+export declare const zipFlatten: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <S, R2, O2, E2, B>(that: any) => <R1, O1, E1, A extends readonly unknown[]>(self: any) => any
+) => <S, R2, O2, E2, B>(
+  that: Kind<F, S, R2, O2, E2, B>
+) => <R1, O1, E1, A extends readonly unknown[]>(
+  self: Kind<F, S, R1, O1, E1, A>
+) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, readonly [...A, B]>
 ```
 
 Added in v1.0.0
@@ -165,9 +184,11 @@ other side will **NOT** be interrupted.
 **Signature**
 
 ```ts
-export declare const zipLeftPar: <F extends any>(
+export declare const zipLeftPar: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <S, R2, O2, E2>(that: any) => <R1, O1, E1, A>(self: any) => any
+) => <S, R2, O2, E2>(
+  that: Kind<F, S, R2, O2, E2, unknown>
+) => <R1, O1, E1, A>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, A>
 ```
 
 Added in v1.0.0
@@ -179,10 +200,14 @@ Returns a default `zipMany` composition.
 **Signature**
 
 ```ts
-export declare const zipManyComposition: <F extends any, G extends any>(
+export declare const zipManyComposition: <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
-) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(collection: Iterable<any>) => (self: any) => any
+) => <FS, FR, FO, FE, GS, GR, GO, GE, A>(
+  collection: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
+) => (
+  self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, readonly [A, ...A[]]>>
 ```
 
 Added in v1.0.0
@@ -196,9 +221,11 @@ then the other side will **NOT** be interrupted.
 **Signature**
 
 ```ts
-export declare const zipRightPar: <F extends any>(
+export declare const zipRightPar: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <S, R2, O2, E2, A>(that: any) => <R1, O1, E1>(self: any) => any
+) => <S, R2, O2, E2, A>(
+  that: Kind<F, S, R2, O2, E2, A>
+) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, unknown>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, A>
 ```
 
 Added in v1.0.0
@@ -211,9 +238,12 @@ specified combiner function.
 **Signature**
 
 ```ts
-export declare const zipWith: <F extends any>(
+export declare const zipWith: <F extends TypeLambda>(
   Semigroupal: Semigroupal<F>
-) => <S, R2, O2, E2, B, A, C>(that: any, f: (a: A, b: B) => C) => <R1, O1, E1>(self: any) => any
+) => <S, R2, O2, E2, B, A, C>(
+  that: Kind<F, S, R2, O2, E2, B>,
+  f: (a: A, b: B) => C
+) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O2 | O1, E2 | E1, C>
 ```
 
 Added in v1.0.0
@@ -225,13 +255,15 @@ Returns a default `zipWith` composition.
 **Signature**
 
 ```ts
-export declare const zipWithComposition: <F extends any, G extends any>(
+export declare const zipWithComposition: <F extends TypeLambda, G extends TypeLambda>(
   SemigroupalF: Semigroupal<F>,
   SemigroupalG: Semigroupal<G>
 ) => <FS, FR2, FO2, FE2, GS, GR2, GO2, GE2, B, A, C>(
-  that: any,
+  that: Kind<F, FS, FR2, FO2, FE2, Kind<G, GS, GR2, GO2, GE2, B>>,
   f: (a: A, b: B) => C
-) => <FR1, FO1, FE1, GR1, GO1, GE1>(self: any) => any
+) => <FR1, FO1, FE1, GR1, GO1, GE1>(
+  self: Kind<F, FS, FR1, FO1, FE1, Kind<G, GS, GR1, GO1, GE1, A>>
+) => Kind<F, FS, FR1 & FR2, FO2 | FO1, FE2 | FE1, Kind<G, GS, GR1 & GR2, GO2 | GO1, GE2 | GE1, C>>
 ```
 
 Added in v1.0.0

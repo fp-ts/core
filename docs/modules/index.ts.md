@@ -52,7 +52,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ordering: any
+export declare const ordering: typeof ordering
 ```
 
 Added in v1.0.0
@@ -64,7 +64,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bifunctor: any
+export declare const bifunctor: typeof bifunctor
 ```
 
 Added in v1.0.0
@@ -74,7 +74,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bounded: any
+export declare const bounded: typeof bounded
 ```
 
 Added in v1.0.0
@@ -84,7 +84,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const category: any
+export declare const category: typeof category
 ```
 
 Added in v1.0.0
@@ -94,7 +94,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const categoryKind: any
+export declare const categoryKind: typeof categoryKind
 ```
 
 Added in v1.0.0
@@ -104,7 +104,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const comonad: any
+export declare const comonad: typeof comonad
 ```
 
 Added in v1.0.0
@@ -114,7 +114,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composable: any
+export declare const composable: typeof composable
 ```
 
 Added in v1.0.0
@@ -124,7 +124,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composableKind: any
+export declare const composableKind: typeof composableKind
 ```
 
 Added in v1.0.0
@@ -134,7 +134,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const contravariant: any
+export declare const contravariant: typeof contravariant
 ```
 
 Added in v1.0.0
@@ -144,7 +144,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const extendable: any
+export declare const extendable: typeof extendable
 ```
 
 Added in v1.0.0
@@ -154,7 +154,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMap: any
+export declare const flatMap: typeof flatMap
 ```
 
 Added in v1.0.0
@@ -164,7 +164,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldable: any
+export declare const foldable: typeof foldable
 ```
 
 Added in v1.0.0
@@ -174,7 +174,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldableWithIndex: any
+export declare const foldableWithIndex: typeof foldableWithIndex
 ```
 
 Added in v1.0.0
@@ -184,7 +184,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const functor: any
+export declare const functor: typeof functor
 ```
 
 Added in v1.0.0
@@ -194,7 +194,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const invariant: any
+export declare const invariant: typeof invariant
 ```
 
 Added in v1.0.0
@@ -204,7 +204,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const monad: any
+export declare const monad: typeof monad
 ```
 
 Added in v1.0.0
@@ -214,7 +214,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const monoid: any
+export declare const monoid: typeof monoid
 ```
 
 Added in v1.0.0
@@ -224,7 +224,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const monoidKind: any
+export declare const monoidKind: typeof monoidKind
 ```
 
 Added in v1.0.0
@@ -234,7 +234,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const monoidal: any
+export declare const monoidal: typeof monoidal
 ```
 
 Added in v1.0.0
@@ -244,7 +244,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const pointed: any
+export declare const pointed: typeof pointed
 ```
 
 Added in v1.0.0
@@ -254,7 +254,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semigroup: any
+export declare const semigroup: typeof semigroup
 ```
 
 Added in v1.0.0
@@ -264,7 +264,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semigroupKind: any
+export declare const semigroupKind: typeof semigroupKind
 ```
 
 Added in v1.0.0
@@ -274,7 +274,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semigroupal: any
+export declare const semigroupal: typeof semigroupal
 ```
 
 Added in v1.0.0
@@ -284,7 +284,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sortable: any
+export declare const sortable: typeof sortable
 ```
 
 Added in v1.0.0
@@ -294,7 +294,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversable: any
+export declare const traversable: typeof traversable
 ```
 
 Added in v1.0.0
@@ -304,7 +304,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversableWithIndex: any
+export declare const traversableWithIndex: typeof traversableWithIndex
 ```
 
 Added in v1.0.0
@@ -316,7 +316,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const hkt: any
+export declare const hkt: typeof hkt
 ```
 
 Added in v1.0.0
