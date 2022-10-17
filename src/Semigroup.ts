@@ -62,7 +62,7 @@ export const constant = <A>(a: A): Semigroup<A> => ({
  * @since 1.0.0
  */
 export const reverse = <A>(Semigroup: Semigroup<A>): Semigroup<A> => ({
-  combine: (that) => (self) => Semigroup.combine(that)(self),
+  combine: (that) => (self) => Semigroup.combine(self)(that),
   combineMany: (collection) =>
     (self) => {
       const reversed = Array.from(collection).reverse()
