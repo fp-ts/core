@@ -6,6 +6,25 @@ import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"
 
 describe("Foldable", () => {
+  it("reduceComposition", () => {
+    const reduce = foldable.reduceComposition(RA.Foldable, RA.Foldable)
+    const f = (b: string, a: string) => b + a
+    U.deepStrictEqual(pipe([], reduce("-", f)), "-")
+    U.deepStrictEqual(pipe([[]], reduce("-", f)), "-")
+    U.deepStrictEqual(pipe([["a", "c"], ["b", "d"]], reduce("-", f)), "-acbd")
+  })
+
+  it("reduceRightComposition", () => {
+    const reduceRight = foldable.reduceRightComposition(RA.Foldable, RA.Foldable)
+    const f = (b: string, a: string) => b + a
+    U.deepStrictEqual(pipe([], reduceRight("-", f)), "-")
+    U.deepStrictEqual(pipe([[]], reduceRight("-", f)), "-")
+    U.deepStrictEqual(
+      pipe([["a", "c"], ["b", "d"]], reduceRight("-", f)),
+      "-dbca"
+    )
+  })
+
   it("toReadonlyArray", () => {
     const toReadonlyArray = foldable.toReadonlyArray(O.Foldable)
     U.deepStrictEqual(toReadonlyArray(O.none), [])
