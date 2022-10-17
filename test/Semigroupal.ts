@@ -18,6 +18,9 @@ describe("Semigroupal", () => {
 
   it("zipManyComposition", () => {
     const zipMany = _.zipManyComposition(O.Semigroupal, O.Semigroupal)
+    U.deepStrictEqual(pipe(O.none, zipMany([])), O.none)
+    U.deepStrictEqual(pipe(O.some(O.none), zipMany([])), O.some(O.none))
+    U.deepStrictEqual(pipe(O.some(O.some(1)), zipMany([])), O.some(O.some([1] as const)))
     U.deepStrictEqual(pipe(O.none, zipMany([O.none])), O.none)
     U.deepStrictEqual(pipe(O.some(O.none), zipMany([O.none])), O.none)
     U.deepStrictEqual(pipe(O.some(O.none), zipMany([O.some(O.none)])), O.some(O.none))

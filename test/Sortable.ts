@@ -56,6 +56,12 @@ describe("Sortable", () => {
       [2, "c"],
       [1, "c"]
     ])
+    U.deepStrictEqual(sort(pipe(sortBySnd, S.combineMany([sortByFst])))(tuples), [
+      [2, "a"],
+      [1, "b"],
+      [1, "c"],
+      [2, "c"]
+    ])
   })
 
   it("getMonoid", () => {

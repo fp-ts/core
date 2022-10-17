@@ -32,6 +32,7 @@ describe("Semigroup", () => {
   describe("min", () => {
     it("should return the minimum", () => {
       const S = _.min(number.Sortable)
+      U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
       U.deepStrictEqual(pipe(1, S.combineMany([3, 2])), 1)
     })
 
@@ -40,12 +41,14 @@ describe("Semigroup", () => {
       const S = _.min(pipe(number.Sortable, sortable.contramap((_: Item) => _.a)))
       const item: Item = { a: 1 }
       U.strictEqual(pipe({ a: 2 }, S.combineMany([{ a: 1 }, item])), item)
+      U.strictEqual(pipe(item, S.combineMany([])), item)
     })
   })
 
   describe("max", () => {
     it("should return the maximum", () => {
       const S = _.max(number.Sortable)
+      U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
       U.deepStrictEqual(pipe(1, S.combineMany([3, 2])), 3)
     })
 
@@ -54,6 +57,7 @@ describe("Semigroup", () => {
       const S = _.max(pipe(number.Sortable, sortable.contramap((_: Item) => _.a)))
       const item: Item = { a: 2 }
       U.strictEqual(pipe({ a: 1 }, S.combineMany([{ a: 2 }, item])), item)
+      U.strictEqual(pipe(item, S.combineMany([])), item)
     })
   })
 
@@ -66,6 +70,21 @@ describe("Semigroup", () => {
       name: "ab",
       age: 30
     })
+    U.deepStrictEqual(pipe({ name: "a", age: 10 }, S.combineMany([])), {
+      name: "a",
+      age: 10
+    })
+    U.deepStrictEqual(pipe({ name: "a", age: 10 }, S.combineMany([{ name: "b", age: 20 }])), {
+      name: "ab",
+      age: 30
+    })
+    U.deepStrictEqual(
+      pipe({ name: "a", age: 10 }, S.combineMany([{ name: "b", age: 20 }, { name: "c", age: 30 }])),
+      {
+        name: "abc",
+        age: 60
+      }
+    )
   })
 
   it("tuple", () => {
@@ -74,11 +93,15 @@ describe("Semigroup", () => {
       number.SemigroupSum
     )
     U.deepStrictEqual(pipe(["a", 10], S.combine(["b", 20])), ["ab", 30])
+    U.deepStrictEqual(pipe(["a", 10], S.combineMany([])), ["a", 10])
+    U.deepStrictEqual(pipe(["a", 10], S.combineMany([["b", 20]])), ["ab", 30])
+    U.deepStrictEqual(pipe(["a", 10], S.combineMany([["b", 20], ["c", 30]])), ["abc", 60])
   })
 
   it("first", () => {
     const S = _.first<number>()
     U.deepStrictEqual(pipe(1, S.combine(2)), 1)
+    U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
     U.deepStrictEqual(pipe(1, S.combineMany([2, 3, 4, 5, 6])), 1)
   })
 
