@@ -94,17 +94,6 @@ export const zip = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
       pipe(self, Semigroupal.zipWith(that, (a, b) => [a, b]))
 
 /**
- * Zips this effect with the specified effect using the
- * specified combiner function.
- *
- * @since 1.0.0
- */
-export const zipWith = <F extends TypeLambda>(Semigroupal: Semigroupal<F>) =>
-  <S, R2, O2, E2, B, A, C>(that: Kind<F, S, R2, O2, E2, B>, f: (a: A, b: B) => C) =>
-    <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> =>
-      pipe(self, Semigroupal.zipWith(that, f))
-
-/**
  * Returns an effect that executes both this effect and the specified effect,
  * in parallel, this effect result returned. If either side fails, then the
  * other side will **NOT** be interrupted.
