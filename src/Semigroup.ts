@@ -68,9 +68,7 @@ export const reverse = <A>(Semigroup: Semigroup<A>): Semigroup<A> => ({
       const reversed = Array.from(collection).reverse()
       return reversed.length === 0 ?
         self :
-        Semigroup.combine(self)(
-          reversed.reduceRight((first, second) => Semigroup.combine(second)(first))
-        )
+        Semigroup.combine(self)(Semigroup.combineMany(reversed.slice(1))(reversed[0]))
     }
 })
 
