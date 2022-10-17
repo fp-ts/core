@@ -8,7 +8,7 @@ import * as U from "./util"
 describe("Semigroup", () => {
   it("reverse", () => {
     const S = _.reverse(string.Semigroup)
-    // U.deepStrictEqual(pipe("a", S.combine("b")), "ba")
+    U.deepStrictEqual(pipe("a", S.combine("b")), "ba")
     U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "ba")
   })
 
