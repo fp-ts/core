@@ -17,7 +17,7 @@ export interface Bounded<A> extends Sortable<A> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromSortable = <A>(Sortable: Sortable<A>, maximum: A, minimum: A): Bounded<A> => ({
+export const fromSortable = <A>(Sortable: Sortable<A>, minimum: A, maximum: A): Bounded<A> => ({
   ...Sortable,
   maximum,
   minimum

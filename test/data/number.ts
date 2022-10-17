@@ -34,4 +34,4 @@ export const Sortable: sortable.Sortable<number> = sortable.fromCompare((that) =
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
-export const Bounded: bounded.Bounded<number> = bounded.fromSortable(Sortable, Infinity, -Infinity)
+export const Bounded: bounded.Bounded<number> = bounded.fromSortable(Sortable, -Infinity, Infinity)

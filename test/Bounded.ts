@@ -4,7 +4,7 @@ import * as U from "./util"
 
 describe("Bounded", () => {
   it("clamp", () => {
-    const clamp = _.clamp(_.fromSortable<number>(number.Sortable, 10, 1))
+    const clamp = _.clamp(_.fromSortable<number>(number.Sortable, 1, 10))
     U.deepStrictEqual(clamp(2), 2)
     U.deepStrictEqual(clamp(10), 10)
     U.deepStrictEqual(clamp(20), 10)
