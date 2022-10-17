@@ -1,5 +1,6 @@
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
+import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
@@ -45,6 +46,17 @@ export const reduceRight = <B, A>(b: B, f: (b: B, a: A) => B) =>
 export const Foldable: foldable.Foldable<OptionTypeLambda> = {
   reduce,
   reduceRight
+}
+
+export const reduceWithIndex = <B, A>(b: B, f: (b: B, a: A, i: number) => B) =>
+  (self: Option<A>): B => isNone(self) ? b : f(b, self.value, 0)
+
+export const reduceRightWithIndex = <B, A>(b: B, f: (b: B, a: A, i: number) => B) =>
+  (self: Option<A>): B => isNone(self) ? b : f(b, self.value, 0)
+
+export const FoldableWithIndex: foldableWithIndex.FoldableWithIndex<OptionTypeLambda, number> = {
+  reduceWithIndex,
+  reduceRightWithIndex
 }
 
 export const foldMap: <M>(

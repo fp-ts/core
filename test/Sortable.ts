@@ -48,21 +48,21 @@ describe("Sortable", () => {
   })
 
   it("clamp", () => {
-    const clampNumber = _.clamp(number.Sortable)
-    U.deepStrictEqual(clampNumber(1, 10)(2), 2)
-    U.deepStrictEqual(clampNumber(1, 10)(10), 10)
-    U.deepStrictEqual(clampNumber(1, 10)(20), 10)
-    U.deepStrictEqual(clampNumber(1, 10)(1), 1)
-    U.deepStrictEqual(clampNumber(1, 10)(-10), 1)
+    const clamp = _.clamp(number.Sortable)
+    U.deepStrictEqual(clamp(1, 10)(2), 2)
+    U.deepStrictEqual(clamp(1, 10)(10), 10)
+    U.deepStrictEqual(clamp(1, 10)(20), 10)
+    U.deepStrictEqual(clamp(1, 10)(1), 1)
+    U.deepStrictEqual(clamp(1, 10)(-10), 1)
   })
 
   it("between", () => {
-    const betweenNumber = _.between(number.Sortable)
-    U.deepStrictEqual(betweenNumber(1, 10)(2), true)
-    U.deepStrictEqual(betweenNumber(1, 10)(10), true)
-    U.deepStrictEqual(betweenNumber(1, 10)(20), false)
-    U.deepStrictEqual(betweenNumber(1, 10)(1), true)
-    U.deepStrictEqual(betweenNumber(1, 10)(-10), false)
+    const between = _.between(number.Sortable)
+    U.deepStrictEqual(between(1, 10)(2), true)
+    U.deepStrictEqual(between(1, 10)(10), true)
+    U.deepStrictEqual(between(1, 10)(20), false)
+    U.deepStrictEqual(between(1, 10)(1), true)
+    U.deepStrictEqual(between(1, 10)(-10), false)
   })
 
   it("reverse", () => {

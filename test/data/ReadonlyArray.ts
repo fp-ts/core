@@ -12,7 +12,7 @@ export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Out1"]>
 }
 
-export const FoldableReadonlyArray: foldable.Foldable<ReadonlyArrayTypeLambda> = {
+export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
   reduce: (b, f) => self => self.reduce((b, a) => f(b, a), b),
   reduceRight: (b, f) => self => self.reduceRight((b, a) => f(b, a), b)
 }
@@ -25,7 +25,7 @@ export const reduceWithIndex = <A, B>(
 export const reduceRightWithIndex = <A, B>(b: B, f: (b: B, a: A, i: number) => B) =>
   (self: ReadonlyArray<A>): B => self.reduceRight((b, a, i) => f(b, a, i), b)
 
-export const FoldableWithIndexReadonlyArray: foldableWithIndex.FoldableWithIndex<
+export const FoldableWithIndex: foldableWithIndex.FoldableWithIndex<
   ReadonlyArrayTypeLambda,
   number
 > = {
