@@ -1,9 +1,24 @@
 import * as _ from "@fp-ts/core/Functor"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as O from "./data/Option"
+import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"
 
 describe("Functor", () => {
+  it("mapWithIndexComposition", () => {
+    const map = _.mapComposition(RA.Functor, RA.Functor)
+    const f = (a: string) => a + "!"
+    U.deepStrictEqual(pipe([], map(f)), [])
+    U.deepStrictEqual(pipe([[]], map(f)), [[]])
+    U.deepStrictEqual(pipe([["a"]], map(f)), [["a!"]])
+    U.deepStrictEqual(pipe([["a"], ["b"]], map(f)), [["a!"], ["b!"]])
+    U.deepStrictEqual(pipe([["a", "c"], ["b", "d", "e"]], map(f)), [["a!", "c!"], [
+      "b!",
+      "d!",
+      "e!"
+    ]])
+  })
+
   it("flap", () => {
     const flap = _.flap(O.Functor)
     U.deepStrictEqual(pipe(O.none, flap(1)), O.none)

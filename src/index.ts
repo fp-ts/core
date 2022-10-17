@@ -15,6 +15,7 @@ import * as flatMap from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
+import * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
 import * as monad from "@fp-ts/core/Monad"
@@ -96,6 +97,11 @@ export {
    * @since 1.0.0
    */
   functor,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  functorWithIndex,
   /**
    * @since 1.0.0
    */
