@@ -3,7 +3,9 @@ import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import type * as functor from "@fp-ts/core/Functor"
 import type * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { pipe } from "@fp-ts/core/internal/Function"
 import type * as monoidal from "@fp-ts/core/Monoidal"
+import type * as semigroupal from "@fp-ts/core/Semigroupal"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
@@ -14,8 +16,11 @@ export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Out1"]>
 }
 
+const map = <A, B>(f: (a: A) => B) =>
+  (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map(a => f(a))
+
 export const Functor: functor.Functor<ReadonlyArrayTypeLambda> = {
-  map: (f) => (self) => self.map(a => f(a))
+  map
 }
 
 export const FunctorWithIndex: functorWithIndex.FunctorWithIndex<ReadonlyArrayTypeLambda, number> =
@@ -89,4 +94,36 @@ export const TraverseWithIndex: traverseWithIndex_.TraversableWithIndex<
   number
 > = {
   traverseWithIndex
+}
+
+export const zipWith = <B, A, C>(that: ReadonlyArray<B>, f: (a: A, b: B) => C) =>
+  (self: ReadonlyArray<A>): ReadonlyArray<C> => {
+    const out: Array<C> = []
+    for (const a of self) {
+      for (const b of that) {
+        out.push(f(a, b))
+      }
+    }
+    return out
+  }
+
+export const Semigroupal: semigroupal.Semigroupal<ReadonlyArrayTypeLambda> = {
+  map,
+  zipWith,
+  zipMany: <A>(collection: Iterable<ReadonlyArray<A>>) =>
+    (self: ReadonlyArray<A>): ReadonlyArray<readonly [A, ...Array<A>]> => {
+      const fa: ReadonlyArray<readonly [A, ...Array<A>]> = pipe(
+        self,
+        Functor.map(a => [a] as const)
+      )
+      const fas = Array.from(collection)
+      if (fas.length === 0) {
+        return fa
+      }
+      let out = fa
+      for (const c of fas) {
+        out = pipe(out, zipWith(c, (a, b) => [...a, b]))
+      }
+      return out
+    }
 }
