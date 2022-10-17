@@ -3,7 +3,7 @@
  */
 
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import { identity } from "@fp-ts/core/internal/Function"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Monoid } from "@fp-ts/core/Monoid"
 
 /**
@@ -21,6 +21,44 @@ export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F>
     f: (b: B, a: A, i: I) => B
   ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => B
 }
+
+/**
+ * Returns a default `reduceWithIndex` composition.
+ *
+ * @since 1.0.0
+ */
+export const reduceWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
+  F: FoldableWithIndex<F, I>,
+  G: FoldableWithIndex<G, J>
+) =>
+  <B, A>(b: B, f: (b: B, a: A, ij: readonly [I, J]) => B) =>
+    <FS, FR, FO, FE, GS, GR, GO, GE>(
+      self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+    ): B =>
+      pipe(
+        self,
+        F.reduceWithIndex(b, (b, ga, i) =>
+          pipe(ga, G.reduceWithIndex(b, (b, a, j) => f(b, a, [i, j]))))
+      )
+
+/**
+ * Returns a default `reduceRightWithIndex` composition.
+ *
+ * @since 1.0.0
+ */
+export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
+  F: FoldableWithIndex<F, I>,
+  G: FoldableWithIndex<G, J>
+) =>
+  <B, A>(b: B, f: (b: B, a: A, ij: readonly [I, J]) => B) =>
+    <FS, FR, FO, FE, GS, GR, GO, GE>(
+      self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+    ): B =>
+      pipe(
+        self,
+        F.reduceRightWithIndex(b, (b, ga, i) =>
+          pipe(ga, G.reduceRightWithIndex(b, (b, a, j) => f(b, a, [i, j]))))
+      )
 
 /**
  * @since 1.0.0
