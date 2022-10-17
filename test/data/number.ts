@@ -4,13 +4,13 @@ import * as monoid from "@fp-ts/core/Monoid"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as sortable from "@fp-ts/core/Sortable"
 
-export const sum = (that: number) => (self: number): number => self + that
+const sum = (that: number) => (self: number): number => self + that
 
 export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromCombine(sum)
 
 export const MonoidSum: Monoid<number> = monoid.fromSemigroup(SemigroupSum, 0)
 
-export const multiply = (that: number) => (self: number): number => self * that
+const multiply = (that: number) => (self: number): number => self * that
 
 export const SemigroupMultiply: semigroup.Semigroup<number> = {
   combine: multiply,
