@@ -6,11 +6,17 @@ import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"
 
 describe("Foldable", () => {
+  it("toReadonlyArray", () => {
+    const toReadonlyArray = foldableWithIndex.toReadonlyArray(O.FoldableWithIndex)
+    U.deepStrictEqual(toReadonlyArray(O.none), [])
+    U.deepStrictEqual(toReadonlyArray(O.some(2)), [2])
+  })
+
   it("toReadonlyArrayWith", () => {
     const toReadonlyArrayWith = foldableWithIndex.toReadonlyArrayWith(O.FoldableWithIndex)
-    U.deepStrictEqual(toReadonlyArrayWith(O.none, U.double), [])
-    U.deepStrictEqual(toReadonlyArrayWith(O.some(2), U.double), [4])
-    U.deepStrictEqual(toReadonlyArrayWith(O.some(2), (a, i) => U.double(a) + i), [4])
+    U.deepStrictEqual(pipe(O.none, toReadonlyArrayWith(U.double)), [])
+    U.deepStrictEqual(pipe(O.some(2), toReadonlyArrayWith(U.double)), [4])
+    U.deepStrictEqual(pipe(O.some(2), toReadonlyArrayWith((a, i) => U.double(a) * i)), [0])
   })
 
   it("foldMapWithIndex", () => {
