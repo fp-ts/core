@@ -6,7 +6,7 @@ import * as U from "./util"
 
 describe("Traversable", () => {
   it("traverseComposition", () => {
-    const traverse = traverse_.traverseComposition(RA.Traverse, RA.Traverse)(O.Monoidal)
+    const traverse = traverse_.traverseComposition(RA.Traverse, RA.Traverse)(O.ProductWithUnit)
     U.deepStrictEqual(
       pipe(
         [[1, 2], [3]],
@@ -24,7 +24,7 @@ describe("Traversable", () => {
   })
 
   it("sequence", () => {
-    const sequence = traverse_.sequence(RA.Traverse)(O.Monoidal)
+    const sequence = traverse_.sequence(RA.Traverse)(O.ProductWithUnit)
     U.deepStrictEqual(
       pipe(
         [O.none, O.some(2)],

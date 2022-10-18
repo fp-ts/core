@@ -1,14 +1,14 @@
+import type * as semigroupKind from "@fp-ts/core/Coproduct"
+import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/Monoid"
-import type * as monoidal from "@fp-ts/core/Monoidal"
-import * as monoidKind from "@fp-ts/core/MonoidKind"
 import type * as pointed from "@fp-ts/core/Pointed"
-import * as semigroupal from "@fp-ts/core/Semigroupal"
-import type * as semigroupKind from "@fp-ts/core/SemigroupKind"
+import * as product from "@fp-ts/core/Product"
+import type * as productWithUnit from "@fp-ts/core/ProductWithUnit"
 
 export interface None {
   readonly _tag: "None"
@@ -107,10 +107,10 @@ export const bind: <N extends string, A extends object, B>(
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   flatMap_.bind(FlatMap)
 
-const zipMany = <A>(
+const productMany = <A>(
   collection: Iterable<Option<A>>
 ) =>
-  (self: Option<A>): Option<[A, ...ReadonlyArray<A>]> => {
+  (self: Option<A>): Option<readonly [A, ...ReadonlyArray<A>]> => {
     if (isNone(self)) {
       return none
     }
@@ -124,46 +124,42 @@ const zipMany = <A>(
     return some(out)
   }
 
-export const Semigroupal: semigroupal.Semigroupal<OptionTypeLambda> = {
+export const Product: product.Product<OptionTypeLambda> = {
   map,
-  zipWith: (that, f) =>
-    (self) => isNone(self) ? none : isNone(that) ? none : some(f(self.value, that.value)),
-  zipMany
+  product: (that) =>
+    (self) => isNone(self) ? none : isNone(that) ? none : some([self.value, that.value]),
+  productMany
 }
 
-export const zip: <B, A>(
-  that: Option<B>
-) => (self: Option<A>) => Option<readonly [A, B]> = semigroupal.zip(Semigroupal)
-
-export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = semigroupal
+export const ap: <A>(fa: Option<A>) => <B>(fab: Option<(a: A) => B>) => Option<B> = product
   .ap(
-    Semigroupal
+    Product
   )
 
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  semigroupal.lift2(Semigroupal)
+  product.lift2(Product)
 
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = semigroupal.lift3(Semigroupal)
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = product.lift3(Product)
 
 export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  semigroupal.bindRight(Semigroupal)
+  product.bindRight(Product)
 
-export const zipFlatten: <B>(
+export const productFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = semigroupal
-  .zipFlatten(Semigroupal)
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = product
+  .productFlatten(Product)
 
 export const catchAll = <B>(that: () => Option<B>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 export const Do: Option<{}> = some({})
 
-const zipAll = <A>(
+const productAll = <A>(
   collection: Iterable<Option<A>>
 ): Option<ReadonlyArray<A>> => {
   const out = []
@@ -176,17 +172,17 @@ const zipAll = <A>(
   return some(out)
 }
 
-export const Monoidal: monoidal.Monoidal<OptionTypeLambda> = {
-  ...Semigroupal,
-  of: some,
-  zipAll
+export const ProductWithUnit: productWithUnit.ProductWithUnit<OptionTypeLambda> = {
+  ...Product,
+  unit: () => some(undefined),
+  productAll
 }
 
-const combineKind = <B>(
+const coproduct = <B>(
   that: Option<B>
 ) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
 
-export const combineKindMany = <A>(
+export const coproductMany = <A>(
   collection: Iterable<Option<A>>
 ) =>
   (self: Option<A>): Option<A> => {
@@ -202,11 +198,12 @@ export const combineKindMany = <A>(
     return none
   }
 
-export const SemigroupKind: semigroupKind.SemigroupKind<OptionTypeLambda> = {
+export const SemigroupKind: semigroupKind.Coproduct<OptionTypeLambda> = {
   map,
-  combineKind,
-  combineKindMany
+  coproduct,
+  coproductMany
 }
 
-export const MonoidKind: monoidKind.MonoidKind<OptionTypeLambda> = monoidKind
-  .fromSemigroupKind(SemigroupKind, () => none)
+export const MonoidKind: coproductWithCounit.CoproductWithCounit<OptionTypeLambda> =
+  coproductWithCounit
+    .fromCoproduct(SemigroupKind, () => none)

@@ -10,6 +10,8 @@ import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
 import * as composableKind from "@fp-ts/core/ComposableKind"
 import * as contravariant from "@fp-ts/core/Contravariant"
+import * as coproduct from "@fp-ts/core/Coproduct"
+import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
 import * as extendable from "@fp-ts/core/Extendable"
 import * as flatMap from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
@@ -20,13 +22,11 @@ import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
-import * as monoidal from "@fp-ts/core/Monoidal"
-import * as monoidKind from "@fp-ts/core/MonoidKind"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as pointed from "@fp-ts/core/Pointed"
+import * as product from "@fp-ts/core/Product"
+import * as productWithUnit from "@fp-ts/core/ProductWithUnit"
 import * as semigroup from "@fp-ts/core/Semigroup"
-import * as semigroupal from "@fp-ts/core/Semigroupal"
-import * as semigroupKind from "@fp-ts/core/SemigroupKind"
 import * as sortable from "@fp-ts/core/Sortable"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
@@ -72,6 +72,16 @@ export {
    * @since 1.0.0
    */
   contravariant,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  coproduct,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  coproductWithCounit,
   /**
    * @category type classes
    * @since 1.0.0
@@ -122,16 +132,6 @@ export {
    */
   monoid,
   /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  monoidal,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  monoidKind,
-  /**
    * @category data types
    * @since 1.0.0
    */
@@ -145,17 +145,17 @@ export {
    * @category type classes
    * @since 1.0.0
    */
+  product,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  productWithUnit,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
   semigroup,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  semigroupal,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  semigroupKind,
   /**
    * @category type classes
    * @since 1.0.0

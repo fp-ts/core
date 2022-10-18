@@ -1,6 +1,6 @@
 import type * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as semigroupal from "@fp-ts/core/Semigroupal"
+import type * as product from "@fp-ts/core/Product"
 
 export interface Failure<E> {
   readonly _tag: "Failure"
@@ -33,31 +33,25 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
   map
 }
 
-const zipMany = <E, A>(
-  collection: Iterable<Result<E, A>>
-) =>
-  (self: Result<E, A>): Result<E, [A, ...ReadonlyArray<A>]> => {
-    if (isFailure(self)) {
-      return self
-    }
-    const out: [A, ...Array<A>] = [self.success]
-    for (const r of collection) {
-      if (isFailure(r)) {
-        return r
-      }
-      out.push(r.success)
-    }
-    return succeed(out)
-  }
-
-export const Semigroupal: semigroupal.Semigroupal<ResultTypeLambda> = {
+export const Semigroupal: product.Product<ResultTypeLambda> = {
   map,
-  zipWith: (that, f) =>
+  product: (that) =>
     (self) =>
-      isFailure(self) ? self : isFailure(that) ? that : succeed(f(self.success, that.success)),
-  zipMany
+      isFailure(self) ? self : isFailure(that) ? that : succeed([self.success, that.success]),
+  productMany: <E, A>(
+    collection: Iterable<Result<E, A>>
+  ) =>
+    (self: Result<E, A>): Result<E, [A, ...ReadonlyArray<A>]> => {
+      if (isFailure(self)) {
+        return self
+      }
+      const out: [A, ...Array<A>] = [self.success]
+      for (const r of collection) {
+        if (isFailure(r)) {
+          return r
+        }
+        out.push(r.success)
+      }
+      return succeed(out)
+    }
 }
-
-export const zip: <E2, B, A>(
-  that: Result<E2, B>
-) => <E1>(self: Result<E1, A>) => Result<E2 | E1, readonly [A, B]> = semigroupal.zip(Semigroupal)
