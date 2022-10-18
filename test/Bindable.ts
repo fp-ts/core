@@ -4,12 +4,12 @@ import * as O from "./data/Option"
 import * as U from "./util"
 
 describe("Bindable", () => {
-  it("zipLeft", () => {
-    const zipLeft = _.zipLeft(O.Bindable)
-    U.deepStrictEqual(pipe(O.none, zipLeft(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.none, zipLeft(O.some(2))), O.none)
-    U.deepStrictEqual(pipe(O.some(1), zipLeft(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.some(1), zipLeft(O.some(2))), O.some(1))
+  it("andThenDiscard", () => {
+    const andThenDiscard = _.andThenDiscard(O.Bindable)
+    U.deepStrictEqual(pipe(O.none, andThenDiscard(O.none)), O.none)
+    U.deepStrictEqual(pipe(O.none, andThenDiscard(O.some(2))), O.none)
+    U.deepStrictEqual(pipe(O.some(1), andThenDiscard(O.none)), O.none)
+    U.deepStrictEqual(pipe(O.some(1), andThenDiscard(O.some(2))), O.some(1))
   })
 
   it("bind", () => {
