@@ -3,9 +3,9 @@
  */
 
 import * as bifunctor from "@fp-ts/core/Bifunctor"
-import * as bindable from "@fp-ts/core/Bindable"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
+import * as chainable from "@fp-ts/core/Chainable"
 import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
 import * as contravariant from "@fp-ts/core/Contravariant"
@@ -41,17 +41,17 @@ export {
    * @category type classes
    * @since 1.0.0
    */
-  bindable as bind,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
   bounded,
   /**
    * @category type classes
    * @since 1.0.0
    */
   category,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  chainable,
   /**
    * @category type classes
    * @since 1.0.0

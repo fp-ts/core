@@ -10,21 +10,21 @@ import { pipe } from "@fp-ts/core/internal/Function"
  * @category type class
  * @since 1.0.0
  */
-export interface Bindable<F extends TypeLambda> extends Functor<F>, FlatMap<F> {}
+export interface Chainable<F extends TypeLambda> extends Functor<F>, FlatMap<F> {}
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
  * @since 1.0.0
  */
-export const tap = <F extends TypeLambda>(Bindable: Bindable<F>) =>
+export const tap = <F extends TypeLambda>(Chainable: Chainable<F>) =>
   <A, S, R2, O2, E2>(
     f: (a: A) => Kind<F, S, R2, O2, E2, unknown>
   ): (<R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) =>
-    Bindable.flatMap((a) =>
+    Chainable.flatMap((a) =>
       pipe(
         f(a),
-        Bindable.map(() => a)
+        Chainable.map(() => a)
       )
     )
 
@@ -35,18 +35,18 @@ export const tap = <F extends TypeLambda>(Bindable: Bindable<F>) =>
  * @category sequencing
  * @since 1.0.0
  */
-export const andThenDiscard = <F extends TypeLambda>(Bindable: Bindable<F>) =>
+export const andThenDiscard = <F extends TypeLambda>(Chainable: Chainable<F>) =>
   <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
   ): (<R1, O1, E1, A>(
     self: Kind<F, S, R1, O1, E1, A>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => tap(Bindable)(() => that)
+  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => tap(Chainable)(() => that)
 
 /**
  * @category do notation
  * @since 1.0.0
  */
-export const bind = <M extends TypeLambda>(Bindable: Bindable<M>) =>
+export const bind = <M extends TypeLambda>(Chainable: Chainable<M>) =>
   <N extends string, A extends object, S, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     f: (a: A) => Kind<M, S, R2, O2, E2, B>
@@ -60,9 +60,9 @@ export const bind = <M extends TypeLambda>(Bindable: Bindable<M>) =>
     E1 | E2,
     { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
   > =>
-    Bindable.flatMap((a) =>
+    Chainable.flatMap((a) =>
       pipe(
         f(a),
-        Bindable.map((b) => Object.assign({}, a, { [name]: b }) as any)
+        Chainable.map((b) => Object.assign({}, a, { [name]: b }) as any)
       )
     )
