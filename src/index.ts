@@ -5,10 +5,8 @@
 import * as bifunctor from "@fp-ts/core/Bifunctor"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
-import * as categoryKind from "@fp-ts/core/CategoryKind"
 import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
-import * as composableKind from "@fp-ts/core/ComposableKind"
 import * as contravariant from "@fp-ts/core/Contravariant"
 import * as coproduct from "@fp-ts/core/Coproduct"
 import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
@@ -52,22 +50,12 @@ export {
    * @category type classes
    * @since 1.0.0
    */
-  categoryKind,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
   comonad,
   /**
    * @category type classes
    * @since 1.0.0
    */
   composable,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  composableKind,
   /**
    * @category type classes
    * @since 1.0.0

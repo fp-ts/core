@@ -109,7 +109,7 @@ export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Opti
 
 export const composeKind: <B, C>(
   bfc: (b: B) => Option<C>
-) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKind(
+) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKleisli(
   FlatMap
 )
 
