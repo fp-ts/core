@@ -120,10 +120,9 @@ export const ap = <F extends TypeLambda>(Product: Product<F>) =>
       pipe(self, Product.product(fa), Product.map(([f, a]) => f(a)))
 
 /**
- * pipe(fa, andThenDiscardPar(fb))
  * @since 1.0.0
  */
-export const andThenDiscardPar = <F extends TypeLambda>(Product: Product<F>) =>
+export const andThenDiscard = <F extends TypeLambda>(Product: Product<F>) =>
   <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
   ) =>
@@ -133,10 +132,9 @@ export const andThenDiscardPar = <F extends TypeLambda>(Product: Product<F>) =>
       pipe(self, Product.product(that), Product.map(([a]) => a))
 
 /**
- * pipe(fa, andThenPar(fb))
  * @since 1.0.0
  */
-export const andThenPar = <F extends TypeLambda>(Product: Product<F>) =>
+export const andThen = <F extends TypeLambda>(Product: Product<F>) =>
   <S, R2, O2, E2, A>(
     that: Kind<F, S, R2, O2, E2, A>
   ) =>

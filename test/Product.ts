@@ -75,16 +75,16 @@ describe("Semigroupal", () => {
     U.deepStrictEqual(pipe(O.some(double), ap(O.some(1))), O.some(2))
   })
 
-  it("andThenDiscardPar", () => {
-    const andThenDiscardPar = _.andThenDiscardPar(O.Product)
+  it("andThenDiscard", () => {
+    const andThenDiscardPar = _.andThenDiscard(O.Product)
     U.deepStrictEqual(pipe(O.none, andThenDiscardPar(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, andThenDiscardPar(O.some(2))), O.none)
     U.deepStrictEqual(pipe(O.some(1), andThenDiscardPar(O.none)), O.none)
     U.deepStrictEqual(pipe(O.some(1), andThenDiscardPar(O.some(2))), O.some(1))
   })
 
-  it("andThenPar", () => {
-    const andThenPar = _.andThenPar(O.Product)
+  it("andThen", () => {
+    const andThenPar = _.andThen(O.Product)
     U.deepStrictEqual(pipe(O.none, andThenPar(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, andThenPar(O.some(2))), O.none)
     U.deepStrictEqual(pipe(O.some(1), andThenPar(O.none)), O.none)
