@@ -9,7 +9,7 @@ describe("TraversableWithIndex", () => {
     const traverseWithIndex = traverseWithIndex_.traverseWithIndexComposition(
       RA.TraverseWithIndex,
       RA.TraverseWithIndex
-    )(O.ProductWithUnit)
+    )(O.Applicative)
     U.deepStrictEqual(
       pipe(
         [["a"], ["bb"]],
