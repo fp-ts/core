@@ -1,7 +1,6 @@
 /**
  * @since 1.0.0
  */
-import type { ComposableKind } from "@fp-ts/core/ComposableKind"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
@@ -71,9 +70,14 @@ export const bind = <M extends TypeLambda>(FlatMap: FlatMap<M>) =>
 /**
  * @since 1.0.0
  */
-export const composeKind = <F extends TypeLambda>(
+export const composeKleisli = <F extends TypeLambda>(
   FlatMap: FlatMap<F>
-): ComposableKind<F>["composeKind"] => (bc) => (ab) => a => pipe(ab(a), FlatMap.flatMap(bc))
+): <B, S, R2, O2, E2, C>(
+  bfc: (b: B) => Kind<F, S, R2, O2, E2, C>
+) => <A, R1, O1, E1>(
+  afb: (a: A) => Kind<F, S, R1, O1, E1, B>
+) => (a: A) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> =>
+  (bc) => (ab) => a => pipe(ab(a), FlatMap.flatMap(bc))
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.

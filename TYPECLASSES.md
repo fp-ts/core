@@ -3,10 +3,8 @@
 | **Bifunctor**            | `mapBoth`                                 |                          |
 | **Bounded**              | `maximum`, `minimum`                      | **Sortable**             |
 | **Category**             | `id`                                      | **Composable**           |
-| **CategoryKind**         | `idKind`                                  | **ComposableKind**       |
 | **Comonad**              | `extract`                                 | **Extendable**           |
 | **Composable**           | `compose`                                 |                          |
-| **ComposableKind**       | `composeKind`                             |                          |
 | **Contravariant**        | `contramap`                               |                          |
 | **Extendable**           | `extend`                                  | **Functor**              |
 | **Coproduct**            | `coproduct`, `coproductMany`              | **Functor**              |
@@ -24,5 +22,5 @@
 | **ProductWithUnit**      | `productAll`                              | **Product**              |
 | **Semigroup**            | `combine`, `combineMany`                  |                          |
 | **Sortable**             | `compare`                                 |                          |
-| **Traversable**          | `traverse`                                |                          |
-| **TraversableWithIndex** | `traverseWihtIndex`                       |                          |
+| **Traversable**          | `traverse`                                | **Functor**              |
+| **TraversableWithIndex** | `traverseWihtIndex`                       | **FunctorWithIndex**     |
