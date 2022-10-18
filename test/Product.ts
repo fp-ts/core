@@ -1,3 +1,4 @@
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Product"
 import * as O from "./data/Option"
@@ -5,7 +6,67 @@ import * as RA from "./data/ReadonlyArray"
 import * as string from "./data/string"
 import * as U from "./util"
 
-describe("Semigroupal", () => {
+describe("Product", () => {
+  it("fromFunctor", () => {
+    function curried(f: Function, n: number, acc: ReadonlyArray<unknown>) {
+      return function(x: unknown) {
+        const combined = Array(acc.length + 1)
+        for (let i = 0; i < acc.length; i++) {
+          combined[i] = acc[i]
+        }
+        combined[acc.length] = x
+        return n === 0 ? f.apply(null, combined) : curried(f, n - 1, combined)
+      }
+    }
+
+    const tupleConstructors: Record<number, (a: unknown) => any> = {
+      1: (a) => [a],
+      2: (a) => (b: any) => [a, b],
+      3: (a) => (b: any) => (c: any) => [a, b, c],
+      4: (a) => (b: any) => (c: any) => (d: any) => [a, b, c, d],
+      5: (a) => (b: any) => (c: any) => (d: any) => (e: any) => [a, b, c, d, e]
+    }
+
+    function tuple<T extends ReadonlyArray<any>>(...t: T): T {
+      return t
+    }
+
+    function getTupleConstructor(len: number): (a: unknown) => any {
+      if (!Object.prototype.hasOwnProperty.call(tupleConstructors, len)) {
+        tupleConstructors[len] = curried(tuple, len - 1, [])
+      }
+      return tupleConstructors[len]
+    }
+
+    const assertSameResult = <F extends TypeLambda>(Product: _.Product<F>) =>
+      <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
+        (self: Kind<F, S, R, O, E, A>) => {
+          const ap = _.ap(Product)
+          const productManyFromAp = <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
+            (
+              self: Kind<F, S, R, O, E, A>
+            ): Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
+              const args = [self, ...Array.from(collection)]
+              const len = args.length
+              const f = getTupleConstructor(len)
+              let fas = pipe(args[0], Product.map(f))
+              for (let i = 1; i < len; i++) {
+                fas = pipe(fas, ap(args[i]))
+              }
+              return fas
+            }
+          const actual = pipe(self, Product.productMany(collection))
+          const expected = pipe(self, productManyFromAp(collection))
+          // console.log(expected)
+          U.deepStrictEqual(actual, expected)
+        }
+
+    assertSameResult(RA.Product)([])([])
+    assertSameResult(RA.Product)([])([1, 2, 3])
+    assertSameResult(RA.Product)([[4]])([1, 2, 3])
+    assertSameResult(RA.Product)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
+  })
+
   describe("productComposition", () => {
     it("ReadonlyArray", () => {
       const product = _.productComposition(RA.Product, O.Product)
@@ -76,19 +137,19 @@ describe("Semigroupal", () => {
   })
 
   it("andThenDiscard", () => {
-    const andThenDiscardPar = _.andThenDiscard(O.Product)
-    U.deepStrictEqual(pipe(O.none, andThenDiscardPar(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.none, andThenDiscardPar(O.some(2))), O.none)
-    U.deepStrictEqual(pipe(O.some(1), andThenDiscardPar(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.some(1), andThenDiscardPar(O.some(2))), O.some(1))
+    const andThenDiscard = _.andThenDiscard(O.Product)
+    U.deepStrictEqual(pipe(O.none, andThenDiscard(O.none)), O.none)
+    U.deepStrictEqual(pipe(O.none, andThenDiscard(O.some(2))), O.none)
+    U.deepStrictEqual(pipe(O.some(1), andThenDiscard(O.none)), O.none)
+    U.deepStrictEqual(pipe(O.some(1), andThenDiscard(O.some(2))), O.some(1))
   })
 
   it("andThen", () => {
-    const andThenPar = _.andThen(O.Product)
-    U.deepStrictEqual(pipe(O.none, andThenPar(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.none, andThenPar(O.some(2))), O.none)
-    U.deepStrictEqual(pipe(O.some(1), andThenPar(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.some(1), andThenPar(O.some(2))), O.some(2))
+    const andThen = _.andThen(O.Product)
+    U.deepStrictEqual(pipe(O.none, andThen(O.none)), O.none)
+    U.deepStrictEqual(pipe(O.none, andThen(O.some(2))), O.none)
+    U.deepStrictEqual(pipe(O.some(1), andThen(O.none)), O.none)
+    U.deepStrictEqual(pipe(O.some(1), andThen(O.some(2))), O.some(2))
   })
 
   it("bindRight", () => {

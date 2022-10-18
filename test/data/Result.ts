@@ -33,7 +33,7 @@ export const Functor: functor.Functor<ResultTypeLambda> = {
   map
 }
 
-export const Semigroupal: product.Product<ResultTypeLambda> = {
+export const Product: product.Product<ResultTypeLambda> = {
   map,
   product: (that) =>
     (self) =>
