@@ -75,19 +75,19 @@ export function concat<B>(
 }
 
 export const traverseWithIndex = <F extends TypeLambda>(
-  Monoidal: applicative.Applicative<F>
+  Applicative: applicative.Applicative<F>
 ) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
     (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> =>
-      Monoidal.productAll(Array.from(self).map((a, i) => f(a, i)))
+      Applicative.productAll(Array.from(self).map((a, i) => f(a, i)))
 
 export const traverse = <F extends TypeLambda>(
-  Monoidal: applicative.Applicative<F>
+  Applicative: applicative.Applicative<F>
 ) =>
   <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>
   ): (self: ReadonlyArray<A>) => Kind<F, S, R, O, E, ReadonlyArray<B>> =>
-    traverseWithIndex(Monoidal)((a) => f(a))
+    traverseWithIndex(Applicative)((a) => f(a))
 
 export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
   map,
