@@ -3,9 +3,8 @@ import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import type * as functor from "@fp-ts/core/Functor"
 import type * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
-import type * as monoidal from "@fp-ts/core/Monoidal"
-import type * as semigroupal from "@fp-ts/core/Semigroupal"
+import * as product_ from "@fp-ts/core/Product"
+import type * as productWithUnit from "@fp-ts/core/ProductWithUnit"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
@@ -72,13 +71,15 @@ export function concat<B>(
   return <A>(self: NonEmptyReadonlyArray<A | B>) => self.concat(that)
 }
 
-export const traverseWithIndex = <F extends TypeLambda>(Monoidal: monoidal.Monoidal<F>) =>
+export const traverseWithIndex = <F extends TypeLambda>(
+  Monoidal: productWithUnit.ProductWithUnit<F>
+) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
     (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> =>
-      Monoidal.zipAll(Array.from(self).map((a, i) => f(a, i)))
+      Monoidal.productAll(Array.from(self).map((a, i) => f(a, i)))
 
 export const traverse = <F extends TypeLambda>(
-  Monoidal: monoidal.Monoidal<F>
+  Monoidal: productWithUnit.ProductWithUnit<F>
 ) =>
   <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>
@@ -96,34 +97,18 @@ export const TraverseWithIndex: traverseWithIndex_.TraversableWithIndex<
   traverseWithIndex
 }
 
-export const zipWith = <B, A, C>(that: ReadonlyArray<B>, f: (a: A, b: B) => C) =>
-  (self: ReadonlyArray<A>): ReadonlyArray<C> => {
-    const out: Array<C> = []
+export const product = <B>(that: ReadonlyArray<B>) =>
+  <A>(self: ReadonlyArray<A>): ReadonlyArray<readonly [A, B]> => {
+    const out: Array<readonly [A, B]> = []
     for (const a of self) {
       for (const b of that) {
-        out.push(f(a, b))
+        out.push([a, b])
       }
     }
     return out
   }
 
-export const Semigroupal: semigroupal.Semigroupal<ReadonlyArrayTypeLambda> = {
-  map,
-  zipWith,
-  zipMany: <A>(collection: Iterable<ReadonlyArray<A>>) =>
-    (self: ReadonlyArray<A>): ReadonlyArray<readonly [A, ...Array<A>]> => {
-      const fa: ReadonlyArray<readonly [A, ...Array<A>]> = pipe(
-        self,
-        Functor.map(a => [a] as const)
-      )
-      const fas = Array.from(collection)
-      if (fas.length === 0) {
-        return fa
-      }
-      let out = fa
-      for (const c of fas) {
-        out = pipe(out, zipWith(c, (a, b) => [...a, b]))
-      }
-      return out
-    }
-}
+export const Product: product_.Product<ReadonlyArrayTypeLambda> = product_.fromFunctor(
+  Functor,
+  product
+)
