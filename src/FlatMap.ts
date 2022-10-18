@@ -20,7 +20,7 @@ export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
  * @category sequencing
  * @since 1.0.0
  */
-export const zipRight = <F extends TypeLambda>(FlatMap: FlatMap<F>) =>
+export const andThen = <F extends TypeLambda>(FlatMap: FlatMap<F>) =>
   <S, R2, O2, E2, A>(
     that: Kind<F, S, R2, O2, E2, A>
   ): (<R1, O1, E1>(

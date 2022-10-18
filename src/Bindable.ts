@@ -13,13 +13,29 @@ import { pipe } from "@fp-ts/core/internal/Function"
 export interface Bindable<F extends TypeLambda> extends Functor<F>, FlatMap<F> {}
 
 /**
+ * Returns an effect that effectfully "peeks" at the success of this effect.
+ *
+ * @since 1.0.0
+ */
+export const tap = <F extends TypeLambda>(Bindable: Bindable<F>) =>
+  <A, S, R2, O2, E2>(
+    f: (a: A) => Kind<F, S, R2, O2, E2, unknown>
+  ): (<R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) =>
+    Bindable.flatMap((a) =>
+      pipe(
+        f(a),
+        Bindable.map(() => a)
+      )
+    )
+
+/**
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
  * @category sequencing
  * @since 1.0.0
  */
-export const zipLeft = <F extends TypeLambda>(Bindable: Bindable<F>) =>
+export const andThenDiscard = <F extends TypeLambda>(Bindable: Bindable<F>) =>
   <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
   ): (<R1, O1, E1, A>(
@@ -48,21 +64,5 @@ export const bind = <M extends TypeLambda>(Bindable: Bindable<M>) =>
       pipe(
         f(a),
         Bindable.map((b) => Object.assign({}, a, { [name]: b }) as any)
-      )
-    )
-
-/**
- * Returns an effect that effectfully "peeks" at the success of this effect.
- *
- * @since 1.0.0
- */
-export const tap = <F extends TypeLambda>(Bindable: Bindable<F>) =>
-  <A, S, R2, O2, E2>(
-    f: (a: A) => Kind<F, S, R2, O2, E2, unknown>
-  ): (<R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) =>
-    Bindable.flatMap((a) =>
-      pipe(
-        f(a),
-        Bindable.map(() => a)
       )
     )
