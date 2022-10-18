@@ -24,7 +24,7 @@ export interface Some<A> {
 export type Option<A> = None | Some<A>
 
 export interface OptionTypeLambda extends TypeLambda {
-  readonly type: Option<this["Out1"]>
+  readonly type: Option<this["Out"]>
 }
 
 export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === "None"
