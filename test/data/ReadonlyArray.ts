@@ -18,6 +18,9 @@ export interface ReadonlyArrayTypeLambda extends TypeLambda {
 const map = <A, B>(f: (a: A) => B) =>
   (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map(a => f(a))
 
+const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
+  (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map((a, i) => f(a, i))
+
 export const Functor: functor.Functor<ReadonlyArrayTypeLambda> = {
   map
 }
@@ -87,6 +90,7 @@ export const traverse = <F extends TypeLambda>(
     traverseWithIndex(Monoidal)((a) => f(a))
 
 export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
+  map,
   traverse
 }
 
@@ -94,6 +98,7 @@ export const TraverseWithIndex: traverseWithIndex_.TraversableWithIndex<
   ReadonlyArrayTypeLambda,
   number
 > = {
+  mapWithIndex,
   traverseWithIndex
 }
 

@@ -1,7 +1,8 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Functor } from "@fp-ts/core/Functor"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type { ProductWithUnit } from "@fp-ts/core/ProductWithUnit"
 
@@ -9,7 +10,7 @@ import type { ProductWithUnit } from "@fp-ts/core/ProductWithUnit"
  * @category type class
  * @since 1.0.0
  */
-export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
+export interface Traversable<T extends TypeLambda> extends Functor<T> {
   readonly traverse: <F extends TypeLambda>(
     ProductWithUnit: ProductWithUnit<F>
   ) => <A, S, R, O, E, B>(
