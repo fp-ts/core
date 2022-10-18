@@ -8,35 +8,18 @@ import * as U from "./util"
 
 describe("Product", () => {
   it("fromFunctor", () => {
-    function curried(f: Function, n: number, acc: ReadonlyArray<unknown>) {
-      return function(x: unknown) {
+    const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
+      (x: unknown) => {
         const combined = Array(acc.length + 1)
         for (let i = 0; i < acc.length; i++) {
           combined[i] = acc[i]
         }
         combined[acc.length] = x
-        return n === 0 ? f.apply(null, combined) : curried(f, n - 1, combined)
+        return n === 0 ? f.apply(null, combined) : curry(f, n - 1, combined)
       }
-    }
 
-    const tupleConstructors: Record<number, (a: unknown) => any> = {
-      1: (a) => [a],
-      2: (a) => (b: any) => [a, b],
-      3: (a) => (b: any) => (c: any) => [a, b, c],
-      4: (a) => (b: any) => (c: any) => (d: any) => [a, b, c, d],
-      5: (a) => (b: any) => (c: any) => (d: any) => (e: any) => [a, b, c, d, e]
-    }
-
-    function tuple<T extends ReadonlyArray<any>>(...t: T): T {
-      return t
-    }
-
-    function getTupleConstructor(len: number): (a: unknown) => any {
-      if (!Object.prototype.hasOwnProperty.call(tupleConstructors, len)) {
-        tupleConstructors[len] = curried(tuple, len - 1, [])
-      }
-      return tupleConstructors[len]
-    }
+    const getCurriedTupleConstructor = (len: number): (a: unknown) => any =>
+      curry(<T extends ReadonlyArray<any>>(...t: T): T => t, len - 1, [])
 
     const assertSameResult = <F extends TypeLambda>(Product: _.Product<F>) =>
       <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
@@ -48,7 +31,7 @@ describe("Product", () => {
             ): Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
               const args = [self, ...Array.from(collection)]
               const len = args.length
-              const f = getTupleConstructor(len)
+              const f = getCurriedTupleConstructor(len)
               let fas = pipe(args[0], Product.map(f))
               for (let i = 1; i < len; i++) {
                 fas = pipe(fas, ap(args[i]))
