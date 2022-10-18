@@ -1,5 +1,7 @@
 | Typeclass                | member(s)                                 | extends                  |
 | ------------------------ | ----------------------------------------- | ------------------------ |
+| **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**            |
+| **Applicative**          | `productAll`                              | **Product**              |
 | **Bifunctor**            | `mapBoth`                                 |                          |
 | **Bounded**              | `maximum`, `minimum`                      | **Sortable**             |
 | **Category**             | `id`                                      | **Composable**           |
@@ -9,7 +11,6 @@
 | **Contravariant**        | `contramap`                               |                          |
 | **Extendable**           | `extend`                                  | **Functor**              |
 | **Coproduct**            | `coproduct`, `coproductMany`              | **Functor**              |
-| **CoproductWithCounit**  | `counit`, `coproductAll`                  | **Coproduct**            |
 | **FlatMap**              | `flatMap`                                 |                          |
 | **Foldable**             | `reduce`, `reduceRight`                   |                          |
 | **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                          |
@@ -20,7 +21,6 @@
 | **Of**                   | `of`                                      |                          |
 | **Pointed**              |                                           | **Functor**, **Of**      |
 | **Product**              | `product`, `productMany`                  | **Functor**              |
-| **ProductWithUnit**      | `productAll`                              | **Product**              |
 | **Semigroup**            | `combine`, `combineMany`                  |                          |
 | **Sortable**             | `compare`                                 |                          |
 | **Traversable**          | `traverse`                                | **Functor**              |

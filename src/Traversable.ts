@@ -1,10 +1,10 @@
 /**
  * @since 1.0.0
  */
+import type { Applicative } from "@fp-ts/core/Applicative"
 import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
-import type { ProductWithUnit } from "@fp-ts/core/ProductWithUnit"
 
 /**
  * @category type class
@@ -12,7 +12,7 @@ import type { ProductWithUnit } from "@fp-ts/core/ProductWithUnit"
  */
 export interface Traversable<T extends TypeLambda> extends Functor<T> {
   readonly traverse: <F extends TypeLambda>(
-    ProductWithUnit: ProductWithUnit<F>
+    Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>
   ) => <TS, TR, TO, TE>(
@@ -29,21 +29,21 @@ export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
   TraversableF: Traversable<F>,
   TraversableG: Traversable<G>
 ) =>
-  <H extends TypeLambda>(ProductWithUnit: ProductWithUnit<H>) =>
+  <H extends TypeLambda>(Applicative: Applicative<H>) =>
     <A, S, R, O, E, B>(
       f: (a: A) => Kind<H, S, R, O, E, B>
     ): (<FS, FR, FO, FE, GS, GR, GO, GE>(
       fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
     ) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>) =>
-      TraversableF.traverse(ProductWithUnit)(TraversableG.traverse(ProductWithUnit)(f))
+      TraversableF.traverse(Applicative)(TraversableG.traverse(Applicative)(f))
 
 /**
  * @since 1.0.0
  */
 export const sequence = <T extends TypeLambda>(Traversable: Traversable<T>) =>
   <F extends TypeLambda>(
-    ProductWithUnit: ProductWithUnit<F>
+    Applicative: Applicative<F>
   ): (<TS, TR, TO, TE, S, R, O, E, A>(
     self: Kind<T, TS, TR, TO, TE, Kind<F, S, R, O, E, A>>
   ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, A>>) =>
-    Traversable.traverse(ProductWithUnit)(identity)
+    Traversable.traverse(Applicative)(identity)

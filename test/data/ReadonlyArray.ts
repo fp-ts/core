@@ -1,10 +1,10 @@
+import type * as applicative from "@fp-ts/core/Applicative"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import type * as functor from "@fp-ts/core/Functor"
 import type * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as product_ from "@fp-ts/core/Product"
-import type * as productWithUnit from "@fp-ts/core/ProductWithUnit"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
 import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
@@ -75,14 +75,14 @@ export function concat<B>(
 }
 
 export const traverseWithIndex = <F extends TypeLambda>(
-  Monoidal: productWithUnit.ProductWithUnit<F>
+  Monoidal: applicative.Applicative<F>
 ) =>
   <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, S, R, O, E, B>) =>
     (self: Iterable<A>): Kind<F, S, R, O, E, ReadonlyArray<B>> =>
       Monoidal.productAll(Array.from(self).map((a, i) => f(a, i)))
 
 export const traverse = <F extends TypeLambda>(
-  Monoidal: productWithUnit.ProductWithUnit<F>
+  Monoidal: applicative.Applicative<F>
 ) =>
   <A, S, R, O, E, B>(
     f: (a: A) => Kind<F, S, R, O, E, B>

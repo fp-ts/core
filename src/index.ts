@@ -2,6 +2,8 @@
  * @since 1.0.0
  */
 
+import * as alternative from "@fp-ts/core/Alternative"
+import * as applicative from "@fp-ts/core/Applicative"
 import * as bifunctor from "@fp-ts/core/Bifunctor"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
@@ -10,7 +12,6 @@ import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
 import * as contravariant from "@fp-ts/core/Contravariant"
 import * as coproduct from "@fp-ts/core/Coproduct"
-import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
 import * as extendable from "@fp-ts/core/Extendable"
 import * as flatMap from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
@@ -25,13 +26,22 @@ import * as of from "@fp-ts/core/Of"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as pointed from "@fp-ts/core/Pointed"
 import * as product from "@fp-ts/core/Product"
-import * as productWithUnit from "@fp-ts/core/ProductWithUnit"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as sortable from "@fp-ts/core/Sortable"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
 
 export {
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  alternative,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  applicative,
   /**
    * @category type classes
    * @since 1.0.0
@@ -72,11 +82,6 @@ export {
    * @since 1.0.0
    */
   coproduct,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  coproductWithCounit,
   /**
    * @category type classes
    * @since 1.0.0
@@ -146,11 +151,6 @@ export {
    * @since 1.0.0
    */
   product,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  productWithUnit,
   /**
    * @category type classes
    * @since 1.0.0

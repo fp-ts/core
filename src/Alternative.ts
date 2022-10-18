@@ -8,7 +8,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
  * @category type class
  * @since 1.0.0
  */
-export interface CoproductWithCounit<F extends TypeLambda> extends Coproduct<F> {
+export interface Alternative<F extends TypeLambda> extends Coproduct<F> {
   readonly counit: <S>() => Kind<F, S, unknown, never, never, never>
 
   readonly coproductAll: <S, R, O, E, A>(
@@ -21,8 +21,8 @@ export interface CoproductWithCounit<F extends TypeLambda> extends Coproduct<F> 
  */
 export const fromCoproduct = <F extends TypeLambda>(
   Coproduct: Coproduct<F>,
-  counit: CoproductWithCounit<F>["counit"]
-): CoproductWithCounit<F> => {
+  counit: Alternative<F>["counit"]
+): Alternative<F> => {
   return {
     ...Coproduct,
     counit,

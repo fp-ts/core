@@ -1,6 +1,7 @@
+import * as alternative from "@fp-ts/core/Alternative"
+import type * as applicative from "@fp-ts/core/Applicative"
 import * as chainable from "@fp-ts/core/Chainable"
 import type * as semigroupKind from "@fp-ts/core/Coproduct"
-import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
@@ -10,7 +11,6 @@ import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as of_ from "@fp-ts/core/Of"
 import type * as pointed from "@fp-ts/core/Pointed"
 import * as product from "@fp-ts/core/Product"
-import type * as productWithUnit from "@fp-ts/core/ProductWithUnit"
 
 export interface None {
   readonly _tag: "None"
@@ -183,7 +183,7 @@ const productAll = <A>(
   return some(out)
 }
 
-export const ProductWithUnit: productWithUnit.ProductWithUnit<OptionTypeLambda> = {
+export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   ...Product,
   unit: () => some(undefined),
   productAll
@@ -209,12 +209,11 @@ export const coproductMany = <A>(
     return none
   }
 
-export const SemigroupKind: semigroupKind.Coproduct<OptionTypeLambda> = {
+export const Coproduct: semigroupKind.Coproduct<OptionTypeLambda> = {
   map,
   coproduct,
   coproductMany
 }
 
-export const MonoidKind: coproductWithCounit.CoproductWithCounit<OptionTypeLambda> =
-  coproductWithCounit
-    .fromCoproduct(SemigroupKind, () => none)
+export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
+  .fromCoproduct(Coproduct, () => none)

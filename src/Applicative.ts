@@ -12,7 +12,7 @@ import * as product from "@fp-ts/core/Product"
  * @category type class
  * @since 1.0.0
  */
-export interface ProductWithUnit<F extends TypeLambda> extends Product<F> {
+export interface Applicative<F extends TypeLambda> extends Product<F> {
   readonly unit: <S>() => Kind<F, S, unknown, never, never, unknown>
 
   readonly productAll: <S, R, O, E, A>(
@@ -25,9 +25,9 @@ export interface ProductWithUnit<F extends TypeLambda> extends Product<F> {
  *
  * @since 1.0.0
  */
-export const liftMonoid = <F extends TypeLambda>(ProductWithUnit: ProductWithUnit<F>) =>
+export const liftMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
     monoid.fromSemigroup(
-      product.liftSemigroup(ProductWithUnit)<A, S, R, O, E>(Monoid),
-      pipe(ProductWithUnit.unit<S>(), ProductWithUnit.map(() => Monoid.empty))
+      product.liftSemigroup(Applicative)<A, S, R, O, E>(Monoid),
+      pipe(Applicative.unit<S>(), Applicative.map(() => Monoid.empty))
     )
