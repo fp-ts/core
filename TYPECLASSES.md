@@ -1,9 +1,9 @@
 | Typeclass                | member(s)                                 | extends                  |
 | ------------------------ | ----------------------------------------- | ------------------------ |
 | **Bifunctor**            | `mapBoth`                                 |                          |
-| **Bindable**             |                                           | **Functor**, **FlatMap** |
 | **Bounded**              | `maximum`, `minimum`                      | **Sortable**             |
 | **Category**             | `id`                                      | **Composable**           |
+| **Chainable**            |                                           | **Functor**, **FlatMap** |
 | **Comonad**              | `extract`                                 | **Extendable**           |
 | **Composable**           | `compose`                                 |                          |
 | **Contravariant**        | `contramap`                               |                          |
