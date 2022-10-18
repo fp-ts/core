@@ -7,7 +7,7 @@ export interface ReaderAsyncWriter<R, E, A> {
 }
 
 export interface ReaderAsyncWriterTypeLambda extends TypeLambda {
-  readonly type: ReaderAsyncWriter<this["In1"], this["Out2"], this["Out1"]>
+  readonly type: ReaderAsyncWriter<this["In"], this["Out2"], this["Out"]>
 }
 
 declare const fa: ReaderAsyncWriter<{ a: string }, "a", string>

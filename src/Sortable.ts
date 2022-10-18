@@ -21,7 +21,7 @@ export interface Sortable<A> {
  * @since 1.0.0
  */
 export interface SortableTypeLambda extends TypeLambda {
-  readonly type: Sortable<this["In1"]>
+  readonly type: Sortable<this["In"]>
 }
 
 /**
