@@ -1,16 +1,19 @@
 /**
- * @internal
+ * **internal**
+ *
  * @since 1.0.0
  */
 
 /**
- * @internal
+ * **internal**
+ *
  * @since 1.0.0
  */
 export const identity = <A>(a: A): A => a
 
 /**
- * @internal
+ * **internal**
+ *
  * @since 1.0.0
  */
 export function pipe<A>(a: A): A
