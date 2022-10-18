@@ -16,7 +16,7 @@
 | **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                          |
 | **Functor**              | `map`                                     |                          |
 | **Invariant**            | `imap`                                    |                          |
-| **Monad**                |                                           | **Succeed**, **FlatMap** |
+| **Monad**                |                                           | **Pointed**, **FlatMap** |
 | **Monoid**               | `empty`, `combineAll`                     | **Semigroup**            |
 | **Of**                   | `of`                                      |                          |
 | **Pointed**              |                                           | **Functor**, **Of**      |
