@@ -5,7 +5,9 @@ import * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
+import type * as of_ from "@fp-ts/core/Of"
 import type * as pointed from "@fp-ts/core/Pointed"
 import * as product from "@fp-ts/core/Product"
 import type * as productWithUnit from "@fp-ts/core/ProductWithUnit"
@@ -32,10 +34,6 @@ export const isSome = <A>(fa: Option<A>): fa is Some<A> => fa._tag === "Some"
 export const none: Option<never> = { _tag: "None" }
 
 export const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
-
-export const Pointed: pointed.Pointed<OptionTypeLambda> = {
-  of: some
-}
 
 export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
   (self: Option<A>): B => isNone(self) ? b : f(b, self.value)
@@ -66,8 +64,17 @@ export const foldMap: <M>(
 export const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> = (f) =>
   (fa) => isNone(fa) ? none : some(f(fa.value))
 
+export const Of: of_.Of<OptionTypeLambda> = {
+  of: some
+}
+
 export const Functor: functor.Functor<OptionTypeLambda> = {
   map
+}
+
+export const Pointed: pointed.Pointed<OptionTypeLambda> = {
+  ...Of,
+  ...Functor
 }
 
 export const bindTo: <N extends string>(
@@ -90,6 +97,11 @@ export const flatMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Opt
 export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
   map,
   flatMap
+}
+
+export const Monad: monad.Monad<OptionTypeLambda> = {
+  ...Of,
+  ...FlatMap
 }
 
 export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flatMap_

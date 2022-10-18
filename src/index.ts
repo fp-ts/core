@@ -22,6 +22,7 @@ import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
+import * as of from "@fp-ts/core/Of"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as pointed from "@fp-ts/core/Pointed"
 import * as product from "@fp-ts/core/Product"
@@ -131,6 +132,11 @@ export {
    * @since 1.0.0
    */
   monoid,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  of,
   /**
    * @category data types
    * @since 1.0.0

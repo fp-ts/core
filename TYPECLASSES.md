@@ -18,10 +18,11 @@
 | **Invariant**            | `imap`                                    |                          |
 | **Monad**                |                                           | **Succeed**, **FlatMap** |
 | **Monoid**               | `empty`, `combineAll`                     | **Semigroup**            |
-| **Semigroup**            | `combine`, `combineMany`                  |                          |
-| **Sortable**             | `compare`                                 |                          |
-| **Pointed**              | `of`                                      |                          |
+| **Of**                   | `of`                                      |                          |
+| **Pointed**              |                                           | **Functor**, **Of**      |
 | **Product**              | `product`, `productMany`                  | **Functor**              |
 | **ProductWithUnit**      | `productAll`                              | **Product**              |
+| **Semigroup**            | `combine`, `combineMany`                  |                          |
+| **Sortable**             | `compare`                                 |                          |
 | **Traversable**          | `traverse`                                |                          |
 | **TraversableWithIndex** | `traverseWihtIndex`                       |                          |
