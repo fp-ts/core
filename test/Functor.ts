@@ -31,10 +31,10 @@ describe("Functor", () => {
     U.deepStrictEqual(pipe(O.some(1), as(2)), O.some(2))
   })
 
-  it("as", () => {
-    const unit = _.unit(O.Functor)
-    U.deepStrictEqual(pipe(O.none, unit), O.none)
-    U.deepStrictEqual(pipe(O.some(1), unit), O.some(undefined))
+  it("asUnit", () => {
+    const asUnit = _.asUnit(O.Functor)
+    U.deepStrictEqual(pipe(O.none, asUnit), O.none)
+    U.deepStrictEqual(pipe(O.some(1), asUnit), O.some(undefined))
   })
 
   it("bindTo", () => {

@@ -1,4 +1,4 @@
-import * as bindable_ from "@fp-ts/core/Bindable"
+import * as chainable from "@fp-ts/core/Chainable"
 import type * as semigroupKind from "@fp-ts/core/Coproduct"
 import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
@@ -104,19 +104,19 @@ export const composeKeisli: <B, C>(
   FlatMap
 )
 
-export const Bindable: bindable_.Bindable<OptionTypeLambda> = {
+export const Chainable: chainable.Chainable<OptionTypeLambda> = {
   ...Functor,
   ...FlatMap
 }
 
-export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = bindable_
-  .tap(Bindable)
+export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = chainable
+  .tap(Chainable)
 
 export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  bindable_.bind(Bindable)
+  chainable.bind(Chainable)
 
 const productMany = <A>(
   collection: Iterable<Option<A>>

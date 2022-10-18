@@ -47,7 +47,7 @@ export const as = <F extends TypeLambda>(Functor: Functor<F>) =>
  * @category mapping
  * @since 1.0.0
  */
-export const unit = <F extends TypeLambda>(
+export const asUnit = <F extends TypeLambda>(
   Functor: Functor<F>
 ): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, void>) =>
   as(Functor)(undefined)
