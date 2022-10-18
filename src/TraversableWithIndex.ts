@@ -1,14 +1,15 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { FunctorWithIndex } from "@fp-ts/core/FunctorWithIndex"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { ProductWithUnit } from "@fp-ts/core/ProductWithUnit"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
+export interface TraversableWithIndex<T extends TypeLambda, I> extends FunctorWithIndex<T, I> {
   readonly traverseWithIndex: <F extends TypeLambda>(
     ProductWithUnit: ProductWithUnit<F>
   ) => <A, S, R, O, E, B>(
