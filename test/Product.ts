@@ -44,10 +44,26 @@ describe("Product", () => {
           U.deepStrictEqual(actual, expected)
         }
 
-    assertSameResult(RA.Product)([])([])
-    assertSameResult(RA.Product)([])([1, 2, 3])
-    assertSameResult(RA.Product)([[4]])([1, 2, 3])
-    assertSameResult(RA.Product)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
+    const product = <B>(that: ReadonlyArray<B>) =>
+      <A>(self: ReadonlyArray<A>): ReadonlyArray<readonly [A, B]> => {
+        const out: Array<readonly [A, B]> = []
+        for (const a of self) {
+          for (const b of that) {
+            out.push([a, b])
+          }
+        }
+        return out
+      }
+
+    const Product = _.fromFunctor(
+      RA.Functor,
+      product
+    )
+
+    assertSameResult(Product)([])([])
+    assertSameResult(Product)([])([1, 2, 3])
+    assertSameResult(Product)([[4]])([1, 2, 3])
+    assertSameResult(Product)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
   })
 
   describe("productComposition", () => {
