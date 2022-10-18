@@ -15,5 +15,5 @@ declare const fb: ReaderAsyncWriter<{ b: number }, "b", number>
 
 export declare const Coproduct: coproduct.Coproduct<ReaderAsyncWriterTypeLambda>
 
-// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "a" | "b", string | number>
+// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "b", string | number>
 pipe(fa, Coproduct.coproduct(fb))
