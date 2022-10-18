@@ -15,7 +15,7 @@ export interface Success<A> {
 export type Result<E, A> = Failure<E> | Success<A>
 
 export interface ResultTypeLambda extends TypeLambda {
-  readonly type: Result<this["Out2"], this["Out1"]>
+  readonly type: Result<this["Out2"], this["Out"]>
 }
 
 export const isFailure = <E, A>(self: Result<E, A>): self is Failure<E> => self._tag === "Failure"
