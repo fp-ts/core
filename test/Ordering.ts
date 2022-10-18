@@ -34,4 +34,13 @@ describe("Ordering", () => {
     deepStrictEqual(pipe(1, _.Semigroup.combineMany([0, 0, -1])), 1)
     deepStrictEqual(pipe(-1, _.Semigroup.combineMany([0, 0, 1])), -1)
   })
+
+  it("Monoid", () => {
+    deepStrictEqual(pipe(_.Monoid.empty, _.Monoid.combine(0)), 0)
+    deepStrictEqual(pipe(_.Monoid.empty, _.Monoid.combine(1)), 1)
+    deepStrictEqual(pipe(_.Monoid.empty, _.Monoid.combine(-1)), -1)
+    deepStrictEqual(pipe(0, _.Monoid.combine(_.Monoid.empty)), 0)
+    deepStrictEqual(pipe(1, _.Monoid.combine(_.Monoid.empty)), 1)
+    deepStrictEqual(pipe(-1, _.Monoid.combine(_.Monoid.empty)), -1)
+  })
 })
