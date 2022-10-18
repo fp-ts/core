@@ -1,3 +1,4 @@
+import * as bindable_ from "@fp-ts/core/Bindable"
 import type * as semigroupKind from "@fp-ts/core/Coproduct"
 import * as coproductWithCounit from "@fp-ts/core/CoproductWithCounit"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
@@ -5,7 +6,6 @@ import * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import type * as monad from "@fp-ts/core/Monad"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as of_ from "@fp-ts/core/Of"
 import type * as pointed from "@fp-ts/core/Pointed"
@@ -95,29 +95,28 @@ export const flatMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Opt
   (self) => isNone(self) ? none : f(self.value)
 
 export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
-  map,
   flatMap
 }
 
-export const Monad: monad.Monad<OptionTypeLambda> = {
-  ...Of,
-  ...FlatMap
-}
-
-export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = flatMap_
-  .tap(FlatMap)
-
-export const composeKind: <B, C>(
+export const composeKeisli: <B, C>(
   bfc: (b: B) => Option<C>
 ) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_.composeKleisli(
   FlatMap
 )
 
+export const Bindable: bindable_.Bindable<OptionTypeLambda> = {
+  ...Functor,
+  ...FlatMap
+}
+
+export const tap: <A>(f: (a: A) => Option<unknown>) => (self: Option<A>) => Option<A> = bindable_
+  .tap(Bindable)
+
 export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  flatMap_.bind(FlatMap)
+  bindable_.bind(Bindable)
 
 const productMany = <A>(
   collection: Iterable<Option<A>>
