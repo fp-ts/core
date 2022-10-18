@@ -3,6 +3,7 @@
  */
 
 import * as bifunctor from "@fp-ts/core/Bifunctor"
+import * as bindable from "@fp-ts/core/Bindable"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
 import * as comonad from "@fp-ts/core/Comonad"
@@ -36,6 +37,11 @@ export {
    * @since 1.0.0
    */
   bifunctor,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  bindable as bind,
   /**
    * @category type classes
    * @since 1.0.0

@@ -1,6 +1,7 @@
 | Typeclass                | member(s)                                 | extends                  |
 | ------------------------ | ----------------------------------------- | ------------------------ |
 | **Bifunctor**            | `mapBoth`                                 |                          |
+| **Bindable**             |                                           | **Functor**, **FlatMap** |
 | **Bounded**              | `maximum`, `minimum`                      | **Sortable**             |
 | **Category**             | `id`                                      | **Composable**           |
 | **Comonad**              | `extract`                                 | **Extendable**           |
@@ -9,7 +10,7 @@
 | **Extendable**           | `extend`                                  | **Functor**              |
 | **Coproduct**            | `coproduct`, `coproductMany`              | **Functor**              |
 | **CoproductWithCounit**  | `counit`, `coproductAll`                  | **Coproduct**            |
-| **FlatMap**              | `flatMap`                                 | **Functor**              |
+| **FlatMap**              | `flatMap`                                 |                          |
 | **Foldable**             | `reduce`, `reduceRight`                   |                          |
 | **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                          |
 | **Functor**              | `map`                                     |                          |
