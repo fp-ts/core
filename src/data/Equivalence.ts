@@ -3,7 +3,7 @@
  */
 
 /**
- * @category data type
+ * @category data
  * @since 1.0.0
  */
 export interface Equivalence<A, B> {

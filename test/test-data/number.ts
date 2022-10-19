@@ -1,8 +1,8 @@
-import * as bounded from "@fp-ts/core/Bounded"
-import type { Monoid } from "@fp-ts/core/Monoid"
-import * as monoid from "@fp-ts/core/Monoid"
-import * as semigroup from "@fp-ts/core/Semigroup"
-import * as sortable from "@fp-ts/core/Sortable"
+import * as bounded from "@fp-ts/core/typeclass/Bounded"
+import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as sortable from "@fp-ts/core/typeclass/Sortable"
 
 const sum = (that: number) => (self: number): number => self + that
 

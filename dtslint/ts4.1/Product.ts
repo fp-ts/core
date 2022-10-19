@@ -1,4 +1,4 @@
-import * as product from "@fp-ts/core/Product"
+import * as product from "@fp-ts/core/typeclass/Product"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 
 export interface ReaderAsyncWriter<R, E, A> {

@@ -1,7 +1,7 @@
-import type { Monoid } from "@fp-ts/core/Monoid"
-import * as monoid from "@fp-ts/core/Monoid"
-import type * as semigroup from "@fp-ts/core/Semigroup"
-import * as sortable from "@fp-ts/core/Sortable"
+import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as sortable from "@fp-ts/core/typeclass/Sortable"
 
 export const Sortable: sortable.Sortable<boolean> = sortable.fromCompare((that) =>
   (self) => self < that ? -1 : self > that ? 1 : 0

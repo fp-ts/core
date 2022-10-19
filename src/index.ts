@@ -3,102 +3,113 @@
  */
 
 // -------------------------------------------------------------------------------------
-// type classes
+// HKT
 // -------------------------------------------------------------------------------------
 
-import * as alternative from "@fp-ts/core/Alternative"
-import * as applicative from "@fp-ts/core/Applicative"
-import * as bicovariant from "@fp-ts/core/Bicovariant"
-import * as bounded from "@fp-ts/core/Bounded"
-import * as category from "@fp-ts/core/Category"
-import * as chainable from "@fp-ts/core/Chainable"
-import * as comonad from "@fp-ts/core/Comonad"
-import * as composable from "@fp-ts/core/Composable"
-import * as contravariant from "@fp-ts/core/Contravariant"
-import * as coproduct from "@fp-ts/core/Coproduct"
-import * as covariant from "@fp-ts/core/Covariant"
-import * as covariantWithIndex from "@fp-ts/core/CovariantWithIndex"
-import * as extendable from "@fp-ts/core/Extendable"
-import * as flatMap from "@fp-ts/core/FlatMap"
-import * as foldable from "@fp-ts/core/Foldable"
-import * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as hkt from "@fp-ts/core/HKT"
-import * as invariant from "@fp-ts/core/Invariant"
-import * as monad from "@fp-ts/core/Monad"
-import * as monoid from "@fp-ts/core/Monoid"
-import * as of from "@fp-ts/core/Of"
-import * as pointed from "@fp-ts/core/Pointed"
-import * as product from "@fp-ts/core/Product"
-import * as semigroup from "@fp-ts/core/Semigroup"
-import * as sortable from "@fp-ts/core/Sortable"
-import * as traversable from "@fp-ts/core/Traversable"
-import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
 
 // -------------------------------------------------------------------------------------
-// data types
+// typeclass
+// -------------------------------------------------------------------------------------
+
+import * as alternative from "@fp-ts/core/typeclass/Alternative"
+import * as applicative from "@fp-ts/core/typeclass/Applicative"
+import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
+import * as bounded from "@fp-ts/core/typeclass/Bounded"
+import * as category from "@fp-ts/core/typeclass/Category"
+import * as chainable from "@fp-ts/core/typeclass/Chainable"
+import * as comonad from "@fp-ts/core/typeclass/Comonad"
+import * as composable from "@fp-ts/core/typeclass/Composable"
+import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
+import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
+import * as covariant from "@fp-ts/core/typeclass/Covariant"
+import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
+import * as extendable from "@fp-ts/core/typeclass/Extendable"
+import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
+import * as foldable from "@fp-ts/core/typeclass/Foldable"
+import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
+import * as invariant from "@fp-ts/core/typeclass/Invariant"
+import * as monad from "@fp-ts/core/typeclass/Monad"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as of from "@fp-ts/core/typeclass/Of"
+import * as pointed from "@fp-ts/core/typeclass/Pointed"
+import * as product from "@fp-ts/core/typeclass/Product"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as sortable from "@fp-ts/core/typeclass/Sortable"
+import * as traversable from "@fp-ts/core/typeclass/Traversable"
+import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
+
+// -------------------------------------------------------------------------------------
+// data
 // -------------------------------------------------------------------------------------
 
 import * as equivalence from "@fp-ts/core/data/Equivalence"
+import * as _function from "@fp-ts/core/data/Function"
 import * as ordering from "@fp-ts/core/data/Ordering"
 
 export {
   /**
-   * @category type classes
+   * @category data
+   * @since 1.0.0
+   */
+  _function as function,
+  /**
+   * @category typeclass
    * @since 1.0.0
    */
   alternative,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   applicative,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   bicovariant,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   bounded,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   category,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   chainable,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   comonad,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   composable,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   contravariant,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   coproduct,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   covariant,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   covariantWithIndex,
@@ -108,22 +119,22 @@ export {
    */
   equivalence,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   extendable,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   flatMap,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   foldable,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   foldableWithIndex,
@@ -132,22 +143,22 @@ export {
    */
   hkt,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   invariant,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   monad,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   monoid,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   of,
@@ -157,32 +168,32 @@ export {
    */
   ordering,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   pointed,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   product,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   semigroup,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   sortable,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   traversable,
   /**
-   * @category type classes
+   * @category typeclass
    * @since 1.0.0
    */
   traversableWithIndex

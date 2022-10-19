@@ -1,6 +1,6 @@
-import * as monoid from "@fp-ts/core/Monoid"
-import * as semigroup from "@fp-ts/core/Semigroup"
-import type * as sortable from "@fp-ts/core/Sortable"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import type * as sortable from "@fp-ts/core/typeclass/Sortable"
 
 export const Semigroup: semigroup.Semigroup<string> = semigroup.fromCombine((that) =>
   (self) => self + that
