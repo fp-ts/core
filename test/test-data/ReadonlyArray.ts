@@ -15,10 +15,10 @@ export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Out"]>
 }
 
-const map = <A, B>(f: (a: A) => B) =>
+export const map = <A, B>(f: (a: A) => B) =>
   (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map(a => f(a))
 
-const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
+export const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
   (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map((a, i) => f(a, i))
 
 export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = {
@@ -92,7 +92,6 @@ export const traverse = <F extends TypeLambda>(
     traverseWithIndex(Applicative)((a) => f(a))
 
 export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
-  map,
   traverse
 }
 
@@ -100,7 +99,6 @@ export const TraversableWithIndex: traversableWithIndex.TraversableWithIndex<
   ReadonlyArrayTypeLambda,
   number
 > = {
-  mapWithIndex,
   traverseWithIndex
 }
 

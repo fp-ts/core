@@ -24,5 +24,5 @@
 | **Product**              | `product`, `productMany`                  | **Covariant**              |
 | **Semigroup**            | `combine`, `combineMany`                  |                            |
 | **Sortable**             | `compare`                                 |                            |
-| **Traversable**          | `traverse`                                | **Covariant**              |
-| **TraversableWithIndex** | `traverseWihtIndex`                       | **CovariantWithIndex**     |
+| **Traversable**          | `traverse`                                |                            |
+| **TraversableWithIndex** | `traverseWihtIndex`                       |                            |
