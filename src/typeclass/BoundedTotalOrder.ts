@@ -8,7 +8,7 @@ import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
  * @category type class
  * @since 1.0.0
  */
-export interface Bounded<A> extends TotalOrder<A> {
+export interface BoundedTotalOrder<A> extends TotalOrder<A> {
   readonly minimum: A
   readonly maximum: A
 }
@@ -21,7 +21,7 @@ export const fromTotalOrder = <A>(
   TotalOrder: TotalOrder<A>,
   minimum: A,
   maximum: A
-): Bounded<A> => ({
+): BoundedTotalOrder<A> => ({
   ...TotalOrder,
   maximum,
   minimum
@@ -32,17 +32,17 @@ export const fromTotalOrder = <A>(
  *
  * @since 1.0.0
  */
-export const clamp = <A>(Bounded: Bounded<A>): (a: A) => A =>
-  compare.clamp(Bounded)(Bounded.minimum, Bounded.maximum)
+export const clamp = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): (a: A) => A =>
+  compare.clamp(BoundedTotalOrder)(BoundedTotalOrder.minimum, BoundedTotalOrder.maximum)
 
 /**
  * Reverses the `Ord` of a `Bounded` and flips `maximum` and `minimum` values.
  *
  * @since 1.0.0
  */
-export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> =>
+export const reverse = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): BoundedTotalOrder<A> =>
   fromTotalOrder(
-    compare.reverse(Bounded),
-    Bounded.minimum,
-    Bounded.maximum
+    compare.reverse(BoundedTotalOrder),
+    BoundedTotalOrder.minimum,
+    BoundedTotalOrder.maximum
   )

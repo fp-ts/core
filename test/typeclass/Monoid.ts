@@ -6,14 +6,14 @@ import * as U from "../util"
 
 describe("Monoid", () => {
   it("min", () => {
-    const M = monoid.min(number.Bounded)
+    const M = monoid.min(number.BoundedTotalOrder)
     U.deepStrictEqual(M.combineAll([]), +Infinity)
     U.deepStrictEqual(M.combineAll([1]), 1)
     U.deepStrictEqual(M.combineAll([1, -1]), -1)
   })
 
   it("max", () => {
-    const M = monoid.max(number.Bounded)
+    const M = monoid.max(number.BoundedTotalOrder)
     U.deepStrictEqual(M.combineAll([]), -Infinity)
     U.deepStrictEqual(M.combineAll([1]), 1)
     U.deepStrictEqual(M.combineAll([1, -1]), 1)

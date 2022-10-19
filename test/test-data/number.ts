@@ -1,5 +1,5 @@
 import * as associative from "@fp-ts/core/typeclass/Associative"
-import * as bounded from "@fp-ts/core/typeclass/Bounded"
+import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
@@ -34,8 +34,9 @@ export const TotalOrder: totalOrder.TotalOrder<number> = totalOrder.fromCompare(
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
-export const Bounded: bounded.Bounded<number> = bounded.fromTotalOrder(
-  TotalOrder,
-  -Infinity,
-  Infinity
-)
+export const BoundedTotalOrder: boundedTotalOrder.BoundedTotalOrder<number> = boundedTotalOrder
+  .fromTotalOrder(
+    TotalOrder,
+    -Infinity,
+    Infinity
+  )

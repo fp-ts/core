@@ -16,7 +16,7 @@ import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as associative from "@fp-ts/core/typeclass/Associative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
-import * as bounded from "@fp-ts/core/typeclass/Bounded"
+import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
 import * as category from "@fp-ts/core/typeclass/Category"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as comonad from "@fp-ts/core/typeclass/Comonad"
@@ -70,7 +70,7 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  bounded,
+  boundedTotalOrder,
   /**
    * @category typeclass
    * @since 1.0.0
