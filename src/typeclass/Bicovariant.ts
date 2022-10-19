@@ -1,8 +1,8 @@
 /**
  * @since 1.0.0
  */
-import { identity } from "@fp-ts/core/data/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import { identity } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
 /**

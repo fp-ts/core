@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/data/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as number from "../test-data/number"
 import * as O from "../test-data/Option"

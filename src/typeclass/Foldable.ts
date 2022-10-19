@@ -2,8 +2,8 @@
  * @since 1.0.0
  */
 
-import { identity, pipe } from "@fp-ts/core/data/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 
 /**

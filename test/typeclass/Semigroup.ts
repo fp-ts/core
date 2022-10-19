@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/data/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Semigroup"
 import * as sortable from "@fp-ts/core/typeclass/Sortable"
 import * as number from "../test-data/number"
