@@ -5,7 +5,7 @@
 | **Associative**          | `combine`, `combineMany`                  |                            |
 | **Bicovariant**          | `bimap`                                   |                            |
 | **BoundedTotalOrder**    | `maximum`, `minimum`                      | **Sortable**               |
-| **Category**             | `id`                                      | **Composable**             |
+| **Category**             | `identity`                                | **Composable**             |
 | **Chainable**            |                                           | **Covariant**, **FlatMap** |
 | **Comonad**              | `extract`                                 | **Extendable**             |
 | **Composable**           | `compose`                                 |                            |
