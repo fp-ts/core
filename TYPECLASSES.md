@@ -15,6 +15,7 @@
 | **Covariant**            | `map`                                     |                            |
 | **CovariantWithIndex**   | `mapWithIndex`                            |                            |
 | **Extendable**           | `extend`                                  | **Covariant**              |
+| **Filterable**           | `filterMap`                               |                            |
 | **FlatMap**              | `flatMap`                                 |                            |
 | **Foldable**             | `reduce`, `reduceRight`                   |                            |
 | **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                            |
