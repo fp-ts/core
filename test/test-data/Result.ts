@@ -1,4 +1,5 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import type * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as product from "@fp-ts/core/typeclass/Product"
 
@@ -31,6 +32,20 @@ export const map = <A, B>(f: (a: A) => B) =>
 
 export const Covariant: covariant.Covariant<ResultTypeLambda> = {
   map
+}
+
+export const mapError = <E, G>(f: (e: E) => G) =>
+  <A>(self: Result<E, A>): Result<G, A> => isSuccess(self) ? self : fail(f(self.failure))
+
+export const mapBoth = <E, G, A, B>(
+  f: (e: E) => G,
+  g: (a: A) => B
+) =>
+  (self: Result<E, A>): Result<G, B> =>
+    isFailure(self) ? fail(f(self.failure)) : succeed(g(self.success))
+
+export const Bicovariant: bicovariant.Bicovariant<ResultTypeLambda> = {
+  mapBoth
 }
 
 export const Product: product.Product<ResultTypeLambda> = {
