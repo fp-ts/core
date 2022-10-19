@@ -1,8 +1,8 @@
 /**
  * @since 1.0.0
  */
-import * as equivalence from "@fp-ts/core/data/Equivalence"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import * as equivalence from "@fp-ts/core/internal/Equivalence"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
