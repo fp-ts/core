@@ -5,6 +5,16 @@ import * as RA from "./data/ReadonlyArray"
 import * as U from "./util"
 
 describe("Functor", () => {
+  it("invmap", () => {
+    const Invariant = O.Invariant
+    const equivalence = Invariant.invmap({
+      to: (a: string): [string] => [a],
+      from: (as) => as[0]
+    })
+    U.deepStrictEqual(equivalence.to(O.none), O.none)
+    U.deepStrictEqual(equivalence.to(O.some("a")), O.some(["a"]))
+  })
+
   it("mapWithIndexComposition", () => {
     const map = _.mapComposition(RA.Functor, RA.Functor)
     const f = (a: string) => a + "!"
