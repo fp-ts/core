@@ -10,7 +10,7 @@ import type { BoundedTotalOrder } from "@fp-ts/core/typeclass/BoundedTotalOrder"
  * @since 1.0.0
  */
 export interface Monoid<A> extends Associative<A> {
-  readonly empty: A
+  readonly unit: A
   readonly combineAll: (collection: Iterable<A>) => A
 }
 
@@ -18,16 +18,16 @@ export interface Monoid<A> extends Associative<A> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromAssociative = <A>(Associative: Associative<A>, empty: A): Monoid<A> => ({
+export const fromAssociative = <A>(Associative: Associative<A>, unit: A): Monoid<A> => ({
   ...Associative,
-  empty,
-  combineAll: (collection) => Associative.combineMany(collection)(empty)
+  unit,
+  combineAll: (collection) => Associative.combineMany(collection)(unit)
 })
 
 /**
  * Get a monoid where `combine` will return the minimum, based on the provided bounded order.
  *
- * The `empty` value is the `maximum` value.
+ * The `unit` value is the `maximum` value.
  *
  * @category constructors
  * @since 1.0.0
@@ -38,7 +38,7 @@ export const min = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
 /**
  * Get a monoid where `combine` will return the maximum, based on the provided bounded order.
  *
- * The `empty` value is the `minimum` value.
+ * The `unit` value is the `minimum` value.
  *
  * @category constructors
  * @since 1.0.0
@@ -52,7 +52,7 @@ export const max = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
  * @since 1.0.0
  */
 export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> =>
-  fromAssociative(associative.reverse(Monoid), Monoid.empty)
+  fromAssociative(associative.reverse(Monoid), Monoid.unit)
 
 /**
  * Given a struct of monoids returns a monoid for the struct.
@@ -62,13 +62,13 @@ export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> =>
 export const struct = <A>(
   monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<{ readonly [K in keyof A]: A[K] }> => {
-  const empty: A = {} as any
+  const unit: A = {} as any
   for (const k in monoids) {
     if (Object.prototype.hasOwnProperty.call(monoids, k)) {
-      empty[k] = monoids[k].empty
+      unit[k] = monoids[k].unit
     }
   }
-  return fromAssociative(associative.struct(monoids), empty)
+  return fromAssociative(associative.struct(monoids), unit)
 }
 
 /**
@@ -79,6 +79,6 @@ export const struct = <A>(
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<Readonly<A>> => {
-  const empty: A = monoids.map((m) => m.empty) as any
-  return fromAssociative(associative.tuple(...monoids), empty)
+  const unit: A = monoids.map((m) => m.unit) as any
+  return fromAssociative(associative.tuple(...monoids), unit)
 }

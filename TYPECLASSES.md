@@ -19,7 +19,7 @@
 | **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                            |
 | **Invariant**            | `imap`                                    |                            |
 | **Monad**                |                                           | **Pointed**, **FlatMap**   |
-| **Monoid**               | `empty`, `combineAll`                     | **Semigroup**              |
+| **Monoid**               | `unit`, `combineAll`                      | **Associative**            |
 | **Of**                   | `of`                                      |                            |
 | **Pointed**              |                                           | **Covariant**, **Of**      |
 | **Product**              | `product`, `productMany`                  | **Covariant**              |
