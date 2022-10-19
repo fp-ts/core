@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 
@@ -28,3 +29,12 @@ export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeL
   self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
 ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) =>
   (f) => FunctorF.mapWithIndex((ga, i) => pipe(ga, FunctorG.mapWithIndex((a, j) => f(a, [i, j]))))
+
+/**
+ * Returns a default `map` implementation.
+ *
+ * @since 1.0.0
+ */
+export const map = <F extends TypeLambda, I>(
+  FunctorWithIndex: FunctorWithIndex<F, I>
+): Functor<F>["map"] => f => FunctorWithIndex.mapWithIndex(f)

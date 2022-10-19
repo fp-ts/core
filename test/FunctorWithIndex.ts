@@ -17,4 +17,11 @@ describe("FunctorWithIndex", () => {
       "e12"
     ]])
   })
+
+  it("map", () => {
+    const map = _.map(RA.FunctorWithIndex)
+    const f = (a: string) => a + "!"
+    U.deepStrictEqual(pipe([], map(f)), [])
+    U.deepStrictEqual(pipe(["a", "b", "c"], map(f)), ["a!", "b!", "c!"])
+  })
 })
