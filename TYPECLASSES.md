@@ -1,7 +1,7 @@
 | Typeclass                | member(s)                                 | extends                    |
 | ------------------------ | ----------------------------------------- | -------------------------- |
 | **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**              |
-| **Applicative**          | `unit`, `productAll`                      | **Product**                |
+| **Applicative**          | `productAll`                              | **Product**, **Of**        |
 | **Associative**          | `combine`, `combineMany`                  |                            |
 | **Bicovariant**          | `bimap`                                   |                            |
 | **BoundedTotalOrder**    | `maximum`, `minimum`                      | **Sortable**               |

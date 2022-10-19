@@ -185,7 +185,7 @@ const productAll = <A>(
 
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   ...Product,
-  unit: () => some(undefined),
+  ...Of,
   productAll
 }
 
