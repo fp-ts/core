@@ -1,6 +1,6 @@
+import * as _ from "@fp-ts/core/data/Ordering"
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as _ from "@fp-ts/core/Ordering"
-import { deepStrictEqual } from "./util"
+import { deepStrictEqual } from "../util"
 
 describe("Ordering", () => {
   it("match", () => {

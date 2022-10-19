@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import * as equivalence from "@fp-ts/core/data/Equivalence"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/Invariant"
 
@@ -22,7 +23,8 @@ export interface Contravariant<F extends TypeLambda> extends TypeClass<F> {
 export const invmap = <F extends TypeLambda>(
   Contravariant: Contravariant<F>
 ): Invariant<F>["invmap"] =>
-  equivalence => ({
-    to: Contravariant.contramap(equivalence.from),
-    from: Contravariant.contramap(equivalence.to)
-  })
+  eq =>
+    equivalence.make(
+      Contravariant.contramap(eq.from),
+      Contravariant.contramap(eq.to)
+    )

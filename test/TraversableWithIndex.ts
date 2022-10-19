@@ -1,7 +1,7 @@
 import * as _ from "@fp-ts/core/TraversableWithIndex"
 import { pipe } from "../src/internal/Function"
-import * as O from "./data/Option"
-import * as RA from "./data/ReadonlyArray"
+import * as O from "./test-data/Option"
+import * as RA from "./test-data/ReadonlyArray"
 import * as U from "./util"
 
 describe("TraversableWithIndex", () => {

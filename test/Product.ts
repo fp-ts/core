@@ -1,9 +1,9 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Product"
-import * as O from "./data/Option"
-import * as RA from "./data/ReadonlyArray"
-import * as string from "./data/string"
+import * as O from "./test-data/Option"
+import * as RA from "./test-data/ReadonlyArray"
+import * as string from "./test-data/string"
 import * as U from "./util"
 
 describe("Product", () => {

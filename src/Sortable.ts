@@ -2,11 +2,11 @@
  * @since 1.0.0
  */
 import * as contravariant from "@fp-ts/core/Contravariant"
+import type { Ordering } from "@fp-ts/core/data/Ordering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type * as invariant from "@fp-ts/core/Invariant"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as monoid from "@fp-ts/core/Monoid"
-import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
 
 /**

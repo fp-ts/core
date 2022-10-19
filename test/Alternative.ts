@@ -1,5 +1,5 @@
 import * as _ from "@fp-ts/core/Alternative"
-import * as O from "./data/Option"
+import * as O from "./test-data/Option"
 import * as U from "./util"
 
 describe("Alternative", () => {

@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import * as equivalence from "@fp-ts/core/data/Equivalence"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/Invariant"
 
@@ -36,10 +37,11 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
 export const invmap = <F extends TypeLambda>(
   Functor: Functor<F>
 ): Invariant<F>["invmap"] =>
-  equivalence => ({
-    to: Functor.map(equivalence.to),
-    from: Functor.map(equivalence.from)
-  })
+  eq =>
+    equivalence.make(
+      Functor.map(eq.to),
+      Functor.map(eq.from)
+    )
 
 /**
  * @category mapping
@@ -65,10 +67,6 @@ export const asUnit = <F extends TypeLambda>(
   Functor: Functor<F>
 ): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, void>) =>
   as(Functor)(undefined)
-
-// -------------------------------------------------------------------------------------
-// do notation
-// -------------------------------------------------------------------------------------
 
 /**
  * @category do notation
@@ -99,12 +97,7 @@ export {
   let_ as let
 }
 
-// -------------------------------------------------------------------------------------
-// tuple sequencing
-// -------------------------------------------------------------------------------------
-
 /**
- * @category tuple sequencing
  * @since 1.0.0
  */
 export const tupled = <F extends TypeLambda>(
