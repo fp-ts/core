@@ -44,7 +44,7 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 // -------------------------------------------------------------------------------------
 
 import * as equivalence from "@fp-ts/core/data/Equivalence"
-import * as ordering from "@fp-ts/core/data/Ordering"
+import * as totalOrdering from "@fp-ts/core/data/TotalOrdering"
 
 export {
   /**
@@ -157,11 +157,6 @@ export {
    */
   of,
   /**
-   * @category data types
-   * @since 1.0.0
-   */
-  ordering,
-  /**
    * @category typeclass
    * @since 1.0.0
    */
@@ -181,6 +176,11 @@ export {
    * @since 1.0.0
    */
   sortable,
+  /**
+   * @category data types
+   * @since 1.0.0
+   */
+  totalOrdering,
   /**
    * @category typeclass
    * @since 1.0.0
