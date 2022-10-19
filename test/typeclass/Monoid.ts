@@ -45,8 +45,8 @@ describe("Monoid", () => {
 
     it("should ignore non own properties", () => {
       const monoids = Object.create({ a: 1 })
-      const s = monoid.struct(monoids)
-      U.deepStrictEqual(s.unit, {})
+      const M = monoid.struct(monoids)
+      U.deepStrictEqual(M.unit, {})
     })
   })
 
