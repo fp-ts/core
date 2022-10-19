@@ -1,8 +1,9 @@
 /**
  * @since 1.0.0
  */
-import type * as contravariant from "@fp-ts/core/Contravariant"
+import * as contravariant from "@fp-ts/core/Contravariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as invariant from "@fp-ts/core/Invariant"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import * as monoid from "@fp-ts/core/Monoid"
 import type { Ordering } from "@fp-ts/core/Ordering"
@@ -21,7 +22,7 @@ export interface Sortable<A> {
  * @since 1.0.0
  */
 export interface SortableTypeLambda extends TypeLambda {
-  readonly type: Sortable<this["In"]>
+  readonly type: Sortable<this["Out"]>
 }
 
 /**
@@ -113,6 +114,13 @@ export const getMonoid = <A>(): Monoid<Sortable<A>> =>
  */
 export const Contravariant: contravariant.Contravariant<SortableTypeLambda> = {
   contramap
+}
+
+/**
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<SortableTypeLambda> = {
+  invmap: contravariant.invmap(Contravariant)
 }
 
 /**

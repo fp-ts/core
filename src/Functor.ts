@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Invariant } from "@fp-ts/core/Invariant"
 
 /**
  * @category type class
@@ -26,6 +27,19 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
 ) => <FS, FR, FO, FE, GS, GR, GO, GE>(
   self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
 ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) => (f) => FunctorF.map(FunctorG.map(f))
+
+/**
+ * Returns a default `invmap` implementation.
+ *
+ * @since 1.0.0
+ */
+export const invmap = <F extends TypeLambda>(
+  Functor: Functor<F>
+): Invariant<F>["invmap"] =>
+  equivalence => ({
+    to: Functor.map(equivalence.to),
+    from: Functor.map(equivalence.from)
+  })
 
 /**
  * @category mapping

@@ -7,6 +7,7 @@ import * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type * as invariant from "@fp-ts/core/Invariant"
 import type { Monoid } from "@fp-ts/core/Monoid"
 import type * as of_ from "@fp-ts/core/Of"
 import type * as pointed from "@fp-ts/core/Pointed"
@@ -70,6 +71,13 @@ export const Of: of_.Of<OptionTypeLambda> = {
 
 export const Functor: functor.Functor<OptionTypeLambda> = {
   map
+}
+
+/**
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<OptionTypeLambda> = {
+  invmap: functor.invmap(Functor)
 }
 
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
