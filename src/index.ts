@@ -39,6 +39,7 @@ import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
+import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
 
 // -------------------------------------------------------------------------------------
@@ -216,6 +217,11 @@ export {
    * @since 1.0.0
    */
   traversable,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  traversableFilterable,
   /**
    * @category typeclass
    * @since 1.0.0
