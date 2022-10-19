@@ -19,6 +19,16 @@ export const isRight = <E, A>(self: Either<E, A>): self is Right<A> => self._tag
 /**
  * @since 1.0.0
  */
+export const left = <E>(e: E): Either<E, never> => ({ _tag: "Left", left: e })
+
+/**
+ * @since 1.0.0
+ */
+export const right = <A>(a: A): Either<never, A> => ({ _tag: "Right", right: a })
+
+/**
+ * @since 1.0.0
+ */
 export const getLeft = <E, A>(
   self: Either<E, A>
 ): Option<E> => (isRight(self) ? option.none : option.some(self.left))

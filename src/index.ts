@@ -27,6 +27,7 @@ import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/typeclass/Extendable"
+import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
@@ -46,6 +47,8 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 
 import * as either from "@fp-ts/core/data/Either"
 import * as option from "@fp-ts/core/data/Option"
+import * as predicate from "@fp-ts/core/data/Predicate"
+import * as refinement from "@fp-ts/core/data/Refinement"
 import * as totalOrdering from "@fp-ts/core/data/TotalOrdering"
 
 export {
@@ -133,6 +136,11 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
+  filterable,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
   flatMap,
   /**
    * @category typeclass
@@ -182,7 +190,17 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
+  predicate,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
   product,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  refinement,
   /**
    * @category typeclass
    * @since 1.0.0
