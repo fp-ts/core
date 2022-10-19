@@ -9,7 +9,7 @@ import { identity } from "@fp-ts/core/internal/Function"
  * @category type class
  * @since 1.0.0
  */
-export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
+export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
   readonly mapBoth: <E, G, A, B>(
     f: (e: E) => G,
     g: (a: A) => B
@@ -20,21 +20,21 @@ export interface Bifunctor<F extends TypeLambda> extends TypeClass<F> {
  * @since 1.0.0
  */
 export const mapLeft = <F extends TypeLambda>(
-  Bifunctor: Bifunctor<F>
+  Bicovariant: Bicovariant<F>
 ): (<E, G>(
   f: (e: E) => G
 ) => <S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
   <E, G>(f: (e: E) => G): (<S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
-    Bifunctor.mapBoth(f, identity)
+    Bicovariant.mapBoth(f, identity)
 
 /**
  * Returns a default `map` implementation.
  *
  * @since 1.0.0
  */
-export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Covariant<F>["map"] =>
+export const map = <F extends TypeLambda>(Bicovariant: Bicovariant<F>): Covariant<F>["map"] =>
   <A, B>(f: (a: A) => B): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
-    Bifunctor.mapBoth(identity, f)
+    Bicovariant.mapBoth(identity, f)
 
 /**
  * Returns a default `mapBoth` composition.
@@ -43,7 +43,7 @@ export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Covariant<F>
  */
 export const mapBothComposition = <F extends TypeLambda, G extends TypeLambda>(
   CovariantF: Covariant<F>,
-  BifunctorG: Bifunctor<G>
+  BicovariantG: Bicovariant<G>
 ) =>
   <GE, GG, A, B>(
     f: (e: GE) => GG,
@@ -51,4 +51,4 @@ export const mapBothComposition = <F extends TypeLambda, G extends TypeLambda>(
   ): (<FS, FR, FO, FE, GS, GR, GO>(
     self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
   ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GG, B>>) =>
-    CovariantF.map(BifunctorG.mapBoth(f, g))
+    CovariantF.map(BicovariantG.mapBoth(f, g))
