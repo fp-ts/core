@@ -35,7 +35,7 @@ import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as sortable from "@fp-ts/core/typeclass/Sortable"
+import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
 
@@ -175,7 +175,7 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  sortable,
+  totalOrder,
   /**
    * @category data types
    * @since 1.0.0

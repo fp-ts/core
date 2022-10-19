@@ -2,7 +2,7 @@ import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as sortable from "@fp-ts/core/typeclass/Sortable"
+import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 
 const sum = (that: number) => (self: number): number => self + that
 
@@ -30,8 +30,12 @@ export const SemigroupMultiply: semigroup.Semigroup<number> = {
     }
 }
 
-export const Sortable: sortable.Sortable<number> = sortable.fromCompare((that) =>
+export const TotalOrder: totalOrder.TotalOrder<number> = totalOrder.fromCompare((that) =>
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
-export const Bounded: bounded.Bounded<number> = bounded.fromSortable(Sortable, -Infinity, Infinity)
+export const Bounded: bounded.Bounded<number> = bounded.fromTotalOrder(
+  TotalOrder,
+  -Infinity,
+  Infinity
+)

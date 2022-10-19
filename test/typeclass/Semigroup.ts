@@ -1,6 +1,6 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Semigroup"
-import * as sortable from "@fp-ts/core/typeclass/Sortable"
+import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as number from "../test-data/number"
 import * as string from "../test-data/string"
 import * as U from "../util"
@@ -31,14 +31,14 @@ describe("Semigroup", () => {
 
   describe("min", () => {
     it("should return the minimum", () => {
-      const S = _.min(number.Sortable)
+      const S = _.min(number.TotalOrder)
       U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
       U.deepStrictEqual(pipe(1, S.combineMany([3, 2])), 1)
     })
 
     it("should return the last minimum", () => {
       type Item = { a: number }
-      const S = _.min(pipe(number.Sortable, sortable.contramap((_: Item) => _.a)))
+      const S = _.min(pipe(number.TotalOrder, totalOrder.contramap((_: Item) => _.a)))
       const item: Item = { a: 1 }
       U.strictEqual(pipe({ a: 2 }, S.combineMany([{ a: 1 }, item])), item)
       U.strictEqual(pipe(item, S.combineMany([])), item)
@@ -47,14 +47,14 @@ describe("Semigroup", () => {
 
   describe("max", () => {
     it("should return the maximum", () => {
-      const S = _.max(number.Sortable)
+      const S = _.max(number.TotalOrder)
       U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
       U.deepStrictEqual(pipe(1, S.combineMany([3, 2])), 3)
     })
 
     it("should return the last minimum", () => {
       type Item = { a: number }
-      const S = _.max(pipe(number.Sortable, sortable.contramap((_: Item) => _.a)))
+      const S = _.max(pipe(number.TotalOrder, totalOrder.contramap((_: Item) => _.a)))
       const item: Item = { a: 2 }
       U.strictEqual(pipe({ a: 1 }, S.combineMany([{ a: 2 }, item])), item)
       U.strictEqual(pipe(item, S.combineMany([])), item)

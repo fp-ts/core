@@ -1,9 +1,9 @@
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as sortable from "@fp-ts/core/typeclass/Sortable"
+import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 
-export const Sortable: sortable.Sortable<boolean> = sortable.fromCompare((that) =>
+export const TotalOrder: totalOrder.TotalOrder<boolean> = totalOrder.fromCompare((that) =>
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
