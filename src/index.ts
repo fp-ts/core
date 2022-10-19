@@ -44,15 +44,9 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 // -------------------------------------------------------------------------------------
 
 import * as equivalence from "@fp-ts/core/data/Equivalence"
-import * as _function from "@fp-ts/core/data/Function"
 import * as ordering from "@fp-ts/core/data/Ordering"
 
 export {
-  /**
-   * @category data
-   * @since 1.0.0
-   */
-  _function as function,
   /**
    * @category typeclass
    * @since 1.0.0

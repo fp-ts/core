@@ -1,4 +1,4 @@
-import * as _ from "@fp-ts/core/data/Function"
+import * as _ from "@fp-ts/core/internal/Function"
 import * as U from "../util"
 
 describe("FlatMap", () => {

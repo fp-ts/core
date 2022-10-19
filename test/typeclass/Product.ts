@@ -1,5 +1,5 @@
-import { pipe } from "@fp-ts/core/data/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Product"
 import * as O from "../test-data/Option"
 import * as RA from "../test-data/ReadonlyArray"

@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/data/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import * as O from "../test-data/Option"
 import * as RA from "../test-data/ReadonlyArray"
