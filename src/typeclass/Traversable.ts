@@ -2,15 +2,14 @@
  * @since 1.0.0
  */
 import { identity } from "@fp-ts/core/data/Function"
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
-import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Traversable<T extends TypeLambda> extends Covariant<T> {
+export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
   readonly traverse: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(
