@@ -26,7 +26,7 @@ describe("TraversableWithIndex", () => {
     )
   })
 
-  it("map", () => {
+  it("traverse", () => {
     const traverse = _.traverse(RA.TraversableWithIndex)(O.Applicative)
     const f = (n: number) => n > 0 ? O.some(n) : O.none
     U.deepStrictEqual(pipe([], traverse(f)), O.some([]))
