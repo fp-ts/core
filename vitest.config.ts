@@ -6,8 +6,8 @@ export default defineConfig({
   test: {
     include: ["./test/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     exclude: [
-      "./test/**/util.ts",
-      "./test/data/*.ts"
+      "./test/util.ts",
+      "./test/test-data/*.ts"
     ],
     globals: true
   },

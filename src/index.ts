@@ -2,6 +2,10 @@
  * @since 1.0.0
  */
 
+// -------------------------------------------------------------------------------------
+// type classes
+// -------------------------------------------------------------------------------------
+
 import * as alternative from "@fp-ts/core/Alternative"
 import * as applicative from "@fp-ts/core/Applicative"
 import * as bifunctor from "@fp-ts/core/Bifunctor"
@@ -23,13 +27,19 @@ import * as invariant from "@fp-ts/core/Invariant"
 import * as monad from "@fp-ts/core/Monad"
 import * as monoid from "@fp-ts/core/Monoid"
 import * as of from "@fp-ts/core/Of"
-import * as ordering from "@fp-ts/core/Ordering"
 import * as pointed from "@fp-ts/core/Pointed"
 import * as product from "@fp-ts/core/Product"
 import * as semigroup from "@fp-ts/core/Semigroup"
 import * as sortable from "@fp-ts/core/Sortable"
 import * as traversable from "@fp-ts/core/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
+
+// -------------------------------------------------------------------------------------
+// data types
+// -------------------------------------------------------------------------------------
+
+import * as equivalence from "@fp-ts/core/data/Equivalence"
+import * as ordering from "@fp-ts/core/data/Ordering"
 
 export {
   /**
@@ -82,6 +92,11 @@ export {
    * @since 1.0.0
    */
   coproduct,
+  /**
+   * @category data types
+   * @since 1.0.0
+   */
+  equivalence,
   /**
    * @category type classes
    * @since 1.0.0

@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Invariant"
 import * as sortable from "@fp-ts/core/Sortable"
-import * as string from "./data/string"
+import * as string from "./test-data/string"
 import * as U from "./util"
 
 describe("Contravariant", () => {

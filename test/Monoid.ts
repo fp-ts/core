@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as monoid from "@fp-ts/core/Monoid"
-import * as number from "./data/number"
-import * as string from "./data/string"
+import * as number from "./test-data/number"
+import * as string from "./test-data/string"
 import * as U from "./util"
 
 describe("Monoid", () => {

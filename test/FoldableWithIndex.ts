@@ -1,8 +1,8 @@
 import * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as number from "./data/number"
-import * as O from "./data/Option"
-import * as RA from "./data/ReadonlyArray"
+import * as number from "./test-data/number"
+import * as O from "./test-data/Option"
+import * as RA from "./test-data/ReadonlyArray"
 import * as U from "./util"
 
 describe("FoldableWithIndex", () => {

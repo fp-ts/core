@@ -1,9 +1,9 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/Sortable"
-import * as boolean from "./data/boolean"
-import * as number from "./data/number"
-import { sort } from "./data/ReadonlyArray"
-import * as string from "./data/string"
+import * as boolean from "./test-data/boolean"
+import * as number from "./test-data/number"
+import { sort } from "./test-data/ReadonlyArray"
+import * as string from "./test-data/string"
 import * as U from "./util"
 
 describe("Sortable", () => {
