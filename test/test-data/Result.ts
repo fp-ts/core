@@ -37,7 +37,7 @@ export const Covariant: covariant.Covariant<ResultTypeLambda> = {
 export const mapError = <E, G>(f: (e: E) => G) =>
   <A>(self: Result<E, A>): Result<G, A> => isSuccess(self) ? self : fail(f(self.failure))
 
-export const mapBoth = <E, G, A, B>(
+export const bimap = <E, G, A, B>(
   f: (e: E) => G,
   g: (a: A) => B
 ) =>
@@ -45,7 +45,7 @@ export const mapBoth = <E, G, A, B>(
     isFailure(self) ? fail(f(self.failure)) : succeed(g(self.success))
 
 export const Bicovariant: bicovariant.Bicovariant<ResultTypeLambda> = {
-  mapBoth
+  bimap
 }
 
 export const Product: product.Product<ResultTypeLambda> = {
