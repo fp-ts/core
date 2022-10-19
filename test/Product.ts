@@ -7,7 +7,7 @@ import * as string from "./test-data/string"
 import * as U from "./util"
 
 describe("Product", () => {
-  it("fromFunctor", () => {
+  it("fromCovariant", () => {
     const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
       (x: unknown) => {
         const combined = Array(acc.length + 1)
@@ -55,8 +55,8 @@ describe("Product", () => {
         return out
       }
 
-    const Product = _.fromFunctor(
-      RA.Functor,
+    const Product = _.fromCovariant(
+      RA.Covariant,
       product
     )
 

@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Functor } from "@fp-ts/core/Functor"
+import type { Covariant } from "@fp-ts/core/Covariant"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Semigroup } from "@fp-ts/core/Semigroup"
@@ -11,7 +11,7 @@ import * as semigroup from "@fp-ts/core/Semigroup"
  * @category type class
  * @since 1.0.0
  */
-export interface Product<F extends TypeLambda> extends Functor<F> {
+export interface Product<F extends TypeLambda> extends Covariant<F> {
   readonly product: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -27,12 +27,12 @@ export interface Product<F extends TypeLambda> extends Functor<F> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromFunctor = <F extends TypeLambda>(
-  Functor: Functor<F>,
+export const fromCovariant = <F extends TypeLambda>(
+  Covariant: Covariant<F>,
   product: Product<F>["product"]
 ): Product<F> => {
   return {
-    ...Functor,
+    ...Covariant,
     product,
     productMany: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
@@ -40,10 +40,10 @@ export const fromFunctor = <F extends TypeLambda>(
       (self: Kind<F, S, R, O, E, A>) => {
         let out: Kind<F, S, R, O, E, [A, ...Array<A>]> = pipe(
           self,
-          Functor.map(a => [a])
+          Covariant.map(a => [a])
         )
         for (const fa of collection) {
-          out = pipe(out, product(fa), Functor.map(([[head, ...tail], a]) => [head, ...tail, a]))
+          out = pipe(out, product(fa), Covariant.map(([[head, ...tail], a]) => [head, ...tail, a]))
         }
         return out
       }

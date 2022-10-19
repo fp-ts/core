@@ -2,10 +2,10 @@ import * as alternative from "@fp-ts/core/Alternative"
 import type * as applicative from "@fp-ts/core/Applicative"
 import * as chainable from "@fp-ts/core/Chainable"
 import type * as semigroupKind from "@fp-ts/core/Coproduct"
+import * as covariant from "@fp-ts/core/Covariant"
 import * as flatMap_ from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
-import * as functor from "@fp-ts/core/Functor"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type * as invariant from "@fp-ts/core/Invariant"
 import type { Monoid } from "@fp-ts/core/Monoid"
@@ -69,7 +69,7 @@ export const Of: of_.Of<OptionTypeLambda> = {
   of: some
 }
 
-export const Functor: functor.Functor<OptionTypeLambda> = {
+export const Covariant: covariant.Covariant<OptionTypeLambda> = {
   map
 }
 
@@ -77,27 +77,27 @@ export const Functor: functor.Functor<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  invmap: functor.invmap(Functor)
+  invmap: covariant.invmap(Covariant)
 }
 
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
   ...Of,
-  ...Functor
+  ...Covariant
 }
 
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = functor.bindTo(Functor)
+) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = covariant.bindTo(Covariant)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  functor.let(Functor)
+  covariant.let(Covariant)
 
 export { let_ as let }
 
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = functor.tupled(Functor)
+export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tupled(Covariant)
 
 export const flatMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B> = (f) =>
   (self) => isNone(self) ? none : f(self.value)
@@ -113,7 +113,7 @@ export const composeKeisli: <B, C>(
 )
 
 export const Chainable: chainable.Chainable<OptionTypeLambda> = {
-  ...Functor,
+  ...Covariant,
   ...FlatMap
 }
 

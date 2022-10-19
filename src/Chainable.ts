@@ -1,8 +1,8 @@
 /**
  * @since 1.0.0
  */
+import type { Covariant } from "@fp-ts/core/Covariant"
 import type { FlatMap } from "@fp-ts/core/FlatMap"
-import type { Functor } from "@fp-ts/core/Functor"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 
@@ -10,7 +10,7 @@ import { pipe } from "@fp-ts/core/internal/Function"
  * @category type class
  * @since 1.0.0
  */
-export interface Chainable<F extends TypeLambda> extends Functor<F>, FlatMap<F> {}
+export interface Chainable<F extends TypeLambda> extends Covariant<F>, FlatMap<F> {}
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.

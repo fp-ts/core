@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import type { Applicative } from "@fp-ts/core/Applicative"
-import type { FunctorWithIndex } from "@fp-ts/core/FunctorWithIndex"
+import type { CovariantWithIndex } from "@fp-ts/core/CovariantWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Traversable } from "@fp-ts/core/Traversable"
 
@@ -10,7 +10,7 @@ import type { Traversable } from "@fp-ts/core/Traversable"
  * @category type class
  * @since 1.0.0
  */
-export interface TraversableWithIndex<T extends TypeLambda, I> extends FunctorWithIndex<T, I> {
+export interface TraversableWithIndex<T extends TypeLambda, I> extends CovariantWithIndex<T, I> {
   readonly traverseWithIndex: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(

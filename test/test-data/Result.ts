@@ -1,4 +1,4 @@
-import type * as functor from "@fp-ts/core/Functor"
+import type * as covariant from "@fp-ts/core/Covariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type * as product from "@fp-ts/core/Product"
 
@@ -29,7 +29,7 @@ export const succeed = <A>(a: A): Result<never, A> => ({ _tag: "Success", succes
 export const map = <A, B>(f: (a: A) => B) =>
   <E>(self: Result<E, A>): Result<E, B> => isFailure(self) ? self : succeed(f(self.success))
 
-export const Functor: functor.Functor<ResultTypeLambda> = {
+export const Covariant: covariant.Covariant<ResultTypeLambda> = {
   map
 }
 
