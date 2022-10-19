@@ -1,6 +1,6 @@
-import * as coproduct from "@fp-ts/core/Coproduct"
+import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/data/Function"
 
 export interface ReaderAsyncWriter<R, E, A> {
   (r: R): () => Promise<[E, A]>

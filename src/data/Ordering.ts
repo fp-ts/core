@@ -1,11 +1,11 @@
 /**
  * @since 1.0.0
  */
-import * as monoid from "@fp-ts/core/Monoid"
-import type * as semigroup from "@fp-ts/core/Semigroup"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
- * @category data type
+ * @category data
  * @since 1.0.0
  */
 export type Ordering = -1 | 0 | 1

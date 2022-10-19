@@ -1,6 +1,6 @@
-import type * as covariant from "@fp-ts/core/Covariant"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import type * as product from "@fp-ts/core/Product"
+import type * as covariant from "@fp-ts/core/typeclass/Covariant"
+import type * as product from "@fp-ts/core/typeclass/Product"
 
 export interface Failure<E> {
   readonly _tag: "Failure"
