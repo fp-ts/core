@@ -8,12 +8,14 @@ import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
  * @category data
  * @since 1.0.0
  */
-export type Ordering = -1 | 0 | 1
+export type TotalOrdering = -1 | 0 | 1
 
 /**
  * @since 1.0.0
  */
-export const reverse = (o: Ordering): Ordering => (o === -1 ? 1 : o === 1 ? -1 : 0)
+export const reverse = (
+  totalOrdering: TotalOrdering
+): TotalOrdering => (totalOrdering === -1 ? 1 : totalOrdering === 1 ? -1 : 0)
 
 /**
  * @category pattern matching
@@ -23,13 +25,15 @@ export const match = <A, B, C = B>(
   onLessThan: () => A,
   onEqual: () => B,
   onGreaterThan: () => C
-) => (o: Ordering): A | B | C => o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan()
+) =>
+  (totalOrdering: TotalOrdering): A | B | C =>
+    totalOrdering === -1 ? onLessThan() : totalOrdering === 0 ? onEqual() : onGreaterThan()
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = {
+export const Semigroup: semigroup.Semigroup<TotalOrdering> = {
   combine: (that) => (self) => self !== 0 ? self : that,
   combineMany: (collection) =>
     (self) => {
@@ -50,4 +54,4 @@ export const Semigroup: semigroup.Semigroup<Ordering> = {
  * @category instances
  * @since 1.0.0
  */
-export const Monoid: monoid.Monoid<Ordering> = monoid.fromSemigroup(Semigroup, 0)
+export const Monoid: monoid.Monoid<TotalOrdering> = monoid.fromSemigroup(Semigroup, 0)

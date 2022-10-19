@@ -1,8 +1,8 @@
-import * as _ from "@fp-ts/core/data/Ordering"
+import * as _ from "@fp-ts/core/data/TotalOrdering"
 import { pipe } from "@fp-ts/core/internal/Function"
 import { deepStrictEqual } from "../util"
 
-describe("Ordering", () => {
+describe("TotalOrdering", () => {
   it("match", () => {
     const f = _.match(
       () => "lt",
