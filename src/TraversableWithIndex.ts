@@ -4,6 +4,7 @@
 import type { Applicative } from "@fp-ts/core/Applicative"
 import type { FunctorWithIndex } from "@fp-ts/core/FunctorWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Traversable } from "@fp-ts/core/Traversable"
 
 /**
  * @category type class
@@ -39,3 +40,12 @@ export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends 
           f(a, [i, j])
         )(ga)
       )
+
+/**
+ * Returns a default `traverse` implementation.
+ *
+ * @since 1.0.0
+ */
+export const traverse = <F extends TypeLambda, I>(
+  TraversableWithIndex: TraversableWithIndex<F, I>
+): Traversable<F>["traverse"] => f => TraversableWithIndex.traverseWithIndex(f)

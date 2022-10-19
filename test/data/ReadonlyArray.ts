@@ -7,7 +7,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as product_ from "@fp-ts/core/Product"
 import type { Sortable } from "@fp-ts/core/Sortable"
 import type * as traverse_ from "@fp-ts/core/Traversable"
-import type * as traverseWithIndex_ from "@fp-ts/core/TraversableWithIndex"
+import type * as traversableWithIndex from "@fp-ts/core/TraversableWithIndex"
 import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
 
@@ -94,7 +94,7 @@ export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
   traverse
 }
 
-export const TraverseWithIndex: traverseWithIndex_.TraversableWithIndex<
+export const TraversableWithIndex: traversableWithIndex.TraversableWithIndex<
   ReadonlyArrayTypeLambda,
   number
 > = {
