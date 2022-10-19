@@ -9,7 +9,7 @@
 import * as hkt from "@fp-ts/core/HKT"
 
 // -------------------------------------------------------------------------------------
-// typeclass
+// typeclasses
 // -------------------------------------------------------------------------------------
 
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
@@ -43,7 +43,7 @@ import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFiltera
 import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
 
 // -------------------------------------------------------------------------------------
-// data
+// data types
 // -------------------------------------------------------------------------------------
 
 import * as either from "@fp-ts/core/data/Either"
@@ -124,7 +124,7 @@ export {
    */
   covariantWithIndex,
   /**
-   * @category typeclass
+   * @category data types
    * @since 1.0.0
    */
   either,
@@ -178,7 +178,7 @@ export {
    */
   of,
   /**
-   * @category typeclass
+   * @category data types
    * @since 1.0.0
    */
   option,
@@ -188,7 +188,7 @@ export {
    */
   pointed,
   /**
-   * @category typeclass
+   * @category data types
    * @since 1.0.0
    */
   predicate,
@@ -198,7 +198,7 @@ export {
    */
   product,
   /**
-   * @category typeclass
+   * @category data types
    * @since 1.0.0
    */
   refinement,
