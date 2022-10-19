@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import type { Applicative } from "@fp-ts/core/Applicative"
-import type { Functor } from "@fp-ts/core/Functor"
+import type { Covariant } from "@fp-ts/core/Covariant"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 
@@ -10,7 +10,7 @@ import { identity } from "@fp-ts/core/internal/Function"
  * @category type class
  * @since 1.0.0
  */
-export interface Traversable<T extends TypeLambda> extends Functor<T> {
+export interface Traversable<T extends TypeLambda> extends Covariant<T> {
   readonly traverse: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(

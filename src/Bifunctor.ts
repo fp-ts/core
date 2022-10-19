@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Functor } from "@fp-ts/core/Functor"
+import type { Covariant } from "@fp-ts/core/Covariant"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 
@@ -32,7 +32,7 @@ export const mapLeft = <F extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>["map"] =>
+export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Covariant<F>["map"] =>
   <A, B>(f: (a: A) => B): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
     Bifunctor.mapBoth(identity, f)
 
@@ -42,7 +42,7 @@ export const map = <F extends TypeLambda>(Bifunctor: Bifunctor<F>): Functor<F>["
  * @since 1.0.0
  */
 export const mapBothComposition = <F extends TypeLambda, G extends TypeLambda>(
-  FunctorF: Functor<F>,
+  CovariantF: Covariant<F>,
   BifunctorG: Bifunctor<G>
 ) =>
   <GE, GG, A, B>(
@@ -51,4 +51,4 @@ export const mapBothComposition = <F extends TypeLambda, G extends TypeLambda>(
   ): (<FS, FR, FO, FE, GS, GR, GO>(
     self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
   ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GG, B>>) =>
-    FunctorF.map(BifunctorG.mapBoth(f, g))
+    CovariantF.map(BifunctorG.mapBoth(f, g))

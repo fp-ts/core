@@ -1,27 +1,28 @@
-| Typeclass                | member(s)                                 | extends                  |
-| ------------------------ | ----------------------------------------- | ------------------------ |
-| **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**            |
-| **Applicative**          | `unit`, `productAll`                      | **Product**              |
-| **Bifunctor**            | `mapBoth`                                 |                          |
-| **Bounded**              | `maximum`, `minimum`                      | **Sortable**             |
-| **Category**             | `id`                                      | **Composable**           |
-| **Chainable**            |                                           | **Functor**, **FlatMap** |
-| **Comonad**              | `extract`                                 | **Extendable**           |
-| **Composable**           | `compose`                                 |                          |
-| **Contravariant**        | `contramap`                               |                          |
-| **Extendable**           | `extend`                                  | **Functor**              |
-| **Coproduct**            | `coproduct`, `coproductMany`              | **Functor**              |
-| **FlatMap**              | `flatMap`                                 |                          |
-| **Foldable**             | `reduce`, `reduceRight`                   |                          |
-| **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                          |
-| **Functor**              | `map`                                     |                          |
-| **Invariant**            | `invmap`                                  |                          |
-| **Monad**                |                                           | **Pointed**, **FlatMap** |
-| **Monoid**               | `empty`, `combineAll`                     | **Semigroup**            |
-| **Of**                   | `of`                                      |                          |
-| **Pointed**              |                                           | **Functor**, **Of**      |
-| **Product**              | `product`, `productMany`                  | **Functor**              |
-| **Semigroup**            | `combine`, `combineMany`                  |                          |
-| **Sortable**             | `compare`                                 |                          |
-| **Traversable**          | `traverse`                                | **Functor**              |
-| **TraversableWithIndex** | `traverseWihtIndex`                       | **FunctorWithIndex**     |
+| Typeclass                | member(s)                                 | extends                    |
+| ------------------------ | ----------------------------------------- | -------------------------- |
+| **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**              |
+| **Applicative**          | `unit`, `productAll`                      | **Product**                |
+| **Bifunctor**            | `mapBoth`                                 |                            |
+| **Bounded**              | `maximum`, `minimum`                      | **Sortable**               |
+| **Category**             | `id`                                      | **Composable**             |
+| **Chainable**            |                                           | **Covariant**, **FlatMap** |
+| **Comonad**              | `extract`                                 | **Extendable**             |
+| **Composable**           | `compose`                                 |                            |
+| **Contravariant**        | `contramap`                               |                            |
+| **Coproduct**            | `coproduct`, `coproductMany`              | **Covariant**              |
+| **Covariant**            | `map`                                     |                            |
+| **CovariantWithIndex**   | `mapWithIndex`                            |                            |
+| **Extendable**           | `extend`                                  | **Covariant**              |
+| **FlatMap**              | `flatMap`                                 |                            |
+| **Foldable**             | `reduce`, `reduceRight`                   |                            |
+| **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                            |
+| **Invariant**            | `invmap`                                  |                            |
+| **Monad**                |                                           | **Pointed**, **FlatMap**   |
+| **Monoid**               | `empty`, `combineAll`                     | **Semigroup**              |
+| **Of**                   | `of`                                      |                            |
+| **Pointed**              |                                           | **Covariant**, **Of**      |
+| **Product**              | `product`, `productMany`                  | **Covariant**              |
+| **Semigroup**            | `combine`, `combineMany`                  |                            |
+| **Sortable**             | `compare`                                 |                            |
+| **Traversable**          | `traverse`                                | **Covariant**              |
+| **TraversableWithIndex** | `traverseWihtIndex`                       | **CovariantWithIndex**     |

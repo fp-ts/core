@@ -16,12 +16,12 @@ import * as comonad from "@fp-ts/core/Comonad"
 import * as composable from "@fp-ts/core/Composable"
 import * as contravariant from "@fp-ts/core/Contravariant"
 import * as coproduct from "@fp-ts/core/Coproduct"
+import * as covariant from "@fp-ts/core/Covariant"
+import * as covariantWithIndex from "@fp-ts/core/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/Extendable"
 import * as flatMap from "@fp-ts/core/FlatMap"
 import * as foldable from "@fp-ts/core/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
-import * as functor from "@fp-ts/core/Functor"
-import * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import * as hkt from "@fp-ts/core/HKT"
 import * as invariant from "@fp-ts/core/Invariant"
 import * as monad from "@fp-ts/core/Monad"
@@ -93,6 +93,16 @@ export {
    */
   coproduct,
   /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  covariant,
+  /**
+   * @category type classes
+   * @since 1.0.0
+   */
+  covariantWithIndex,
+  /**
    * @category data types
    * @since 1.0.0
    */
@@ -117,16 +127,6 @@ export {
    * @since 1.0.0
    */
   foldableWithIndex,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  functor,
-  /**
-   * @category type classes
-   * @since 1.0.0
-   */
-  functorWithIndex,
   /**
    * @since 1.0.0
    */

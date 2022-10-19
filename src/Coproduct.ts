@@ -1,14 +1,14 @@
 /**
  * @since 1.0.0
  */
-import type { Functor } from "@fp-ts/core/Functor"
+import type { Covariant } from "@fp-ts/core/Covariant"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Coproduct<F extends TypeLambda> extends Functor<F> {
+export interface Coproduct<F extends TypeLambda> extends Covariant<F> {
   readonly coproduct: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(

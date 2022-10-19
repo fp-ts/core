@@ -1,11 +1,11 @@
-import * as _ from "@fp-ts/core/FunctorWithIndex"
+import * as _ from "@fp-ts/core/CovariantWithIndex"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as RA from "./test-data/ReadonlyArray"
 import * as U from "./util"
 
 describe("FunctorWithIndex", () => {
   it("mapWithIndexComposition", () => {
-    const mapWithIndex = _.mapWithIndexComposition(RA.FunctorWithIndex, RA.FunctorWithIndex)
+    const mapWithIndex = _.mapWithIndexComposition(RA.CovariantWithIndex, RA.CovariantWithIndex)
     const f = (a: string, [i, j]: readonly [number, number]) => a + i + j
     U.deepStrictEqual(pipe([], mapWithIndex(f)), [])
     U.deepStrictEqual(pipe([[]], mapWithIndex(f)), [[]])
@@ -19,7 +19,7 @@ describe("FunctorWithIndex", () => {
   })
 
   it("map", () => {
-    const map = _.map(RA.FunctorWithIndex)
+    const map = _.map(RA.CovariantWithIndex)
     const f = (a: string) => a + "!"
     U.deepStrictEqual(pipe([], map(f)), [])
     U.deepStrictEqual(pipe(["a", "b", "c"], map(f)), ["a!", "b!", "c!"])

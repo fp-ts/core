@@ -1,8 +1,8 @@
 import type * as applicative from "@fp-ts/core/Applicative"
+import type * as covariant from "@fp-ts/core/Covariant"
+import type * as covariantWithIndex from "@fp-ts/core/CovariantWithIndex"
 import type * as foldable from "@fp-ts/core/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/FoldableWithIndex"
-import type * as functor from "@fp-ts/core/Functor"
-import type * as functorWithIndex from "@fp-ts/core/FunctorWithIndex"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as product_ from "@fp-ts/core/Product"
 import type { Sortable } from "@fp-ts/core/Sortable"
@@ -21,14 +21,16 @@ const map = <A, B>(f: (a: A) => B) =>
 const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
   (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map((a, i) => f(a, i))
 
-export const Functor: functor.Functor<ReadonlyArrayTypeLambda> = {
+export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = {
   map
 }
 
-export const FunctorWithIndex: functorWithIndex.FunctorWithIndex<ReadonlyArrayTypeLambda, number> =
-  {
-    mapWithIndex: (f) => (self) => self.map((a, i) => f(a, i))
-  }
+export const CovariantWithIndex: covariantWithIndex.CovariantWithIndex<
+  ReadonlyArrayTypeLambda,
+  number
+> = {
+  mapWithIndex: (f) => (self) => self.map((a, i) => f(a, i))
+}
 
 export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
   reduce: (b, f) => self => self.reduce((b, a) => f(b, a), b),
@@ -113,7 +115,7 @@ export const product = <B>(that: ReadonlyArray<B>) =>
     return out
   }
 
-export const Product: product_.Product<ReadonlyArrayTypeLambda> = product_.fromFunctor(
-  Functor,
+export const Product: product_.Product<ReadonlyArrayTypeLambda> = product_.fromCovariant(
+  Covariant,
   product
 )
