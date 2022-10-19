@@ -9,5 +9,5 @@ import type { Composable } from "@fp-ts/core/typeclass/Composable"
  * @since 1.0.0
  */
 export interface Category<F extends TypeLambda> extends Composable<F> {
-  readonly id: <S, R>() => Kind<F, S, R, never, never, R>
+  readonly identity: <S, R>() => Kind<F, S, R, never, never, R>
 }
