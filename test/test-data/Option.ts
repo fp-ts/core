@@ -150,12 +150,6 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
 export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
 
 /**
- * @category conversions
- * @since 1.0.0
- */
-export const toResult: <E>(onNone: E) => <A>(self: Option<A>) => Either<E, A> = either.fromOption
-
-/**
  * Takes a (lazy) default value, a function, and an `Option` value, if the `Option` value is `None` the default value is
  * returned, otherwise the function is applied to the value inside the `Some` and the result is returned.
  *
@@ -249,92 +243,6 @@ export const fromThrowable = <A>(f: () => A): Option<A> => {
 export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => B
 ): ((...a: A) => Option<B>) => (...a) => fromThrowable(() => f(...a))
-
-/**
- * Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
- * returns the value wrapped in a `Some`.
- *
- * @exampleTodo
- * import { none, some, fromNullable } from '@fp-ts/data/Option'
- *
- * assert.deepStrictEqual(fromNullable(undefined), none)
- * assert.deepStrictEqual(fromNullable(null), none)
- * assert.deepStrictEqual(fromNullable(1), some(1))
- *
- * @category conversions
- * @since 1.0.0
- */
-export const fromNullable: <A>(a: A) => Option<NonNullable<A>> = option.fromNullable
-
-/**
- * Returns a *smart constructor* from a function that returns a nullable value.
- *
- * @exampleTodo
- * import { liftNullable, none, some } from '@fp-ts/data/Option'
- *
- * const f = (s: string): number | undefined => {
- *   const n = parseFloat(s)
- *   return isNaN(n) ? undefined : n
- * }
- *
- * const g = liftNullable(f)
- *
- * assert.deepStrictEqual(g('1'), some(1))
- * assert.deepStrictEqual(g('a'), none)
- *
- * @category lifting
- * @since 1.0.0
- */
-export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
-  f: (...a: A) => B | null | undefined
-): ((...a: A) => Option<NonNullable<B>>) => (...a) => fromNullable(f(...a))
-
-/**
- * This is `flatMap` + `fromNullable`, useful when working with optional values.
- *
- * @exampleTodo
- * import { some, none, fromNullable, flatMapNullable } from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
- *
- * interface Employee {
- *   company?: {
- *     address?: {
- *       street?: {
- *         name?: string
- *       }
- *     }
- *   }
- * }
- *
- * const employee1: Employee = { company: { address: { street: { name: 'high street' } } } }
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     fromNullable(employee1.company),
- *     flatMapNullable(company => company.address),
- *     flatMapNullable(address => address.street),
- *     flatMapNullable(street => street.name)
- *   ),
- *   some('high street')
- * )
- *
- * const employee2: Employee = { company: { address: { street: {} } } }
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     fromNullable(employee2.company),
- *     flatMapNullable(company => company.address),
- *     flatMapNullable(address => address.street),
- *     flatMapNullable(street => street.name)
- *   ),
- *   none
- * )
- *
- * @category sequencing
- * @since 1.0.0
- */
-export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
-  (ma: Option<A>): Option<NonNullable<B>> => isNone(ma) ? none : fromNullable(f(ma.value))
 
 /**
  * Extracts the value out of the structure, if it exists. Otherwise returns `null`.
@@ -947,8 +855,7 @@ export const traverseFilterMap: <F extends TypeLambda>(
 ) => <A, S, R, O, E, B>(
   f: (a: A) => Kind<F, S, R, O, E, Option<B>>
 ) => (ta: Option<A>) => Kind<F, S, R, O, E, Option<B>> = traversableFilterable.traverseFilterMap(
-  Traversable,
-  Compactable
+  { ...Traversable, ...Compactable }
 )
 
 /**
@@ -960,7 +867,7 @@ export const traversePartitionMap: <F extends TypeLambda>(
 ) => <A, S, R, O, E, B, C>(
   f: (a: A) => Kind<F, S, R, O, E, Either<B, C>>
 ) => (wa: Option<A>) => Kind<F, S, R, O, E, readonly [Option<B>, Option<C>]> = traversableFilterable
-  .traversePartitionMap(Traversable, Covariant, Compactable)
+  .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
 
 /**
  * @category instances

@@ -17,6 +17,23 @@ export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
+ * Returns a default `bimap` composition.
+ *
+ * @since 1.0.0
+ */
+export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
+  CovariantF: Covariant<F>,
+  BicovariantG: Bicovariant<G>
+) =>
+  <GE1, GE2, A, B>(
+    f: (e: GE1) => GE2,
+    g: (a: A) => B
+  ): (<FS, FR, FO, FE, GS, GR, GO>(
+    self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE1, A>>
+  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE2, B>>) =>
+    CovariantF.map(BicovariantG.bimap(f, g))
+
+/**
  * @since 1.0.0
  */
 export const mapLeft = <F extends TypeLambda>(
@@ -37,20 +54,3 @@ export const map = <F extends TypeLambda>(Bicovariant: Bicovariant<F>): Covarian
     f: (a: A) => B
   ): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
     Bicovariant.bimap(identity, f)
-
-/**
- * Returns a default `bimap` composition.
- *
- * @since 1.0.0
- */
-export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
-  CovariantF: Covariant<F>,
-  BicovariantG: Bicovariant<G>
-) =>
-  <GE1, GE2, A, B>(
-    f: (e: GE1) => GE2,
-    g: (a: A) => B
-  ): (<FS, FR, FO, FE, GS, GR, GO>(
-    self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE1, A>>
-  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE2, B>>) =>
-    CovariantF.map(BicovariantG.bimap(f, g))

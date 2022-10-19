@@ -34,14 +34,13 @@ export const compactComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const separate = <F extends TypeLambda>(
-  Covariant: Covariant<F>,
-  Compactable: Compactable<F>
+  F: Covariant<F> & Compactable<F>
 ) =>
   <S, R, O, E, A, B>(
     self: Kind<F, S, R, O, E, Either<A, B>>
   ): readonly [Kind<F, S, R, O, E, A>, Kind<F, S, R, O, E, B>] => {
     return [
-      pipe(self, Covariant.map(either.getLeft), Compactable.compact),
-      pipe(self, Covariant.map(either.getRight), Compactable.compact)
+      pipe(self, F.map(either.getLeft), F.compact),
+      pipe(self, F.map(either.getRight), F.compact)
     ]
   }

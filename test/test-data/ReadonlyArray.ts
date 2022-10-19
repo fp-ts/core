@@ -1,4 +1,8 @@
+import type { compactable, filterable } from "@fp-ts/core"
+import { traversableFilterable } from "@fp-ts/core"
+import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { identity } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import type * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
@@ -118,3 +122,60 @@ export const Product: product_.Product<ReadonlyArrayTypeLambda> = product_.fromC
   Covariant,
   product
 )
+
+export const filterMapWithIndex = <A, B>(f: (i: number, a: A) => Option<B>) =>
+  (fa: ReadonlyArray<A>): ReadonlyArray<B> => {
+    const out: Array<B> = []
+    for (let i = 0; i < fa.length; i++) {
+      const optionB = f(i, fa[i])
+      if (O.isSome(optionB)) {
+        out.push(optionB.value)
+      }
+    }
+    return out
+  }
+
+export const filterMap: <A, B>(
+  f: (a: A) => Option<B>
+) => (fa: ReadonlyArray<A>) => ReadonlyArray<B> = (f) => filterMapWithIndex((_, a) => f(a))
+
+export const compact: <A>(fa: ReadonlyArray<Option<A>>) => ReadonlyArray<A> =
+  /*#__PURE__*/ filterMap(identity)
+
+export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
+  compact
+}
+
+export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
+  filterMap
+}
+
+export const Traversable: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
+  traverse
+}
+
+/**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const traverseFilterMap = traversableFilterable.traverseFilterMap(
+  { ...Traversable, ...Compactable }
+)
+
+/**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const traversePartitionMap = traversableFilterable
+  .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const TraversableFilterable: traversableFilterable.TraversableFilterable<
+  ReadonlyArrayTypeLambda
+> = {
+  traverseFilterMap,
+  traversePartitionMap
+}
