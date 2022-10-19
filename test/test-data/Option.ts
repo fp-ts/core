@@ -2,7 +2,7 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
-import type * as semigroupKind from "@fp-ts/core/typeclass/Coproduct"
+import type * as coproduct_ from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
@@ -217,7 +217,7 @@ export const coproductMany = <A>(
     return none
   }
 
-export const Coproduct: semigroupKind.Coproduct<OptionTypeLambda> = {
+export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
   map,
   coproduct,
   coproductMany

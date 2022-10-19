@@ -1,15 +1,15 @@
 /**
  * @since 1.0.0
  */
+import type { Associative } from "@fp-ts/core/typeclass/Associative"
+import * as associative from "@fp-ts/core/typeclass/Associative"
 import type { Bounded } from "@fp-ts/core/typeclass/Bounded"
-import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Monoid<A> extends Semigroup<A> {
+export interface Monoid<A> extends Associative<A> {
   readonly empty: A
   readonly combineAll: (collection: Iterable<A>) => A
 }
@@ -18,10 +18,10 @@ export interface Monoid<A> extends Semigroup<A> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromSemigroup = <A>(Semigroup: Semigroup<A>, empty: A): Monoid<A> => ({
-  ...Semigroup,
+export const fromAssociative = <A>(Associative: Associative<A>, empty: A): Monoid<A> => ({
+  ...Associative,
   empty,
-  combineAll: (collection) => Semigroup.combineMany(collection)(empty)
+  combineAll: (collection) => Associative.combineMany(collection)(empty)
 })
 
 /**
@@ -33,7 +33,7 @@ export const fromSemigroup = <A>(Semigroup: Semigroup<A>, empty: A): Monoid<A> =
  * @since 1.0.0
  */
 export const min = <A>(Bounded: Bounded<A>): Monoid<A> =>
-  fromSemigroup(semigroup.min(Bounded), Bounded.maximum)
+  fromAssociative(associative.min(Bounded), Bounded.maximum)
 
 /**
  * Get a monoid where `combine` will return the maximum, based on the provided bounded order.
@@ -44,7 +44,7 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> =>
  * @since 1.0.0
  */
 export const max = <A>(Bounded: Bounded<A>): Monoid<A> =>
-  fromSemigroup(semigroup.max(Bounded), Bounded.minimum)
+  fromAssociative(associative.max(Bounded), Bounded.minimum)
 
 /**
  * The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
@@ -52,7 +52,7 @@ export const max = <A>(Bounded: Bounded<A>): Monoid<A> =>
  * @since 1.0.0
  */
 export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> =>
-  fromSemigroup(semigroup.reverse(Monoid), Monoid.empty)
+  fromAssociative(associative.reverse(Monoid), Monoid.empty)
 
 /**
  * Given a struct of monoids returns a monoid for the struct.
@@ -68,7 +68,7 @@ export const struct = <A>(
       empty[k] = monoids[k].empty
     }
   }
-  return fromSemigroup(semigroup.struct(monoids), empty)
+  return fromAssociative(associative.struct(monoids), empty)
 }
 
 /**
@@ -80,5 +80,5 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<Readonly<A>> => {
   const empty: A = monoids.map((m) => m.empty) as any
-  return fromSemigroup(semigroup.tuple(...monoids), empty)
+  return fromAssociative(associative.tuple(...monoids), empty)
 }

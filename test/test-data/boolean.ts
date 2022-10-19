@@ -1,13 +1,13 @@
+import type * as associative from "@fp-ts/core/typeclass/Associative"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 
 export const TotalOrder: totalOrder.TotalOrder<boolean> = totalOrder.fromCompare((that) =>
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
-export const SemigroupAll: semigroup.Semigroup<boolean> = ({
+export const AssociativeAll: associative.Associative<boolean> = ({
   combine: (that) => (self) => self && that,
   combineMany: (collection) =>
     (self) => {
@@ -23,7 +23,7 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = ({
     }
 })
 
-export const SemigroupAny: semigroup.Semigroup<boolean> = {
+export const AssociativeAny: associative.Associative<boolean> = {
   combine: (that) => (self) => self || that,
   combineMany: (collection) =>
     (self) => {
@@ -39,4 +39,4 @@ export const SemigroupAny: semigroup.Semigroup<boolean> = {
     }
 }
 
-export const MonoidAll: Monoid<boolean> = monoid.fromSemigroup(SemigroupAll, true)
+export const MonoidAll: Monoid<boolean> = monoid.fromAssociative(AssociativeAll, true)

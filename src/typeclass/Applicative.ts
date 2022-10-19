@@ -27,7 +27,7 @@ export interface Applicative<F extends TypeLambda> extends Product<F> {
  */
 export const liftMonoid = <F extends TypeLambda>(Applicative: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
-    monoid.fromSemigroup(
-      product.liftSemigroup(Applicative)<A, S, R, O, E>(Monoid),
+    monoid.fromAssociative(
+      product.liftAssociative(Applicative)<A, S, R, O, E>(Monoid),
       pipe(Applicative.unit<S>(), Applicative.map(() => Monoid.empty))
     )
