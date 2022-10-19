@@ -3,6 +3,14 @@
  */
 
 /**
+ * A lazy argument.
+ *
+ * @since 1.0.0
+ */
+export interface LazyArg<A> {
+  (): A
+}
+/**
  * @since 1.0.0
  */
 export const identity = <A>(a: A): A => a
