@@ -8,7 +8,7 @@
 
 import * as alternative from "@fp-ts/core/Alternative"
 import * as applicative from "@fp-ts/core/Applicative"
-import * as bifunctor from "@fp-ts/core/Bifunctor"
+import * as bicovariant from "@fp-ts/core/Bicovariant"
 import * as bounded from "@fp-ts/core/Bounded"
 import * as category from "@fp-ts/core/Category"
 import * as chainable from "@fp-ts/core/Chainable"
@@ -56,7 +56,7 @@ export {
    * @category type classes
    * @since 1.0.0
    */
-  bifunctor,
+  bicovariant,
   /**
    * @category type classes
    * @since 1.0.0

@@ -2,7 +2,7 @@
 | ------------------------ | ----------------------------------------- | -------------------------- |
 | **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**              |
 | **Applicative**          | `unit`, `productAll`                      | **Product**                |
-| **Bifunctor**            | `mapBoth`                                 |                            |
+| **Bicovariant**          | `mapBoth`                                 |                            |
 | **Bounded**              | `maximum`, `minimum`                      | **Sortable**               |
 | **Category**             | `id`                                      | **Composable**             |
 | **Chainable**            |                                           | **Covariant**, **FlatMap** |
