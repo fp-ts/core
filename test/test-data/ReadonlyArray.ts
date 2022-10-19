@@ -8,8 +8,9 @@ import * as product_ from "@fp-ts/core/typeclass/Product"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
-import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
+
+export type NonEmptyReadonlyArray<A> = readonly [A, ...ReadonlyArray<A>]
 
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Out"]>
