@@ -22,12 +22,12 @@ describe("Monoid", () => {
   it("reverse", () => {
     const M = monoid.reverse(string.Monoid)
     U.deepStrictEqual(pipe("a", M.combine("b")), "ba")
-    U.deepStrictEqual(pipe("a", M.combine(M.empty)), "a")
-    U.deepStrictEqual(pipe(M.empty, M.combine("a")), "a")
+    U.deepStrictEqual(pipe("a", M.combine(M.unit)), "a")
+    U.deepStrictEqual(pipe(M.unit, M.combine("a")), "a")
     U.deepStrictEqual(pipe("a", M.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", M.combineMany(["b", "c", "d"])), "dcba")
-    U.deepStrictEqual(pipe("a", M.combineMany([M.empty])), "a")
-    U.deepStrictEqual(pipe(M.empty, M.combineMany(["a"])), "a")
+    U.deepStrictEqual(pipe("a", M.combineMany([M.unit])), "a")
+    U.deepStrictEqual(pipe(M.unit, M.combineMany(["a"])), "a")
   })
 
   describe("struct", () => {
@@ -36,7 +36,7 @@ describe("Monoid", () => {
         name: string.Monoid,
         age: number.MonoidSum
       })
-      U.deepStrictEqual(M.empty, { name: "", age: 0 })
+      U.deepStrictEqual(M.unit, { name: "", age: 0 })
       U.deepStrictEqual(pipe({ name: "a", age: 10 }, M.combine({ name: "b", age: 20 })), {
         name: "ab",
         age: 30
@@ -46,7 +46,7 @@ describe("Monoid", () => {
     it("should ignore non own properties", () => {
       const monoids = Object.create({ a: 1 })
       const s = monoid.struct(monoids)
-      U.deepStrictEqual(s.empty, {})
+      U.deepStrictEqual(s.unit, {})
     })
   })
 
@@ -55,7 +55,7 @@ describe("Monoid", () => {
       string.Monoid,
       number.MonoidSum
     )
-    U.deepStrictEqual(M.empty, ["", 0])
+    U.deepStrictEqual(M.unit, ["", 0])
     U.deepStrictEqual(pipe(["a", 10], M.combine(["b", 20])), ["ab", 30])
   })
 })
