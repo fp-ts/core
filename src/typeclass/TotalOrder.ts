@@ -4,8 +4,7 @@
 import type { TotalOrdering } from "@fp-ts/core/data/TotalOrdering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Associative } from "@fp-ts/core/typeclass/Associative"
-import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
-import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import type * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 
@@ -22,7 +21,7 @@ export interface TotalOrder<A> {
  * @since 1.0.0
  */
 export interface TotalOrderTypeLambda extends TypeLambda {
-  readonly type: TotalOrder<this["Out"]>
+  readonly type: TotalOrder<this["In"]>
 }
 
 /**
@@ -114,13 +113,6 @@ export const getMonoid = <A>(): Monoid<TotalOrder<A>> =>
  */
 export const Contravariant: contravariant.Contravariant<TotalOrderTypeLambda> = {
   contramap
-}
-
-/**
- * @since 1.0.0
- */
-export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
-  invmap: contravariant.invmap(Contravariant)
 }
 
 /**

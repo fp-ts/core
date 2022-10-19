@@ -7,7 +7,6 @@ import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
-import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import type * as of_ from "@fp-ts/core/typeclass/Of"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
@@ -71,13 +70,6 @@ export const Of: of_.Of<OptionTypeLambda> = {
 
 export const Covariant: covariant.Covariant<OptionTypeLambda> = {
   map
-}
-
-/**
- * @since 1.0.0
- */
-export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  invmap: covariant.invmap(Covariant)
 }
 
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {

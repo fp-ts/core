@@ -43,7 +43,6 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 // data
 // -------------------------------------------------------------------------------------
 
-import * as equivalence from "@fp-ts/core/data/Equivalence"
 import * as totalOrdering from "@fp-ts/core/data/TotalOrdering"
 
 export {
@@ -112,11 +111,6 @@ export {
    * @since 1.0.0
    */
   covariantWithIndex,
-  /**
-   * @category data types
-   * @since 1.0.0
-   */
-  equivalence,
   /**
    * @category typeclass
    * @since 1.0.0
