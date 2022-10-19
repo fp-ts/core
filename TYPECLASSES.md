@@ -17,7 +17,7 @@
 | **FlatMap**              | `flatMap`                                 |                            |
 | **Foldable**             | `reduce`, `reduceRight`                   |                            |
 | **FoldableWithIndex**    | `reduceWithIndex`, `reduceRightWithIndex` |                            |
-| **Invariant**            | `invmap`                                  |                            |
+| **Invariant**            | `imap`                                    |                            |
 | **Monad**                |                                           | **Pointed**, **FlatMap**   |
 | **Monoid**               | `empty`, `combineAll`                     | **Semigroup**              |
 | **Of**                   | `of`                                      |                            |

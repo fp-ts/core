@@ -2,29 +2,13 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import * as equivalence from "@fp-ts/core/internal/Equivalence"
-import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
  * @category type class
  * @since 1.0.0
  */
 export interface Contravariant<F extends TypeLambda> extends TypeClass<F> {
-  readonly contramap: <B, A>(
-    f: (b: B) => A
-  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+  readonly contramap: <R2, R1>(
+    f: (r2: R2) => R1
+  ) => <S, O, E, A>(self: Kind<F, S, R1, O, E, A>) => Kind<F, S, R2, O, E, A>
 }
-
-/**
- * Returns a default `invmap` implementation.
- *
- * @since 1.0.0
- */
-export const invmap = <F extends TypeLambda>(
-  Contravariant: Contravariant<F>
-): Invariant<F>["invmap"] =>
-  eq =>
-    equivalence.make(
-      Contravariant.contramap(eq.from),
-      Contravariant.contramap(eq.to)
-    )
