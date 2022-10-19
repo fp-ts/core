@@ -27,6 +27,7 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
   ) => <TS, TR, TO, TE>(
     self: Kind<T, TS, TR, TO, TE, A>
   ) => Kind<F, S, R, O, E, readonly [Kind<T, TS, TR, TO, TE, B>, Kind<T, TS, TR, TO, TE, C>]>
+
   readonly traverseFilterMap: <F extends TypeLambda>(
     Applicative: Applicative<F>
   ) => <A, S, R, O, E, B>(
@@ -37,28 +38,29 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
 }
 
 /**
+ * Returns a default `traversePartitionMap` implementation.
+ *
  * @since 1.0.0
  */
 export const traversePartitionMap = <T extends TypeLambda>(
-  Traversable: Traversable<T>,
-  Covariant: Covariant<T>,
-  Compactable: Compactable<T>
+  F: Traversable<T> & Covariant<T> & Compactable<T>
 ): TraversableFilterable<T>["traversePartitionMap"] =>
   (Applicative) =>
     (f) =>
       flow(
-        Traversable.traverse(Applicative)(f),
-        Applicative.map(compactable.separate(Covariant, Compactable))
+        F.traverse(Applicative)(f),
+        Applicative.map(compactable.separate(F))
       )
 
 /**
+ * Returns a default `traverseFilterMap` implementation.
+ *
  * @since 1.0.0
  */
 export const traverseFilterMap = <T extends TypeLambda>(
-  Traversable: Traversable<T>,
-  Compactable: Compactable<T>
+  F: Traversable<T> & Compactable<T>
 ): TraversableFilterable<T>["traverseFilterMap"] =>
-  (Monoidal) => (f) => flow(Traversable.traverse(Monoidal)(f), Monoidal.map(Compactable.compact))
+  (Applicative) => (f) => flow(F.traverse(Applicative)(f), Applicative.map(F.compact))
 
 /**
  * @since 1.0.0

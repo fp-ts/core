@@ -39,9 +39,3 @@ export const getLeft = <E, A>(
 export const getRight = <E, A>(
   self: Either<E, A>
 ): Option<A> => (isLeft(self) ? option.none : option.some(self.right))
-
-/**
- * @since 1.0.0
- */
-export const fromOption = <E>(onNone: E) =>
-  <A>(fa: Option<A>): Either<E, A> => option.isNone(fa) ? left(onNone) : right(fa.value)
