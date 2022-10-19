@@ -9,7 +9,7 @@ import type { Coproduct } from "@fp-ts/core/typeclass/Coproduct"
  * @since 1.0.0
  */
 export interface Alternative<F extends TypeLambda> extends Coproduct<F> {
-  readonly counit: <S>() => Kind<F, S, unknown, never, never, never>
+  readonly zero: <S>() => Kind<F, S, unknown, never, never, never>
 
   readonly coproductAll: <S, R, O, E, A>(
     collection: Iterable<Kind<F, S, R, O, E, A>>
@@ -21,13 +21,13 @@ export interface Alternative<F extends TypeLambda> extends Coproduct<F> {
  */
 export const fromCoproduct = <F extends TypeLambda>(
   Coproduct: Coproduct<F>,
-  counit: Alternative<F>["counit"]
+  zero: Alternative<F>["zero"]
 ): Alternative<F> => {
   return {
     ...Coproduct,
-    counit,
+    zero,
     coproductAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => Coproduct.coproductMany(collection)(counit<S>())
+    ) => Coproduct.coproductMany(collection)(zero<S>())
   }
 }
