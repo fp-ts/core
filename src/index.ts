@@ -20,6 +20,7 @@ import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
 import * as category from "@fp-ts/core/typeclass/Category"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as comonad from "@fp-ts/core/typeclass/Comonad"
+import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as composable from "@fp-ts/core/typeclass/Composable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
@@ -43,6 +44,8 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 // data
 // -------------------------------------------------------------------------------------
 
+import * as either from "@fp-ts/core/data/Either"
+import * as option from "@fp-ts/core/data/Option"
 import * as totalOrdering from "@fp-ts/core/data/TotalOrdering"
 
 export {
@@ -90,6 +93,11 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
+  compactable,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
   composable,
   /**
    * @category typeclass
@@ -111,6 +119,11 @@ export {
    * @since 1.0.0
    */
   covariantWithIndex,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  either,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -155,6 +168,11 @@ export {
    * @since 1.0.0
    */
   of,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  option,
   /**
    * @category typeclass
    * @since 1.0.0

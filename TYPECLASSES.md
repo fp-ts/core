@@ -8,6 +8,7 @@
 | **Category**             | `identity`                                | **Composable**             |
 | **Chainable**            |                                           | **Covariant**, **FlatMap** |
 | **Comonad**              | `extract`                                 | **Extendable**             |
+| **Compactable**          | `compact`                                 |                            |
 | **Composable**           | `compose`                                 |                            |
 | **Contravariant**        | `contramap`                               |                            |
 | **Coproduct**            | `coproduct`, `coproductMany`              | **Covariant**              |
