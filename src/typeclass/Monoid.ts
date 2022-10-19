@@ -3,7 +3,7 @@
  */
 import type { Associative } from "@fp-ts/core/typeclass/Associative"
 import * as associative from "@fp-ts/core/typeclass/Associative"
-import type { Bounded } from "@fp-ts/core/typeclass/Bounded"
+import type { BoundedTotalOrder } from "@fp-ts/core/typeclass/BoundedTotalOrder"
 
 /**
  * @category type class
@@ -32,8 +32,8 @@ export const fromAssociative = <A>(Associative: Associative<A>, empty: A): Monoi
  * @category constructors
  * @since 1.0.0
  */
-export const min = <A>(Bounded: Bounded<A>): Monoid<A> =>
-  fromAssociative(associative.min(Bounded), Bounded.maximum)
+export const min = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
+  fromAssociative(associative.min(BoundedTotalOrder), BoundedTotalOrder.maximum)
 
 /**
  * Get a monoid where `combine` will return the maximum, based on the provided bounded order.
@@ -43,8 +43,8 @@ export const min = <A>(Bounded: Bounded<A>): Monoid<A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const max = <A>(Bounded: Bounded<A>): Monoid<A> =>
-  fromAssociative(associative.max(Bounded), Bounded.minimum)
+export const max = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
+  fromAssociative(associative.max(BoundedTotalOrder), BoundedTotalOrder.minimum)
 
 /**
  * The dual of a `Monoid`, obtained by swapping the arguments of `combine`.

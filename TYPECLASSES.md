@@ -4,7 +4,7 @@
 | **Applicative**          | `unit`, `productAll`                      | **Product**                |
 | **Associative**          | `combine`, `combineMany`                  |                            |
 | **Bicovariant**          | `bimap`                                   |                            |
-| **Bounded**              | `maximum`, `minimum`                      | **Sortable**               |
+| **BoundedTotalOrder**    | `maximum`, `minimum`                      | **Sortable**               |
 | **Category**             | `id`                                      | **Composable**             |
 | **Chainable**            |                                           | **Covariant**, **FlatMap** |
 | **Comonad**              | `extract`                                 | **Extendable**             |
