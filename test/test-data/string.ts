@@ -1,6 +1,6 @@
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import type * as sortable from "@fp-ts/core/typeclass/Sortable"
+import type * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 
 export const Semigroup: semigroup.Semigroup<string> = semigroup.fromCombine((that) =>
   (self) => self + that
@@ -8,6 +8,6 @@ export const Semigroup: semigroup.Semigroup<string> = semigroup.fromCombine((tha
 
 export const Monoid: monoid.Monoid<string> = monoid.fromSemigroup(Semigroup, "")
 
-export const Sortable: sortable.Sortable<string> = {
+export const TotalOrder: totalOrder.TotalOrder<string> = {
   compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
 }

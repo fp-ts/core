@@ -23,6 +23,6 @@
 | **Pointed**              |                                           | **Covariant**, **Of**      |
 | **Product**              | `product`, `productMany`                  | **Covariant**              |
 | **Semigroup**            | `combine`, `combineMany`                  |                            |
-| **Sortable**             | `compare`                                 |                            |
+| **TotalOrder**           | `compare`                                 |                            |
 | **Traversable**          | `traverse`                                |                            |
 | **TraversableWithIndex** | `traverseWihtIndex`                       |                            |

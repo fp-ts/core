@@ -1,14 +1,14 @@
 /**
  * @since 1.0.0
  */
-import * as compare from "@fp-ts/core/typeclass/Sortable"
-import type { Sortable } from "@fp-ts/core/typeclass/Sortable"
+import * as compare from "@fp-ts/core/typeclass/TotalOrder"
+import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Bounded<A> extends Sortable<A> {
+export interface Bounded<A> extends TotalOrder<A> {
   readonly minimum: A
   readonly maximum: A
 }
@@ -17,8 +17,12 @@ export interface Bounded<A> extends Sortable<A> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromSortable = <A>(Sortable: Sortable<A>, minimum: A, maximum: A): Bounded<A> => ({
-  ...Sortable,
+export const fromTotalOrder = <A>(
+  TotalOrder: TotalOrder<A>,
+  minimum: A,
+  maximum: A
+): Bounded<A> => ({
+  ...TotalOrder,
   maximum,
   minimum
 })
@@ -37,7 +41,7 @@ export const clamp = <A>(Bounded: Bounded<A>): (a: A) => A =>
  * @since 1.0.0
  */
 export const reverse = <A>(Bounded: Bounded<A>): Bounded<A> =>
-  fromSortable(
+  fromTotalOrder(
     compare.reverse(Bounded),
     Bounded.minimum,
     Bounded.maximum

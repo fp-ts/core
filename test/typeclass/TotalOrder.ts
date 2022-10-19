@@ -1,21 +1,21 @@
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as _ from "@fp-ts/core/typeclass/Sortable"
+import * as _ from "@fp-ts/core/typeclass/TotalOrder"
 import * as boolean from "../test-data/boolean"
 import * as number from "../test-data/number"
 import { sort } from "../test-data/ReadonlyArray"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
-describe("Sortable", () => {
+describe("TotalOrder", () => {
   it("tuple", () => {
-    const S = _.tuple(string.Sortable, number.Sortable, boolean.Sortable)
+    const S = _.tuple(string.TotalOrder, number.TotalOrder, boolean.TotalOrder)
     U.deepStrictEqual(pipe(["a", 1, true], S.compare(["b", 2, true])), -1)
     U.deepStrictEqual(pipe(["a", 1, true], S.compare(["a", 2, true])), -1)
     U.deepStrictEqual(pipe(["a", 1, true], S.compare(["a", 1, false])), 1)
   })
 
   it("Contravariant", () => {
-    const S = pipe(number.Sortable, _.Contravariant.contramap((s: string) => s.length))
+    const S = pipe(number.TotalOrder, _.Contravariant.contramap((s: string) => s.length))
     U.deepStrictEqual(pipe("a", S.compare("b")), 0)
     U.deepStrictEqual(pipe("a", S.compare("bb")), -1)
     U.deepStrictEqual(pipe("aa", S.compare("b")), 1)
@@ -31,11 +31,11 @@ describe("Sortable", () => {
     ]
     const S = _.getSemigroup<T>()
     const sortByFst = pipe(
-      number.Sortable,
+      number.TotalOrder,
       _.contramap((x: T) => x[0])
     )
     const sortBySnd = pipe(
-      string.Sortable,
+      string.TotalOrder,
       _.contramap((x: T) => x[1])
     )
     U.deepStrictEqual(sort(pipe(sortByFst, S.combine(sortBySnd)))(tuples), [
@@ -74,11 +74,11 @@ describe("Sortable", () => {
     ]
     const M = _.getMonoid<T>()
     const sortByFst = pipe(
-      number.Sortable,
+      number.TotalOrder,
       _.contramap((x: T) => x[0])
     )
     const sortBySnd = pipe(
-      string.Sortable,
+      string.TotalOrder,
       _.contramap((x: T) => x[1])
     )
     U.deepStrictEqual(sort(pipe(M.empty, M.combineMany([sortByFst, sortBySnd])))(tuples), [
@@ -96,7 +96,7 @@ describe("Sortable", () => {
   })
 
   it("clamp", () => {
-    const clamp = _.clamp(number.Sortable)
+    const clamp = _.clamp(number.TotalOrder)
     U.deepStrictEqual(clamp(1, 10)(2), 2)
     U.deepStrictEqual(clamp(1, 10)(10), 10)
     U.deepStrictEqual(clamp(1, 10)(20), 10)
@@ -105,7 +105,7 @@ describe("Sortable", () => {
   })
 
   it("between", () => {
-    const between = _.between(number.Sortable)
+    const between = _.between(number.TotalOrder)
     U.deepStrictEqual(between(1, 10)(2), true)
     U.deepStrictEqual(between(1, 10)(10), true)
     U.deepStrictEqual(between(1, 10)(20), false)
@@ -114,35 +114,35 @@ describe("Sortable", () => {
   })
 
   it("reverse", () => {
-    const Compare = _.reverse(number.Sortable)
+    const Compare = _.reverse(number.TotalOrder)
     U.deepStrictEqual(pipe(1, Compare.compare(2)), 1)
     U.deepStrictEqual(pipe(2, Compare.compare(1)), -1)
     U.deepStrictEqual(pipe(2, Compare.compare(2)), 0)
   })
 
   it("lt", () => {
-    const lt = _.lt(number.Sortable)
+    const lt = _.lt(number.TotalOrder)
     U.deepStrictEqual(pipe(0, lt(1)), true)
     U.deepStrictEqual(pipe(1, lt(1)), false)
     U.deepStrictEqual(pipe(2, lt(1)), false)
   })
 
   it("leq", () => {
-    const leq = _.leq(number.Sortable)
+    const leq = _.leq(number.TotalOrder)
     U.deepStrictEqual(pipe(0, leq(1)), true)
     U.deepStrictEqual(pipe(1, leq(1)), true)
     U.deepStrictEqual(pipe(2, leq(1)), false)
   })
 
   it("gt", () => {
-    const gt = _.gt(number.Sortable)
+    const gt = _.gt(number.TotalOrder)
     U.deepStrictEqual(pipe(0, gt(1)), false)
     U.deepStrictEqual(pipe(1, gt(1)), false)
     U.deepStrictEqual(pipe(2, gt(1)), true)
   })
 
   it("geq", () => {
-    const geq = _.geq(number.Sortable)
+    const geq = _.geq(number.TotalOrder)
     U.deepStrictEqual(pipe(0, geq(1)), false)
     U.deepStrictEqual(pipe(1, geq(1)), true)
     U.deepStrictEqual(pipe(2, geq(1)), true)
@@ -152,7 +152,7 @@ describe("Sortable", () => {
     type A = { readonly a: number }
     const min = _.min(
       pipe(
-        number.Sortable,
+        number.TotalOrder,
         _.contramap((a: A) => a.a)
       )
     )
@@ -167,7 +167,7 @@ describe("Sortable", () => {
     type A = { readonly a: number }
     const max = _.max(
       pipe(
-        number.Sortable,
+        number.TotalOrder,
         _.contramap((a: A) => a.a)
       )
     )

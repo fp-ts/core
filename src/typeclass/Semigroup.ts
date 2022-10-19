@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import { identity } from "@fp-ts/core/internal/Function"
-import type { Sortable } from "@fp-ts/core/typeclass/Sortable"
+import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
  * @category type class
@@ -35,8 +35,8 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
  * @category constructors
  * @since 1.0.0
  */
-export const min = <A>(Sortable: Sortable<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => Sortable.compare(that)(self) === -1 ? self : that)
+export const min = <A>(TotalOrder: TotalOrder<A>): Semigroup<A> =>
+  fromCombine((that) => (self) => TotalOrder.compare(that)(self) === -1 ? self : that)
 
 /**
  * `Semigroup` that returns last maximum of elements.
@@ -44,8 +44,8 @@ export const min = <A>(Sortable: Sortable<A>): Semigroup<A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const max = <A>(Sortable: Sortable<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => Sortable.compare(that)(self) === 1 ? self : that)
+export const max = <A>(TotalOrder: TotalOrder<A>): Semigroup<A> =>
+  fromCombine((that) => (self) => TotalOrder.compare(that)(self) === 1 ? self : that)
 
 /**
  * @category constructors
