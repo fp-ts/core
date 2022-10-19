@@ -1,6 +1,6 @@
 | Typeclass                | member(s)                                 | extends                    |
 | ------------------------ | ----------------------------------------- | -------------------------- |
-| **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**              |
+| **Alternative**          | `zero`, `coproductAll`                    | **Coproduct**              |
 | **Applicative**          | `productAll`                              | **Product**, **Of**        |
 | **Associative**          | `combine`, `combineMany`                  |                            |
 | **Bicovariant**          | `bimap`                                   |                            |
