@@ -2,6 +2,7 @@
 | ------------------------ | ----------------------------------------- | -------------------------- |
 | **Alternative**          | `counit`, `coproductAll`                  | **Coproduct**              |
 | **Applicative**          | `unit`, `productAll`                      | **Product**                |
+| **Associative**          | `combine`, `combineMany`                  |                            |
 | **Bicovariant**          | `mapBoth`                                 |                            |
 | **Bounded**              | `maximum`, `minimum`                      | **Sortable**               |
 | **Category**             | `id`                                      | **Composable**             |
@@ -22,7 +23,6 @@
 | **Of**                   | `of`                                      |                            |
 | **Pointed**              |                                           | **Covariant**, **Of**      |
 | **Product**              | `product`, `productMany`                  | **Covariant**              |
-| **Semigroup**            | `combine`, `combineMany`                  |                            |
 | **TotalOrder**           | `compare`                                 |                            |
 | **Traversable**          | `traverse`                                |                            |
 | **TraversableWithIndex** | `traverseWihtIndex`                       |                            |

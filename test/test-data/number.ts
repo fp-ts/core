@@ -1,18 +1,18 @@
+import * as associative from "@fp-ts/core/typeclass/Associative"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 
 const sum = (that: number) => (self: number): number => self + that
 
-export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromCombine(sum)
+export const AssociativeSum: associative.Associative<number> = associative.fromCombine(sum)
 
-export const MonoidSum: Monoid<number> = monoid.fromSemigroup(SemigroupSum, 0)
+export const MonoidSum: Monoid<number> = monoid.fromAssociative(AssociativeSum, 0)
 
 const multiply = (that: number) => (self: number): number => self * that
 
-export const SemigroupMultiply: semigroup.Semigroup<number> = {
+export const AssociativeMultiply: associative.Associative<number> = {
   combine: multiply,
   combineMany: (collection) =>
     (self) => {

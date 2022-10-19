@@ -1,8 +1,8 @@
 /**
  * @since 1.0.0
  */
+import type * as associative from "@fp-ts/core/typeclass/Associative"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category data
@@ -33,7 +33,7 @@ export const match = <A, B, C = B>(
  * @category instances
  * @since 1.0.0
  */
-export const Semigroup: semigroup.Semigroup<TotalOrdering> = {
+export const Associative: associative.Associative<TotalOrdering> = {
   combine: (that) => (self) => self !== 0 ? self : that,
   combineMany: (collection) =>
     (self) => {
@@ -54,4 +54,4 @@ export const Semigroup: semigroup.Semigroup<TotalOrdering> = {
  * @category instances
  * @since 1.0.0
  */
-export const Monoid: monoid.Monoid<TotalOrdering> = monoid.fromSemigroup(Semigroup, 0)
+export const Monoid: monoid.Monoid<TotalOrdering> = monoid.fromAssociative(Associative, 0)

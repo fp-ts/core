@@ -3,11 +3,11 @@
  */
 import type { TotalOrdering } from "@fp-ts/core/data/TotalOrdering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { Associative } from "@fp-ts/core/typeclass/Associative"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category type class
@@ -70,7 +70,7 @@ export const contramap = <B, A>(f: (b: B) => A) =>
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup = <A>(): Semigroup<TotalOrder<A>> => ({
+export const getAssociative = <A>(): Associative<TotalOrder<A>> => ({
   combine: (totalOrder2) =>
     (totalOrder1) =>
       fromCompare((that) =>
@@ -106,7 +106,7 @@ export const getSemigroup = <A>(): Semigroup<TotalOrder<A>> => ({
  * @since 1.0.0
  */
 export const getMonoid = <A>(): Monoid<TotalOrder<A>> =>
-  monoid.fromSemigroup(getSemigroup<A>(), fromCompare(() => () => 0))
+  monoid.fromAssociative(getAssociative<A>(), fromCompare(() => () => 0))
 
 /**
  * @category instances

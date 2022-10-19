@@ -1,13 +1,13 @@
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as _ from "@fp-ts/core/typeclass/Semigroup"
+import * as _ from "@fp-ts/core/typeclass/Associative"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as number from "../test-data/number"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
-describe("Semigroup", () => {
+describe("Associative", () => {
   it("reverse", () => {
-    const S = _.reverse(string.Semigroup)
+    const S = _.reverse(string.Associative)
     U.deepStrictEqual(pipe("a", S.combine("b")), "ba")
     U.deepStrictEqual(pipe("a", S.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "ba")
@@ -22,7 +22,7 @@ describe("Semigroup", () => {
   })
 
   it("intercalate", () => {
-    const S = pipe(string.Semigroup, _.intercalate("|"))
+    const S = pipe(string.Associative, _.intercalate("|"))
     U.deepStrictEqual(pipe("a", S.combine("b")), "a|b")
     U.deepStrictEqual(pipe("a", S.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "a|b")
@@ -63,8 +63,8 @@ describe("Semigroup", () => {
 
   it("struct", () => {
     const S = _.struct({
-      name: string.Semigroup,
-      age: number.SemigroupSum
+      name: string.Associative,
+      age: number.AssociativeSum
     })
     U.deepStrictEqual(pipe({ name: "a", age: 10 }, S.combine({ name: "b", age: 20 })), {
       name: "ab",
@@ -89,8 +89,8 @@ describe("Semigroup", () => {
 
   it("tuple", () => {
     const S = _.tuple(
-      string.Semigroup,
-      number.SemigroupSum
+      string.Associative,
+      number.AssociativeSum
     )
     U.deepStrictEqual(pipe(["a", 10], S.combine(["b", 20])), ["ab", 30])
     U.deepStrictEqual(pipe(["a", 10], S.combineMany([])), ["a", 10])

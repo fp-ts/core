@@ -14,6 +14,7 @@ import * as hkt from "@fp-ts/core/HKT"
 
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
+import * as associative from "@fp-ts/core/typeclass/Associative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as category from "@fp-ts/core/typeclass/Category"
@@ -34,7 +35,6 @@ import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
@@ -57,6 +57,11 @@ export {
    * @since 1.0.0
    */
   applicative,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  associative,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -166,11 +171,6 @@ export {
    * @since 1.0.0
    */
   product,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  semigroup,
   /**
    * @category typeclass
    * @since 1.0.0

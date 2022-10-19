@@ -3,9 +3,9 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
+import type { Associative } from "@fp-ts/core/typeclass/Associative"
+import * as associative from "@fp-ts/core/typeclass/Associative"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
-import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category type class
@@ -96,15 +96,15 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
       )
 
 /**
- * Lift a semigroup into 'F', the inner values are combined using the provided `Semigroup`.
+ * Lift an associative into 'F', the inner values are combined using the provided `Associative`.
  *
  * @since 1.0.0
  */
-export const liftSemigroup = <F extends TypeLambda>(Product: Product<F>) =>
-  <A, S, R, O, E>(Semigroup: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> =>
-    semigroup.fromCombine((that) =>
+export const liftAssociative = <F extends TypeLambda>(Product: Product<F>) =>
+  <A, S, R, O, E>(Associative: Associative<A>): Associative<Kind<F, S, R, O, E, A>> =>
+    associative.fromCombine((that) =>
       (self) =>
-        pipe(self, Product.product(that), Product.map(([a1, a2]) => Semigroup.combine(a2)(a1)))
+        pipe(self, Product.product(that), Product.map(([a1, a2]) => Associative.combine(a2)(a1)))
     )
 
 /**

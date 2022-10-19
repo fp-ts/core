@@ -20,19 +20,19 @@ describe("TotalOrdering", () => {
     deepStrictEqual(_.reverse(1), -1)
   })
 
-  it("Semigroup", () => {
-    deepStrictEqual(pipe(0, _.Semigroup.combine(0)), 0)
-    deepStrictEqual(pipe(0, _.Semigroup.combine(1)), 1)
-    deepStrictEqual(pipe(1, _.Semigroup.combine(-1)), 1)
-    deepStrictEqual(pipe(-1, _.Semigroup.combine(1)), -1)
+  it("Associative", () => {
+    deepStrictEqual(pipe(0, _.Associative.combine(0)), 0)
+    deepStrictEqual(pipe(0, _.Associative.combine(1)), 1)
+    deepStrictEqual(pipe(1, _.Associative.combine(-1)), 1)
+    deepStrictEqual(pipe(-1, _.Associative.combine(1)), -1)
 
-    deepStrictEqual(pipe(0, _.Semigroup.combineMany([])), 0)
-    deepStrictEqual(pipe(1, _.Semigroup.combineMany([])), 1)
-    deepStrictEqual(pipe(-1, _.Semigroup.combineMany([])), -1)
-    deepStrictEqual(pipe(0, _.Semigroup.combineMany([0, 0, 0])), 0)
-    deepStrictEqual(pipe(0, _.Semigroup.combineMany([0, 0, 1])), 1)
-    deepStrictEqual(pipe(1, _.Semigroup.combineMany([0, 0, -1])), 1)
-    deepStrictEqual(pipe(-1, _.Semigroup.combineMany([0, 0, 1])), -1)
+    deepStrictEqual(pipe(0, _.Associative.combineMany([])), 0)
+    deepStrictEqual(pipe(1, _.Associative.combineMany([])), 1)
+    deepStrictEqual(pipe(-1, _.Associative.combineMany([])), -1)
+    deepStrictEqual(pipe(0, _.Associative.combineMany([0, 0, 0])), 0)
+    deepStrictEqual(pipe(0, _.Associative.combineMany([0, 0, 1])), 1)
+    deepStrictEqual(pipe(1, _.Associative.combineMany([0, 0, -1])), 1)
+    deepStrictEqual(pipe(-1, _.Associative.combineMany([0, 0, 1])), -1)
   })
 
   it("Monoid", () => {
