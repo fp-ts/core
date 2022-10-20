@@ -7,7 +7,7 @@ import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import type * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
-import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
+import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as product_ from "@fp-ts/core/typeclass/Product"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
@@ -37,11 +37,6 @@ export const CovariantWithIndex: covariantWithIndex.CovariantWithIndex<
   mapWithIndex: (f) => (self) => self.map((a, i) => f(a, i))
 }
 
-export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
-  reduce: (b, f) => self => self.reduce((b, a) => f(b, a), b),
-  reduceRight: (b, f) => self => self.reduceRight((b, a) => f(b, a), b)
-}
-
 export const reduceWithIndex = <A, B>(
   b: B,
   f: (b: B, a: A, i: number) => B
@@ -56,6 +51,11 @@ export const FoldableWithIndex: foldableWithIndex.FoldableWithIndex<
 > = {
   reduceWithIndex,
   reduceRightWithIndex
+}
+
+export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
+  reduce: foldableWithIndex.reduce(FoldableWithIndex),
+  reduceRight: foldableWithIndex.reduceRight(FoldableWithIndex)
 }
 
 export const isNonEmpty = <A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A> =>
