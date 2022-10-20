@@ -23,6 +23,7 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import type * as productSemigroupal from "@fp-ts/core/typeclass/ProductSemigroupal"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
@@ -191,4 +192,22 @@ export const imap = <A, B>(
  */
 export const Invariant: invariant.Invariant<AssociativeTypeLambda> = {
   imap
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const product = <B>(
+  that: Associative<B>
+) =>
+  <A>(self: Associative<A>): Associative<readonly [A, B]> =>
+    fromCombine(([a2, b2]) => ([a1, b1]) => [self.combine(a2)(a1), that.combine(b2)(b1)])
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const ProductSemigroupal: productSemigroupal.ProductSemigroupal<AssociativeTypeLambda> = {
+  product
 }
