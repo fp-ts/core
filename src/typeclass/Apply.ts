@@ -6,18 +6,13 @@ import { pipe } from "@fp-ts/core/internal/Function"
 import type { Associative } from "@fp-ts/core/typeclass/Associative"
 import * as associative from "@fp-ts/core/typeclass/Associative"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
+import type { ProductSemigroupal } from "@fp-ts/core/typeclass/ProductSemigroupal"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Apply<F extends TypeLambda> extends Covariant<F> {
-  readonly product: <S, R2, O2, E2, B>(
-    that: Kind<F, S, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(
-    self: Kind<F, S, R1, O1, E1, A>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
-
+export interface Apply<F extends TypeLambda> extends ProductSemigroupal<F>, Covariant<F> {
   readonly productMany: <S, R, O, E, A>(
     collection: Iterable<Kind<F, S, R, O, E, A>>
   ) => (self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
