@@ -1,7 +1,6 @@
 /**
  * @since 1.0.0
  */
-
 import type { TypeLambda } from "@fp-ts/core/HKT"
 
 /**
