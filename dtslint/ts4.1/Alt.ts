@@ -15,5 +15,5 @@ declare const fb: ReaderAsyncWriter<{ b: number }, "b", number>
 
 export declare const Alt: alt.Alt<ReaderAsyncWriterTypeLambda>
 
-// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "b", string | number>
+// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "a" | "b", string | number>
 pipe(fa, Alt.coproduct(fb))
