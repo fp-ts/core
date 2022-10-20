@@ -25,7 +25,6 @@ import * as comonad from "@fp-ts/core/typeclass/Comonad"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as composable from "@fp-ts/core/typeclass/Composable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
-import * as coproductSemigroupal from "@fp-ts/core/typeclass/CoproductSemigroupal"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/typeclass/Extendable"
@@ -39,7 +38,8 @@ import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
-import * as productSemigroupal from "@fp-ts/core/typeclass/ProductSemigroupal"
+import * as semigroupalCoproduct from "@fp-ts/core/typeclass/SemigroupalCoproduct"
+import * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -125,11 +125,6 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  coproductSemigroupal,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   covariant,
   /**
    * @category typeclass
@@ -211,15 +206,20 @@ export {
    */
   predicate,
   /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  productSemigroupal,
-  /**
    * @category data types
    * @since 1.0.0
    */
   refinement,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  semigroupalCoproduct,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  semigroupalProduct,
   /**
    * @category typeclass
    * @since 1.0.0

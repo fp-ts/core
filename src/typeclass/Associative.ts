@@ -23,7 +23,7 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
-import type * as productSemigroupal from "@fp-ts/core/typeclass/ProductSemigroupal"
+import type * as productSemigroupal from "@fp-ts/core/typeclass/SemigroupalProduct"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
@@ -195,7 +195,6 @@ export const Invariant: invariant.Invariant<AssociativeTypeLambda> = {
 }
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const product = <B>(
@@ -208,6 +207,6 @@ export const product = <B>(
  * @category instances
  * @since 1.0.0
  */
-export const ProductSemigroupal: productSemigroupal.ProductSemigroupal<AssociativeTypeLambda> = {
+export const SemigroupalProduct: productSemigroupal.SemigroupalProduct<AssociativeTypeLambda> = {
   product
 }
