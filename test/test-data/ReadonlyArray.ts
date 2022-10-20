@@ -1,5 +1,5 @@
 import type { compactable, filterable } from "@fp-ts/core"
-import { traversableFilterable } from "@fp-ts/core"
+import { filterableWithIndex, traversableFilterable } from "@fp-ts/core"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
@@ -123,11 +123,11 @@ export const Product: product_.Product<ReadonlyArrayTypeLambda> = product_.fromC
   product
 )
 
-export const filterMapWithIndex = <A, B>(f: (i: number, a: A) => Option<B>) =>
+export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
   (fa: ReadonlyArray<A>): ReadonlyArray<B> => {
     const out: Array<B> = []
     for (let i = 0; i < fa.length; i++) {
-      const optionB = f(i, fa[i])
+      const optionB = f(fa[i], i)
       if (O.isSome(optionB)) {
         out.push(optionB.value)
       }
@@ -135,9 +135,16 @@ export const filterMapWithIndex = <A, B>(f: (i: number, a: A) => Option<B>) =>
     return out
   }
 
+export const FilterableWithIndex: filterableWithIndex.FilterableWithIndex<
+  ReadonlyArrayTypeLambda,
+  number
+> = {
+  filterMapWithIndex
+}
+
 export const filterMap: <A, B>(
   f: (a: A) => Option<B>
-) => (fa: ReadonlyArray<A>) => ReadonlyArray<B> = (f) => filterMapWithIndex((_, a) => f(a))
+) => (fa: ReadonlyArray<A>) => ReadonlyArray<B> = filterableWithIndex.filterMap(FilterableWithIndex)
 
 export const compact: <A>(fa: ReadonlyArray<Option<A>>) => ReadonlyArray<A> =
   /*#__PURE__*/ filterMap(identity)

@@ -28,6 +28,7 @@ import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/typeclass/Extendable"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
+import * as filterableWithIndex from "@fp-ts/core/typeclass/FilterableWithIndex"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
@@ -138,6 +139,11 @@ export {
    * @since 1.0.0
    */
   filterable,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  filterableWithIndex,
   /**
    * @category typeclass
    * @since 1.0.0

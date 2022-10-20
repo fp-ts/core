@@ -62,6 +62,24 @@ export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G exten
       )
 
 /**
+ * Returns a default `reduce` implementation.
+ *
+ * @since 1.0.0
+ */
+export const reduce = <F extends TypeLambda, I>(
+  FoldableWithIndex: FoldableWithIndex<F, I>
+): Foldable<F>["reduce"] => (b, f) => FoldableWithIndex.reduceWithIndex(b, f)
+
+/**
+ * Returns a default `reduceRight` implementation.
+ *
+ * @since 1.0.0
+ */
+export const reduceRight = <F extends TypeLambda, I>(
+  FoldableWithIndex: FoldableWithIndex<F, I>
+): Foldable<F>["reduceRight"] => (b, f) => FoldableWithIndex.reduceRightWithIndex(b, f)
+
+/**
  * @since 1.0.0
  */
 export const toReadonlyArray = <F extends TypeLambda, I>(
@@ -92,21 +110,3 @@ export const foldMapWithIndex = <F extends TypeLambda, I>(
     <A>(f: (a: A, i: I) => M) =>
       <S, R, O, E>(self: Kind<F, S, R, O, E, A>): M =>
         Monoid.combineAll(toReadonlyArrayWith(FoldableWithIndex)(f)(self))
-
-/**
- * Returns a default `reduce` implementation.
- *
- * @since 1.0.0
- */
-export const reduce = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
-): Foldable<F>["reduce"] => (b, f) => FoldableWithIndex.reduceWithIndex(b, f)
-
-/**
- * Returns a default `reduceRight` implementation.
- *
- * @since 1.0.0
- */
-export const reduceRight = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
-): Foldable<F>["reduceRight"] => (b, f) => FoldableWithIndex.reduceRightWithIndex(b, f)
