@@ -4,7 +4,6 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Associative } from "@fp-ts/core/typeclass/Associative"
-import * as associative from "@fp-ts/core/typeclass/Associative"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { ProductSemigroupal } from "@fp-ts/core/typeclass/ProductSemigroupal"
 
@@ -90,16 +89,18 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
       )
 
 /**
- * Lift an associative into 'F', the inner values are combined using the provided `Associative`.
+ * Lift an `Associative` into 'F', the inner values are combined using the provided `Associative`.
  *
  * @since 1.0.0
  */
 export const liftAssociative = <F extends TypeLambda>(Apply: Apply<F>) =>
-  <A, S, R, O, E>(Associative: Associative<A>): Associative<Kind<F, S, R, O, E, A>> =>
-    associative.fromCombine((that) =>
+  <A, S, R, O, E>(Associative: Associative<A>): Associative<Kind<F, S, R, O, E, A>> => ({
+    combine: (that) =>
       (self) =>
-        pipe(self, Apply.product(that), Apply.map(([a1, a2]) => Associative.combine(a2)(a1)))
-    )
+        pipe(self, Apply.product(that), Apply.map(([a1, a2]) => Associative.combine(a2)(a1))),
+    combineMany: (collection) =>
+      (self) => pipe(self, Apply.productMany(collection), Apply.map(Associative.combineMany))
+  })
 
 /**
  * @since 1.0.0
