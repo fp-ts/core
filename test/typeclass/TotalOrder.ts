@@ -120,32 +120,32 @@ describe("TotalOrder", () => {
     U.deepStrictEqual(pipe(2, Compare.compare(2)), 0)
   })
 
-  it("lt", () => {
-    const lt = _.lt(number.TotalOrder)
-    U.deepStrictEqual(pipe(0, lt(1)), true)
-    U.deepStrictEqual(pipe(1, lt(1)), false)
-    U.deepStrictEqual(pipe(2, lt(1)), false)
+  it("lessThan", () => {
+    const lessThan = _.lessThan(number.TotalOrder)
+    U.deepStrictEqual(pipe(0, lessThan(1)), true)
+    U.deepStrictEqual(pipe(1, lessThan(1)), false)
+    U.deepStrictEqual(pipe(2, lessThan(1)), false)
   })
 
-  it("leq", () => {
-    const leq = _.leq(number.TotalOrder)
-    U.deepStrictEqual(pipe(0, leq(1)), true)
-    U.deepStrictEqual(pipe(1, leq(1)), true)
-    U.deepStrictEqual(pipe(2, leq(1)), false)
+  it("lessThanOrEqualTo", () => {
+    const lessThanOrEqualTo = _.lessThanOrEqualTo(number.TotalOrder)
+    U.deepStrictEqual(pipe(0, lessThanOrEqualTo(1)), true)
+    U.deepStrictEqual(pipe(1, lessThanOrEqualTo(1)), true)
+    U.deepStrictEqual(pipe(2, lessThanOrEqualTo(1)), false)
   })
 
-  it("gt", () => {
-    const gt = _.gt(number.TotalOrder)
-    U.deepStrictEqual(pipe(0, gt(1)), false)
-    U.deepStrictEqual(pipe(1, gt(1)), false)
-    U.deepStrictEqual(pipe(2, gt(1)), true)
+  it("greaterThan", () => {
+    const greaterThan = _.greaterThan(number.TotalOrder)
+    U.deepStrictEqual(pipe(0, greaterThan(1)), false)
+    U.deepStrictEqual(pipe(1, greaterThan(1)), false)
+    U.deepStrictEqual(pipe(2, greaterThan(1)), true)
   })
 
-  it("geq", () => {
-    const geq = _.geq(number.TotalOrder)
-    U.deepStrictEqual(pipe(0, geq(1)), false)
-    U.deepStrictEqual(pipe(1, geq(1)), true)
-    U.deepStrictEqual(pipe(2, geq(1)), true)
+  it("greaterThanOrEqualTo", () => {
+    const greaterThanOrEqualTo = _.greaterThanOrEqualTo(number.TotalOrder)
+    U.deepStrictEqual(pipe(0, greaterThanOrEqualTo(1)), false)
+    U.deepStrictEqual(pipe(1, greaterThanOrEqualTo(1)), true)
+    U.deepStrictEqual(pipe(2, greaterThanOrEqualTo(1)), true)
   })
 
   it("min", () => {
