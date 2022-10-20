@@ -75,13 +75,7 @@ const let_ = <F extends TypeLambda>(
 ) => Kind<F, S, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
   (name, f) => F.map((a) => Object.assign({}, a, { [name]: f(a) }) as any)
 
-export {
-  /**
-   * @category do notation
-   * @since 1.0.0
-   */
-  let_ as let
-}
+export { let_ as let }
 
 /**
  * @since 1.0.0

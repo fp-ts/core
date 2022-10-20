@@ -20,7 +20,9 @@
  *
  * @since 1.0.0
  */
+import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
+import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
@@ -30,6 +32,14 @@ import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 export interface Associative<A> {
   readonly combine: (that: A) => (self: A) => A
   readonly combineMany: (collection: Iterable<A>) => (self: A) => A
+}
+
+/**
+ * @category type lambdas
+ * @since 1.0.0
+ */
+export interface AssociativeTypeLambda extends TypeLambda {
+  readonly type: Associative<this["InOut"]>
 }
 
 /**
@@ -161,3 +171,24 @@ export const last = <A = never>(): Associative<A> => ({
       return a
     }
 })
+
+/**
+ * @since 1.0.0
+ */
+export const imap = <S, T>(
+  to: (s: S) => T,
+  from: (t: T) => S
+) =>
+  (Associative: Associative<S>): Associative<T> => ({
+    combine: (that) => (self) => to(Associative.combine(from(that))(from(self))),
+    combineMany: (collection) =>
+      (self) => to(Associative.combineMany(Array.from(collection).map(from))(from(self)))
+  })
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<AssociativeTypeLambda> = {
+  imap
+}
