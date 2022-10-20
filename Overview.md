@@ -7,43 +7,43 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 # Concrete Types
 
-|                 | member(s)                | extends         |
-| --------------- | ------------------------ | --------------- |
-| **Associative** | `combine`, `combineMany` |                 |
-| **Monoid**      | `unit`, `combineAll`     | **Associative** |
-| **TotalOrder**  | `compare`                |                 |
+|                 | member(s)                  | extends         |
+| --------------- | -------------------------- | --------------- |
+| **Associative** | `combine`<br>`combineMany` |                 |
+| **Monoid**      | `unit`<br>`combineAll`     | **Associative** |
+| **TotalOrder**  | `compare`                  |                 |
 
 # Parameterized Types
 
-|                           | member(s)                                   | extends                    |
-| ------------------------- | ------------------------------------------- | -------------------------- |
-| **Alternative**           | `zero`, `coproductAll`                      | **Coproduct**              |
-| **Applicative**           | `productAll`                                | **Product**, **Of**        |
-| **Associative**           | `combine`, `combineMany`                    |                            |
-| **Bicovariant**           | `bimap`                                     |                            |
-| **BoundedTotalOrder**     | `maximum`, `minimum`                        | **Sortable**               |
-| **Category**              | `identity`                                  | **Composable**             |
-| **Chainable**             |                                             | **Covariant**, **FlatMap** |
-| **Comonad**               | `extract`                                   | **Extendable**             |
-| **Compactable**           | `compact`                                   |                            |
-| **Composable**            | `compose`                                   |                            |
-| **Contravariant**         | `contramap`                                 |                            |
-| **Coproduct**             | `coproduct`, `coproductMany`                | **Covariant**              |
-| **Covariant**             | `map`                                       |                            |
-| **CovariantWithIndex**    | `mapWithIndex`                              |                            |
-| **Extendable**            | `extend`                                    | **Covariant**              |
-| **Filterable**            | `filterMap`                                 |                            |
-| **FilterableWithIndex**   | `filterMapWithIndex`                        |                            |
-| **FlatMap**               | `flatMap`                                   |                            |
-| **Foldable**              | `reduce`, `reduceRight`                     |                            |
-| **FoldableWithIndex**     | `reduceWithIndex`, `reduceRightWithIndex`   |                            |
-| **Invariant**             | `imap`                                      |                            |
-| **Monad**                 |                                             | **Pointed**, **FlatMap**   |
-| **Monoid**                | `unit`, `combineAll`                        | **Associative**            |
-| **Of**                    | `of`                                        |                            |
-| **Pointed**               |                                             | **Covariant**, **Of**      |
-| **Product**               | `product`, `productMany`                    | **Covariant**              |
-| **TotalOrder**            | `compare`                                   |                            |
-| **Traversable**           | `traverse`                                  |                            |
-| **TraversableFilterable** | `traversePartitionMap`, `traverseFilterMap` |                            |
-| **TraversableWithIndex**  | `traverseWihtIndex`                         |                            |
+|                           | member(s)                                     | extends                    |
+| ------------------------- | --------------------------------------------- | -------------------------- |
+| **Alternative**           | `zero`<br>`coproductAll`                      | **Coproduct**              |
+| **Applicative**           | `productAll`                                  | **Product**, **Of**        |
+| **Associative**           | `combine`<br>`combineMany`                    |                            |
+| **Bicovariant**           | `bimap`                                       |                            |
+| **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**               |
+| **Category**              | `identity`                                    | **Composable**             |
+| **Chainable**             |                                               | **Covariant**, **FlatMap** |
+| **Comonad**               | `extract`                                     | **Extendable**             |
+| **Compactable**           | `compact`                                     |                            |
+| **Composable**            | `compose`                                     |                            |
+| **Contravariant**         | `contramap`                                   |                            |
+| **Coproduct**             | `coproduct`<br>`coproductMany`                | **Covariant**              |
+| **Covariant**             | `map`                                         |                            |
+| **CovariantWithIndex**    | `mapWithIndex`                                |                            |
+| **Extendable**            | `extend`                                      | **Covariant**              |
+| **Filterable**            | `filterMap`                                   |                            |
+| **FilterableWithIndex**   | `filterMapWithIndex`                          |                            |
+| **FlatMap**               | `flatMap`                                     |                            |
+| **Foldable**              | `reduce`<br>`reduceRight`                     |                            |
+| **FoldableWithIndex**     | `reduceWithIndex`<br>`reduceRightWithIndex`   |                            |
+| **Invariant**             | `imap`                                        |                            |
+| **Monad**                 |                                               | **Pointed**, **FlatMap**   |
+| **Monoid**                | `unit`<br>`combineAll`                        | **Associative**            |
+| **Of**                    | `of`                                          |                            |
+| **Pointed**               |                                               | **Covariant**, **Of**      |
+| **Product**               | `product`<br>`productMany`                    | **Covariant**              |
+| **TotalOrder**            | `compare`                                     |                            |
+| **Traversable**           | `traverse`                                    |                            |
+| **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                            |
+| **TraversableWithIndex**  | `traverseWihtIndex`                           |                            |
