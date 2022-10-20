@@ -34,7 +34,6 @@ import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
-import * as invariantSemigroupalProduct from "@fp-ts/core/typeclass/InvariantSemigroupalProduct"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of from "@fp-ts/core/typeclass/Of"
@@ -176,11 +175,6 @@ export {
    * @since 1.0.0
    */
   invariant,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  invariantSemigroupalProduct,
   /**
    * @category typeclass
    * @since 1.0.0
