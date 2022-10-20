@@ -25,7 +25,7 @@ The objective of the `fp-ts org` in github and in npm (`@fp-ts`) is to simplify 
 Our "current" idea (that is well open for changes) is for `fp-ts org` to have:
 
 - `@fp-ts/core` with the new `HKT` implementation and the most common typeclasses such as `Monad`
-- `@fp-ts/data` with `Result` (aka Either), `ReadonlyArray`, `List` and the most common data structures together with data related typeclasses (i.e. `Compactable`, etc)
+- `@fp-ts/data` with `Option`, `Either`, `ReadonlyArray`, `List` and the most common data structures together with data related typeclasses (i.e. `Compactable`, etc)
 - `@fp-ts/optics` with an optic implementation that will provide also optics for structures in `@fp-ts/data`
 - `@fp-ts/codec` with a concrete codec such as `io-ts` again for all the structures in `@fp-ts/data`
 
@@ -35,7 +35,7 @@ And for [`Effect`](https://github.com/Effect-TS) to have:
 - `@effect/query` with the query impl
 - `@effect/*` every other effect based impl
 
-Note that [`Effect`](https://github.com/Effect-TS) will not have base structures like `Option` / `Result` / `List` and typeclasses like `Monad` / `Functor` and [`fp-ts`](https://github.com/fp-ts) will not have effect execution modules like `Task` / `IO` as both projects are made to be the same ecosystem and each answer a specific set of needs in the best way possible.
+Note that [`Effect`](https://github.com/Effect-TS) will not have base structures like `Option` / `Either` / `List` and typeclasses like `Monad` / `Functor` and [`fp-ts`](https://github.com/fp-ts) will not have effect execution modules like `Task` / `IO` as both projects are made to be the same ecosystem and each answer a specific set of needs in the best way possible.
 
 # Installation
 
