@@ -72,7 +72,7 @@ export type Option<A> = None | Some<A>
  * @since 1.0.0
  */
 export interface OptionTypeLambda extends TypeLambda {
-  readonly type: Option<this["Out"]>
+  readonly type: Option<this["Target"]>
 }
 
 // -------------------------------------------------------------------------------------

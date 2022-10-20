@@ -39,7 +39,7 @@ export interface Associative<A> {
  * @since 1.0.0
  */
 export interface AssociativeTypeLambda extends TypeLambda {
-  readonly type: Associative<this["InOut"]>
+  readonly type: Associative<this["Target"]>
 }
 
 /**
@@ -175,11 +175,11 @@ export const last = <A = never>(): Associative<A> => ({
 /**
  * @since 1.0.0
  */
-export const imap = <S, T>(
-  to: (s: S) => T,
-  from: (t: T) => S
+export const imap = <A, B>(
+  to: (a: A) => B,
+  from: (b: B) => A
 ) =>
-  (Associative: Associative<S>): Associative<T> => ({
+  (Associative: Associative<A>): Associative<B> => ({
     combine: (that) => (self) => to(Associative.combine(from(that))(from(self))),
     combineMany: (collection) =>
       (self) => to(Associative.combineMany(Array.from(collection).map(from))(from(self)))

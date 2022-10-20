@@ -20,28 +20,27 @@ export interface TypeClass<F extends TypeLambda> {
 export interface TypeLambda {
   readonly InOut: unknown
   readonly In: unknown
-  readonly Out3: unknown
   readonly Out2: unknown
-  readonly Out: unknown
+  readonly Out1: unknown
+  readonly Target: unknown
 }
 
 /**
  * @since 1.0.0
  */
-export type Kind<F extends TypeLambda, InOut, In, Out3, Out2, Out> = F extends {
+export type Kind<F extends TypeLambda, InOut, In, Out2, Out1, Target> = F extends {
   readonly type: unknown
 } ? (F & {
   readonly InOut: InOut
   readonly In: In
-  readonly Out3: Out3
   readonly Out2: Out2
-  readonly Out: Out
+  readonly Out1: Out1
+  readonly Target: Target
 })["type"]
   : {
     readonly F: F
     readonly InOut: (_: InOut) => InOut
     readonly In: (_: In) => void
-    readonly Out3: () => Out3
     readonly Out2: () => Out2
-    readonly Out: () => Out
+    readonly Out1: () => Out1
   }

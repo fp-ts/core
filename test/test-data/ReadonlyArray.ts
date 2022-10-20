@@ -17,7 +17,7 @@ import * as O from "./Option"
 export type NonEmptyReadonlyArray<A> = readonly [A, ...ReadonlyArray<A>]
 
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
-  readonly type: ReadonlyArray<this["Out"]>
+  readonly type: ReadonlyArray<this["Target"]>
 }
 
 export const map = <A, B>(f: (a: A) => B) =>

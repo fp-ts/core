@@ -21,7 +21,7 @@ export interface TotalOrder<A> {
  * @since 1.0.0
  */
 export interface TotalOrderTypeLambda extends TypeLambda {
-  readonly type: TotalOrder<this["In"]>
+  readonly type: TotalOrder<this["Target"]>
 }
 
 /**
