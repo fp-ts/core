@@ -4,11 +4,11 @@
 import type { TotalOrdering } from "@fp-ts/core/data/TotalOrdering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Associative } from "@fp-ts/core/typeclass/Associative"
+import type * as semigroupalProduct from "@fp-ts/core/typeclass/AssociativeProduct"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 
 /**
  * @category type class
@@ -129,7 +129,7 @@ export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<TotalOrderTypeLambda> = {
+export const SemigroupalProduct: semigroupalProduct.AssociativeProduct<TotalOrderTypeLambda> = {
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }

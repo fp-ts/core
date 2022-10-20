@@ -17,6 +17,8 @@ import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as apply from "@fp-ts/core/typeclass/Apply"
 import * as associative from "@fp-ts/core/typeclass/Associative"
+import * as associativeCoproduct from "@fp-ts/core/typeclass/AssociativeCoproduct"
+import * as associativeProduct from "@fp-ts/core/typeclass/AssociativeProduct"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
 import * as category from "@fp-ts/core/typeclass/Category"
@@ -38,8 +40,6 @@ import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
-import * as semigroupalCoproduct from "@fp-ts/core/typeclass/SemigroupalCoproduct"
-import * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -81,6 +81,16 @@ export {
    * @since 1.0.0
    */
   associative,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  associativeCoproduct,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  associativeProduct,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -210,16 +220,6 @@ export {
    * @since 1.0.0
    */
   refinement,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  semigroupalCoproduct,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  semigroupalProduct,
   /**
    * @category typeclass
    * @since 1.0.0

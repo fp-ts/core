@@ -7,7 +7,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
  * @category type class
  * @since 1.0.0
  */
-export interface SemigroupalProduct<F extends TypeLambda> extends TypeClass<F> {
+export interface AssociativeProduct<F extends TypeLambda> extends TypeClass<F> {
   readonly product: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(

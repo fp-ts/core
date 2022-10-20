@@ -22,6 +22,8 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Applicative**           | `productAll`                                  | **Product**, **Of**                     |
 | **Apply**                 | `productMany`                                 | **SemigroupalProduct**, **Covariant**   |
 | **Associative**           | `combine`<br>`combineMany`                    |                                         |
+| **AssociativeCoproduct**  | `coproduct`                                   |                                         |
+| **AssociativeProduct**    | `product`<br>`productMany`                    |                                         |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
 | **Category**              | `identity`                                    | **Composable**                          |
@@ -43,8 +45,6 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Monoid**                | `unit`<br>`combineAll`                        | **Associative**                         |
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
-| **SemigroupalCoproduct**  | `coproduct`                                   |                                         |
-| **SemigroupalProduct**    | `product`<br>`productMany`                    |                                         |
 | **TotalOrder**            | `compare`                                     |                                         |
 | **Traversable**           | `traverse`                                    |                                         |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                         |
@@ -54,12 +54,12 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 ```
 digraph G {
-    "Alt" -> "SemigroupalCoproduct"
+    "Alt" -> "AssociativeCoproduct"
     "Alt" -> "Covariant"
     "Alternative" -> "Alt"
     "Applicative" -> "Apply"
     "Applicative" -> "Of"
-    "Apply" -> "SemigroupalProduct"
+    "Apply" -> "AssociativeProduct"
     "Apply" -> "Covariant"
     "BoundedTotalOrder" -> "TotalOrder"
     "Category" -> "Composable"
@@ -72,5 +72,11 @@ digraph G {
     "Monoid" -> "Associative"
     "Pointed" -> "Of"
     "Pointed" -> "Covariant"
+    "Product" -> "AssociativeProduct"
+    "Applicative" -> "Product"
+    "Coproduct" -> "AssociativeCoproduct"
+    "Alternative" -> "Coproduct"
+    "InvariantProduct" -> "Product"
+    "InvariantCoproduct" -> "Coproduct"
 }
 ```
