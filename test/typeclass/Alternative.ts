@@ -3,8 +3,8 @@ import * as O from "../test-data/Option"
 import * as U from "../util"
 
 describe("Alternative", () => {
-  it("fromCoproduct", () => {
-    const Alternative = _.fromCoproduct(O.Coproduct, () => O.none)
+  it("fromAlt", () => {
+    const Alternative = _.fromAlt(O.Alt, () => O.none)
     U.deepStrictEqual(Alternative.coproductAll([]), O.none)
     U.deepStrictEqual(Alternative.coproductAll([O.none]), O.none)
     U.deepStrictEqual(Alternative.coproductAll([O.some(1)]), O.some(1))

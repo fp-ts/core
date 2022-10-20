@@ -12,8 +12,10 @@ import * as hkt from "@fp-ts/core/HKT"
 // typeclasses
 // -------------------------------------------------------------------------------------
 
+import * as alt from "@fp-ts/core/typeclass/Alt"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
+import * as apply from "@fp-ts/core/typeclass/Apply"
 import * as associative from "@fp-ts/core/typeclass/Associative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
@@ -23,7 +25,6 @@ import * as comonad from "@fp-ts/core/typeclass/Comonad"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as composable from "@fp-ts/core/typeclass/Composable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
-import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/typeclass/Extendable"
@@ -37,7 +38,6 @@ import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
-import * as product from "@fp-ts/core/typeclass/Product"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -58,12 +58,22 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
+  alt,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
   alternative,
   /**
    * @category typeclass
    * @since 1.0.0
    */
   applicative,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  apply,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -109,11 +119,6 @@ export {
    * @since 1.0.0
    */
   contravariant,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  coproduct,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -198,11 +203,6 @@ export {
    * @since 1.0.0
    */
   predicate,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  product,
   /**
    * @category data types
    * @since 1.0.0

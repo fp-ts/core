@@ -1,12 +1,12 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as _ from "@fp-ts/core/typeclass/Product"
+import * as _ from "@fp-ts/core/typeclass/Apply"
 import * as O from "../test-data/Option"
 import * as RA from "../test-data/ReadonlyArray"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
-describe("Product", () => {
+describe("Apply", () => {
   it("fromCovariant", () => {
     const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
       (x: unknown) => {
@@ -21,10 +21,10 @@ describe("Product", () => {
     const getCurriedTupleConstructor = (len: number): (a: unknown) => any =>
       curry(<T extends ReadonlyArray<any>>(...t: T): T => t, len - 1, [])
 
-    const assertSameResult = <F extends TypeLambda>(Product: _.Product<F>) =>
+    const assertSameResult = <F extends TypeLambda>(Apply: _.Apply<F>) =>
       <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
         (self: Kind<F, S, R, O, E, A>) => {
-          const ap = _.ap(Product)
+          const ap = _.ap(Apply)
           const productManyFromAp = <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
             (
               self: Kind<F, S, R, O, E, A>
@@ -32,13 +32,13 @@ describe("Product", () => {
               const args = [self, ...Array.from(collection)]
               const len = args.length
               const f = getCurriedTupleConstructor(len)
-              let fas = pipe(args[0], Product.map(f))
+              let fas = pipe(args[0], Apply.map(f))
               for (let i = 1; i < len; i++) {
                 fas = pipe(fas, ap(args[i]))
               }
               return fas
             }
-          const actual = pipe(self, Product.productMany(collection))
+          const actual = pipe(self, Apply.productMany(collection))
           const expected = pipe(self, productManyFromAp(collection))
           // console.log(expected)
           U.deepStrictEqual(actual, expected)
@@ -55,20 +55,20 @@ describe("Product", () => {
         return out
       }
 
-    const Product = _.fromCovariant(
+    const Apply = _.fromCovariant(
       RA.Covariant,
       product
     )
 
-    assertSameResult(Product)([])([])
-    assertSameResult(Product)([])([1, 2, 3])
-    assertSameResult(Product)([[4]])([1, 2, 3])
-    assertSameResult(Product)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
+    assertSameResult(Apply)([])([])
+    assertSameResult(Apply)([])([1, 2, 3])
+    assertSameResult(Apply)([[4]])([1, 2, 3])
+    assertSameResult(Apply)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
   })
 
   describe("productComposition", () => {
     it("ReadonlyArray", () => {
-      const product = _.productComposition(RA.Product, O.Product)
+      const product = _.productComposition(RA.Apply, O.Apply)
       U.deepStrictEqual(pipe([], product([O.none])), [])
       U.deepStrictEqual(pipe([O.none], product([])), [])
       U.deepStrictEqual(pipe([O.none], product([O.none])), [O.none])
@@ -76,7 +76,7 @@ describe("Product", () => {
     })
 
     it("Option", () => {
-      const product = _.productComposition(O.Product, O.Product)
+      const product = _.productComposition(O.Apply, O.Apply)
       U.deepStrictEqual(pipe(O.none, product(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), product(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some(O.some(1)), product(O.none)), O.none)
@@ -91,7 +91,7 @@ describe("Product", () => {
 
   describe("productManyComposition", () => {
     it("ReadonlyArray", () => {
-      const productMany = _.productManyComposition(RA.Product, O.Product)
+      const productMany = _.productManyComposition(RA.Apply, O.Apply)
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([])), [O.some([1] as const), O.none])
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([[O.some(2), O.none]])), [
         O.some([1, 2] as const),
@@ -111,7 +111,7 @@ describe("Product", () => {
     })
 
     it("Option", () => {
-      const productMany = _.productManyComposition(O.Product, O.Product)
+      const productMany = _.productManyComposition(O.Apply, O.Apply)
       U.deepStrictEqual(pipe(O.none, productMany([])), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), productMany([])), O.some(O.none))
       U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1] as const)))
@@ -127,7 +127,7 @@ describe("Product", () => {
   })
 
   it("ap", () => {
-    const ap = _.ap(O.Product)
+    const ap = _.ap(O.Apply)
     const double = (n: number) => n * 2
     U.deepStrictEqual(pipe(O.none, ap(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, ap(O.some(1))), O.none)
@@ -136,7 +136,7 @@ describe("Product", () => {
   })
 
   it("andThenDiscard", () => {
-    const andThenDiscard = _.andThenDiscard(O.Product)
+    const andThenDiscard = _.andThenDiscard(O.Apply)
     U.deepStrictEqual(pipe(O.none, andThenDiscard(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, andThenDiscard(O.some(2))), O.none)
     U.deepStrictEqual(pipe(O.some(1), andThenDiscard(O.none)), O.none)
@@ -144,7 +144,7 @@ describe("Product", () => {
   })
 
   it("andThen", () => {
-    const andThen = _.andThen(O.Product)
+    const andThen = _.andThen(O.Apply)
     U.deepStrictEqual(pipe(O.none, andThen(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, andThen(O.some(2))), O.none)
     U.deepStrictEqual(pipe(O.some(1), andThen(O.none)), O.none)
@@ -152,19 +152,19 @@ describe("Product", () => {
   })
 
   it("bindRight", () => {
-    const bindRight = _.bindRight(O.Product)
+    const bindRight = _.bindRight(O.Apply)
     U.deepStrictEqual(pipe(O.some({ a: 1 }), bindRight("b", O.none)), O.none)
     U.deepStrictEqual(pipe(O.some({ a: 1 }), bindRight("b", O.some(2))), O.some({ a: 1, b: 2 }))
   })
 
   it("productFlatten", () => {
-    const productFlatten = _.productFlatten(O.Product)
+    const productFlatten = _.productFlatten(O.Apply)
     U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none)), O.none)
     U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3] as const))
   })
 
   it("liftAssociative", () => {
-    const liftAssociative = _.liftAssociative(O.Product)
+    const liftAssociative = _.liftAssociative(O.Apply)
     const S = liftAssociative(string.Associative)
     U.deepStrictEqual(pipe(O.none, S.combine(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, S.combine(O.some("b"))), O.none)
@@ -173,7 +173,7 @@ describe("Product", () => {
   })
 
   it("lift2", () => {
-    const sum = _.lift2(O.Product)((a: number, b: number) => a + b)
+    const sum = _.lift2(O.Apply)((a: number, b: number) => a + b)
     U.deepStrictEqual(sum(O.none, O.none), O.none)
     U.deepStrictEqual(sum(O.some(1), O.none), O.none)
     U.deepStrictEqual(sum(O.none, O.some(2)), O.none)
@@ -181,7 +181,7 @@ describe("Product", () => {
   })
 
   it("lift3", () => {
-    const sum = _.lift3(O.Product)((a: number, b: number, c: number) => a + b + c)
+    const sum = _.lift3(O.Apply)((a: number, b: number, c: number) => a + b + c)
     U.deepStrictEqual(sum(O.none, O.none, O.none), O.none)
     U.deepStrictEqual(sum(O.some(1), O.none, O.none), O.none)
     U.deepStrictEqual(sum(O.none, O.some(2), O.none), O.none)

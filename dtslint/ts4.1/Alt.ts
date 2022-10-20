@@ -1,4 +1,4 @@
-import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
+import * as alt from "@fp-ts/core/typeclass/Alt"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 
@@ -13,7 +13,7 @@ export interface ReaderAsyncWriterTypeLambda extends TypeLambda {
 declare const fa: ReaderAsyncWriter<{ a: string }, "a", string>
 declare const fb: ReaderAsyncWriter<{ b: number }, "b", number>
 
-export declare const Coproduct: coproduct.Coproduct<ReaderAsyncWriterTypeLambda>
+export declare const Alt: alt.Alt<ReaderAsyncWriterTypeLambda>
 
 // $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "b", string | number>
-pipe(fa, Coproduct.coproduct(fb))
+pipe(fa, Alt.coproduct(fb))
