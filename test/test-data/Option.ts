@@ -34,7 +34,6 @@ import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
-import type * as invariantSemigroupalProduct from "@fp-ts/core/typeclass/InvariantSemigroupalProduct"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
@@ -1109,17 +1108,6 @@ export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<OptionTyp
       }
       return some(res)
     }
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const InvariantSemigroupalProduct: invariantSemigroupalProduct.InvariantSemigroupalProduct<
-  OptionTypeLambda
-> = {
-  ...SemigroupalProduct,
-  ...Invariant
 }
 
 // TODO
