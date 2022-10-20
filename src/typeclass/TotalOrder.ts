@@ -120,7 +120,7 @@ export const Contravariant: contravariant.Contravariant<TotalOrderTypeLambda> = 
  *
  * @since 1.0.0
  */
-export const lt = <A>(TotalOrder: TotalOrder<A>) =>
+export const lessThan = <A>(TotalOrder: TotalOrder<A>) =>
   (that: A) => (self: A) => TotalOrder.compare(that)(self) === -1
 
 /**
@@ -128,7 +128,7 @@ export const lt = <A>(TotalOrder: TotalOrder<A>) =>
  *
  * @since 1.0.0
  */
-export const gt = <A>(TotalOrder: TotalOrder<A>) =>
+export const greaterThan = <A>(TotalOrder: TotalOrder<A>) =>
   (that: A) => (self: A) => TotalOrder.compare(that)(self) === 1
 
 /**
@@ -136,7 +136,7 @@ export const gt = <A>(TotalOrder: TotalOrder<A>) =>
  *
  * @since 1.0.0
  */
-export const leq = <A>(TotalOrder: TotalOrder<A>) =>
+export const lessThanOrEqualTo = <A>(TotalOrder: TotalOrder<A>) =>
   (that: A) => (self: A) => TotalOrder.compare(that)(self) !== 1
 
 /**
@@ -144,7 +144,7 @@ export const leq = <A>(TotalOrder: TotalOrder<A>) =>
  *
  * @since 1.0.0
  */
-export const geq = <A>(TotalOrder: TotalOrder<A>) =>
+export const greaterThanOrEqualTo = <A>(TotalOrder: TotalOrder<A>) =>
   (that: A) => (self: A) => TotalOrder.compare(that)(self) !== -1
 
 /**
@@ -178,4 +178,4 @@ export const clamp = <A>(TotalOrder: TotalOrder<A>) =>
  */
 export const between = <A>(TotalOrder: TotalOrder<A>) =>
   (minimum: A, maximum: A) =>
-    (a: A): boolean => !lt(TotalOrder)(minimum)(a) && !gt(TotalOrder)(maximum)(a)
+    (a: A): boolean => !lessThan(TotalOrder)(minimum)(a) && !greaterThan(TotalOrder)(maximum)(a)
