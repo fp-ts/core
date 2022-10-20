@@ -99,7 +99,12 @@ export const liftAssociative = <F extends TypeLambda>(Apply: Apply<F>) =>
       (self) =>
         pipe(self, Apply.product(that), Apply.map(([a1, a2]) => Associative.combine(a2)(a1))),
     combineMany: (collection) =>
-      (self) => pipe(self, Apply.productMany(collection), Apply.map(Associative.combineMany))
+      (self) =>
+        pipe(
+          self,
+          Apply.productMany(collection),
+          Apply.map(([head, ...tail]) => pipe(head, Associative.combineMany(tail)))
+        )
   })
 
 /**
