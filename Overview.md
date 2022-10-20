@@ -30,7 +30,6 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Compactable**           | `compact`                                     |                                         |
 | **Composable**            | `compose`                                     |                                         |
 | **Contravariant**         | `contramap`                                   |                                         |
-| **CoproductSemigroupal**  | `coproduct`                                   |                                         |
 | **Covariant**             | `map`                                         |                                         |
 | **CovariantWithIndex**    | `mapWithIndex`                                |                                         |
 | **Extendable**            | `extend`                                      | **Covariant**                           |
@@ -44,7 +43,8 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Monoid**                | `unit`<br>`combineAll`                        | **Associative**                         |
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
-| **ProductSemigroupal**    | `product`                                     |                                         |
+| **SemigroupalCoproduct**  | `coproduct`                                   |                                         |
+| **SemigroupalProduct**    | `product`                                     |                                         |
 | **TotalOrder**            | `compare`                                     |                                         |
 | **Traversable**           | `traverse`                                    |                                         |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                         |

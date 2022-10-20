@@ -135,7 +135,7 @@ describe("Associative", () => {
     const S = pipe(
       string.Associative,
       _.product(number.AssociativeSum),
-      _.ProductSemigroupal.product(number.AssociativeMultiply),
+      _.SemigroupalProduct.product(number.AssociativeMultiply),
       _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
     )
     U.deepStrictEqual(pipe(["a", 2, 3], S.combine(["b", 3, 4])), ["ab", 5, 12])
