@@ -5,7 +5,7 @@ import * as RA from "../test-data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Covariant", () => {
-  it("mapWithIndexComposition", () => {
+  it("mapComposition", () => {
     const map = _.mapComposition(RA.Covariant, RA.Covariant)
     const f = (a: string) => a + "!"
     U.deepStrictEqual(pipe([], map(f)), [])
@@ -55,5 +55,11 @@ describe("Covariant", () => {
     const tupled = _.tupled(O.Covariant)
     U.deepStrictEqual(pipe(O.none, tupled), O.none)
     U.deepStrictEqual(pipe(O.some(1), tupled), O.some([1] as const))
+  })
+
+  it("imap", () => {
+    const f = _.imap(O.Covariant)((s: string) => [s] as const, ([s]) => s)
+    U.deepStrictEqual(pipe(O.none, f), O.none)
+    U.deepStrictEqual(pipe(O.some("a"), f), O.some(["a"] as const))
   })
 })

@@ -21,7 +21,8 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { identity } from "@fp-ts/core/internal/Function"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
+import * as nonEmptyReadonlyArray from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as productSemigroupal from "@fp-ts/core/typeclass/SemigroupalProduct"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
@@ -208,5 +209,16 @@ export const product = <B>(
  * @since 1.0.0
  */
 export const SemigroupalProduct: productSemigroupal.SemigroupalProduct<AssociativeTypeLambda> = {
-  product
+  product,
+  productMany: <A>(collection: Iterable<Associative<A>>) =>
+    (self: Associative<A>): Associative<readonly [A, ...Array<A>]> =>
+      fromCombine((t2) =>
+        (t1) =>
+          pipe(
+            [self, ...collection],
+            nonEmptyReadonlyArray.mapWithIndex<Associative<A>, A>((Associative, i) =>
+              Associative.combine(t2[i])(t1[i])
+            )
+          )
+      )
 }

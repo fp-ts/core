@@ -11,11 +11,7 @@ import type { SemigroupalProduct } from "@fp-ts/core/typeclass/SemigroupalProduc
  * @category type class
  * @since 1.0.0
  */
-export interface Apply<F extends TypeLambda> extends SemigroupalProduct<F>, Covariant<F> {
-  readonly productMany: <S, R, O, E, A>(
-    collection: Iterable<Kind<F, S, R, O, E, A>>
-  ) => (self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]>
-}
+export interface Apply<F extends TypeLambda> extends SemigroupalProduct<F>, Covariant<F> {}
 
 /**
  * @category constructors
