@@ -1,4 +1,21 @@
-| Typeclass                 | member(s)                                   | extends                    |
+# Introduction
+
+The functional abstractions in `@fp-ts/core` can be broadly divided into two categories.
+
+- Abstractions For Concrete Types - These abstractions define properties of concrete types, such as `number` and `string`, as well as ways of combining those values.
+- Abstractions For Parameterized Types - These abstractions define properties of parameterized types such as `ReadonlyArray` and `Option` and ways of combining them.
+
+# Concrete Types
+
+|                 | member(s)                | extends         |
+| --------------- | ------------------------ | --------------- |
+| **Associative** | `combine`, `combineMany` |                 |
+| **Monoid**      | `unit`, `combineAll`     | **Associative** |
+| **TotalOrder**  | `compare`                |                 |
+
+# Parameterized Types
+
+|                           | member(s)                                   | extends                    |
 | ------------------------- | ------------------------------------------- | -------------------------- |
 | **Alternative**           | `zero`, `coproductAll`                      | **Coproduct**              |
 | **Applicative**           | `productAll`                                | **Product**, **Of**        |

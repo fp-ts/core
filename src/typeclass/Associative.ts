@@ -1,4 +1,23 @@
 /**
+ * `Associative<A>` describes a way of combining two values of type `A` that is associative.
+ *
+ * ```ts
+ * export interface Associative<A> {
+ *   readonly combine: (that: A) => (self: A) => A
+ *   readonly combineMany: (collection: Iterable<A>) => (self: A) => A
+ * }
+ * ```
+ *
+ * The combine operator must be associative, meaning that if we combine `a` with `b` and then combine the result
+ * with `c` we must get the same value as if we combine `b` with `c` and then combine `a` with the result.
+ *
+ * ```
+ * (a <> b) <> c === a <> (b <> c)
+ * ```
+ *
+ * The `Associative` abstraction allows us to combine values of a data type to build a new value of that data type
+ * with richer structure.
+ *
  * @since 1.0.0
  */
 import { identity } from "@fp-ts/core/internal/Function"

@@ -47,6 +47,7 @@ npm install @fp-ts/core
 
 # Documentation
 
+- [Overview](./Overview.md)
 - [API Reference](https://fp-ts.github.io/core/)
 
 # License
