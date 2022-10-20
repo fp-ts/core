@@ -4,7 +4,8 @@
 import type { TotalOrdering } from "@fp-ts/core/data/TotalOrdering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Associative } from "@fp-ts/core/typeclass/Associative"
-import type * as contravariant from "@fp-ts/core/typeclass/Contravariant"
+import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
+import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 
@@ -113,6 +114,14 @@ export const getMonoid = <A>(): Monoid<TotalOrder<A>> =>
  */
 export const Contravariant: contravariant.Contravariant<TotalOrderTypeLambda> = {
   contramap
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
+  imap: contravariant.imap(Contravariant)
 }
 
 /**
