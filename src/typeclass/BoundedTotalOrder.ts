@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as compare from "@fp-ts/core/typeclass/TotalOrder"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
@@ -11,6 +12,14 @@ import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 export interface BoundedTotalOrder<A> extends TotalOrder<A> {
   readonly minimum: A
   readonly maximum: A
+}
+
+/**
+ * @category type lambdas
+ * @since 1.0.0
+ */
+export interface BoundedTotalOrderTypeLambda extends TypeLambda {
+  readonly type: BoundedTotalOrder<this["Target"]>
 }
 
 /**

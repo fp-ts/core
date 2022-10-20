@@ -32,5 +32,5 @@ export type Either<E, A> = Left<E> | Right<A>
  * @since 1.0.0
  */
 export interface EitherTypeLambda extends TypeLambda {
-  readonly type: Either<this["Out2"], this["Out"]>
+  readonly type: Either<this["Out1"], this["Target"]>
 }

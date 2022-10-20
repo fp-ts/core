@@ -16,5 +16,5 @@ export interface Predicate<A> {
  * @since 1.0.0
  */
 export interface PredicateTypeLambda extends TypeLambda {
-  readonly type: Predicate<this["In"]>
+  readonly type: Predicate<this["Target"]>
 }
