@@ -17,8 +17,10 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 |                           | member(s)                                     | extends                    |
 | ------------------------- | --------------------------------------------- | -------------------------- |
+| **Alt**                   | `coproduct`<br>`coproductMany`                | **Covariant**              |
 | **Alternative**           | `zero`<br>`coproductAll`                      | **Coproduct**              |
 | **Applicative**           | `productAll`                                  | **Product**, **Of**        |
+| **Apply**                 | `product`<br>`productMany`                    | **Covariant**              |
 | **Associative**           | `combine`<br>`combineMany`                    |                            |
 | **Bicovariant**           | `bimap`                                       |                            |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**               |
@@ -28,7 +30,6 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Compactable**           | `compact`                                     |                            |
 | **Composable**            | `compose`                                     |                            |
 | **Contravariant**         | `contramap`                                   |                            |
-| **Coproduct**             | `coproduct`<br>`coproductMany`                | **Covariant**              |
 | **Covariant**             | `map`                                         |                            |
 | **CovariantWithIndex**    | `mapWithIndex`                                |                            |
 | **Extendable**            | `extend`                                      | **Covariant**              |
@@ -42,7 +43,6 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Monoid**                | `unit`<br>`combineAll`                        | **Associative**            |
 | **Of**                    | `of`                                          |                            |
 | **Pointed**               |                                               | **Covariant**, **Of**      |
-| **Product**               | `product`<br>`productMany`                    | **Covariant**              |
 | **TotalOrder**            | `compare`                                     |                            |
 | **Traversable**           | `traverse`                                    |                            |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                            |

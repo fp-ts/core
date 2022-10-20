@@ -8,7 +8,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category type class
  * @since 1.0.0
  */
-export interface Coproduct<F extends TypeLambda> extends Covariant<F> {
+export interface Alt<F extends TypeLambda> extends Covariant<F> {
   readonly coproduct: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(

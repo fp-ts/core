@@ -11,7 +11,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category type class
  * @since 1.0.0
  */
-export interface Product<F extends TypeLambda> extends Covariant<F> {
+export interface Apply<F extends TypeLambda> extends Covariant<F> {
   readonly product: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -29,8 +29,8 @@ export interface Product<F extends TypeLambda> extends Covariant<F> {
  */
 export const fromCovariant = <F extends TypeLambda>(
   Covariant: Covariant<F>,
-  product: Product<F>["product"]
-): Product<F> => {
+  product: Apply<F>["product"]
+): Apply<F> => {
   return {
     ...Covariant,
     product,
@@ -56,8 +56,8 @@ export const fromCovariant = <F extends TypeLambda>(
  * @since 1.0.0
  */
 export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
-  ProductF: Product<F>,
-  ProductG: Product<G>
+  ApplyF: Apply<F>,
+  ApplyG: Apply<G>
 ) =>
   <FS, FR2, FO2, FE2, GS, GR2, GO2, GE2, B>(
     that: Kind<F, FS, FR2, FO2, FE2, Kind<G, GS, GR2, GO2, GE2, B>>
@@ -71,8 +71,7 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
       FO1 | FO2,
       FE1 | FE2,
       Kind<G, GS, GR1 & GR2, GO1 | GO2, GE1 | GE2, readonly [A, B]>
-    > =>
-      pipe(self, ProductF.product(that), ProductF.map(([ga, gb]) => pipe(ga, ProductG.product(gb))))
+    > => pipe(self, ApplyF.product(that), ApplyF.map(([ga, gb]) => pipe(ga, ApplyG.product(gb))))
 
 /**
  * Returns a default `productMany` composition.
@@ -80,8 +79,8 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
-  ProductF: Product<F>,
-  ProductG: Product<G>
+  ApplyF: Apply<F>,
+  ApplyG: Apply<G>
 ) =>
   <FS, FR, FO, FE, GS, GR, GO, GE, A>(
     collection: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
@@ -91,8 +90,8 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
     ): Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, readonly [A, ...ReadonlyArray<A>]>> =>
       pipe(
         self,
-        ProductF.productMany(collection),
-        ProductF.map(([ga, ...gas]) => pipe(ga, ProductG.productMany(gas)))
+        ApplyF.productMany(collection),
+        ApplyF.map(([ga, ...gas]) => pipe(ga, ApplyG.productMany(gas)))
       )
 
 /**
@@ -100,53 +99,53 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
  *
  * @since 1.0.0
  */
-export const liftAssociative = <F extends TypeLambda>(Product: Product<F>) =>
+export const liftAssociative = <F extends TypeLambda>(Apply: Apply<F>) =>
   <A, S, R, O, E>(Associative: Associative<A>): Associative<Kind<F, S, R, O, E, A>> =>
     associative.fromCombine((that) =>
       (self) =>
-        pipe(self, Product.product(that), Product.map(([a1, a2]) => Associative.combine(a2)(a1)))
+        pipe(self, Apply.product(that), Apply.map(([a1, a2]) => Associative.combine(a2)(a1)))
     )
 
 /**
  * @since 1.0.0
  */
-export const ap = <F extends TypeLambda>(Product: Product<F>) =>
+export const ap = <F extends TypeLambda>(Apply: Apply<F>) =>
   <S, R2, O2, E2, A>(
     fa: Kind<F, S, R2, O2, E2, A>
   ) =>
     <R1, O1, E1, B>(
       self: Kind<F, S, R1, O1, E1, (a: A) => B>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B> =>
-      pipe(self, Product.product(fa), Product.map(([f, a]) => f(a)))
+      pipe(self, Apply.product(fa), Apply.map(([f, a]) => f(a)))
 
 /**
  * @since 1.0.0
  */
-export const andThenDiscard = <F extends TypeLambda>(Product: Product<F>) =>
+export const andThenDiscard = <F extends TypeLambda>(Apply: Apply<F>) =>
   <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
   ) =>
     <R1, O1, E1, A>(
       self: Kind<F, S, R1, O1, E1, A>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A> =>
-      pipe(self, Product.product(that), Product.map(([a]) => a))
+      pipe(self, Apply.product(that), Apply.map(([a]) => a))
 
 /**
  * @since 1.0.0
  */
-export const andThen = <F extends TypeLambda>(Product: Product<F>) =>
+export const andThen = <F extends TypeLambda>(Apply: Apply<F>) =>
   <S, R2, O2, E2, A>(
     that: Kind<F, S, R2, O2, E2, A>
   ) =>
     <R1, O1, E1>(
       self: Kind<F, S, R1, O1, E1, unknown>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A> =>
-      pipe(self, Product.product(that), Product.map(([_, a]) => a))
+      pipe(self, Apply.product(that), Apply.map(([_, a]) => a))
 
 /**
  * @since 1.0.0
  */
-export const bindRight = <F extends TypeLambda>(Product: Product<F>) =>
+export const bindRight = <F extends TypeLambda>(Apply: Apply<F>) =>
   <N extends string, A extends object, S, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     fb: Kind<F, S, R2, O2, E2, B>
@@ -163,41 +162,41 @@ export const bindRight = <F extends TypeLambda>(Product: Product<F>) =>
     > =>
       pipe(
         self,
-        Product.product(fb),
-        Product.map(([a, b]) => Object.assign({}, a, { [name]: b }) as any)
+        Apply.product(fb),
+        Apply.map(([a, b]) => Object.assign({}, a, { [name]: b }) as any)
       )
 
 /**
  * @since 1.0.0
  */
-export const productFlatten = <F extends TypeLambda>(Product: Product<F>) =>
+export const productFlatten = <F extends TypeLambda>(Apply: Apply<F>) =>
   <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) =>
     <R1, O1, E1, A extends ReadonlyArray<unknown>>(
       self: Kind<F, S, R1, O1, E1, A>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, readonly [...A, B]> =>
-      pipe(self, Product.product(that), Product.map(([a, b]) => [...a, b] as const))
+      pipe(self, Apply.product(that), Apply.map(([a, b]) => [...a, b] as const))
 
 /**
  * Lifts a binary function into `F`.
  *
  * @since 1.0.0
  */
-export const lift2 = <F extends TypeLambda>(Product: Product<F>) =>
+export const lift2 = <F extends TypeLambda>(Apply: Apply<F>) =>
   <A, B, C>(f: (a: A, b: B) => C) =>
     <S, R1, O1, E1, R2, O2, E2>(
       fa: Kind<F, S, R1, O1, E1, A>,
       fb: Kind<F, S, R2, O2, E2, B>
     ): Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> =>
-      pipe(fa, Product.product(fb), Product.map(([a, b]) => f(a, b)))
+      pipe(fa, Apply.product(fb), Apply.map(([a, b]) => f(a, b)))
 
 /**
  * Lifts a ternary function into 'F'.
  *
  * @since 1.0.0
  */
-export const lift3 = <F extends TypeLambda>(Product: Product<F>) =>
+export const lift3 = <F extends TypeLambda>(Apply: Apply<F>) =>
   <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>
     <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(
       fa: Kind<F, S, R1, O1, E1, A>,
@@ -206,7 +205,7 @@ export const lift3 = <F extends TypeLambda>(Product: Product<F>) =>
     ): Kind<F, S, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D> =>
       pipe(
         fa,
-        Product.product(fb),
-        Product.product(fc),
-        Product.map(([[a, b], c]) => f(a, b, c))
+        Apply.product(fb),
+        Apply.product(fc),
+        Apply.map(([[a, b], c]) => f(a, b, c))
       )

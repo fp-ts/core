@@ -20,12 +20,13 @@ import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { flow, identity, pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
+import type * as alt from "@fp-ts/core/typeclass/Alt"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
+import * as apply from "@fp-ts/core/typeclass/Apply"
 import type * as associative from "@fp-ts/core/typeclass/Associative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
-import type * as coproduct_ from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as extendable from "@fp-ts/core/typeclass/Extendable"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
@@ -35,7 +36,6 @@ import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
-import * as product_ from "@fp-ts/core/typeclass/Product"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -623,7 +623,7 @@ export const product = <B>(
  * @category instances
  * @since 1.0.0
  */
-export const Product: product_.Product<OptionTypeLambda> = {
+export const Apply: apply.Apply<OptionTypeLambda> = {
   map,
   product,
   productMany: <A>(
@@ -664,14 +664,14 @@ export const coproductMany = <A>(
     return none
   }
 
-export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
+export const Alt: alt.Alt<OptionTypeLambda> = {
   map,
   coproduct,
   coproductMany
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromCoproduct(Coproduct, () => none)
+  .fromAlt(Alt, () => none)
 
 /**
  * Lifts a binary function into `Option`.
@@ -680,7 +680,7 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = alternativ
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  product_.lift2(Product)
+  apply.lift2(Apply)
 
 /**
  * Lifts a ternary function into `Option`.
@@ -690,7 +690,7 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Optio
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = product_.lift3(Product)
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = apply.lift3(Apply)
 
 /**
  * @category instances
@@ -699,8 +699,8 @@ export const lift3: <A, B, C, D>(
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   of: some,
   map,
-  productMany: Product.productMany,
-  product: Product.product,
+  productMany: Apply.productMany,
+  product: Apply.product,
   productAll: <A>(collection: Iterable<Option<A>>): Option<ReadonlyArray<A>> => {
     const out: Array<A> = []
     for (const o of collection) {
@@ -1047,7 +1047,7 @@ export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  product_.bindRight(Product)
+  apply.bindRight(Apply)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -1073,8 +1073,8 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tu
  */
 export const productFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = product_
-  .productFlatten(Product)
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = apply
+  .productFlatten(Apply)
 
 // TODO
 // // -------------------------------------------------------------------------------------
