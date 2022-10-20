@@ -33,9 +33,12 @@ import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
+import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import type * as invariantSemigroupalProduct from "@fp-ts/core/typeclass/InvariantSemigroupalProduct"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
+import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -1075,6 +1078,49 @@ export const productFlatten: <B>(
   fb: Option<B>
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = apply
   .productFlatten(Apply)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<OptionTypeLambda> = {
+  imap: covariant.imap(Covariant)
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<OptionTypeLambda> = {
+  product,
+  productMany: <A>(
+    others: Iterable<Option<A>>
+  ) =>
+    (start: Option<A>): Option<[A, ...Array<A>]> => {
+      if (isNone(start)) {
+        return none
+      }
+      const res: [A, ...Array<A>] = [start.value]
+      for (const o of others) {
+        if (isNone(o)) {
+          return none
+        }
+        res.push(o.value)
+      }
+      return some(res)
+    }
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const InvariantSemigroupalProduct: invariantSemigroupalProduct.InvariantSemigroupalProduct<
+  OptionTypeLambda
+> = {
+  ...SemigroupalProduct,
+  ...Invariant
+}
 
 // TODO
 // // -------------------------------------------------------------------------------------
