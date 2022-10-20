@@ -25,8 +25,8 @@ export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass
  * @since 1.0.0
  */
 export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
-  TraversableWithIndexF: TraversableWithIndex<F, I>,
-  TraversableWithIndexG: TraversableWithIndex<G, J>
+  F: TraversableWithIndex<F, I>,
+  G: TraversableWithIndex<G, J>
 ) =>
   <H extends TypeLambda>(Applicative: Applicative<H>) =>
     <A, S, R, O, E, B>(
@@ -34,10 +34,8 @@ export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends 
     ): (<FS, FR, FO, FE, GS, GR, GO, GE>(
       fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
     ) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>) =>
-      TraversableWithIndexF.traverseWithIndex(Applicative)((ga, i) =>
-        TraversableWithIndexG.traverseWithIndex(Applicative)<A, S, R, O, E, B>((a, j) =>
-          f(a, [i, j])
-        )(ga)
+      F.traverseWithIndex(Applicative)((ga, i) =>
+        G.traverseWithIndex(Applicative)<A, S, R, O, E, B>((a, j) => f(a, [i, j]))(ga)
       )
 
 /**
@@ -46,5 +44,5 @@ export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends 
  * @since 1.0.0
  */
 export const traverse = <F extends TypeLambda, I>(
-  TraversableWithIndex: TraversableWithIndex<F, I>
-): Traversable<F>["traverse"] => f => TraversableWithIndex.traverseWithIndex(f)
+  F: TraversableWithIndex<F, I>
+): Traversable<F>["traverse"] => f => F.traverseWithIndex(f)

@@ -31,7 +31,7 @@ export interface TotalOrderTypeLambda extends TypeLambda {
  * @since 1.0.0
  */
 export const fromCompare = <A>(compare: TotalOrder<A>["compare"]): TotalOrder<A> => ({
-  compare: (that) => (self) => self === that ? 0 : compare(that)(self)
+  compare: that => self => self === that ? 0 : compare(that)(self)
 })
 
 /**
@@ -42,8 +42,8 @@ export const fromCompare = <A>(compare: TotalOrder<A>["compare"]): TotalOrder<A>
 export const tuple = <A extends ReadonlyArray<unknown>>(
   ...totalOrders: { [K in keyof A]: TotalOrder<A[K]> }
 ): TotalOrder<Readonly<A>> =>
-  fromCompare((that) =>
-    (self) => {
+  fromCompare(that =>
+    self => {
       let i = 0
       for (; i < totalOrders.length - 1; i++) {
         const r = totalOrders[i].compare(that[i])(self[i])
@@ -59,7 +59,7 @@ export const tuple = <A extends ReadonlyArray<unknown>>(
  * @since 1.0.0
  */
 export const reverse = <A>(TotalOrder: TotalOrder<A>): TotalOrder<A> =>
-  fromCompare((that) => (self) => TotalOrder.compare(self)(that))
+  fromCompare(that => self => TotalOrder.compare(self)(that))
 
 /**
  * @since 1.0.0
@@ -74,8 +74,8 @@ export const contramap = <B, A>(f: (b: B) => A) =>
 export const getAssociative = <A>(): Associative<TotalOrder<A>> => ({
   combine: (totalOrder2) =>
     (totalOrder1) =>
-      fromCompare((that) =>
-        (self) => {
+      fromCompare(that =>
+        self => {
           const out = totalOrder1.compare(that)(self)
           if (out !== 0) {
             return out
@@ -85,8 +85,8 @@ export const getAssociative = <A>(): Associative<TotalOrder<A>> => ({
       ),
   combineMany: (collection) =>
     (self) =>
-      fromCompare((a2) =>
-        (a1) => {
+      fromCompare(a2 =>
+        a1 => {
           let out = self.compare(a2)(a1)
           if (out !== 0) {
             return out

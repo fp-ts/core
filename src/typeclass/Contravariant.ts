@@ -19,5 +19,5 @@ export interface Contravariant<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const imap = <F extends TypeLambda>(Contravariant: Contravariant<F>): Invariant<F>["imap"] =>
-  (_, from) => Contravariant.contramap(from)
+export const imap = <F extends TypeLambda>(F: Contravariant<F>): Invariant<F>["imap"] =>
+  (_, from) => F.contramap(from)

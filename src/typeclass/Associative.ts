@@ -163,9 +163,9 @@ export const first = <A = never>(): Associative<A> => ({
  * @since 1.0.0
  */
 export const last = <A = never>(): Associative<A> => ({
-  combine: (second) => () => second,
-  combineMany: (collection) =>
-    (self) => {
+  combine: second => () => second,
+  combineMany: collection =>
+    self => {
       let a: A = self
       // eslint-disable-next-line no-empty
       for (a of collection) {}
@@ -181,9 +181,9 @@ export const imap = <A, B>(
   from: (b: B) => A
 ) =>
   (Associative: Associative<A>): Associative<B> => ({
-    combine: (that) => (self) => to(Associative.combine(from(that))(from(self))),
+    combine: that => self => to(Associative.combine(from(that))(from(self))),
     combineMany: (collection) =>
-      (self) => to(Associative.combineMany(Array.from(collection).map(from))(from(self)))
+      self => to(Associative.combineMany(Array.from(collection).map(from))(from(self)))
   })
 
 /**
@@ -194,18 +194,7 @@ export const Invariant: invariant.Invariant<AssociativeTypeLambda> = {
   imap
 }
 
-/**
- * @since 1.0.0
- */
-export const product = <B>(
-  that: Associative<B>
-) => <A>(self: Associative<A>): Associative<readonly [A, B]> => tuple(self, that)
-
-/**
- * @category instances
- * @since 1.0.0
- */
 export const SemigroupalProduct: productSemigroupal.SemigroupalProduct<AssociativeTypeLambda> = {
-  product,
+  product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }

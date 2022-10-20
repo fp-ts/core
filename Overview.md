@@ -49,3 +49,28 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Traversable**           | `traverse`                                    |                                         |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                         |
 | **TraversableWithIndex**  | `traverseWihtIndex`                           |                                         |
+
+## Graph
+
+```
+digraph G {
+    "Alt" -> "SemigroupalCoproduct"
+    "Alt" -> "Covariant"
+    "Alternative" -> "Alt"
+    "Applicative" -> "Apply"
+    "Applicative" -> "Of"
+    "Apply" -> "SemigroupalProduct"
+    "Apply" -> "Covariant"
+    "BoundedTotalOrder" -> "TotalOrder"
+    "Category" -> "Composable"
+    "Chainable" -> "Covariant"
+    "Chainable" -> "FlatMap"
+    "Comonad" -> "Extendable"
+    "Extendable" -> "Covariant"
+    "Monad" -> "Pointed"
+    "Monad" -> "FlatMap"
+    "Monoid" -> "Associative"
+    "Pointed" -> "Of"
+    "Pointed" -> "Covariant"
+}
+```

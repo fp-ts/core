@@ -66,7 +66,7 @@ export const traverseFilterMap = <T extends TypeLambda>(
  * @since 1.0.0
  */
 export const traverseFilter = <T extends TypeLambda>(
-  TraversableFilterable: TraversableFilterable<T>
+  F: TraversableFilterable<T>
 ) =>
   <F extends TypeLambda>(
     Applicative: Applicative<F>
@@ -76,10 +76,10 @@ export const traverseFilter = <T extends TypeLambda>(
     self: Kind<T, TS, TR, TO, TE, B>
   ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>) =>
     (predicate) =>
-      TraversableFilterable.traverseFilterMap(Applicative)((b) =>
+      F.traverseFilterMap(Applicative)(b =>
         pipe(
           predicate(b),
-          Applicative.map((ok) => (ok ? option.some(b) : option.none))
+          Applicative.map(keep => (keep ? option.some(b) : option.none))
         )
       )
 
@@ -87,7 +87,7 @@ export const traverseFilter = <T extends TypeLambda>(
  * @since 1.0.0
  */
 export const traversePartition = <T extends TypeLambda>(
-  TraversableFilterable: TraversableFilterable<T>
+  F: TraversableFilterable<T>
 ) =>
   <F extends TypeLambda>(
     Applicative: Applicative<F>
@@ -97,9 +97,9 @@ export const traversePartition = <T extends TypeLambda>(
     self: Kind<T, TS, TR, TO, TE, B>
   ) => Kind<F, S, R, O, E, readonly [Kind<T, TS, TR, TO, TE, B>, Kind<T, TS, TR, TO, TE, B>]>) =>
     (predicate) =>
-      TraversableFilterable.traversePartitionMap(Applicative)((b) =>
+      F.traversePartitionMap(Applicative)(b =>
         pipe(
           predicate(b),
-          Applicative.map((ok) => (ok ? either.right(b) : either.left(b)))
+          Applicative.map((keep) => (keep ? either.right(b) : either.left(b)))
         )
       )

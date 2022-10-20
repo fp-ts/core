@@ -21,17 +21,14 @@ export interface CovariantWithIndex<F extends TypeLambda, I> extends TypeClass<F
  * @since 1.0.0
  */
 export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
-  CovariantWithIndexF: CovariantWithIndex<F, I>,
-  CovariantWithIndexG: CovariantWithIndex<G, J>
+  F: CovariantWithIndex<F, I>,
+  G: CovariantWithIndex<G, J>
 ): (<A, B>(
   f: (a: A, ij: readonly [I, J]) => B
 ) => <FS, FR, FO, FE, GS, GR, GO, GE>(
   self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
 ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) =>
-  (f) =>
-    CovariantWithIndexF.mapWithIndex((ga, i) =>
-      pipe(ga, CovariantWithIndexG.mapWithIndex((a, j) => f(a, [i, j])))
-    )
+  (f) => F.mapWithIndex((ga, i) => pipe(ga, G.mapWithIndex((a, j) => f(a, [i, j]))))
 
 /**
  * Returns a default `map` implementation.
@@ -39,5 +36,5 @@ export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeL
  * @since 1.0.0
  */
 export const map = <F extends TypeLambda, I>(
-  CovariantWithIndex: CovariantWithIndex<F, I>
-): Covariant<F>["map"] => f => CovariantWithIndex.mapWithIndex(f)
+  F: CovariantWithIndex<F, I>
+): Covariant<F>["map"] => f => F.mapWithIndex(f)

@@ -15,5 +15,5 @@ export interface Of<F extends TypeLambda> extends TypeClass<F> {
  * @since 1.0.0
  */
 export const unit = <F extends TypeLambda>(
-  Of: Of<F>
-) => <S>(): Kind<F, S, unknown, never, never, void> => Of.of<void, S>(undefined)
+  F: Of<F>
+) => <S>(): Kind<F, S, unknown, never, never, void> => F.of<void, S>(undefined)
