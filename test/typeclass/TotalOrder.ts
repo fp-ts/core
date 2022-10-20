@@ -21,6 +21,15 @@ describe("TotalOrder", () => {
     U.deepStrictEqual(pipe("aa", S.compare("b")), 1)
   })
 
+  it("Invariant", () => {
+    const TotalOrder = _.Invariant.imap((s: string) => [s] as const, ([s]) => s)(
+      string.TotalOrder
+    )
+    U.deepStrictEqual(pipe(["a"], TotalOrder.compare(["b"])), -1)
+    U.deepStrictEqual(pipe(["a"], TotalOrder.compare(["a"])), 0)
+    U.deepStrictEqual(pipe(["b"], TotalOrder.compare(["a"])), 1)
+  })
+
   it("getAssociative", () => {
     type T = readonly [number, string]
     const tuples: ReadonlyArray<T> = [
