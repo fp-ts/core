@@ -24,11 +24,11 @@ export interface Compactable<F extends TypeLambda> extends TypeClass<F> {
  * @since 1.0.0
  */
 export const compactComposition = <F extends TypeLambda, G extends TypeLambda>(
-  Covariant: Covariant<F>,
-  Compactable: Compactable<G>
+  F: Covariant<F>,
+  G: Compactable<G>
 ): (<FS, FR, FO, FE, GS, GR, GO, GE, A>(
   self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, Option<A>>>
-) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>) => Covariant.map(Compactable.compact)
+) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>) => F.map(G.compact)
 
 /**
  * @since 1.0.0

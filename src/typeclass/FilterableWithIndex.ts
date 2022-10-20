@@ -26,15 +26,14 @@ export interface FilterableWithIndex<F extends TypeLambda, I> extends TypeClass<
  * @since 1.0.0
  */
 export const filterMapWithIndexComposition = <F extends TypeLambda, G extends TypeLambda, I>(
-  CovariantF: Covariant<F>,
-  FilterableWithIndexG: FilterableWithIndex<G, I>
+  F: Covariant<F>,
+  G: FilterableWithIndex<G, I>
 ) =>
   <A, B>(
     f: (a: A, i: I) => Option<B>
   ): <FS, FR, FO, FE, GS, GR, GO, GE>(
     self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>> =>
-    CovariantF.map(FilterableWithIndexG.filterMapWithIndex(f))
+  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>> => F.map(G.filterMapWithIndex(f))
 
 /**
  * Returns a default `filterMap` implementation.
@@ -42,14 +41,14 @@ export const filterMapWithIndexComposition = <F extends TypeLambda, G extends Ty
  * @since 1.0.0
  */
 export const filterMap = <F extends TypeLambda, I>(
-  FilterableWithIndex: FilterableWithIndex<F, I>
-): Filterable<F>["filterMap"] => (f) => FilterableWithIndex.filterMapWithIndex(f)
+  F: FilterableWithIndex<F, I>
+): Filterable<F>["filterMap"] => (f) => F.filterMapWithIndex(f)
 
 /**
  * @since 1.0.0
  */
 export const filterWithIndex: <F extends TypeLambda, I>(
-  FilterableWithIndex: FilterableWithIndex<F, I>
+  F: FilterableWithIndex<F, I>
 ) => {
   <C extends A, B extends A, A = C>(refinement: (a: A, i: I) => a is B): <S, R, O, E>(
     self: Kind<F, S, R, O, E, C>
@@ -70,15 +69,15 @@ export const filterWithIndex: <F extends TypeLambda, I>(
  * @since 1.0.0
  */
 export const partitionMapWithIndex = <F extends TypeLambda, I>(
-  FilterableWithIndex: FilterableWithIndex<F, I>
+  F: FilterableWithIndex<F, I>
 ) =>
   <A, B, C>(f: (a: A, i: I) => Either<B, C>) =>
     <S, R, O, E>(
       self: Kind<F, S, R, O, E, A>
     ): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
       return [
-        pipe(self, FilterableWithIndex.filterMapWithIndex(flow(f, either.getLeft))),
-        pipe(self, FilterableWithIndex.filterMapWithIndex(flow(f, either.getRight)))
+        pipe(self, F.filterMapWithIndex(flow(f, either.getLeft))),
+        pipe(self, F.filterMapWithIndex(flow(f, either.getRight)))
       ]
     }
 
@@ -86,7 +85,7 @@ export const partitionMapWithIndex = <F extends TypeLambda, I>(
  * @since 1.0.0
  */
 export const partitionWithIndex: <F extends TypeLambda, I>(
-  FilterableWithIndex: FilterableWithIndex<F, I>
+  F: FilterableWithIndex<F, I>
 ) => {
   <C extends A, B extends A, A = C>(refinement: (a: A, i: I) => a is B): <S, R, O, E>(
     self: Kind<F, S, R, O, E, C>

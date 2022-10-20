@@ -37,20 +37,19 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const mapLeft = <F extends TypeLambda>(
-  Bicovariant: Bicovariant<F>
+  F: Bicovariant<F>
 ): (<E1, E2>(
   f: (e: E1) => E2
 ) => <S, R, O, A>(self: Kind<F, S, R, O, E1, A>) => Kind<F, S, R, O, E2, A>) =>
   <E, G>(f: (e: E) => G): (<S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
-    Bicovariant.bimap(f, identity)
+    F.bimap(f, identity)
 
 /**
  * Returns a default `map` implementation.
  *
  * @since 1.0.0
  */
-export const map = <F extends TypeLambda>(Bicovariant: Bicovariant<F>): Covariant<F>["map"] =>
+export const map = <F extends TypeLambda>(F: Bicovariant<F>): Covariant<F>["map"] =>
   <A, B>(
     f: (a: A) => B
-  ): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) =>
-    Bicovariant.bimap(identity, f)
+  ): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) => F.bimap(identity, f)

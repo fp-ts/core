@@ -21,7 +21,7 @@ export interface Monoid<A> extends Associative<A> {
 export const fromAssociative = <A>(Associative: Associative<A>, unit: A): Monoid<A> => ({
   ...Associative,
   unit,
-  combineAll: (collection) => Associative.combineMany(collection)(unit)
+  combineAll: collection => Associative.combineMany(collection)(unit)
 })
 
 /**

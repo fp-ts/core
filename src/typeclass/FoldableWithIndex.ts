@@ -67,8 +67,8 @@ export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G exten
  * @since 1.0.0
  */
 export const reduce = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
-): Foldable<F>["reduce"] => (b, f) => FoldableWithIndex.reduceWithIndex(b, f)
+  F: FoldableWithIndex<F, I>
+): Foldable<F>["reduce"] => (b, f) => F.reduceWithIndex(b, f)
 
 /**
  * Returns a default `reduceRight` implementation.
@@ -76,26 +76,26 @@ export const reduce = <F extends TypeLambda, I>(
  * @since 1.0.0
  */
 export const reduceRight = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
-): Foldable<F>["reduceRight"] => (b, f) => FoldableWithIndex.reduceRightWithIndex(b, f)
+  F: FoldableWithIndex<F, I>
+): Foldable<F>["reduceRight"] => (b, f) => F.reduceRightWithIndex(b, f)
 
 /**
  * @since 1.0.0
  */
 export const toReadonlyArray = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
+  F: FoldableWithIndex<F, I>
 ): <S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => ReadonlyArray<A> =>
-  toReadonlyArrayWith(FoldableWithIndex)(identity)
+  toReadonlyArrayWith(F)(identity)
 
 /**
  * @since 1.0.0
  */
 export const toReadonlyArrayWith = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
+  F: FoldableWithIndex<F, I>
 ) =>
   <A, B>(f: (a: A, i: I) => B) =>
     <S, R, O, E>(self: Kind<F, S, R, O, E, A>): ReadonlyArray<B> =>
-      FoldableWithIndex.reduceWithIndex<A, Array<B>>([], (out, a, i) => {
+      F.reduceWithIndex<A, Array<B>>([], (out, a, i) => {
         out.push(f(a, i))
         return out
       })(self)
@@ -104,9 +104,9 @@ export const toReadonlyArrayWith = <F extends TypeLambda, I>(
  * @since 1.0.0
  */
 export const foldMapWithIndex = <F extends TypeLambda, I>(
-  FoldableWithIndex: FoldableWithIndex<F, I>
+  F: FoldableWithIndex<F, I>
 ) =>
   <M>(Monoid: Monoid<M>) =>
     <A>(f: (a: A, i: I) => M) =>
       <S, R, O, E>(self: Kind<F, S, R, O, E, A>): M =>
-        Monoid.combineAll(toReadonlyArrayWith(FoldableWithIndex)(f)(self))
+        Monoid.combineAll(toReadonlyArrayWith(F)(f)(self))

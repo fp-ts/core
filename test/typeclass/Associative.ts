@@ -7,79 +7,79 @@ import * as U from "../util"
 
 describe("Associative", () => {
   it("reverse", () => {
-    const S = _.reverse(string.Associative)
-    U.deepStrictEqual(pipe("a", S.combine("b")), "ba")
-    U.deepStrictEqual(pipe("a", S.combineMany([])), "a")
-    U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "ba")
-    U.deepStrictEqual(pipe("a", S.combineMany(["b", "c", "d"])), "dcba")
+    const A = _.reverse(string.Associative)
+    U.deepStrictEqual(pipe("a", A.combine("b")), "ba")
+    U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
+    U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "ba")
+    U.deepStrictEqual(pipe("a", A.combineMany(["b", "c", "d"])), "dcba")
   })
 
   it("constant", () => {
-    const S = _.constant("-")
-    U.deepStrictEqual(pipe("a", S.combine("b")), "-")
-    U.deepStrictEqual(pipe("a", S.combineMany([])), "-")
-    U.deepStrictEqual(pipe("a", S.combineMany(["b", "c", "d"])), "-")
+    const A = _.constant("-")
+    U.deepStrictEqual(pipe("a", A.combine("b")), "-")
+    U.deepStrictEqual(pipe("a", A.combineMany([])), "-")
+    U.deepStrictEqual(pipe("a", A.combineMany(["b", "c", "d"])), "-")
   })
 
   it("intercalate", () => {
-    const S = pipe(string.Associative, _.intercalate("|"))
-    U.deepStrictEqual(pipe("a", S.combine("b")), "a|b")
-    U.deepStrictEqual(pipe("a", S.combineMany([])), "a")
-    U.deepStrictEqual(pipe("a", S.combineMany(["b"])), "a|b")
-    U.deepStrictEqual(pipe("a", S.combineMany(["b", "c", "d"])), "a|b|c|d")
+    const A = pipe(string.Associative, _.intercalate("|"))
+    U.deepStrictEqual(pipe("a", A.combine("b")), "a|b")
+    U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
+    U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "a|b")
+    U.deepStrictEqual(pipe("a", A.combineMany(["b", "c", "d"])), "a|b|c|d")
   })
 
   describe("min", () => {
     it("should return the minimum", () => {
-      const S = _.min(number.TotalOrder)
-      U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
-      U.deepStrictEqual(pipe(1, S.combineMany([3, 2])), 1)
+      const A = _.min(number.TotalOrder)
+      U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
+      U.deepStrictEqual(pipe(1, A.combineMany([3, 2])), 1)
     })
 
     it("should return the last minimum", () => {
       type Item = { a: number }
-      const S = _.min(pipe(number.TotalOrder, totalOrder.contramap((_: Item) => _.a)))
+      const A = _.min(pipe(number.TotalOrder, totalOrder.contramap((_: Item) => _.a)))
       const item: Item = { a: 1 }
-      U.strictEqual(pipe({ a: 2 }, S.combineMany([{ a: 1 }, item])), item)
-      U.strictEqual(pipe(item, S.combineMany([])), item)
+      U.strictEqual(pipe({ a: 2 }, A.combineMany([{ a: 1 }, item])), item)
+      U.strictEqual(pipe(item, A.combineMany([])), item)
     })
   })
 
   describe("max", () => {
     it("should return the maximum", () => {
-      const S = _.max(number.TotalOrder)
-      U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
-      U.deepStrictEqual(pipe(1, S.combineMany([3, 2])), 3)
+      const A = _.max(number.TotalOrder)
+      U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
+      U.deepStrictEqual(pipe(1, A.combineMany([3, 2])), 3)
     })
 
     it("should return the last minimum", () => {
       type Item = { a: number }
-      const S = _.max(pipe(number.TotalOrder, totalOrder.contramap((_: Item) => _.a)))
+      const A = _.max(pipe(number.TotalOrder, totalOrder.contramap((_: Item) => _.a)))
       const item: Item = { a: 2 }
-      U.strictEqual(pipe({ a: 1 }, S.combineMany([{ a: 2 }, item])), item)
-      U.strictEqual(pipe(item, S.combineMany([])), item)
+      U.strictEqual(pipe({ a: 1 }, A.combineMany([{ a: 2 }, item])), item)
+      U.strictEqual(pipe(item, A.combineMany([])), item)
     })
   })
 
   it("struct", () => {
-    const S = _.struct({
+    const A = _.struct({
       name: string.Associative,
       age: number.AssociativeSum
     })
-    U.deepStrictEqual(pipe({ name: "a", age: 10 }, S.combine({ name: "b", age: 20 })), {
+    U.deepStrictEqual(pipe({ name: "a", age: 10 }, A.combine({ name: "b", age: 20 })), {
       name: "ab",
       age: 30
     })
-    U.deepStrictEqual(pipe({ name: "a", age: 10 }, S.combineMany([])), {
+    U.deepStrictEqual(pipe({ name: "a", age: 10 }, A.combineMany([])), {
       name: "a",
       age: 10
     })
-    U.deepStrictEqual(pipe({ name: "a", age: 10 }, S.combineMany([{ name: "b", age: 20 }])), {
+    U.deepStrictEqual(pipe({ name: "a", age: 10 }, A.combineMany([{ name: "b", age: 20 }])), {
       name: "ab",
       age: 30
     })
     U.deepStrictEqual(
-      pipe({ name: "a", age: 10 }, S.combineMany([{ name: "b", age: 20 }, { name: "c", age: 30 }])),
+      pipe({ name: "a", age: 10 }, A.combineMany([{ name: "b", age: 20 }, { name: "c", age: 30 }])),
       {
         name: "abc",
         age: 60
@@ -88,28 +88,28 @@ describe("Associative", () => {
   })
 
   it("tuple", () => {
-    const S = _.tuple(
+    const A = _.tuple(
       string.Associative,
       number.AssociativeSum
     )
-    U.deepStrictEqual(pipe(["a", 10], S.combine(["b", 20])), ["ab", 30])
-    U.deepStrictEqual(pipe(["a", 10], S.combineMany([])), ["a", 10])
-    U.deepStrictEqual(pipe(["a", 10], S.combineMany([["b", 20]])), ["ab", 30])
-    U.deepStrictEqual(pipe(["a", 10], S.combineMany([["b", 20], ["c", 30]])), ["abc", 60])
+    U.deepStrictEqual(pipe(["a", 10], A.combine(["b", 20])), ["ab", 30])
+    U.deepStrictEqual(pipe(["a", 10], A.combineMany([])), ["a", 10])
+    U.deepStrictEqual(pipe(["a", 10], A.combineMany([["b", 20]])), ["ab", 30])
+    U.deepStrictEqual(pipe(["a", 10], A.combineMany([["b", 20], ["c", 30]])), ["abc", 60])
   })
 
   it("first", () => {
-    const S = _.first<number>()
-    U.deepStrictEqual(pipe(1, S.combine(2)), 1)
-    U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
-    U.deepStrictEqual(pipe(1, S.combineMany([2, 3, 4, 5, 6])), 1)
+    const A = _.first<number>()
+    U.deepStrictEqual(pipe(1, A.combine(2)), 1)
+    U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
+    U.deepStrictEqual(pipe(1, A.combineMany([2, 3, 4, 5, 6])), 1)
   })
 
   it("last", () => {
-    const S = _.last<number>()
-    U.deepStrictEqual(pipe(1, S.combine(2)), 2)
-    U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
-    U.deepStrictEqual(pipe(1, S.combineMany([2, 3, 4, 5, 6])), 6)
+    const A = _.last<number>()
+    U.deepStrictEqual(pipe(1, A.combine(2)), 2)
+    U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
+    U.deepStrictEqual(pipe(1, A.combineMany([2, 3, 4, 5, 6])), 6)
   })
 
   it("imap", () => {
@@ -132,20 +132,20 @@ describe("Associative", () => {
   })
 
   it("product", () => {
-    const S = pipe(
+    const A = pipe(
       string.Associative,
-      _.product(number.AssociativeSum),
+      _.SemigroupalProduct.product(number.AssociativeSum),
       _.SemigroupalProduct.product(number.AssociativeMultiply),
       _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
     )
-    U.deepStrictEqual(pipe(["a", 2, 3], S.combine(["b", 3, 4])), ["ab", 5, 12])
+    U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
   })
 
   it("productMany", () => {
-    const S = pipe(
+    const A = pipe(
       string.Associative,
       _.SemigroupalProduct.productMany([string.Associative, string.Associative])
     )
-    U.deepStrictEqual(pipe(["a", "b", "c"], S.combine(["d", "e", "f"])), ["ad", "be", "cf"])
+    U.deepStrictEqual(pipe(["a", "b", "c"], A.combine(["d", "e", "f"])), ["ad", "be", "cf"])
   })
 })
