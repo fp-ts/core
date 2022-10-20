@@ -17,10 +17,10 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 |                           | member(s)                                     | extends                                 |
 | ------------------------- | --------------------------------------------- | --------------------------------------- |
-| **Alt**                   | `coproductMany`                               | **CoproductSemigroupal**, **Covariant** |
+| **Alt**                   | `coproductMany`                               | **SemigroupalCoproduct**, **Covariant** |
 | **Alternative**           | `zero`<br>`coproductAll`                      | **Coproduct**                           |
 | **Applicative**           | `productAll`                                  | **Product**, **Of**                     |
-| **Apply**                 | `productMany`                                 | **ProductSemigroupal**, **Covariant**   |
+| **Apply**                 | `productMany`                                 | **SemigroupalProduct**, **Covariant**   |
 | **Associative**           | `combine`<br>`combineMany`                    |                                         |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
@@ -44,7 +44,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
 | **SemigroupalCoproduct**  | `coproduct`                                   |                                         |
-| **SemigroupalProduct**    | `product`                                     |                                         |
+| **SemigroupalProduct**    | `product`<br>`productMany`                    |                                         |
 | **TotalOrder**            | `compare`                                     |                                         |
 | **Traversable**           | `traverse`                                    |                                         |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                         |

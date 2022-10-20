@@ -140,4 +140,12 @@ describe("Associative", () => {
     )
     U.deepStrictEqual(pipe(["a", 2, 3], S.combine(["b", 3, 4])), ["ab", 5, 12])
   })
+
+  it("productMany", () => {
+    const S = pipe(
+      string.Associative,
+      _.SemigroupalProduct.productMany([string.Associative, string.Associative])
+    )
+    U.deepStrictEqual(pipe(["a", "b", "c"], S.combine(["d", "e", "f"])), ["ad", "be", "cf"])
+  })
 })
