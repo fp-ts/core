@@ -111,4 +111,23 @@ describe("Associative", () => {
     U.deepStrictEqual(pipe(1, S.combineMany([])), 1)
     U.deepStrictEqual(pipe(1, S.combineMany([2, 3, 4, 5, 6])), 6)
   })
+
+  it("imap", () => {
+    const imap = _.imap
+    const To = imap((s: string) => [s], ([s]) => s)(string.Associative)
+    U.deepStrictEqual(pipe(["a"], To.combine(["b"])), ["ab"])
+    U.deepStrictEqual(pipe(["a"], To.combineMany([])), ["a"])
+    U.deepStrictEqual(pipe(["a"], To.combineMany([["b"]])), ["ab"])
+    U.deepStrictEqual(pipe(["a"], To.combineMany([["b"], ["c"]])), ["abc"])
+
+    U.deepStrictEqual(
+      pipe(
+        ["a"],
+        _.Invariant.imap((s: string) => [s], ([s]) => s)(string.Associative).combineMany([["b"], [
+          "c"
+        ]])
+      ),
+      ["abc"]
+    )
+  })
 })
