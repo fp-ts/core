@@ -12,7 +12,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 export interface CovariantWithIndex<F extends TypeLambda, I> extends TypeClass<F> {
   readonly mapWithIndex: <A, B>(
     f: (a: A, i: I) => B
-  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 
 /**
@@ -25,9 +25,9 @@ export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeL
   G: CovariantWithIndex<G, J>
 ): (<A, B>(
   f: (a: A, ij: readonly [I, J]) => B
-) => <FS, FR, FO, FE, GS, GR, GO, GE>(
-  self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) =>
+) => <FR, FO, FE, GR, GO, GE>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>) =>
   (f) => F.mapWithIndex((ga, i) => pipe(ga, G.mapWithIndex((a, j) => f(a, [i, j]))))
 
 /**

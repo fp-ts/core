@@ -22,19 +22,19 @@ import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
 export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T> {
   readonly traversePartitionMap: <F extends TypeLambda>(
     Applicative: Applicative<F>
-  ) => <A, S, R, O, E, B, C>(
-    f: (a: A) => Kind<F, S, R, O, E, Either<B, C>>
-  ) => <TS, TR, TO, TE>(
-    self: Kind<T, TS, TR, TO, TE, A>
-  ) => Kind<F, S, R, O, E, readonly [Kind<T, TS, TR, TO, TE, B>, Kind<T, TS, TR, TO, TE, C>]>
+  ) => <A, R, O, E, B, C>(
+    f: (a: A) => Kind<F, R, O, E, Either<B, C>>
+  ) => <TR, TO, TE>(
+    self: Kind<T, TR, TO, TE, A>
+  ) => Kind<F, R, O, E, readonly [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>
 
   readonly traverseFilterMap: <F extends TypeLambda>(
     Applicative: Applicative<F>
-  ) => <A, S, R, O, E, B>(
-    f: (a: A) => Kind<F, S, R, O, E, Option<B>>
-  ) => <TS, TR, TO, TE>(
-    self: Kind<T, TS, TR, TO, TE, A>
-  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>
+  ) => <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, Option<B>>
+  ) => <TR, TO, TE>(
+    self: Kind<T, TR, TO, TE, A>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 }
 
 /**
@@ -72,11 +72,11 @@ export const traverseFilter = <T extends TypeLambda>(
 ) =>
   <F extends TypeLambda>(
     Applicative: Applicative<F>
-  ): (<B extends A, S, R, O, E, A = B>(
-    predicate: (a: A) => Kind<F, S, R, O, E, boolean>
-  ) => <TS, TR, TO, TE>(
-    self: Kind<T, TS, TR, TO, TE, B>
-  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>) =>
+  ): (<B extends A, R, O, E, A = B>(
+    predicate: (a: A) => Kind<F, R, O, E, boolean>
+  ) => <TR, TO, TE>(
+    self: Kind<T, TR, TO, TE, B>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>) =>
     (predicate) =>
       F.traverseFilterMap(Applicative)(b =>
         pipe(
@@ -93,11 +93,11 @@ export const traversePartition = <T extends TypeLambda>(
 ) =>
   <F extends TypeLambda>(
     Applicative: Applicative<F>
-  ): (<B extends A, S, R, O, E, A = B>(
-    predicate: (a: A) => Kind<F, S, R, O, E, boolean>
-  ) => <TS, TR, TO, TE>(
-    self: Kind<T, TS, TR, TO, TE, B>
-  ) => Kind<F, S, R, O, E, readonly [Kind<T, TS, TR, TO, TE, B>, Kind<T, TS, TR, TO, TE, B>]>) =>
+  ): (<B extends A, R, O, E, A = B>(
+    predicate: (a: A) => Kind<F, R, O, E, boolean>
+  ) => <TR, TO, TE>(
+    self: Kind<T, TR, TO, TE, B>
+  ) => Kind<F, R, O, E, readonly [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, B>]>) =>
     (predicate) =>
       F.traversePartitionMap(Applicative)(b =>
         pipe(

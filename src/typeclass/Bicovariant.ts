@@ -13,7 +13,7 @@ export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
   readonly bimap: <E1, E2, A, B>(
     f: (e: E1) => E2,
     g: (a: A) => B
-  ) => <S, R, O>(self: Kind<F, S, R, O, E1, A>) => Kind<F, S, R, O, E2, B>
+  ) => <R, O>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, B>
 }
 
 /**
@@ -28,10 +28,9 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
   <GE1, GE2, A, B>(
     f: (e: GE1) => GE2,
     g: (a: A) => B
-  ): (<FS, FR, FO, FE, GS, GR, GO>(
-    self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE1, A>>
-  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE2, B>>) =>
-    CovariantF.map(BicovariantG.bimap(f, g))
+  ): (<FR, FO, FE, GR, GO>(
+    self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE1, A>>
+  ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE2, B>>) => CovariantF.map(BicovariantG.bimap(f, g))
 
 /**
  * @since 1.0.0
@@ -40,8 +39,8 @@ export const mapLeft = <F extends TypeLambda>(
   F: Bicovariant<F>
 ): (<E1, E2>(
   f: (e: E1) => E2
-) => <S, R, O, A>(self: Kind<F, S, R, O, E1, A>) => Kind<F, S, R, O, E2, A>) =>
-  <E, G>(f: (e: E) => G): (<S, R, O, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, G, A>) =>
+) => <R, O, A>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, A>) =>
+  <E, G>(f: (e: E) => G): (<R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>) =>
     F.bimap(f, identity)
 
 /**
@@ -52,4 +51,4 @@ export const mapLeft = <F extends TypeLambda>(
 export const map = <F extends TypeLambda>(F: Bicovariant<F>): Covariant<F>["map"] =>
   <A, B>(
     f: (a: A) => B
-  ): (<S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>) => F.bimap(identity, f)
+  ): (<R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>) => F.bimap(identity, f)

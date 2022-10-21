@@ -9,9 +9,9 @@ import { pipe } from "@fp-ts/core/internal/Function"
  * @since 1.0.0
  */
 export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
-  readonly flatMap: <A, S, R2, O2, E2, B>(
-    f: (a: A) => Kind<F, S, R2, O2, E2, B>
-  ) => <R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, B>
+  readonly flatMap: <A, R2, O2, E2, B>(
+    f: (a: A) => Kind<F, R2, O2, E2, B>
+  ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
 }
 
 /**
@@ -21,20 +21,19 @@ export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
  * @since 1.0.0
  */
 export const andThen = <F extends TypeLambda>(F: FlatMap<F>) =>
-  <S, R2, O2, E2, A>(
-    that: Kind<F, S, R2, O2, E2, A>
+  <R2, O2, E2, A>(
+    that: Kind<F, R2, O2, E2, A>
   ): (<R1, O1, E1>(
-    self: Kind<F, S, R1, O1, E1, unknown>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => F.flatMap(() => that)
+    self: Kind<F, R1, O1, E1, unknown>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) => F.flatMap(() => that)
 
 /**
  * @since 1.0.0
  */
 export const composeKleisli = <F extends TypeLambda>(
   F: FlatMap<F>
-): <B, S, R2, O2, E2, C>(
-  bfc: (b: B) => Kind<F, S, R2, O2, E2, C>
+): <B, R2, O2, E2, C>(
+  bfc: (b: B) => Kind<F, R2, O2, E2, C>
 ) => <A, R1, O1, E1>(
-  afb: (a: A) => Kind<F, S, R1, O1, E1, B>
-) => (a: A) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, C> =>
-  bc => ab => a => pipe(ab(a), F.flatMap(bc))
+  afb: (a: A) => Kind<F, R1, O1, E1, B>
+) => (a: A) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => bc => ab => a => pipe(ab(a), F.flatMap(bc))

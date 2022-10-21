@@ -24,13 +24,13 @@ describe("NonEmptyApplicative", () => {
     const assertSameResult = <F extends TypeLambda>(
       NonEmptyApplicative: _.NonEmptyApplicative<F>
     ) =>
-      <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
-        (self: Kind<F, S, R, O, E, A>) => {
+      <S, R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
+        (self: Kind<F, R, O, E, A>) => {
           const ap = _.ap(NonEmptyApplicative)
-          const productManyFromAp = <S, R, O, E, A>(collection: Iterable<Kind<F, S, R, O, E, A>>) =>
+          const productManyFromAp = <S, R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
             (
-              self: Kind<F, S, R, O, E, A>
-            ): Kind<F, S, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
+              self: Kind<F, R, O, E, A>
+            ): Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
               const args = [self, ...Array.from(collection)]
               const len = args.length
               const f = getCurriedTupleConstructor(len)

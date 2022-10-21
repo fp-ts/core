@@ -210,4 +210,4 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambd
  * @since 1.0.0
  */
 export const Product: product.Product<SemigroupTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, () => constant(empty))
+  .fromNonEmptyProduct(NonEmptyProduct, constant(empty))

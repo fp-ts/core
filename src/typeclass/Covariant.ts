@@ -12,7 +12,7 @@ import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 export interface Covariant<F extends TypeLambda> extends TypeClass<F> {
   readonly map: <A, B>(
     f: (a: A) => B
-  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 
 /**
@@ -33,16 +33,16 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
   G: Covariant<G>
 ): (<A, B>(
   f: (a: A) => B
-) => <FS, FR, FO, FE, GS, GR, GO, GE>(
-  self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>) => f => F.map(G.map(f))
+) => <FR, FO, FE, GR, GO, GE>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>) => f => F.map(G.map(f))
 
 /**
  * @category mapping
  * @since 1.0.0
  */
 export const flap = <F extends TypeLambda>(F: Covariant<F>) =>
-  <A>(a: A): (<S, R, O, E, B>(self: Kind<F, S, R, O, E, (a: A) => B>) => Kind<F, S, R, O, E, B>) =>
+  <A>(a: A): (<R, O, E, B>(self: Kind<F, R, O, E, (a: A) => B>) => Kind<F, R, O, E, B>) =>
     F.map(f => f(a))
 
 /**
@@ -50,8 +50,7 @@ export const flap = <F extends TypeLambda>(F: Covariant<F>) =>
  * @since 1.0.0
  */
 export const as = <F extends TypeLambda>(F: Covariant<F>) =>
-  <B>(b: B): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, B>) =>
-    F.map(() => b)
+  <B>(b: B): (<R, O, E>(self: Kind<F, R, O, E, unknown>) => Kind<F, R, O, E, B>) => F.map(() => b)
 
 /**
  * @category mapping
@@ -59,8 +58,7 @@ export const as = <F extends TypeLambda>(F: Covariant<F>) =>
  */
 export const asUnit = <F extends TypeLambda>(
   F: Covariant<F>
-): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, readonly []>) =>
-  as(F)(empty)
+): (<R, O, E>(self: Kind<F, R, O, E, unknown>) => Kind<F, R, O, E, readonly []>) => as(F)(empty)
 
 /**
  * @category do notation
@@ -69,18 +67,18 @@ export const asUnit = <F extends TypeLambda>(
 export const bindTo = <F extends TypeLambda>(F: Covariant<F>) =>
   <N extends string>(
     name: N
-  ): (<S, R, O, E, A>(
-    self: Kind<F, S, R, O, E, A>
-  ) => Kind<F, S, R, O, E, { readonly [K in N]: A }>) => F.map(a => ({ [name]: a } as any))
+  ): (<R, O, E, A>(
+    self: Kind<F, R, O, E, A>
+  ) => Kind<F, R, O, E, { readonly [K in N]: A }>) => F.map(a => ({ [name]: a } as any))
 
 const let_ = <F extends TypeLambda>(
   F: Covariant<F>
 ): (<N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <S, R, O, E>(
-  self: Kind<F, S, R, O, E, A>
-) => Kind<F, S, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
+) => <R, O, E>(
+  self: Kind<F, R, O, E, A>
+) => Kind<F, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
   (name, f) => F.map(a => Object.assign({}, a, { [name]: f(a) }) as any)
 
 export { let_ as let }
@@ -90,5 +88,4 @@ export { let_ as let }
  */
 export const tupled = <F extends TypeLambda>(
   F: Covariant<F>
-): (<S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, readonly [A]>) =>
-  F.map(a => [a])
+): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) => F.map(a => [a])

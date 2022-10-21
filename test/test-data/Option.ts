@@ -490,9 +490,9 @@ export const partitionMap: <A, B, C>(
  */
 export const traverse: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
-) => <A, S, R, O, E, B>(
-  f: (a: A) => Kind<F, S, R, O, E, B>
-) => (ta: Option<A>) => Kind<F, S, R, O, E, Option<B>> = (F) =>
+) => <A, R, O, E, B>(
+  f: (a: A) => Kind<F, R, O, E, B>
+) => (ta: Option<A>) => Kind<F, R, O, E, Option<B>> = (F) =>
   (f) => (ta) => isNone(ta) ? F.of(none) : pipe(f(ta.value), F.map(some))
 
 // -------------------------------------------------------------------------------------
@@ -676,7 +676,7 @@ export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<Option
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromNonEmptyAlternative(NonEmptyAlternative, () => none)
+  .fromNonEmptyAlternative(NonEmptyAlternative, none)
 
 /**
  * Lifts a binary function into `Option`.
@@ -839,8 +839,8 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
  */
 export const sequence: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
-) => <S, R, O, E, A>(fas: Option<Kind<F, S, R, O, E, A>>) => Kind<F, S, R, O, E, Option<A>> =
-  traversable.sequence(Traversable)
+) => <R, O, E, A>(fas: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>> = traversable
+  .sequence(Traversable)
 
 /**
  * @category filtering
@@ -848,9 +848,9 @@ export const sequence: <F extends TypeLambda>(
  */
 export const traverseFilterMap: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
-) => <A, S, R, O, E, B>(
-  f: (a: A) => Kind<F, S, R, O, E, Option<B>>
-) => (ta: Option<A>) => Kind<F, S, R, O, E, Option<B>> = traversableFilterable.traverseFilterMap(
+) => <A, R, O, E, B>(
+  f: (a: A) => Kind<F, R, O, E, Option<B>>
+) => (ta: Option<A>) => Kind<F, R, O, E, Option<B>> = traversableFilterable.traverseFilterMap(
   { ...Traversable, ...Compactable }
 )
 
@@ -860,9 +860,9 @@ export const traverseFilterMap: <F extends TypeLambda>(
  */
 export const traversePartitionMap: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
-) => <A, S, R, O, E, B, C>(
-  f: (a: A) => Kind<F, S, R, O, E, Either<B, C>>
-) => (wa: Option<A>) => Kind<F, S, R, O, E, readonly [Option<B>, Option<C>]> = traversableFilterable
+) => <A, R, O, E, B, C>(
+  f: (a: A) => Kind<F, R, O, E, Either<B, C>>
+) => (wa: Option<A>) => Kind<F, R, O, E, readonly [Option<B>, Option<C>]> = traversableFilterable
   .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
 
 /**
@@ -882,9 +882,9 @@ export const TraversableFilterable: traversableFilterable.TraversableFilterable<
  */
 export const traverseFilter: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
-) => <B extends A, S, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, S, R, O, E, boolean>
-) => (self: Option<B>) => Kind<F, S, R, O, E, Option<B>> = traversableFilterable.traverseFilter(
+) => <B extends A, R, O, E, A = B>(
+  predicate: (a: A) => Kind<F, R, O, E, boolean>
+) => (self: Option<B>) => Kind<F, R, O, E, Option<B>> = traversableFilterable.traverseFilter(
   TraversableFilterable
 )
 
@@ -894,10 +894,10 @@ export const traverseFilter: <F extends TypeLambda>(
  */
 export const traversePartition: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
-) => <B extends A, S, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, S, R, O, E, boolean>
-) => (self: Option<B>) => Kind<F, S, R, O, E, readonly [Option<B>, Option<B>]> =
-  traversableFilterable.traversePartition(TraversableFilterable)
+) => <B extends A, R, O, E, A = B>(
+  predicate: (a: A) => Kind<F, R, O, E, boolean>
+) => (self: Option<B>) => Kind<F, R, O, E, readonly [Option<B>, Option<B>]> = traversableFilterable
+  .traversePartition(TraversableFilterable)
 
 // TODO
 // /**

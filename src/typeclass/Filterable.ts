@@ -20,7 +20,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
   readonly filterMap: <A, B>(
     f: (a: A) => Option<B>
-  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 
 /**
@@ -34,9 +34,9 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
 ) =>
   <A, B>(
     f: (a: A) => Option<B>
-  ): <FS, FR, FO, FE, GS, GR, GO, GE>(
-    self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-  ) => Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>> => F.map(G.filterMap(f))
+  ): <FR, FO, FE, GR, GO, GE>(
+    self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+  ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>> => F.map(G.filterMap(f))
 
 /**
  * @since 1.0.0
@@ -44,16 +44,16 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
 export const filter: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <S, R, O, E>(
-    self: Kind<F, S, R, O, E, C>
-  ) => Kind<F, S, R, O, E, B>
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <R, O, E>(
+    self: Kind<F, R, O, E, C>
+  ) => Kind<F, R, O, E, B>
   <B extends A, A = B>(
     predicate: Predicate<A>
-  ): <S, R, O, E>(self: Kind<F, S, R, O, E, B>) => Kind<F, S, R, O, E, B>
+  ): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
 } = <F extends TypeLambda>(Filterable: Filterable<F>) =>
   <B extends A, A = B>(
     predicate: Predicate<A>
-  ): (<S, R, O, E>(self: Kind<F, S, R, O, E, B>) => Kind<F, S, R, O, E, B>) =>
+  ): (<R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>) =>
     Filterable.filterMap(b => (predicate(b) ? option.some(b) : option.none))
 
 /**
@@ -61,9 +61,9 @@ export const filter: <F extends TypeLambda>(
  */
 export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
   <A, B, C>(f: (a: A) => Either<B, C>) =>
-    <S, R, O, E>(
-      self: Kind<F, S, R, O, E, A>
-    ): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
+    <R, O, E>(
+      self: Kind<F, R, O, E, A>
+    ): readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>] => {
       return [
         pipe(self, F.filterMap(a => either.getLeft(f(a)))),
         pipe(self, F.filterMap(a => either.getRight(f(a))))
@@ -76,18 +76,18 @@ export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
 export const partition: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <S, R, O, E>(
-    self: Kind<F, S, R, O, E, C>
-  ) => readonly [Kind<F, S, R, O, E, C>, Kind<F, S, R, O, E, B>]
-  <B extends A, A = B>(predicate: Predicate<A>): <S, R, O, E>(
-    self: Kind<F, S, R, O, E, B>
-  ) => readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, B>]
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <R, O, E>(
+    self: Kind<F, R, O, E, C>
+  ) => readonly [Kind<F, R, O, E, C>, Kind<F, R, O, E, B>]
+  <B extends A, A = B>(predicate: Predicate<A>): <R, O, E>(
+    self: Kind<F, R, O, E, B>
+  ) => readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
 } = <F extends TypeLambda>(Filterable: Filterable<F>) => {
   const partitionMap_ = partitionMap(Filterable)
   return <B extends A, A = B>(
     predicate: Predicate<A>
-  ): (<S, R, O, E>(
-    self: Kind<F, S, R, O, E, B>
-  ) => readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, B>]) =>
+  ): (<R, O, E>(
+    self: Kind<F, R, O, E, B>
+  ) => readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]) =>
     partitionMap_(b => (predicate(b) ? either.right(b) : either.left(b)))
 }

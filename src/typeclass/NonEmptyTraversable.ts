@@ -14,11 +14,11 @@ import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicat
 export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> {
   readonly nonEmptyTraverse: <F extends TypeLambda>(
     NonEmptyApplicative: NonEmptyApplicative<F>
-  ) => <A, S, R, O, E, B>(
-    f: (a: A) => Kind<F, S, R, O, E, B>
-  ) => <TS, TR, TO, TE>(
-    self: Kind<T, TS, TR, TO, TE, A>
-  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>
+  ) => <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ) => <TR, TO, TE>(
+    self: Kind<T, TR, TO, TE, A>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 }
 
 /**
@@ -31,11 +31,11 @@ export const nonEmptyTraverseComposition = <F extends TypeLambda, G extends Type
   G: NonEmptyTraversable<G>
 ) =>
   <H extends TypeLambda>(NonEmptyApplicative: NonEmptyApplicative<H>) =>
-    <A, S, R, O, E, B>(
-      f: (a: A) => Kind<H, S, R, O, E, B>
-    ): (<FS, FR, FO, FE, GS, GR, GO, GE>(
-      fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-    ) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>) =>
+    <A, R, O, E, B>(
+      f: (a: A) => Kind<H, R, O, E, B>
+    ): (<FR, FO, FE, GR, GO, GE>(
+      fga: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+    ) => Kind<H, R, O, E, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>
       F.nonEmptyTraverse(NonEmptyApplicative)(G.nonEmptyTraverse(NonEmptyApplicative)(f))
 
 /**
@@ -44,7 +44,7 @@ export const nonEmptyTraverseComposition = <F extends TypeLambda, G extends Type
 export const nonEmptySequence = <T extends TypeLambda>(T: NonEmptyTraversable<T>) =>
   <F extends TypeLambda>(
     NonEmptyApplicative: NonEmptyApplicative<F>
-  ): (<TS, TR, TO, TE, S, R, O, E, A>(
-    self: Kind<T, TS, TR, TO, TE, Kind<F, S, R, O, E, A>>
-  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, A>>) =>
+  ): (<TR, TO, TE, R, O, E, A>(
+    self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>) =>
     T.nonEmptyTraverse(NonEmptyApplicative)(identity)
