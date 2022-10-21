@@ -6,6 +6,7 @@ import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import type { SemigroupalProduct } from "@fp-ts/core/typeclass/SemigroupalProduct"
+import * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 
 /**
  * @category type class
@@ -19,24 +20,11 @@ export interface Apply<F extends TypeLambda> extends SemigroupalProduct<F>, Cova
  */
 export const fromCovariant = <F extends TypeLambda>(
   Covariant: Covariant<F>,
-  product: Apply<F>["product"]
+  product: SemigroupalProduct<F>["product"]
 ): Apply<F> => {
   return {
     ...Covariant,
-    product,
-    productMany: <S, R, O, E, A>(
-      collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) =>
-      (self: Kind<F, S, R, O, E, A>) => {
-        let out: Kind<F, S, R, O, E, [A, ...Array<A>]> = pipe(
-          self,
-          Covariant.map(a => [a])
-        )
-        for (const fa of collection) {
-          out = pipe(out, product(fa), Covariant.map(([[head, ...tail], a]) => [head, ...tail, a]))
-        }
-        return out
-      }
+    ...semigroupalProduct.fromCovariant(Covariant, product)
   }
 }
 

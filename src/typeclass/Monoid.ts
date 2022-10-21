@@ -18,7 +18,7 @@ export interface Monoid<A> extends Semigroup<A> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromSemigroup = <A>(S: Semigroup<A>, empty: A): Monoid<A> => ({
+export const fromSemigroup = <A>(S: Semigroup<A>, empty: Monoid<A>["empty"]): Monoid<A> => ({
   ...S,
   empty,
   combineAll: collection => S.combineMany(collection)(empty)

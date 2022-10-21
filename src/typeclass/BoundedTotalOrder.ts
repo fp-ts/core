@@ -28,8 +28,8 @@ export interface BoundedTotalOrderTypeLambda extends TypeLambda {
  */
 export const fromTotalOrder = <A>(
   TotalOrder: TotalOrder<A>,
-  minimum: A,
-  maximum: A
+  minimum: BoundedTotalOrder<A>["minimum"],
+  maximum: BoundedTotalOrder<A>["maximum"]
 ): BoundedTotalOrder<A> => ({
   ...TotalOrder,
   maximum,
