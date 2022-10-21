@@ -37,6 +37,7 @@ import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroupalCoproduct from "@fp-ts/core/typeclass/SemigroupalCoproduct"
 import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
@@ -649,6 +650,8 @@ export const Apply: apply.Apply<OptionTypeLambda> = {
 const coproduct = <B>(
   that: Option<B>
 ) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
+
+export const SemigroupalCoproduct = semigroupalCoproduct.fromCoproduct<OptionTypeLambda>(coproduct)
 
 export const coproductMany = <A>(
   collection: Iterable<Option<A>>
