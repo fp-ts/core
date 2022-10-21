@@ -20,7 +20,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Alt**                   |                                               | **SemigroupalCoproduct**, **Covariant** |
 | **Alternative**           |                                               | **MonoidalCoproduct**, **Covariant**    |
 | **Applicative**           |                                               | **MonoidalProduct**, **Pointed**        |
-| **Apply**                 | `productMany`                                 | **SemigroupalProduct**, **Covariant**   |
+| **Apply**                 |                                               | **SemigroupalProduct**, **Covariant**   |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
 | **Category**              | `identity`                                    | **Composable**                          |
