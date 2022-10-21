@@ -3,6 +3,7 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
+import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 
 /**
@@ -31,7 +32,7 @@ export const fromNonEmptyProduct = <F extends TypeLambda>(
     productAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
     ) => {
-      const fas = Array.from(collection)
+      const fas = fromIterable(collection)
       return isNonEmpty(fas) ? F.productMany(tail(fas))(head(fas)) : unit<S>()
     }
   }
