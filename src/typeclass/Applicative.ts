@@ -23,5 +23,5 @@ export const liftMonoid = <F extends TypeLambda>(F: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
     monoid.fromSemigroup(
       apply.liftSemigroup(F)<A, S, R, O, E>(Monoid),
-      F.of(Monoid.unit)
+      F.of(Monoid.empty)
     )

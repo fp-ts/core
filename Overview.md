@@ -37,7 +37,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **FoldableWithIndex**     | `reduceWithIndex`<br>`reduceRightWithIndex`   |                                         |
 | **Invariant**             | `imap`                                        |                                         |
 | **Monad**                 |                                               | **Pointed**, **FlatMap**                |
-| **Monoid**                | `unit`<br>`combineAll`                        | **Semigroup**                           |
+| **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                           |
 | **MonoidalCoproduct**     | `zero`<br>`coproductAll`                      |                                         |
 | **MonoidalProduct**       | `unit`<br>`productAll`                        |                                         |
 | **Of**                    | `of`                                          |                                         |
@@ -63,7 +63,6 @@ digraph G {
     "Apply" -> "SemigroupalProduct"
     "Apply" -> "Covariant"
     "BoundedTotalOrder" -> "TotalOrder"
-    "Category" -> "Composable"
     "Chainable" -> "Covariant"
     "Chainable" -> "FlatMap"
     "Comonad" -> "Extendable"
