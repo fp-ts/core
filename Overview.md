@@ -50,6 +50,7 @@ digraph ConcreteTypes {
 | **NonEmptyApplicative**   |                                               | **NonEmptyProduct**, **Covariant**   |
 | **NonEmptyCoproduct**     | `coproduct`<br>`coproductMany`                |                                      |
 | **NonEmptyProduct**       | `product`<br>`productMany`                    |                                      |
+| **NonEmptyTraversable**   | `nonEmptyTraverse`                            |                                      |
 | **Of**                    | `of`                                          |                                      |
 | **Pointed**               |                                               | **Covariant**, **Of**                |
 | **Product**               | `unit`<br>`productAll`                        |                                      |
