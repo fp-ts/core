@@ -626,8 +626,16 @@ export const product = <B>(
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<OptionTypeLambda> = {
-  map,
+export const Invariant: invariant.Invariant<OptionTypeLambda> = {
+  imap: covariant.imap(Covariant)
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> = {
+  imap: Invariant.imap,
   product,
   productMany: <A>(
     others: Iterable<Option<A>>
@@ -645,6 +653,15 @@ export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<Option
       }
       return some(res)
     }
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<OptionTypeLambda> = {
+  ...Covariant,
+  ...NonEmptyProduct
 }
 
 const coproduct = <B>(
@@ -1055,35 +1072,3 @@ export const productFlatten: <B>(
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> =
   nonEmptyApplicative
     .productFlatten(NonEmptyApplicative)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  imap: covariant.imap(Covariant)
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> = {
-  product,
-  productMany: <A>(
-    others: Iterable<Option<A>>
-  ) =>
-    (start: Option<A>): Option<[A, ...Array<A>]> => {
-      if (isNone(start)) {
-        return none
-      }
-      const res: [A, ...Array<A>] = [start.value]
-      for (const o of others) {
-        if (isNone(o)) {
-          return none
-        }
-        res.push(o.value)
-      }
-      return some(res)
-    }
-}

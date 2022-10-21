@@ -4,6 +4,7 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
+import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
@@ -25,6 +26,7 @@ export const fromCovariant = <F extends TypeLambda>(
 ): NonEmptyApplicative<F> => {
   return {
     ...Covariant,
+    imap: covariant.imap(Covariant),
     product,
     productMany: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>

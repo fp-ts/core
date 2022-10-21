@@ -48,7 +48,7 @@ digraph ConcreteTypes {
 | **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                                |
 | **NonEmptyAlternative**   |                                               | **NonEmptyCoproduct**, **Covariant**         |
 | **NonEmptyApplicative**   |                                               | **NonEmptyProduct**, **Covariant**           |
-| **NonEmptyCoproduct**     | `coproduct`<br>`coproductMany`                |                                              |
+| **NonEmptyCoproduct**     | `coproduct`<br>`coproductMany`                | **Invariant**                                |
 | **NonEmptyProduct**       | `product`<br>`productMany`                    |                                              |
 | **NonEmptyTraversable**   | `nonEmptyTraverse`                            |                                              |
 | **Of**                    | `of`                                          |                                              |
@@ -82,6 +82,7 @@ digraph ParameterizedTypes {
     "Pointed" -> "Covariant"
     "Product" -> "NonEmptyProduct"
     "Coproduct" -> "NonEmptyCoproduct"
+    "NonEmptyProduct" -> "Invariant"
 }
 ```
 

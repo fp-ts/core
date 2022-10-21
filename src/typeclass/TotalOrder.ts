@@ -133,6 +133,7 @@ export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
  * @since 1.0.0
  */
 export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<TotalOrderTypeLambda> = {
+  ...Invariant,
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }
