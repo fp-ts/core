@@ -9,7 +9,7 @@ import type { SemigroupalProduct } from "@fp-ts/core/typeclass/SemigroupalProduc
  * @since 1.0.0
  */
 export interface MonoidalProduct<F extends TypeLambda> extends SemigroupalProduct<F> {
-  readonly unit: <S>() => Kind<F, S, unknown, never, never, void>
+  readonly unit: <S>() => Kind<F, S, unknown, never, never, []>
 
   readonly productAll: <S, R, O, E, A>(
     collection: Iterable<Kind<F, S, R, O, E, A>>
@@ -29,6 +29,9 @@ export const fromSemigroupalProduct = <F extends TypeLambda>(
     unit,
     productAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => SemigroupalProduct.productMany(collection)(unit<S>())
+    ) => {
+      const fas = Array.from(collection)
+      return fas.length === 0 ? unit<S>() : SemigroupalProduct.productMany(fas.slice(1))(fas[0])
+    }
   }
 }

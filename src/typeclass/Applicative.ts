@@ -7,6 +7,7 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type { MonoidalProduct } from "@fp-ts/core/typeclass/MonoidalProduct"
 import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
+import { unit } from "@fp-ts/core/typeclass/Of"
 import type { Pointed } from "@fp-ts/core/typeclass/Pointed"
 
 /**
@@ -20,12 +21,11 @@ export interface Applicative<F extends TypeLambda> extends MonoidalProduct<F>, P
  */
 export const fromApply = <F extends TypeLambda>(
   Apply: apply.Apply<F>,
-  unit: MonoidalProduct<F>["unit"],
   of: Pointed<F>["of"]
 ): Applicative<F> => {
   return {
     ...Apply,
-    ...monoidalProduct.fromSemigroupalProduct(Apply, unit),
+    ...monoidalProduct.fromSemigroupalProduct(Apply, unit({ of })),
     of
   }
 }
