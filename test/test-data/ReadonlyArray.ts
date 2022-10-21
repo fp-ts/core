@@ -1,5 +1,6 @@
 import type { compactable, filterable } from "@fp-ts/core"
 import { filterableWithIndex, traversableFilterable } from "@fp-ts/core"
+import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
@@ -13,8 +14,6 @@ import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
 import * as O from "./Option"
-
-export type NonEmptyReadonlyArray<A> = readonly [A, ...ReadonlyArray<A>]
 
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Target"]>

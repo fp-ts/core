@@ -50,6 +50,7 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 // -------------------------------------------------------------------------------------
 
 import * as either from "@fp-ts/core/data/Either"
+import * as nonEmptyReadonlyArray from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import * as option from "@fp-ts/core/data/Option"
 import * as predicate from "@fp-ts/core/data/Predicate"
 import * as refinement from "@fp-ts/core/data/Refinement"
@@ -180,6 +181,11 @@ export {
    * @since 1.0.0
    */
   monoidalProduct,
+  /**
+   * @category data types
+   * @since 1.0.0
+   */
+  nonEmptyReadonlyArray,
   /**
    * @category typeclass
    * @since 1.0.0
