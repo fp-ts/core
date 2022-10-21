@@ -25,7 +25,7 @@ export interface Applicative<F extends TypeLambda> extends Apply<F>, Of<F> {
  */
 export const liftMonoid = <F extends TypeLambda>(F: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
-    monoid.fromAssociative(
-      apply.liftAssociative(F)<A, S, R, O, E>(Monoid),
+    monoid.fromSemigroup(
+      apply.liftSemigroup(F)<A, S, R, O, E>(Monoid),
       F.of(Monoid.unit)
     )

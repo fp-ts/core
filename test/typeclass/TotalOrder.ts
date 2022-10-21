@@ -30,7 +30,7 @@ describe("TotalOrder", () => {
     U.deepStrictEqual(pipe(["b"], TotalOrder.compare(["a"])), 1)
   })
 
-  it("getAssociative", () => {
+  it("getSemigroup", () => {
     type T = readonly [number, string]
     const tuples: ReadonlyArray<T> = [
       [2, "c"],
@@ -38,7 +38,7 @@ describe("TotalOrder", () => {
       [2, "a"],
       [1, "c"]
     ]
-    const S = _.getAssociative<T>()
+    const S = _.getSemigroup<T>()
     const sortByFst = pipe(
       number.TotalOrder,
       _.contramap((x: T) => x[0])

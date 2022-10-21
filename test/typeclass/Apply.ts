@@ -163,9 +163,9 @@ describe("Apply", () => {
     U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3] as const))
   })
 
-  it("liftAssociative", () => {
-    const liftAssociative = _.liftAssociative(O.Apply)
-    const S = liftAssociative(string.Associative)
+  it("liftSemigroup", () => {
+    const liftSemigroup = _.liftSemigroup(O.Apply)
+    const S = liftSemigroup(string.Semigroup)
     U.deepStrictEqual(pipe(O.none, S.combine(O.none)), O.none)
     U.deepStrictEqual(pipe(O.none, S.combine(O.some("b"))), O.none)
     U.deepStrictEqual(pipe(O.some("a"), S.combine(O.none)), O.none)
