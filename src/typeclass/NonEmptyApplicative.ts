@@ -4,16 +4,16 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
+import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
+import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
-import type { SemigroupalProduct } from "@fp-ts/core/typeclass/SemigroupalProduct"
-import * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 
 /**
  * @category type class
  * @since 1.0.0
  */
 export interface NonEmptyApplicative<F extends TypeLambda>
-  extends SemigroupalProduct<F>, Covariant<F>
+  extends NonEmptyProduct<F>, Covariant<F>
 {}
 
 /**
@@ -22,11 +22,11 @@ export interface NonEmptyApplicative<F extends TypeLambda>
  */
 export const fromCovariant = <F extends TypeLambda>(
   Covariant: Covariant<F>,
-  product: SemigroupalProduct<F>["product"]
+  product: NonEmptyProduct<F>["product"]
 ): NonEmptyApplicative<F> => {
   return {
     ...Covariant,
-    ...semigroupalProduct.fromCovariant(Covariant, product)
+    ...nonEmptyProduct.fromCovariant(Covariant, product)
   }
 }
 

@@ -1,5 +1,5 @@
 /**
- * `TraversableFilterable` represents data structures which can be _partitioned_ with effects in some `Monoidal` functor.
+ * `TraversableFilterable` represents data structures which can be _partitioned_ with effects in some `Applicative` functor.
  *
  * @since 1.0.0
  */

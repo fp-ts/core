@@ -20,6 +20,7 @@ import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as comonad from "@fp-ts/core/typeclass/Comonad"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
+import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/typeclass/Extendable"
@@ -31,15 +32,14 @@ import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as monoidalCoproduct from "@fp-ts/core/typeclass/MonoidalCoproduct"
-import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
 import * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
+import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
+import * as product from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as semigroupalCoproduct from "@fp-ts/core/typeclass/SemigroupalCoproduct"
-import * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -97,6 +97,11 @@ export {
    * @since 1.0.0
    */
   contravariant,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  coproduct,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -165,22 +170,22 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  monoidalCoproduct,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  monoidalProduct,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   nonEmptyAlternative,
   /**
    * @category typeclass
    * @since 1.0.0
    */
   nonEmptyApplicative,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  nonEmptyCoproduct,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  nonEmptyProduct,
   /**
    * @category data types
    * @since 1.0.0
@@ -207,6 +212,11 @@ export {
    */
   predicate,
   /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  product,
+  /**
    * @category data types
    * @since 1.0.0
    */
@@ -216,16 +226,6 @@ export {
    * @since 1.0.0
    */
   semigroup,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  semigroupalCoproduct,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  semigroupalProduct,
   /**
    * @category typeclass
    * @since 1.0.0

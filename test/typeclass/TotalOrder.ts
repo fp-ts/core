@@ -190,7 +190,7 @@ describe("TotalOrder", () => {
   it("product", () => {
     const TO = pipe(
       string.TotalOrder,
-      _.SemigroupalProduct.product(number.TotalOrder)
+      _.NonEmptyProduct.product(number.TotalOrder)
     )
     U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 2])), -1)
     U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 1])), 0)
@@ -201,7 +201,7 @@ describe("TotalOrder", () => {
   it("productMany", () => {
     const TO = pipe(
       string.TotalOrder,
-      _.SemigroupalProduct.productMany([string.TotalOrder, string.TotalOrder])
+      _.NonEmptyProduct.productMany([string.TotalOrder, string.TotalOrder])
     )
     U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
     U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
@@ -211,7 +211,7 @@ describe("TotalOrder", () => {
 
   it("productAll", () => {
     const TO = pipe(
-      _.MonoidalProduct.productAll([string.TotalOrder, string.TotalOrder, string.TotalOrder])
+      _.Product.productAll([string.TotalOrder, string.TotalOrder, string.TotalOrder])
     )
     U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
     U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)

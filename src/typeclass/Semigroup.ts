@@ -24,7 +24,7 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
-import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
+import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
@@ -193,7 +193,7 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
   imap
 }
 
-export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<SemigroupTypeLambda> = {
+export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambda> = {
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }

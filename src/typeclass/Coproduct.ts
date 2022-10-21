@@ -2,13 +2,13 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { SemigroupalCoproduct } from "@fp-ts/core/typeclass/SemigroupalCoproduct"
+import type { NonEmptyCoproduct } from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface MonoidalCoproduct<F extends TypeLambda> extends SemigroupalCoproduct<F> {
+export interface Coproduct<F extends TypeLambda> extends NonEmptyCoproduct<F> {
   readonly zero: <S>() => Kind<F, S, unknown, never, never, never>
 
   readonly coproductAll: <S, R, O, E, A>(
@@ -19,15 +19,15 @@ export interface MonoidalCoproduct<F extends TypeLambda> extends SemigroupalCopr
 /**
  * @since 1.0.0
  */
-export const fromSemigroupalCoproduct = <F extends TypeLambda>(
-  SemigroupalCoproduct: SemigroupalCoproduct<F>,
-  zero: MonoidalCoproduct<F>["zero"]
-): MonoidalCoproduct<F> => {
+export const fromNonEmptyCoproduct = <F extends TypeLambda>(
+  F: NonEmptyCoproduct<F>,
+  zero: Coproduct<F>["zero"]
+): Coproduct<F> => {
   return {
-    ...SemigroupalCoproduct,
+    ...F,
     zero,
     coproductAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => SemigroupalCoproduct.coproductMany(collection)(zero<S>())
+    ) => F.coproductMany(collection)(zero<S>())
   }
 }
