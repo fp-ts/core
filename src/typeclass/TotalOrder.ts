@@ -7,9 +7,9 @@ import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
+import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
+import * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
-import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 
 /**
  * @category type class
@@ -132,7 +132,7 @@ export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<TotalOrderTypeLambda> = {
+export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<TotalOrderTypeLambda> = {
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }
@@ -141,8 +141,8 @@ export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<TotalOrde
  * @category instances
  * @since 1.0.0
  */
-export const MonoidalProduct: monoidalProduct.MonoidalProduct<TotalOrderTypeLambda> =
-  monoidalProduct.fromSemigroupalProduct(SemigroupalProduct, () => empty)
+export const Product: product.Product<TotalOrderTypeLambda> = product
+  .fromNonEmptyProduct(NonEmptyProduct, () => empty)
 
 /**
  * Test whether one value is _strictly less than_ another.

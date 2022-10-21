@@ -33,12 +33,12 @@ import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as alt from "@fp-ts/core/typeclass/NonEmptyAlternative"
+import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
+import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as semigroupalCoproduct from "@fp-ts/core/typeclass/SemigroupalCoproduct"
-import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -651,15 +651,15 @@ const coproduct = <B>(
   that: Option<B>
 ) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
 
-export const SemigroupalCoproduct = semigroupalCoproduct.fromCoproduct<OptionTypeLambda>(coproduct)
+export const NonEmptyCoproduct = nonEmptyCoproduct.fromCoproduct<OptionTypeLambda>(coproduct)
 
-export const Alt: alt.NonEmptyAlternative<OptionTypeLambda> = {
+export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<OptionTypeLambda> = {
   map,
-  ...SemigroupalCoproduct
+  ...NonEmptyCoproduct
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromNonEmptyAlternative(Alt, () => none)
+  .fromNonEmptyAlternative(NonEmptyAlternative, () => none)
 
 /**
  * Lifts a binary function into `Option`.
@@ -1068,7 +1068,7 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<OptionTypeLambda> = {
+export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> = {
   product,
   productMany: <A>(
     others: Iterable<Option<A>>
@@ -1087,79 +1087,3 @@ export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<OptionTyp
       return some(res)
     }
 }
-
-// TODO
-// // -------------------------------------------------------------------------------------
-// // array utils
-// // -------------------------------------------------------------------------------------
-
-// /**
-//  * Equivalent to `NonEmptyReadonlyArray#traverseWithIndex(Semigroupal)`.
-//  *
-//  * @category traversing
-//  * @since 1.0.0
-//  */
-// export const traverseNonEmptyReadonlyArrayWithIndex = <A, B>(
-//   f: (index: number, a: A) => Option<B>
-// ) =>
-//   (as: NonEmptyReadonlyArray<A>): Option<NonEmptyReadonlyArray<B>> => {
-//     const o = f(0, internal.head(as))
-//     if (isNone(o)) {
-//       return none
-//     }
-//     const out: internal.NonEmptyArray<B> = [o.value]
-//     for (let i = 1; i < as.length; i++) {
-//       const o = f(i, as[i])
-//       if (isNone(o)) {
-//         return none
-//       }
-//       out.push(o.value)
-//     }
-//     return some(out)
-//   }
-
-// /**
-//  * Equivalent to `ReadonlyArray#traverseWithIndex(Monoidal)`.
-//  *
-//  * @category traversing
-//  * @since 1.0.0
-//  */
-// export const traverseReadonlyArrayWithIndex = <A, B>(
-//   f: (index: number, a: A) => Option<B>
-// ): ((as: ReadonlyArray<A>) => Option<ReadonlyArray<B>>) => {
-//   const g = traverseNonEmptyReadonlyArrayWithIndex(f)
-//   return (as) => (internal.isNonEmpty(as) ? g(as) : Zip)
-// }
-
-// /**
-//  * Equivalent to `NonEmptyReadonlyArray#traverse(Semigroupal)`.
-//  *
-//  * @category traversing
-//  * @since 1.0.0
-//  */
-// export const traverseNonEmptyReadonlyArray = <A, B>(
-//   f: (a: A) => Option<B>
-// ): ((as: NonEmptyReadonlyArray<A>) => Option<NonEmptyReadonlyArray<B>>) => {
-//   return traverseNonEmptyReadonlyArrayWithIndex(flow(SK, f))
-// }
-
-// /**
-//  * Equivalent to `ReadonlyArray#traverse(Monoidal)`.
-//  *
-//  * @category traversing
-//  * @since 1.0.0
-//  */
-// export const traverseReadonlyArray = <A, B>(
-//   f: (a: A) => Option<B>
-// ): ((as: ReadonlyArray<A>) => Option<ReadonlyArray<B>>) => {
-//   return traverseReadonlyArrayWithIndex(flow(SK, f))
-// }
-
-// /**
-//  * Equivalent to `ReadonlyArray#sequence(Monoidal)`.
-//  *
-//  * @category traversing
-//  * @since 1.0.0
-//  */
-// export const sequenceReadonlyArray: <A>(arr: ReadonlyArray<Option<A>>) => Option<ReadonlyArray<A>> =
-//   traverseReadonlyArray(identity)

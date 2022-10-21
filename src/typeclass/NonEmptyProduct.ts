@@ -9,7 +9,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category type class
  * @since 1.0.0
  */
-export interface SemigroupalProduct<F extends TypeLambda> extends TypeClass<F> {
+export interface NonEmptyProduct<F extends TypeLambda> extends TypeClass<F> {
   readonly product: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -27,8 +27,8 @@ export interface SemigroupalProduct<F extends TypeLambda> extends TypeClass<F> {
  */
 export const fromCovariant = <F extends TypeLambda>(
   Covariant: Covariant<F>,
-  product: SemigroupalProduct<F>["product"]
-): SemigroupalProduct<F> => {
+  product: NonEmptyProduct<F>["product"]
+): NonEmptyProduct<F> => {
   return {
     product,
     productMany: <S, R, O, E, A>(

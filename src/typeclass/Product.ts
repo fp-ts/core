@@ -3,13 +3,13 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
-import type { SemigroupalProduct } from "@fp-ts/core/typeclass/SemigroupalProduct"
+import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface MonoidalProduct<F extends TypeLambda> extends SemigroupalProduct<F> {
+export interface Product<F extends TypeLambda> extends NonEmptyProduct<F> {
   readonly unit: <S>() => Kind<F, S, unknown, never, never, readonly []>
 
   readonly productAll: <S, R, O, E, A>(
@@ -21,18 +21,18 @@ export interface MonoidalProduct<F extends TypeLambda> extends SemigroupalProduc
  * @category constructors
  * @since 1.0.0
  */
-export const fromSemigroupalProduct = <F extends TypeLambda>(
-  SemigroupalProduct: SemigroupalProduct<F>,
-  unit: MonoidalProduct<F>["unit"]
-): MonoidalProduct<F> => {
+export const fromNonEmptyProduct = <F extends TypeLambda>(
+  F: NonEmptyProduct<F>,
+  unit: Product<F>["unit"]
+): Product<F> => {
   return {
-    ...SemigroupalProduct,
+    ...F,
     unit,
     productAll: <S, R, O, E, A>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
     ) => {
       const fas = Array.from(collection)
-      return isNonEmpty(fas) ? SemigroupalProduct.productMany(tail(fas))(head(fas)) : unit<S>()
+      return isNonEmpty(fas) ? F.productMany(tail(fas))(head(fas)) : unit<S>()
     }
   }
 }

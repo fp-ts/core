@@ -8,7 +8,7 @@ import { pipe } from "@fp-ts/core/internal/Function"
  * @category type class
  * @since 1.0.0
  */
-export interface SemigroupalCoproduct<F extends TypeLambda> extends TypeClass<F> {
+export interface NonEmptyCoproduct<F extends TypeLambda> extends TypeClass<F> {
   readonly coproduct: <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -25,8 +25,8 @@ export interface SemigroupalCoproduct<F extends TypeLambda> extends TypeClass<F>
  * @since 1.0.0
  */
 export const fromCoproduct = <F extends TypeLambda>(
-  coproduct: SemigroupalCoproduct<F>["coproduct"]
-): SemigroupalCoproduct<F> => {
+  coproduct: NonEmptyCoproduct<F>["coproduct"]
+): NonEmptyCoproduct<F> => {
   return {
     coproduct,
     coproductMany: collection =>
