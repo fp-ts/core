@@ -19,7 +19,8 @@ export interface Covariant<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const imap = <F extends TypeLambda>(F: Covariant<F>): Invariant<F>["imap"] => F.map
+export const imap = <F extends TypeLambda>(F: Covariant<F>): Invariant<F>["imap"] =>
+  (to, _) => F.map(to)
 
 /**
  * Returns a default `map` composition.
