@@ -22,7 +22,7 @@ export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> 
 }
 
 /**
- * Returns a default `traverse` composition.
+ * Returns a default `nonEmptyTraverse` composition.
  *
  * @since 1.0.0
  */

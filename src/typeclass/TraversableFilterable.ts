@@ -7,7 +7,7 @@ import type { Either } from "@fp-ts/core/data/Either"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
-import { flow, pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
@@ -46,11 +46,13 @@ export const traversePartitionMap = <T extends TypeLambda>(
   F: Traversable<T> & Covariant<T> & Compactable<T>
 ): TraversableFilterable<T>["traversePartitionMap"] =>
   (Applicative) =>
-    (f) =>
-      flow(
-        F.traverse(Applicative)(f),
-        Applicative.map(compactable.separate(F))
-      )
+    f =>
+      ta =>
+        pipe(
+          ta,
+          F.traverse(Applicative)(f),
+          Applicative.map(compactable.separate(F))
+        )
 
 /**
  * Returns a default `traverseFilterMap` implementation.
@@ -60,7 +62,7 @@ export const traversePartitionMap = <T extends TypeLambda>(
 export const traverseFilterMap = <T extends TypeLambda>(
   F: Traversable<T> & Compactable<T>
 ): TraversableFilterable<T>["traverseFilterMap"] =>
-  (Applicative) => (f) => flow(F.traverse(Applicative)(f), Applicative.map(F.compact))
+  (Applicative) => f => ta => pipe(ta, F.traverse(Applicative)(f), Applicative.map(F.compact))
 
 /**
  * @since 1.0.0

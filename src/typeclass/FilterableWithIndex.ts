@@ -5,7 +5,7 @@ import type { Either } from "@fp-ts/core/data/Either"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
-import { flow, pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Filterable } from "@fp-ts/core/typeclass/Filterable"
@@ -76,8 +76,8 @@ export const partitionMapWithIndex = <F extends TypeLambda, I>(
       self: Kind<F, S, R, O, E, A>
     ): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
       return [
-        pipe(self, F.filterMapWithIndex(flow(f, either.getLeft))),
-        pipe(self, F.filterMapWithIndex(flow(f, either.getRight)))
+        pipe(self, F.filterMapWithIndex((a, i) => either.getLeft(f(a, i)))),
+        pipe(self, F.filterMapWithIndex((a, i) => either.getRight(f(a, i))))
       ]
     }
 

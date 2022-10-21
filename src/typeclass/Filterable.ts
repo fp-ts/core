@@ -9,7 +9,7 @@ import type { Predicate } from "@fp-ts/core/data/Predicate"
 import type { Refinement } from "@fp-ts/core/data/Refinement"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
-import { flow, pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
@@ -65,8 +65,8 @@ export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
       self: Kind<F, S, R, O, E, A>
     ): readonly [Kind<F, S, R, O, E, B>, Kind<F, S, R, O, E, C>] => {
       return [
-        pipe(self, F.filterMap(flow(f, either.getLeft))),
-        pipe(self, F.filterMap(flow(f, either.getRight)))
+        pipe(self, F.filterMap(a => either.getLeft(f(a)))),
+        pipe(self, F.filterMap(a => either.getRight(f(a))))
       ]
     }
 

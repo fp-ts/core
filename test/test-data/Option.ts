@@ -18,7 +18,7 @@ import type { Refinement } from "@fp-ts/core/data/Refinement"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
-import { flow, identity, pipe } from "@fp-ts/core/internal/Function"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -482,7 +482,7 @@ export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: Option<A>) => Opt
  */
 export const partitionMap: <A, B, C>(
   f: (a: A) => Either<B, C>
-) => (fa: Option<A>) => readonly [Option<B>, Option<C>] = (f) => flow(map(f), separate)
+) => (fa: Option<A>) => readonly [Option<B>, Option<C>] = (f) => oa => pipe(oa, map(f), separate)
 
 /**
  * @category traversing

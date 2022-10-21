@@ -30,20 +30,4 @@ describe("Function", () => {
       4094
     )
   })
-
-  it("flow", () => {
-    const f = (n: number): number => n + 1
-    const g = U.double
-    U.deepStrictEqual(_.flow(f)(2), 3)
-    U.deepStrictEqual(_.flow(f, g)(2), 6)
-    U.deepStrictEqual(_.flow(f, g, f)(2), 7)
-    U.deepStrictEqual(_.flow(f, g, f, g)(2), 14)
-    U.deepStrictEqual(_.flow(f, g, f, g, f)(2), 15)
-    U.deepStrictEqual(_.flow(f, g, f, g, f, g)(2), 30)
-    U.deepStrictEqual(_.flow(f, g, f, g, f, g, f)(2), 31)
-    U.deepStrictEqual(_.flow(f, g, f, g, f, g, f, g)(2), 62)
-    U.deepStrictEqual(_.flow(f, g, f, g, f, g, f, g, f)(2), 63)
-    // this is just to satisfy noImplicitReturns and 100% coverage
-    U.deepStrictEqual((_.flow as any)(...[f, g, f, g, f, g, f, g, f, g]), undefined)
-  })
 })
