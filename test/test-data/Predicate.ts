@@ -41,7 +41,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambd
 }
 
 export const Product: product.Product<PredicateTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, () => () => true)
+  .fromNonEmptyProduct(NonEmptyProduct, () => true)
 
 export const isString = (u: unknown): u is string => typeof u === "string"
 

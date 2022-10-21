@@ -12,11 +12,11 @@ import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
 export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
   readonly traverseWithIndex: <F extends TypeLambda>(
     Applicative: Applicative<F>
-  ) => <A, S, R, O, E, B>(
-    f: (a: A, i: I) => Kind<F, S, R, O, E, B>
-  ) => <TS, TR, TO, TE>(
-    self: Kind<T, TS, TR, TO, TE, A>
-  ) => Kind<F, S, R, O, E, Kind<T, TS, TR, TO, TE, B>>
+  ) => <A, R, O, E, B>(
+    f: (a: A, i: I) => Kind<F, R, O, E, B>
+  ) => <TR, TO, TE>(
+    self: Kind<T, TR, TO, TE, A>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 }
 
 /**
@@ -29,13 +29,13 @@ export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends 
   G: TraversableWithIndex<G, J>
 ) =>
   <H extends TypeLambda>(Applicative: Applicative<H>) =>
-    <A, S, R, O, E, B>(
-      f: (a: A, ij: readonly [I, J]) => Kind<H, S, R, O, E, B>
-    ): (<FS, FR, FO, FE, GS, GR, GO, GE>(
-      fga: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
-    ) => Kind<H, S, R, O, E, Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, B>>>) =>
+    <A, R, O, E, B>(
+      f: (a: A, ij: readonly [I, J]) => Kind<H, R, O, E, B>
+    ): (<FR, FO, FE, GR, GO, GE>(
+      fga: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+    ) => Kind<H, R, O, E, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>
       F.traverseWithIndex(Applicative)((ga, i) =>
-        G.traverseWithIndex(Applicative)<A, S, R, O, E, B>((a, j) => f(a, [i, j]))(ga)
+        G.traverseWithIndex(Applicative)<A, R, O, E, B>((a, j) => f(a, [i, j]))(ga)
       )
 
 /**

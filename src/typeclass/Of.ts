@@ -10,7 +10,7 @@ import type { Product } from "@fp-ts/core/typeclass/Product"
  * @since 1.0.0
  */
 export interface Of<F extends TypeLambda> extends TypeClass<F> {
-  readonly of: <A, S>(a: A) => Kind<F, S, unknown, never, never, A>
+  readonly of: <A>(a: A) => Kind<F, unknown, never, never, A>
 }
 
 /**
@@ -18,4 +18,4 @@ export interface Of<F extends TypeLambda> extends TypeClass<F> {
  */
 export const unit = <F extends TypeLambda>(
   F: Of<F>
-): Product<F>["unit"] => () => F.of(empty)
+): Product<F>["unit"] => F.of(empty)

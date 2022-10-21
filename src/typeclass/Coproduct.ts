@@ -9,11 +9,11 @@ import type { NonEmptyCoproduct } from "@fp-ts/core/typeclass/NonEmptyCoproduct"
  * @since 1.0.0
  */
 export interface Coproduct<F extends TypeLambda> extends NonEmptyCoproduct<F> {
-  readonly zero: <S>() => Kind<F, S, unknown, never, never, never>
+  readonly zero: Kind<F, unknown, never, never, never>
 
-  readonly coproductAll: <S, R, O, E, A>(
-    collection: Iterable<Kind<F, S, R, O, E, A>>
-  ) => Kind<F, S, R, O, E, A>
+  readonly coproductAll: <R, O, E, A>(
+    collection: Iterable<Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, A>
 }
 
 /**
@@ -26,8 +26,8 @@ export const fromNonEmptyCoproduct = <F extends TypeLambda>(
   return {
     ...F,
     zero,
-    coproductAll: <S, R, O, E, A>(
-      collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => F.coproductMany(collection)(zero<S>())
+    coproductAll: <R, O, E, A>(
+      collection: Iterable<Kind<F, R, O, E, A>>
+    ) => F.coproductMany(collection)(zero)
   }
 }

@@ -9,7 +9,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @since 1.0.0
  */
 export interface Extendable<F extends TypeLambda> extends Covariant<F> {
-  readonly extend: <S, R, O, E, A, B>(
-    f: (self: Kind<F, S, R, O, E, A>) => B
-  ) => (self: Kind<F, S, R, O, E, A>) => Kind<F, S, R, O, E, B>
+  readonly extend: <R, O, E, A, B>(
+    f: (self: Kind<F, R, O, E, A>) => B
+  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }

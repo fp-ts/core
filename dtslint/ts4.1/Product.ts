@@ -19,4 +19,4 @@ export declare const Product: product.Product<ReaderAsyncWriterTypeLambda>
 product.tuple(Product)(fa, fb, fc)
 
 // $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", { readonly fa: string; readonly fb: number; readonly fc: boolean; }>
-const x= product.struct(Product)({ fa, fb, fc })
+product.struct(Product)({ fa, fb, fc })

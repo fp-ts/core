@@ -4,7 +4,7 @@ import * as U from "../util"
 
 describe("Alternative", () => {
   it("fromAlt", () => {
-    const Alternative = _.fromNonEmptyAlternative(O.NonEmptyAlternative, () => O.none)
+    const Alternative = _.fromNonEmptyAlternative(O.NonEmptyAlternative, O.none)
     U.deepStrictEqual(Alternative.coproductAll([]), O.none)
     U.deepStrictEqual(Alternative.coproductAll([O.none]), O.none)
     U.deepStrictEqual(Alternative.coproductAll([O.some(1)]), O.some(1))

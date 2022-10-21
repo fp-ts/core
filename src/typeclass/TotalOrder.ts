@@ -143,7 +143,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<TotalOrderTypeLamb
  * @since 1.0.0
  */
 export const Product: product.Product<TotalOrderTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, () => empty)
+  .fromNonEmptyProduct(NonEmptyProduct, empty)
 
 /**
  * Test whether one value is _strictly less than_ another.

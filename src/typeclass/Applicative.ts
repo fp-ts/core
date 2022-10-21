@@ -39,8 +39,8 @@ export const fromNonEmptyApplicative = <F extends TypeLambda>(
  * @since 1.0.0
  */
 export const liftMonoid = <F extends TypeLambda>(F: Applicative<F>) =>
-  <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
+  <A, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, R, O, E, A>> =>
     monoid.fromSemigroup(
-      nonEmptyApplicative.liftSemigroup(F)<A, S, R, O, E>(Monoid),
+      nonEmptyApplicative.liftSemigroup(F)<A, R, O, E>(Monoid),
       F.of(Monoid.empty)
     )

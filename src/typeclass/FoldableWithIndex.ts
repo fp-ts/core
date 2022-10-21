@@ -15,12 +15,12 @@ export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F>
   readonly reduceWithIndex: <A, B>(
     b: B,
     f: (b: B, a: A, i: I) => B
-  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => B
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 
   readonly reduceRightWithIndex: <A, B>(
     b: B,
     f: (b: B, a: A, i: I) => B
-  ) => <S, R, O, E>(self: Kind<F, S, R, O, E, A>) => B
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 }
 
 /**
@@ -33,8 +33,8 @@ export const reduceWithIndexComposition = <F extends TypeLambda, I, G extends Ty
   G: FoldableWithIndex<G, J>
 ) =>
   <B, A>(b: B, f: (b: B, a: A, ij: readonly [I, J]) => B) =>
-    <FS, FR, FO, FE, GS, GR, GO, GE>(
-      self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+    <FR, FO, FE, GR, GO, GE>(
+      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
     ): B =>
       pipe(
         self,
@@ -52,8 +52,8 @@ export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G exten
   G: FoldableWithIndex<G, J>
 ) =>
   <B, A>(b: B, f: (b: B, a: A, ij: readonly [I, J]) => B) =>
-    <FS, FR, FO, FE, GS, GR, GO, GE>(
-      self: Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>
+    <FR, FO, FE, GR, GO, GE>(
+      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
     ): B =>
       pipe(
         self,
@@ -84,8 +84,7 @@ export const reduceRight = <F extends TypeLambda, I>(
  */
 export const toReadonlyArray = <F extends TypeLambda, I>(
   F: FoldableWithIndex<F, I>
-): <S, R, O, E, A>(self: Kind<F, S, R, O, E, A>) => ReadonlyArray<A> =>
-  toReadonlyArrayWith(F)(identity)
+): <R, O, E, A>(self: Kind<F, R, O, E, A>) => ReadonlyArray<A> => toReadonlyArrayWith(F)(identity)
 
 /**
  * @since 1.0.0
@@ -94,7 +93,7 @@ export const toReadonlyArrayWith = <F extends TypeLambda, I>(
   F: FoldableWithIndex<F, I>
 ) =>
   <A, B>(f: (a: A, i: I) => B) =>
-    <S, R, O, E>(self: Kind<F, S, R, O, E, A>): ReadonlyArray<B> =>
+    <R, O, E>(self: Kind<F, R, O, E, A>): ReadonlyArray<B> =>
       F.reduceWithIndex<A, Array<B>>([], (out, a, i) => {
         out.push(f(a, i))
         return out
@@ -108,5 +107,4 @@ export const foldMapWithIndex = <F extends TypeLambda, I>(
 ) =>
   <M>(Monoid: Monoid<M>) =>
     <A>(f: (a: A, i: I) => M) =>
-      <S, R, O, E>(self: Kind<F, S, R, O, E, A>): M =>
-        Monoid.combineAll(toReadonlyArrayWith(F)(f)(self))
+      <R, O, E>(self: Kind<F, R, O, E, A>): M => Monoid.combineAll(toReadonlyArrayWith(F)(f)(self))

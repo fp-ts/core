@@ -18,9 +18,9 @@ export interface Chainable<F extends TypeLambda> extends Covariant<F>, FlatMap<F
  * @since 1.0.0
  */
 export const tap = <F extends TypeLambda>(F: Chainable<F>) =>
-  <A, S, R2, O2, E2>(
-    f: (a: A) => Kind<F, S, R2, O2, E2, unknown>
-  ): (<R1, O1, E1>(self: Kind<F, S, R1, O1, E1, A>) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) =>
+  <A, R2, O2, E2>(
+    f: (a: A) => Kind<F, R2, O2, E2, unknown>
+  ): (<R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) =>
     F.flatMap(a =>
       pipe(
         f(a),
@@ -36,25 +36,24 @@ export const tap = <F extends TypeLambda>(F: Chainable<F>) =>
  * @since 1.0.0
  */
 export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>) =>
-  <S, R2, O2, E2>(
-    that: Kind<F, S, R2, O2, E2, unknown>
+  <R2, O2, E2>(
+    that: Kind<F, R2, O2, E2, unknown>
   ): (<R1, O1, E1, A>(
-    self: Kind<F, S, R1, O1, E1, A>
-  ) => Kind<F, S, R1 & R2, O1 | O2, E1 | E2, A>) => tap(F)(() => that)
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) => tap(F)(() => that)
 
 /**
  * @category do notation
  * @since 1.0.0
  */
-export const bind = <M extends TypeLambda>(F: Chainable<M>) =>
-  <N extends string, A extends object, S, R2, O2, E2, B>(
+export const bind = <F extends TypeLambda>(F: Chainable<F>) =>
+  <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
-    f: (a: A) => Kind<M, S, R2, O2, E2, B>
+    f: (a: A) => Kind<F, R2, O2, E2, B>
   ): <R1, O1, E1>(
-    self: Kind<M, S, R1, O1, E1, A>
+    self: Kind<F, R1, O1, E1, A>
   ) => Kind<
-    M,
-    S,
+    F,
     R1 & R2,
     O1 | O2,
     E1 | E2,
