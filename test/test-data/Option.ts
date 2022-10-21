@@ -22,7 +22,7 @@ import { flow, identity, pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
 import type * as alt from "@fp-ts/core/typeclass/Alt"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
-import type * as applicative from "@fp-ts/core/typeclass/Applicative"
+import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as apply from "@fp-ts/core/typeclass/Apply"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
@@ -608,7 +608,7 @@ export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = covariant.a
  * @category mapping
  * @since 1.0.0
  */
-export const asUnit: (self: Option<unknown>) => Option<void> = covariant.asUnit(Covariant)
+export const asUnit: (self: Option<unknown>) => Option<[]> = covariant.asUnit(Covariant)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
@@ -701,21 +701,10 @@ export const lift3: <A, B, C, D>(
  * @category instances
  * @since 1.0.0
  */
-export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  of: some,
-  ...Apply,
-  unit: () => none,
-  productAll: <A>(collection: Iterable<Option<A>>): Option<ReadonlyArray<A>> => {
-    const out: Array<A> = []
-    for (const o of collection) {
-      if (isNone(o)) {
-        return none
-      }
-      out.push(o.value)
-    }
-    return some(out)
-  }
-}
+export const Applicative: applicative.Applicative<OptionTypeLambda> = applicative.fromApply(
+  Apply,
+  some
+)
 
 /**
  * @category instances

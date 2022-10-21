@@ -58,8 +58,7 @@ export const as = <F extends TypeLambda>(F: Covariant<F>) =>
  */
 export const asUnit = <F extends TypeLambda>(
   F: Covariant<F>
-): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, void>) =>
-  as(F)(undefined)
+): (<S, R, O, E>(self: Kind<F, S, R, O, E, unknown>) => Kind<F, S, R, O, E, []>) => as(F)([])
 
 /**
  * @category do notation

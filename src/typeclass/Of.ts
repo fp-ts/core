@@ -17,4 +17,4 @@ export interface Of<F extends TypeLambda> extends TypeClass<F> {
  */
 export const unit = <F extends TypeLambda>(
   F: Of<F>
-): MonoidalProduct<F>["unit"] => () => F.of(undefined)
+): MonoidalProduct<F>["unit"] => () => F.of([])

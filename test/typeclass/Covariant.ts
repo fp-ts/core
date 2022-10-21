@@ -34,7 +34,7 @@ describe("Covariant", () => {
   it("asUnit", () => {
     const asUnit = _.asUnit(O.Covariant)
     U.deepStrictEqual(pipe(O.none, asUnit), O.none)
-    U.deepStrictEqual(pipe(O.some(1), asUnit), O.some(undefined))
+    U.deepStrictEqual(pipe(O.some(1), asUnit), O.some([]))
   })
 
   it("bindTo", () => {
