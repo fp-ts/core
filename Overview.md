@@ -22,12 +22,10 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Applicative**           |                                               | **MonoidalProduct**, **Pointed**        |
 | **Apply**                 |                                               | **SemigroupalProduct**, **Covariant**   |
 | **Bicovariant**           | `bimap`                                       |                                         |
-| **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
-| **Category**              | `identity`                                    | **Composable**                          |
+| **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **TotalOrder**                          |
 | **Chainable**             |                                               | **Covariant**, **FlatMap**              |
 | **Comonad**               | `extract`                                     | **Extendable**                          |
 | **Compactable**           | `compact`                                     |                                         |
-| **Composable**            | `compose`                                     |                                         |
 | **Contravariant**         | `contramap`                                   |                                         |
 | **Covariant**             | `map`                                         |                                         |
 | **CovariantWithIndex**    | `mapWithIndex`                                |                                         |
