@@ -20,10 +20,8 @@ import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { flow, identity, pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
-import type * as alt from "@fp-ts/core/typeclass/Alt"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
-import * as apply from "@fp-ts/core/typeclass/Apply"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
@@ -35,6 +33,8 @@ import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
+import type * as alt from "@fp-ts/core/typeclass/NonEmptyAlternative"
+import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroupalCoproduct from "@fp-ts/core/typeclass/SemigroupalCoproduct"
@@ -626,7 +626,7 @@ export const product = <B>(
  * @category instances
  * @since 1.0.0
  */
-export const Apply: apply.Apply<OptionTypeLambda> = {
+export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<OptionTypeLambda> = {
   map,
   product,
   productMany: <A>(
@@ -653,13 +653,13 @@ const coproduct = <B>(
 
 export const SemigroupalCoproduct = semigroupalCoproduct.fromCoproduct<OptionTypeLambda>(coproduct)
 
-export const Alt: alt.Alt<OptionTypeLambda> = {
+export const Alt: alt.NonEmptyAlternative<OptionTypeLambda> = {
   map,
   ...SemigroupalCoproduct
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromAlt(Alt, () => none)
+  .fromNonEmptyAlternative(Alt, () => none)
 
 /**
  * Lifts a binary function into `Option`.
@@ -668,7 +668,7 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = alternativ
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  apply.lift2(Apply)
+  nonEmptyApplicative.lift2(NonEmptyApplicative)
 
 /**
  * Lifts a ternary function into `Option`.
@@ -678,16 +678,19 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Optio
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = apply.lift3(Apply)
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = nonEmptyApplicative.lift3(
+  NonEmptyApplicative
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Applicative: applicative.Applicative<OptionTypeLambda> = applicative.fromApply(
-  Apply,
-  some
-)
+export const Applicative: applicative.Applicative<OptionTypeLambda> = applicative
+  .fromNonEmptyApplicative(
+    NonEmptyApplicative,
+    some
+  )
 
 /**
  * @category instances
@@ -1023,7 +1026,7 @@ export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  apply.bindRight(Apply)
+  nonEmptyApplicative.bindRight(NonEmptyApplicative)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -1049,8 +1052,9 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tu
  */
 export const productFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = apply
-  .productFlatten(Apply)
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> =
+  nonEmptyApplicative
+    .productFlatten(NonEmptyApplicative)
 
 /**
  * @category instances

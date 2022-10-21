@@ -27,10 +27,8 @@ digraph ConcreteTypes {
 
 |                           | member(s)                                     | extends                                 |
 | ------------------------- | --------------------------------------------- | --------------------------------------- |
-| **Alt**                   |                                               | **SemigroupalCoproduct**, **Covariant** |
 | **Alternative**           |                                               | **MonoidalCoproduct**, **Covariant**    |
 | **Applicative**           |                                               | **MonoidalProduct**, **Pointed**        |
-| **Apply**                 |                                               | **SemigroupalProduct**, **Covariant**   |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **Chainable**             |                                               | **Covariant**, **FlatMap**              |
 | **Comonad**               | `extract`                                     | **Extendable**                          |
@@ -49,6 +47,8 @@ digraph ConcreteTypes {
 | **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                           |
 | **MonoidalCoproduct**     | `zero`<br>`coproductAll`                      |                                         |
 | **MonoidalProduct**       | `unit`<br>`productAll`                        |                                         |
+| **NonEmptyAlternative**   |                                               | **SemigroupalCoproduct**, **Covariant** |
+| **NonEmptyApplicative**   |                                               | **SemigroupalProduct**, **Covariant**   |
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
 | **Semigroup**             | `combine`<br>`combineMany`                    |                                         |
@@ -62,14 +62,14 @@ digraph ConcreteTypes {
 
 ```
 digraph ParameterizedTypes {
-    "Alt" -> "SemigroupalCoproduct"
-    "Alt" -> "Covariant"
+    "NonEmptyAlternative" -> "SemigroupalCoproduct"
+    "NonEmptyAlternative" -> "Covariant"
     "Alternative" -> "MonoidalCoproduct"
     "Alternative" -> "Covariant"
     "Applicative" -> "MonoidalProduct"
     "Applicative" -> "Pointed"
-    "Apply" -> "SemigroupalProduct"
-    "Apply" -> "Covariant"
+    "NonEmptyApplicative" -> "SemigroupalProduct"
+    "NonEmptyApplicative" -> "Covariant"
     "Chainable" -> "Covariant"
     "Chainable" -> "FlatMap"
     "Comonad" -> "Extendable"

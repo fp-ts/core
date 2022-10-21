@@ -12,7 +12,9 @@ import * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
  * @category type class
  * @since 1.0.0
  */
-export interface Apply<F extends TypeLambda> extends SemigroupalProduct<F>, Covariant<F> {}
+export interface NonEmptyApplicative<F extends TypeLambda>
+  extends SemigroupalProduct<F>, Covariant<F>
+{}
 
 /**
  * @category constructors
@@ -21,7 +23,7 @@ export interface Apply<F extends TypeLambda> extends SemigroupalProduct<F>, Cova
 export const fromCovariant = <F extends TypeLambda>(
   Covariant: Covariant<F>,
   product: SemigroupalProduct<F>["product"]
-): Apply<F> => {
+): NonEmptyApplicative<F> => {
   return {
     ...Covariant,
     ...semigroupalProduct.fromCovariant(Covariant, product)
@@ -34,8 +36,8 @@ export const fromCovariant = <F extends TypeLambda>(
  * @since 1.0.0
  */
 export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: Apply<F>,
-  G: Apply<G>
+  F: NonEmptyApplicative<F>,
+  G: NonEmptyApplicative<G>
 ) =>
   <FS, FR2, FO2, FE2, GS, GR2, GO2, GE2, B>(
     that: Kind<F, FS, FR2, FO2, FE2, Kind<G, GS, GR2, GO2, GE2, B>>
@@ -57,8 +59,8 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: Apply<F>,
-  G: Apply<G>
+  F: NonEmptyApplicative<F>,
+  G: NonEmptyApplicative<G>
 ) =>
   <FS, FR, FO, FE, GS, GR, GO, GE, A>(
     collection: Iterable<Kind<F, FS, FR, FO, FE, Kind<G, GS, GR, GO, GE, A>>>
@@ -77,7 +79,7 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
  *
  * @since 1.0.0
  */
-export const liftSemigroup = <F extends TypeLambda>(F: Apply<F>) =>
+export const liftSemigroup = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <A, S, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, S, R, O, E, A>> => ({
     combine: that => self => pipe(self, F.product(that), F.map(([a1, a2]) => S.combine(a2)(a1))),
     combineMany: collection =>
@@ -92,7 +94,7 @@ export const liftSemigroup = <F extends TypeLambda>(F: Apply<F>) =>
 /**
  * @since 1.0.0
  */
-export const ap = <F extends TypeLambda>(F: Apply<F>) =>
+export const ap = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <S, R2, O2, E2, A>(
     fa: Kind<F, S, R2, O2, E2, A>
   ) =>
@@ -104,7 +106,7 @@ export const ap = <F extends TypeLambda>(F: Apply<F>) =>
 /**
  * @since 1.0.0
  */
-export const andThenDiscard = <F extends TypeLambda>(F: Apply<F>) =>
+export const andThenDiscard = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <S, R2, O2, E2>(
     that: Kind<F, S, R2, O2, E2, unknown>
   ) =>
@@ -115,7 +117,7 @@ export const andThenDiscard = <F extends TypeLambda>(F: Apply<F>) =>
 /**
  * @since 1.0.0
  */
-export const andThen = <F extends TypeLambda>(F: Apply<F>) =>
+export const andThen = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <S, R2, O2, E2, A>(
     that: Kind<F, S, R2, O2, E2, A>
   ) =>
@@ -126,7 +128,7 @@ export const andThen = <F extends TypeLambda>(F: Apply<F>) =>
 /**
  * @since 1.0.0
  */
-export const bindRight = <F extends TypeLambda>(F: Apply<F>) =>
+export const bindRight = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <N extends string, A extends object, S, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     fb: Kind<F, S, R2, O2, E2, B>
@@ -150,7 +152,7 @@ export const bindRight = <F extends TypeLambda>(F: Apply<F>) =>
 /**
  * @since 1.0.0
  */
-export const productFlatten = <F extends TypeLambda>(F: Apply<F>) =>
+export const productFlatten = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <S, R2, O2, E2, B>(
     that: Kind<F, S, R2, O2, E2, B>
   ) =>
@@ -164,7 +166,7 @@ export const productFlatten = <F extends TypeLambda>(F: Apply<F>) =>
  *
  * @since 1.0.0
  */
-export const lift2 = <F extends TypeLambda>(F: Apply<F>) =>
+export const lift2 = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <A, B, C>(f: (a: A, b: B) => C) =>
     <S, R1, O1, E1, R2, O2, E2>(
       fa: Kind<F, S, R1, O1, E1, A>,
@@ -177,7 +179,7 @@ export const lift2 = <F extends TypeLambda>(F: Apply<F>) =>
  *
  * @since 1.0.0
  */
-export const lift3 = <F extends TypeLambda>(F: Apply<F>) =>
+export const lift3 = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>
     <S, R1, O1, E1, R2, O2, E2, R3, O3, E3>(
       fa: Kind<F, S, R1, O1, E1, A>,
