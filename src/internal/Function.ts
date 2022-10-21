@@ -259,42 +259,10 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T>
   rs: (r: R) => S,
   st: (s: S) => T
 ): T
-export function pipe(
-  a: unknown,
-  ab?: Function,
-  bc?: Function,
-  cd?: Function,
-  de?: Function,
-  ef?: Function,
-  fg?: Function,
-  gh?: Function,
-  hi?: Function
-): unknown {
-  switch (arguments.length) {
-    case 1:
-      return a
-    case 2:
-      return ab!(a)
-    case 3:
-      return bc!(ab!(a))
-    case 4:
-      return cd!(bc!(ab!(a)))
-    case 5:
-      return de!(cd!(bc!(ab!(a))))
-    case 6:
-      return ef!(de!(cd!(bc!(ab!(a)))))
-    case 7:
-      return fg!(ef!(de!(cd!(bc!(ab!(a))))))
-    case 8:
-      return gh!(fg!(ef!(de!(cd!(bc!(ab!(a)))))))
-    case 9:
-      return hi!(gh!(fg!(ef!(de!(cd!(bc!(ab!(a))))))))
-    default: {
-      let ret = arguments[0]
-      for (let i = 1; i < arguments.length; i++) {
-        ret = arguments[i](ret)
-      }
-      return ret
-    }
+export function pipe() {
+  let out = arguments[0]
+  for (let i = 1; i < arguments.length; i++) {
+    out = arguments[i](out)
   }
+  return out
 }
