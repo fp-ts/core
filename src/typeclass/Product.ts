@@ -6,14 +6,13 @@ import { pipe } from "@fp-ts/core/internal/Function"
 import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import { empty, fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
+import type { Of } from "@fp-ts/core/typeclass/Of"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Product<F extends TypeLambda> extends NonEmptyProduct<F> {
-  readonly unit: Kind<F, unknown, never, never, readonly []>
-
+export interface Product<F extends TypeLambda> extends NonEmptyProduct<F>, Of<F> {
   readonly productAll: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, ReadonlyArray<A>>
@@ -25,16 +24,18 @@ export interface Product<F extends TypeLambda> extends NonEmptyProduct<F> {
  */
 export const fromNonEmptyProduct = <F extends TypeLambda>(
   F: NonEmptyProduct<F>,
-  unit: Product<F>["unit"]
+  of: Of<F>["of"]
 ): Product<F> => {
   return {
     ...F,
-    unit,
+    of,
     productAll: <R, O, E, A>(
       collection: Iterable<Kind<F, R, O, E, A>>
     ) => {
       const fas = fromIterable(collection)
-      return isNonEmpty(fas) ? F.productMany(tail(fas))(head(fas)) : unit
+      return isNonEmpty(fas) ?
+        F.productMany(tail(fas))(head(fas)) as Kind<F, R, O, E, ReadonlyArray<A>> :
+        of<ReadonlyArray<A>>(empty)
     }
   }
 }
@@ -49,7 +50,7 @@ export const tuple = <F extends TypeLambda>(F: Product<F>) =>
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
-  > => isNonEmpty(tuple) ? F.productAll(tuple) : F.unit as any
+  > => isNonEmpty(tuple) ? F.productAll(tuple) : F.of(empty) as any
 
 /**
  * @since 1.0.0
@@ -75,5 +76,5 @@ export const struct = <F extends TypeLambda>(F: Product<F>) =>
         }, (r) => Object.keys(r).map(k => r[k]))
       ) as any
     }
-    return pipe(F.unit, F.imap(() => ({}), () => empty)) as any
+    return pipe(F.of(empty), F.imap(() => ({}), () => empty)) as any
   }

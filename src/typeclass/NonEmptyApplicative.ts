@@ -32,12 +32,16 @@ export const fromCovariant = <F extends TypeLambda>(
       collection: Iterable<Kind<F, R, O, E, A>>
     ) =>
       (self: Kind<F, R, O, E, A>) => {
-        let out: Kind<F, R, O, E, [A, ...Array<A>]> = pipe(
+        let out = pipe(
           self,
-          Covariant.map(a => [a])
+          Covariant.map((a): readonly [A, ...Array<A>] => [a])
         )
         for (const fa of collection) {
-          out = pipe(out, product(fa), Covariant.map(([[head, ...tail], a]) => [head, ...tail, a]))
+          out = pipe(
+            out,
+            product(fa),
+            Covariant.map(([[head, ...tail], a]): readonly [A, ...Array<A>] => [head, ...tail, a])
+          )
         }
         return out
       }

@@ -1,5 +1,4 @@
 import { pipe } from "@fp-ts/core/internal/Function"
-import { empty } from "@fp-ts/core/internal/ReadonlyArray"
 import * as _ from "@fp-ts/core/typeclass/Covariant"
 import * as O from "../test-data/Option"
 import * as RA from "../test-data/ReadonlyArray"
@@ -35,7 +34,7 @@ describe("Covariant", () => {
   it("asUnit", () => {
     const asUnit = _.asUnit(O.Covariant)
     U.deepStrictEqual(pipe(O.none, asUnit), O.none)
-    U.deepStrictEqual(pipe(O.some(1), asUnit), O.some(empty))
+    U.deepStrictEqual(pipe(O.some(1), asUnit), O.some(undefined))
   })
 
   it("bindTo", () => {

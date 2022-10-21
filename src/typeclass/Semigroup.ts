@@ -23,7 +23,7 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
-import { empty, fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
+import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as product from "@fp-ts/core/typeclass/Product"
@@ -210,4 +210,4 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambd
  * @since 1.0.0
  */
 export const Product: product.Product<SemigroupTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, constant(empty))
+  .fromNonEmptyProduct(NonEmptyProduct, constant)

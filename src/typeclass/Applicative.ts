@@ -6,7 +6,6 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
-import { unit } from "@fp-ts/core/typeclass/Of"
 import type { Of } from "@fp-ts/core/typeclass/Of"
 import type { Product } from "@fp-ts/core/typeclass/Product"
 import * as product from "@fp-ts/core/typeclass/Product"
@@ -15,9 +14,7 @@ import * as product from "@fp-ts/core/typeclass/Product"
  * @category type class
  * @since 1.0.0
  */
-export interface Applicative<F extends TypeLambda>
-  extends Product<F>, NonEmptyApplicative<F>, Of<F>
-{}
+export interface Applicative<F extends TypeLambda> extends Product<F>, NonEmptyApplicative<F> {}
 
 /**
  * @since 1.0.0
@@ -28,7 +25,7 @@ export const fromNonEmptyApplicative = <F extends TypeLambda>(
 ): Applicative<F> => {
   return {
     ...NonEmptyApplicative,
-    ...product.fromNonEmptyProduct(NonEmptyApplicative, unit({ of })),
+    ...product.fromNonEmptyProduct(NonEmptyApplicative, of),
     of
   }
 }

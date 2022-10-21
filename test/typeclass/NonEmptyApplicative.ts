@@ -18,16 +18,16 @@ describe("NonEmptyApplicative", () => {
         return n === 0 ? f.apply(null, combined) : curry(f, n - 1, combined)
       }
 
-    const getCurriedTupleConstructor = (len: number): (a: unknown) => any =>
+    const getCurriedTupleConstructor = (len: number): (a: any) => any =>
       curry(<T extends ReadonlyArray<any>>(...t: T): T => t, len - 1, [])
 
     const assertSameResult = <F extends TypeLambda>(
       NonEmptyApplicative: _.NonEmptyApplicative<F>
     ) =>
-      <S, R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
+      <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
         (self: Kind<F, R, O, E, A>) => {
           const ap = _.ap(NonEmptyApplicative)
-          const productManyFromAp = <S, R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
+          const productManyFromAp = <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
             (
               self: Kind<F, R, O, E, A>
             ): Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
