@@ -36,6 +36,7 @@ import * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
+import * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
@@ -191,6 +192,11 @@ export {
    * @since 1.0.0
    */
   nonEmptyReadonlyArray,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  nonEmptyTraversable,
   /**
    * @category typeclass
    * @since 1.0.0
