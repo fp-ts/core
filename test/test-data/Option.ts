@@ -700,9 +700,8 @@ export const lift3: <A, B, C, D>(
  */
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   of: some,
-  map,
-  productMany: Apply.productMany,
-  product: Apply.product,
+  ...Apply,
+  unit: () => none,
   productAll: <A>(collection: Iterable<Option<A>>): Option<ReadonlyArray<A>> => {
     const out: Array<A> = []
     for (const o of collection) {

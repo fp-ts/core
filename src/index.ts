@@ -35,6 +35,8 @@ import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as monoidalCoproduct from "@fp-ts/core/typeclass/MonoidalCoproduct"
+import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -180,6 +182,16 @@ export {
    * @since 1.0.0
    */
   monoid,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  monoidalCoproduct,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  monoidalProduct,
   /**
    * @category typeclass
    * @since 1.0.0
