@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import { empty } from "@fp-ts/core/internal/ReadonlyArray"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
@@ -58,7 +57,7 @@ export const as = <F extends TypeLambda>(F: Covariant<F>) =>
  */
 export const asUnit = <F extends TypeLambda>(
   F: Covariant<F>
-): (<R, O, E>(self: Kind<F, R, O, E, unknown>) => Kind<F, R, O, E, readonly []>) => as(F)(empty)
+): (<R, O, E>(self: Kind<F, R, O, E, unknown>) => Kind<F, R, O, E, void>) => as(F)<void>(undefined)
 
 /**
  * @category do notation
@@ -88,4 +87,5 @@ export { let_ as let }
  */
 export const tupled = <F extends TypeLambda>(
   F: Covariant<F>
-): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) => F.map(a => [a])
+): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) =>
+  F.map(a => [a] as const)

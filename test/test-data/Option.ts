@@ -488,12 +488,14 @@ export const partitionMap: <A, B, C>(
  * @category traversing
  * @since 1.0.0
  */
-export const traverse: <F extends TypeLambda>(
-  Applicative: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => (ta: Option<A>) => Kind<F, R, O, E, Option<B>> = (F) =>
-  (f) => (ta) => isNone(ta) ? F.of(none) : pipe(f(ta.value), F.map(some))
+export const traverse = <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) =>
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ) =>
+    (ta: Option<A>): Kind<F, R, O, E, Option<B>> =>
+      isNone(ta) ? F.of<Option<B>>(none) : pipe(f(ta.value), F.map(some))
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -608,7 +610,7 @@ export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = covariant.a
  * @category mapping
  * @since 1.0.0
  */
-export const asUnit: (self: Option<unknown>) => Option<readonly []> = covariant.asUnit(Covariant)
+export const asUnit: (self: Option<unknown>) => Option<void> = covariant.asUnit(Covariant)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
