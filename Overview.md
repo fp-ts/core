@@ -17,9 +17,9 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 |                           | member(s)                                     | extends                                 |
 | ------------------------- | --------------------------------------------- | --------------------------------------- |
-| **Alt**                   | `coproductMany`                               | **SemigroupalCoproduct**, **Covariant** |
-| **Alternative**           | `zero`<br>`coproductAll`                      | **MonoidalCoproduct**, **Covariant**    |
-| **Applicative**           | `productAll`                                  | **MonoidalProduct**, **Pointed**        |
+| **Alt**                   |                                               | **SemigroupalCoproduct**, **Covariant** |
+| **Alternative**           |                                               | **MonoidalCoproduct**, **Covariant**    |
+| **Applicative**           |                                               | **MonoidalProduct**, **Pointed**        |
 | **Apply**                 | `productMany`                                 | **SemigroupalProduct**, **Covariant**   |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
@@ -45,7 +45,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
 | **Semigroup**             | `combine`<br>`combineMany`                    |                                         |
-| **SemigroupalCoproduct**  | `coproduct`                                   |                                         |
+| **SemigroupalCoproduct**  | `coproduct`<br>`coproductMany`                |                                         |
 | **SemigroupalProduct**    | `product`<br>`productMany`                    |                                         |
 | **TotalOrder**            | `compare`                                     |                                         |
 | **Traversable**           | `traverse`                                    |                                         |
