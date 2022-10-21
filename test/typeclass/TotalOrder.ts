@@ -90,13 +90,13 @@ describe("TotalOrder", () => {
       string.TotalOrder,
       _.contramap((x: T) => x[1])
     )
-    U.deepStrictEqual(sort(pipe(M.unit, M.combineMany([sortByFst, sortBySnd])))(tuples), [
+    U.deepStrictEqual(sort(pipe(M.empty, M.combineMany([sortByFst, sortBySnd])))(tuples), [
       [1, "b"],
       [1, "c"],
       [2, "a"],
       [2, "c"]
     ])
-    U.deepStrictEqual(sort(pipe(sortBySnd, M.combineMany([sortByFst, M.unit])))(tuples), [
+    U.deepStrictEqual(sort(pipe(sortBySnd, M.combineMany([sortByFst, M.empty])))(tuples), [
       [2, "a"],
       [1, "b"],
       [1, "c"],

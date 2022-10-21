@@ -573,7 +573,7 @@ export const getMonoid = <A>(
       }
       return c
     },
-    unit: none
+    empty: none
   })
 }
 
@@ -744,7 +744,7 @@ export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
  * @since 1.0.0
  */
 export const foldMap = <M>(Monoid: monoid.Monoid<M>) =>
-  <A>(f: (a: A) => M) => (self: Option<A>): M => isNone(self) ? Monoid.unit : f(self.value)
+  <A>(f: (a: A) => M) => (self: Option<A>): M => isNone(self) ? Monoid.empty : f(self.value)
 
 /**
  * @category folding
