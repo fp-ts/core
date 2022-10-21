@@ -25,39 +25,39 @@ digraph ConcreteTypes {
 
 # Parameterized Types
 
-|                           | member(s)                                     | extends                              |
-| ------------------------- | --------------------------------------------- | ------------------------------------ |
-| **Alternative**           |                                               | **Coproduct**, **Covariant**         |
-| **Applicative**           |                                               | **Product**, **Pointed**             |
-| **Bicovariant**           | `bimap`                                       |                                      |
-| **Chainable**             |                                               | **Covariant**, **FlatMap**           |
-| **Comonad**               | `extract`                                     | **Extendable**                       |
-| **Compactable**           | `compact`                                     |                                      |
-| **Contravariant**         | `contramap`                                   |                                      |
-| **Coproduct**             | `zero`<br>`coproductAll`                      |                                      |
-| **Covariant**             | `map`                                         |                                      |
-| **CovariantWithIndex**    | `mapWithIndex`                                |                                      |
-| **Extendable**            | `extend`                                      | **Covariant**                        |
-| **Filterable**            | `filterMap`                                   |                                      |
-| **FilterableWithIndex**   | `filterMapWithIndex`                          |                                      |
-| **FlatMap**               | `flatMap`                                     |                                      |
-| **Foldable**              | `reduce`<br>`reduceRight`                     |                                      |
-| **FoldableWithIndex**     | `reduceWithIndex`<br>`reduceRightWithIndex`   |                                      |
-| **Invariant**             | `imap`                                        |                                      |
-| **Monad**                 |                                               | **Pointed**, **FlatMap**             |
-| **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                        |
-| **NonEmptyAlternative**   |                                               | **NonEmptyCoproduct**, **Covariant** |
-| **NonEmptyApplicative**   |                                               | **NonEmptyProduct**, **Covariant**   |
-| **NonEmptyCoproduct**     | `coproduct`<br>`coproductMany`                |                                      |
-| **NonEmptyProduct**       | `product`<br>`productMany`                    |                                      |
-| **NonEmptyTraversable**   | `nonEmptyTraverse`                            |                                      |
-| **Of**                    | `of`                                          |                                      |
-| **Pointed**               |                                               | **Covariant**, **Of**                |
-| **Product**               | `unit`<br>`productAll`                        |                                      |
-| **Semigroup**             | `combine`<br>`combineMany`                    |                                      |
-| **Traversable**           | `traverse`                                    |                                      |
-| **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                      |
-| **TraversableWithIndex**  | `traverseWihtIndex`                           |                                      |
+|                           | member(s)                                     | extends                                      |
+| ------------------------- | --------------------------------------------- | -------------------------------------------- |
+| **Alternative**           |                                               | **Coproduct**, **NonEmptyAlternative**       |
+| **Applicative**           |                                               | **Product**, **NonEmptyApplicative**, **Of** |
+| **Bicovariant**           | `bimap`                                       |                                              |
+| **Chainable**             |                                               | **Covariant**, **FlatMap**                   |
+| **Comonad**               | `extract`                                     | **Extendable**                               |
+| **Compactable**           | `compact`                                     |                                              |
+| **Contravariant**         | `contramap`                                   |                                              |
+| **Coproduct**             | `zero`<br>`coproductAll`                      |                                              |
+| **Covariant**             | `map`                                         |                                              |
+| **CovariantWithIndex**    | `mapWithIndex`                                |                                              |
+| **Extendable**            | `extend`                                      | **Covariant**                                |
+| **Filterable**            | `filterMap`                                   |                                              |
+| **FilterableWithIndex**   | `filterMapWithIndex`                          |                                              |
+| **FlatMap**               | `flatMap`                                     |                                              |
+| **Foldable**              | `reduce`<br>`reduceRight`                     |                                              |
+| **FoldableWithIndex**     | `reduceWithIndex`<br>`reduceRightWithIndex`   |                                              |
+| **Invariant**             | `imap`                                        |                                              |
+| **Monad**                 |                                               | **Pointed**, **FlatMap**                     |
+| **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                                |
+| **NonEmptyAlternative**   |                                               | **NonEmptyCoproduct**, **Covariant**         |
+| **NonEmptyApplicative**   |                                               | **NonEmptyProduct**, **Covariant**           |
+| **NonEmptyCoproduct**     | `coproduct`<br>`coproductMany`                |                                              |
+| **NonEmptyProduct**       | `product`<br>`productMany`                    |                                              |
+| **NonEmptyTraversable**   | `nonEmptyTraverse`                            |                                              |
+| **Of**                    | `of`                                          |                                              |
+| **Pointed**               |                                               | **Covariant**, **Of**                        |
+| **Product**               | `unit`<br>`productAll`                        |                                              |
+| **Semigroup**             | `combine`<br>`combineMany`                    |                                              |
+| **Traversable**           | `traverse`                                    |                                              |
+| **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                              |
+| **TraversableWithIndex**  | `traverseWihtIndex`                           |                                              |
 
 **Graph**
 
@@ -66,9 +66,10 @@ digraph ParameterizedTypes {
     "NonEmptyAlternative" -> "NonEmptyCoproduct"
     "NonEmptyAlternative" -> "Covariant"
     "Alternative" -> "Coproduct"
-    "Alternative" -> "Covariant"
+    "Alternative" -> "NonEmptyAlternative"
     "Applicative" -> "Product"
-    "Applicative" -> "Pointed"
+    "Applicative" -> "NonEmptyApplicative"
+    "Applicative" -> "Of"
     "NonEmptyApplicative" -> "NonEmptyProduct"
     "NonEmptyApplicative" -> "Covariant"
     "Chainable" -> "Covariant"

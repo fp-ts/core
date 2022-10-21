@@ -5,7 +5,6 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
-import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
 /**
@@ -26,7 +25,20 @@ export const fromCovariant = <F extends TypeLambda>(
 ): NonEmptyApplicative<F> => {
   return {
     ...Covariant,
-    ...nonEmptyProduct.fromCovariant(Covariant, product)
+    product,
+    productMany: <S, R, O, E, A>(
+      collection: Iterable<Kind<F, S, R, O, E, A>>
+    ) =>
+      (self: Kind<F, S, R, O, E, A>) => {
+        let out: Kind<F, S, R, O, E, [A, ...Array<A>]> = pipe(
+          self,
+          Covariant.map(a => [a])
+        )
+        for (const fa of collection) {
+          out = pipe(out, product(fa), Covariant.map(([[head, ...tail], a]) => [head, ...tail, a]))
+        }
+        return out
+      }
   }
 }
 
