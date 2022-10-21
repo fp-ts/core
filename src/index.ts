@@ -12,10 +12,8 @@ import * as hkt from "@fp-ts/core/HKT"
 // typeclasses
 // -------------------------------------------------------------------------------------
 
-import * as alt from "@fp-ts/core/typeclass/Alt"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
-import * as apply from "@fp-ts/core/typeclass/Apply"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
@@ -35,6 +33,8 @@ import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as monoidalCoproduct from "@fp-ts/core/typeclass/MonoidalCoproduct"
 import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
+import * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
+import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -61,22 +61,12 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  alt,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   alternative,
   /**
    * @category typeclass
    * @since 1.0.0
    */
   applicative,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  apply,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -181,6 +171,16 @@ export {
    * @since 1.0.0
    */
   monoidalProduct,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  nonEmptyAlternative,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  nonEmptyApplicative,
   /**
    * @category data types
    * @since 1.0.0

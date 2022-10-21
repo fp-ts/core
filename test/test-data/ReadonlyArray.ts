@@ -5,11 +5,11 @@ import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
-import * as apply from "@fp-ts/core/typeclass/Apply"
 import type * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
+import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
@@ -117,10 +117,12 @@ export const product = <B>(that: ReadonlyArray<B>) =>
     return out
   }
 
-export const Apply: apply.Apply<ReadonlyArrayTypeLambda> = apply.fromCovariant(
-  Covariant,
-  product
-)
+export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<ReadonlyArrayTypeLambda> =
+  nonEmptyApplicative
+    .fromCovariant(
+      Covariant,
+      product
+    )
 
 export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
   (fa: ReadonlyArray<A>): ReadonlyArray<B> => {

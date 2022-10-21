@@ -2,11 +2,11 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as apply from "@fp-ts/core/typeclass/Apply"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type { MonoidalProduct } from "@fp-ts/core/typeclass/MonoidalProduct"
 import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
+import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import { unit } from "@fp-ts/core/typeclass/Of"
 import type { Pointed } from "@fp-ts/core/typeclass/Pointed"
 
@@ -19,13 +19,13 @@ export interface Applicative<F extends TypeLambda> extends MonoidalProduct<F>, P
 /**
  * @since 1.0.0
  */
-export const fromApply = <F extends TypeLambda>(
-  Apply: apply.Apply<F>,
+export const fromNonEmptyApplicative = <F extends TypeLambda>(
+  NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<F>,
   of: Pointed<F>["of"]
 ): Applicative<F> => {
   return {
-    ...Apply,
-    ...monoidalProduct.fromSemigroupalProduct(Apply, unit({ of })),
+    ...NonEmptyApplicative,
+    ...monoidalProduct.fromSemigroupalProduct(NonEmptyApplicative, unit({ of })),
     of
   }
 }
@@ -38,6 +38,6 @@ export const fromApply = <F extends TypeLambda>(
 export const liftMonoid = <F extends TypeLambda>(F: Applicative<F>) =>
   <A, S, R, O, E>(Monoid: Monoid<A>): Monoid<Kind<F, S, R, O, E, A>> =>
     monoid.fromSemigroup(
-      apply.liftSemigroup(F)<A, S, R, O, E>(Monoid),
+      nonEmptyApplicative.liftSemigroup(F)<A, S, R, O, E>(Monoid),
       F.of(Monoid.empty)
     )

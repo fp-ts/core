@@ -9,4 +9,6 @@ import type { SemigroupalCoproduct } from "@fp-ts/core/typeclass/SemigroupalCopr
  * @category type class
  * @since 1.0.0
  */
-export interface Alt<F extends TypeLambda> extends SemigroupalCoproduct<F>, Covariant<F> {}
+export interface NonEmptyAlternative<F extends TypeLambda>
+  extends SemigroupalCoproduct<F>, Covariant<F>
+{}
