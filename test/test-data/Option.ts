@@ -640,7 +640,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> 
   productMany: <A>(
     others: Iterable<Option<A>>
   ) =>
-    (start: Option<A>): Option<[A, ...Array<A>]> => {
+    (start: Option<A>): Option<readonly [A, ...Array<A>]> => {
       if (isNone(start)) {
         return none
       }
