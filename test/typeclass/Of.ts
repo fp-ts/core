@@ -4,6 +4,6 @@ import * as U from "../util"
 
 describe("Of", () => {
   it("unit", () => {
-    U.deepStrictEqual(_.unit(O.Pointed)(), O.some([]))
+    U.deepStrictEqual(_.unit(O.Pointed)(), O.some([] as const))
   })
 })

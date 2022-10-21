@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import { empty } from "@fp-ts/core/internal/ReadonlyArray"
 import type { MonoidalProduct } from "@fp-ts/core/typeclass/MonoidalProduct"
 
 /**
@@ -17,4 +18,4 @@ export interface Of<F extends TypeLambda> extends TypeClass<F> {
  */
 export const unit = <F extends TypeLambda>(
   F: Of<F>
-): MonoidalProduct<F>["unit"] => () => F.of([])
+): MonoidalProduct<F>["unit"] => () => F.of(empty)

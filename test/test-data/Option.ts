@@ -608,7 +608,7 @@ export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = covariant.a
  * @category mapping
  * @since 1.0.0
  */
-export const asUnit: (self: Option<unknown>) => Option<[]> = covariant.asUnit(Covariant)
+export const asUnit: (self: Option<unknown>) => Option<readonly []> = covariant.asUnit(Covariant)
 
 /**
  * Sequentially zips this effect with the specified effect using the specified combiner function.
