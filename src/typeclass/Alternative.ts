@@ -1,10 +1,11 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { Alt } from "@fp-ts/core/typeclass/Alt"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { MonoidalCoproduct } from "@fp-ts/core/typeclass/MonoidalCoproduct"
+import * as monoidalCoproduct from "@fp-ts/core/typeclass/MonoidalCoproduct"
 
 /**
  * @category type class
@@ -21,9 +22,6 @@ export const fromAlt = <F extends TypeLambda>(
 ): Alternative<F> => {
   return {
     ...Alt,
-    zero,
-    coproductAll: <S, R, O, E, A>(
-      collection: Iterable<Kind<F, S, R, O, E, A>>
-    ) => Alt.coproductMany(collection)(zero<S>())
+    ...monoidalCoproduct.fromSemigroupalCoproduct(Alt, zero)
   }
 }
