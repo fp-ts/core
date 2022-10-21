@@ -7,11 +7,21 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 # Concrete Types
 
-|                 | member(s)                  | extends         |
-| --------------- | -------------------------- | --------------- |
-| **Associative** | `combine`<br>`combineMany` |                 |
-| **Monoid**      | `unit`<br>`combineAll`     | **Associative** |
-| **TotalOrder**  | `compare`                  |                 |
+|                       | member(s)                  | extends        |
+| --------------------- | -------------------------- | -------------- |
+| **BoundedTotalOrder** | `maximum`<br>`minimum`     | **TotalOrder** |
+| **Semigroup**         | `combine`<br>`combineMany` |                |
+| **Monoid**            | `unit`<br>`combineAll`     | **Semigroup**  |
+| **TotalOrder**        | `compare`                  |                |
+
+**Graph**
+
+```
+digraph ConcreteTypes {
+    "BoundedTotalOrder" -> "TotalOrder"
+    "Monoid" -> "Semigroup"
+}
+```
 
 # Parameterized Types
 
@@ -22,7 +32,6 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Applicative**           |                                               | **MonoidalProduct**, **Pointed**        |
 | **Apply**                 |                                               | **SemigroupalProduct**, **Covariant**   |
 | **Bicovariant**           | `bimap`                                       |                                         |
-| **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **TotalOrder**                          |
 | **Chainable**             |                                               | **Covariant**, **FlatMap**              |
 | **Comonad**               | `extract`                                     | **Extendable**                          |
 | **Compactable**           | `compact`                                     |                                         |
@@ -45,15 +54,14 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Semigroup**             | `combine`<br>`combineMany`                    |                                         |
 | **SemigroupalCoproduct**  | `coproduct`<br>`coproductMany`                |                                         |
 | **SemigroupalProduct**    | `product`<br>`productMany`                    |                                         |
-| **TotalOrder**            | `compare`                                     |                                         |
 | **Traversable**           | `traverse`                                    |                                         |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                         |
 | **TraversableWithIndex**  | `traverseWihtIndex`                           |                                         |
 
-## Graph
+**Graph**
 
 ```
-digraph G {
+digraph ParameterizedTypes {
     "Alt" -> "SemigroupalCoproduct"
     "Alt" -> "Covariant"
     "Alternative" -> "MonoidalCoproduct"
@@ -62,17 +70,26 @@ digraph G {
     "Applicative" -> "Pointed"
     "Apply" -> "SemigroupalProduct"
     "Apply" -> "Covariant"
-    "BoundedTotalOrder" -> "TotalOrder"
     "Chainable" -> "Covariant"
     "Chainable" -> "FlatMap"
     "Comonad" -> "Extendable"
     "Extendable" -> "Covariant"
     "Monad" -> "Pointed"
     "Monad" -> "FlatMap"
-    "Monoid" -> "Semigroup"
     "Pointed" -> "Of"
     "Pointed" -> "Covariant"
     "MonoidalProduct" -> "SemigroupalProduct"
     "MonoidalCoproduct" -> "SemigroupalCoproduct"
 }
 ```
+
+# Data Types
+
+Additionaly `@fp-ts/core` exports a few data types (types only, implementations are in `@fp-ts/data`)
+
+- `Either`
+- `NonEmptyReadonlyArray`
+- `Option`
+- `Predicate`
+- `Refinement`
+- `TotalOrdering`
