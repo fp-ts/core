@@ -653,26 +653,9 @@ const coproduct = <B>(
 
 export const SemigroupalCoproduct = semigroupalCoproduct.fromCoproduct<OptionTypeLambda>(coproduct)
 
-export const coproductMany = <A>(
-  collection: Iterable<Option<A>>
-) =>
-  (self: Option<A>): Option<A> => {
-    let out = self
-    if (isSome(out)) {
-      return out
-    }
-    for (out of collection) {
-      if (isSome(out)) {
-        return out
-      }
-    }
-    return none
-  }
-
 export const Alt: alt.Alt<OptionTypeLambda> = {
   map,
-  coproduct,
-  coproductMany
+  ...SemigroupalCoproduct
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative

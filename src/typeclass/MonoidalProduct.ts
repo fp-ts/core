@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import type { SemigroupalProduct } from "@fp-ts/core/typeclass/SemigroupalProduct"
 
 /**
@@ -31,7 +32,7 @@ export const fromSemigroupalProduct = <F extends TypeLambda>(
       collection: Iterable<Kind<F, S, R, O, E, A>>
     ) => {
       const fas = Array.from(collection)
-      return fas.length === 0 ? unit<S>() : SemigroupalProduct.productMany(fas.slice(1))(fas[0])
+      return isNonEmpty(fas) ? SemigroupalProduct.productMany(tail(fas))(head(fas)) : unit<S>()
     }
   }
 }

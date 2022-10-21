@@ -8,26 +8,26 @@ import * as U from "../util"
 
 describe("TotalOrder", () => {
   it("tuple", () => {
-    const S = _.tuple(string.TotalOrder, number.TotalOrder, boolean.TotalOrder)
-    U.deepStrictEqual(pipe(["a", 1, true], S.compare(["b", 2, true])), -1)
-    U.deepStrictEqual(pipe(["a", 1, true], S.compare(["a", 2, true])), -1)
-    U.deepStrictEqual(pipe(["a", 1, true], S.compare(["a", 1, false])), 1)
+    const TO = _.tuple(string.TotalOrder, number.TotalOrder, boolean.TotalOrder)
+    U.deepStrictEqual(pipe(["a", 1, true], TO.compare(["b", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], TO.compare(["a", 2, true])), -1)
+    U.deepStrictEqual(pipe(["a", 1, true], TO.compare(["a", 1, false])), 1)
   })
 
   it("Contravariant", () => {
-    const S = pipe(number.TotalOrder, _.Contravariant.contramap((s: string) => s.length))
-    U.deepStrictEqual(pipe("a", S.compare("b")), 0)
-    U.deepStrictEqual(pipe("a", S.compare("bb")), -1)
-    U.deepStrictEqual(pipe("aa", S.compare("b")), 1)
+    const TO = pipe(number.TotalOrder, _.Contravariant.contramap((s: string) => s.length))
+    U.deepStrictEqual(pipe("a", TO.compare("b")), 0)
+    U.deepStrictEqual(pipe("a", TO.compare("bb")), -1)
+    U.deepStrictEqual(pipe("aa", TO.compare("b")), 1)
   })
 
   it("Invariant", () => {
-    const TotalOrder = _.Invariant.imap((s: string) => [s] as const, ([s]) => s)(
+    const TO = _.Invariant.imap((s: string) => [s] as const, ([s]) => s)(
       string.TotalOrder
     )
-    U.deepStrictEqual(pipe(["a"], TotalOrder.compare(["b"])), -1)
-    U.deepStrictEqual(pipe(["a"], TotalOrder.compare(["a"])), 0)
-    U.deepStrictEqual(pipe(["b"], TotalOrder.compare(["a"])), 1)
+    U.deepStrictEqual(pipe(["a"], TO.compare(["b"])), -1)
+    U.deepStrictEqual(pipe(["a"], TO.compare(["a"])), 0)
+    U.deepStrictEqual(pipe(["b"], TO.compare(["a"])), 1)
   })
 
   it("getSemigroup", () => {
@@ -123,10 +123,10 @@ describe("TotalOrder", () => {
   })
 
   it("reverse", () => {
-    const Compare = _.reverse(number.TotalOrder)
-    U.deepStrictEqual(pipe(1, Compare.compare(2)), 1)
-    U.deepStrictEqual(pipe(2, Compare.compare(1)), -1)
-    U.deepStrictEqual(pipe(2, Compare.compare(2)), 0)
+    const TO = _.reverse(number.TotalOrder)
+    U.deepStrictEqual(pipe(1, TO.compare(2)), 1)
+    U.deepStrictEqual(pipe(2, TO.compare(1)), -1)
+    U.deepStrictEqual(pipe(2, TO.compare(2)), 0)
   })
 
   it("lessThan", () => {
@@ -185,5 +185,37 @@ describe("TotalOrder", () => {
     const first = { a: 1 }
     const second = { a: 1 }
     U.strictEqual(pipe(first, max(second)), first)
+  })
+
+  it("product", () => {
+    const TO = pipe(
+      string.TotalOrder,
+      _.SemigroupalProduct.product(number.TotalOrder)
+    )
+    U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 2])), -1)
+    U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 1])), 0)
+    U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 0])), 1)
+    U.deepStrictEqual(pipe(["a", 1], TO.compare(["b", 1])), -1)
+  })
+
+  it("productMany", () => {
+    const TO = pipe(
+      string.TotalOrder,
+      _.SemigroupalProduct.productMany([string.TotalOrder, string.TotalOrder])
+    )
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "a"])), 1)
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["b", "a"])), -1)
+  })
+
+  it("productAll", () => {
+    const TO = pipe(
+      _.MonoidalProduct.productAll([string.TotalOrder, string.TotalOrder, string.TotalOrder])
+    )
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "a"])), 1)
+    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["b", "a"])), -1)
   })
 })
