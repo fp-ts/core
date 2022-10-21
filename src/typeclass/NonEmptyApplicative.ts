@@ -17,6 +17,8 @@ export interface NonEmptyApplicative<F extends TypeLambda>
 {}
 
 /**
+ * Useful for tests.
+ *
  * @category constructors
  * @since 1.0.0
  */

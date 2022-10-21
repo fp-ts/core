@@ -1,8 +1,9 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
-import * as product from "@fp-ts/core/typeclass/Product"
+import type * as product from "@fp-ts/core/typeclass/Product"
 
 export interface Predicate<A> {
   (a: A): boolean
@@ -29,7 +30,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambd
         if (self(head) === false) {
           return false
         }
-        const predicates = Array.from(collection)
+        const predicates = fromIterable(collection)
         for (let i = 0; i < predicates.length; i++) {
           if (predicates[i](tail[i]) === false) {
             return false
@@ -40,8 +41,20 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambd
     }
 }
 
-export const Product: product.Product<PredicateTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, () => () => true)
+export const Product: product.Product<PredicateTypeLambda> = {
+  ...NonEmptyProduct,
+  of: () => () => true,
+  productAll: collection =>
+    as => {
+      const predicates = fromIterable(collection)
+      for (let i = 0; i < predicates.length; i++) {
+        if (predicates[i](as[i]) === false) {
+          return false
+        }
+      }
+      return true
+    }
+}
 
 export const isString = (u: unknown): u is string => typeof u === "string"
 

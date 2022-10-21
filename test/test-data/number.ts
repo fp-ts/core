@@ -1,4 +1,4 @@
-import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
+import type * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -34,9 +34,8 @@ export const TotalOrder: totalOrder.TotalOrder<number> = totalOrder.fromCompare(
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
-export const BoundedTotalOrder: boundedTotalOrder.BoundedTotalOrder<number> = boundedTotalOrder
-  .fromTotalOrder(
-    TotalOrder,
-    -Infinity,
-    Infinity
-  )
+export const BoundedTotalOrder: boundedTotalOrder.BoundedTotalOrder<number> = {
+  ...TotalOrder,
+  maximum: Infinity,
+  minimum: -Infinity
+}

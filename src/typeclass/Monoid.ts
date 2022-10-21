@@ -15,6 +15,8 @@ export interface Monoid<A> extends Semigroup<A> {
 }
 
 /**
+ * Optimised.
+ *
  * @category constructors
  * @since 1.0.0
  */

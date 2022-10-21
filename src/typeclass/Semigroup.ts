@@ -26,7 +26,7 @@ import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArr
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
-import * as product from "@fp-ts/core/typeclass/Product"
+import type * as product from "@fp-ts/core/typeclass/Product"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
@@ -47,6 +47,8 @@ export interface SemigroupTypeLambda extends TypeLambda {
 }
 
 /**
+ * Useful when `combineMany` can't be optimised.
+ *
  * @category constructors
  * @since 1.0.0
  */
@@ -209,5 +211,8 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambd
  * @category instances
  * @since 1.0.0
  */
-export const Product: product.Product<SemigroupTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, constant)
+export const Product: product.Product<SemigroupTypeLambda> = {
+  ...NonEmptyProduct,
+  of: constant,
+  productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple<Array<A>>(...collection)
+}
