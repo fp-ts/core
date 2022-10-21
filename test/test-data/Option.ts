@@ -676,7 +676,7 @@ export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<Option
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromNonEmptyAlternative(NonEmptyAlternative, none)
+  .fromNonEmptyAlternative(NonEmptyAlternative, () => none)
 
 /**
  * Lifts a binary function into `Option`.
