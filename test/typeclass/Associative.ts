@@ -1,13 +1,13 @@
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as _ from "@fp-ts/core/typeclass/Associative"
+import * as _ from "@fp-ts/core/typeclass/Semigroup"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as number from "../test-data/number"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
-describe("Associative", () => {
+describe("Semigroup", () => {
   it("reverse", () => {
-    const A = _.reverse(string.Associative)
+    const A = _.reverse(string.Semigroup)
     U.deepStrictEqual(pipe("a", A.combine("b")), "ba")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "ba")
@@ -22,7 +22,7 @@ describe("Associative", () => {
   })
 
   it("intercalate", () => {
-    const A = pipe(string.Associative, _.intercalate("|"))
+    const A = pipe(string.Semigroup, _.intercalate("|"))
     U.deepStrictEqual(pipe("a", A.combine("b")), "a|b")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "a|b")
@@ -63,8 +63,8 @@ describe("Associative", () => {
 
   it("struct", () => {
     const A = _.struct({
-      name: string.Associative,
-      age: number.AssociativeSum
+      name: string.Semigroup,
+      age: number.SemigroupSum
     })
     U.deepStrictEqual(pipe({ name: "a", age: 10 }, A.combine({ name: "b", age: 20 })), {
       name: "ab",
@@ -89,8 +89,8 @@ describe("Associative", () => {
 
   it("tuple", () => {
     const A = _.tuple(
-      string.Associative,
-      number.AssociativeSum
+      string.Semigroup,
+      number.SemigroupSum
     )
     U.deepStrictEqual(pipe(["a", 10], A.combine(["b", 20])), ["ab", 30])
     U.deepStrictEqual(pipe(["a", 10], A.combineMany([])), ["a", 10])
@@ -114,7 +114,7 @@ describe("Associative", () => {
 
   it("imap", () => {
     const imap = _.imap
-    const To = imap((s: string) => [s], ([s]) => s)(string.Associative)
+    const To = imap((s: string) => [s], ([s]) => s)(string.Semigroup)
     U.deepStrictEqual(pipe(["a"], To.combine(["b"])), ["ab"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([])), ["a"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([["b"]])), ["ab"])
@@ -123,7 +123,7 @@ describe("Associative", () => {
     U.deepStrictEqual(
       pipe(
         ["a"],
-        _.Invariant.imap((s: string) => [s], ([s]) => s)(string.Associative).combineMany([["b"], [
+        _.Invariant.imap((s: string) => [s], ([s]) => s)(string.Semigroup).combineMany([["b"], [
           "c"
         ]])
       ),
@@ -133,9 +133,9 @@ describe("Associative", () => {
 
   it("product", () => {
     const A = pipe(
-      string.Associative,
-      _.SemigroupalProduct.product(number.AssociativeSum),
-      _.SemigroupalProduct.product(number.AssociativeMultiply),
+      string.Semigroup,
+      _.SemigroupalProduct.product(number.SemigroupSum),
+      _.SemigroupalProduct.product(number.SemigroupMultiply),
       _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
     )
     U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
@@ -143,8 +143,8 @@ describe("Associative", () => {
 
   it("productMany", () => {
     const A = pipe(
-      string.Associative,
-      _.SemigroupalProduct.productMany([string.Associative, string.Associative])
+      string.Semigroup,
+      _.SemigroupalProduct.productMany([string.Semigroup, string.Semigroup])
     )
     U.deepStrictEqual(pipe(["a", "b", "c"], A.combine(["d", "e", "f"])), ["ad", "be", "cf"])
   })

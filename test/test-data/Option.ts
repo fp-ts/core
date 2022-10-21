@@ -24,8 +24,6 @@ import type * as alt from "@fp-ts/core/typeclass/Alt"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as apply from "@fp-ts/core/typeclass/Apply"
-import type * as associative from "@fp-ts/core/typeclass/Associative"
-import type * as semigroupalProduct from "@fp-ts/core/typeclass/AssociativeProduct"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
@@ -38,6 +36,8 @@ import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
+import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -551,11 +551,11 @@ export const liftTotalOrder = <A>(O: totalOrder.TotalOrder<A>): totalOrder.Total
  * @since 1.0.0
  */
 export const getMonoid = <A>(
-  Associative: associative.Associative<A>
+  S: semigroup.Semigroup<A>
 ): monoid.Monoid<Option<A>> => {
   const combine = (that: Option<A>) =>
     (self: Option<A>): Option<A> =>
-      isNone(self) ? that : isNone(that) ? self : some(Associative.combine(that.value)(self.value))
+      isNone(self) ? that : isNone(that) ? self : some(S.combine(that.value)(self.value))
   return ({
     combine,
     combineMany: (others) =>
@@ -1090,7 +1090,7 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupalProduct: semigroupalProduct.AssociativeProduct<OptionTypeLambda> = {
+export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<OptionTypeLambda> = {
   product,
   productMany: <A>(
     others: Iterable<Option<A>>

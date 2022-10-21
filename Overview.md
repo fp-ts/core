@@ -21,9 +21,6 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Alternative**           | `zero`<br>`coproductAll`                      | **Coproduct**                           |
 | **Applicative**           | `productAll`                                  | **Product**, **Of**                     |
 | **Apply**                 | `productMany`                                 | **SemigroupalProduct**, **Covariant**   |
-| **Associative**           | `combine`<br>`combineMany`                    |                                         |
-| **AssociativeCoproduct**  | `coproduct`                                   |                                         |
-| **AssociativeProduct**    | `product`<br>`productMany`                    |                                         |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
 | **Category**              | `identity`                                    | **Composable**                          |
@@ -45,6 +42,9 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Monoid**                | `unit`<br>`combineAll`                        | **Associative**                         |
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
+| **Semigroup**             | `combine`<br>`combineMany`                    |                                         |
+| **SemigroupalCoproduct**  | `coproduct`                                   |                                         |
+| **SemigroupalProduct**    | `product`<br>`productMany`                    |                                         |
 | **TotalOrder**            | `compare`                                     |                                         |
 | **Traversable**           | `traverse`                                    |                                         |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                         |

@@ -1,8 +1,8 @@
 /**
- * `Associative<A>` describes a way of combining two values of type `A` that is associative.
+ * `Semigroup<A>` describes a way of combining two values of type `A` that is associative.
  *
  * ```ts
- * export interface Associative<A> {
+ * export interface Semigroup<A> {
  *   readonly combine: (that: A) => (self: A) => A
  *   readonly combineMany: (collection: Iterable<A>) => (self: A) => A
  * }
@@ -15,22 +15,22 @@
  * (a <> b) <> c === a <> (b <> c)
  * ```
  *
- * The `Associative` abstraction allows us to combine values of a data type to build a new value of that data type
+ * The `Semigroup` abstraction allows us to combine values of a data type to build a new value of that data type
  * with richer structure.
  *
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
-import type * as productSemigroupal from "@fp-ts/core/typeclass/AssociativeProduct"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Associative<A> {
+export interface Semigroup<A> {
   readonly combine: (that: A) => (self: A) => A
   readonly combineMany: (collection: Iterable<A>) => (self: A) => A
 }
@@ -39,15 +39,15 @@ export interface Associative<A> {
  * @category type lambdas
  * @since 1.0.0
  */
-export interface AssociativeTypeLambda extends TypeLambda {
-  readonly type: Associative<this["Target"]>
+export interface SemigroupTypeLambda extends TypeLambda {
+  readonly type: Semigroup<this["Target"]>
 }
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const fromCombine = <A>(combine: Associative<A>["combine"]): Associative<A> => ({
+export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> => ({
   combine,
   combineMany: (collection) =>
     (self) => {
@@ -60,45 +60,45 @@ export const fromCombine = <A>(combine: Associative<A>["combine"]): Associative<
 })
 
 /**
- * `Associative` that returns last minimum of elements.
+ * `Semigroup` that returns last minimum of elements.
  *
  * @category constructors
  * @since 1.0.0
  */
-export const min = <A>(TotalOrder: TotalOrder<A>): Associative<A> =>
-  fromCombine((that) => (self) => TotalOrder.compare(that)(self) === -1 ? self : that)
+export const min = <A>(TO: TotalOrder<A>): Semigroup<A> =>
+  fromCombine((that) => (self) => TO.compare(that)(self) === -1 ? self : that)
 
 /**
- * `Associative` that returns last maximum of elements.
+ * `Semigroup` that returns last maximum of elements.
  *
  * @category constructors
  * @since 1.0.0
  */
-export const max = <A>(TotalOrder: TotalOrder<A>): Associative<A> =>
-  fromCombine((that) => (self) => TotalOrder.compare(that)(self) === 1 ? self : that)
+export const max = <A>(TO: TotalOrder<A>): Semigroup<A> =>
+  fromCombine((that) => (self) => TO.compare(that)(self) === 1 ? self : that)
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const constant = <A>(a: A): Associative<A> => ({
+export const constant = <A>(a: A): Semigroup<A> => ({
   combine: () => () => a,
   combineMany: () => () => a
 })
 
 /**
- * The dual of an `Associative`, obtained by flipping the arguments of `combine`.
+ * The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
  *
  * @since 1.0.0
  */
-export const reverse = <A>(Associative: Associative<A>): Associative<A> => ({
-  combine: (that) => (self) => Associative.combine(self)(that),
+export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
+  combine: (that) => (self) => S.combine(self)(that),
   combineMany: (collection) =>
     (self) => {
       const reversed = Array.from(collection).reverse()
       return reversed.length === 0 ?
         self :
-        Associative.combine(self)(Associative.combineMany(reversed.slice(1))(reversed[0]))
+        S.combine(self)(S.combineMany(reversed.slice(1))(reversed[0]))
     }
 })
 
@@ -107,7 +107,7 @@ export const reverse = <A>(Associative: Associative<A>): Associative<A> => ({
  *
  * @since 1.0.0
  */
-export const struct = <A>(associatives: { [K in keyof A]: Associative<A[K]> }): Associative<
+export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semigroup<
   {
     readonly [K in keyof A]: A[K]
   }
@@ -115,9 +115,9 @@ export const struct = <A>(associatives: { [K in keyof A]: Associative<A[K]> }): 
   fromCombine((that) =>
     (self) => {
       const r = {} as any
-      for (const k in associatives) {
-        if (Object.prototype.hasOwnProperty.call(associatives, k)) {
-          r[k] = associatives[k].combine(that[k])(self[k])
+      for (const k in semigroups) {
+        if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
+          r[k] = semigroups[k].combine(that[k])(self[k])
         }
       }
       return r
@@ -130,19 +130,17 @@ export const struct = <A>(associatives: { [K in keyof A]: Associative<A[K]> }): 
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<unknown>>(
-  ...associatives: { [K in keyof A]: Associative<A[K]> }
-): Associative<Readonly<A>> =>
-  fromCombine((that) =>
-    (self) => associatives.map((Associative, i) => Associative.combine(that[i])(self[i])) as any
-  )
+  ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
+): Semigroup<Readonly<A>> =>
+  fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
 
 /**
  * @since 1.0.0
  */
 export const intercalate = <A>(separator: A) =>
-  (Associative: Associative<A>): Associative<A> =>
+  (S: Semigroup<A>): Semigroup<A> =>
     fromCombine(
-      (that) => Associative.combineMany([separator, that])
+      (that) => S.combineMany([separator, that])
     )
 
 /**
@@ -151,7 +149,7 @@ export const intercalate = <A>(separator: A) =>
  * @category instances
  * @since 1.0.0
  */
-export const first = <A = never>(): Associative<A> => ({
+export const first = <A = never>(): Semigroup<A> => ({
   combine: () => identity,
   combineMany: () => identity
 })
@@ -162,7 +160,7 @@ export const first = <A = never>(): Associative<A> => ({
  * @category instances
  * @since 1.0.0
  */
-export const last = <A = never>(): Associative<A> => ({
+export const last = <A = never>(): Semigroup<A> => ({
   combine: second => () => second,
   combineMany: collection =>
     self => {
@@ -180,21 +178,21 @@ export const imap = <A, B>(
   to: (a: A) => B,
   from: (b: B) => A
 ) =>
-  (Associative: Associative<A>): Associative<B> => ({
-    combine: that => self => to(Associative.combine(from(that))(from(self))),
+  (S: Semigroup<A>): Semigroup<B> => ({
+    combine: that => self => to(S.combine(from(that))(from(self))),
     combineMany: (collection) =>
-      self => to(Associative.combineMany(Array.from(collection).map(from))(from(self)))
+      self => to(S.combineMany(Array.from(collection).map(from))(from(self)))
   })
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Invariant: invariant.Invariant<AssociativeTypeLambda> = {
+export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
   imap
 }
 
-export const SemigroupalProduct: productSemigroupal.AssociativeProduct<AssociativeTypeLambda> = {
+export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<SemigroupTypeLambda> = {
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }
