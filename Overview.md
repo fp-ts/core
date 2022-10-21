@@ -18,8 +18,8 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 |                           | member(s)                                     | extends                                 |
 | ------------------------- | --------------------------------------------- | --------------------------------------- |
 | **Alt**                   | `coproductMany`                               | **SemigroupalCoproduct**, **Covariant** |
-| **Alternative**           | `zero`<br>`coproductAll`                      | **Coproduct**                           |
-| **Applicative**           | `productAll`                                  | **Product**, **Of**                     |
+| **Alternative**           | `zero`<br>`coproductAll`                      | **MonoidalCoproduct**, **Covariant**    |
+| **Applicative**           | `productAll`                                  | **MonoidalProduct**, **Pointed**        |
 | **Apply**                 | `productMany`                                 | **SemigroupalProduct**, **Covariant**   |
 | **Bicovariant**           | `bimap`                                       |                                         |
 | **BoundedTotalOrder**     | `maximum`<br>`minimum`                        | **Sortable**                            |
@@ -39,7 +39,9 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **FoldableWithIndex**     | `reduceWithIndex`<br>`reduceRightWithIndex`   |                                         |
 | **Invariant**             | `imap`                                        |                                         |
 | **Monad**                 |                                               | **Pointed**, **FlatMap**                |
-| **Monoid**                | `unit`<br>`combineAll`                        | **Associative**                         |
+| **Monoid**                | `unit`<br>`combineAll`                        | **Semigroup**                           |
+| **MonoidalCoproduct**     | `zero`<br>`coproductAll`                      |                                         |
+| **MonoidalProduct**       | `unit`<br>`productAll`                        |                                         |
 | **Of**                    | `of`                                          |                                         |
 | **Pointed**               |                                               | **Covariant**, **Of**                   |
 | **Semigroup**             | `combine`<br>`combineMany`                    |                                         |
@@ -56,9 +58,10 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 digraph G {
     "Alt" -> "SemigroupalCoproduct"
     "Alt" -> "Covariant"
-    "Alternative" -> "Alt"
-    "Applicative" -> "Apply"
-    "Applicative" -> "Of"
+    "Alternative" -> "MonoidalCoproduct"
+    "Alternative" -> "Covariant"
+    "Applicative" -> "MonoidalProduct"
+    "Applicative" -> "Pointed"
     "Apply" -> "SemigroupalProduct"
     "Apply" -> "Covariant"
     "BoundedTotalOrder" -> "TotalOrder"
@@ -72,11 +75,7 @@ digraph G {
     "Monoid" -> "Semigroup"
     "Pointed" -> "Of"
     "Pointed" -> "Covariant"
-    "Product" -> "SemigroupalProduct"
-    "Applicative" -> "MonoidalProduct"
+    "MonoidalProduct" -> "SemigroupalProduct"
     "MonoidalCoproduct" -> "SemigroupalCoproduct"
-    "Alternative" -> "MonoidalCoproduct"
-    "InvariantMonoidalProduct" -> "MonoidalProduct"
-    "InvariantMonoidalCoproduct" -> "MonoidalCoproduct"
 }
 ```
