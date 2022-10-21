@@ -18,11 +18,9 @@ import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as apply from "@fp-ts/core/typeclass/Apply"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
-import * as category from "@fp-ts/core/typeclass/Category"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as comonad from "@fp-ts/core/typeclass/Comonad"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
-import * as composable from "@fp-ts/core/typeclass/Composable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
@@ -92,11 +90,6 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  category,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   chainable,
   /**
    * @category typeclass
@@ -108,11 +101,6 @@ export {
    * @since 1.0.0
    */
   compactable,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  composable,
   /**
    * @category typeclass
    * @since 1.0.0
