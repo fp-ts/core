@@ -23,6 +23,7 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
+import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
@@ -182,7 +183,7 @@ export const imap = <A, B>(
   (S: Semigroup<A>): Semigroup<B> => ({
     combine: that => self => to(S.combine(from(that))(from(self))),
     combineMany: (collection) =>
-      self => to(S.combineMany(Array.from(collection).map(from))(from(self)))
+      self => to(S.combineMany(fromIterable(collection).map(from))(from(self)))
   })
 
 /**
