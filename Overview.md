@@ -54,12 +54,12 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 ```
 digraph G {
-    "Alt" -> "AssociativeCoproduct"
+    "Alt" -> "SemigroupalCoproduct"
     "Alt" -> "Covariant"
     "Alternative" -> "Alt"
     "Applicative" -> "Apply"
     "Applicative" -> "Of"
-    "Apply" -> "AssociativeProduct"
+    "Apply" -> "SemigroupalProduct"
     "Apply" -> "Covariant"
     "BoundedTotalOrder" -> "TotalOrder"
     "Category" -> "Composable"
@@ -69,14 +69,14 @@ digraph G {
     "Extendable" -> "Covariant"
     "Monad" -> "Pointed"
     "Monad" -> "FlatMap"
-    "Monoid" -> "Associative"
+    "Monoid" -> "Semigroup"
     "Pointed" -> "Of"
     "Pointed" -> "Covariant"
-    "Product" -> "AssociativeProduct"
-    "Applicative" -> "Product"
-    "Coproduct" -> "AssociativeCoproduct"
-    "Alternative" -> "Coproduct"
-    "InvariantProduct" -> "Product"
-    "InvariantCoproduct" -> "Coproduct"
+    "Product" -> "SemigroupalProduct"
+    "Applicative" -> "MonoidalProduct"
+    "MonoidalCoproduct" -> "SemigroupalCoproduct"
+    "Alternative" -> "MonoidalCoproduct"
+    "InvariantMonoidalProduct" -> "MonoidalProduct"
+    "InvariantMonoidalCoproduct" -> "MonoidalCoproduct"
 }
 ```
