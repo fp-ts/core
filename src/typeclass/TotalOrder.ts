@@ -8,7 +8,7 @@ import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
-import * as product from "@fp-ts/core/typeclass/Product"
+import type * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
 /**
@@ -28,6 +28,8 @@ export interface TotalOrderTypeLambda extends TypeLambda {
 }
 
 /**
+ * Main constructor.
+ *
  * @category constructors
  * @since 1.0.0
  */
@@ -142,8 +144,11 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<TotalOrderTypeLamb
  * @category instances
  * @since 1.0.0
  */
-export const Product: product.Product<TotalOrderTypeLambda> = product
-  .fromNonEmptyProduct(NonEmptyProduct, () => empty)
+export const Product: product.Product<TotalOrderTypeLambda> = {
+  ...NonEmptyProduct,
+  of: () => empty,
+  productAll: <A>(collection: Iterable<TotalOrder<A>>) => tuple<Array<A>>(...collection)
+}
 
 /**
  * Test whether one value is _strictly less than_ another.

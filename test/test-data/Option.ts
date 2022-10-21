@@ -19,9 +19,11 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
+import * as nonEmptyReadonlyArray from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import * as option from "@fp-ts/core/internal/Option"
-import * as alternative from "@fp-ts/core/typeclass/Alternative"
-import * as applicative from "@fp-ts/core/typeclass/Applicative"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
+import type * as alternative from "@fp-ts/core/typeclass/Alternative"
+import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
@@ -35,13 +37,14 @@ import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
-import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
+import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
+import * as nonEmptyArray from "./NonEmptyArray"
 
 /**
  * @category models
@@ -639,21 +642,19 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
 export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> = {
   imap: Invariant.imap,
   product,
-  productMany: <A>(
-    others: Iterable<Option<A>>
-  ) =>
-    (start: Option<A>): Option<readonly [A, ...Array<A>]> => {
-      if (isNone(start)) {
+  productMany: collection =>
+    self => {
+      if (isNone(self)) {
         return none
       }
-      const res: [A, ...Array<A>] = [start.value]
-      for (const o of others) {
+      const out = nonEmptyArray.make(self.value)
+      for (const o of collection) {
         if (isNone(o)) {
           return none
         }
-        res.push(o.value)
+        out.push(o.value)
       }
-      return some(res)
+      return some(out)
     }
 }
 
@@ -670,15 +671,32 @@ const coproduct = <B>(
   that: Option<B>
 ) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
 
-export const NonEmptyCoproduct = nonEmptyCoproduct.fromCoproduct<OptionTypeLambda>(coproduct)
+export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<OptionTypeLambda> = {
+  coproduct,
+  coproductMany: collection =>
+    self => {
+      if (isSome(self)) {
+        return self
+      }
+      for (const o of collection) {
+        if (isSome(o)) {
+          return o
+        }
+      }
+      return none
+    }
+}
 
 export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<OptionTypeLambda> = {
   map,
   ...NonEmptyCoproduct
 }
 
-export const Alternative: alternative.Alternative<OptionTypeLambda> = alternative
-  .fromNonEmptyAlternative(NonEmptyAlternative, () => none)
+export const Alternative: alternative.Alternative<OptionTypeLambda> = {
+  ...NonEmptyAlternative,
+  zero: () => none,
+  coproductAll: collection => NonEmptyAlternative.coproductMany(collection)(none)
+}
 
 /**
  * Lifts a binary function into `Option`.
@@ -705,11 +723,18 @@ export const lift3: <A, B, C, D>(
  * @category instances
  * @since 1.0.0
  */
-export const Applicative: applicative.Applicative<OptionTypeLambda> = applicative
-  .fromNonEmptyApplicative(
-    NonEmptyApplicative,
-    some
-  )
+export const Applicative: applicative.Applicative<OptionTypeLambda> = {
+  ...NonEmptyApplicative,
+  of: some,
+  productAll: collection => {
+    const as = readonlyArray.fromIterable(collection)
+    return nonEmptyReadonlyArray.isNonEmpty(as) ?
+      NonEmptyApplicative.productMany(nonEmptyReadonlyArray.tail(as))(
+        nonEmptyReadonlyArray.head(as)
+      ) :
+      some(readonlyArray.empty)
+  }
+}
 
 /**
  * @category instances

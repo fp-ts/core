@@ -15,19 +15,3 @@ export interface Coproduct<F extends TypeLambda> extends NonEmptyCoproduct<F> {
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, A>
 }
-
-/**
- * @since 1.0.0
- */
-export const fromNonEmptyCoproduct = <F extends TypeLambda>(
-  F: NonEmptyCoproduct<F>,
-  zero: Coproduct<F>["zero"]
-): Coproduct<F> => {
-  return {
-    ...F,
-    zero,
-    coproductAll: <R, O, E, A>(
-      collection: Iterable<Kind<F, R, O, E, A>>
-    ) => F.coproductMany(collection)(zero())
-  }
-}

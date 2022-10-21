@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
 
 /**
  * @category type class
@@ -18,24 +17,4 @@ export interface NonEmptyCoproduct<F extends TypeLambda> extends TypeClass<F> {
   readonly coproductMany: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, A>
-}
-
-/**
- * @category constructors
- * @since 1.0.0
- */
-export const fromCoproduct = <F extends TypeLambda>(
-  coproduct: NonEmptyCoproduct<F>["coproduct"]
-): NonEmptyCoproduct<F> => {
-  return {
-    coproduct,
-    coproductMany: collection =>
-      self => {
-        let out = self
-        for (const fa of collection) {
-          out = pipe(out, coproduct(fa))
-        }
-        return out
-      }
-  }
 }

@@ -3,8 +3,8 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
-import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
-import { empty, fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
+import { isNonEmpty } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
+import { empty } from "@fp-ts/core/internal/ReadonlyArray"
 import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Of } from "@fp-ts/core/typeclass/Of"
 
@@ -16,28 +16,6 @@ export interface Product<F extends TypeLambda> extends NonEmptyProduct<F>, Of<F>
   readonly productAll: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, ReadonlyArray<A>>
-}
-
-/**
- * @category constructors
- * @since 1.0.0
- */
-export const fromNonEmptyProduct = <F extends TypeLambda>(
-  F: NonEmptyProduct<F>,
-  of: Of<F>["of"]
-): Product<F> => {
-  return {
-    ...F,
-    of,
-    productAll: <R, O, E, A>(
-      collection: Iterable<Kind<F, R, O, E, A>>
-    ) => {
-      const fas = fromIterable(collection)
-      return isNonEmpty(fas) ?
-        F.productMany(tail(fas))(head(fas)) as Kind<F, R, O, E, ReadonlyArray<A>> :
-        of<ReadonlyArray<A>>(empty)
-    }
-  }
 }
 
 /**
