@@ -17,7 +17,7 @@ export interface Alternative<F extends TypeLambda> extends MonoidalCoproduct<F>,
  */
 export const fromAlt = <F extends TypeLambda>(
   Alt: Alt<F>,
-  zero: Alternative<F>["zero"]
+  zero: MonoidalCoproduct<F>["zero"]
 ): Alternative<F> => {
   return {
     ...Alt,

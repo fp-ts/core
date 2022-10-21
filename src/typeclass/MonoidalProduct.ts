@@ -15,3 +15,20 @@ export interface MonoidalProduct<F extends TypeLambda> extends SemigroupalProduc
     collection: Iterable<Kind<F, S, R, O, E, A>>
   ) => Kind<F, S, R, O, E, ReadonlyArray<A>>
 }
+
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const fromSemigroupalProduct = <F extends TypeLambda>(
+  SemigroupalProduct: SemigroupalProduct<F>,
+  unit: MonoidalProduct<F>["unit"]
+): MonoidalProduct<F> => {
+  return {
+    ...SemigroupalProduct,
+    unit,
+    productAll: <S, R, O, E, A>(
+      collection: Iterable<Kind<F, S, R, O, E, A>>
+    ) => SemigroupalProduct.productMany(collection)(unit<S>())
+  }
+}

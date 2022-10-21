@@ -7,6 +7,7 @@ import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as monoidalProduct from "@fp-ts/core/typeclass/MonoidalProduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import type * as semigroupalProduct from "@fp-ts/core/typeclass/SemigroupalProduct"
 
@@ -102,12 +103,14 @@ export const getSemigroup = <A>(): Semigroup<TotalOrder<A>> => ({
       )
 })
 
+const empty: TotalOrder<unknown> = fromCompare(() => () => 0)
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const getMonoid = <A>(): Monoid<TotalOrder<A>> =>
-  monoid.fromSemigroup(getSemigroup<A>(), fromCompare(() => () => 0))
+  monoid.fromSemigroup(getSemigroup<A>(), empty)
 
 /**
  * @category instances
@@ -133,6 +136,13 @@ export const SemigroupalProduct: semigroupalProduct.SemigroupalProduct<TotalOrde
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const MonoidalProduct: monoidalProduct.MonoidalProduct<TotalOrderTypeLambda> =
+  monoidalProduct.fromSemigroupalProduct(SemigroupalProduct, () => empty)
 
 /**
  * Test whether one value is _strictly less than_ another.
