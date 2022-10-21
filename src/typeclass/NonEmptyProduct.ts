@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
@@ -20,19 +19,3 @@ export interface NonEmptyProduct<F extends TypeLambda> extends Invariant<F> {
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
-
-/**
- * @since 1.0.0
- */
-export const zip3 = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
-  <R, O, E, A, B, C>(
-    fa: Kind<F, R, O, E, A>,
-    fb: Kind<F, R, O, E, B>,
-    fc: Kind<F, R, O, E, C>
-  ): Kind<F, R, O, E, readonly [A, B, C]> =>
-    pipe(
-      fa,
-      F.product(fb),
-      F.product(fc),
-      F.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
-    )
