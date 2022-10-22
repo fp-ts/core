@@ -14,16 +14,19 @@ export interface PredicateTypeLambda extends TypeLambda {
   readonly type: Predicate<this["Target"]>
 }
 
-export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = {
-  contramap: f => self => b => self(f(b))
-}
+export const contramap = <B, A>(f: (b: B) => A) =>
+  (self: Predicate<A>): Predicate<B> => b => self(f(b))
+
+export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = contravariant.make(
+  contramap
+)
 
 export const Invariant: invariant.Invariant<PredicateTypeLambda> = {
-  imap: contravariant.imap(Contravariant)
+  imap: Contravariant.imap
 }
 
 export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambda> = {
-  imap: Invariant.imap,
+  imap: Contravariant.imap,
   product: that => self => ([a, b]) => self(a) && that(b),
   productMany: collection =>
     self => {

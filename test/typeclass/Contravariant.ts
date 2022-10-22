@@ -6,7 +6,10 @@ import * as U from "../util"
 
 describe("Contravariant", () => {
   it("imap", () => {
-    const O = _.imap(order.Contravariant)((s: string) => [s] as const, ([s]) => s)(
+    const O = _.imap<order.OrderTypeLambda>(order.contramap)(
+      (s: string) => [s] as const,
+      ([s]) => s
+    )(
       string.Order
     )
     U.deepStrictEqual(pipe(["a"], O.compare(["b"])), -1)

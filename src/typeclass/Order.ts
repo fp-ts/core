@@ -117,16 +117,16 @@ export const getMonoid = <A>(): Monoid<Order<A>> => monoid.fromSemigroup(getSemi
  * @category instances
  * @since 1.0.0
  */
-export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = {
+export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = contravariant.make(
   contramap
-}
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OrderTypeLambda> = {
-  imap: contravariant.imap(Contravariant)
+  imap: Contravariant.imap
 }
 
 /**
@@ -134,7 +134,7 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
  * @since 1.0.0
  */
 export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OrderTypeLambda> = {
-  ...Invariant,
+  imap: Contravariant.imap,
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
 }
