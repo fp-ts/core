@@ -39,9 +39,9 @@ import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlterna
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
+import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 import * as nonEmptyArray from "./NonEmptyArray"
@@ -512,11 +512,11 @@ export const traverse = <F extends TypeLambda>(
  * `None` is considered to be less than any `Some` value.
  *
  * @exampleTodo
- * import { none, some, liftTotalOrder } from '@fp-ts/data/Option'
+ * import { none, some, liftOrder } from '@fp-ts/data/Option'
  * import * as N from '@fp-ts/data/number'
  * import { pipe } from '@fp-ts/data/Function'
  *
- * const O = liftTotalOrder(N.TotalOrder)
+ * const O = liftOrder(N.Order)
  * assert.strictEqual(pipe(none, O.compare(none)), 0)
  * assert.strictEqual(pipe(none, O.compare(some(1))), -1)
  * assert.strictEqual(pipe(some(1), O.compare(none)), 1)
@@ -526,8 +526,8 @@ export const traverse = <F extends TypeLambda>(
  * @category instances
  * @since 1.0.0
  */
-export const liftTotalOrder = <A>(O: totalOrder.TotalOrder<A>): totalOrder.TotalOrder<Option<A>> =>
-  totalOrder.fromCompare((that) =>
+export const liftOrder = <A>(O: order.Order<A>): order.Order<Option<A>> =>
+  order.fromCompare((that) =>
     (self) => isSome(self) ? (isSome(that) ? O.compare(that.value)(self.value) : 1) : -1
   )
 

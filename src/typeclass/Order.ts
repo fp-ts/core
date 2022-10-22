@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { TotalOrdering } from "@fp-ts/core/data/TotalOrdering"
+import type { Ordering } from "@fp-ts/core/data/Ordering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -15,16 +15,16 @@ import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
  * @category type class
  * @since 1.0.0
  */
-export interface TotalOrder<A> {
-  readonly compare: (that: A) => (self: A) => TotalOrdering
+export interface Order<A> {
+  readonly compare: (that: A) => (self: A) => Ordering
 }
 
 /**
  * @category type lambdas
  * @since 1.0.0
  */
-export interface TotalOrderTypeLambda extends TypeLambda {
-  readonly type: TotalOrder<this["Target"]>
+export interface OrderTypeLambda extends TypeLambda {
+  readonly type: Order<this["Target"]>
 }
 
 /**
@@ -33,7 +33,7 @@ export interface TotalOrderTypeLambda extends TypeLambda {
  * @category constructors
  * @since 1.0.0
  */
-export const fromCompare = <A>(compare: TotalOrder<A>["compare"]): TotalOrder<A> => ({
+export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
   compare: that => self => self === that ? 0 : compare(that)(self)
 })
 
@@ -43,47 +43,47 @@ export const fromCompare = <A>(compare: TotalOrder<A>["compare"]): TotalOrder<A>
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<any>>(
-  ...totalOrders: { [K in keyof A]: TotalOrder<A[K]> }
-): TotalOrder<Readonly<A>> =>
+  ...orders: { [K in keyof A]: Order<A[K]> }
+): Order<Readonly<A>> =>
   fromCompare(that =>
     self => {
       let i = 0
-      for (; i < totalOrders.length - 1; i++) {
-        const r = totalOrders[i].compare(that[i])(self[i])
+      for (; i < orders.length - 1; i++) {
+        const r = orders[i].compare(that[i])(self[i])
         if (r !== 0) {
           return r
         }
       }
-      return totalOrders[i].compare(that[i])(self[i])
+      return orders[i].compare(that[i])(self[i])
     }
   )
 
 /**
  * @since 1.0.0
  */
-export const reverse = <A>(TotalOrder: TotalOrder<A>): TotalOrder<A> =>
-  fromCompare(that => self => TotalOrder.compare(self)(that))
+export const reverse = <A>(O: Order<A>): Order<A> =>
+  fromCompare(that => self => O.compare(self)(that))
 
 /**
  * @since 1.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: TotalOrder<A>): TotalOrder<B> => fromCompare((b2) => (b1) => self.compare(f(b2))(f(b1)))
+  (self: Order<A>): Order<B> => fromCompare((b2) => (b1) => self.compare(f(b2))(f(b1)))
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup = <A>(): Semigroup<TotalOrder<A>> => ({
-  combine: (totalOrder2) =>
-    (totalOrder1) =>
+export const getSemigroup = <A>(): Semigroup<Order<A>> => ({
+  combine: (O2) =>
+    (O1) =>
       fromCompare(that =>
         self => {
-          const out = totalOrder1.compare(that)(self)
+          const out = O1.compare(that)(self)
           if (out !== 0) {
             return out
           }
-          return totalOrder2.compare(that)(self)
+          return O2.compare(that)(self)
         }
       ),
   combineMany: (collection) =>
@@ -94,8 +94,8 @@ export const getSemigroup = <A>(): Semigroup<TotalOrder<A>> => ({
           if (out !== 0) {
             return out
           }
-          for (const totalOrder of collection) {
-            out = totalOrder.compare(a2)(a1)
+          for (const O of collection) {
+            out = O.compare(a2)(a1)
             if (out !== 0) {
               return out
             }
@@ -105,20 +105,19 @@ export const getSemigroup = <A>(): Semigroup<TotalOrder<A>> => ({
       )
 })
 
-const empty: TotalOrder<unknown> = fromCompare(() => () => 0)
+const empty: Order<unknown> = fromCompare(() => () => 0)
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const getMonoid = <A>(): Monoid<TotalOrder<A>> =>
-  monoid.fromSemigroup(getSemigroup<A>(), empty)
+export const getMonoid = <A>(): Monoid<Order<A>> => monoid.fromSemigroup(getSemigroup<A>(), empty)
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Contravariant: contravariant.Contravariant<TotalOrderTypeLambda> = {
+export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = {
   contramap
 }
 
@@ -126,7 +125,7 @@ export const Contravariant: contravariant.Contravariant<TotalOrderTypeLambda> = 
  * @category instances
  * @since 1.0.0
  */
-export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
+export const Invariant: invariant.Invariant<OrderTypeLambda> = {
   imap: contravariant.imap(Contravariant)
 }
 
@@ -134,7 +133,7 @@ export const Invariant: invariant.Invariant<TotalOrderTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<TotalOrderTypeLambda> = {
+export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OrderTypeLambda> = {
   ...Invariant,
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
@@ -144,10 +143,10 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<TotalOrderTypeLamb
  * @category instances
  * @since 1.0.0
  */
-export const Product: product.Product<TotalOrderTypeLambda> = {
+export const Product: product.Product<OrderTypeLambda> = {
   ...NonEmptyProduct,
   of: () => empty,
-  productAll: <A>(collection: Iterable<TotalOrder<A>>) => tuple<Array<A>>(...collection)
+  productAll: <A>(collection: Iterable<Order<A>>) => tuple<Array<A>>(...collection)
 }
 
 /**
@@ -155,62 +154,60 @@ export const Product: product.Product<TotalOrderTypeLambda> = {
  *
  * @since 1.0.0
  */
-export const lessThan = <A>(TotalOrder: TotalOrder<A>) =>
-  (that: A) => (self: A) => TotalOrder.compare(that)(self) === -1
+export const lessThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(that)(self) === -1
 
 /**
  * Test whether one value is _strictly greater than_ another.
  *
  * @since 1.0.0
  */
-export const greaterThan = <A>(TotalOrder: TotalOrder<A>) =>
-  (that: A) => (self: A) => TotalOrder.compare(that)(self) === 1
+export const greaterThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(that)(self) === 1
 
 /**
  * Test whether one value is _non-strictly less than_ another.
  *
  * @since 1.0.0
  */
-export const lessThanOrEqualTo = <A>(TotalOrder: TotalOrder<A>) =>
-  (that: A) => (self: A) => TotalOrder.compare(that)(self) !== 1
+export const lessThanOrEqualTo = <A>(O: Order<A>) =>
+  (that: A) => (self: A) => O.compare(that)(self) !== 1
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
  *
  * @since 1.0.0
  */
-export const greaterThanOrEqualTo = <A>(TotalOrder: TotalOrder<A>) =>
-  (that: A) => (self: A) => TotalOrder.compare(that)(self) !== -1
+export const greaterThanOrEqualTo = <A>(O: Order<A>) =>
+  (that: A) => (self: A) => O.compare(that)(self) !== -1
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
  *
  * @since 1.0.0
  */
-export const min = <A>(TotalOrder: TotalOrder<A>) =>
-  (that: A) => (self: A): A => self === that || TotalOrder.compare(that)(self) < 1 ? self : that
+export const min = <A>(O: Order<A>) =>
+  (that: A) => (self: A): A => self === that || O.compare(that)(self) < 1 ? self : that
 
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
  *
  * @since 1.0.0
  */
-export const max = <A>(TotalOrder: TotalOrder<A>) =>
-  (that: A) => (self: A): A => self === that || TotalOrder.compare(that)(self) > -1 ? self : that
+export const max = <A>(O: Order<A>) =>
+  (that: A) => (self: A): A => self === that || O.compare(that)(self) > -1 ? self : that
 
 /**
  * Clamp a value between a minimum and a maximum.
  *
  * @since 1.0.0
  */
-export const clamp = <A>(TotalOrder: TotalOrder<A>) =>
-  (minimum: A, maximum: A) => (a: A) => min(TotalOrder)(max(TotalOrder)(a)(minimum))(maximum)
+export const clamp = <A>(O: Order<A>) =>
+  (minimum: A, maximum: A) => (a: A) => min(O)(max(O)(a)(minimum))(maximum)
 
 /**
  * Test whether a value is between a minimum and a maximum (inclusive).
  *
  * @since 1.0.0
  */
-export const between = <A>(TotalOrder: TotalOrder<A>) =>
+export const between = <A>(O: Order<A>) =>
   (minimum: A, maximum: A) =>
-    (a: A): boolean => !lessThan(TotalOrder)(minimum)(a) && !greaterThan(TotalOrder)(maximum)(a)
+    (a: A): boolean => !lessThan(O)(minimum)(a) && !greaterThan(O)(maximum)(a)
