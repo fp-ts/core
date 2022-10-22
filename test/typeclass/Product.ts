@@ -1,5 +1,4 @@
 import { pipe } from "@fp-ts/core/internal/Function"
-import { empty } from "@fp-ts/core/internal/ReadonlyArray"
 import * as _ from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as number from "../test-data/number"
@@ -12,7 +11,7 @@ describe("Product", () => {
   describe("tuple", () => {
     it("Covariant (Option)", () => {
       const tuple = _.tuple(O.Applicative)
-      U.deepStrictEqual(tuple(), O.some(empty))
+      U.deepStrictEqual(tuple(), O.some([] as const))
       U.deepStrictEqual(tuple(O.some("a")), O.some(["a"] as const))
       U.deepStrictEqual(
         tuple(O.some("a"), O.some(1), O.some(true)),

@@ -42,7 +42,7 @@ export const fromCompare = <A>(compare: TotalOrder<A>["compare"]): TotalOrder<A>
  *
  * @since 1.0.0
  */
-export const tuple = <A extends ReadonlyArray<unknown>>(
+export const tuple = <A extends ReadonlyArray<any>>(
   ...totalOrders: { [K in keyof A]: TotalOrder<A[K]> }
 ): TotalOrder<Readonly<A>> =>
   fromCompare(that =>

@@ -11,7 +11,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | --------------------- | -------------------------- | -------------- |
 | **BoundedTotalOrder** | `maximum`<br>`minimum`     | **TotalOrder** |
 | **Semigroup**         | `combine`<br>`combineMany` |                |
-| **Monoid**            | `unit`<br>`combineAll`     | **Semigroup**  |
+| **Monoid**            | `empty`<br>`combineAll`    | **Semigroup**  |
 | **TotalOrder**        | `compare`                  |                |
 
 **Graph**
