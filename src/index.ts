@@ -22,13 +22,10 @@ import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as extendable from "@fp-ts/core/typeclass/Extendable"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
-import * as filterableWithIndex from "@fp-ts/core/typeclass/FilterableWithIndex"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
-import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -44,7 +41,6 @@ import * as product from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
-import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
 
 // -------------------------------------------------------------------------------------
 // data types
@@ -109,11 +105,6 @@ export {
    */
   covariant,
   /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  covariantWithIndex,
-  /**
    * @category data types
    * @since 1.0.0
    */
@@ -132,22 +123,12 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  filterableWithIndex,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   flatMap,
   /**
    * @category typeclass
    * @since 1.0.0
    */
   foldable,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  foldableWithIndex,
   /**
    * @since 1.0.0
    */
@@ -251,10 +232,5 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  traversableFilterable,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  traversableWithIndex
+  traversableFilterable
 }
