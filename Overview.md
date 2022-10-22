@@ -36,13 +36,10 @@ digraph ConcreteTypes {
 | **Contravariant**         | `contramap`                                   | **Invariant**                          |
 | **Coproduct**             | `zero`<br>`coproductAll`                      |                                        |
 | **Covariant**             | `map`                                         | **Invariant**                          |
-| **CovariantWithIndex**    | `mapWithIndex`                                |                                        |
 | **Extendable**            | `extend`                                      | **Covariant**                          |
 | **Filterable**            | `filterMap`                                   |                                        |
-| **FilterableWithIndex**   | `filterMapWithIndex`                          |                                        |
 | **FlatMap**               | `flatMap`                                     |                                        |
 | **Foldable**              | `reduce`<br>`reduceRight`                     |                                        |
-| **FoldableWithIndex**     | `reduceWithIndex`<br>`reduceRightWithIndex`   |                                        |
 | **Invariant**             | `imap`                                        |                                        |
 | **Monad**                 |                                               | **Pointed**, **FlatMap**               |
 | **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                          |
@@ -57,7 +54,6 @@ digraph ConcreteTypes {
 | **Semigroup**             | `combine`<br>`combineMany`                    |                                        |
 | **Traversable**           | `traverse`                                    |                                        |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                        |
-| **TraversableWithIndex**  | `traverseWihtIndex`                           |                                        |
 
 **Graph**
 
