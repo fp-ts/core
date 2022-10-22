@@ -153,12 +153,6 @@ describe("NonEmptyApplicative", () => {
     U.deepStrictEqual(pipe(O.some(1), andThen(O.some(2))), O.some(2))
   })
 
-  it("productFlatten", () => {
-    const productFlatten = _.productFlatten(O.NonEmptyApplicative)
-    U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3] as const))
-  })
-
   it("liftSemigroup", () => {
     const liftSemigroup = _.liftSemigroup(O.NonEmptyApplicative)
     const S = liftSemigroup(string.Semigroup)

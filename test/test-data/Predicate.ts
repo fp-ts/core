@@ -1,10 +1,10 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
-import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as of_ from "@fp-ts/core/typeclass/Of"
-import type * as product from "@fp-ts/core/typeclass/Product"
+import * as product from "@fp-ts/core/typeclass/Product"
 
 export interface Predicate<A> {
   (a: A): boolean
@@ -77,6 +77,12 @@ export const bindRight: <N extends string, A extends object, B>(
   .bindRight(
     NonEmptyProduct
   )
+
+export const tupled: <A>(self: Predicate<A>) => Predicate<readonly [A]> = invariant.tupled(
+  Invariant
+)
+
+export const tuple = product.tuple(Product)
 
 export const isString = (u: unknown): u is string => typeof u === "string"
 

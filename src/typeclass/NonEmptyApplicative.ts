@@ -142,18 +142,6 @@ export const andThen = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
     ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => pipe(self, F.product(that), F.map(([_, a]) => a))
 
 /**
- * @since 1.0.0
- */
-export const productFlatten = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
-  <R2, O2, E2, B>(
-    that: Kind<F, R2, O2, E2, B>
-  ) =>
-    <R1, O1, E1, A extends ReadonlyArray<any>>(
-      self: Kind<F, R1, O1, E1, A>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, readonly [...A, B]> =>
-      pipe(self, F.product(that), F.map(([a, b]) => [...a, b] as const))
-
-/**
  * Lifts a binary function into `F`.
  *
  * @since 1.0.0
