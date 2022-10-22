@@ -23,8 +23,8 @@ export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
 export const andThen = <F extends TypeLambda>(F: FlatMap<F>) =>
   <R2, O2, E2, A>(
     that: Kind<F, R2, O2, E2, A>
-  ): (<R1, O1, E1>(
-    self: Kind<F, R1, O1, E1, unknown>
+  ): (<R1, O1, E1, _>(
+    self: Kind<F, R1, O1, E1, _>
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) => F.flatMap(() => that)
 
 /**

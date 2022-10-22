@@ -4,7 +4,6 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import { isNonEmpty } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
-import { empty } from "@fp-ts/core/internal/ReadonlyArray"
 import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Of } from "@fp-ts/core/typeclass/Of"
 
@@ -28,7 +27,7 @@ export const tuple = <F extends TypeLambda>(F: Product<F>) =>
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
-  > => isNonEmpty(tuple) ? F.productAll(tuple) : F.of(empty) as any
+  > => isNonEmpty(tuple) ? F.productAll(tuple) : F.of([]) as any
 
 /**
  * @since 1.0.0
@@ -42,8 +41,8 @@ export const struct = <F extends TypeLambda>(F: Product<F>) =>
     { readonly [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => {
     const keys = Object.keys(r)
-    if (isNonEmpty(keys)) {
-      return pipe(
+    return isNonEmpty(keys) ?
+      pipe(
         F.productAll(keys.map(k => r[k])),
         F.imap(values => {
           const out: Record<string, unknown> = {}
@@ -52,7 +51,6 @@ export const struct = <F extends TypeLambda>(F: Product<F>) =>
           }
           return out
         }, (r) => Object.keys(r).map(k => r[k]))
-      ) as any
-    }
-    return pipe(F.of(empty), F.imap(() => ({}), () => empty)) as any
+      ) :
+      pipe(F.of([]), F.imap(() => ({}), () => [])) as any
   }

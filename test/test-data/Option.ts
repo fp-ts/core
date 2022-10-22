@@ -732,7 +732,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
       NonEmptyApplicative.productMany(nonEmptyReadonlyArray.tail(as))(
         nonEmptyReadonlyArray.head(as)
       ) :
-      some(readonlyArray.empty)
+      some([])
   }
 }
 

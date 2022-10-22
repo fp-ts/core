@@ -134,7 +134,7 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
  *
  * @since 1.0.0
  */
-export const tuple = <A extends ReadonlyArray<unknown>>(
+export const tuple = <A extends ReadonlyArray<any>>(
   ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
 ): Semigroup<Readonly<A>> =>
   fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)

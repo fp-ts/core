@@ -78,7 +78,7 @@ export const struct = <A>(
  *
  * @since 1.0.0
  */
-export const tuple = <A extends ReadonlyArray<unknown>>(
+export const tuple = <A extends ReadonlyArray<any>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
 ): Monoid<Readonly<A>> => {
   const empty: A = monoids.map((m) => m.empty) as any

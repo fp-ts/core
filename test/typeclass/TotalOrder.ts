@@ -187,35 +187,46 @@ describe("TotalOrder", () => {
     U.strictEqual(pipe(first, max(second)), first)
   })
 
-  it("product", () => {
-    const TO = pipe(
-      string.TotalOrder,
-      _.NonEmptyProduct.product(number.TotalOrder)
-    )
-    U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 2])), -1)
-    U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 1])), 0)
-    U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 0])), 1)
-    U.deepStrictEqual(pipe(["a", 1], TO.compare(["b", 1])), -1)
+  describe("NonEmptyProduct", () => {
+    it("product", () => {
+      const TO = pipe(
+        string.TotalOrder,
+        _.NonEmptyProduct.product(number.TotalOrder)
+      )
+      U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 2])), -1)
+      U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 1])), 0)
+      U.deepStrictEqual(pipe(["a", 1], TO.compare(["a", 0])), 1)
+      U.deepStrictEqual(pipe(["a", 1], TO.compare(["b", 1])), -1)
+    })
+
+    it("productMany", () => {
+      const TO = pipe(
+        string.TotalOrder,
+        _.NonEmptyProduct.productMany([string.TotalOrder, string.TotalOrder])
+      )
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "a"])), 1)
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["b", "a"])), -1)
+    })
   })
 
-  it("productMany", () => {
-    const TO = pipe(
-      string.TotalOrder,
-      _.NonEmptyProduct.productMany([string.TotalOrder, string.TotalOrder])
-    )
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "a"])), 1)
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["b", "a"])), -1)
-  })
+  describe("Product", () => {
+    it("of", () => {
+      const TO = _.Product.of("a")
+      U.deepStrictEqual(pipe("b", TO.compare("a")), 0)
+      U.deepStrictEqual(pipe("a", TO.compare("a")), 0)
+      U.deepStrictEqual(pipe("a", TO.compare("b")), 0)
+    })
 
-  it("productAll", () => {
-    const TO = pipe(
-      _.Product.productAll([string.TotalOrder, string.TotalOrder, string.TotalOrder])
-    )
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "a"])), 1)
-    U.deepStrictEqual(pipe(["a", "b"], TO.compare(["b", "a"])), -1)
+    it("productAll", () => {
+      const TO = pipe(
+        _.Product.productAll([string.TotalOrder, string.TotalOrder, string.TotalOrder])
+      )
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "c"])), -1)
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "b"])), 0)
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["a", "a"])), 1)
+      U.deepStrictEqual(pipe(["a", "b"], TO.compare(["b", "a"])), -1)
+    })
   })
 })

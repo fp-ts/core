@@ -49,7 +49,7 @@ export const flap = <F extends TypeLambda>(F: Covariant<F>) =>
  * @since 1.0.0
  */
 export const as = <F extends TypeLambda>(F: Covariant<F>) =>
-  <B>(b: B): (<R, O, E>(self: Kind<F, R, O, E, unknown>) => Kind<F, R, O, E, B>) => F.map(() => b)
+  <B>(b: B): (<R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>) => F.map(() => b)
 
 /**
  * @category mapping
@@ -57,7 +57,7 @@ export const as = <F extends TypeLambda>(F: Covariant<F>) =>
  */
 export const asUnit = <F extends TypeLambda>(
   F: Covariant<F>
-): (<R, O, E>(self: Kind<F, R, O, E, unknown>) => Kind<F, R, O, E, void>) => as(F)<void>(undefined)
+): (<R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, void>) => as(F)<void>(undefined)
 
 /**
  * @category do notation
