@@ -25,12 +25,12 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
   CovariantF: Covariant<F>,
   BicovariantG: Bicovariant<G>
 ) =>
-  <GE1, GE2, A, B>(
-    f: (e: GE1) => GE2,
+  <E1, E2, A, B>(
+    f: (e: E1) => E2,
     g: (a: A) => B
   ): (<FR, FO, FE, GR, GO>(
-    self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE1, A>>
-  ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE2, B>>) => CovariantF.map(BicovariantG.bimap(f, g))
+    self: Kind<F, FR, FO, FE, Kind<G, GR, GO, E1, A>>
+  ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, E2, B>>) => CovariantF.map(BicovariantG.bimap(f, g))
 
 /**
  * @since 1.0.0

@@ -74,6 +74,6 @@ export const toReadonlyArrayWith = <F extends TypeLambda>(
  * @since 1.0.0
  */
 export const foldMap = <F extends TypeLambda>(F: Foldable<F>) =>
-  <M>(Monoid: Monoid<M>) =>
+  <M>(M: Monoid<M>) =>
     <A>(f: (a: A) => M) =>
-      <R, O, E>(self: Kind<F, R, O, E, A>): M => Monoid.combineAll(toReadonlyArrayWith(F)(f)(self))
+      <R, O, E>(self: Kind<F, R, O, E, A>): M => M.combineAll(toReadonlyArrayWith(F)(f)(self))
