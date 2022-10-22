@@ -54,3 +54,30 @@ export const struct = <F extends TypeLambda>(F: Product<F>) =>
       ) :
       pipe(F.of([]), F.imap(() => ({}), () => [])) as any
   }
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindRight = <F extends TypeLambda>(F: Product<F>) =>
+  <N extends string, A extends object, R2, O2, E2, B>(
+    name: Exclude<N, keyof A>,
+    fb: Kind<F, R2, O2, E2, B>
+  ) =>
+    <R1, O1, E1>(
+      self: Kind<F, R1, O1, E1, A>
+    ): Kind<
+      F,
+      R1 & R2,
+      O1 | O2,
+      E1 | E2,
+      { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
+    > =>
+      pipe(
+        self,
+        F.product(fb),
+        F.imap(
+          ([a, b]) => Object.assign({}, a, { [name]: b }) as any,
+          ({ [name]: b, ...rest }) => [rest, b] as any
+        )
+      )

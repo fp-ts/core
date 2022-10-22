@@ -59,17 +59,6 @@ export const asUnit = <F extends TypeLambda>(
   F: Covariant<F>
 ): (<R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, void>) => as(F)<void>(undefined)
 
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bindTo = <F extends TypeLambda>(F: Covariant<F>) =>
-  <N extends string>(
-    name: N
-  ): (<R, O, E, A>(
-    self: Kind<F, R, O, E, A>
-  ) => Kind<F, R, O, E, { readonly [K in N]: A }>) => F.map(a => ({ [name]: a } as any))
-
 const let_ = <F extends TypeLambda>(
   F: Covariant<F>
 ): (<N extends string, A extends object, B>(
@@ -80,12 +69,10 @@ const let_ = <F extends TypeLambda>(
 ) => Kind<F, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
   (name, f) => F.map(a => Object.assign({}, a, { [name]: f(a) }) as any)
 
-export { let_ as let }
-
-/**
- * @since 1.0.0
- */
-export const tupled = <F extends TypeLambda>(
-  F: Covariant<F>
-): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) =>
-  F.map(a => [a] as const)
+export {
+  /**
+   * @category do notation
+   * @since 1.0.0
+   */
+  let_ as let
+}

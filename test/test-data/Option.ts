@@ -32,7 +32,7 @@ import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import type * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
-import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
@@ -1040,7 +1040,7 @@ export const Do: Option<{}> = some({})
  */
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = covariant.bindTo(Covariant)
+) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = invariant.bindTo(Invariant)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
@@ -1086,7 +1086,7 @@ export const Zip: Option<readonly []> = some([])
  * @category tuple sequencing
  * @since 1.0.0
  */
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = covariant.tupled(Covariant)
+export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tupled(Invariant)
 
 /**
  * Sequentially zips this effect with the specified effect.
