@@ -1,19 +1,19 @@
-import * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
+import * as _ from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 
-export interface ReaderAsyncWriter<R, E, A> {
-  (r: R): () => Promise<[E, A]>
+interface RAW<R, E, A> {
+  (r: R): () => Promise<readonly [E, A]>
 }
 
-export interface ReaderAsyncWriterTypeLambda extends TypeLambda {
-  readonly type: ReaderAsyncWriter<this["In"], this["Out1"], this["Target"]>
+interface RAWTypeLambda extends TypeLambda {
+  readonly type: RAW<this["In"], this["Out1"], this["Target"]>
 }
 
-declare const fa: ReaderAsyncWriter<{ a: string }, "a", string>
-declare const fb: ReaderAsyncWriter<{ b: number }, "b", number>
+declare const fa: RAW<{ a: string }, string, "fa">
+declare const fb: RAW<{ b: number }, number, "fb">
 
-export declare const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<ReaderAsyncWriterTypeLambda>
+declare const NonEmptyAlternative: _.NonEmptyAlternative<RAWTypeLambda>
 
-// $ExpectType ReaderAsyncWriter<{ a: string; } & { b: number; }, "a" | "b", string | number>
+// $ExpectType RAW<{ a: string; } & { b: number; }, string | number, "fa" | "fb">
 pipe(fa, NonEmptyAlternative.coproduct(fb))

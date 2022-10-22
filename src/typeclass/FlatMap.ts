@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 
 /**
  * @category type class
@@ -15,9 +15,16 @@ export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
+ * @since 1.0.0
+ */
+export const flatten = <F extends TypeLambda>(F: FlatMap<F>) =>
+  <R2, O2, E2, R1, O1, E1, A>(
+    self: Kind<F, R2, O2, E2, Kind<F, R1, O1, E1, A>>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => pipe(self, F.flatMap(identity))
+
+/**
  * A variant of `flatMap` that ignores the value produced by this effect.
  *
- * @category sequencing
  * @since 1.0.0
  */
 export const andThen = <F extends TypeLambda>(F: FlatMap<F>) =>

@@ -4,6 +4,13 @@ import * as O from "../test-data/Option"
 import * as U from "../util"
 
 describe("FlatMap", () => {
+  it("flatten", () => {
+    const flatten = _.flatten(O.FlatMap)
+    U.deepStrictEqual(pipe(O.none, flatten), O.none)
+    U.deepStrictEqual(pipe(O.some(O.none), flatten), O.none)
+    U.deepStrictEqual(pipe(O.some(O.some(1)), flatten), O.some(1))
+  })
+
   it("andThen", () => {
     const andThen = _.andThen(O.FlatMap)
     U.deepStrictEqual(pipe(O.none, andThen(O.none)), O.none)
