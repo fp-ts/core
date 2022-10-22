@@ -153,12 +153,6 @@ describe("NonEmptyApplicative", () => {
     U.deepStrictEqual(pipe(O.some(1), andThen(O.some(2))), O.some(2))
   })
 
-  it("bindRight", () => {
-    const bindRight = _.bindRight(O.NonEmptyApplicative)
-    U.deepStrictEqual(pipe(O.some({ a: 1 }), bindRight("b", O.none)), O.none)
-    U.deepStrictEqual(pipe(O.some({ a: 1 }), bindRight("b", O.some(2))), O.some({ a: 1, b: 2 }))
-  })
-
   it("productFlatten", () => {
     const productFlatten = _.productFlatten(O.NonEmptyApplicative)
     U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none)), O.none)
