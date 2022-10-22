@@ -7,18 +7,18 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 # Concrete Types
 
-|                       | member(s)                  | extends        |
-| --------------------- | -------------------------- | -------------- |
-| **BoundedTotalOrder** | `maximum`<br>`minimum`     | **TotalOrder** |
-| **Semigroup**         | `combine`<br>`combineMany` |                |
-| **Monoid**            | `empty`<br>`combineAll`    | **Semigroup**  |
-| **TotalOrder**        | `compare`                  |                |
+|               | member(s)                  | extends       |
+| ------------- | -------------------------- | ------------- |
+| **Bounded**   | `maxBound`<br>`minBound`   | **Order**     |
+| **Semigroup** | `combine`<br>`combineMany` |               |
+| **Monoid**    | `empty`<br>`combineAll`    | **Semigroup** |
+| **Order**     | `compare`                  |               |
 
 **Graph**
 
 ```
 digraph ConcreteTypes {
-    "BoundedTotalOrder" -> "TotalOrder"
+    "Bounded" -> "Order"
     "Monoid" -> "Semigroup"
 }
 ```
@@ -95,4 +95,4 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 - `Option`
 - `Predicate`
 - `Refinement`
-- `TotalOrdering`
+- `Ordering`

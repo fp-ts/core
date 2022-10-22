@@ -26,8 +26,8 @@ import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArr
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
+import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product from "@fp-ts/core/typeclass/Product"
-import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
 
 /**
  * @category type class
@@ -70,7 +70,7 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
  * @category constructors
  * @since 1.0.0
  */
-export const min = <A>(TO: TotalOrder<A>): Semigroup<A> =>
+export const min = <A>(TO: Order<A>): Semigroup<A> =>
   fromCombine((that) => (self) => TO.compare(that)(self) === -1 ? self : that)
 
 /**
@@ -79,7 +79,7 @@ export const min = <A>(TO: TotalOrder<A>): Semigroup<A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const max = <A>(TO: TotalOrder<A>): Semigroup<A> =>
+export const max = <A>(TO: Order<A>): Semigroup<A> =>
   fromCombine((that) => (self) => TO.compare(that)(self) === 1 ? self : that)
 
 /**

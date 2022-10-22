@@ -10,7 +10,7 @@ import type * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithInd
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
-import type { TotalOrder } from "@fp-ts/core/typeclass/TotalOrder"
+import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
 import * as O from "./Option"
@@ -64,7 +64,7 @@ export const head = <A>(
   self: ReadonlyArray<A>
 ): O.Option<A> => (isNonEmpty(self) ? O.some(self[0]) : O.none)
 
-export const sort = <B>(Compare: TotalOrder<B>) =>
+export const sort = <B>(Compare: Order<B>) =>
   <A extends B>(as: ReadonlyArray<A>): ReadonlyArray<A> =>
     as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a2)(a1))
 

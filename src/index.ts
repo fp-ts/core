@@ -15,7 +15,7 @@ import * as hkt from "@fp-ts/core/HKT"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
-import * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
+import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as comonad from "@fp-ts/core/typeclass/Comonad"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
@@ -38,10 +38,10 @@ import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 import * as of from "@fp-ts/core/typeclass/Of"
+import * as order from "@fp-ts/core/typeclass/Order"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
@@ -53,9 +53,9 @@ import * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithInde
 import * as either from "@fp-ts/core/data/Either"
 import * as nonEmptyReadonlyArray from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import * as option from "@fp-ts/core/data/Option"
+import * as ordering from "@fp-ts/core/data/Ordering"
 import * as predicate from "@fp-ts/core/data/Predicate"
 import * as refinement from "@fp-ts/core/data/Refinement"
-import * as totalOrdering from "@fp-ts/core/data/TotalOrdering"
 
 export {
   /**
@@ -77,7 +77,7 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  boundedTotalOrder,
+  bounded,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -211,6 +211,16 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
+  order,
+  /**
+   * @category data types
+   * @since 1.0.0
+   */
+  ordering,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
   pointed,
   /**
    * @category data types
@@ -232,16 +242,6 @@ export {
    * @since 1.0.0
    */
   semigroup,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  totalOrder,
-  /**
-   * @category data types
-   * @since 1.0.0
-   */
-  totalOrdering,
   /**
    * @category typeclass
    * @since 1.0.0

@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { BoundedTotalOrder } from "@fp-ts/core/typeclass/BoundedTotalOrder"
+import type { Bounded } from "@fp-ts/core/typeclass/Bounded"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
@@ -29,13 +29,12 @@ export const fromSemigroup = <A>(S: Semigroup<A>, empty: Monoid<A>["empty"]): Mo
 /**
  * Get a monoid where `combine` will return the minimum, based on the provided bounded order.
  *
- * The `empty` value is the `maximum` value.
+ * The `empty` value is the `maxBound` value.
  *
  * @category constructors
  * @since 1.0.0
  */
-export const min = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
-  fromSemigroup(semigroup.min(BoundedTotalOrder), BoundedTotalOrder.maximum)
+export const min = <A>(B: Bounded<A>): Monoid<A> => fromSemigroup(semigroup.min(B), B.maxBound)
 
 /**
  * Get a monoid where `combine` will return the maximum, based on the provided bounded order.
@@ -45,16 +44,14 @@ export const min = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const max = <A>(BoundedTotalOrder: BoundedTotalOrder<A>): Monoid<A> =>
-  fromSemigroup(semigroup.max(BoundedTotalOrder), BoundedTotalOrder.minimum)
+export const max = <A>(B: Bounded<A>): Monoid<A> => fromSemigroup(semigroup.max(B), B.minBound)
 
 /**
  * The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
  *
  * @since 1.0.0
  */
-export const reverse = <A>(Monoid: Monoid<A>): Monoid<A> =>
-  fromSemigroup(semigroup.reverse(Monoid), Monoid.empty)
+export const reverse = <A>(M: Monoid<A>): Monoid<A> => fromSemigroup(semigroup.reverse(M), M.empty)
 
 /**
  * Given a struct of monoids returns a monoid for the struct.

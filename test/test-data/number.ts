@@ -1,8 +1,8 @@
-import type * as boundedTotalOrder from "@fp-ts/core/typeclass/BoundedTotalOrder"
+import type * as bounded from "@fp-ts/core/typeclass/Bounded"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as totalOrder from "@fp-ts/core/typeclass/TotalOrder"
 
 const sum = (that: number) => (self: number): number => self + that
 
@@ -30,12 +30,12 @@ export const SemigroupMultiply: semigroup.Semigroup<number> = {
     }
 }
 
-export const TotalOrder: totalOrder.TotalOrder<number> = totalOrder.fromCompare((that) =>
+export const Order: order.Order<number> = order.fromCompare((that) =>
   (self) => self < that ? -1 : self > that ? 1 : 0
 )
 
-export const BoundedTotalOrder: boundedTotalOrder.BoundedTotalOrder<number> = {
-  ...TotalOrder,
-  maximum: Infinity,
-  minimum: -Infinity
+export const Bounded: bounded.Bounded<number> = {
+  ...Order,
+  maxBound: Infinity,
+  minBound: -Infinity
 }
