@@ -1,73 +1,10 @@
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import * as O from "../test-data/Option"
-import * as RA from "../test-data/ReadonlyArray"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
 describe("NonEmptyApplicative", () => {
-  it("fromCovariant", () => {
-    const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
-      (x: unknown) => {
-        const combined = Array(acc.length + 1)
-        for (let i = 0; i < acc.length; i++) {
-          combined[i] = acc[i]
-        }
-        combined[acc.length] = x
-        return n === 0 ? f.apply(null, combined) : curry(f, n - 1, combined)
-      }
-
-    const getCurriedTupleConstructor = (len: number): (a: any) => any =>
-      curry(<T extends ReadonlyArray<any>>(...t: T): T => t, len - 1, [])
-
-    const assertSameResult = <F extends TypeLambda>(
-      NonEmptyApplicative: _.NonEmptyApplicative<F>
-    ) =>
-      <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
-        (self: Kind<F, R, O, E, A>) => {
-          const ap = _.ap(NonEmptyApplicative)
-          const productManyFromAp = <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
-            (
-              self: Kind<F, R, O, E, A>
-            ): Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
-              const args = [self, ...Array.from(collection)]
-              const len = args.length
-              const f = getCurriedTupleConstructor(len)
-              let fas = pipe(args[0], NonEmptyApplicative.map(f))
-              for (let i = 1; i < len; i++) {
-                fas = pipe(fas, ap(args[i]))
-              }
-              return fas
-            }
-          const actual = pipe(self, NonEmptyApplicative.productMany(collection))
-          const expected = pipe(self, productManyFromAp(collection))
-          // console.log(expected)
-          U.deepStrictEqual(actual, expected)
-        }
-
-    const product = <B>(that: ReadonlyArray<B>) =>
-      <A>(self: ReadonlyArray<A>): ReadonlyArray<readonly [A, B]> => {
-        const out: Array<readonly [A, B]> = []
-        for (const a of self) {
-          for (const b of that) {
-            out.push([a, b])
-          }
-        }
-        return out
-      }
-
-    const NonEmptyApplicative = _.fromCovariant(
-      RA.Covariant,
-      product
-    )
-
-    assertSameResult(NonEmptyApplicative)([])([])
-    assertSameResult(NonEmptyApplicative)([])([1, 2, 3])
-    assertSameResult(NonEmptyApplicative)([[4]])([1, 2, 3])
-    assertSameResult(NonEmptyApplicative)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
-  })
-
   it("ap", () => {
     const ap = _.ap(O.NonEmptyApplicative)
     const double = (n: number) => n * 2

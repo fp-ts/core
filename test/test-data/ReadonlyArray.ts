@@ -1,5 +1,5 @@
 import type { compactable, filterable } from "@fp-ts/core"
-import { filterableWithIndex, traversableFilterable } from "@fp-ts/core"
+import { filterableWithIndex, nonEmptyProduct, traversableFilterable } from "@fp-ts/core"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -9,7 +9,7 @@ import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
-import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import type * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as traversableWithIndex from "@fp-ts/core/typeclass/TraversableWithIndex"
@@ -115,12 +115,17 @@ export const product = <B>(that: ReadonlyArray<B>) =>
     return out
   }
 
+const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<ReadonlyArrayTypeLambda> = {
+  imap: Covariant.imap,
+  product,
+  productMany: nonEmptyProduct.productMany(Covariant, product)
+}
+
 export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<ReadonlyArrayTypeLambda> =
-  nonEmptyApplicative
-    .fromCovariant(
-      Covariant,
-      product
-    )
+  {
+    ...Covariant,
+    ...NonEmptyProduct
+  }
 
 export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
   (fa: ReadonlyArray<A>): ReadonlyArray<B> => {
