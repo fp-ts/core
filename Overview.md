@@ -83,6 +83,7 @@ digraph ParameterizedTypes {
     "Product" -> "NonEmptyProduct"
     "Coproduct" -> "NonEmptyCoproduct"
     "NonEmptyProduct" -> "Invariant"
+    "Covariant" -> "Invariant"
 }
 ```
 
