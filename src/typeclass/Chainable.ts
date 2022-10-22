@@ -43,7 +43,6 @@ export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>) =>
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) => tap(F)(() => that)
 
 /**
- * @category do notation
  * @since 1.0.0
  */
 export const bind = <F extends TypeLambda>(F: Chainable<F>) =>

@@ -38,7 +38,7 @@ import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
-import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
+import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -614,18 +614,6 @@ export const as: <B>(b: B) => (self: Option<unknown>) => Option<B> = covariant.a
 export const asUnit: (self: Option<unknown>) => Option<void> = covariant.asUnit(Covariant)
 
 /**
- * Sequentially zips this effect with the specified effect using the specified combiner function.
- *
- * @category tuple sequencing
- * @since 1.0.0
- */
-export const product = <B>(
-  that: Option<B>
-) =>
-  <A>(self: Option<A>): Option<readonly [A, B]> =>
-    isSome(self) && isSome(that) ? some([self.value, that.value]) : none
-
-/**
  * @category instances
  * @since 1.0.0
  */
@@ -639,7 +627,7 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
  */
 export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> = {
   imap: Invariant.imap,
-  product,
+  product: that => self => isSome(self) && isSome(that) ? some([self.value, that.value]) : none,
   productMany: collection =>
     self => {
       if (isNone(self)) {
@@ -1068,7 +1056,7 @@ export const bindRight: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  nonEmptyApplicative.bindRight(NonEmptyApplicative)
+  nonEmptyProduct.bindRight(NonEmptyApplicative)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing

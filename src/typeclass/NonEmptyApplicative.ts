@@ -144,29 +144,6 @@ export const andThen = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
 /**
  * @since 1.0.0
  */
-export const bindRight = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
-  <N extends string, A extends object, R2, O2, E2, B>(
-    name: Exclude<N, keyof A>,
-    fb: Kind<F, R2, O2, E2, B>
-  ) =>
-    <R1, O1, E1>(
-      self: Kind<F, R1, O1, E1, A>
-    ): Kind<
-      F,
-      R1 & R2,
-      O1 | O2,
-      E1 | E2,
-      { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
-    > =>
-      pipe(
-        self,
-        F.product(fb),
-        F.map(([a, b]) => Object.assign({}, a, { [name]: b }) as any)
-      )
-
-/**
- * @since 1.0.0
- */
 export const productFlatten = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>

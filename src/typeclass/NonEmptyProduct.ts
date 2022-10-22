@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { pipe } from "@fp-ts/core/internal/Function"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
@@ -19,3 +20,29 @@ export interface NonEmptyProduct<F extends TypeLambda> extends Invariant<F> {
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
+
+/**
+ * @since 1.0.0
+ */
+export const bindRight = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+  <N extends string, A extends object, R2, O2, E2, B>(
+    name: Exclude<N, keyof A>,
+    fb: Kind<F, R2, O2, E2, B>
+  ) =>
+    <R1, O1, E1>(
+      self: Kind<F, R1, O1, E1, A>
+    ): Kind<
+      F,
+      R1 & R2,
+      O1 | O2,
+      E1 | E2,
+      { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
+    > =>
+      pipe(
+        self,
+        F.product(fb),
+        F.imap(
+          ([a, b]) => Object.assign({}, a, { [name]: b }) as any,
+          ({ [name]: b, ...rest }) => [rest, b] as any
+        )
+      )
