@@ -14,16 +14,9 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Monoid**    | `empty`<br>`combineAll`    | **Semigroup** |
 | **Order**     | `compare`                  |               |
 
-**Graph**
-
-```
-digraph ConcreteTypes {
-    "Bounded" -> "Order"
-    "Monoid" -> "Semigroup"
-}
-```
-
 # Parameterized Types
+
+![Type Class Hierarchy](typeclass.png "Type Class Hierarchy")
 
 |                           | member(s)                                     | extends                                |
 | ------------------------- | --------------------------------------------- | -------------------------------------- |
@@ -54,35 +47,6 @@ digraph ConcreteTypes {
 | **Semigroup**             | `combine`<br>`combineMany`                    |                                        |
 | **Traversable**           | `traverse`                                    |                                        |
 | **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                        |
-
-**Graph**
-
-```
-digraph ParameterizedTypes {
-    "NonEmptyAlternative" -> "NonEmptyCoproduct"
-    "NonEmptyAlternative" -> "Covariant"
-    "Alternative" -> "Coproduct"
-    "Alternative" -> "NonEmptyAlternative"
-    "Applicative" -> "Product"
-    "Applicative" -> "NonEmptyApplicative"
-    "Product" -> "Of"
-    "NonEmptyApplicative" -> "NonEmptyProduct"
-    "NonEmptyApplicative" -> "Covariant"
-    "Chainable" -> "Covariant"
-    "Chainable" -> "FlatMap"
-    "Comonad" -> "Extendable"
-    "Extendable" -> "Covariant"
-    "Monad" -> "Pointed"
-    "Monad" -> "FlatMap"
-    "Pointed" -> "Of"
-    "Pointed" -> "Covariant"
-    "Product" -> "NonEmptyProduct"
-    "Coproduct" -> "NonEmptyCoproduct"
-    "NonEmptyProduct" -> "Invariant"
-    "Covariant" -> "Invariant"
-    "Contravariant" -> "Invariant"
-}
-```
 
 # Data Types
 
@@ -270,3 +234,34 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | ------------------- | ------------------------- | -------------- |
 | `traverseFilter`    | `T<A>`, `A => F<boolean>` | `F<T<A>>`      |
 | `traversePartition` | `T<A>`, `A => F<boolean>` | `[T<A>, T<A>]` |
+
+---
+
+Parameterized Types graph source:
+
+```
+digraph ParameterizedTypes {
+    "NonEmptyAlternative" -> "NonEmptyCoproduct"
+    "NonEmptyAlternative" -> "Covariant"
+    "Alternative" -> "Coproduct"
+    "Alternative" -> "NonEmptyAlternative"
+    "Applicative" -> "Product"
+    "Applicative" -> "NonEmptyApplicative"
+    "Product" -> "Of"
+    "NonEmptyApplicative" -> "NonEmptyProduct"
+    "NonEmptyApplicative" -> "Covariant"
+    "Chainable" -> "Covariant"
+    "Chainable" -> "FlatMap"
+    "Comonad" -> "Extendable"
+    "Extendable" -> "Covariant"
+    "Monad" -> "Pointed"
+    "Monad" -> "FlatMap"
+    "Pointed" -> "Of"
+    "Pointed" -> "Covariant"
+    "Product" -> "NonEmptyProduct"
+    "Coproduct" -> "NonEmptyCoproduct"
+    "NonEmptyProduct" -> "Invariant"
+    "Covariant" -> "Invariant"
+    "Contravariant" -> "Invariant"
+}
+```
