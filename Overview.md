@@ -33,9 +33,9 @@ digraph ConcreteTypes {
 | **Chainable**             |                                               | **Covariant**, **FlatMap**             |
 | **Comonad**               | `extract`                                     | **Extendable**                         |
 | **Compactable**           | `compact`                                     |                                        |
-| **Contravariant**         | `contramap`                                   |                                        |
+| **Contravariant**         | `contramap`                                   | **Invariant**                          |
 | **Coproduct**             | `zero`<br>`coproductAll`                      |                                        |
-| **Covariant**             | `map`                                         |                                        |
+| **Covariant**             | `map`                                         | **Invariant**                          |
 | **CovariantWithIndex**    | `mapWithIndex`                                |                                        |
 | **Extendable**            | `extend`                                      | **Covariant**                          |
 | **Filterable**            | `filterMap`                                   |                                        |
@@ -84,6 +84,7 @@ digraph ParameterizedTypes {
     "Coproduct" -> "NonEmptyCoproduct"
     "NonEmptyProduct" -> "Invariant"
     "Covariant" -> "Invariant"
+    "Contravariant" -> "Invariant"
 }
 ```
 

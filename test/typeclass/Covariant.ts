@@ -46,7 +46,7 @@ describe("Covariant", () => {
   })
 
   it("imap", () => {
-    const f = _.imap<O.OptionTypeLambda>(O.Covariant.map)((s: string) => [s] as const, ([s]) => s)
+    const f = _.imap<O.OptionTypeLambda>(O.map)((s: string) => [s] as const, ([s]) => s)
     U.deepStrictEqual(pipe(O.none, f), O.none)
     U.deepStrictEqual(pipe(O.some("a"), f), O.some(["a"] as const))
   })
