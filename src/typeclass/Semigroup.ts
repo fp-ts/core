@@ -70,8 +70,8 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
  * @category constructors
  * @since 1.0.0
  */
-export const min = <A>(TO: Order<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => TO.compare(that)(self) === -1 ? self : that)
+export const min = <A>(O: Order<A>): Semigroup<A> =>
+  fromCombine((that) => (self) => O.compare(that)(self) === -1 ? self : that)
 
 /**
  * `Semigroup` that returns last maximum of elements.
@@ -79,8 +79,8 @@ export const min = <A>(TO: Order<A>): Semigroup<A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const max = <A>(TO: Order<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => TO.compare(that)(self) === 1 ? self : that)
+export const max = <A>(O: Order<A>): Semigroup<A> =>
+  fromCombine((that) => (self) => O.compare(that)(self) === 1 ? self : that)
 
 /**
  * @category constructors
