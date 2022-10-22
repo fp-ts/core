@@ -58,12 +58,12 @@ export const andThenDiscard = <F extends TypeLambda>(F: NonEmptyApplicative<F>) 
  * @since 1.0.0
  */
 export const andThen = <F extends TypeLambda>(F: NonEmptyApplicative<F>) =>
-  <R2, O2, E2, A>(
-    that: Kind<F, R2, O2, E2, A>
+  <R2, O2, E2, B>(
+    that: Kind<F, R2, O2, E2, B>
   ) =>
     <R1, O1, E1, _>(
       self: Kind<F, R1, O1, E1, _>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => pipe(self, F.product(that), F.map(([_, a]) => a))
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => pipe(self, F.product(that), F.map(([_, a]) => a))
 
 /**
  * Lifts a binary function into `F`.

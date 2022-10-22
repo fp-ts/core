@@ -53,6 +53,14 @@ export const reduceRightComposition = <F extends TypeLambda, G extends TypeLambd
 /**
  * @since 1.0.0
  */
+export const foldMap = <F extends TypeLambda>(F: Foldable<F>) =>
+  <M>(M: Monoid<M>) =>
+    <A>(f: (a: A) => M) =>
+      <R, O, E>(self: Kind<F, R, O, E, A>): M => M.combineAll(toReadonlyArrayWith(F)(f)(self))
+
+/**
+ * @since 1.0.0
+ */
 export const toReadonlyArray = <F extends TypeLambda>(
   F: Foldable<F>
 ): <R, O, E, A>(self: Kind<F, R, O, E, A>) => ReadonlyArray<A> => toReadonlyArrayWith(F)(identity)
@@ -69,11 +77,3 @@ export const toReadonlyArrayWith = <F extends TypeLambda>(
         out.push(f(a))
         return out
       })(self)
-
-/**
- * @since 1.0.0
- */
-export const foldMap = <F extends TypeLambda>(F: Foldable<F>) =>
-  <M>(M: Monoid<M>) =>
-    <A>(f: (a: A) => M) =>
-      <R, O, E>(self: Kind<F, R, O, E, A>): M => M.combineAll(toReadonlyArrayWith(F)(f)(self))
