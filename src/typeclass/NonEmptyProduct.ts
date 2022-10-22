@@ -46,3 +46,19 @@ export const bindRight = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
           ({ [name]: b, ...rest }) => [rest, b] as any
         )
       )
+
+/**
+ * @since 1.0.0
+ */
+export const productFlatten = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+  <R2, O2, E2, B>(
+    that: Kind<F, R2, O2, E2, B>
+  ) =>
+    <R1, O1, E1, A extends ReadonlyArray<any>>(
+      self: Kind<F, R1, O1, E1, A>
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, readonly [...A, B]> =>
+      pipe(
+        self,
+        F.product(that),
+        F.imap(([a, b]) => [...a, b] as const, ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
+      )

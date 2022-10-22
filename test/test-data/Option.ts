@@ -1069,7 +1069,6 @@ export const bindRight: <N extends string, A extends object, B>(
 export const Zip: Option<readonly []> = some([])
 
 /**
- * @category tuple sequencing
  * @since 1.0.0
  */
 export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tupled(Invariant)
@@ -1083,5 +1082,5 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tu
 export const productFlatten: <B>(
   fb: Option<B>
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> =
-  nonEmptyApplicative
-    .productFlatten(NonEmptyApplicative)
+  nonEmptyProduct
+    .productFlatten(NonEmptyProduct)
