@@ -15,7 +15,7 @@ export interface Contravariant<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * Returns a default `imap` composition.
+ * Returns a default `imap` implementation.
  *
  * @since 1.0.0
  */

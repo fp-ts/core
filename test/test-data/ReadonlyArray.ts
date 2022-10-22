@@ -5,7 +5,7 @@ import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
-import type * as covariant from "@fp-ts/core/typeclass/Covariant"
+import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as foldableWithIndex from "@fp-ts/core/typeclass/FoldableWithIndex"
@@ -25,9 +25,7 @@ export const map = <A, B>(f: (a: A) => B) =>
 export const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
   (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map((a, i) => f(a, i))
 
-export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = {
-  map
-}
+export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(map)
 
 export const CovariantWithIndex: covariantWithIndex.CovariantWithIndex<
   ReadonlyArrayTypeLambda,

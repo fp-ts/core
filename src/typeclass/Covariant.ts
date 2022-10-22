@@ -1,26 +1,35 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Covariant<F extends TypeLambda> extends TypeClass<F> {
+export interface Covariant<F extends TypeLambda> extends Invariant<F> {
   readonly map: <A, B>(
     f: (a: A) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 
 /**
- * Returns a default `imap` composition.
+ * Returns a default `imap` implementation.
  *
  * @since 1.0.0
  */
-export const imap = <F extends TypeLambda>(F: Covariant<F>): Invariant<F>["imap"] =>
-  (to, _) => F.map(to)
+export const imap = <F extends TypeLambda>(map: Covariant<F>["map"]): Invariant<F>["imap"] =>
+  (to, _) => map(to)
+
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<F> => ({
+  map,
+  imap: imap(map)
+})
 
 /**
  * Returns a default `map` composition.
@@ -69,10 +78,4 @@ const let_ = <F extends TypeLambda>(
 ) => Kind<F, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
   (name, f) => F.map(a => Object.assign({}, a, { [name]: f(a) }) as any)
 
-export {
-  /**
-   * @category do notation
-   * @since 1.0.0
-   */
-  let_ as let
-}
+export { let_ as let }

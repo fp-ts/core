@@ -317,9 +317,15 @@ export const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> = (f) =
  * @category instances
  * @since 1.0.0
  */
+export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(map)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
-  of: some,
-  map
+  ...Covariant,
+  of: some
 }
 
 /**
@@ -352,7 +358,7 @@ export const andThen: <A>(that: Option<A>) => (self: Option<unknown>) => Option<
  */
 export const Chainable: chainable.Chainable<OptionTypeLambda> = {
   ...FlatMap,
-  map
+  ...Covariant
 }
 
 /**
@@ -584,14 +590,6 @@ export const getMonoid = <A>(
 }
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<OptionTypeLambda> = {
-  map
-}
-
-/**
  * @category mapping
  * @since 1.0.0
  */
@@ -632,7 +630,7 @@ export const product = <B>(
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  imap: covariant.imap(Covariant)
+  imap: covariant.imap<OptionTypeLambda>(Covariant.map)
 }
 
 /**
@@ -688,7 +686,7 @@ export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<OptionTypeLa
 }
 
 export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<OptionTypeLambda> = {
-  map,
+  ...Covariant,
   ...NonEmptyCoproduct
 }
 
@@ -741,7 +739,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const Monad: monad.Monad<OptionTypeLambda> = {
-  map,
+  ...Covariant,
   of: some,
   flatMap
 }
@@ -812,7 +810,7 @@ export const FoldableWithIndex: foldableWithIndex.FoldableWithIndex<OptionTypeLa
  * @since 1.0.0
  */
 export const Extendable: extendable.Extendable<OptionTypeLambda> = {
-  map,
+  ...Covariant,
   extend
 }
 
