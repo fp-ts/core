@@ -3,6 +3,7 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
+import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
 
@@ -43,6 +44,34 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
       FE1 | FE2,
       Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, readonly [A, B]>
     > => pipe(self, F.product(that), F.map(([ga, gb]) => pipe(ga, G.product(gb))))
+
+/**
+ * Returns a default `productMany` implementation (useful for tests).
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const productMany = <F extends TypeLambda>(
+  Covariant: Covariant<F>,
+  product: NonEmptyProduct<F>["product"]
+): NonEmptyProduct<F>["productMany"] =>
+  <R, O, E, A>(
+    collection: Iterable<Kind<F, R, O, E, A>>
+  ) =>
+    (self: Kind<F, R, O, E, A>) => {
+      let out = pipe(
+        self,
+        Covariant.map((a): readonly [A, ...Array<A>] => [a])
+      )
+      for (const fa of collection) {
+        out = pipe(
+          out,
+          product(fa),
+          Covariant.map(([[head, ...tail], a]): readonly [A, ...Array<A>] => [head, ...tail, a])
+        )
+      }
+      return out
+    }
 
 /**
  * Returns a default `productMany` composition.

@@ -16,39 +16,6 @@ export interface NonEmptyApplicative<F extends TypeLambda>
 {}
 
 /**
- * Useful for tests.
- *
- * @category constructors
- * @since 1.0.0
- */
-export const fromCovariant = <F extends TypeLambda>(
-  Covariant: Covariant<F>,
-  product: NonEmptyProduct<F>["product"]
-): NonEmptyApplicative<F> => {
-  return {
-    ...Covariant,
-    product,
-    productMany: <R, O, E, A>(
-      collection: Iterable<Kind<F, R, O, E, A>>
-    ) =>
-      (self: Kind<F, R, O, E, A>) => {
-        let out = pipe(
-          self,
-          Covariant.map((a): readonly [A, ...Array<A>] => [a])
-        )
-        for (const fa of collection) {
-          out = pipe(
-            out,
-            product(fa),
-            Covariant.map(([[head, ...tail], a]): readonly [A, ...Array<A>] => [head, ...tail, a])
-          )
-        }
-        return out
-      }
-  }
-}
-
-/**
  * Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.
  *
  * @since 1.0.0
