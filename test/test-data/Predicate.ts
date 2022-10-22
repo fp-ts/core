@@ -3,7 +3,8 @@ import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
-import type * as product from "@fp-ts/core/typeclass/Product"
+import * as of_ from "@fp-ts/core/typeclass/Of"
+import * as product from "@fp-ts/core/typeclass/Product"
 
 export interface Predicate<A> {
   (a: A): boolean
@@ -41,9 +42,17 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambd
     }
 }
 
+export const of = <A>(_: A): Predicate<A> => () => true
+
+export const Of: of_.Of<PredicateTypeLambda> = {
+  of
+}
+
+export const Do = of_.Do(Of)
+
 export const Product: product.Product<PredicateTypeLambda> = {
   ...NonEmptyProduct,
-  of: () => () => true,
+  of,
   productAll: collection =>
     as => {
       const predicates = fromIterable(collection)
@@ -55,6 +64,15 @@ export const Product: product.Product<PredicateTypeLambda> = {
       return true
     }
 }
+
+export const bindRight: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  fb: Predicate<B>
+) => (
+  self: Predicate<A>
+) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = product.bindRight(
+  Product
+)
 
 export const isString = (u: unknown): u is string => typeof u === "string"
 

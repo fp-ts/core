@@ -37,24 +37,12 @@ describe("Covariant", () => {
     U.deepStrictEqual(pipe(O.some(1), asUnit), O.some(undefined))
   })
 
-  it("bindTo", () => {
-    const bindTo = _.bindTo(O.Covariant)
-    U.deepStrictEqual(pipe(O.none, bindTo("a")), O.none)
-    U.deepStrictEqual(pipe(O.some(1), bindTo("a")), O.some({ a: 1 }))
-  })
-
   it("let", () => {
     const letOption = _.let(O.Covariant)
     U.deepStrictEqual(
       pipe(O.some({ a: 1, b: 2 }), letOption("c", ({ a, b }) => a + b)),
       O.some({ a: 1, b: 2, c: 3 })
     )
-  })
-
-  it("tupled", () => {
-    const tupled = _.tupled(O.Covariant)
-    U.deepStrictEqual(pipe(O.none, tupled), O.none)
-    U.deepStrictEqual(pipe(O.some(1), tupled), O.some([1] as const))
   })
 
   it("imap", () => {

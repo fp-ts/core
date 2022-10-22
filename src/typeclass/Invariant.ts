@@ -13,3 +13,22 @@ export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
     from: (b: B) => A
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
+
+/**
+ * @since 1.0.0
+ */
+export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
+  <N extends string>(
+    name: N
+  ): (<R, O, E, A>(
+    self: Kind<F, R, O, E, A>
+  ) => Kind<F, R, O, E, { readonly [K in N]: A }>) =>
+    F.imap(a => ({ [name]: a } as any), ({ [name]: a }) => a)
+
+/**
+ * @since 1.0.0
+ */
+export const tupled = <F extends TypeLambda>(
+  F: Invariant<F>
+): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) =>
+  F.imap(a => [a] as const, ([a]) => a)
