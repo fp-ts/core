@@ -22,7 +22,7 @@ export const mapWithIndex = <A, B>(
 export const traverseWithIndex = <F extends TypeLambda>(
   NonEmptyApplicative: NonEmptyApplicative<F>
 ) =>
-  <A, S, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
+  <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
     (self: NonEmptyReadonlyArray<A>): Kind<F, R, O, E, NonEmptyReadonlyArray<B>> => {
       const fbs = pipe(self, mapWithIndex(f))
       return pipe(
@@ -34,7 +34,7 @@ export const traverseWithIndex = <F extends TypeLambda>(
 export const nonEmptyTraverse = <F extends TypeLambda>(
   NonEmptyApplicative: NonEmptyApplicative<F>
 ) =>
-  <A, S, R, O, E, B>(
+  <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): ((self: NonEmptyReadonlyArray<A>) => Kind<F, R, O, E, NonEmptyReadonlyArray<B>>) =>
     traverseWithIndex(NonEmptyApplicative)(f)
