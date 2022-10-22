@@ -46,6 +46,27 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
     > => pipe(self, F.product(that), F.map(([ga, gb]) => pipe(ga, G.product(gb))))
 
 /**
+ * Returns a default `productMany` composition.
+ *
+ * @since 1.0.0
+ */
+export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
+  F: NonEmptyApplicative<F>,
+  G: NonEmptyProduct<G>
+) =>
+  <FR, FO, FE, GR, GO, GE, A>(
+    collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
+  ) =>
+    (
+      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+    ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, readonly [A, ...ReadonlyArray<A>]>> =>
+      pipe(
+        self,
+        F.productMany(collection),
+        F.map(([ga, ...gas]) => pipe(ga, G.productMany(gas)))
+      )
+
+/**
  * Returns a default `productMany` implementation (useful for tests).
  *
  * @category constructors
@@ -72,27 +93,6 @@ export const productMany = <F extends TypeLambda>(
       }
       return out
     }
-
-/**
- * Returns a default `productMany` composition.
- *
- * @since 1.0.0
- */
-export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: NonEmptyApplicative<F>,
-  G: NonEmptyProduct<G>
-) =>
-  <FR, FO, FE, GR, GO, GE, A>(
-    collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
-  ) =>
-    (
-      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, readonly [A, ...ReadonlyArray<A>]>> =>
-      pipe(
-        self,
-        F.productMany(collection),
-        F.map(([ga, ...gas]) => pipe(ga, G.productMany(gas)))
-      )
 
 /**
  * @since 1.0.0

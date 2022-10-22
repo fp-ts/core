@@ -105,10 +105,10 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 
 **Bicovariant**
 
-| Name      | Given      | To                     |
-| --------- | ---------- | ---------------------- |
-| `mapLeft` | `E1 => E2` | `F<E1, A> => F<E2, A>` |
-| `mapLeft` | `A => B`   | `F<A> => F<B>`         |
+| Name      | Given                  | To         |
+| --------- | ---------------------- | ---------- |
+| `mapLeft` | `F<E1, A>`, `E1 => E2` | `F<E2, A>` |
+| `map`     | `F<A>`, `A => B`       | `F<B>`     |
 
 **Bounded**
 
@@ -176,13 +176,13 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 
 **Monoid**
 
-| Name      | Given                       | To                         |
-| --------- | --------------------------- | -------------------------- |
-| `min`     | `Bounded<A>`                | `Monoid<A>`                |
-| `max`     | `Bounded<A>`                | `Monoid<A>`                |
-| `reverse` | `Monoid<A>`                 | `Monoid<A>`                |
-| `struct`  | `Record<string, Monoid<_>>` | `Monoid<Record<string, _>` |
-| `tuple`   | `ReadonlyArray<Monoid<_>>`  | `Monoid<ReadonlyArray<_>`  |
+| Name      | Given                                 | To                            |
+| --------- | ------------------------------------- | ----------------------------- |
+| `min`     | `Bounded<A>`                          | `Monoid<A>`                   |
+| `max`     | `Bounded<A>`                          | `Monoid<A>`                   |
+| `reverse` | `Monoid<A>`                           | `Monoid<A>`                   |
+| `struct`  | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
+| `tuple`   | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
 
 **NonEmptyApplicative**
 
@@ -194,3 +194,79 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | `andThen`        | `F<A>`, `F<B>`      | `F<B>`                       |
 | `lift2`          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
 | `lift3`          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
+
+**NonEmptyProduct**
+
+| Name                     | Given                          | To                               |
+| ------------------------ | ------------------------------ | -------------------------------- |
+| `productComposition`     | `F<G<A>>`, `F<G<B>>`           | `F<G<[A, B]>>`                   |
+| `productManyComposition` | `F<G<A>>`, `Iterable<F<G<A>>>` | `F<G<[A, ...ReadonlyArray<A>]>>` |
+| `bindRight`              | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
+| `productFlatten`         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
+
+**NonEmptyTraversable**
+
+| Name                          | Given                  | To           |
+| ----------------------------- | ---------------------- | ------------ |
+| `nonEmptyTraverseComposition` | `T<F<A>>`, `A => G<B>` | `G<T<F<B>>>` |
+| `nonEmptySequence`            | `T<F<A>>`              | `F<T<A>>`    |
+
+**Of**
+
+| Name   | Given | To        |
+| ------ | ----- | --------- |
+| `unit` |       | `F<void>` |
+| `Do`   |       | `F<{}>`   |
+
+**Order**
+
+| Name                   | Given                       | To                    |
+| ---------------------- | --------------------------- | --------------------- |
+| `tuple`                | `[Order<A>, Order<B>, ...]` | `Order<[A, B, ...]>`  |
+| `reverse`              | `Order<A>`                  | `Order<A>`            |
+| `contramap`            | `Order<A>`, `B => A`        | `Order<B>`            |
+| `getSemigroup`         |                             | `Semigroup<Order<A>>` |
+| `getMonoid`            |                             | `Monoid<Order<A>>`    |
+| `lessThan`             | `[A, A]`                    | `boolean`             |
+| `greaterThan`          | `[A, A]`                    | `boolean`             |
+| `lessThanOrEqualTo`    | `[A, A]`                    | `boolean`             |
+| `greaterThanOrEqualTo` | `[A, A]`                    | `boolean`             |
+| `min`                  | `[A, A]`                    | `boolean`             |
+| `max`                  | `[A, A]`                    | `boolean`             |
+| `clamp`                | `[A, A]`                    | `A`                   |
+| `between`              | `A`                         | `boolean`             |
+
+**Product**
+
+| Name     | Given                       | To                       |
+| -------- | --------------------------- | ------------------------ |
+| `struct` | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
+| `tuple`  | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
+
+**Semigroup**
+
+| Name          | Given                                       | To                               |
+| ------------- | ------------------------------------------- | -------------------------------- |
+| `min`         | `Order<A>`                                  | `Semigroup<A>`                   |
+| `max`         | `Order<A>`                                  | `Semigroup<A>`                   |
+| `reverse`     | `Semigroup<A>`                              | `Semigroup<A>`                   |
+| `constant`    | `A`                                         | `Semigroup<A>`                   |
+| `struct`      | `{ a: Semigroup<A>, b: Semigroup<B>, ... }` | `Semigroup<{ a: A, b: B, ... }>` |
+| `tuple`       | `[Semigroup<A>, Semigroup<B>, ...]`         | `Semigroup<[A, B, ...]>`         |
+| `intercalate` | `A`, `Semigroup<A>`                         | `Semigroup<A>`                   |
+| `first`       |                                             | `Semigroup<A>`                   |
+| `last`        |                                             | `Semigroup<A>`                   |
+
+**Traversable**
+
+| Name                  | Given                  | To           |
+| --------------------- | ---------------------- | ------------ |
+| `traverseComposition` | `T<F<A>>`, `A => G<B>` | `G<T<F<B>>>` |
+| `sequence`            | `T<F<A>>`              | `F<T<A>>`    |
+
+**TraversableFilterable**
+
+| Name                | Given                     | To             |
+| ------------------- | ------------------------- | -------------- |
+| `traverseFilter`    | `T<A>`, `A => F<boolean>` | `F<T<A>>`      |
+| `traversePartition` | `T<A>`, `A => F<boolean>` | `[T<A>, T<A>]` |

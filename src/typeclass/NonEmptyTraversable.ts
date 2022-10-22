@@ -26,17 +26,17 @@ export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> 
  *
  * @since 1.0.0
  */
-export const nonEmptyTraverseComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: NonEmptyTraversable<F>,
-  G: NonEmptyTraversable<G>
+export const nonEmptyTraverseComposition = <T extends TypeLambda, F extends TypeLambda>(
+  T: NonEmptyTraversable<T>,
+  F: NonEmptyTraversable<F>
 ) =>
-  <H extends TypeLambda>(H: NonEmptyApplicative<H>) =>
+  <G extends TypeLambda>(G: NonEmptyApplicative<G>) =>
     <A, R, O, E, B>(
-      f: (a: A) => Kind<H, R, O, E, B>
+      f: (a: A) => Kind<G, R, O, E, B>
     ): (<FR, FO, FE, GR, GO, GE>(
-      fga: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ) => Kind<H, R, O, E, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>
-      F.nonEmptyTraverse(H)(G.nonEmptyTraverse(H)(f))
+      tfa: Kind<T, FR, FO, FE, Kind<F, GR, GO, GE, A>>
+    ) => Kind<G, R, O, E, Kind<T, FR, FO, FE, Kind<F, GR, GO, GE, B>>>) =>
+      T.nonEmptyTraverse(G)(F.nonEmptyTraverse(G)(f))
 
 /**
  * @since 1.0.0
