@@ -4,6 +4,7 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
+import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
 
 /**
  * @category type class
@@ -20,6 +21,49 @@ export interface NonEmptyProduct<F extends TypeLambda> extends Invariant<F> {
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]>
 }
+
+/**
+ * Returns a default `product` composition.
+ *
+ * @since 1.0.0
+ */
+export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
+  F: NonEmptyApplicative<F>,
+  G: NonEmptyProduct<G>
+) =>
+  <FR2, FO2, FE2, GR2, GO2, GE2, B>(
+    that: Kind<F, FR2, FO2, FE2, Kind<G, GR2, GO2, GE2, B>>
+  ) =>
+    <FR1, FO1, FE1, GR1, GO1, GE1, A>(
+      self: Kind<F, FR1, FO1, FE1, Kind<G, GR1, GO1, GE1, A>>
+    ): Kind<
+      F,
+      FR1 & FR2,
+      FO1 | FO2,
+      FE1 | FE2,
+      Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, readonly [A, B]>
+    > => pipe(self, F.product(that), F.map(([ga, gb]) => pipe(ga, G.product(gb))))
+
+/**
+ * Returns a default `productMany` composition.
+ *
+ * @since 1.0.0
+ */
+export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
+  F: NonEmptyApplicative<F>,
+  G: NonEmptyProduct<G>
+) =>
+  <FR, FO, FE, GR, GO, GE, A>(
+    collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
+  ) =>
+    (
+      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+    ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, readonly [A, ...ReadonlyArray<A>]>> =>
+      pipe(
+        self,
+        F.productMany(collection),
+        F.map(([ga, ...gas]) => pipe(ga, G.productMany(gas)))
+      )
 
 /**
  * @since 1.0.0
