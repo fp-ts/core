@@ -9,6 +9,8 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 ## Members and derived functions
 
+Note: members are in bold.
+
 ### Bounded
 
 Extends:
@@ -132,19 +134,6 @@ Extends:
 | **bimap** | `F<E1, A>`, `E1 => E2`, `A => B` | `F<E2, B>` |
 | mapLeft   | `F<E1, A>`, `E1 => E2`           | `F<E2, A>` |
 | map       | `F<A>`, `A => B`                 | `F<B>`     |
-
-### Bounded
-
-Extends:
-
-- `Order`
-
-| Name         | Given        | To           |
-| ------------ | ------------ | ------------ |
-| **maxBound** |              | `A`          |
-| **minBound** |              | `A`          |
-| clamp        | `A`          | `A`          |
-| reverse      | `Bounded<A>` | `Bounded<A>` |
 
 ### Chainable
 
