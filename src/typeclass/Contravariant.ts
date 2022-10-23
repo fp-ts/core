@@ -15,6 +15,22 @@ export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
 }
 
 /**
+ * Composing two contravariant functors yields a Covariant functor.
+ *
+ * Returns a default `map` composition.
+ *
+ * @since 1.0.0
+ */
+export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
+  F: Contravariant<F>,
+  G: Contravariant<G>
+): (<A, B>(
+  f: (a: A) => B
+) => <FR, FO, FE, GR, GO, GE>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>) => f => F.contramap(G.contramap(f))
+
+/**
  * Returns a default `imap` implementation.
  *
  * @since 1.0.0
