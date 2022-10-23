@@ -16,7 +16,37 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 # Parameterized Types
 
-![Type Class Hierarchy](typeclass.png "Type Class Hierarchy")
+### Type Class Hierarchy
+
+```mermaid
+flowchart TD
+    Alternative --> NonEmptyAlternative
+    Alternative --> Coproduct
+    Applicative --> Product
+    Coproduct --> NonEmptyCoproduct
+    NonEmptyAlternative --> Covariant
+    NonEmptyAlternative --> NonEmptyCoproduct
+    NonEmptyApplicative --> NonEmptyProduct
+    NonEmptyApplicative --> Covariant
+    Applicative --> NonEmptyApplicative
+    Comonad --> Extendable
+    Extendable --> Covariant
+    Chainable --> FlatMap
+    Chainable ---> Covariant
+    Monad --> Pointed
+    Monad --> FlatMap
+    Pointed --> Of
+    Pointed --> Covariant
+    Product --> NonEmptyProduct
+    Product --> Of
+    NonEmptyProduct --> Invariant
+    Covariant --> Invariant
+    Contravariant --> Invariant
+```
+
+### All available typeclasses
+
+Note: some of these are omitted from the diagram above because they do not extend any functionality.
 
 |                           | member(s)                                     | extends                                |
 | ------------------------- | --------------------------------------------- | -------------------------------------- |
@@ -27,7 +57,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 | **Comonad**               | `extract`                                     | **Extendable**                         |
 | **Compactable**           | `compact`                                     |                                        |
 | **Contravariant**         | `contramap`                                   | **Invariant**                          |
-| **Coproduct**             | `zero`<br>`coproductAll`                      |                                        |
+| **Coproduct**             | `zero`<br>`coproductAll`                      | **NonEmptyCoproduct**                  |
 | **Covariant**             | `map`                                         | **Invariant**                          |
 | **Extendable**            | `extend`                                      | **Covariant**                          |
 | **Filterable**            | `filterMap`                                   |                                        |
