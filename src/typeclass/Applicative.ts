@@ -12,7 +12,7 @@ import type { Product } from "@fp-ts/core/typeclass/Product"
  * @category type class
  * @since 1.0.0
  */
-export interface Applicative<F extends TypeLambda> extends Product<F>, NonEmptyApplicative<F> {}
+export interface Applicative<F extends TypeLambda> extends NonEmptyApplicative<F>, Product<F> {}
 
 /**
  * Lift a monoid into 'F', the inner values are combined using the provided `Monoid`.
