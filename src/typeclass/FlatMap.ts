@@ -37,7 +37,7 @@ export const andThen = <F extends TypeLambda>(F: FlatMap<F>) =>
 /**
  * @since 1.0.0
  */
-export const composeKleisli = <F extends TypeLambda>(
+export const composeKleisliArrow = <F extends TypeLambda>(
   F: FlatMap<F>
 ): <B, R2, O2, E2, C>(
   bfc: (b: B) => Kind<F, R2, O2, E2, C>
