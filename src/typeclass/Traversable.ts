@@ -24,17 +24,17 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
  *
  * @since 1.0.0
  */
-export const traverseComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: Traversable<F>,
+export const traverseComposition = <T extends TypeLambda, G extends TypeLambda>(
+  T: Traversable<T>,
   G: Traversable<G>
 ) =>
-  <H extends TypeLambda>(Applicative: Applicative<H>) =>
+  <F extends TypeLambda>(F: Applicative<F>) =>
     <A, R, O, E, B>(
-      f: (a: A) => Kind<H, R, O, E, B>
+      f: (a: A) => Kind<F, R, O, E, B>
     ): (<FR, FO, FE, GR, GO, GE>(
-      fga: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ) => Kind<H, R, O, E, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>
-      F.traverse(Applicative)(G.traverse(Applicative)(f))
+      tga: Kind<T, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+    ) => Kind<F, R, O, E, Kind<T, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>
+      T.traverse(F)(G.traverse(F)(f))
 
 /**
  * @since 1.0.0
