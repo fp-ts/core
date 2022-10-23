@@ -279,6 +279,8 @@ Extends:
 
 ### Filterable
 
+`Filterable<F>` allows you to `map` and filter out elements simultaneously.
+
 | Name                 | Given                       | To             |
 | -------------------- | --------------------------- | -------------- |
 | **filterMap**        | `F<A>`, `A => Option<B>`    | `F<B>`         |
@@ -341,6 +343,8 @@ Invariant functors.
 | tupled          | `F<A>`                        | `F<[A]>`           |
 
 ### Monad
+
+Allows composition of dependent effectful functions.
 
 Extends:
 
@@ -417,6 +421,12 @@ Extends:
 
 ### NonEmptyTraversable
 
+`NonEmptyTraversable`, also known as `Traversable1`.
+
+`NonEmptyTraversable` is like a non-empty `Traversable`. Unkine the `traverse` and `sequence`
+methods of `Traversable` it provides `nonEmptyTraverse` and `nonEmptySequence` methods which require a `NonEmptyApplicative`
+instance instead of `Applicative`.
+
 | Name                        | Given                                            | To           |
 | --------------------------- | ------------------------------------------------ | ------------ |
 | **nonEmptyTraverse**        | `NonEmptyApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
@@ -453,13 +463,20 @@ Extends:
 
 ### Traversable
 
+Traversal over a structure with an effect.
+
 | Name                | Given                                    | To           |
 | ------------------- | ---------------------------------------- | ------------ |
 | **traverse**        | `Applicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
 | traverseComposition | `Applicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
 | sequence            | `Applicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
+| traverseTap         | `Applicative<F>`, `T<A>`, `A => F<B>`    | `F<T<A>>`    |
 
 ### TraversableFilterable
+
+`TraversableFilterable`, also known as `Witherable`, represents list-like structures
+that can essentially have a `traverse` and a `filter` applied as a single
+combined operation (`traverseFilter`).
 
 | Name                     | Given                                            | To                |
 | ------------------------ | ------------------------------------------------ | ----------------- |
