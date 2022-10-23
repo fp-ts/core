@@ -21,7 +21,7 @@ export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
  *
  * @since 1.0.0
  */
-export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const contramapComposition = <F extends TypeLambda, G extends TypeLambda>(
   F: Contravariant<F>,
   G: Contravariant<G>
 ): (<A, B>(

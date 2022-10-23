@@ -7,7 +7,7 @@ import * as U from "../util"
 
 describe("Contravariant", () => {
   it("mapComposition", () => {
-    const map = _.mapComposition(P.Contravariant, P.Contravariant)
+    const map = _.contramapComposition(P.Contravariant, P.Contravariant)
     const emptyString: P.Predicate<P.Predicate<string>> = p => p("") === true
     const a = pipe(emptyString, map(s => s.length))
     U.deepStrictEqual(a(P.isString), false)
