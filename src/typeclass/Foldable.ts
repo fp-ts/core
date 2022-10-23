@@ -4,6 +4,8 @@
 
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
+import type { Coproduct } from "@fp-ts/core/typeclass/Coproduct"
+import type { Monad } from "@fp-ts/core/typeclass/Monad"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 
 /**
@@ -77,3 +79,44 @@ export const toReadonlyArrayWith = <F extends TypeLambda>(
         out.push(f(a))
         return out
       })(self)
+
+/**
+ * @since 1.0.0
+ */
+export const reduceKind = <F extends TypeLambda>(F: Foldable<F>) =>
+  <G extends TypeLambda>(G: Monad<G>) =>
+    <B, A, R, O, E>(
+      b: B,
+      f: (b: B, a: A) => Kind<G, R, O, E, B>
+    ): <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B> =>
+      F.reduce<A, Kind<G, R, O, E, B>>(
+        G.of(b),
+        (gb, a) => pipe(gb, G.flatMap(b => f(b, a)))
+      )
+
+/**
+ * @since 1.0.0
+ */
+export const reduceRightKind = <F extends TypeLambda>(F: Foldable<F>) =>
+  <G extends TypeLambda>(G: Monad<G>) =>
+    <B, A, R, O, E>(
+      b: B,
+      f: (b: B, a: A) => Kind<G, R, O, E, B>
+    ): <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B> =>
+      F.reduceRight<A, Kind<G, R, O, E, B>>(
+        G.of(b),
+        (gb, a) => pipe(gb, G.flatMap(b => f(b, a)))
+      )
+
+/**
+ * @since 1.0.0
+ */
+export const foldMapKind = <F extends TypeLambda>(F: Foldable<F>) =>
+  <G extends TypeLambda>(G: Coproduct<G>) =>
+    <A, R, O, E, B>(
+      f: (a: A) => Kind<G, R, O, E, B>
+    ): <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B> =>
+      F.reduce<A, Kind<G, R, O, E, B>>(
+        G.zero(),
+        (gb, a) => pipe(gb, G.coproduct(f(a)))
+      )
