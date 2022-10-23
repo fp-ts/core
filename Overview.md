@@ -288,12 +288,12 @@ Extends:
 
 ### FlatMap
 
-| Name           | Given                    | To          |
-| -------------- | ------------------------ | ----------- |
-| **flatMap**    | `F<A>`, `A => F<B>`      | `F<B>`      |
-| flatten        | `F<F<A>>`                | `F<A>`      |
-| andThen        | `F<A>`, `F<B>`           | `F<B>`      |
-| composeKleisli | `A => F<B>`, `B => F<C>` | `A => F<C>` |
+| Name                | Given                    | To          |
+| ------------------- | ------------------------ | ----------- |
+| **flatMap**         | `F<A>`, `A => F<B>`      | `F<B>`      |
+| flatten             | `F<F<A>>`                | `F<A>`      |
+| andThen             | `F<A>`, `F<B>`           | `F<B>`      |
+| composeKleisliArrow | `A => F<B>`, `B => F<C>` | `A => F<C>` |
 
 ### Foldable
 
@@ -352,9 +352,9 @@ Extends:
 
 `NonEmptyCoproduct` is a universal semigroup which operates on kinds.
 
-This type class is useful when its type parameter F[_] has a
+This type class is useful when its type parameter `F<_>` has a
 structure that can be combined for any particular type. Thus,
-SemigroupK is like a Semigroup for kinds (i.e. parametrized
+`NonEmptyCoproduct` is like a `Semigroup` for kinds (i.e. parametrized
 types).
 
 A `NonEmptyCoproduct<F>` can produce a `Semigroup<F<A>>` for any type A.
