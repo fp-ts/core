@@ -31,9 +31,9 @@ export const traverseComposition = <T extends TypeLambda, G extends TypeLambda>(
   <F extends TypeLambda>(F: Applicative<F>) =>
     <A, R, O, E, B>(
       f: (a: A) => Kind<F, R, O, E, B>
-    ): (<FR, FO, FE, GR, GO, GE>(
-      tga: Kind<T, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ) => Kind<F, R, O, E, Kind<T, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>
+    ): (<TR, TO, TE, GR, GO, GE>(
+      tga: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>
+    ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, B>>>) =>
       T.traverse(F)(G.traverse(F)(f))
 
 /**

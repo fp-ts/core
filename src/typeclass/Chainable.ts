@@ -10,7 +10,7 @@ import type { FlatMap } from "@fp-ts/core/typeclass/FlatMap"
  * @category type class
  * @since 1.0.0
  */
-export interface Chainable<F extends TypeLambda> extends Covariant<F>, FlatMap<F> {}
+export interface Chainable<F extends TypeLambda> extends FlatMap<F>, Covariant<F> {}
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.

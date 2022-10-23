@@ -91,7 +91,7 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 
 # Members and derived functions
 
-**Applicative**
+**Applicative** (extends `Product`, `NonEmptyApplicative`)
 
 | Name       | Given       | To             |
 | ---------- | ----------- | -------------- |
@@ -104,14 +104,16 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | mapLeft | `F<E1, A>`, `E1 => E2` | `F<E2, A>` |
 | map     | `F<A>`, `A => B`       | `F<B>`     |
 
-**Bounded**
+**Bounded** (extends `Order`)
 
-| Name    | Given        | To           |
-| ------- | ------------ | ------------ |
-| clamp   | `A`          | `A`          |
-| reverse | `Bounded<A>` | `Bounded<A>` |
+| Name         | Given        | To           |
+| ------------ | ------------ | ------------ |
+| **maxBound** |              | `A`          |
+| **minBound** |              | `A`          |
+| clamp        | `A`          | `A`          |
+| reverse      | `Bounded<A>` | `Bounded<A>` |
 
-**Chainable**
+**Chainable** (extends `FlatMap`, `Covariant`)
 
 | Name           | Given                               | To                     |
 | -------------- | ----------------------------------- | ---------------------- |
@@ -126,7 +128,7 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | **compact** | `F<Option<A>>`    | `F<A>`         |
 | separate    | `F<Either<A, B>>` | `[F<A>, F<B>]` |
 
-**Covariant**
+**Covariant** (extends `Invariant`)
 
 | Name           | Given               | To        |
 | -------------- | ------------------- | --------- |
@@ -175,7 +177,7 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | bindTo   | `F<A>`, `name: string`     | `F<{ [name]: A }>` |
 | tupled   | `F<A>`                     | `F<[A]>`           |
 
-**Monoid**
+**Monoid** (extends `Semigroup`)
 
 | Name           | Given                                 | To                            |
 | -------------- | ------------------------------------- | ----------------------------- |
@@ -187,7 +189,7 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
 | tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
 
-**NonEmptyApplicative**
+**NonEmptyApplicative** (extends `NonEmptyProduct`, `Covariant`)
 
 | Name           | Given               | To                           |
 | -------------- | ------------------- | ---------------------------- |
@@ -198,7 +200,7 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | lift2          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
 | lift3          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
 
-**NonEmptyProduct**
+**NonEmptyProduct** (extends `Invariant`)
 
 | Name                   | Given                          | To                               |
 | ---------------------- | ------------------------------ | -------------------------------- |
@@ -244,7 +246,7 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | clamp                | `A`, `A`                    | `A`                   |
 | between              | `A`                         | `boolean`             |
 
-**Product**
+**Product** (extends `NonEmptyProduct`, `Of`)
 
 | Name           | Given                       | To                       |
 | -------------- | --------------------------- | ------------------------ |
