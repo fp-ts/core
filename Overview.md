@@ -131,6 +131,7 @@ flowchart TD
     NonEmptyProduct --> Invariant
     Covariant --> Invariant
     Contravariant --> Invariant
+    NonEmptyCoproduct --> Invariant
 ```
 
 ## Members and derived functions
@@ -376,6 +377,7 @@ Extends:
 | **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>`       |
 | **coproductMany** | `Iterable<F<A>>` | `F<A>`            |
 | getSemigroup      |                  | `Semigroup<F<A>>` |
+| coproductEither   | `F<A>`, `F<B>`   | `F<Either<A, B>>` |
 
 ### NonEmptyProduct
 
