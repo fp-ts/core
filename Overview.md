@@ -13,6 +13,8 @@ Note: members are in bold.
 
 ### Bounded
 
+A type class used to name the lower limit and the upper limit of a type.
+
 Extends:
 
 - `Order`
@@ -25,6 +27,11 @@ Extends:
 | reverse      | `Bounded<A>` | `Bounded<A>` |
 
 ### Monoid
+
+A monoid is a semigroup with an identity. A monoid is a specialization of a
+semigroup, so its operation must be associative. Additionally,
+`x |> combine(empty) == empty |> combine(x) == x`. For example, if we have `Monoid<String>`,
+with `combine` as string concatenation, then `empty = ""`.
 
 Extends:
 
@@ -41,6 +48,23 @@ Extends:
 | tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
 
 ### Order
+
+The `Order` type class is used to define a total ordering on some type `A`.
+An order is defined by a relation `<=`, which obeys the following laws:
+
+- either `x <= y` or `y <= x` (totality)
+- if `x <= y` and `y <= x`, then `x == y` (antisymmetry)
+- if `x <= y` and `y <= z`, then `x <= z` (transitivity)
+
+The truth table for compare is defined as follows:
+
+| `x <= y` | `x >= y` | Ordering |                       |
+| -------- | -------- | -------- | --------------------- |
+| `true`   | `true`   | `0`      | corresponds to x == y |
+| `true`   | `false`  | `< 0`    | corresponds to x < y  |
+| `false`  | `true`   | `> 0`    | corresponds to x > y  |
+
+By the totality law, `x <= y` and `y <= x` cannot be both `false`.
 
 | Name                 | Given                       | To                    |
 | -------------------- | --------------------------- | --------------------- |
@@ -60,6 +84,10 @@ Extends:
 | between              | `A`                         | `boolean`             |
 
 ### Semigroup
+
+A semigroup is any set `A` with an associative operation (`combine`):
+
+`x |> combine(y) |> combine(z) == x |> combine(y |> combine(z))`
 
 | Name            | Given                                       | To                               |
 | --------------- | ------------------------------------------- | -------------------------------- |
@@ -129,6 +157,9 @@ Extends:
 
 ### Bicovariant
 
+A type class of types which give rise to two independent, covariant
+functors.
+
 | Name      | Given                            | To         |
 | --------- | -------------------------------- | ---------- |
 | **bimap** | `F<E1, A>`, `E1 => E2`, `A => B` | `F<E2, B>` |
@@ -150,6 +181,9 @@ Extends:
 
 ### Comonad
 
+`Comonad` is the dual of `Monad`. Whereas monads allow for the composition of effectful functions,
+comonads allow for composition of functions that extract the value from their context.
+
 Extends:
 
 - `Extendable`
@@ -160,12 +194,16 @@ Extends:
 
 ### Compactable
 
+`Compactable` represents data structures which can be compacted / separated.
+
 | Name        | Given             | To             |
 | ----------- | ----------------- | -------------- |
 | **compact** | `F<Option<A>>`    | `F<A>`         |
 | separate    | `F<Either<A, B>>` | `[F<A>, F<B>]` |
 
 ### Contravariant
+
+Contravariant functors.
 
 Extends:
 
@@ -182,16 +220,38 @@ Extends:
 
 ### Coproduct
 
+`Coproduct` is a universal monoid which operates on kinds.
+
+This type class is useful when its type parameter `F<_>` has a
+structure that can be combined for any particular type, and which
+also has a "zero" representation. Thus, `Coproduct` is like a `Monoid`
+for kinds (i.e. parametrized types).
+
+A `Coproduct<F>` can produce a `Monoid<F<A>>` for any type `A`.
+
+Here's how to distinguish `Monoid` and `Coproduct`:
+
+- `Monoid<A>` allows `A` values to be combined, and also means there
+  is an "empty" `A` value that functions as an identity.
+
+- `Coproduct<F>` allows two `F<A>` values to be combined, for any `A`. It
+  also means that for any `A`, there is an "zero" `F<A>` value. The
+  combination operation and zero value just depend on the
+  structure of `F`, but not on the structure of `A`.
+
 Extends:
 
 - `NonEmptyCoproduct`
 
-| Name             | Given            | To     |
-| ---------------- | ---------------- | ------ |
-| **zero**         |                  | `F<A>` |
-| **coproductAll** | `Iterable<F<A>>` | `F<A>` |
+| Name             | Given            | To             |
+| ---------------- | ---------------- | -------------- |
+| **zero**         |                  | `F<A>`         |
+| **coproductAll** | `Iterable<F<A>>` | `F<A>`         |
+| getMonoid        |                  | `Monoid<F<A>>` |
 
 ### Covariant
+
+Covariant functors.
 
 Extends:
 
@@ -248,6 +308,8 @@ Extends:
 | toReadonlyArrayWith    | `F<A>`, `A => B`              | `ReadonlyArray<B>` |
 
 ### Invariant
+
+Invariant functors.
 
 | Name            | Given                         | To                 |
 | --------------- | ----------------------------- | ------------------ |
