@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category type class
@@ -18,3 +19,14 @@ export interface NonEmptyCoproduct<F extends TypeLambda> extends TypeClass<F> {
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, A>
 }
+
+/**
+ * @since 1.0.0
+ */
+export const getSemigroup = <F extends TypeLambda>(F: NonEmptyCoproduct<F>) =>
+  <A>(): Semigroup<
+    Kind<F, unknown, never, never, A>
+  > => ({
+    combine: F.coproduct,
+    combineMany: F.coproductMany
+  })
