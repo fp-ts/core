@@ -264,34 +264,3 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | ------------------- | ------------------------- | -------------- |
 | `traverseFilter`    | `T<A>`, `A => F<boolean>` | `F<T<A>>`      |
 | `traversePartition` | `T<A>`, `A => F<boolean>` | `[T<A>, T<A>]` |
-
----
-
-Parameterized Types graph source:
-
-```
-digraph ParameterizedTypes {
-    "NonEmptyAlternative" -> "NonEmptyCoproduct"
-    "NonEmptyAlternative" -> "Covariant"
-    "Alternative" -> "Coproduct"
-    "Alternative" -> "NonEmptyAlternative"
-    "Applicative" -> "Product"
-    "Applicative" -> "NonEmptyApplicative"
-    "Product" -> "Of"
-    "NonEmptyApplicative" -> "NonEmptyProduct"
-    "NonEmptyApplicative" -> "Covariant"
-    "Chainable" -> "Covariant"
-    "Chainable" -> "FlatMap"
-    "Comonad" -> "Extendable"
-    "Extendable" -> "Covariant"
-    "Monad" -> "Pointed"
-    "Monad" -> "FlatMap"
-    "Pointed" -> "Of"
-    "Pointed" -> "Covariant"
-    "Product" -> "NonEmptyProduct"
-    "Coproduct" -> "NonEmptyCoproduct"
-    "NonEmptyProduct" -> "Invariant"
-    "Covariant" -> "Invariant"
-    "Contravariant" -> "Invariant"
-}
-```
