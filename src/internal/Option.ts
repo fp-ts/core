@@ -3,10 +3,14 @@
  */
 import type { None, Option, Some } from "@fp-ts/core/data/Option"
 
-/** @internal */
+/**
+ * @since 1.0.0
+ */
 export const none: Option<never> = { _tag: "None" }
 
-/** @internal */
+/**
+ * @since 1.0.0
+ */
 export const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
 /**
