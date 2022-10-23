@@ -48,15 +48,25 @@ flowchart TD
 
 Note: members are in bold.
 
-**Alternative** (extends `NonEmptyAlternative`, `Coproduct`)
+### Alternative
 
-**Applicative** (extends `NonEmptyApplicative`, `Product`)
+Extends:
+
+- `NonEmptyAlternative`
+- `Coproduct`
+
+### Applicative
+
+Extends:
+
+- `NonEmptyApplicative`
+- `Product`
 
 | Name       | Given       | To             |
 | ---------- | ----------- | -------------- |
 | liftMonoid | `Monoid<A>` | `Monoid<F<A>>` |
 
-**Bicovariant**
+### Bicovariant
 
 | Name      | Given                            | To         |
 | --------- | -------------------------------- | ---------- |
@@ -64,7 +74,11 @@ Note: members are in bold.
 | mapLeft   | `F<E1, A>`, `E1 => E2`           | `F<E2, A>` |
 | map       | `F<A>`, `A => B`                 | `F<B>`     |
 
-**Bounded** (extends `Order`)
+### Bounded
+
+Extends:
+
+- `Order`
 
 | Name         | Given        | To           |
 | ------------ | ------------ | ------------ |
@@ -73,7 +87,12 @@ Note: members are in bold.
 | clamp        | `A`          | `A`          |
 | reverse      | `Bounded<A>` | `Bounded<A>` |
 
-**Chainable** (extends `FlatMap`, `Covariant`)
+### Chainable
+
+Extends:
+
+- `FlatMap`
+- `Covariant`
 
 | Name           | Given                               | To                     |
 | -------------- | ----------------------------------- | ---------------------- |
@@ -81,20 +100,28 @@ Note: members are in bold.
 | andThenDiscard | `F<A>`, `F<B>`                      | `F<A>`                 |
 | bind           | `F<A>`, `name: string`, `A => F<B>` | `F<A & { [name]: B }>` |
 
-**Comonad** (extends `Extendable`)
+### Comonad
+
+Extends:
+
+- `Extendable`
 
 | Name        | Given  | To  |
 | ----------- | ------ | --- |
 | **extract** | `F<A>` | `A` |
 
-**Compactable**
+### Compactable
 
 | Name        | Given             | To             |
 | ----------- | ----------------- | -------------- |
 | **compact** | `F<Option<A>>`    | `F<A>`         |
 | separate    | `F<Either<A, B>>` | `[F<A>, F<B>]` |
 
-**Contravariant** (extends `Invariant`)
+### Contravariant
+
+Extends:
+
+- `Invariant`
 
 | Name           | Given               | To        |
 | -------------- | ------------------- | --------- |
@@ -105,14 +132,22 @@ Note: members are in bold.
 | as             | `F<A>`, `B`         | `F<B>`    |
 | asUnit         | `F<A>`              | `F<void>` |
 
-**Coproduct** (extends `NonEmptyCoproduct`)
+### Coproduct
+
+Extends:
+
+- `NonEmptyCoproduct`
 
 | Name             | Given            | To     |
 | ---------------- | ---------------- | ------ |
 | **zero**         |                  | `F<A>` |
 | **coproductAll** | `Iterable<F<A>>` | `F<A>` |
 
-**Covariant** (extends `Invariant`)
+### Covariant
+
+Extends:
+
+- `Invariant`
 
 | Name           | Given               | To        |
 | -------------- | ------------------- | --------- |
@@ -123,13 +158,17 @@ Note: members are in bold.
 | as             | `F<A>`, `B`         | `F<B>`    |
 | asUnit         | `F<A>`              | `F<void>` |
 
-**Extendable** (extends `Covariant`)
+### Extendable
+
+Extends:
+
+- `Covariant`
 
 | Name       | Given               | To     |
 | ---------- | ------------------- | ------ |
 | **extend** | `F<A>`, `F<A> => B` | `F<B>` |
 
-**Filterable**
+### Filterable
 
 | Name                 | Given                       | To             |
 | -------------------- | --------------------------- | -------------- |
@@ -139,7 +178,7 @@ Note: members are in bold.
 | partitionMap         | `F<A>`, `A => Either<B, C>` | `[F<B>, F<C>]` |
 | partition            | `F<A>`, `A => boolean`      | `[F<A>, F<A>]` |
 
-**FlatMap**
+### FlatMap
 
 | Name           | Given                    | To          |
 | -------------- | ------------------------ | ----------- |
@@ -148,7 +187,7 @@ Note: members are in bold.
 | andThen        | `F<A>`, `F<B>`           | `F<B>`      |
 | composeKleisli | `A => F<B>`, `B => F<C>` | `A => F<C>` |
 
-**Foldable**
+### Foldable
 
 | Name                   | Given                         | To                 |
 | ---------------------- | ----------------------------- | ------------------ |
@@ -160,7 +199,7 @@ Note: members are in bold.
 | toReadonlyArray        | `F<A>`                        | `ReadonlyArray<A>` |
 | toReadonlyArrayWith    | `F<A>`, `A => B`              | `ReadonlyArray<B>` |
 
-**Invariant**
+### Invariant
 
 | Name            | Given                         | To                 |
 | --------------- | ----------------------------- | ------------------ |
@@ -169,9 +208,18 @@ Note: members are in bold.
 | bindTo          | `F<A>`, `name: string`        | `F<{ [name]: A }>` |
 | tupled          | `F<A>`                        | `F<[A]>`           |
 
-**Monad** (extends `FlatMap`, `Pointed`)
+### Monad
 
-**Monoid** (extends `Semigroup`)
+Extends:
+
+- `FlatMap`
+- `Pointed`
+
+### Monoid
+
+Extends:
+
+- `Semigroup`
 
 | Name           | Given                                 | To                            |
 | -------------- | ------------------------------------- | ----------------------------- |
@@ -183,9 +231,19 @@ Note: members are in bold.
 | struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
 | tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
 
-**NonEmptyAlternative** (extends `NonEmptyCoproduct`, `Covariant`)
+### NonEmptyAlternative
 
-**NonEmptyApplicative** (extends `NonEmptyProduct`, `Covariant`)
+Extends:
+
+- `NonEmptyCoproduct`
+- `Covariant`
+
+### NonEmptyApplicative
+
+Extends:
+
+- `NonEmptyProduct`
+- `Covariant`
 
 | Name           | Given               | To                           |
 | -------------- | ------------------- | ---------------------------- |
@@ -196,14 +254,22 @@ Note: members are in bold.
 | lift2          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
 | lift3          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
 
-**NonEmptyCoproduct** (extends `Invariant`)
+### NonEmptyCoproduct
+
+Extends:
+
+- `Invariant`
 
 | Name              | Given            | To          |
 | ----------------- | ---------------- | ----------- |
 | **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>` |
 | **coproductMany** | `Iterable<F<A>>` | `F<A>`      |
 
-**NonEmptyProduct** (extends `Invariant`)
+### NonEmptyProduct
+
+Extends:
+
+- `Invariant`
 
 | Name                   | Given                          | To                               |
 | ---------------------- | ------------------------------ | -------------------------------- |
@@ -214,7 +280,7 @@ Note: members are in bold.
 | bindRight              | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
 | productFlatten         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
 
-**NonEmptyTraversable**
+### NonEmptyTraversable
 
 | Name                        | Given                                            | To           |
 | --------------------------- | ------------------------------------------------ | ------------ |
@@ -222,7 +288,7 @@ Note: members are in bold.
 | nonEmptyTraverseComposition | `NonEmptyApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
 | nonEmptySequence            | `NonEmptyApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
 
-**Of**
+### Of
 
 | Name   | Given | To        |
 | ------ | ----- | --------- |
@@ -230,7 +296,7 @@ Note: members are in bold.
 | unit   |       | `F<void>` |
 | Do     |       | `F<{}>`   |
 
-**Order**
+### Order
 
 | Name                 | Given                       | To                    |
 | -------------------- | --------------------------- | --------------------- |
@@ -249,9 +315,19 @@ Note: members are in bold.
 | clamp                | `A`, `A`                    | `A`                   |
 | between              | `A`                         | `boolean`             |
 
-**Pointed** (extends `Covariant`, `Of`)
+### Pointed
 
-**Product** (extends `NonEmptyProduct`, `Of`)
+Extends:
+
+- `Covariant`
+- `Of`
+
+### Product
+
+Extends:
+
+- `NonEmptyProduct`
+- `Of`
 
 | Name           | Given                       | To                       |
 | -------------- | --------------------------- | ------------------------ |
@@ -259,7 +335,7 @@ Note: members are in bold.
 | struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
 | tuple          | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
 
-**Semigroup**
+### Semigroup
 
 | Name            | Given                                       | To                               |
 | --------------- | ------------------------------------------- | -------------------------------- |
@@ -275,7 +351,7 @@ Note: members are in bold.
 | first           |                                             | `Semigroup<A>`                   |
 | last            |                                             | `Semigroup<A>`                   |
 
-**Traversable**
+### Traversable
 
 | Name                | Given                                    | To           |
 | ------------------- | ---------------------------------------- | ------------ |
@@ -283,7 +359,7 @@ Note: members are in bold.
 | traverseComposition | `Applicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
 | sequence            | `Applicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
 
-**TraversableFilterable**
+### TraversableFilterable
 
 | Name                     | Given                                            | To                |
 | ------------------------ | ------------------------------------------------ | ----------------- |
