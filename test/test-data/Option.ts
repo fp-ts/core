@@ -658,6 +658,7 @@ const coproduct = <B>(
 ) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
 
 export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<OptionTypeLambda> = {
+  imap: Invariant.imap,
   coproduct,
   coproductMany: collection =>
     self => {
