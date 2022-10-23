@@ -298,6 +298,24 @@ Extends:
 
 ### Foldable
 
+Data structures that can be folded to a summary value.
+
+In the case of a collection (such as `ReadonlyArray`), these
+methods will fold together (combine) the values contained in the
+collection to produce a single result. Most collection types have
+`reduce` methods, which will usually be used by the associated
+`Foldable<F>` instance.
+
+Instances of `Foldable` should be ordered collections to allow for consistent folding.
+
+`Foldable<F>` is implemented in terms of two basic methods:
+
+- `pipe(fa, reduce(b, f))` eagerly folds `fa` from left-to-right.
+- `pipe(fa, reduceRight(b, f))` eagerly folds `fa` from right-to-left.
+
+Beyond these it provides many other useful methods related to
+folding over `F<A>` values.
+
 | Name                   | Given                                     | To                 |
 | ---------------------- | ----------------------------------------- | ------------------ |
 | **reduce**             | `F<A>`, `B`, `(B, A) => B`                | `B`                |
