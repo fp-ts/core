@@ -350,14 +350,32 @@ Extends:
 
 ### NonEmptyCoproduct
 
+`NonEmptyCoproduct` is a universal semigroup which operates on kinds.
+
+This type class is useful when its type parameter F[_] has a
+structure that can be combined for any particular type. Thus,
+SemigroupK is like a Semigroup for kinds (i.e. parametrized
+types).
+
+A `NonEmptyCoproduct<F>` can produce a `Semigroup<F<A>>` for any type A.
+
+Here's how to distinguish `Semigroup` and `NonEmptyCoproduct`:
+
+- `Semigroup<A>` allows two `A` values to be combined.
+
+- `NonEmptyCoproduct<F>` allows two `F<A>` values to be combined, for any `A`.
+  The combination operation just depends on the structure of `F`,
+  but not the structure of `A`.
+
 Extends:
 
 - `Invariant`
 
-| Name              | Given            | To          |
-| ----------------- | ---------------- | ----------- |
-| **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>` |
-| **coproductMany** | `Iterable<F<A>>` | `F<A>`      |
+| Name              | Given            | To                |
+| ----------------- | ---------------- | ----------------- |
+| **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>`       |
+| **coproductMany** | `Iterable<F<A>>` | `F<A>`            |
+| getSemigroup      |                  | `Semigroup<F<A>>` |
 
 ### NonEmptyProduct
 
