@@ -16,7 +16,7 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 # Parameterized Types
 
-### Parameterized Types Hierarchy
+**Parameterized Types Hierarchy**
 
 ```mermaid
 flowchart TD
@@ -44,54 +44,13 @@ flowchart TD
     Contravariant --> Invariant
 ```
 
-### All available parameterized types
+## Members and derived functions
 
-Note: some of these are omitted from the diagram above because they do not extend any functionality.
+Note: members are in bold.
 
-|                           | member(s)                                     | extends                                |
-| ------------------------- | --------------------------------------------- | -------------------------------------- |
-| **Alternative**           |                                               | **Coproduct**, **NonEmptyAlternative** |
-| **Applicative**           |                                               | **Product**, **NonEmptyApplicative**   |
-| **Bicovariant**           | `bimap`                                       |                                        |
-| **Chainable**             |                                               | **Covariant**, **FlatMap**             |
-| **Comonad**               | `extract`                                     | **Extendable**                         |
-| **Compactable**           | `compact`                                     |                                        |
-| **Contravariant**         | `contramap`                                   | **Invariant**                          |
-| **Coproduct**             | `zero`<br>`coproductAll`                      | **NonEmptyCoproduct**                  |
-| **Covariant**             | `map`                                         | **Invariant**                          |
-| **Extendable**            | `extend`                                      | **Covariant**                          |
-| **Filterable**            | `filterMap`                                   |                                        |
-| **FlatMap**               | `flatMap`                                     |                                        |
-| **Foldable**              | `reduce`<br>`reduceRight`                     |                                        |
-| **Invariant**             | `imap`                                        |                                        |
-| **Monad**                 |                                               | **Pointed**, **FlatMap**               |
-| **Monoid**                | `empty`<br>`combineAll`                       | **Semigroup**                          |
-| **NonEmptyAlternative**   |                                               | **NonEmptyCoproduct**, **Covariant**   |
-| **NonEmptyApplicative**   |                                               | **NonEmptyProduct**, **Covariant**     |
-| **NonEmptyCoproduct**     | `coproduct`<br>`coproductMany`                | **Invariant**                          |
-| **NonEmptyProduct**       | `product`<br>`productMany`                    |                                        |
-| **NonEmptyTraversable**   | `nonEmptyTraverse`                            |                                        |
-| **Of**                    | `of`                                          |                                        |
-| **Pointed**               |                                               | **Covariant**, **Of**                  |
-| **Product**               | `productAll`                                  | **NonEmptyProduct**, **Of**            |
-| **Semigroup**             | `combine`<br>`combineMany`                    |                                        |
-| **Traversable**           | `traverse`                                    |                                        |
-| **TraversableFilterable** | `traversePartitionMap`<br>`traverseFilterMap` |                                        |
+**Alternative** (extends `NonEmptyAlternative`, `Coproduct`)
 
-# Data Types
-
-Additionaly `@fp-ts/core` exports a few data types (types only, implementations are in `@fp-ts/data`)
-
-- `Either`
-- `NonEmptyReadonlyArray`
-- `Option`
-- `Predicate`
-- `Refinement`
-- `Ordering`
-
-# Members and derived functions
-
-**Applicative** (extends `Product`, `NonEmptyApplicative`)
+**Applicative** (extends `NonEmptyApplicative`, `Product`)
 
 | Name       | Given       | To             |
 | ---------- | ----------- | -------------- |
@@ -99,10 +58,11 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 
 **Bicovariant**
 
-| Name    | Given                  | To         |
-| ------- | ---------------------- | ---------- |
-| mapLeft | `F<E1, A>`, `E1 => E2` | `F<E2, A>` |
-| map     | `F<A>`, `A => B`       | `F<B>`     |
+| Name      | Given                            | To         |
+| --------- | -------------------------------- | ---------- |
+| **bimap** | `F<E1, A>`, `E1 => E2`, `A => B` | `F<E2, B>` |
+| mapLeft   | `F<E1, A>`, `E1 => E2`           | `F<E2, A>` |
+| map       | `F<A>`, `A => B`                 | `F<B>`     |
 
 **Bounded** (extends `Order`)
 
@@ -120,6 +80,12 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | tap            | `F<A>`, `A => F<B>`                 | `F<A>`                 |
 | andThenDiscard | `F<A>`, `F<B>`                      | `F<A>`                 |
 | bind           | `F<A>`, `name: string`, `A => F<B>` | `F<A & { [name]: B }>` |
+
+**Comonad** (extends `Extendable`)
+
+| Name        | Given  | To  |
+| ----------- | ------ | --- |
+| **extract** | `F<A>` | `A` |
 
 **Compactable**
 
@@ -139,6 +105,13 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | as             | `F<A>`, `B`         | `F<B>`    |
 | asUnit         | `F<A>`              | `F<void>` |
 
+**Coproduct** (extends `NonEmptyCoproduct`)
+
+| Name             | Given            | To     |
+| ---------------- | ---------------- | ------ |
+| **zero**         |                  | `F<A>` |
+| **coproductAll** | `Iterable<F<A>>` | `F<A>` |
+
 **Covariant** (extends `Invariant`)
 
 | Name           | Given               | To        |
@@ -149,6 +122,12 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | flap           | `A`, `F<A => B>`    | `F<B>`    |
 | as             | `F<A>`, `B`         | `F<B>`    |
 | asUnit         | `F<A>`              | `F<void>` |
+
+**Extendable** (extends `Covariant`)
+
+| Name       | Given               | To     |
+| ---------- | ------------------- | ------ |
+| **extend** | `F<A>`, `F<A> => B` | `F<B>` |
 
 **Filterable**
 
@@ -190,6 +169,8 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | bindTo          | `F<A>`, `name: string`        | `F<{ [name]: A }>` |
 | tupled          | `F<A>`                        | `F<[A]>`           |
 
+**Monad** (extends `FlatMap`, `Pointed`)
+
 **Monoid** (extends `Semigroup`)
 
 | Name           | Given                                 | To                            |
@@ -202,6 +183,8 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
 | tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
 
+**NonEmptyAlternative** (extends `NonEmptyCoproduct`, `Covariant`)
+
 **NonEmptyApplicative** (extends `NonEmptyProduct`, `Covariant`)
 
 | Name           | Given               | To                           |
@@ -212,6 +195,13 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | andThen        | `F<A>`, `F<B>`      | `F<B>`                       |
 | lift2          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
 | lift3          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
+
+**NonEmptyCoproduct** (extends `Invariant`)
+
+| Name              | Given            | To          |
+| ----------------- | ---------------- | ----------- |
+| **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>` |
+| **coproductMany** | `Iterable<F<A>>` | `F<A>`      |
 
 **NonEmptyProduct** (extends `Invariant`)
 
@@ -259,6 +249,8 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | clamp                | `A`, `A`                    | `A`                   |
 | between              | `A`                         | `boolean`             |
 
+**Pointed** (extends `Covariant`, `Of`)
+
 **Product** (extends `NonEmptyProduct`, `Of`)
 
 | Name           | Given                       | To                       |
@@ -299,3 +291,14 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | **traverseFilterMap**    | `Applicative<F>`, `T<A>`, `A => F<Option<B>>`    | `F<T<B>>`         |
 | traverseFilter           | `Applicative<F>`, `T<A>`, `A => F<boolean>`      | `F<T<A>>`         |
 | traversePartition        | `Applicative<F>`, `T<A>`, `A => F<boolean>`      | `F<[T<A>, T<A>]>` |
+
+# Data Types
+
+Additionaly `@fp-ts/core` exports a few data types (types only, implementations are in `@fp-ts/data`)
+
+- `Either`
+- `NonEmptyReadonlyArray`
+- `Option`
+- `Predicate`
+- `Refinement`
+- `Ordering`

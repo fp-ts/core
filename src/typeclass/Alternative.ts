@@ -9,4 +9,4 @@ import type { NonEmptyAlternative } from "@fp-ts/core/typeclass/NonEmptyAlternat
  * @category type class
  * @since 1.0.0
  */
-export interface Alternative<F extends TypeLambda> extends Coproduct<F>, NonEmptyAlternative<F> {}
+export interface Alternative<F extends TypeLambda> extends NonEmptyAlternative<F>, Coproduct<F> {}
