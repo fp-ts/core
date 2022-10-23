@@ -495,3 +495,11 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 - `Predicate<in A>`
 - `Refinement<in out A, out B>`
 - `Ordering`
+
+---
+
+Adapted from:
+
+- [cats](https://github.com/typelevel/cats)
+- [zio-prelude](https://github.com/zio/zio-prelude)
+- [zio-cheatsheet](https://github.com/ghostdogpr/zio-cheatsheet)
