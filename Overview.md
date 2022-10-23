@@ -171,11 +171,12 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 
 **Invariant**
 
-| Name     | Given                      | To                 |
-| -------- | -------------------------- | ------------------ |
-| **imap** | `F<A>`, `A => B`, `B => A` | `F<B>`             |
-| bindTo   | `F<A>`, `name: string`     | `F<{ [name]: A }>` |
-| tupled   | `F<A>`                     | `F<[A]>`           |
+| Name            | Given                         | To                 |
+| --------------- | ----------------------------- | ------------------ |
+| **imap**        | `F<A>`, `A => B`, `B => A`    | `F<B>`             |
+| imapComposition | `F<G<A>>`, `A => B`, `B => A` | `F<G<B>>`          |
+| bindTo          | `F<A>`, `name: string`        | `F<{ [name]: A }>` |
+| tupled          | `F<A>`                        | `F<[A]>`           |
 
 **Monoid** (extends `Semigroup`)
 
