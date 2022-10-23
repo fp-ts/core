@@ -215,9 +215,6 @@ Extends:
 | **contramap**        | `F<A>`, `B => A`    | `F<B>`    |
 | contramapComposition | `F<G<A>>`, `A => B` | `F<G<B>>` |
 | imap                 | `contramap`         | `imap`    |
-| flap                 | `A`, `F<A => B>`    | `F<B>`    |
-| as                   | `F<A>`, `B`         | `F<B>`    |
-| asUnit               | `F<A>`              | `F<void>` |
 
 ### Coproduct
 
