@@ -7,12 +7,71 @@ The functional abstractions in `@fp-ts/core` can be broadly divided into two cat
 
 # Concrete Types
 
-|               | member(s)                  | extends       |
-| ------------- | -------------------------- | ------------- |
-| **Bounded**   | `maxBound`<br>`minBound`   | **Order**     |
-| **Semigroup** | `combine`<br>`combineMany` |               |
-| **Monoid**    | `empty`<br>`combineAll`    | **Semigroup** |
-| **Order**     | `compare`                  |               |
+## Members and derived functions
+
+### Bounded
+
+Extends:
+
+- `Order`
+
+| Name         | Given        | To           |
+| ------------ | ------------ | ------------ |
+| **maxBound** |              | `A`          |
+| **minBound** |              | `A`          |
+| clamp        | `A`          | `A`          |
+| reverse      | `Bounded<A>` | `Bounded<A>` |
+
+### Monoid
+
+Extends:
+
+- `Semigroup`
+
+| Name           | Given                                 | To                            |
+| -------------- | ------------------------------------- | ----------------------------- |
+| **empty**      |                                       | `A`                           |
+| **combineAll** | `Iterable<A>`                         | `A`                           |
+| min            | `Bounded<A>`                          | `Monoid<A>`                   |
+| max            | `Bounded<A>`                          | `Monoid<A>`                   |
+| reverse        | `Monoid<A>`                           | `Monoid<A>`                   |
+| struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
+| tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
+
+### Order
+
+| Name                 | Given                       | To                    |
+| -------------------- | --------------------------- | --------------------- |
+| **compare**          | `A`, `A`                    | `Ordering`            |
+| tuple                | `[Order<A>, Order<B>, ...]` | `Order<[A, B, ...]>`  |
+| reverse              | `Order<A>`                  | `Order<A>`            |
+| contramap            | `Order<A>`, `B => A`        | `Order<B>`            |
+| getSemigroup         |                             | `Semigroup<Order<A>>` |
+| getMonoid            |                             | `Monoid<Order<A>>`    |
+| lessThan             | `A`, `A`                    | `boolean`             |
+| greaterThan          | `A`, `A`                    | `boolean`             |
+| lessThanOrEqualTo    | `A`, `A`                    | `boolean`             |
+| greaterThanOrEqualTo | `A`, `A`                    | `boolean`             |
+| min                  | `A`, `A`                    | `boolean`             |
+| max                  | `A`, `A`                    | `boolean`             |
+| clamp                | `A`, `A`                    | `A`                   |
+| between              | `A`                         | `boolean`             |
+
+### Semigroup
+
+| Name            | Given                                       | To                               |
+| --------------- | ------------------------------------------- | -------------------------------- |
+| **combine**     | `A`, `A`                                    | `A`                              |
+| **combineMany** | `A`, `Iterable<A>`                          | `A`                              |
+| min             | `Order<A>`                                  | `Semigroup<A>`                   |
+| max             | `Order<A>`                                  | `Semigroup<A>`                   |
+| reverse         | `Semigroup<A>`                              | `Semigroup<A>`                   |
+| constant        | `A`                                         | `Semigroup<A>`                   |
+| struct          | `{ a: Semigroup<A>, b: Semigroup<B>, ... }` | `Semigroup<{ a: A, b: B, ... }>` |
+| tuple           | `[Semigroup<A>, Semigroup<B>, ...]`         | `Semigroup<[A, B, ...]>`         |
+| intercalate     | `A`, `Semigroup<A>`                         | `Semigroup<A>`                   |
+| first           |                                             | `Semigroup<A>`                   |
+| last            |                                             | `Semigroup<A>`                   |
 
 # Parameterized Types
 
@@ -215,22 +274,6 @@ Extends:
 - `FlatMap`
 - `Pointed`
 
-### Monoid
-
-Extends:
-
-- `Semigroup`
-
-| Name           | Given                                 | To                            |
-| -------------- | ------------------------------------- | ----------------------------- |
-| **empty**      |                                       | `A`                           |
-| **combineAll** | `Iterable<A>`                         | `A`                           |
-| min            | `Bounded<A>`                          | `Monoid<A>`                   |
-| max            | `Bounded<A>`                          | `Monoid<A>`                   |
-| reverse        | `Monoid<A>`                           | `Monoid<A>`                   |
-| struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
-| tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
-
 ### NonEmptyAlternative
 
 Extends:
@@ -296,25 +339,6 @@ Extends:
 | unit   |       | `F<void>` |
 | Do     |       | `F<{}>`   |
 
-### Order
-
-| Name                 | Given                       | To                    |
-| -------------------- | --------------------------- | --------------------- |
-| **compare**          | `A`, `A`                    | `Ordering`            |
-| tuple                | `[Order<A>, Order<B>, ...]` | `Order<[A, B, ...]>`  |
-| reverse              | `Order<A>`                  | `Order<A>`            |
-| contramap            | `Order<A>`, `B => A`        | `Order<B>`            |
-| getSemigroup         |                             | `Semigroup<Order<A>>` |
-| getMonoid            |                             | `Monoid<Order<A>>`    |
-| lessThan             | `A`, `A`                    | `boolean`             |
-| greaterThan          | `A`, `A`                    | `boolean`             |
-| lessThanOrEqualTo    | `A`, `A`                    | `boolean`             |
-| greaterThanOrEqualTo | `A`, `A`                    | `boolean`             |
-| min                  | `A`, `A`                    | `boolean`             |
-| max                  | `A`, `A`                    | `boolean`             |
-| clamp                | `A`, `A`                    | `A`                   |
-| between              | `A`                         | `boolean`             |
-
 ### Pointed
 
 Extends:
@@ -334,22 +358,6 @@ Extends:
 | **productAll** | `Iterable<F<A>>`            | `F<ReadonlyArray<A>>`    |
 | struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
 | tuple          | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
-
-### Semigroup
-
-| Name            | Given                                       | To                               |
-| --------------- | ------------------------------------------- | -------------------------------- |
-| **combine**     | `A`, `A`                                    | `A`                              |
-| **combineMany** | `A`, `Iterable<A>`                          | `A`                              |
-| min             | `Order<A>`                                  | `Semigroup<A>`                   |
-| max             | `Order<A>`                                  | `Semigroup<A>`                   |
-| reverse         | `Semigroup<A>`                              | `Semigroup<A>`                   |
-| constant        | `A`                                         | `Semigroup<A>`                   |
-| struct          | `{ a: Semigroup<A>, b: Semigroup<B>, ... }` | `Semigroup<{ a: A, b: B, ... }>` |
-| tuple           | `[Semigroup<A>, Semigroup<B>, ...]`         | `Semigroup<[A, B, ...]>`         |
-| intercalate     | `A`, `Semigroup<A>`                         | `Semigroup<A>`                   |
-| first           |                                             | `Semigroup<A>`                   |
-| last            |                                             | `Semigroup<A>`                   |
 
 ### Traversable
 
