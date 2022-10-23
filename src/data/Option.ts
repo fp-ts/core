@@ -15,7 +15,7 @@ export interface None {
  * @category models
  * @since 1.0.0
  */
-export interface Some<A> {
+export interface Some<out A> {
   readonly _tag: "Some"
   readonly value: A
 }

@@ -7,7 +7,7 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
  * @category models
  * @since 1.0.0
  */
-export interface Predicate<A> {
+export interface Predicate<in A> {
   (a: A): boolean
 }
 
