@@ -128,12 +128,24 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 | **compact** | `F<Option<A>>`    | `F<A>`         |
 | separate    | `F<Either<A, B>>` | `[F<A>, F<B>]` |
 
+**Contravariant** (extends `Invariant`)
+
+| Name           | Given               | To        |
+| -------------- | ------------------- | --------- |
+| **contramap**  | `F<A>`, `B => A`    | `F<B>`    |
+| mapComposition | `F<G<A>>`, `A => B` | `F<G<B>>` |
+| imap           | `contramap`         | `imap`    |
+| flap           | `A`, `F<A => B>`    | `F<B>`    |
+| as             | `F<A>`, `B`         | `F<B>`    |
+| asUnit         | `F<A>`              | `F<void>` |
+
 **Covariant** (extends `Invariant`)
 
 | Name           | Given               | To        |
 | -------------- | ------------------- | --------- |
 | **map**        | `F<A>`, `A => B`    | `F<B>`    |
 | mapComposition | `F<G<A>>`, `A => B` | `F<G<B>>` |
+| imap           | `map`               | `imap`    |
 | flap           | `A`, `F<A => B>`    | `F<B>`    |
 | as             | `F<A>`, `B`         | `F<B>`    |
 | asUnit         | `F<A>`              | `F<void>` |

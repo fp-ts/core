@@ -15,6 +15,20 @@ export interface Covariant<F extends TypeLambda> extends Invariant<F> {
 }
 
 /**
+ * Returns a default `map` composition.
+ *
+ * @since 1.0.0
+ */
+export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
+  F: Covariant<F>,
+  G: Covariant<G>
+): (<A, B>(
+  f: (a: A) => B
+) => <FR, FO, FE, GR, GO, GE>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>) => f => F.map(G.map(f))
+
+/**
  * Returns a default `imap` implementation.
  *
  * @since 1.0.0
@@ -30,20 +44,6 @@ export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<
   map,
   imap: imap(map)
 })
-
-/**
- * Returns a default `map` composition.
- *
- * @since 1.0.0
- */
-export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: Covariant<F>,
-  G: Covariant<G>
-): (<A, B>(
-  f: (a: A) => B
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>) => f => F.map(G.map(f))
 
 /**
  * @category mapping
