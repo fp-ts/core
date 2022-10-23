@@ -6,6 +6,6 @@
  * @category models
  * @since 1.0.0
  */
-export interface Refinement<A, B extends A> {
+export interface Refinement<in out A, out B extends A> {
   (a: A): a is B
 }

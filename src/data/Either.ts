@@ -7,7 +7,7 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
  * @category models
  * @since 1.0.0
  */
-export interface Left<E> {
+export interface Left<out E> {
   readonly _tag: "Left"
   readonly left: E
 }
@@ -16,7 +16,7 @@ export interface Left<E> {
  * @category models
  * @since 1.0.0
  */
-export interface Right<A> {
+export interface Right<out A> {
   readonly _tag: "Right"
   readonly right: A
 }
