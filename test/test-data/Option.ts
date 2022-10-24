@@ -18,7 +18,6 @@ import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
-import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as extendable from "@fp-ts/core/test/limbo/Extendable"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -712,7 +711,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   ...NonEmptyApplicative,
   of: some,
   productAll: collection => {
-    const as = readonlyArray.fromIterable(collection)
+    const as = Array.from(collection)
     return nonEmptyReadonlyArray.isNonEmpty(as) ?
       NonEmptyApplicative.productMany(nonEmptyReadonlyArray.tail(as))(
         nonEmptyReadonlyArray.head(as)
