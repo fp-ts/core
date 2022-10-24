@@ -27,7 +27,7 @@
     "functional-programming"
   ],
   "scripts": {
-    "version": "changeset version && pnpm install --no-frozen-lockfile",
+    "version": "changeset version && pnpm install --no-frozen-lockfile && pnpm run docs-update",
     "release": "pnpm run build && changeset publish",
     "clean": "rimraf build tsbuildinfo dist .ultra.cache.json",
     "build": "pnpm build-all && pnpm build-pack",
@@ -42,6 +42,7 @@
     "autofix": "pnpm lint --fix",
     "tc": "tsc --noEmit",
     "docs": "docs-ts",
+    "docs-update": "git add --force --all docs/modules || true",
     "circular": "madge --ts-config ./tsconfig.madge.json --circular --no-color --no-spinner --warning build/esm",
     "test": "vitest",
     "test-all": "npm run circular && npm run dtslint && vitest run",
