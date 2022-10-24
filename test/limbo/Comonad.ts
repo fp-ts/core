@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { Extendable } from "@fp-ts/core/typeclass/Extendable"
+import type { Extendable } from "@fp-ts/core/test/limbo/Extendable"
 
 /**
  * @category type class
