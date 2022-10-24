@@ -1,5 +1,4 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
@@ -34,7 +33,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambd
         if (self(head) === false) {
           return false
         }
-        const predicates = fromIterable(collection)
+        const predicates = Array.from(collection)
         for (let i = 0; i < predicates.length; i++) {
           if (predicates[i](tail[i]) === false) {
             return false
@@ -58,7 +57,7 @@ export const Product: product.Product<PredicateTypeLambda> = {
   of,
   productAll: collection =>
     as => {
-      const predicates = fromIterable(collection)
+      const predicates = Array.from(collection)
       for (let i = 0; i < predicates.length; i++) {
         if (predicates[i](as[i]) === false) {
           return false
