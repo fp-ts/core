@@ -1,7 +1,6 @@
 /**
  * @since 1.0.0
  */
-import type { Ordering } from "@fp-ts/core/data/Ordering"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -16,7 +15,7 @@ import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
  * @since 1.0.0
  */
 export interface Order<A> {
-  readonly compare: (that: A) => (self: A) => Ordering
+  readonly compare: (that: A) => (self: A) => -1 | 0 | 1
 }
 
 /**
