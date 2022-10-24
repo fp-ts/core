@@ -36,6 +36,7 @@ import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct
 import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
+import type * as product from "@fp-ts/core/typeclass/Product"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -703,12 +704,8 @@ export const lift3: <A, B, C, D>(
   NonEmptyApplicative
 )
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  ...NonEmptyApplicative,
+export const Product: product.Product<OptionTypeLambda> = {
+  ...NonEmptyProduct,
   of: some,
   productAll: collection => {
     const as = Array.from(collection)
@@ -718,6 +715,15 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
       ) :
       some([])
   }
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Applicative: applicative.Applicative<OptionTypeLambda> = {
+  ...NonEmptyApplicative,
+  ...Product
 }
 
 /**

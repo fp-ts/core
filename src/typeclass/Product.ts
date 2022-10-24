@@ -48,6 +48,6 @@ export const struct = <F extends TypeLambda>(F: Product<F>) =>
           out[keys[i]] = values[i]
         }
         return out
-      }, (r) => Object.keys(r).map(k => r[k]))
+      }, (r) => keys.map(k => r[k]))
     )
   }

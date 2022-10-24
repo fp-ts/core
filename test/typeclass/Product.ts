@@ -3,14 +3,14 @@ import * as _ from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as number from "../test-data/number"
 import * as O from "../test-data/Option"
-import * as predicate from "../test-data/Predicate"
+import * as P from "../test-data/Predicate"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
 describe("Product", () => {
   describe("tuple", () => {
     it("Covariant (Option)", () => {
-      const tuple = _.tuple(O.Applicative)
+      const tuple = _.tuple(O.Product)
       U.deepStrictEqual(tuple(), O.some([] as const))
       U.deepStrictEqual(tuple(O.some("a")), O.some(["a"] as const))
       U.deepStrictEqual(
@@ -22,13 +22,15 @@ describe("Product", () => {
 
     it("Invariant (Semigroup)", () => {
       const tuple = _.tuple(semigroup.Product)
+      U.deepStrictEqual(pipe([], tuple().combine([])), [])
       const S = tuple(string.Semigroup, number.SemigroupSum)
       U.deepStrictEqual(pipe(["a", 2], S.combine(["b", 3])), ["ab", 5])
     })
 
     it("Contravariant (Predicate)", () => {
-      const tuple = _.tuple(predicate.Product)
-      const p = tuple(predicate.isString, predicate.isNumber, predicate.isBoolean)
+      const tuple = _.tuple(P.Product)
+      U.deepStrictEqual(tuple()([]), true)
+      const p = tuple(P.isString, P.isNumber, P.isBoolean)
       U.deepStrictEqual(p(["a", 1, true]), true)
       U.deepStrictEqual(p(["a", 1, "b"]), false)
     })
@@ -36,7 +38,7 @@ describe("Product", () => {
 
   describe("struct", () => {
     it("Covariant (Option)", () => {
-      const struct = _.struct(O.Applicative)
+      const struct = _.struct(O.Product)
       U.deepStrictEqual(struct({}), O.some({}))
       U.deepStrictEqual(struct({ a: O.some("a") }), O.some({ a: "a" }))
       U.deepStrictEqual(
@@ -51,13 +53,15 @@ describe("Product", () => {
 
     it("Invariant (Semigroup)", () => {
       const struct = _.struct(semigroup.Product)
+      U.deepStrictEqual(pipe({}, struct({}).combine({})), {})
       const S = struct({ x: string.Semigroup, y: number.SemigroupSum })
       U.deepStrictEqual(pipe({ x: "a", y: 2 }, S.combine({ x: "b", y: 3 })), { x: "ab", y: 5 })
     })
 
     it("Contravariant (Predicate)", () => {
-      const struct = _.struct(predicate.Product)
-      const p = struct({ x: predicate.isString, y: predicate.isNumber, z: predicate.isBoolean })
+      const struct = _.struct(P.Product)
+      U.deepStrictEqual(struct({})({}), true)
+      const p = struct({ x: P.isString, y: P.isNumber, z: P.isBoolean })
       U.deepStrictEqual(p({ x: "a", y: 1, z: true }), true)
       U.deepStrictEqual(p({ x: "a", y: 1, z: "b" }), false)
     })

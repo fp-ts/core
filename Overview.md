@@ -23,8 +23,8 @@ Extends:
 | ------------ | ------------ | ------------ |
 | **maxBound** |              | `A`          |
 | **minBound** |              | `A`          |
-| clamp        | `A`          | `A`          |
 | reverse      | `Bounded<A>` | `Bounded<A>` |
+| clamp        | `A`          | `A`          |
 
 ### Monoid
 
@@ -41,11 +41,11 @@ Extends:
 | -------------- | ------------------------------------- | ----------------------------- |
 | **empty**      |                                       | `A`                           |
 | **combineAll** | `Iterable<A>`                         | `A`                           |
+| reverse        | `Monoid<A>`                           | `Monoid<A>`                   |
+| tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
+| struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
 | min            | `Bounded<A>`                          | `Monoid<A>`                   |
 | max            | `Bounded<A>`                          | `Monoid<A>`                   |
-| reverse        | `Monoid<A>`                           | `Monoid<A>`                   |
-| struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }` | `Monoid<{ a: A, b: B, ... }>` |
-| tuple          | `[Monoid<A>, Monoid<B>, ...]`         | `Monoid<[A, B, ...]>`         |
 
 ### Order
 
@@ -69,11 +69,11 @@ By the totality law, `x <= y` and `y <= x` cannot be both `false`.
 | Name                 | Given                       | To                    |
 | -------------------- | --------------------------- | --------------------- |
 | **compare**          | `A`, `A`                    | `Ordering`            |
-| tuple                | `[Order<A>, Order<B>, ...]` | `Order<[A, B, ...]>`  |
 | reverse              | `Order<A>`                  | `Order<A>`            |
 | contramap            | `Order<A>`, `B => A`        | `Order<B>`            |
 | getSemigroup         |                             | `Semigroup<Order<A>>` |
 | getMonoid            |                             | `Monoid<Order<A>>`    |
+| tuple                | `[Order<A>, Order<B>, ...]` | `Order<[A, B, ...]>`  |
 | lessThan             | `A`, `A`                    | `boolean`             |
 | greaterThan          | `A`, `A`                    | `boolean`             |
 | lessThanOrEqualTo    | `A`, `A`                    | `boolean`             |
@@ -93,12 +93,12 @@ A semigroup is any set `A` with an associative operation (`combine`):
 | --------------- | ------------------------------------------- | -------------------------------- |
 | **combine**     | `A`, `A`                                    | `A`                              |
 | **combineMany** | `A`, `Iterable<A>`                          | `A`                              |
+| reverse         | `Semigroup<A>`                              | `Semigroup<A>`                   |
+| tuple           | `[Semigroup<A>, Semigroup<B>, ...]`         | `Semigroup<[A, B, ...]>`         |
+| struct          | `{ a: Semigroup<A>, b: Semigroup<B>, ... }` | `Semigroup<{ a: A, b: B, ... }>` |
 | min             | `Order<A>`                                  | `Semigroup<A>`                   |
 | max             | `Order<A>`                                  | `Semigroup<A>`                   |
-| reverse         | `Semigroup<A>`                              | `Semigroup<A>`                   |
 | constant        | `A`                                         | `Semigroup<A>`                   |
-| struct          | `{ a: Semigroup<A>, b: Semigroup<B>, ... }` | `Semigroup<{ a: A, b: B, ... }>` |
-| tuple           | `[Semigroup<A>, Semigroup<B>, ...]`         | `Semigroup<[A, B, ...]>`         |
 | intercalate     | `A`, `Semigroup<A>`                         | `Semigroup<A>`                   |
 | first           |                                             | `Semigroup<A>`                   |
 | last            |                                             | `Semigroup<A>`                   |
@@ -387,6 +387,8 @@ Extends:
 | **productMany**        | `F<A>`, `Iterable<F<A>>`       | `F<[A, ...ReadonlyArray<A>]>`    |
 | productComposition     | `F<G<A>>`, `F<G<B>>`           | `F<G<[A, B]>>`                   |
 | productManyComposition | `F<G<A>>`, `Iterable<F<G<A>>>` | `F<G<[A, ...ReadonlyArray<A>]>>` |
+| tuple                  | `[F<A>, F<B>, ...]`            | `F<[A, B, ...]>`                 |
+| struct                 | `{ a: F<A>, b: F<B>, ... }`    | `F<{ a: A, b: B, ... }>`         |
 | bindRight              | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
 | productFlatten         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
 
@@ -429,8 +431,8 @@ Extends:
 | Name           | Given                       | To                       |
 | -------------- | --------------------------- | ------------------------ |
 | **productAll** | `Iterable<F<A>>`            | `F<ReadonlyArray<A>>`    |
-| struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
 | tuple          | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
+| struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
 
 ### Traversable
 

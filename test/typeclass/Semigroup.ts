@@ -129,6 +129,8 @@ describe("Semigroup", () => {
       ),
       ["abc"]
     )
+    // should handle an Iterable
+    U.deepStrictEqual(pipe(["a"], To.combineMany(new Set([["b"], ["c"]]))), ["abc"])
   })
 
   it("product", () => {

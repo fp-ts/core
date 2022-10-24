@@ -20,3 +20,6 @@ _.tuple(Product)(fa, fb, fc)
 
 // $ExpectType RAW<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", { readonly fa: string; readonly fb: number; readonly fc: boolean; }>
 _.struct(Product)({ fa, fb, fc })
+
+_.tuple(Product)() // should allow empty tuple
+_.struct(Product)({}) // should allow empty structs
