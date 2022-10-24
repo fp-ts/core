@@ -118,8 +118,6 @@ flowchart TD
     NonEmptyApplicative --> NonEmptyProduct
     NonEmptyApplicative --> Covariant
     Applicative --> NonEmptyApplicative
-    Comonad --> Extendable
-    Extendable --> Covariant
     Chainable --> FlatMap
     Chainable ---> Covariant
     Monad --> Pointed
@@ -130,7 +128,6 @@ flowchart TD
     Product --> Of
     NonEmptyProduct --> Invariant
     Covariant --> Invariant
-    Contravariant --> Invariant
     NonEmptyCoproduct --> Invariant
 ```
 
@@ -179,19 +176,6 @@ Extends:
 | tap            | `F<A>`, `A => F<B>`                 | `F<A>`                 |
 | andThenDiscard | `F<A>`, `F<B>`                      | `F<A>`                 |
 | bind           | `F<A>`, `name: string`, `A => F<B>` | `F<A & { [name]: B }>` |
-
-### Comonad
-
-`Comonad` is the dual of `Monad`. Whereas monads allow for the composition of effectful functions,
-comonads allow for composition of functions that extract the value from their context.
-
-Extends:
-
-- `Extendable`
-
-| Name        | Given  | To  |
-| ----------- | ------ | --- |
-| **extract** | `F<A>` | `A` |
 
 ### Compactable
 
@@ -263,16 +247,6 @@ Extends:
 | flap           | `A`, `F<A => B>`    | `F<B>`    |
 | as             | `F<A>`, `B`         | `F<B>`    |
 | asUnit         | `F<A>`              | `F<void>` |
-
-### Extendable
-
-Extends:
-
-- `Covariant`
-
-| Name       | Given               | To     |
-| ---------- | ------------------- | ------ |
-| **extend** | `F<A>`, `F<A> => B` | `F<B>` |
 
 ### Filterable
 

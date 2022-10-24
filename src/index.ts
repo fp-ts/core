@@ -17,12 +17,10 @@ import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
-import * as comonad from "@fp-ts/core/typeclass/Comonad"
 import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as extendable from "@fp-ts/core/typeclass/Extendable"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
@@ -83,11 +81,6 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  comonad,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   compactable,
   /**
    * @category typeclass
@@ -109,11 +102,6 @@ export {
    * @since 1.0.0
    */
   either,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  extendable,
   /**
    * @category typeclass
    * @since 1.0.0
