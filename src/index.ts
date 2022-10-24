@@ -47,7 +47,6 @@ import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFiltera
 import * as either from "@fp-ts/core/data/Either"
 import * as option from "@fp-ts/core/data/Option"
 import * as ordering from "@fp-ts/core/data/Ordering"
-import * as refinement from "@fp-ts/core/data/Refinement"
 
 export {
   /**
@@ -189,11 +188,6 @@ export {
    * @since 1.0.0
    */
   product,
-  /**
-   * @category data types
-   * @since 1.0.0
-   */
-  refinement,
   /**
    * @category typeclass
    * @since 1.0.0

@@ -5,7 +5,6 @@
  */
 import type { Either } from "@fp-ts/core/data/Either"
 import type { Option } from "@fp-ts/core/data/Option"
-import type { Refinement } from "@fp-ts/core/data/Refinement"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import { pipe } from "@fp-ts/core/internal/Function"
@@ -43,7 +42,7 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
 export const filter: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <R, O, E>(
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
     self: Kind<F, R, O, E, C>
   ) => Kind<F, R, O, E, B>
   <B extends A, A = B>(
@@ -75,7 +74,7 @@ export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
 export const partition: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): <R, O, E>(
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
     self: Kind<F, R, O, E, C>
   ) => readonly [Kind<F, R, O, E, C>, Kind<F, R, O, E, B>]
   <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(

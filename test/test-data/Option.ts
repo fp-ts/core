@@ -13,7 +13,6 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/data/Either"
-import type { Refinement } from "@fp-ts/core/data/Refinement"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
@@ -823,7 +822,7 @@ export const Filterable: filterable.Filterable<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const filter: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: Option<C>) => Option<B>
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (fc: Option<C>) => Option<B>
   <B extends A, A = B>(predicate: (a: A) => boolean): (fb: Option<B>) => Option<B>
 } = filterable.filter(Filterable)
 
@@ -833,7 +832,7 @@ export const filter: {
  */
 export const partition: {
   <C extends A, B extends A, A = C>(
-    refinement: Refinement<A, B>
+    refinement: (a: A) => a is B
   ): (fc: Option<C>) => readonly [Option<C>, Option<B>]
   <B extends A, A = B>(
     predicate: (a: A) => boolean
