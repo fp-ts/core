@@ -120,8 +120,8 @@ flowchart TD
     Applicative --> NonEmptyApplicative
     Chainable --> FlatMap
     Chainable ---> Covariant
-    Monad --> Pointed
     Monad --> FlatMap
+    Monad --> Pointed
     Pointed --> Of
     Pointed --> Covariant
     Product --> NonEmptyProduct
