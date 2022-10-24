@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.0.6
+
+### Patch Changes
+
+- [#22](https://github.com/fp-ts/core/pull/22) [`e71d3d57`](https://github.com/fp-ts/core/commit/e71d3d57b0869ab3283a7bb68e76452bc0a2ffba) Thanks [@gcanti](https://github.com/gcanti)! - rename HKT params
+
 ## 0.0.5
 
 ### Patch Changes
