@@ -7,6 +7,7 @@ import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import type * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import type * as of_ from "@fp-ts/core/typeclass/Of"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as covariantWithIndex from "../limbo/CovariantWithIndex"
@@ -116,6 +117,10 @@ export const product = <B>(that: ReadonlyArray<B>) =>
     }
     return out
   }
+
+export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
+  of: a => [a]
+}
 
 const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<ReadonlyArrayTypeLambda> = {
   imap: Covariant.imap,
