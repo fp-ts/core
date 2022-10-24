@@ -46,6 +46,7 @@ jobs:
       - run: pnpm dtslint
       - run: pnpm lint
       - run: pnpm run docs
+      - run: git add --force --all docs/modules
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
@@ -55,9 +56,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Deploy pages
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          build_dir: docs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
