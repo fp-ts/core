@@ -34,6 +34,7 @@ import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlterna
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
+import type * as of_ from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as product from "@fp-ts/core/typeclass/Product"
@@ -317,13 +318,17 @@ export const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> = (f) =
  */
 export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(map)
 
+export const Of: of_.Of<OptionTypeLambda> = {
+  of: some
+}
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
   ...Covariant,
-  of: some
+  ...Of
 }
 
 /**
@@ -706,7 +711,7 @@ export const lift3: <A, B, C, D>(
 
 export const Product: product.Product<OptionTypeLambda> = {
   ...NonEmptyProduct,
-  of: some,
+  ...Of,
   productAll: collection => {
     const as = Array.from(collection)
     return nonEmptyReadonlyArray.isNonEmpty(as) ?
@@ -732,7 +737,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
  */
 export const Monad: monad.Monad<OptionTypeLambda> = {
   ...Covariant,
-  of: some,
+  ...Of,
   flatMap
 }
 

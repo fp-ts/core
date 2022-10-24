@@ -408,11 +408,12 @@ instance instead of `Applicative`.
 
 ### Of
 
-| Name   | Given | To        |
-| ------ | ----- | --------- |
-| **of** | `A`   | `F<A>`    |
-| unit   |       | `F<void>` |
-| Do     |       | `F<{}>`   |
+| Name          | Given | To        |
+| ------------- | ----- | --------- |
+| **of**        | `A`   | `F<A>`    |
+| ofComposition | `A`   | `F<G<A>>` |
+| unit          |       | `F<void>` |
+| Do            |       | `F<{}>`   |
 
 ### Pointed
 
