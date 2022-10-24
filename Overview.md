@@ -389,7 +389,7 @@ Extends:
 | productManyComposition | `F<G<A>>`, `Iterable<F<G<A>>>` | `F<G<[A, ...ReadonlyArray<A>]>>` |
 | tuple                  | `[F<A>, F<B>, ...]`            | `F<[A, B, ...]>`                 |
 | struct                 | `{ a: F<A>, b: F<B>, ... }`    | `F<{ a: A, b: B, ... }>`         |
-| bindRight              | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
+| bindKind               | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
 | productFlatten         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
 
 ### NonEmptyTraversable
