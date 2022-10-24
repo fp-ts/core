@@ -22,7 +22,6 @@
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
-import { head, isNonEmpty, tail } from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
@@ -101,8 +100,8 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
   combineMany: (collection) =>
     (self) => {
       const reversed = Array.from(collection).reverse()
-      return isNonEmpty(reversed) ?
-        S.combine(self)(S.combineMany(tail(reversed))(head(reversed))) :
+      return reversed.length > 0 ?
+        S.combine(self)(S.combineMany(reversed.slice(1))(reversed[0])) :
         self
     }
 })
