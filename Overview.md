@@ -462,7 +462,6 @@ Additionaly `@fp-ts/core` exports a few data types (types only, implementations 
 
 - `Either<out E, out A>`
 - `Option<out A>`
-- `Predicate<in A>`
 - `Refinement<in out A, out B>`
 - `Ordering`
 

@@ -13,7 +13,6 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/data/Either"
-import type { Predicate } from "@fp-ts/core/data/Predicate"
 import type { Refinement } from "@fp-ts/core/data/Refinement"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
@@ -825,7 +824,7 @@ export const Filterable: filterable.Filterable<OptionTypeLambda> = {
  */
 export const filter: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: Option<C>) => Option<B>
-  <B extends A, A = B>(predicate: Predicate<A>): (fb: Option<B>) => Option<B>
+  <B extends A, A = B>(predicate: (a: A) => boolean): (fb: Option<B>) => Option<B>
 } = filterable.filter(Filterable)
 
 /**
@@ -836,7 +835,9 @@ export const partition: {
   <C extends A, B extends A, A = C>(
     refinement: Refinement<A, B>
   ): (fc: Option<C>) => readonly [Option<C>, Option<B>]
-  <B extends A, A = B>(predicate: Predicate<A>): (fb: Option<B>) => readonly [Option<B>, Option<B>]
+  <B extends A, A = B>(
+    predicate: (a: A) => boolean
+  ): (fb: Option<B>) => readonly [Option<B>, Option<B>]
 } = filterable.partition(Filterable)
 
 /**
@@ -1008,7 +1009,7 @@ export const traversePartition: <F extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const exists = <A>(predicate: Predicate<A>) =>
+export const exists = <A>(predicate: (a: A) => boolean) =>
   (ma: Option<A>): boolean => isNone(ma) ? false : predicate(ma.value)
 
 // -------------------------------------------------------------------------------------
