@@ -1,6 +1,5 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as nonEmptyReadonlyArray from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 
@@ -18,9 +17,11 @@ export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: NonEmptyReadonlyArray<this["Target"]>
 }
 
-export const isNonEmpty = nonEmptyReadonlyArray.isNonEmpty
-export const head = nonEmptyReadonlyArray.head
-export const tail = nonEmptyReadonlyArray.tail
+export const isNonEmpty = <A>(self: ReadonlyArray<A>): self is readonly [A, ...ReadonlyArray<A>] =>
+  self.length > 0
+
+export const head = <A>(as: readonly [A, ...ReadonlyArray<A>]): A => as[0]
+export const tail = <A>(as: readonly [A, ...ReadonlyArray<A>]): ReadonlyArray<A> => as.slice(1)
 
 export const mapWithIndex = <A, B>(
   f: (a: A, i: number) => B

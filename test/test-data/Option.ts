@@ -17,7 +17,6 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
-import * as nonEmptyReadonlyArray from "@fp-ts/core/internal/NonEmptyReadonlyArray"
 import * as option from "@fp-ts/core/internal/Option"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as extendable from "@fp-ts/core/test/limbo/Extendable"
@@ -43,6 +42,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 import type * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import * as nonEmptyArray from "./NonEmptyArray"
+import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
 
 /**
  * @category models
