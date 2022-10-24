@@ -27,7 +27,7 @@
     "functional-programming"
   ],
   "scripts": {
-    "version": "changeset version && pnpm install --no-frozen-lockfile",
+    "version": "changeset version && pnpm install --no-frozen-lockfile && git add --force --all -v docs/modules",
     "release": "pnpm run build && changeset publish",
     "clean": "rimraf build tsbuildinfo dist .ultra.cache.json",
     "build": "pnpm build-all && pnpm build-pack",
