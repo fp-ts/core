@@ -461,7 +461,6 @@ combined operation (`traverseFilter`).
 Additionaly `@fp-ts/core` exports a few data types (types only, implementations are in `@fp-ts/data`)
 
 - `Either<out E, out A>`
-- `NonEmptyReadonlyArray<A>`
 - `Option<out A>`
 - `Predicate<in A>`
 - `Refinement<in out A, out B>`

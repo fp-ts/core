@@ -1,6 +1,5 @@
 import type { compactable, filterable } from "@fp-ts/core"
 import { nonEmptyProduct, traversableFilterable } from "@fp-ts/core"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/data/NonEmptyReadonlyArray"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
@@ -14,6 +13,8 @@ import type * as covariantWithIndex from "../limbo/CovariantWithIndex"
 import * as filterableWithIndex from "../limbo/FilterableWithIndex"
 import * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import type * as traversableWithIndex from "../limbo/TraversableWithIndex"
+import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
+import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
 
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
@@ -56,8 +57,8 @@ export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
   reduceRight: foldableWithIndex.reduceRight(FoldableWithIndex)
 }
 
-export const isNonEmpty = <A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A> =>
-  self.length > 0
+export const isNonEmpty: <A>(self: ReadonlyArray<A>) => self is NonEmptyReadonlyArray<A> =
+  nonEmptyReadonlyArray.isNonEmpty
 
 export const head = <A>(
   self: ReadonlyArray<A>
