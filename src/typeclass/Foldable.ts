@@ -17,11 +17,6 @@ export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
     b: B,
     f: (b: B, a: A) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
-
-  readonly reduceRight: <A, B>(
-    b: B,
-    f: (b: B, a: A) => B
-  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 }
 
 /**
@@ -39,33 +34,15 @@ export const reduceComposition = <F extends TypeLambda, G extends TypeLambda>(
     ): B => pipe(self, F.reduce(b, (b, ga) => pipe(ga, G.reduce(b, f))))
 
 /**
- * Returns a default `reduceRight` composition.
- *
- * @since 1.0.0
- */
-export const reduceRightComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: Foldable<F>,
-  G: Foldable<G>
-) =>
-  <B, A>(b: B, f: (b: B, a: A) => B) =>
-    <FR, FO, FE, GR, GO, GE>(
-      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ): B => pipe(self, F.reduceRight(b, (b, ga) => pipe(ga, G.reduceRight(b, f))))
-
-/**
- * Returns a default `reduceRight` implementation.
- *
  * @since 1.0.0
  */
 export const reduceRight = <F extends TypeLambda>(
-  reduce: Foldable<F>["reduce"]
-): Foldable<F>["reduceRight"] =>
+  F: Foldable<F>
+) =>
   <A, B>(
     b: B,
     f: (b: B, a: A) => B
-  ) =>
-    <R, O, E>(self: Kind<F, R, O, E, A>): B =>
-      internalToReadonlyArrayWith(reduce)(self, identity).reduceRight(f, b)
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>): B => toReadonlyArray(F)(self).reduceRight(f, b)
 
 /**
  * @since 1.0.0
@@ -83,7 +60,10 @@ export const toReadonlyArrayWith = <F extends TypeLambda>(
 ) =>
   <A, B>(f: (a: A) => B) =>
     <R, O, E>(self: Kind<F, R, O, E, A>): ReadonlyArray<B> =>
-      internalToReadonlyArrayWith(F.reduce)(self, f)
+      F.reduce<A, Array<B>>([], (out, a) => {
+        out.push(f(a))
+        return out
+      })(self)
 
 /**
  * @since 1.0.0
@@ -115,7 +95,7 @@ export const reduceRightKind = <F extends TypeLambda>(F: Foldable<F>) =>
       b: B,
       f: (b: B, a: A) => Kind<G, R, O, E, B>
     ): <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B> =>
-      F.reduceRight<A, Kind<G, R, O, E, B>>(
+      reduceRight(F)<A, Kind<G, R, O, E, B>>(
         G.of(b),
         (gb, a) => pipe(gb, G.flatMap(b => f(b, a)))
       )
@@ -132,12 +112,3 @@ export const foldMapKind = <F extends TypeLambda>(F: Foldable<F>) =>
         G.zero(),
         (gb, a) => pipe(gb, G.coproduct(f(a)))
       )
-
-const internalToReadonlyArrayWith = <F extends TypeLambda>(
-  reduce: Foldable<F>["reduce"]
-) =>
-  <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): ReadonlyArray<B> =>
-    reduce<A, Array<B>>([], (out, a) => {
-      out.push(f(a))
-      return out
-    })(self)

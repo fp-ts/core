@@ -775,8 +775,7 @@ export const reduceRight = <B, A>(b: B, f: (b: B, a: A) => B) =>
  * @since 1.0.0
  */
 export const Foldable: foldable.Foldable<OptionTypeLambda> = {
-  reduce,
-  reduceRight
+  reduce
 }
 
 /**

@@ -14,17 +14,6 @@ describe("Foldable", () => {
     U.deepStrictEqual(pipe([["a", "c"], ["b", "d"]], reduce("-", f)), "-acbd")
   })
 
-  it("reduceRightComposition", () => {
-    const reduceRight = _.reduceRightComposition(RA.Foldable, RA.Foldable)
-    const f = (b: string, a: string) => b + a
-    U.deepStrictEqual(pipe([], reduceRight("-", f)), "-")
-    U.deepStrictEqual(pipe([[]], reduceRight("-", f)), "-")
-    U.deepStrictEqual(
-      pipe([["a", "c"], ["b", "d"]], reduceRight("-", f)),
-      "-dbca"
-    )
-  })
-
   it("toReadonlyArray", () => {
     const toReadonlyArray = _.toReadonlyArray(O.Foldable)
     U.deepStrictEqual(toReadonlyArray(O.none), [])
@@ -43,7 +32,7 @@ describe("Foldable", () => {
   })
 
   it("reduceRight", () => {
-    const reduceRight = _.reduceRight<RA.ReadonlyArrayTypeLambda>(RA.Foldable.reduce)
+    const reduceRight = _.reduceRight(RA.Foldable)
     U.deepStrictEqual(pipe(["a", "b", "c"], reduceRight("-", (b, a) => b + a)), "-cba")
   })
 
