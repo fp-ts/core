@@ -42,6 +42,11 @@ describe("Foldable", () => {
     U.deepStrictEqual(pipe([1, 2, 3], foldMap(number.MonoidSum)(U.double)), 12)
   })
 
+  it("reduceRight", () => {
+    const reduceRight = _.reduceRight<RA.ReadonlyArrayTypeLambda>(RA.Foldable.reduce)
+    U.deepStrictEqual(pipe(["a", "b", "c"], reduceRight("-", (b, a) => b + a)), "-cba")
+  })
+
   it("reduceKind", () => {
     const reduceKind = _.reduceKind(RA.Foldable)(O.Monad)
     U.deepStrictEqual(pipe([], reduceKind("-", () => O.none)), O.some("-"))
