@@ -71,15 +71,6 @@ export const reduce = <F extends TypeLambda, I>(
 ): Foldable<F>["reduce"] => (b, f) => F.reduceWithIndex(b, f)
 
 /**
- * Returns a default `reduceRight` implementation.
- *
- * @since 1.0.0
- */
-export const reduceRight = <F extends TypeLambda, I>(
-  F: FoldableWithIndex<F, I>
-): Foldable<F>["reduceRight"] => (b, f) => F.reduceRightWithIndex(b, f)
-
-/**
  * @since 1.0.0
  */
 export const toReadonlyArray = <F extends TypeLambda, I>(

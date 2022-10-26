@@ -279,28 +279,17 @@ collection to produce a single result. Most collection types have
 `reduce` methods, which will usually be used by the associated
 `Foldable<F>` instance.
 
-Instances of `Foldable` should be ordered collections to allow for consistent folding.
-
-`Foldable<F>` is implemented in terms of two basic methods:
-
-- `pipe(fa, reduce(b, f))` eagerly folds `fa` from left-to-right.
-- `pipe(fa, reduceRight(b, f))` eagerly folds `fa` from right-to-left.
-
-Beyond these it provides many other useful methods related to
-folding over `F<A>` values.
-
-| Name                   | Given                                     | To                 |
-| ---------------------- | ----------------------------------------- | ------------------ |
-| **reduce**             | `F<A>`, `B`, `(B, A) => B`                | `B`                |
-| **reduceRight**        | `F<A>`, `B`, `(B, A) => B`                | `B`                |
-| reduceComposition      | `F<G<A>>`, `B`, `(B, A) => B`             | `B`                |
-| reduceRightComposition | `F<G<A>>`, `B`, `(B, A) => B`             | `B`                |
-| foldMap                | `F<A>`, `Monoid<M>`, `A => M`             | `M`                |
-| toReadonlyArray        | `F<A>`                                    | `ReadonlyArray<A>` |
-| toReadonlyArrayWith    | `F<A>`, `A => B`                          | `ReadonlyArray<B>` |
-| reduceKind             | `Monad<G>`, `F<A>`, `B`, `(B, A) => G<B>` | `G<B>`             |
-| reduceRightKind        | `Monad<G>`, `F<A>`, `B`, `(B, A) => G<B>` | `G<B>`             |
-| foldMapKind            | `Coproduct<G>`, `F<A>`, `(A) => G<B>`     | `G<B>`             |
+| Name                | Given                                     | To                 |
+| ------------------- | ----------------------------------------- | ------------------ |
+| **reduce**          | `F<A>`, `B`, `(B, A) => B`                | `B`                |
+| reduceComposition   | `F<G<A>>`, `B`, `(B, A) => B`             | `B`                |
+| reduceRight         | `F<A>`, `B`, `(B, A) => B`                | `B`                |
+| foldMap             | `F<A>`, `Monoid<M>`, `A => M`             | `M`                |
+| toReadonlyArray     | `F<A>`                                    | `ReadonlyArray<A>` |
+| toReadonlyArrayWith | `F<A>`, `A => B`                          | `ReadonlyArray<B>` |
+| reduceKind          | `Monad<G>`, `F<A>`, `B`, `(B, A) => G<B>` | `G<B>`             |
+| reduceRightKind     | `Monad<G>`, `F<A>`, `B`, `(B, A) => G<B>` | `G<B>`             |
+| foldMapKind         | `Coproduct<G>`, `F<A>`, `(A) => G<B>`     | `G<B>`             |
 
 ### Invariant
 

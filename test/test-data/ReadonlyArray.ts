@@ -54,8 +54,7 @@ export const FoldableWithIndex: foldableWithIndex.FoldableWithIndex<
 }
 
 export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
-  reduce: foldableWithIndex.reduce(FoldableWithIndex),
-  reduceRight: foldableWithIndex.reduceRight(FoldableWithIndex)
+  reduce: foldableWithIndex.reduce(FoldableWithIndex)
 }
 
 export const isNonEmpty: <A>(self: ReadonlyArray<A>) => self is NonEmptyReadonlyArray<A> =
