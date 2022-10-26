@@ -84,8 +84,14 @@ export const traverseWithIndex = <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
-    (self: Iterable<A>): Kind<F, R, O, E, ReadonlyArray<B>> =>
-      Applicative.productAll(Array.from(self).map((a, i) => f(a, i)))
+    (self: Iterable<A>): Kind<F, R, O, E, ReadonlyArray<B>> => {
+      const fbs: Array<Kind<F, R, O, E, B>> = []
+      let i = 0
+      for (const a of self) {
+        fbs.push(f(a, i++))
+      }
+      return Applicative.productAll(fbs)
+    }
 
 export const traverse = <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
@@ -93,7 +99,7 @@ export const traverse = <F extends TypeLambda>(
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): (self: ReadonlyArray<A>) => Kind<F, R, O, E, ReadonlyArray<B>> =>
-    traverseWithIndex(Applicative)((a) => f(a))
+    traverseWithIndex(Applicative)(f)
 
 export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
   traverse
