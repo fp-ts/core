@@ -387,8 +387,8 @@ Extends:
 | **productMany**        | `F<A>`, `Iterable<F<A>>`       | `F<[A, ...ReadonlyArray<A>]>`    |
 | productComposition     | `F<G<A>>`, `F<G<B>>`           | `F<G<[A, B]>>`                   |
 | productManyComposition | `F<G<A>>`, `Iterable<F<G<A>>>` | `F<G<[A, ...ReadonlyArray<A>]>>` |
-| tuple                  | `[F<A>, F<B>, ...]`            | `F<[A, B, ...]>`                 |
-| struct                 | `{ a: F<A>, b: F<B>, ... }`    | `F<{ a: A, b: B, ... }>`         |
+| nonEmptyTuple          | `[F<A>, F<B>, ...]`            | `F<[A, B, ...]>`                 |
+| nonEmptyStruct         | `{ a: F<A>, b: F<B>, ... }`    | `F<{ a: A, b: B, ... }>`         |
 | bindKind               | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
 | productFlatten         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
 
