@@ -172,26 +172,26 @@ describe("NonEmptyProduct", () => {
     })
   })
 
-  describe("tuple", () => {
+  describe("nonEmptyTuple", () => {
     it("Covariant (Option)", () => {
-      const tuple = _.tuple(O.NonEmptyProduct)
-      U.deepStrictEqual(tuple(O.some("a")), O.some(["a"] as const))
+      const nonEmptyTuple = _.nonEmptyTuple(O.NonEmptyProduct)
+      U.deepStrictEqual(nonEmptyTuple(O.some("a")), O.some(["a"] as const))
       U.deepStrictEqual(
-        tuple(O.some("a"), O.some(1), O.some(true)),
+        nonEmptyTuple(O.some("a"), O.some(1), O.some(true)),
         O.some(["a", 1, true] as const)
       )
-      U.deepStrictEqual(tuple(O.some("a"), O.some(1), O.none), O.none)
+      U.deepStrictEqual(nonEmptyTuple(O.some("a"), O.some(1), O.none), O.none)
     })
 
     it("Invariant (Semigroup)", () => {
-      const tuple = _.tuple(semigroup.NonEmptyProduct)
-      const S = tuple(string.Semigroup, number.SemigroupSum)
+      const nonEmptyTuple = _.nonEmptyTuple(semigroup.NonEmptyProduct)
+      const S = nonEmptyTuple(string.Semigroup, number.SemigroupSum)
       U.deepStrictEqual(pipe(["a", 2], S.combine(["b", 3])), ["ab", 5])
     })
 
     it("Contravariant (Predicate)", () => {
-      const tuple = _.tuple(P.NonEmptyProduct)
-      const p = tuple(P.isString, P.isNumber, P.isBoolean)
+      const nonEmptyTuple = _.nonEmptyTuple(P.NonEmptyProduct)
+      const p = nonEmptyTuple(P.isString, P.isNumber, P.isBoolean)
       U.deepStrictEqual(p(["a", 1, true]), true)
       U.deepStrictEqual(p(["a", 1, "b"]), false)
     })

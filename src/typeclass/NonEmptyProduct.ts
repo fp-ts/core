@@ -139,16 +139,16 @@ export const productFlatten = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
 /**
  * @since 1.0.0
  */
-export const tuple = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const nonEmptyTuple = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
   <T extends [Kind<F, any, any, any, any>, ...ReadonlyArray<Kind<F, any, any, any, any>>]>(
-    ...tuple: T
+    ...nonEmptyTuple: T
   ): Kind<
     F,
     ([T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
-  > => F.productMany(tuple.slice(1))(tuple[0]) as any
+  > => F.productMany(nonEmptyTuple.slice(1))(nonEmptyTuple[0]) as any
 
 type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 
