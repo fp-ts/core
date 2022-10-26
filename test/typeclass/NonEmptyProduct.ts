@@ -197,29 +197,29 @@ describe("NonEmptyProduct", () => {
     })
   })
 
-  describe("struct", () => {
+  describe("nonEmptyStruct", () => {
     it("Covariant (Option)", () => {
-      const struct = _.struct(O.Product)
-      U.deepStrictEqual(struct({ a: O.some("a") }), O.some({ a: "a" }))
+      const nonEmptyStruct = _.nonEmptyStruct(O.Product)
+      U.deepStrictEqual(nonEmptyStruct({ a: O.some("a") }), O.some({ a: "a" }))
       U.deepStrictEqual(
-        struct({ a: O.some("a"), b: O.some(1), c: O.some(true) }),
+        nonEmptyStruct({ a: O.some("a"), b: O.some(1), c: O.some(true) }),
         O.some({ a: "a", b: 1, c: true })
       )
       U.deepStrictEqual(
-        struct({ a: O.some("a"), b: O.some(1), c: O.none }),
+        nonEmptyStruct({ a: O.some("a"), b: O.some(1), c: O.none }),
         O.none
       )
     })
 
     it("Invariant (Semigroup)", () => {
-      const struct = _.struct(semigroup.Product)
-      const S = struct({ x: string.Semigroup, y: number.SemigroupSum })
+      const nonEmptyStruct = _.nonEmptyStruct(semigroup.Product)
+      const S = nonEmptyStruct({ x: string.Semigroup, y: number.SemigroupSum })
       U.deepStrictEqual(pipe({ x: "a", y: 2 }, S.combine({ x: "b", y: 3 })), { x: "ab", y: 5 })
     })
 
     it("Contravariant (Predicate)", () => {
-      const struct = _.struct(P.Product)
-      const p = struct({ x: P.isString, y: P.isNumber, z: P.isBoolean })
+      const nonEmptyStruct = _.nonEmptyStruct(P.Product)
+      const p = nonEmptyStruct({ x: P.isString, y: P.isNumber, z: P.isBoolean })
       U.deepStrictEqual(p({ x: "a", y: 1, z: true }), true)
       U.deepStrictEqual(p({ x: "a", y: 1, z: "b" }), false)
     })

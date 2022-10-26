@@ -155,9 +155,9 @@ type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 /**
  * @since 1.0.0
  */
-export const struct = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const nonEmptyStruct = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
   <R extends Record<string, Kind<F, any, any, any, any>>>(
-    r: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
+    nonEmptyStruct: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
   ): Kind<
     F,
     ([R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never),
@@ -165,9 +165,9 @@ export const struct = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
     ([R[keyof R]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     { readonly [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => {
-    const keys = Object.keys(r)
+    const keys = Object.keys(nonEmptyStruct)
     return pipe(
-      F.productMany(keys.slice(1).map(k => r[k]))(r[keys[0]]),
+      F.productMany(keys.slice(1).map(k => nonEmptyStruct[k]))(nonEmptyStruct[keys[0]]),
       F.imap(([value, ...values]) => {
         const out: any = { [keys[0]]: value }
         for (let i = 0; i < values.length; i++) {

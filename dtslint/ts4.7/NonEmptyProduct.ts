@@ -7,4 +7,4 @@ export declare const NonEmptyProduct: _.NonEmptyProduct<OptionTypeLambda>
 _.nonEmptyTuple(NonEmptyProduct)() // should not allow empty tuples
 
 // $ExpectError
-_.struct(NonEmptyProduct)({}) // should not allow empty structs
+_.nonEmptyStruct(NonEmptyProduct)({}) // should not allow empty structs
