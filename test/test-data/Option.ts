@@ -849,21 +849,22 @@ export const partition: {
 } = filterable.partition(Filterable)
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<OptionTypeLambda> = {
-  traverse
-}
-
-/**
  * @category traversing
  * @since 1.0.0
  */
 export const sequence: <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
 ) => <R, O, E, A>(fas: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>> = traversable
-  .sequence(Traversable)
+  .sequence<OptionTypeLambda>(traverse)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<OptionTypeLambda> = {
+  traverse,
+  sequence
+}
 
 /**
  * @category filtering

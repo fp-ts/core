@@ -4,6 +4,7 @@
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
+import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
 /**
  * @category type class
@@ -15,6 +16,10 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
+
+  readonly sequence: <F extends TypeLambda>(F: Applicative<F>) => <TR, TO, TE, R, O, E, A>(
+    self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
 }
 
 /**
@@ -30,17 +35,36 @@ export const traverseComposition = <T extends TypeLambda, G extends TypeLambda>(
     <A, R, O, E, B>(
       f: (a: A) => Kind<F, R, O, E, B>
     ): (<TR, TO, TE, GR, GO, GE>(
-      tga: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>
+      self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>
     ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, B>>>) =>
       T.traverse(F)(G.traverse(F)(f))
 
 /**
+ * Returns a default `sequence` composition.
+ *
  * @since 1.0.0
  */
-export const sequence = <T extends TypeLambda>(T: Traversable<T>) =>
+export const sequenceComposition = <T extends TypeLambda, G extends TypeLambda>(
+  T: Traversable<T> & Covariant<T>,
+  G: Traversable<G>
+) =>
+  <F extends TypeLambda>(F: Applicative<F>) =>
+    <TR, TO, TE, GR, GO, GE, R, O, E, A>(
+      self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, Kind<F, R, O, E, A>>>
+    ): Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>> =>
+      T.sequence(F)(pipe(self, T.map(G.sequence(F))))
+
+/**
+ * Returns a default `sequence` implementation.
+ *
+ * @since 1.0.0
+ */
+export const sequence = <T extends TypeLambda>(
+  traverse: Traversable<T>["traverse"]
+): Traversable<T>["sequence"] =>
   <F extends TypeLambda>(F: Applicative<F>): (<TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>) => T.traverse(F)(identity)
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>) => traverse(F)(identity)
 
 /**
  * Given a function which returns a `F` effect, thread this effect

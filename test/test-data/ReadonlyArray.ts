@@ -2,7 +2,7 @@ import type { compactable, filterable } from "@fp-ts/core"
 import { nonEmptyProduct, traversableFilterable } from "@fp-ts/core"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { identity } from "@fp-ts/core/internal/Function"
+import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
@@ -101,8 +101,9 @@ export const traverse = <F extends TypeLambda>(
   ): (self: ReadonlyArray<A>) => Kind<F, R, O, E, ReadonlyArray<B>> =>
     traverseWithIndex(Applicative)(f)
 
-export const Traverse: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
-  traverse
+export const Traversable: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
+  traverse,
+  sequence: F => self => pipe(self, traverse(F)(identity))
 }
 
 export const TraversableWithIndex: traversableWithIndex.TraversableWithIndex<
@@ -171,10 +172,6 @@ export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
 
 export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
   filterMap
-}
-
-export const Traversable: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
-  traverse
 }
 
 /**
