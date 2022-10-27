@@ -46,7 +46,7 @@ export const traverseWithIndex = <F extends TypeLambda>(
       )
     }
 
-export const nonEmptyTraverse = <F extends TypeLambda>(
+export const traverseNonEmpty = <F extends TypeLambda>(
   NonEmptyApplicative: NonEmptyApplicative<F>
 ) =>
   <A, R, O, E, B>(
@@ -57,5 +57,5 @@ export const nonEmptyTraverse = <F extends TypeLambda>(
 export const NonEmptyTraversable: nonEmptyTraversable.NonEmptyTraversable<
   NonEmptyReadonlyArrayTypeLambda
 > = {
-  nonEmptyTraverse
+  traverseNonEmpty
 }

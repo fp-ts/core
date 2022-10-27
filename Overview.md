@@ -385,15 +385,15 @@ Extends:
 
 `NonEmptyTraversable`, also known as `Traversable1`.
 
-`NonEmptyTraversable` is like a non-empty `Traversable`. Unkine the `traverse` and `sequence`
-methods of `Traversable` it provides `nonEmptyTraverse` and `nonEmptySequence` methods which require a `NonEmptyApplicative`
+`NonEmptyTraversable` is like a non-empty `Traversable`. Unlike the `traverse` and `sequence`
+methods of `Traversable` it provides `traverseNonEmpty` and `sequenceNonEmpty` methods which require a `NonEmptyApplicative`
 instance instead of `Applicative`.
 
 | Name                        | Given                                            | To           |
 | --------------------------- | ------------------------------------------------ | ------------ |
-| **nonEmptyTraverse**        | `NonEmptyApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
-| nonEmptyTraverseComposition | `NonEmptyApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
-| nonEmptySequence            | `NonEmptyApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
+| **traverseNonEmpty**        | `NonEmptyApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
+| traverseNonEmptyComposition | `NonEmptyApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
+| sequenceNonEmpty            | `NonEmptyApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
 
 ### Of
 
