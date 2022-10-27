@@ -392,8 +392,9 @@ instance instead of `Applicative`.
 | Name                        | Given                                            | To           |
 | --------------------------- | ------------------------------------------------ | ------------ |
 | **traverseNonEmpty**        | `NonEmptyApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
+| **sequenceNonEmpty**        | `NonEmptyApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
 | traverseNonEmptyComposition | `NonEmptyApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
-| sequenceNonEmpty            | `NonEmptyApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
+| sequenceNonEmptyComposition | `NonEmptyApplicative<F>`, `T<G<F<A>>>`           | `F<T<G<A>>>` |
 
 ### Of
 
