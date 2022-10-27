@@ -141,14 +141,14 @@ export const productFlatten = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
  */
 export const nonEmptyTuple = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
   <T extends [Kind<F, any, any, any, any>, ...ReadonlyArray<Kind<F, any, any, any, any>>]>(
-    ...nonEmptyTuple: T
+    ...components: T
   ): Kind<
     F,
     ([T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
-  > => F.productMany(nonEmptyTuple.slice(1))(nonEmptyTuple[0]) as any
+  > => F.productMany(components.slice(1))(components[0]) as any
 
 type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 
@@ -157,7 +157,7 @@ type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
  */
 export const nonEmptyStruct = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
   <R extends Record<string, Kind<F, any, any, any, any>>>(
-    nonEmptyStruct: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
+    fields: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
   ): Kind<
     F,
     ([R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never),
@@ -165,9 +165,9 @@ export const nonEmptyStruct = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
     ([R[keyof R]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     { readonly [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => {
-    const keys = Object.keys(nonEmptyStruct)
+    const keys = Object.keys(fields)
     return pipe(
-      F.productMany(keys.slice(1).map(k => nonEmptyStruct[k]))(nonEmptyStruct[keys[0]]),
+      F.productMany(keys.slice(1).map(k => fields[k]))(fields[keys[0]]),
       F.imap(([value, ...values]) => {
         const out: any = { [keys[0]]: value }
         for (let i = 0; i < values.length; i++) {
