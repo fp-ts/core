@@ -22,8 +22,8 @@ export interface Coproduct<F extends TypeLambda> extends NonEmptyCoproduct<F> {
  * @since 1.0.0
  */
 export const getMonoid = <F extends TypeLambda>(F: Coproduct<F>) =>
-  <A>(): Monoid<
-    Kind<F, unknown, never, never, A>
+  <R, O, E, A>(): Monoid<
+    Kind<F, R, O, E, A>
   > => ({
     ...nonEmptyCoproduct.getSemigroup(F)(),
     empty: F.zero(),
