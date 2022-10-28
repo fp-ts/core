@@ -1,5 +1,25 @@
 # @fp-ts/core
 
+## 0.0.7
+
+### Patch Changes
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`2aa35975`](https://github.com/fp-ts/core/commit/2aa35975d2803377c0a629603b308e3c2c6448b9) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyTraversable: rename nonEmptyTraverse to traverseNonEmpty, nonEmptySequence to sequenceNonEmpty
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`9d4ac0bb`](https://github.com/fp-ts/core/commit/9d4ac0bb2dc82a33a9959565b6af8289af0f4403) Thanks [@gcanti](https://github.com/gcanti)! - Traversable: add sequence as member
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`eb6020ca`](https://github.com/fp-ts/core/commit/eb6020ca6b8d1cbe3cb4ead58ab9b54cc9ce82a3) Thanks [@gcanti](https://github.com/gcanti)! - Foldable: remove reduceRight from typeclass
+
+- [#28](https://github.com/fp-ts/core/pull/28) [`9f6a193e`](https://github.com/fp-ts/core/commit/9f6a193e4580aadc18ccc172a9e3cf6ffde5c19d) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyCoproduct / Coproduct: fix getSemigroup / getMonoid type params
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`29a94c17`](https://github.com/fp-ts/core/commit/29a94c17f0f018627892f1749acbdea07471374f) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyProduct: rename struct to nonEmptyStruct
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`577f9597`](https://github.com/fp-ts/core/commit/577f9597db0a53728fca14e9a945e1e0d7164957) Thanks [@gcanti](https://github.com/gcanti)! - Foldable: add a default `reduceRight` implementation
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`fc914c93`](https://github.com/fp-ts/core/commit/fc914c9319017abd3da4b11987342fbf56806eca) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyTraversable: add sequenceNonEmpty as member
+
+- [#26](https://github.com/fp-ts/core/pull/26) [`fc4d0aae`](https://github.com/fp-ts/core/commit/fc4d0aaef2aeca6b63f10432695c62e808c6310b) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyProduct: rename tuple to nonEmptyTuple
+
 ## 0.0.6
 
 ### Patch Changes
