@@ -11,7 +11,7 @@ import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicat
  * @category type class
  * @since 1.0.0
  */
-export interface NonEmptyProduct<F extends TypeLambda> extends Invariant<F> {
+export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
   readonly product: <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -30,7 +30,7 @@ export interface NonEmptyProduct<F extends TypeLambda> extends Invariant<F> {
  */
 export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
   F: NonEmptyApplicative<F>,
-  G: NonEmptyProduct<G>
+  G: SemiProduct<G>
 ) =>
   <FR2, FO2, FE2, GR2, GO2, GE2, B>(
     that: Kind<F, FR2, FO2, FE2, Kind<G, GR2, GO2, GE2, B>>
@@ -52,7 +52,7 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
  */
 export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
   F: NonEmptyApplicative<F>,
-  G: NonEmptyProduct<G>
+  G: SemiProduct<G>
 ) =>
   <FR, FO, FE, GR, GO, GE, A>(
     collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
@@ -74,8 +74,8 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
  */
 export const productMany = <F extends TypeLambda>(
   Covariant: Covariant<F>,
-  product: NonEmptyProduct<F>["product"]
-): NonEmptyProduct<F>["productMany"] =>
+  product: SemiProduct<F>["product"]
+): SemiProduct<F>["productMany"] =>
   <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
   ) =>
@@ -97,7 +97,7 @@ export const productMany = <F extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const andThenBind = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     fb: Kind<F, R2, O2, E2, B>
@@ -123,7 +123,7 @@ export const andThenBind = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
 /**
  * @since 1.0.0
  */
-export const productFlatten = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const productFlatten = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) =>
@@ -139,7 +139,7 @@ export const productFlatten = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
 /**
  * @since 1.0.0
  */
-export const nonEmptyTuple = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const nonEmptyTuple = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <T extends [Kind<F, any, any, any, any>, ...ReadonlyArray<Kind<F, any, any, any, any>>]>(
     ...components: T
   ): Kind<
@@ -155,7 +155,7 @@ type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 /**
  * @since 1.0.0
  */
-export const nonEmptyStruct = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const nonEmptyStruct = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <R extends Record<string, Kind<F, any, any, any, any>>>(
     fields: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
   ): Kind<

@@ -187,11 +187,11 @@ describe("Order", () => {
     U.strictEqual(pipe(first, max(second)), first)
   })
 
-  describe("NonEmptyProduct", () => {
+  describe("SemiProduct", () => {
     it("product", () => {
       const O = pipe(
         string.Order,
-        _.NonEmptyProduct.product(number.Order)
+        _.SemiProduct.product(number.Order)
       )
       U.deepStrictEqual(pipe(["a", 1], O.compare(["a", 2])), -1)
       U.deepStrictEqual(pipe(["a", 1], O.compare(["a", 1])), 0)
@@ -202,7 +202,7 @@ describe("Order", () => {
     it("productMany", () => {
       const O = pipe(
         string.Order,
-        _.NonEmptyProduct.productMany([string.Order, string.Order])
+        _.SemiProduct.productMany([string.Order, string.Order])
       )
       U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "c"])), -1)
       U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "b"])), 0)

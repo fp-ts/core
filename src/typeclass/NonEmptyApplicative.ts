@@ -4,16 +4,14 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
-import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface NonEmptyApplicative<F extends TypeLambda>
-  extends NonEmptyProduct<F>, Covariant<F>
-{}
+export interface NonEmptyApplicative<F extends TypeLambda> extends SemiProduct<F>, Covariant<F> {}
 
 /**
  * Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.

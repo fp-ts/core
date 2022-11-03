@@ -6,9 +6,9 @@ import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -132,7 +132,7 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OrderTypeLambda> = {
+export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
   imap: Contravariant.imap,
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
@@ -143,7 +143,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OrderTypeLambda> =
  * @since 1.0.0
  */
 export const Product: product.Product<OrderTypeLambda> = {
-  ...NonEmptyProduct,
+  ...SemiProduct,
   of: () => empty,
   productAll: <A>(collection: Iterable<Order<A>>) => tuple<Array<A>>(...collection)
 }

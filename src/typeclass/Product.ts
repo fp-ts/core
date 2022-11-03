@@ -3,14 +3,14 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
-import type { NonEmptyProduct } from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Of } from "@fp-ts/core/typeclass/Of"
+import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Product<F extends TypeLambda> extends NonEmptyProduct<F>, Of<F> {
+export interface Product<F extends TypeLambda> extends SemiProduct<F>, Of<F> {
   readonly productAll: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, ReadonlyArray<A>>

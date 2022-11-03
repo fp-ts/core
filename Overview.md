@@ -115,7 +115,7 @@ flowchart TD
     Coproduct --> NonEmptyCoproduct
     NonEmptyAlternative --> Covariant
     NonEmptyAlternative --> NonEmptyCoproduct
-    NonEmptyApplicative --> NonEmptyProduct
+    NonEmptyApplicative --> SemiProduct
     NonEmptyApplicative --> Covariant
     Applicative --> NonEmptyApplicative
     Chainable --> FlatMap
@@ -124,9 +124,9 @@ flowchart TD
     Monad --> Pointed
     Pointed --> Of
     Pointed --> Covariant
-    Product --> NonEmptyProduct
+    Product --> SemiProduct
     Product --> Of
-    NonEmptyProduct --> Invariant
+    SemiProduct --> Invariant
     Covariant --> Invariant
     NonEmptyCoproduct --> Invariant
 ```
@@ -322,7 +322,7 @@ Extends:
 
 Extends:
 
-- `NonEmptyProduct`
+- `SemiProduct`
 - `Covariant`
 
 | Name           | Given               | To                           |
@@ -364,23 +364,6 @@ Extends:
 | getSemigroup      |                  | `Semigroup<F<A>>` |
 | coproductEither   | `F<A>`, `F<B>`   | `F<Either<A, B>>` |
 
-### NonEmptyProduct
-
-Extends:
-
-- `Invariant`
-
-| Name                   | Given                          | To                               |
-| ---------------------- | ------------------------------ | -------------------------------- |
-| **product**            | `F<A>`, `F<B>`                 | `F<[A, B]>`                      |
-| **productMany**        | `F<A>`, `Iterable<F<A>>`       | `F<[A, ...ReadonlyArray<A>]>`    |
-| productComposition     | `F<G<A>>`, `F<G<B>>`           | `F<G<[A, B]>>`                   |
-| productManyComposition | `F<G<A>>`, `Iterable<F<G<A>>>` | `F<G<[A, ...ReadonlyArray<A>]>>` |
-| nonEmptyTuple          | `[F<A>, F<B>, ...]`            | `F<[A, B, ...]>`                 |
-| nonEmptyStruct         | `{ a: F<A>, b: F<B>, ... }`    | `F<{ a: A, b: B, ... }>`         |
-| andThenBind            | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
-| productFlatten         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
-
 ### NonEmptyTraversable
 
 `NonEmptyTraversable`, also known as `Traversable1`.
@@ -416,7 +399,7 @@ Extends:
 
 Extends:
 
-- `NonEmptyProduct`
+- `SemiProduct`
 - `Of`
 
 | Name           | Given                       | To                       |
@@ -424,6 +407,23 @@ Extends:
 | **productAll** | `Iterable<F<A>>`            | `F<ReadonlyArray<A>>`    |
 | tuple          | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
 | struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
+
+### SemiProduct
+
+Extends:
+
+- `Invariant`
+
+| Name                   | Given                          | To                               |
+| ---------------------- | ------------------------------ | -------------------------------- |
+| **product**            | `F<A>`, `F<B>`                 | `F<[A, B]>`                      |
+| **productMany**        | `F<A>`, `Iterable<F<A>>`       | `F<[A, ...ReadonlyArray<A>]>`    |
+| productComposition     | `F<G<A>>`, `F<G<B>>`           | `F<G<[A, B]>>`                   |
+| productManyComposition | `F<G<A>>`, `Iterable<F<G<A>>>` | `F<G<[A, ...ReadonlyArray<A>]>>` |
+| nonEmptyTuple          | `[F<A>, F<B>, ...]`            | `F<[A, B, ...]>`                 |
+| nonEmptyStruct         | `{ a: F<A>, b: F<B>, ... }`    | `F<{ a: A, b: B, ... }>`         |
+| andThenBind            | `F<A>`, `name: string`, `F<B>` | `F<A & { [name]: B }>`           |
+| productFlatten         | `F<A>`, `F<B>`                 | `F<[...A, B]>`                   |
 
 ### Traversable
 

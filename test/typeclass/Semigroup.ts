@@ -136,8 +136,8 @@ describe("Semigroup", () => {
   it("product", () => {
     const A = pipe(
       string.Semigroup,
-      _.NonEmptyProduct.product(number.SemigroupSum),
-      _.NonEmptyProduct.product(number.SemigroupMultiply),
+      _.SemiProduct.product(number.SemigroupSum),
+      _.SemiProduct.product(number.SemigroupMultiply),
       _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
     )
     U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
@@ -146,7 +146,7 @@ describe("Semigroup", () => {
   it("productMany", () => {
     const A = pipe(
       string.Semigroup,
-      _.NonEmptyProduct.productMany([string.Semigroup, string.Semigroup])
+      _.SemiProduct.productMany([string.Semigroup, string.Semigroup])
     )
     U.deepStrictEqual(pipe(["a", "b", "c"], A.combine(["d", "e", "f"])), ["ad", "be", "cf"])
   })

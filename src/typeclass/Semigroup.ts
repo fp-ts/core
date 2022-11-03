@@ -23,9 +23,9 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
-import type * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product from "@fp-ts/core/typeclass/Product"
+import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -204,7 +204,7 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambda> = {
+export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
   ...Invariant,
   product: that => self => tuple(self, that),
   productMany: collection => self => tuple(self, ...collection)
@@ -215,7 +215,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambd
  * @since 1.0.0
  */
 export const Product: product.Product<SemigroupTypeLambda> = {
-  ...NonEmptyProduct,
+  ...SemiProduct,
   of: constant,
   productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple<Array<A>>(...collection)
 }

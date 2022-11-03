@@ -1,9 +1,9 @@
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
-import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as of_ from "@fp-ts/core/typeclass/Of"
 import * as product from "@fp-ts/core/typeclass/Product"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 export interface Predicate<A> {
   (a: A): boolean
@@ -24,7 +24,7 @@ export const Invariant: invariant.Invariant<PredicateTypeLambda> = {
   imap: Contravariant.imap
 }
 
-export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<PredicateTypeLambda> = {
+export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
   imap: Contravariant.imap,
   product: that => self => ([a, b]) => self(a) && that(b),
   productMany: collection =>
@@ -53,7 +53,7 @@ export const Of: of_.Of<PredicateTypeLambda> = {
 export const Do = of_.Do(Of)
 
 export const Product: product.Product<PredicateTypeLambda> = {
-  ...NonEmptyProduct,
+  ...SemiProduct,
   of,
   productAll: collection =>
     as => {
@@ -72,9 +72,9 @@ export const andThenBind: <N extends string, A extends object, B>(
   fb: Predicate<B>
 ) => (
   self: Predicate<A>
-) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = nonEmptyProduct
+) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
   .andThenBind(
-    NonEmptyProduct
+    SemiProduct
   )
 
 export const tupled: <A>(self: Predicate<A>) => Predicate<readonly [A]> = invariant.tupled(
