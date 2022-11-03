@@ -1,8 +1,8 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
-import * as _ from "@fp-ts/core/typeclass/NonEmptyProduct"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as _ from "@fp-ts/core/typeclass/SemiProduct"
 import * as number from "../test-data/number"
 import * as O from "../test-data/Option"
 import * as P from "../test-data/Predicate"
@@ -10,7 +10,7 @@ import * as RA from "../test-data/ReadonlyArray"
 import * as string from "../test-data/string"
 import * as U from "../util"
 
-describe("NonEmptyProduct", () => {
+describe("SemiProduct", () => {
   it("productMany", () => {
     const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
       (x: unknown) => {
@@ -80,7 +80,7 @@ describe("NonEmptyProduct", () => {
 
   describe("productComposition", () => {
     it("ReadonlyArray", () => {
-      const product = _.productComposition(RA.NonEmptyApplicative, O.NonEmptyProduct)
+      const product = _.productComposition(RA.NonEmptyApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe([], product([O.none])), [])
       U.deepStrictEqual(pipe([O.none], product([])), [])
       U.deepStrictEqual(pipe([O.none], product([O.none])), [O.none])
@@ -88,7 +88,7 @@ describe("NonEmptyProduct", () => {
     })
 
     it("Option", () => {
-      const product = _.productComposition(O.NonEmptyApplicative, O.NonEmptyProduct)
+      const product = _.productComposition(O.NonEmptyApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe(O.none, product(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), product(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some(O.some(1)), product(O.none)), O.none)
@@ -103,7 +103,7 @@ describe("NonEmptyProduct", () => {
 
   describe("productManyComposition", () => {
     it("ReadonlyArray", () => {
-      const productMany = _.productManyComposition(RA.NonEmptyApplicative, O.NonEmptyProduct)
+      const productMany = _.productManyComposition(RA.NonEmptyApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([])), [O.some([1] as const), O.none])
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([[O.some(2), O.none]])), [
         O.some([1, 2] as const),
@@ -123,7 +123,7 @@ describe("NonEmptyProduct", () => {
     })
 
     it("Option", () => {
-      const productMany = _.productManyComposition(O.NonEmptyApplicative, O.NonEmptyProduct)
+      const productMany = _.productManyComposition(O.NonEmptyApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe(O.none, productMany([])), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), productMany([])), O.some(O.none))
       U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1] as const)))
@@ -158,13 +158,13 @@ describe("NonEmptyProduct", () => {
 
   describe("productFlatten", () => {
     it("Covariant (Option)", () => {
-      const productFlatten = _.productFlatten(O.NonEmptyProduct)
+      const productFlatten = _.productFlatten(O.SemiProduct)
       U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3] as const))
     })
 
     it("Contravariant (Predicate)", () => {
-      const productFlatten = _.productFlatten(P.NonEmptyProduct)
+      const productFlatten = _.productFlatten(P.SemiProduct)
       const p = pipe(P.tuple(P.isString, P.isString), productFlatten(P.isNumber))
       U.deepStrictEqual(p(["a", "b", 3]), true)
       U.deepStrictEqual(p(["a", "b", "c"]), false)
@@ -174,7 +174,7 @@ describe("NonEmptyProduct", () => {
 
   describe("nonEmptyTuple", () => {
     it("Covariant (Option)", () => {
-      const nonEmptyTuple = _.nonEmptyTuple(O.NonEmptyProduct)
+      const nonEmptyTuple = _.nonEmptyTuple(O.SemiProduct)
       U.deepStrictEqual(nonEmptyTuple(O.some("a")), O.some(["a"] as const))
       U.deepStrictEqual(
         nonEmptyTuple(O.some("a"), O.some(1), O.some(true)),
@@ -184,13 +184,13 @@ describe("NonEmptyProduct", () => {
     })
 
     it("Invariant (Semigroup)", () => {
-      const nonEmptyTuple = _.nonEmptyTuple(semigroup.NonEmptyProduct)
+      const nonEmptyTuple = _.nonEmptyTuple(semigroup.SemiProduct)
       const S = nonEmptyTuple(string.Semigroup, number.SemigroupSum)
       U.deepStrictEqual(pipe(["a", 2], S.combine(["b", 3])), ["ab", 5])
     })
 
     it("Contravariant (Predicate)", () => {
-      const nonEmptyTuple = _.nonEmptyTuple(P.NonEmptyProduct)
+      const nonEmptyTuple = _.nonEmptyTuple(P.SemiProduct)
       const p = nonEmptyTuple(P.isString, P.isNumber, P.isBoolean)
       U.deepStrictEqual(p(["a", 1, true]), true)
       U.deepStrictEqual(p(["a", 1, "b"]), false)

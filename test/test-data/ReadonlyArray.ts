@@ -1,5 +1,5 @@
 import type { compactable, filterable } from "@fp-ts/core"
-import { nonEmptyProduct, traversableFilterable } from "@fp-ts/core"
+import { semiProduct, traversableFilterable } from "@fp-ts/core"
 import type { Option } from "@fp-ts/core/data/Option"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
@@ -128,16 +128,16 @@ export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
   of: a => [a]
 }
 
-const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<ReadonlyArrayTypeLambda> = {
+const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = {
   imap: Covariant.imap,
   product,
-  productMany: nonEmptyProduct.productMany(Covariant, product)
+  productMany: semiProduct.productMany(Covariant, product)
 }
 
 export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<ReadonlyArrayTypeLambda> =
   {
     ...Covariant,
-    ...NonEmptyProduct
+    ...SemiProduct
   }
 
 export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>

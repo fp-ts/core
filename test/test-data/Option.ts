@@ -33,12 +33,12 @@ import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
-import * as nonEmptyProduct from "@fp-ts/core/typeclass/NonEmptyProduct"
 import type * as of_ from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 import type * as foldableWithIndex from "../limbo/FoldableWithIndex"
@@ -628,7 +628,7 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> = {
+export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
   imap: Invariant.imap,
   product: that => self => isSome(self) && isSome(that) ? some([self.value, that.value]) : none,
   productMany: collection =>
@@ -653,7 +653,7 @@ export const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OptionTypeLambda> 
  */
 export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<OptionTypeLambda> = {
   ...Covariant,
-  ...NonEmptyProduct
+  ...SemiProduct
 }
 
 const coproduct = <B>(
@@ -710,7 +710,7 @@ export const lift3: <A, B, C, D>(
 )
 
 export const Product: product.Product<OptionTypeLambda> = {
-  ...NonEmptyProduct,
+  ...SemiProduct,
   ...Of,
   productAll: collection => {
     const as = Array.from(collection)
@@ -1067,7 +1067,7 @@ export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  nonEmptyProduct.andThenBind(NonEmptyApplicative)
+  semiProduct.andThenBind(NonEmptyApplicative)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -1092,6 +1092,5 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tu
  */
 export const productFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> =
-  nonEmptyProduct
-    .productFlatten(NonEmptyProduct)
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = semiProduct
+  .productFlatten(SemiProduct)
