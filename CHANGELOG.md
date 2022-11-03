@@ -1,5 +1,19 @@
 # @fp-ts/core
 
+## 0.0.8
+
+### Patch Changes
+
+- [#29](https://github.com/fp-ts/core/pull/29) [`c2e0f09d`](https://github.com/fp-ts/core/commit/c2e0f09dc0d5aca2cc3c200adbe25991ff1a8c0c) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyAlternative: rename to SemiAlternative
+
+- [#29](https://github.com/fp-ts/core/pull/29) [`adbf4dbc`](https://github.com/fp-ts/core/commit/adbf4dbc1e6d8ea2d85e897de8048be7ac6dd88c) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyProduct: rename to SemiProduct
+
+- [#29](https://github.com/fp-ts/core/pull/29) [`07b7061b`](https://github.com/fp-ts/core/commit/07b7061bcef03d405a47777bc89e979c1b58e335) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyProduct: rename bindKind to andThenBind
+
+- [#29](https://github.com/fp-ts/core/pull/29) [`1f116d3d`](https://github.com/fp-ts/core/commit/1f116d3ddfbb26afd9e92b7001de7f1425774d3e) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyApplicative: rename to SemiApplicative
+
+- [#29](https://github.com/fp-ts/core/pull/29) [`d539285e`](https://github.com/fp-ts/core/commit/d539285e270d69bd995a3ebc4e98a84b74665f46) Thanks [@gcanti](https://github.com/gcanti)! - NonEmptyCoproduct: rename to SemiCoproduct
+
 ## 0.0.7
 
 ### Patch Changes
