@@ -67,13 +67,13 @@ export const Product: product.Product<PredicateTypeLambda> = {
     }
 }
 
-export const bindPredicate: <N extends string, A extends object, B>(
+export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Predicate<B>
 ) => (
   self: Predicate<A>
 ) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = nonEmptyProduct
-  .bindKind(
+  .andThenBind(
     NonEmptyProduct
   )
 

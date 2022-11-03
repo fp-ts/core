@@ -138,18 +138,18 @@ describe("NonEmptyProduct", () => {
     })
   })
 
-  describe("bindKind", () => {
+  describe("andThenBind", () => {
     it("Covariant (Option)", () => {
-      const bindKind = _.bindKind(O.Applicative)
-      U.deepStrictEqual(pipe(O.some({ a: 1 }), bindKind("b", O.none)), O.none)
-      U.deepStrictEqual(pipe(O.some({ a: 1 }), bindKind("b", O.some(2))), O.some({ a: 1, b: 2 }))
+      const andThenBind = _.andThenBind(O.Applicative)
+      U.deepStrictEqual(pipe(O.some({ a: 1 }), andThenBind("b", O.none)), O.none)
+      U.deepStrictEqual(pipe(O.some({ a: 1 }), andThenBind("b", O.some(2))), O.some({ a: 1, b: 2 }))
     })
 
     it("Contravariant (Predicate)", () => {
       const p = pipe(
         P.Do,
-        P.bindPredicate("x", P.isString),
-        P.bindPredicate("y", P.isNumber)
+        P.andThenBind("x", P.isString),
+        P.andThenBind("y", P.isNumber)
       )
       U.deepStrictEqual(p({ x: "a", y: 1 }), true)
       U.deepStrictEqual(p({ x: "a", y: "x" }), false)

@@ -97,7 +97,7 @@ export const productMany = <F extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const bindKind = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
+export const andThenBind = <F extends TypeLambda>(F: NonEmptyProduct<F>) =>
   <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     fb: Kind<F, R2, O2, E2, B>
