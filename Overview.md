@@ -112,9 +112,9 @@ flowchart TD
     Alternative --> NonEmptyAlternative
     Alternative --> Coproduct
     Applicative --> Product
-    Coproduct --> NonEmptyCoproduct
+    Coproduct --> SemiCoproduct
     NonEmptyAlternative --> Covariant
-    NonEmptyAlternative --> NonEmptyCoproduct
+    NonEmptyAlternative --> SemiCoproduct
     SemiApplicative --> SemiProduct
     SemiApplicative --> Covariant
     Applicative --> SemiApplicative
@@ -128,7 +128,7 @@ flowchart TD
     Product --> Of
     SemiProduct --> Invariant
     Covariant --> Invariant
-    NonEmptyCoproduct --> Invariant
+    SemiCoproduct --> Invariant
 ```
 
 ## Members and derived functions
@@ -223,7 +223,7 @@ Here's how to distinguish `Monoid` and `Coproduct`:
 
 Extends:
 
-- `NonEmptyCoproduct`
+- `SemiCoproduct`
 
 | Name             | Given            | To             |
 | ---------------- | ---------------- | -------------- |
@@ -315,38 +315,8 @@ Extends:
 
 Extends:
 
-- `NonEmptyCoproduct`
+- `SemiCoproduct`
 - `Covariant`
-
-### NonEmptyCoproduct
-
-`NonEmptyCoproduct` is a universal semigroup which operates on kinds.
-
-This type class is useful when its type parameter `F<_>` has a
-structure that can be combined for any particular type. Thus,
-`NonEmptyCoproduct` is like a `Semigroup` for kinds (i.e. parametrized
-types).
-
-A `NonEmptyCoproduct<F>` can produce a `Semigroup<F<A>>` for any type A.
-
-Here's how to distinguish `Semigroup` and `NonEmptyCoproduct`:
-
-- `Semigroup<A>` allows two `A` values to be combined.
-
-- `NonEmptyCoproduct<F>` allows two `F<A>` values to be combined, for any `A`.
-  The combination operation just depends on the structure of `F`,
-  but not the structure of `A`.
-
-Extends:
-
-- `Invariant`
-
-| Name              | Given            | To                |
-| ----------------- | ---------------- | ----------------- |
-| **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>`       |
-| **coproductMany** | `Iterable<F<A>>` | `F<A>`            |
-| getSemigroup      |                  | `Semigroup<F<A>>` |
-| coproductEither   | `F<A>`, `F<B>`   | `F<Either<A, B>>` |
 
 ### NonEmptyTraversable
 
@@ -407,6 +377,36 @@ Extends:
 | andThen        | `F<A>`, `F<B>`      | `F<B>`                       |
 | lift2          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
 | lift3          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
+
+### SemiCoproduct
+
+`SemiCoproduct` is a universal semigroup which operates on kinds.
+
+This type class is useful when its type parameter `F<_>` has a
+structure that can be combined for any particular type. Thus,
+`SemiCoproduct` is like a `Semigroup` for kinds (i.e. parametrized
+types).
+
+A `SemiCoproduct<F>` can produce a `Semigroup<F<A>>` for any type A.
+
+Here's how to distinguish `Semigroup` and `SemiCoproduct`:
+
+- `Semigroup<A>` allows two `A` values to be combined.
+
+- `SemiCoproduct<F>` allows two `F<A>` values to be combined, for any `A`.
+  The combination operation just depends on the structure of `F`,
+  but not the structure of `A`.
+
+Extends:
+
+- `Invariant`
+
+| Name              | Given            | To                |
+| ----------------- | ---------------- | ----------------- |
+| **coproduct**     | `F<A>`, `F<B>`   | `F<A \| B>`       |
+| **coproductMany** | `Iterable<F<A>>` | `F<A>`            |
+| getSemigroup      |                  | `Semigroup<F<A>>` |
+| coproductEither   | `F<A>`, `F<B>`   | `F<Either<A, B>>` |
 
 ### SemiProduct
 

@@ -28,13 +28,13 @@ import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
-import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
+import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
@@ -141,11 +141,6 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  nonEmptyCoproduct,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   nonEmptyTraversable,
   /**
    * @category typeclass
@@ -177,6 +172,11 @@ export {
    * @since 1.0.0
    */
   semiApplicative,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  semiCoproduct,
   /**
    * @category typeclass
    * @since 1.0.0
