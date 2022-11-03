@@ -1,6 +1,6 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as _ from "@fp-ts/core/typeclass/SemiProduct"
 import * as number from "../test-data/number"
@@ -26,11 +26,11 @@ describe("SemiProduct", () => {
       curry(<T extends ReadonlyArray<any>>(...t: T): T => t, len - 1, [])
 
     const assertSameResult = <F extends TypeLambda>(
-      NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<F>
+      SemiApplicative: semiApplicative.SemiApplicative<F>
     ) =>
       <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
         (self: Kind<F, R, O, E, A>) => {
-          const ap = nonEmptyApplicative.ap(NonEmptyApplicative)
+          const ap = semiApplicative.ap(SemiApplicative)
           const productManyFromAp = <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
             (
               self: Kind<F, R, O, E, A>
@@ -38,13 +38,13 @@ describe("SemiProduct", () => {
               const args = [self, ...Array.from(collection)]
               const len = args.length
               const f = getCurriedTupleConstructor(len)
-              let fas = pipe(args[0], NonEmptyApplicative.map(f))
+              let fas = pipe(args[0], SemiApplicative.map(f))
               for (let i = 1; i < len; i++) {
                 fas = pipe(fas, ap(args[i]))
               }
               return fas
             }
-          const actual = pipe(self, NonEmptyApplicative.productMany(collection))
+          const actual = pipe(self, SemiApplicative.productMany(collection))
           const expected = pipe(self, productManyFromAp(collection))
           // console.log(expected)
           U.deepStrictEqual(actual, expected)
@@ -66,21 +66,21 @@ describe("SemiProduct", () => {
       product
     )
 
-    const NonEmptyApplicative = {
+    const SemiApplicative = {
       ...RA.Covariant,
       product,
       productMany
     }
 
-    assertSameResult(NonEmptyApplicative)([])([])
-    assertSameResult(NonEmptyApplicative)([])([1, 2, 3])
-    assertSameResult(NonEmptyApplicative)([[4]])([1, 2, 3])
-    assertSameResult(NonEmptyApplicative)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
+    assertSameResult(SemiApplicative)([])([])
+    assertSameResult(SemiApplicative)([])([1, 2, 3])
+    assertSameResult(SemiApplicative)([[4]])([1, 2, 3])
+    assertSameResult(SemiApplicative)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
   })
 
   describe("productComposition", () => {
     it("ReadonlyArray", () => {
-      const product = _.productComposition(RA.NonEmptyApplicative, O.SemiProduct)
+      const product = _.productComposition(RA.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe([], product([O.none])), [])
       U.deepStrictEqual(pipe([O.none], product([])), [])
       U.deepStrictEqual(pipe([O.none], product([O.none])), [O.none])
@@ -88,7 +88,7 @@ describe("SemiProduct", () => {
     })
 
     it("Option", () => {
-      const product = _.productComposition(O.NonEmptyApplicative, O.SemiProduct)
+      const product = _.productComposition(O.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe(O.none, product(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), product(O.none)), O.none)
       U.deepStrictEqual(pipe(O.some(O.some(1)), product(O.none)), O.none)
@@ -103,7 +103,7 @@ describe("SemiProduct", () => {
 
   describe("productManyComposition", () => {
     it("ReadonlyArray", () => {
-      const productMany = _.productManyComposition(RA.NonEmptyApplicative, O.SemiProduct)
+      const productMany = _.productManyComposition(RA.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([])), [O.some([1] as const), O.none])
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([[O.some(2), O.none]])), [
         O.some([1, 2] as const),
@@ -123,7 +123,7 @@ describe("SemiProduct", () => {
     })
 
     it("Option", () => {
-      const productMany = _.productManyComposition(O.NonEmptyApplicative, O.SemiProduct)
+      const productMany = _.productManyComposition(O.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe(O.none, productMany([])), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), productMany([])), O.some(O.none))
       U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1] as const)))

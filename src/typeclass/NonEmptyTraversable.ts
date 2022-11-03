@@ -6,7 +6,7 @@
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
-import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
 
 /**
  * @category type class
@@ -14,7 +14,7 @@ import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicat
  */
 export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> {
   readonly traverseNonEmpty: <F extends TypeLambda>(
-    F: NonEmptyApplicative<F>
+    F: SemiApplicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(
@@ -22,7 +22,7 @@ export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> 
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 
   readonly sequenceNonEmpty: <F extends TypeLambda>(
-    F: NonEmptyApplicative<F>
+    F: SemiApplicative<F>
   ) => <TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
@@ -37,7 +37,7 @@ export const traverseNonEmptyComposition = <T extends TypeLambda, F extends Type
   T: NonEmptyTraversable<T>,
   G: NonEmptyTraversable<F>
 ) =>
-  <G extends TypeLambda>(F: NonEmptyApplicative<G>) =>
+  <G extends TypeLambda>(F: SemiApplicative<G>) =>
     <A, R, O, E, B>(
       f: (a: A) => Kind<G, R, O, E, B>
     ): (<TR, TO, TE, GR, GO, GE>(
@@ -54,7 +54,7 @@ export const sequenceNonEmptyComposition = <T extends TypeLambda, F extends Type
   T: NonEmptyTraversable<T> & Covariant<T>,
   G: NonEmptyTraversable<F>
 ) =>
-  <G extends TypeLambda>(F: NonEmptyApplicative<G>) =>
+  <G extends TypeLambda>(F: SemiApplicative<G>) =>
     <TR, TO, TE, GR, GO, GE, R, O, E, A>(
       self: Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, Kind<G, R, O, E, A>>>
     ): Kind<G, R, O, E, Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, A>>> =>
@@ -69,7 +69,7 @@ export const sequenceNonEmpty = <T extends TypeLambda>(
   traverseNonEmpty: NonEmptyTraversable<T>["traverseNonEmpty"]
 ): NonEmptyTraversable<T>["sequenceNonEmpty"] =>
   <F extends TypeLambda>(
-    F: NonEmptyApplicative<F>
+    F: SemiApplicative<F>
   ): (<TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>) => traverseNonEmpty(F)(identity)

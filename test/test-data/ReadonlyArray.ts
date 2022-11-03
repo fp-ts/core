@@ -6,9 +6,9 @@ import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
-import type * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as of_ from "@fp-ts/core/typeclass/Of"
 import type { Order } from "@fp-ts/core/typeclass/Order"
+import type * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as covariantWithIndex from "../limbo/CovariantWithIndex"
 import * as filterableWithIndex from "../limbo/FilterableWithIndex"
@@ -134,11 +134,10 @@ const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = {
   productMany: semiProduct.productMany(Covariant, product)
 }
 
-export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<ReadonlyArrayTypeLambda> =
-  {
-    ...Covariant,
-    ...SemiProduct
-  }
+export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeLambda> = {
+  ...Covariant,
+  ...SemiProduct
+}
 
 export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
   (fa: ReadonlyArray<A>): ReadonlyArray<B> => {
