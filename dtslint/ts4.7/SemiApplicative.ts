@@ -1,11 +1,11 @@
 import * as _ from "@fp-ts/core/typeclass/SemiApplicative"
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda,Variance } from "@fp-ts/core/HKT"
 
 interface RAW<R, E, A> {
   (r: R): () => Promise<readonly [E, A]>
 }
 
-interface RAWTypeLambda extends TypeLambda {
+interface RAWTypeLambda extends TypeLambda<Variance.Covariant> {
   readonly type: RAW<this["In"], this["Out1"], this["Target"]>
 }
 

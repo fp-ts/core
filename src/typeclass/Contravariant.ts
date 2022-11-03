@@ -1,14 +1,14 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
+export interface Contravariant<F extends TypeLambda<Variance.Contravariant>> extends Invariant<F> {
   readonly contramap: <B, A>(
     f: (b: B) => A
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
@@ -21,7 +21,10 @@ export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
  *
  * @since 1.0.0
  */
-export const contramapComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const contramapComposition = <
+  F extends TypeLambda<Variance.Contravariant>,
+  G extends TypeLambda<Variance.Contravariant>
+>(
   F: Contravariant<F>,
   G: Contravariant<G>
 ): (<A, B>(
@@ -35,7 +38,7 @@ export const contramapComposition = <F extends TypeLambda, G extends TypeLambda>
  *
  * @since 1.0.0
  */
-export const imap = <F extends TypeLambda>(
+export const imap = <F extends TypeLambda<Variance.Contravariant>>(
   contramap: Contravariant<F>["contramap"]
 ): Invariant<F>["imap"] => (_, from) => contramap(from)
 
@@ -43,7 +46,7 @@ export const imap = <F extends TypeLambda>(
  * @category constructors
  * @since 1.0.0
  */
-export const make = <F extends TypeLambda>(
+export const make = <F extends TypeLambda<Variance.Contravariant>>(
   contramap: Contravariant<F>["contramap"]
 ): Contravariant<F> => ({
   contramap,

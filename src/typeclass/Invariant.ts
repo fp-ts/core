@@ -1,13 +1,13 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
+export interface Invariant<F extends TypeLambda<Variance.Invariant>> extends TypeClass<F> {
   readonly imap: <A, B>(
     to: (a: A) => B,
     from: (b: B) => A
@@ -19,7 +19,10 @@ export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const imapComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const imapComposition = <
+  F extends TypeLambda<Variance.Invariant>,
+  G extends TypeLambda<Variance.Invariant>
+>(
   F: Invariant<F>,
   G: Invariant<G>
 ): (<A, B>(
@@ -33,7 +36,7 @@ export const imapComposition = <F extends TypeLambda, G extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
+export const bindTo = <F extends TypeLambda<Variance.Invariant>>(F: Invariant<F>) =>
   <N extends string>(
     name: N
   ): (<R, O, E, A>(
@@ -44,7 +47,7 @@ export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
 /**
  * @since 1.0.0
  */
-export const tupled = <F extends TypeLambda>(
+export const tupled = <F extends TypeLambda<Variance.Invariant>>(
   F: Invariant<F>
 ): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) =>
   F.imap(a => [a] as const, ([a]) => a)

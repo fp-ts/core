@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
 import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
 
@@ -9,8 +9,10 @@ import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
  * @category type class
  * @since 1.0.0
  */
-export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
-  readonly traverseWithIndex: <F extends TypeLambda>(
+export interface TraversableWithIndex<T extends TypeLambda<Variance.Covariant>, I>
+  extends TypeClass<T>
+{
+  readonly traverseWithIndex: <F extends TypeLambda<Variance.Covariant>>(
     F: Applicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A, i: I) => Kind<F, R, O, E, B>
@@ -24,11 +26,16 @@ export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass
  *
  * @since 1.0.0
  */
-export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
+export const traverseWithIndexComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  I,
+  G extends TypeLambda<Variance.Covariant>,
+  J
+>(
   F: TraversableWithIndex<F, I>,
   G: TraversableWithIndex<G, J>
 ) =>
-  <H extends TypeLambda>(H: Applicative<H>) =>
+  <H extends TypeLambda<Variance.Covariant>>(H: Applicative<H>) =>
     <A, R, O, E, B>(
       f: (a: A, ij: readonly [I, J]) => Kind<H, R, O, E, B>
     ): (<FR, FO, FE, GR, GO, GE>(
@@ -43,6 +50,6 @@ export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends 
  *
  * @since 1.0.0
  */
-export const traverse = <F extends TypeLambda, I>(
+export const traverse = <F extends TypeLambda<Variance.Covariant>, I>(
   F: TraversableWithIndex<F, I>
 ): Traversable<F>["traverse"] => f => F.traverseWithIndex(f)

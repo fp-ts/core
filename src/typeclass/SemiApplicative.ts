@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
@@ -11,14 +11,16 @@ import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"
  * @category type class
  * @since 1.0.0
  */
-export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, Covariant<F> {}
+export interface SemiApplicative<F extends TypeLambda<Variance.Covariant>>
+  extends SemiProduct<F>, Covariant<F>
+{}
 
 /**
  * Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.
  *
  * @since 1.0.0
  */
-export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const liftSemigroup = <F extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<F>) =>
   <A, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, R, O, E, A>> => ({
     combine: that => self => pipe(self, F.product(that), F.map(([a1, a2]) => S.combine(a2)(a1))),
     combineMany: collection =>
@@ -33,7 +35,7 @@ export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 /**
  * @since 1.0.0
  */
-export const ap = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const ap = <F extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<F>) =>
   <R2, O2, E2, A>(
     fa: Kind<F, R2, O2, E2, A>
   ) =>
@@ -44,7 +46,7 @@ export const ap = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 /**
  * @since 1.0.0
  */
-export const andThenDiscard = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const andThenDiscard = <F extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<F>) =>
   <R2, O2, E2, _>(
     that: Kind<F, R2, O2, E2, _>
   ) =>
@@ -55,7 +57,7 @@ export const andThenDiscard = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 /**
  * @since 1.0.0
  */
-export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const andThen = <F extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) =>
@@ -68,7 +70,7 @@ export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
  *
  * @since 1.0.0
  */
-export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const lift2 = <F extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<F>) =>
   <A, B, C>(f: (a: A, b: B) => C) =>
     <R1, O1, E1, R2, O2, E2>(
       fa: Kind<F, R1, O1, E1, A>,
@@ -80,7 +82,7 @@ export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
  *
  * @since 1.0.0
  */
-export const lift3 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const lift3 = <F extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<F>) =>
   <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>
     <R1, O1, E1, R2, O2, E2, R3, O3, E3>(
       fa: Kind<F, R1, O1, E1, A>,

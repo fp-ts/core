@@ -5,7 +5,7 @@
  */
 import type { Either } from "@fp-ts/core/data/Either"
 import type { Option } from "@fp-ts/core/data/Option"
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
@@ -19,8 +19,10 @@ import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
  * @category models
  * @since 1.0.0
  */
-export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T> {
-  readonly traversePartitionMap: <F extends TypeLambda>(
+export interface TraversableFilterable<T extends TypeLambda<Variance.Invariant>>
+  extends TypeClass<T>
+{
+  readonly traversePartitionMap: <F extends TypeLambda<Variance.Covariant>>(
     F: Applicative<F>
   ) => <A, R, O, E, B, C>(
     f: (a: A) => Kind<F, R, O, E, Either<B, C>>
@@ -28,7 +30,7 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
     self: Kind<T, TR, TO, TE, A>
   ) => Kind<F, R, O, E, readonly [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>
 
-  readonly traverseFilterMap: <F extends TypeLambda>(
+  readonly traverseFilterMap: <F extends TypeLambda<Variance.Covariant>>(
     F: Applicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, Option<B>>
@@ -42,7 +44,7 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
  *
  * @since 1.0.0
  */
-export const traversePartitionMap = <T extends TypeLambda>(
+export const traversePartitionMap = <T extends TypeLambda<Variance.Covariant>>(
   T: Traversable<T> & Covariant<T> & Compactable<T>
 ): TraversableFilterable<T>["traversePartitionMap"] =>
   (F) =>
@@ -59,7 +61,7 @@ export const traversePartitionMap = <T extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const traverseFilterMap = <T extends TypeLambda>(
+export const traverseFilterMap = <T extends TypeLambda<Variance.Covariant>>(
   T: Traversable<T> & Compactable<T>
 ): TraversableFilterable<T>["traverseFilterMap"] =>
   (F) => f => ta => pipe(ta, T.traverse(F)(f), F.map(T.compact))
@@ -67,10 +69,10 @@ export const traverseFilterMap = <T extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const traverseFilter = <T extends TypeLambda>(
+export const traverseFilter = <T extends TypeLambda<Variance.Invariant>>(
   T: TraversableFilterable<T>
 ) =>
-  <F extends TypeLambda>(
+  <F extends TypeLambda<Variance.Covariant>>(
     F: Applicative<F>
   ): (<B extends A, R, O, E, A = B>(
     predicate: (a: A) => Kind<F, R, O, E, boolean>
@@ -88,10 +90,10 @@ export const traverseFilter = <T extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const traversePartition = <T extends TypeLambda>(
+export const traversePartition = <T extends TypeLambda<Variance.Invariant>>(
   T: TraversableFilterable<T>
 ) =>
-  <F extends TypeLambda>(
+  <F extends TypeLambda<Variance.Covariant>>(
     F: Applicative<F>
   ): (<B extends A, R, O, E, A = B>(
     predicate: (a: A) => Kind<F, R, O, E, boolean>

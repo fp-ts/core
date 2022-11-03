@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
@@ -9,7 +9,9 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category type class
  * @since 1.0.0
  */
-export interface CovariantWithIndex<F extends TypeLambda, I> extends TypeClass<F> {
+export interface CovariantWithIndex<F extends TypeLambda<Variance.Covariant>, I>
+  extends TypeClass<F>
+{
   readonly mapWithIndex: <A, B>(
     f: (a: A, i: I) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
@@ -20,7 +22,12 @@ export interface CovariantWithIndex<F extends TypeLambda, I> extends TypeClass<F
  *
  * @since 1.0.0
  */
-export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
+export const mapWithIndexComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  I,
+  G extends TypeLambda<Variance.Covariant>,
+  J
+>(
   F: CovariantWithIndex<F, I>,
   G: CovariantWithIndex<G, J>
 ): (<A, B>(
@@ -35,6 +42,6 @@ export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeL
  *
  * @since 1.0.0
  */
-export const map = <F extends TypeLambda, I>(
+export const map = <F extends TypeLambda<Variance.Covariant>, I>(
   F: CovariantWithIndex<F, I>
 ): Covariant<F>["map"] => f => F.mapWithIndex(f)

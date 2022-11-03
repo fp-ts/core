@@ -13,7 +13,7 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/data/Either"
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
@@ -76,7 +76,7 @@ export type Option<A> = None | Some<A>
  * @category type lambdas
  * @since 1.0.0
  */
-export interface OptionTypeLambda extends TypeLambda {
+export interface OptionTypeLambda extends TypeLambda<Variance.Covariant> {
   readonly type: Option<this["Target"]>
 }
 
@@ -500,7 +500,7 @@ export const partitionMap: <A, B, C>(
  * @category traversing
  * @since 1.0.0
  */
-export const traverse = <F extends TypeLambda>(
+export const traverse = <F extends TypeLambda<Variance.Covariant>>(
   F: applicative.Applicative<F>
 ) =>
   <A, R, O, E, B>(
@@ -852,7 +852,7 @@ export const partition: {
  * @category traversing
  * @since 1.0.0
  */
-export const sequence: <F extends TypeLambda>(
+export const sequence: <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) => <R, O, E, A>(fas: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>> = traversable
   .sequence<OptionTypeLambda>(traverse)
@@ -870,7 +870,7 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
  * @category filtering
  * @since 1.0.0
  */
-export const traverseFilterMap: <F extends TypeLambda>(
+export const traverseFilterMap: <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, Option<B>>
@@ -882,7 +882,7 @@ export const traverseFilterMap: <F extends TypeLambda>(
  * @category filtering
  * @since 1.0.0
  */
-export const traversePartitionMap: <F extends TypeLambda>(
+export const traversePartitionMap: <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) => <A, R, O, E, B, C>(
   f: (a: A) => Kind<F, R, O, E, Either<B, C>>
@@ -904,7 +904,7 @@ export const TraversableFilterable: traversableFilterable.TraversableFilterable<
  * @category filtering
  * @since 1.0.0
  */
-export const traverseFilter: <F extends TypeLambda>(
+export const traverseFilter: <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) => <B extends A, R, O, E, A = B>(
   predicate: (a: A) => Kind<F, R, O, E, boolean>
@@ -916,7 +916,7 @@ export const traverseFilter: <F extends TypeLambda>(
  * @category filtering
  * @since 1.0.0
  */
-export const traversePartition: <F extends TypeLambda>(
+export const traversePartition: <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) => <B extends A, R, O, E, A = B>(
   predicate: (a: A) => Kind<F, R, O, E, boolean>

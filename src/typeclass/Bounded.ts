@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 
@@ -18,7 +18,7 @@ export interface Bounded<A> extends Order<A> {
  * @category type lambdas
  * @since 1.0.0
  */
-export interface BoundedTypeLambda extends TypeLambda {
+export interface BoundedTypeLambda extends TypeLambda<Variance.Invariant> {
   readonly type: Bounded<this["Target"]>
 }
 

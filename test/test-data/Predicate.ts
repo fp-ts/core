@@ -1,4 +1,4 @@
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as of_ from "@fp-ts/core/typeclass/Of"
@@ -9,7 +9,7 @@ export interface Predicate<A> {
   (a: A): boolean
 }
 
-export interface PredicateTypeLambda extends TypeLambda {
+export interface PredicateTypeLambda extends TypeLambda<Variance.Contravariant> {
   readonly type: Predicate<this["Target"]>
 }
 

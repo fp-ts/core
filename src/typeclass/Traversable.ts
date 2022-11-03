@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
@@ -10,14 +10,16 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category type class
  * @since 1.0.0
  */
-export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
-  readonly traverse: <F extends TypeLambda>(
+export interface Traversable<T extends TypeLambda<Variance.Invariant>> extends TypeClass<T> {
+  readonly traverse: <F extends TypeLambda<Variance.Covariant>>(
     F: Applicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 
-  readonly sequence: <F extends TypeLambda>(F: Applicative<F>) => <TR, TO, TE, R, O, E, A>(
+  readonly sequence: <F extends TypeLambda<Variance.Covariant>>(
+    F: Applicative<F>
+  ) => <TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
 }
@@ -27,11 +29,14 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
  *
  * @since 1.0.0
  */
-export const traverseComposition = <T extends TypeLambda, G extends TypeLambda>(
+export const traverseComposition = <
+  T extends TypeLambda<Variance.Invariant>,
+  G extends TypeLambda<Variance.Invariant>
+>(
   T: Traversable<T>,
   G: Traversable<G>
 ) =>
-  <F extends TypeLambda>(F: Applicative<F>) =>
+  <F extends TypeLambda<Variance.Covariant>>(F: Applicative<F>) =>
     <A, R, O, E, B>(
       f: (a: A) => Kind<F, R, O, E, B>
     ): (<TR, TO, TE, GR, GO, GE>(
@@ -44,11 +49,14 @@ export const traverseComposition = <T extends TypeLambda, G extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const sequenceComposition = <T extends TypeLambda, G extends TypeLambda>(
+export const sequenceComposition = <
+  T extends TypeLambda<Variance.Covariant>,
+  G extends TypeLambda<Variance.Invariant>
+>(
   T: Traversable<T> & Covariant<T>,
   G: Traversable<G>
 ) =>
-  <F extends TypeLambda>(F: Applicative<F>) =>
+  <F extends TypeLambda<Variance.Covariant>>(F: Applicative<F>) =>
     <TR, TO, TE, GR, GO, GE, R, O, E, A>(
       self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, Kind<F, R, O, E, A>>>
     ): Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>> =>
@@ -59,10 +67,10 @@ export const sequenceComposition = <T extends TypeLambda, G extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const sequence = <T extends TypeLambda>(
+export const sequence = <T extends TypeLambda<Variance.Invariant>>(
   traverse: Traversable<T>["traverse"]
 ): Traversable<T>["sequence"] =>
-  <F extends TypeLambda>(F: Applicative<F>): (<TR, TO, TE, R, O, E, A>(
+  <F extends TypeLambda<Variance.Covariant>>(F: Applicative<F>): (<TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>) => traverse(F)(identity)
 
@@ -74,8 +82,8 @@ export const sequence = <T extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const traverseTap = <T extends TypeLambda>(T: Traversable<T>) =>
-  <F extends TypeLambda>(F: Applicative<F>) =>
+export const traverseTap = <T extends TypeLambda<Variance.Invariant>>(T: Traversable<T>) =>
+  <F extends TypeLambda<Variance.Covariant>>(F: Applicative<F>) =>
     <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): <TR, TO, TE>(
       self: Kind<T, TR, TO, TE, A>
     ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>> => T.traverse(F)(a => pipe(f(a), F.map(() => a)))

@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -22,7 +22,7 @@ export interface Order<A> {
  * @category type lambdas
  * @since 1.0.0
  */
-export interface OrderTypeLambda extends TypeLambda {
+export interface OrderTypeLambda extends TypeLambda<Variance.Contravariant> {
   readonly type: Order<this["Target"]>
 }
 

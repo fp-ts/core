@@ -1,7 +1,7 @@
 import type { compactable, filterable } from "@fp-ts/core"
 import { semiProduct, traversableFilterable } from "@fp-ts/core"
 import type { Option } from "@fp-ts/core/data/Option"
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
@@ -18,7 +18,7 @@ import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
 
-export interface ReadonlyArrayTypeLambda extends TypeLambda {
+export interface ReadonlyArrayTypeLambda extends TypeLambda<Variance.Covariant> {
   readonly type: ReadonlyArray<this["Target"]>
 }
 
@@ -80,7 +80,7 @@ export function concat<B>(
   return <A>(self: NonEmptyReadonlyArray<A | B>) => self.concat(that)
 }
 
-export const traverseWithIndex = <F extends TypeLambda>(
+export const traverseWithIndex = <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
@@ -93,7 +93,7 @@ export const traverseWithIndex = <F extends TypeLambda>(
       return Applicative.productAll(fbs)
     }
 
-export const traverse = <F extends TypeLambda>(
+export const traverse = <F extends TypeLambda<Variance.Covariant>>(
   Applicative: applicative.Applicative<F>
 ) =>
   <A, R, O, E, B>(

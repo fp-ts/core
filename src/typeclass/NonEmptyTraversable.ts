@@ -3,7 +3,7 @@
  *
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
@@ -12,8 +12,10 @@ import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
  * @category type class
  * @since 1.0.0
  */
-export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> {
-  readonly traverseNonEmpty: <F extends TypeLambda>(
+export interface NonEmptyTraversable<T extends TypeLambda<Variance.Covariant>>
+  extends TypeClass<T>
+{
+  readonly traverseNonEmpty: <F extends TypeLambda<Variance.Covariant>>(
     F: SemiApplicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
@@ -21,7 +23,7 @@ export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> 
     self: Kind<T, TR, TO, TE, A>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 
-  readonly sequenceNonEmpty: <F extends TypeLambda>(
+  readonly sequenceNonEmpty: <F extends TypeLambda<Variance.Covariant>>(
     F: SemiApplicative<F>
   ) => <TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
@@ -33,11 +35,14 @@ export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> 
  *
  * @since 1.0.0
  */
-export const traverseNonEmptyComposition = <T extends TypeLambda, F extends TypeLambda>(
+export const traverseNonEmptyComposition = <
+  T extends TypeLambda<Variance.Covariant>,
+  F extends TypeLambda<Variance.Covariant>
+>(
   T: NonEmptyTraversable<T>,
   G: NonEmptyTraversable<F>
 ) =>
-  <G extends TypeLambda>(F: SemiApplicative<G>) =>
+  <G extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<G>) =>
     <A, R, O, E, B>(
       f: (a: A) => Kind<G, R, O, E, B>
     ): (<TR, TO, TE, GR, GO, GE>(
@@ -50,11 +55,14 @@ export const traverseNonEmptyComposition = <T extends TypeLambda, F extends Type
  *
  * @since 1.0.0
  */
-export const sequenceNonEmptyComposition = <T extends TypeLambda, F extends TypeLambda>(
+export const sequenceNonEmptyComposition = <
+  T extends TypeLambda<Variance.Covariant>,
+  F extends TypeLambda<Variance.Covariant>
+>(
   T: NonEmptyTraversable<T> & Covariant<T>,
   G: NonEmptyTraversable<F>
 ) =>
-  <G extends TypeLambda>(F: SemiApplicative<G>) =>
+  <G extends TypeLambda<Variance.Covariant>>(F: SemiApplicative<G>) =>
     <TR, TO, TE, GR, GO, GE, R, O, E, A>(
       self: Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, Kind<G, R, O, E, A>>>
     ): Kind<G, R, O, E, Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, A>>> =>
@@ -65,10 +73,10 @@ export const sequenceNonEmptyComposition = <T extends TypeLambda, F extends Type
  *
  * @since 1.0.0
  */
-export const sequenceNonEmpty = <T extends TypeLambda>(
+export const sequenceNonEmpty = <T extends TypeLambda<Variance.Covariant>>(
   traverseNonEmpty: NonEmptyTraversable<T>["traverseNonEmpty"]
 ): NonEmptyTraversable<T>["sequenceNonEmpty"] =>
-  <F extends TypeLambda>(
+  <F extends TypeLambda<Variance.Covariant>>(
     F: SemiApplicative<F>
   ): (<TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>

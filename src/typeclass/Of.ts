@@ -1,13 +1,13 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Of<F extends TypeLambda> extends TypeClass<F> {
+export interface Of<F extends TypeLambda<Variance.Invariant>> extends TypeClass<F> {
   readonly of: <A>(a: A) => Kind<F, unknown, never, never, A>
 }
 
@@ -16,7 +16,10 @@ export interface Of<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const ofComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const ofComposition = <
+  F extends TypeLambda<Variance.Invariant>,
+  G extends TypeLambda<Variance.Invariant>
+>(
   F: Of<F>,
   G: Of<G>
 ) => <A>(a: A): Kind<F, unknown, never, never, Kind<G, unknown, never, never, A>> => F.of(G.of(a))
@@ -24,13 +27,13 @@ export const ofComposition = <F extends TypeLambda, G extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const unit = <F extends TypeLambda>(
+export const unit = <F extends TypeLambda<Variance.Invariant>>(
   F: Of<F>
 ): Kind<F, unknown, never, never, void> => F.of<void>(undefined)
 
 /**
  * @since 1.0.0
  */
-export const Do = <F extends TypeLambda>(
+export const Do = <F extends TypeLambda<Variance.Invariant>>(
   F: Of<F>
 ): Kind<F, unknown, never, never, {}> => F.of({})

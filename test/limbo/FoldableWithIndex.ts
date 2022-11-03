@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type { Foldable } from "@fp-ts/core/typeclass/Foldable"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -11,7 +11,9 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
  * @category type class
  * @since 1.0.0
  */
-export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F> {
+export interface FoldableWithIndex<F extends TypeLambda<Variance.Covariant>, I>
+  extends TypeClass<F>
+{
   readonly reduceWithIndex: <A, B>(
     b: B,
     f: (b: B, a: A, i: I) => B
@@ -28,7 +30,12 @@ export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F>
  *
  * @since 1.0.0
  */
-export const reduceWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
+export const reduceWithIndexComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  I,
+  G extends TypeLambda<Variance.Covariant>,
+  J
+>(
   F: FoldableWithIndex<F, I>,
   G: FoldableWithIndex<G, J>
 ) =>
@@ -47,7 +54,12 @@ export const reduceWithIndexComposition = <F extends TypeLambda, I, G extends Ty
  *
  * @since 1.0.0
  */
-export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G extends TypeLambda, J>(
+export const reduceRightWithIndexComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  I,
+  G extends TypeLambda<Variance.Covariant>,
+  J
+>(
   F: FoldableWithIndex<F, I>,
   G: FoldableWithIndex<G, J>
 ) =>
@@ -66,21 +78,21 @@ export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G exten
  *
  * @since 1.0.0
  */
-export const reduce = <F extends TypeLambda, I>(
+export const reduce = <F extends TypeLambda<Variance.Covariant>, I>(
   F: FoldableWithIndex<F, I>
 ): Foldable<F>["reduce"] => (b, f) => F.reduceWithIndex(b, f)
 
 /**
  * @since 1.0.0
  */
-export const toReadonlyArray = <F extends TypeLambda, I>(
+export const toReadonlyArray = <F extends TypeLambda<Variance.Covariant>, I>(
   F: FoldableWithIndex<F, I>
 ): <R, O, E, A>(self: Kind<F, R, O, E, A>) => ReadonlyArray<A> => toReadonlyArrayWith(F)(identity)
 
 /**
  * @since 1.0.0
  */
-export const toReadonlyArrayWith = <F extends TypeLambda, I>(
+export const toReadonlyArrayWith = <F extends TypeLambda<Variance.Covariant>, I>(
   F: FoldableWithIndex<F, I>
 ) =>
   <A, B>(f: (a: A, i: I) => B) =>
@@ -93,7 +105,7 @@ export const toReadonlyArrayWith = <F extends TypeLambda, I>(
 /**
  * @since 1.0.0
  */
-export const foldMapWithIndex = <F extends TypeLambda, I>(
+export const foldMapWithIndex = <F extends TypeLambda<Variance.Covariant>, I>(
   F: FoldableWithIndex<F, I>
 ) =>
   <M>(M: Monoid<M>) =>

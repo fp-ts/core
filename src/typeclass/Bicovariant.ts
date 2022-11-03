@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
@@ -9,7 +9,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category type class
  * @since 1.0.0
  */
-export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
+export interface Bicovariant<F extends TypeLambda<Variance.Covariant>> extends TypeClass<F> {
   readonly bimap: <E1, E2, A, B>(
     f: (e: E1) => E2,
     g: (a: A) => B
@@ -21,7 +21,10 @@ export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const bimapComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  G extends TypeLambda<Variance.Covariant>
+>(
   CovariantF: Covariant<F>,
   BicovariantG: Bicovariant<G>
 ) =>
@@ -35,7 +38,7 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const mapLeft = <F extends TypeLambda>(
+export const mapLeft = <F extends TypeLambda<Variance.Covariant>>(
   F: Bicovariant<F>
 ): (<E1, E2>(
   f: (e: E1) => E2
@@ -48,7 +51,9 @@ export const mapLeft = <F extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const map = <F extends TypeLambda>(F: Bicovariant<F>): Covariant<F>["map"] =>
+export const map = <F extends TypeLambda<Variance.Covariant>>(
+  F: Bicovariant<F>
+): Covariant<F>["map"] =>
   <A, B>(
     f: (a: A) => B
   ): (<R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>) => F.bimap(identity, f)

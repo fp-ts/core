@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
@@ -11,7 +11,7 @@ import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
  * @category type class
  * @since 1.0.0
  */
-export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
+export interface SemiProduct<F extends TypeLambda<Variance.Invariant>> extends Invariant<F> {
   readonly product: <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -28,7 +28,10 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
  *
  * @since 1.0.0
  */
-export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const productComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  G extends TypeLambda<Variance.Invariant>
+>(
   F: SemiApplicative<F>,
   G: SemiProduct<G>
 ) =>
@@ -50,7 +53,10 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const productManyComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  G extends TypeLambda<Variance.Covariant>
+>(
   F: SemiApplicative<F>,
   G: SemiProduct<G>
 ) =>
@@ -72,7 +78,7 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
  * @category constructors
  * @since 1.0.0
  */
-export const productMany = <F extends TypeLambda>(
+export const productMany = <F extends TypeLambda<Variance.Covariant>>(
   Covariant: Covariant<F>,
   product: SemiProduct<F>["product"]
 ): SemiProduct<F>["productMany"] =>
@@ -97,7 +103,7 @@ export const productMany = <F extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const andThenBind = <F extends TypeLambda<Variance.Invariant>>(F: SemiProduct<F>) =>
   <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     fb: Kind<F, R2, O2, E2, B>
@@ -123,7 +129,7 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
 /**
  * @since 1.0.0
  */
-export const productFlatten = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const productFlatten = <F extends TypeLambda<Variance.Invariant>>(F: SemiProduct<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) =>
@@ -139,7 +145,7 @@ export const productFlatten = <F extends TypeLambda>(F: SemiProduct<F>) =>
 /**
  * @since 1.0.0
  */
-export const nonEmptyTuple = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const nonEmptyTuple = <F extends TypeLambda<Variance.Invariant>>(F: SemiProduct<F>) =>
   <T extends [Kind<F, any, any, any, any>, ...ReadonlyArray<Kind<F, any, any, any, any>>]>(
     ...components: T
   ): Kind<
@@ -155,7 +161,7 @@ type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 /**
  * @since 1.0.0
  */
-export const nonEmptyStruct = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const nonEmptyStruct = <F extends TypeLambda<Variance.Invariant>>(F: SemiProduct<F>) =>
   <R extends Record<string, Kind<F, any, any, any, any>>>(
     fields: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
   ): Kind<

@@ -5,7 +5,7 @@
  */
 import type { Either } from "@fp-ts/core/data/Either"
 import type { Option } from "@fp-ts/core/data/Option"
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as option from "@fp-ts/core/internal/Option"
@@ -15,7 +15,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category models
  * @since 1.0.0
  */
-export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
+export interface Filterable<F extends TypeLambda<Variance.Covariant>> extends TypeClass<F> {
   readonly filterMap: <A, B>(
     f: (a: A) => Option<B>
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
@@ -26,7 +26,10 @@ export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const filterMapComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  G extends TypeLambda<Variance.Covariant>
+>(
   F: Covariant<F>,
   G: Filterable<G>
 ) =>
@@ -39,7 +42,7 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
 /**
  * @since 1.0.0
  */
-export const filter: <F extends TypeLambda>(
+export const filter: <F extends TypeLambda<Variance.Covariant>>(
   F: Filterable<F>
 ) => {
   <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
@@ -48,7 +51,7 @@ export const filter: <F extends TypeLambda>(
   <B extends A, A = B>(
     predicate: (a: A) => boolean
   ): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
-} = <F extends TypeLambda>(Filterable: Filterable<F>) =>
+} = <F extends TypeLambda<Variance.Covariant>>(Filterable: Filterable<F>) =>
   <B extends A, A = B>(
     predicate: (a: A) => boolean
   ): (<R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>) =>
@@ -57,7 +60,7 @@ export const filter: <F extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
+export const partitionMap = <F extends TypeLambda<Variance.Covariant>>(F: Filterable<F>) =>
   <A, B, C>(f: (a: A) => Either<B, C>) =>
     <R, O, E>(
       self: Kind<F, R, O, E, A>
@@ -71,7 +74,7 @@ export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
 /**
  * @since 1.0.0
  */
-export const partition: <F extends TypeLambda>(
+export const partition: <F extends TypeLambda<Variance.Covariant>>(
   F: Filterable<F>
 ) => {
   <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
@@ -80,7 +83,7 @@ export const partition: <F extends TypeLambda>(
   <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(
     self: Kind<F, R, O, E, B>
   ) => readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
-} = <F extends TypeLambda>(Filterable: Filterable<F>) =>
+} = <F extends TypeLambda<Variance.Covariant>>(Filterable: Filterable<F>) =>
   <B extends A, A = B>(
     predicate: (a: A) => boolean
   ): (<R, O, E>(

@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda, Variance } from "@fp-ts/core/HKT"
 
 /**
  * @category models
@@ -30,6 +30,6 @@ export type Option<A> = None | Some<A>
  * @category type lambdas
  * @since 1.0.0
  */
-export interface OptionTypeLambda extends TypeLambda {
+export interface OptionTypeLambda extends TypeLambda<Variance.Covariant> {
   readonly type: Option<this["Target"]>
 }

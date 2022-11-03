@@ -1,4 +1,4 @@
-import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
@@ -14,7 +14,7 @@ export type NonEmptyReadonlyArray<A> = readonly [A, ...ReadonlyArray<A>]
  * @category type lambdas
  * @since 1.0.0
  */
-export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
+export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda<Variance.Covariant> {
   readonly type: NonEmptyReadonlyArray<this["Target"]>
 }
 
@@ -39,7 +39,7 @@ export const map = <A, B>(
   f: (a: A) => B
 ): (self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> => mapWithIndex(f)
 
-export const traverseWithIndex = <F extends TypeLambda>(
+export const traverseWithIndex = <F extends TypeLambda<Variance.Covariant>>(
   F: SemiApplicative<F>
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
@@ -51,7 +51,7 @@ export const traverseWithIndex = <F extends TypeLambda>(
       )
     }
 
-export const traverseNonEmpty = <F extends TypeLambda>(
+export const traverseNonEmpty = <F extends TypeLambda<Variance.Covariant>>(
   F: SemiApplicative<F>
 ) =>
   <A, R, O, E, B>(

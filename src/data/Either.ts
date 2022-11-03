@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda, Variance } from "@fp-ts/core/HKT"
 
 /**
  * @category models
@@ -31,6 +31,6 @@ export type Either<E, A> = Left<E> | Right<A>
  * @category type lambdas
  * @since 1.0.0
  */
-export interface EitherTypeLambda extends TypeLambda {
+export interface EitherTypeLambda extends TypeLambda<Variance.Covariant> {
   readonly type: Either<this["Out1"], this["Target"]>
 }

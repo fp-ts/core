@@ -5,7 +5,7 @@
  */
 import type { Either } from "@fp-ts/core/data/Either"
 import type { Option } from "@fp-ts/core/data/Option"
-import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeClass, TypeLambda, Variance } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
@@ -14,7 +14,7 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @category models
  * @since 1.0.0
  */
-export interface Compactable<F extends TypeLambda> extends TypeClass<F> {
+export interface Compactable<F extends TypeLambda<Variance.Covariant>> extends TypeClass<F> {
   readonly compact: <R, O, E, A>(self: Kind<F, R, O, E, Option<A>>) => Kind<F, R, O, E, A>
 }
 
@@ -23,7 +23,10 @@ export interface Compactable<F extends TypeLambda> extends TypeClass<F> {
  *
  * @since 1.0.0
  */
-export const compactComposition = <F extends TypeLambda, G extends TypeLambda>(
+export const compactComposition = <
+  F extends TypeLambda<Variance.Covariant>,
+  G extends TypeLambda<Variance.Covariant>
+>(
   F: Covariant<F>,
   G: Compactable<G>
 ): (<FR, FO, FE, GR, GO, GE, A>(
@@ -33,7 +36,7 @@ export const compactComposition = <F extends TypeLambda, G extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const separate = <F extends TypeLambda>(
+export const separate = <F extends TypeLambda<Variance.Covariant>>(
   F: Covariant<F> & Compactable<F>
 ) =>
   <R, O, E, A, B>(

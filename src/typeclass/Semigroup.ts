@@ -20,7 +20,7 @@
  *
  * @since 1.0.0
  */
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { TypeLambda, Variance } from "@fp-ts/core/HKT"
 import { identity } from "@fp-ts/core/internal/Function"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
@@ -40,7 +40,7 @@ export interface Semigroup<A> {
  * @category type lambdas
  * @since 1.0.0
  */
-export interface SemigroupTypeLambda extends TypeLambda {
+export interface SemigroupTypeLambda extends TypeLambda<Variance.Invariant> {
   readonly type: Semigroup<this["Target"]>
 }
 
