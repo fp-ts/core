@@ -109,12 +109,12 @@ A semigroup is any set `A` with an associative operation (`combine`):
 
 ```mermaid
 flowchart TD
-    Alternative --> NonEmptyAlternative
+    Alternative --> SemiAlternative
     Alternative --> Coproduct
     Applicative --> Product
     Coproduct --> SemiCoproduct
-    NonEmptyAlternative --> Covariant
-    NonEmptyAlternative --> SemiCoproduct
+    SemiAlternative --> Covariant
+    SemiAlternative --> SemiCoproduct
     SemiApplicative --> SemiProduct
     SemiApplicative --> Covariant
     Applicative --> SemiApplicative
@@ -139,7 +139,7 @@ Note: members are in bold.
 
 Extends:
 
-- `NonEmptyAlternative`
+- `SemiAlternative`
 - `Coproduct`
 
 ### Applicative
@@ -311,13 +311,6 @@ Extends:
 - `FlatMap`
 - `Pointed`
 
-### NonEmptyAlternative
-
-Extends:
-
-- `SemiCoproduct`
-- `Covariant`
-
 ### NonEmptyTraversable
 
 `NonEmptyTraversable`, also known as `Traversable1`.
@@ -361,6 +354,13 @@ Extends:
 | **productAll** | `Iterable<F<A>>`            | `F<ReadonlyArray<A>>`    |
 | tuple          | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
 | struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
+
+### SemiAlternative
+
+Extends:
+
+- `SemiCoproduct`
+- `Covariant`
 
 ### SemiApplicative
 

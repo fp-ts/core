@@ -1,4 +1,4 @@
-import * as _ from "@fp-ts/core/typeclass/NonEmptyAlternative"
+import * as _ from "@fp-ts/core/typeclass/SemiAlternative"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 
@@ -13,7 +13,7 @@ interface RAWTypeLambda extends TypeLambda {
 declare const fa: RAW<{ a: string }, string, "fa">
 declare const fb: RAW<{ b: number }, number, "fb">
 
-declare const NonEmptyAlternative: _.NonEmptyAlternative<RAWTypeLambda>
+declare const SemiAlternative: _.SemiAlternative<RAWTypeLambda>
 
 // $ExpectType RAW<{ a: string; } & { b: number; }, string | number, "fa" | "fb">
-pipe(fa, NonEmptyAlternative.coproduct(fb))
+pipe(fa, SemiAlternative.coproduct(fb))

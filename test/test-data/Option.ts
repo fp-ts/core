@@ -30,11 +30,11 @@ import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import type * as of_ from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as product from "@fp-ts/core/typeclass/Product"
+import type * as semiAlternative from "@fp-ts/core/typeclass/SemiAlternative"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -677,15 +677,15 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
     }
 }
 
-export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<OptionTypeLambda> = {
+export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> = {
   ...Covariant,
   ...SemiCoproduct
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
-  ...NonEmptyAlternative,
+  ...SemiAlternative,
   zero: () => none,
-  coproductAll: collection => NonEmptyAlternative.coproductMany(collection)(none)
+  coproductAll: collection => SemiAlternative.coproductMany(collection)(none)
 }
 
 /**
