@@ -27,12 +27,12 @@ import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
 import * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
 import * as product from "@fp-ts/core/typeclass/Product"
+import * as semiAlternative from "@fp-ts/core/typeclass/SemiAlternative"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -136,11 +136,6 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  nonEmptyAlternative,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   nonEmptyTraversable,
   /**
    * @category typeclass
@@ -167,6 +162,11 @@ export {
    * @since 1.0.0
    */
   product,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  semiAlternative,
   /**
    * @category typeclass
    * @since 1.0.0
