@@ -8,7 +8,7 @@ describe("NonEmptyTraversable", () => {
     const traverseNonEmpty = _.traverseNonEmptyComposition(
       NERA.NonEmptyTraversable,
       NERA.NonEmptyTraversable
-    )(O.NonEmptyApplicative)((n: number) => (n > 0 ? O.some(n) : O.none))
+    )(O.SemiApplicative)((n: number) => (n > 0 ? O.some(n) : O.none))
     U.deepStrictEqual(traverseNonEmpty([[1]]), O.some([[1]] as const))
     U.deepStrictEqual(traverseNonEmpty([[1, -1]]), O.none)
     U.deepStrictEqual(traverseNonEmpty([[1, 2, 3], [4, 5]]), O.some([[1, 2, 3], [4, 5]] as const))
@@ -19,7 +19,7 @@ describe("NonEmptyTraversable", () => {
     const sequence = _.sequenceNonEmptyComposition(
       { ...NERA.NonEmptyTraversable, ...NERA.Covariant },
       NERA.NonEmptyTraversable
-    )(O.NonEmptyApplicative)
+    )(O.SemiApplicative)
     U.deepStrictEqual(sequence([[O.some(1)]]), O.some([[1]] as const))
     U.deepStrictEqual(sequence([[O.some(1), O.none]]), O.none)
     U.deepStrictEqual(
@@ -32,7 +32,7 @@ describe("NonEmptyTraversable", () => {
   it("sequenceNonEmpty", () => {
     const sequenceNonEmpty = _.sequenceNonEmpty<NERA.NonEmptyReadonlyArrayTypeLambda>(
       NERA.NonEmptyTraversable.traverseNonEmpty
-    )(O.NonEmptyApplicative)
+    )(O.SemiApplicative)
     U.deepStrictEqual(sequenceNonEmpty([O.none]), O.none)
     U.deepStrictEqual(sequenceNonEmpty([O.some(1)]), O.some([1] as const))
     U.deepStrictEqual(sequenceNonEmpty([O.none]), O.none)

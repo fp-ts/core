@@ -1,8 +1,8 @@
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
+import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
 
 /**
  * @category models
@@ -40,24 +40,24 @@ export const map = <A, B>(
 ): (self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<B> => mapWithIndex(f)
 
 export const traverseWithIndex = <F extends TypeLambda>(
-  NonEmptyApplicative: NonEmptyApplicative<F>
+  F: SemiApplicative<F>
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
     (self: NonEmptyReadonlyArray<A>): Kind<F, R, O, E, NonEmptyReadonlyArray<B>> => {
       const fbs = pipe(self, mapWithIndex(f))
       return pipe(
         head(fbs),
-        NonEmptyApplicative.productMany(tail(fbs))
+        F.productMany(tail(fbs))
       )
     }
 
 export const traverseNonEmpty = <F extends TypeLambda>(
-  NonEmptyApplicative: NonEmptyApplicative<F>
+  F: SemiApplicative<F>
 ) =>
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): ((self: NonEmptyReadonlyArray<A>) => Kind<F, R, O, E, NonEmptyReadonlyArray<B>>) =>
-    traverseWithIndex(NonEmptyApplicative)(f)
+    traverseWithIndex(F)(f)
 
 export const Covariant: covariant.Covariant<NonEmptyReadonlyArrayTypeLambda> = covariant.make(map)
 

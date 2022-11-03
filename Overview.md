@@ -115,9 +115,9 @@ flowchart TD
     Coproduct --> NonEmptyCoproduct
     NonEmptyAlternative --> Covariant
     NonEmptyAlternative --> NonEmptyCoproduct
-    NonEmptyApplicative --> SemiProduct
-    NonEmptyApplicative --> Covariant
-    Applicative --> NonEmptyApplicative
+    SemiApplicative --> SemiProduct
+    SemiApplicative --> Covariant
+    Applicative --> SemiApplicative
     Chainable --> FlatMap
     Chainable ---> Covariant
     Monad --> FlatMap
@@ -146,7 +146,7 @@ Extends:
 
 Extends:
 
-- `NonEmptyApplicative`
+- `SemiApplicative`
 - `Product`
 
 | Name       | Given       | To             |
@@ -318,22 +318,6 @@ Extends:
 - `NonEmptyCoproduct`
 - `Covariant`
 
-### NonEmptyApplicative
-
-Extends:
-
-- `SemiProduct`
-- `Covariant`
-
-| Name           | Given               | To                           |
-| -------------- | ------------------- | ---------------------------- |
-| liftSemigroup  | `Semigroup<A>`      | `Semigroup<F<A>>`            |
-| ap             | `F<A => B>`, `F<A>` | `F<B>`                       |
-| andThenDiscard | `F<A>`, `F<B>`      | `F<A>`                       |
-| andThen        | `F<A>`, `F<B>`      | `F<B>`                       |
-| lift2          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
-| lift3          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
-
 ### NonEmptyCoproduct
 
 `NonEmptyCoproduct` is a universal semigroup which operates on kinds.
@@ -369,15 +353,15 @@ Extends:
 `NonEmptyTraversable`, also known as `Traversable1`.
 
 `NonEmptyTraversable` is like a non-empty `Traversable`. Unlike the `traverse` and `sequence`
-methods of `Traversable` it provides `traverseNonEmpty` and `sequenceNonEmpty` methods which require a `NonEmptyApplicative`
+methods of `Traversable` it provides `traverseNonEmpty` and `sequenceNonEmpty` methods which require a `SemiApplicative`
 instance instead of `Applicative`.
 
-| Name                        | Given                                            | To           |
-| --------------------------- | ------------------------------------------------ | ------------ |
-| **traverseNonEmpty**        | `NonEmptyApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
-| **sequenceNonEmpty**        | `NonEmptyApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
-| traverseNonEmptyComposition | `NonEmptyApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
-| sequenceNonEmptyComposition | `NonEmptyApplicative<F>`, `T<G<F<A>>>`           | `F<T<G<A>>>` |
+| Name                        | Given                                        | To           |
+| --------------------------- | -------------------------------------------- | ------------ |
+| **traverseNonEmpty**        | `SemiApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
+| **sequenceNonEmpty**        | `SemiApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
+| traverseNonEmptyComposition | `SemiApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
+| sequenceNonEmptyComposition | `SemiApplicative<F>`, `T<G<F<A>>>`           | `F<T<G<A>>>` |
 
 ### Of
 
@@ -407,6 +391,22 @@ Extends:
 | **productAll** | `Iterable<F<A>>`            | `F<ReadonlyArray<A>>`    |
 | tuple          | `[F<A>, F<B>, ...]`         | `F<[A, B, ...]>`         |
 | struct         | `{ a: F<A>, b: F<B>, ... }` | `F<{ a: A, b: B, ... }>` |
+
+### SemiApplicative
+
+Extends:
+
+- `SemiProduct`
+- `Covariant`
+
+| Name           | Given               | To                           |
+| -------------- | ------------------- | ---------------------------- |
+| liftSemigroup  | `Semigroup<A>`      | `Semigroup<F<A>>`            |
+| ap             | `F<A => B>`, `F<A>` | `F<B>`                       |
+| andThenDiscard | `F<A>`, `F<B>`      | `F<A>`                       |
+| andThen        | `F<A>`, `F<B>`      | `F<B>`                       |
+| lift2          | `(A, B) => C`       | `(F<A>, F<B>) => F<C>`       |
+| lift3          | `(A, B, C) => D`    | `(F<A>, F<B>, F<C>) => F<D>` |
 
 ### SemiProduct
 

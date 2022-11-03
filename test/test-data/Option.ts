@@ -31,12 +31,12 @@ import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
-import * as nonEmptyApplicative from "@fp-ts/core/typeclass/NonEmptyApplicative"
 import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import type * as of_ from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as product from "@fp-ts/core/typeclass/Product"
+import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
@@ -651,7 +651,7 @@ export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyApplicative: nonEmptyApplicative.NonEmptyApplicative<OptionTypeLambda> = {
+export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> = {
   ...Covariant,
   ...SemiProduct
 }
@@ -695,7 +695,7 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  nonEmptyApplicative.lift2(NonEmptyApplicative)
+  semiApplicative.lift2(SemiApplicative)
 
 /**
  * Lifts a ternary function into `Option`.
@@ -705,8 +705,8 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Optio
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = nonEmptyApplicative.lift3(
-  NonEmptyApplicative
+) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = semiApplicative.lift3(
+  SemiApplicative
 )
 
 export const Product: product.Product<OptionTypeLambda> = {
@@ -715,7 +715,7 @@ export const Product: product.Product<OptionTypeLambda> = {
   productAll: collection => {
     const as = Array.from(collection)
     return nonEmptyReadonlyArray.isNonEmpty(as) ?
-      NonEmptyApplicative.productMany(nonEmptyReadonlyArray.tail(as))(
+      SemiApplicative.productMany(nonEmptyReadonlyArray.tail(as))(
         nonEmptyReadonlyArray.head(as)
       ) :
       some([])
@@ -727,7 +727,7 @@ export const Product: product.Product<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  ...NonEmptyApplicative,
+  ...SemiApplicative,
   ...Product
 }
 
@@ -1067,7 +1067,7 @@ export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  semiProduct.andThenBind(NonEmptyApplicative)
+  semiProduct.andThenBind(SemiApplicative)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing

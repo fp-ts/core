@@ -5,7 +5,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
-import type { NonEmptyApplicative } from "@fp-ts/core/typeclass/NonEmptyApplicative"
+import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
 
 /**
  * @category type class
@@ -29,7 +29,7 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
  * @since 1.0.0
  */
 export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: NonEmptyApplicative<F>,
+  F: SemiApplicative<F>,
   G: SemiProduct<G>
 ) =>
   <FR2, FO2, FE2, GR2, GO2, GE2, B>(
@@ -51,7 +51,7 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const productManyComposition = <F extends TypeLambda, G extends TypeLambda>(
-  F: NonEmptyApplicative<F>,
+  F: SemiApplicative<F>,
   G: SemiProduct<G>
 ) =>
   <FR, FO, FE, GR, GO, GE, A>(
