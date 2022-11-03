@@ -31,12 +31,12 @@ import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as nonEmptyAlternative from "@fp-ts/core/typeclass/NonEmptyAlternative"
-import type * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
 import type * as of_ from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type * as pointed from "@fp-ts/core/typeclass/Pointed"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
+import type * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
@@ -660,7 +660,7 @@ const coproduct = <B>(
   that: Option<B>
 ) => <A>(self: Option<A>): Option<A | B> => isSome(self) ? self : isSome(that) ? that : none
 
-export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<OptionTypeLambda> = {
+export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
   imap: Invariant.imap,
   coproduct,
   coproductMany: collection =>
@@ -679,7 +679,7 @@ export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<OptionTypeLa
 
 export const NonEmptyAlternative: nonEmptyAlternative.NonEmptyAlternative<OptionTypeLambda> = {
   ...Covariant,
-  ...NonEmptyCoproduct
+  ...SemiCoproduct
 }
 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {

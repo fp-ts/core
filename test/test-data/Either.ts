@@ -1,7 +1,7 @@
 import type { Either, EitherTypeLambda } from "@fp-ts/core/data/Either"
 import * as either from "@fp-ts/core/internal/Either"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
+import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
 export const right = either.right
@@ -17,7 +17,7 @@ const coproduct = <E2, B>(
   that: Either<E2, B>
 ) => <E1, A>(self: Either<E1, A>): Either<E2, A | B> => either.isRight(self) ? self : that
 
-export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<EitherTypeLambda> = {
+export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
   imap,
   coproduct,
   coproductMany: collection =>
@@ -35,5 +35,5 @@ export const NonEmptyCoproduct: nonEmptyCoproduct.NonEmptyCoproduct<EitherTypeLa
     }
 }
 
-export const getSemigroup: <E, A>() => Semigroup<Either<E, A>> = nonEmptyCoproduct
-  .getSemigroup(NonEmptyCoproduct)
+export const getSemigroup: <E, A>() => Semigroup<Either<E, A>> = semiCoproduct
+  .getSemigroup(SemiCoproduct)

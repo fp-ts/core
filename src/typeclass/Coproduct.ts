@@ -3,14 +3,14 @@
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
-import type { NonEmptyCoproduct } from "@fp-ts/core/typeclass/NonEmptyCoproduct"
-import * as nonEmptyCoproduct from "@fp-ts/core/typeclass/NonEmptyCoproduct"
+import type { SemiCoproduct } from "@fp-ts/core/typeclass/SemiCoproduct"
+import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 
 /**
  * @category type class
  * @since 1.0.0
  */
-export interface Coproduct<F extends TypeLambda> extends NonEmptyCoproduct<F> {
+export interface Coproduct<F extends TypeLambda> extends SemiCoproduct<F> {
   readonly zero: <A>() => Kind<F, unknown, never, never, A>
 
   readonly coproductAll: <R, O, E, A>(
@@ -25,7 +25,7 @@ export const getMonoid = <F extends TypeLambda>(F: Coproduct<F>) =>
   <R, O, E, A>(): Monoid<
     Kind<F, R, O, E, A>
   > => ({
-    ...nonEmptyCoproduct.getSemigroup(F)(),
+    ...semiCoproduct.getSemigroup(F)(),
     empty: F.zero(),
     combineAll: F.coproductAll
   })

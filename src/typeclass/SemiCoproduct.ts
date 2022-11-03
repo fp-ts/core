@@ -12,7 +12,7 @@ import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
  * @category type class
  * @since 1.0.0
  */
-export interface NonEmptyCoproduct<F extends TypeLambda> extends Invariant<F> {
+export interface SemiCoproduct<F extends TypeLambda> extends Invariant<F> {
   readonly coproduct: <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
@@ -27,7 +27,7 @@ export interface NonEmptyCoproduct<F extends TypeLambda> extends Invariant<F> {
 /**
  * @since 1.0.0
  */
-export const getSemigroup = <F extends TypeLambda>(F: NonEmptyCoproduct<F>) =>
+export const getSemigroup = <F extends TypeLambda>(F: SemiCoproduct<F>) =>
   <R, O, E, A>(): Semigroup<
     Kind<F, R, O, E, A>
   > => ({
@@ -38,7 +38,7 @@ export const getSemigroup = <F extends TypeLambda>(F: NonEmptyCoproduct<F>) =>
 /**
  * @since 1.0.0
  */
-export const coproductEither = <F extends TypeLambda>(F: NonEmptyCoproduct<F>) =>
+export const coproductEither = <F extends TypeLambda>(F: SemiCoproduct<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) =>
