@@ -1063,11 +1063,11 @@ export const bind: <N extends string, A extends object, B>(
  * @category do notation
  * @since 1.0.0
  */
-export const bindOption: <N extends string, A extends object, B>(
+export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  nonEmptyProduct.bindKind(NonEmptyApplicative)
+  nonEmptyProduct.andThenBind(NonEmptyApplicative)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
