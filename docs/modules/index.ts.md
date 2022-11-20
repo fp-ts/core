@@ -31,15 +31,15 @@ Added in v1.0.0
   - [invariant](#invariant)
   - [monad](#monad)
   - [monoid](#monoid)
-  - [nonEmptyAlternative](#nonemptyalternative)
-  - [nonEmptyApplicative](#nonemptyapplicative)
-  - [nonEmptyCoproduct](#nonemptycoproduct)
-  - [nonEmptyProduct](#nonemptyproduct)
   - [nonEmptyTraversable](#nonemptytraversable)
   - [of](#of)
   - [order](#order)
   - [pointed](#pointed)
   - [product](#product)
+  - [semiAlternative](#semialternative)
+  - [semiApplicative](#semiapplicative)
+  - [semiCoproduct](#semicoproduct)
+  - [semiProduct](#semiproduct)
   - [semigroup](#semigroup)
   - [traversable](#traversable)
   - [traversableFilterable](#traversablefilterable)
@@ -222,46 +222,6 @@ export declare const monoid: typeof monoid
 
 Added in v1.0.0
 
-## nonEmptyAlternative
-
-**Signature**
-
-```ts
-export declare const nonEmptyAlternative: typeof nonEmptyAlternative
-```
-
-Added in v1.0.0
-
-## nonEmptyApplicative
-
-**Signature**
-
-```ts
-export declare const nonEmptyApplicative: typeof nonEmptyApplicative
-```
-
-Added in v1.0.0
-
-## nonEmptyCoproduct
-
-**Signature**
-
-```ts
-export declare const nonEmptyCoproduct: typeof nonEmptyCoproduct
-```
-
-Added in v1.0.0
-
-## nonEmptyProduct
-
-**Signature**
-
-```ts
-export declare const nonEmptyProduct: typeof nonEmptyProduct
-```
-
-Added in v1.0.0
-
 ## nonEmptyTraversable
 
 **Signature**
@@ -308,6 +268,46 @@ Added in v1.0.0
 
 ```ts
 export declare const product: typeof product
+```
+
+Added in v1.0.0
+
+## semiAlternative
+
+**Signature**
+
+```ts
+export declare const semiAlternative: typeof semiAlternative
+```
+
+Added in v1.0.0
+
+## semiApplicative
+
+**Signature**
+
+```ts
+export declare const semiApplicative: typeof semiApplicative
+```
+
+Added in v1.0.0
+
+## semiCoproduct
+
+**Signature**
+
+```ts
+export declare const semiCoproduct: typeof semiCoproduct
+```
+
+Added in v1.0.0
+
+## semiProduct
+
+**Signature**
+
+```ts
+export declare const semiProduct: typeof semiProduct
 ```
 
 Added in v1.0.0

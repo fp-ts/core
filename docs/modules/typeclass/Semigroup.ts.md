@@ -1,6 +1,6 @@
 ---
 title: typeclass/Semigroup.ts
-nav_order: 32
+nav_order: 28
 parent: Modules
 ---
 
@@ -38,8 +38,8 @@ Added in v1.0.0
   - [min](#min)
 - [instances](#instances)
   - [Invariant](#invariant)
-  - [NonEmptyProduct](#nonemptyproduct)
   - [Product](#product)
+  - [SemiProduct](#semiproduct)
   - [first](#first)
   - [last](#last)
 - [type class](#type-class)
@@ -115,22 +115,22 @@ export declare const Invariant: invariant.Invariant<SemigroupTypeLambda>
 
 Added in v1.0.0
 
-## NonEmptyProduct
-
-**Signature**
-
-```ts
-export declare const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<SemigroupTypeLambda>
-```
-
-Added in v1.0.0
-
 ## Product
 
 **Signature**
 
 ```ts
 export declare const Product: product.Product<SemigroupTypeLambda>
+```
+
+Added in v1.0.0
+
+## SemiProduct
+
+**Signature**
+
+```ts
+export declare const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda>
 ```
 
 Added in v1.0.0

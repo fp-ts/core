@@ -1,6 +1,6 @@
 ---
 title: typeclass/Pointed.ts
-nav_order: 30
+nav_order: 23
 parent: Modules
 ---
 

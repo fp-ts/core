@@ -1,6 +1,6 @@
 ---
 title: typeclass/SemiApplicative.ts
-nav_order: 29
+nav_order: 26
 parent: Modules
 ---
 

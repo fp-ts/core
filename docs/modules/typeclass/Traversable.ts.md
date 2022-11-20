@@ -1,6 +1,6 @@
 ---
 title: typeclass/Traversable.ts
-nav_order: 33
+nav_order: 30
 parent: Modules
 ---
 
@@ -16,6 +16,7 @@ Added in v1.0.0
   - [Traversable (interface)](#traversable-interface)
 - [utils](#utils)
   - [sequence](#sequence)
+  - [sequenceComposition](#sequencecomposition)
   - [traverseComposition](#traversecomposition)
   - [traverseTap](#traversetap)
 
@@ -34,6 +35,12 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
+
+  readonly sequence: <F extends TypeLambda>(
+    F: Applicative<F>
+  ) => <TR, TO, TE, R, O, E, A>(
+    self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
 }
 ```
 
@@ -43,16 +50,41 @@ Added in v1.0.0
 
 ## sequence
 
+Returns a default `sequence` implementation.
+
 **Signature**
 
 ```ts
 export declare const sequence: <T extends TypeLambda>(
-  T: Traversable<T>
-) => <F extends TypeLambda>(
+  traverse: <F>(
+    F: Applicative<F>
+  ) => <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
+) => <F>(
   F: Applicative<F>
 ) => <TR, TO, TE, R, O, E, A>(
   self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
 ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
+```
+
+Added in v1.0.0
+
+## sequenceComposition
+
+Returns a default `sequence` composition.
+
+**Signature**
+
+```ts
+export declare const sequenceComposition: <T extends TypeLambda, G extends TypeLambda>(
+  T: Traversable<T> & Covariant<T>,
+  G: Traversable<G>
+) => <F extends TypeLambda>(
+  F: Applicative<F>
+) => <TR, TO, TE, GR, GO, GE, R, O, E, A>(
+  self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, Kind<F, R, O, E, A>>>
+) => Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>>
 ```
 
 Added in v1.0.0
@@ -72,7 +104,7 @@ export declare const traverseComposition: <T extends TypeLambda, G extends TypeL
 ) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, B>
 ) => <TR, TO, TE, GR, GO, GE>(
-  tga: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>
+  self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>
 ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, B>>>
 ```
 

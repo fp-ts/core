@@ -1,6 +1,6 @@
 ---
 title: typeclass/Applicative.ts
-nav_order: 9
+nav_order: 6
 parent: Modules
 ---
 
@@ -26,7 +26,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Applicative<F extends TypeLambda> extends NonEmptyApplicative<F>, Product<F> {}
+export interface Applicative<F extends TypeLambda> extends SemiApplicative<F>, Product<F> {}
 ```
 
 Added in v1.0.0

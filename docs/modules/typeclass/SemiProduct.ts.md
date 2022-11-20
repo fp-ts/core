@@ -1,6 +1,6 @@
 ---
 title: typeclass/SemiProduct.ts
-nav_order: 32
+nav_order: 29
 parent: Modules
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: typeclass/NonEmptyTraversable.ts
-nav_order: 27
+nav_order: 20
 parent: Modules
 ---
 
@@ -17,8 +17,9 @@ Added in v1.0.0
 - [type class](#type-class)
   - [NonEmptyTraversable (interface)](#nonemptytraversable-interface)
 - [utils](#utils)
-  - [nonEmptySequence](#nonemptysequence)
-  - [nonEmptyTraverseComposition](#nonemptytraversecomposition)
+  - [sequenceNonEmpty](#sequencenonempty)
+  - [sequenceNonEmptyComposition](#sequencenonemptycomposition)
+  - [traverseNonEmptyComposition](#traversenonemptycomposition)
 
 ---
 
@@ -30,11 +31,17 @@ Added in v1.0.0
 
 ```ts
 export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> {
-  readonly nonEmptyTraverse: <F extends TypeLambda>(
-    F: NonEmptyApplicative<F>
+  readonly traverseNonEmpty: <F extends TypeLambda>(
+    F: SemiApplicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
+
+  readonly sequenceNonEmpty: <F extends TypeLambda>(
+    F: SemiApplicative<F>
+  ) => <TR, TO, TE, R, O, E, A>(
+    self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
 }
 ```
 
@@ -42,15 +49,21 @@ Added in v1.0.0
 
 # utils
 
-## nonEmptySequence
+## sequenceNonEmpty
+
+Returns a default `sequenceNonEmpty` implementation.
 
 **Signature**
 
 ```ts
-export declare const nonEmptySequence: <T extends TypeLambda>(
-  T: NonEmptyTraversable<T>
-) => <F extends TypeLambda>(
-  F: NonEmptyApplicative<F>
+export declare const sequenceNonEmpty: <T extends TypeLambda>(
+  traverseNonEmpty: <F>(
+    F: SemiApplicative<F>
+  ) => <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
+) => <F>(
+  F: SemiApplicative<F>
 ) => <TR, TO, TE, R, O, E, A>(
   self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
 ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
@@ -58,22 +71,41 @@ export declare const nonEmptySequence: <T extends TypeLambda>(
 
 Added in v1.0.0
 
-## nonEmptyTraverseComposition
+## sequenceNonEmptyComposition
 
-Returns a default `nonEmptyTraverse` composition.
+Returns a default `sequenceNonEmpty` composition.
 
 **Signature**
 
 ```ts
-export declare const nonEmptyTraverseComposition: <T extends TypeLambda, F extends TypeLambda>(
+export declare const sequenceNonEmptyComposition: <T extends TypeLambda, F extends TypeLambda>(
+  T: NonEmptyTraversable<T> & Covariant<T>,
+  G: NonEmptyTraversable<F>
+) => <G extends TypeLambda>(
+  F: SemiApplicative<G>
+) => <TR, TO, TE, GR, GO, GE, R, O, E, A>(
+  self: Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, Kind<G, R, O, E, A>>>
+) => Kind<G, R, O, E, Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, A>>>
+```
+
+Added in v1.0.0
+
+## traverseNonEmptyComposition
+
+Returns a default `traverseNonEmpty` composition.
+
+**Signature**
+
+```ts
+export declare const traverseNonEmptyComposition: <T extends TypeLambda, F extends TypeLambda>(
   T: NonEmptyTraversable<T>,
   G: NonEmptyTraversable<F>
 ) => <G extends TypeLambda>(
-  F: NonEmptyApplicative<G>
+  F: SemiApplicative<G>
 ) => <A, R, O, E, B>(
   f: (a: A) => Kind<G, R, O, E, B>
 ) => <TR, TO, TE, GR, GO, GE>(
-  tfa: Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, A>>
+  self: Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, A>>
 ) => Kind<G, R, O, E, Kind<T, TR, TO, TE, Kind<F, GR, GO, GE, B>>>
 ```
 

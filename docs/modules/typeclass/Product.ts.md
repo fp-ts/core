@@ -1,6 +1,6 @@
 ---
 title: typeclass/Product.ts
-nav_order: 31
+nav_order: 24
 parent: Modules
 ---
 
@@ -27,7 +27,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Product<F extends TypeLambda> extends NonEmptyProduct<F>, Of<F> {
+export interface Product<F extends TypeLambda> extends SemiProduct<F>, Of<F> {
   readonly productAll: <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, ReadonlyArray<A>>
 }
 ```
@@ -44,7 +44,7 @@ Added in v1.0.0
 export declare const struct: <F extends TypeLambda>(
   F: Product<F>
 ) => <R extends Record<string, Kind<F, any, any, any, any>>>(
-  r: R
+  fields: R
 ) => Kind<
   F,
   [R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never,
@@ -64,7 +64,7 @@ Added in v1.0.0
 export declare const tuple: <F extends TypeLambda>(
   F: Product<F>
 ) => <T extends readonly Kind<F, any, any, any, any>[]>(
-  ...tuple: T
+  ...components: T
 ) => Kind<
   F,
   [T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never,

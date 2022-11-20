@@ -1,6 +1,6 @@
 ---
 title: typeclass/Filterable.ts
-nav_order: 17
+nav_order: 14
 parent: Modules
 ---
 
