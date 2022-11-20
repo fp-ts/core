@@ -1,6 +1,6 @@
 ---
 title: typeclass/Alternative.ts
-nav_order: 8
+nav_order: 5
 parent: Modules
 ---
 
@@ -24,7 +24,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export interface Alternative<F extends TypeLambda> extends NonEmptyAlternative<F>, Coproduct<F> {}
+export interface Alternative<F extends TypeLambda> extends SemiAlternative<F>, Coproduct<F> {}
 ```
 
 Added in v1.0.0

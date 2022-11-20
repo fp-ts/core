@@ -1,6 +1,6 @@
 ---
 title: typeclass/FlatMap.ts
-nav_order: 18
+nav_order: 15
 parent: Modules
 ---
 

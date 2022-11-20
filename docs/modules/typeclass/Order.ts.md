@@ -1,6 +1,6 @@
 ---
 title: typeclass/Order.ts
-nav_order: 29
+nav_order: 22
 parent: Modules
 ---
 
@@ -17,8 +17,8 @@ Added in v1.0.0
 - [instances](#instances)
   - [Contravariant](#contravariant)
   - [Invariant](#invariant)
-  - [NonEmptyProduct](#nonemptyproduct)
   - [Product](#product)
+  - [SemiProduct](#semiproduct)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
 - [type class](#type-class)
@@ -76,22 +76,22 @@ export declare const Invariant: invariant.Invariant<OrderTypeLambda>
 
 Added in v1.0.0
 
-## NonEmptyProduct
-
-**Signature**
-
-```ts
-export declare const NonEmptyProduct: nonEmptyProduct.NonEmptyProduct<OrderTypeLambda>
-```
-
-Added in v1.0.0
-
 ## Product
 
 **Signature**
 
 ```ts
 export declare const Product: product.Product<OrderTypeLambda>
+```
+
+Added in v1.0.0
+
+## SemiProduct
+
+**Signature**
+
+```ts
+export declare const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda>
 ```
 
 Added in v1.0.0

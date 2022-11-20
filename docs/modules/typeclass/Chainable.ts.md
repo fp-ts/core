@@ -1,6 +1,6 @@
 ---
 title: typeclass/Chainable.ts
-nav_order: 12
+nav_order: 9
 parent: Modules
 ---
 

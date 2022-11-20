@@ -1,6 +1,6 @@
 ---
 title: typeclass/Invariant.ts
-nav_order: 20
+nav_order: 17
 parent: Modules
 ---
 

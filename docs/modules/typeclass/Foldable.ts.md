@@ -1,6 +1,6 @@
 ---
 title: typeclass/Foldable.ts
-nav_order: 19
+nav_order: 16
 parent: Modules
 ---
 
@@ -19,7 +19,7 @@ Added in v1.0.0
   - [foldMapKind](#foldmapkind)
   - [reduceComposition](#reducecomposition)
   - [reduceKind](#reducekind)
-  - [reduceRightComposition](#reducerightcomposition)
+  - [reduceRight](#reduceright)
   - [reduceRightKind](#reducerightkind)
   - [toReadonlyArray](#toreadonlyarray)
   - [toReadonlyArrayWith](#toreadonlyarraywith)
@@ -35,8 +35,6 @@ Added in v1.0.0
 ```ts
 export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
   readonly reduce: <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
-
-  readonly reduceRight: <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 }
 ```
 
@@ -107,20 +105,14 @@ export declare const reduceKind: <F extends TypeLambda>(
 
 Added in v1.0.0
 
-## reduceRightComposition
-
-Returns a default `reduceRight` composition.
+## reduceRight
 
 **Signature**
 
 ```ts
-export declare const reduceRightComposition: <F extends TypeLambda, G extends TypeLambda>(
-  F: Foldable<F>,
-  G: Foldable<G>
-) => <B, A>(
-  b: B,
-  f: (b: B, a: A) => B
-) => <FR, FO, FE, GR, GO, GE>(self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>) => B
+export declare const reduceRight: <F extends TypeLambda>(
+  F: Foldable<F>
+) => <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 ```
 
 Added in v1.0.0
