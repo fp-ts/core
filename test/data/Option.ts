@@ -13,7 +13,6 @@
  * @since 1.0.0
  */
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as extendable from "@fp-ts/core/test/limbo/Extendable"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
@@ -38,6 +37,10 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import type * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import * as nonEmptyArray from "./NonEmptyArray"
 import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
+
+export interface LazyArg<A> {
+  (): A
+}
 
 export interface None {
   readonly _tag: "None"
