@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.0.9
+
+### Patch Changes
+
+- [#33](https://github.com/fp-ts/core/pull/33) [`c8246ea5`](https://github.com/fp-ts/core/commit/c8246ea56c07d44507b90be49bc529ddee2847d6) Thanks [@gcanti](https://github.com/gcanti)! - remove Compactable, Filterable, TraversableFilterable and /data folder
+
 ## 0.0.8
 
 ### Patch Changes
