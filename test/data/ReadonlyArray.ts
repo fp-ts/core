@@ -1,6 +1,4 @@
-import type { compactable, filterable } from "@fp-ts/core"
-import { semiProduct, traversableFilterable } from "@fp-ts/core"
-import type { Option } from "@fp-ts/core/data/Option"
+import { semiProduct } from "@fp-ts/core"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -11,12 +9,12 @@ import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as covariantWithIndex from "../limbo/CovariantWithIndex"
-import * as filterableWithIndex from "../limbo/FilterableWithIndex"
 import * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import type * as traversableWithIndex from "../limbo/TraversableWithIndex"
 import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
 import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
 import * as O from "./Option"
+import type { Option } from "./Option"
 
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Target"]>
@@ -150,51 +148,3 @@ export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
     }
     return out
   }
-
-export const FilterableWithIndex: filterableWithIndex.FilterableWithIndex<
-  ReadonlyArrayTypeLambda,
-  number
-> = {
-  filterMapWithIndex
-}
-
-export const filterMap: <A, B>(
-  f: (a: A) => Option<B>
-) => (fa: ReadonlyArray<A>) => ReadonlyArray<B> = filterableWithIndex.filterMap(FilterableWithIndex)
-
-export const compact: <A>(fa: ReadonlyArray<Option<A>>) => ReadonlyArray<A> =
-  /*#__PURE__*/ filterMap(identity)
-
-export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
-  compact
-}
-
-export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
-  filterMap
-}
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const traverseFilterMap = traversableFilterable.traverseFilterMap(
-  { ...Traversable, ...Compactable }
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const traversePartitionMap = traversableFilterable
-  .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const TraversableFilterable: traversableFilterable.TraversableFilterable<
-  ReadonlyArrayTypeLambda
-> = {
-  traverseFilterMap,
-  traversePartitionMap
-}

@@ -17,11 +17,9 @@ import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
-import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -38,14 +36,6 @@ import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
-import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
-
-// -------------------------------------------------------------------------------------
-// data types
-// -------------------------------------------------------------------------------------
-
-import * as either from "@fp-ts/core/data/Either"
-import * as option from "@fp-ts/core/data/Option"
 
 export {
   /**
@@ -77,11 +67,6 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  compactable,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
   contravariant,
   /**
    * @category typeclass
@@ -93,16 +78,6 @@ export {
    * @since 1.0.0
    */
   covariant,
-  /**
-   * @category data types
-   * @since 1.0.0
-   */
-  either,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  filterable,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -142,11 +117,6 @@ export {
    * @since 1.0.0
    */
   of,
-  /**
-   * @category data types
-   * @since 1.0.0
-   */
-  option,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -191,10 +161,5 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  traversable,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  traversableFilterable
+  traversable
 }

@@ -1,5 +1,5 @@
 import * as _ from "@fp-ts/core/typeclass/Bounded"
-import * as number from "../test-data/number"
+import * as number from "../data/number"
 import * as U from "../util"
 
 describe("Bounded", () => {

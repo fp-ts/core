@@ -1,6 +1,6 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Chainable"
-import * as O from "../test-data/Option"
+import * as O from "../data/Option"
 import * as U from "../util"
 
 describe("Chainable", () => {

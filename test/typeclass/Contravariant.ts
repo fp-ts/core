@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Contravariant"
 import * as order from "@fp-ts/core/typeclass/Order"
-import * as P from "../test-data/Predicate"
-import * as string from "../test-data/string"
+import * as P from "../data/Predicate"
+import * as string from "../data/string"
 import * as U from "../util"
 
 describe("Contravariant", () => {
