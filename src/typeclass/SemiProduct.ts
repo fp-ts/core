@@ -100,7 +100,7 @@ export const productMany = <F extends TypeLambda>(
 export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
-    fb: Kind<F, R2, O2, E2, B>
+    that: Kind<F, R2, O2, E2, B>
   ) =>
     <R1, O1, E1>(
       self: Kind<F, R1, O1, E1, A>
@@ -113,7 +113,7 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
     > =>
       pipe(
         self,
-        F.product(fb),
+        F.product(that),
         F.imap(
           ([a, b]) => Object.assign({}, a, { [name]: b }) as any,
           ({ [name]: b, ...rest }) => [rest, b] as any
