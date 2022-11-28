@@ -1,9 +1,9 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Invariant"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as O from "../test-data/Option"
-import * as P from "../test-data/Predicate"
-import * as string from "../test-data/string"
+import * as O from "../data/Option"
+import * as P from "../data/Predicate"
+import * as string from "../data/string"
 import * as U from "../util"
 
 describe("Invariant", () => {

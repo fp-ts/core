@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Applicative"
-import * as N from "../test-data/number"
-import * as O from "../test-data/Option"
+import * as N from "../data/number"
+import * as O from "../data/Option"
 import * as U from "../util"
 
 describe("Applicative", () => {

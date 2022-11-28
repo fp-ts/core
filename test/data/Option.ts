@@ -12,19 +12,14 @@
  *
  * @since 1.0.0
  */
-import type { Either } from "@fp-ts/core/data/Either"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as either from "@fp-ts/core/internal/Either"
 import type { LazyArg } from "@fp-ts/core/internal/Function"
 import { identity, pipe } from "@fp-ts/core/internal/Function"
-import * as option from "@fp-ts/core/internal/Option"
 import type * as extendable from "@fp-ts/core/test/limbo/Extendable"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
-import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -40,98 +35,33 @@ import type * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
-import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 import type * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import * as nonEmptyArray from "./NonEmptyArray"
 import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
 
-/**
- * @category models
- * @since 1.0.0
- */
 export interface None {
   readonly _tag: "None"
 }
 
-/**
- * @category models
- * @since 1.0.0
- */
 export interface Some<A> {
   readonly _tag: "Some"
   readonly value: A
 }
 
-/**
- * @category models
- * @since 1.0.0
- */
 export type Option<A> = None | Some<A>
 
-// -------------------------------------------------------------------------------------
-// type lambdas
-// -------------------------------------------------------------------------------------
-
-/**
- * @category type lambdas
- * @since 1.0.0
- */
 export interface OptionTypeLambda extends TypeLambda {
   readonly type: Option<this["Target"]>
 }
 
-// -------------------------------------------------------------------------------------
-// refinements
-// -------------------------------------------------------------------------------------
+export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === "None"
 
-/**
- * Returns `true` if the option is `None`, `false` otherwise.
- *
- * @exampleTodo
- * import { some, none, isNone } from '@fp-ts/data/Option'
- *
- * assert.strictEqual(isNone(some(1)), false)
- * assert.strictEqual(isNone(none), true)
- *
- * @category refinements
- * @since 1.0.0
- */
-export const isNone: (fa: Option<unknown>) => fa is None = option.isNone
+export const isSome = <A>(fa: Option<A>): fa is Some<A> => fa._tag === "Some"
 
-/**
- * Returns `true` if the option is an instance of `Some`, `false` otherwise.
- *
- * @exampleTodo
- * import { some, none, isSome } from '@fp-ts/data/Option'
- *
- * assert.strictEqual(isSome(some(1)), true)
- * assert.strictEqual(isSome(none), false)
- *
- * @category refinements
- * @since 1.0.0
- */
-export const isSome: <A>(fa: Option<A>) => fa is Some<A> = option.isSome
+export const none: Option<never> = { _tag: "None" }
 
-/**
- * `None` doesn't have a constructor, instead you can use it directly as a value. Represents a missing value.
- *
- * @category constructors
- * @since 1.0.0
- */
-export const none: Option<never> = option.none
+export const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
-/**
- * Constructs a `Some`. Represents an optional value that exists.
- *
- * @category constructors
- * @since 1.0.0
- */
-export const some: <A>(a: A) => Option<A> = option.some
-
-/**
- * @category conversions
- * @since 1.0.0
- */
 export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
   for (const a of collection) {
     return some(a)
@@ -139,98 +69,12 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
   return none
 }
 
-/**
- * Converts a `Result` to an `Option` discarding the error.
- *
- * @exampleTodo
- * import * as O from '@fp-ts/data/Option'
- * import * as R from '@fp-ts/data/Result'
- *
- * assert.deepStrictEqual(O.fromResult(R.succeed(1)), O.some(1))
- * assert.deepStrictEqual(O.fromResult(R.fail('a')), O.none)
- *
- * @category conversions
- * @since 1.0.0
- */
-export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
-
-/**
- * Takes a (lazy) default value, a function, and an `Option` value, if the `Option` value is `None` the default value is
- * returned, otherwise the function is applied to the value inside the `Some` and the result is returned.
- *
- * @exampleTodo
- * import { some, none, match } from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
- *
- * assert.strictEqual(
- *   pipe(
- *     some(1),
- *     match(() => 'a none', a => `a some containing ${a}`)
- *   ),
- *   'a some containing 1'
- * )
- *
- * assert.strictEqual(
- *   pipe(
- *     none,
- *     match(() => 'a none', a => `a some containing ${a}`)
- *   ),
- *   'a none'
- * )
- *
- * @category pattern matching
- * @since 1.0.0
- */
 export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
   (ma: Option<A>): B | C => isNone(ma) ? onNone() : onSome(ma.value)
 
-/**
- * Extracts the value out of the structure, if it exists. Otherwise returns the given default value
- *
- * @exampleTodo
- * import { some, none, getOrElse } from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
- *
- * assert.strictEqual(
- *   pipe(
- *     some(1),
- *     getOrElse(0)
- *   ),
- *   1
- * )
- * assert.strictEqual(
- *   pipe(
- *     none,
- *     getOrElse(0)
- *   ),
- *   0
- * )
- *
- * @category error handling
- * @since 1.0.0
- */
 export const getOrElse = <B>(onNone: B) =>
   <A>(ma: Option<A>): A | B => isNone(ma) ? onNone : ma.value
 
-/**
- * Converts an exception into an `Option`. If `f` throws, returns `None`, otherwise returns the output wrapped in a
- * `Some`.
- *
- * @exampleTodo
- * import { none, some, fromThrowable } from '@fp-ts/data/Option'
- *
- * assert.deepStrictEqual(
- *   fromThrowable(() => {
- *     throw new Error()
- *   }),
- *   none
- * )
- * assert.deepStrictEqual(fromThrowable(() => 1), some(1))
- *
- * @category interop
- * @see {@link liftThrowable}
- * @since 1.0.0
- */
 export const fromThrowable = <A>(f: () => A): Option<A> => {
   try {
     return some(f())
@@ -239,41 +83,10 @@ export const fromThrowable = <A>(f: () => A): Option<A> => {
   }
 }
 
-/**
- * Lifts a function that may throw to one returning a `Option`.
- *
- * @category interop
- * @since 1.0.0
- */
 export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => B
 ): ((...a: A) => Option<B>) => (...a) => fromThrowable(() => f(...a))
 
-/**
- * Extracts the value out of the structure, if it exists. Otherwise returns `null`.
- *
- * @exampleTodo
- * import { some, none, toNull } from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
- *
- * assert.strictEqual(
- *   pipe(
- *     some(1),
- *     toNull
- *   ),
- *   1
- * )
- * assert.strictEqual(
- *   pipe(
- *     none,
- *     toNull
- *   ),
- *   null
- * )
- *
- * @category conversions
- * @since 1.0.0
- */
 export const toNull: <A>(self: Option<A>) => A | null = getOrElse(null)
 
 /**
@@ -472,29 +285,12 @@ export const duplicate: <A>(ma: Option<A>) => Option<Option<A>> = extend(identit
  */
 export const compact: <A>(foa: Option<Option<A>>) => Option<A> = flatten
 
-const defaultSeparated = [none, none] as const
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const separate: <A, B>(fe: Option<Either<A, B>>) => readonly [Option<A>, Option<B>] = (ma) =>
-  isNone(ma) ? defaultSeparated : [either.getLeft(ma.value), fromEither(ma.value)]
-
 /**
  * @category filtering
  * @since 1.0.0
  */
 export const filterMap: <A, B>(f: (a: A) => Option<B>) => (fa: Option<A>) => Option<B> = (f) =>
   (fa) => isNone(fa) ? none : f(fa.value)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const partitionMap: <A, B, C>(
-  f: (a: A) => Either<B, C>
-) => (fa: Option<A>) => readonly [Option<B>, Option<C>] = (f) => oa => pipe(oa, map(f), separate)
 
 /**
  * @category traversing
@@ -811,44 +607,6 @@ export const Extendable: extendable.Extendable<OptionTypeLambda> = {
 }
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Compactable: compactable.Compactable<OptionTypeLambda> = {
-  compact
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Filterable: filterable.Filterable<OptionTypeLambda> = {
-  filterMap
-}
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const filter: {
-  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (fc: Option<C>) => Option<B>
-  <B extends A, A = B>(predicate: (a: A) => boolean): (fb: Option<B>) => Option<B>
-} = filterable.filter(Filterable)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const partition: {
-  <C extends A, B extends A, A = C>(
-    refinement: (a: A) => a is B
-  ): (fc: Option<C>) => readonly [Option<C>, Option<B>]
-  <B extends A, A = B>(
-    predicate: (a: A) => boolean
-  ): (fb: Option<B>) => readonly [Option<B>, Option<B>]
-} = filterable.partition(Filterable)
-
-/**
  * @category traversing
  * @since 1.0.0
  */
@@ -866,164 +624,8 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
   sequence
 }
 
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const traverseFilterMap: <F extends TypeLambda>(
-  Applicative: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, Option<B>>
-) => (ta: Option<A>) => Kind<F, R, O, E, Option<B>> = traversableFilterable.traverseFilterMap(
-  { ...Traversable, ...Compactable }
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const traversePartitionMap: <F extends TypeLambda>(
-  Applicative: applicative.Applicative<F>
-) => <A, R, O, E, B, C>(
-  f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-) => (wa: Option<A>) => Kind<F, R, O, E, readonly [Option<B>, Option<C>]> = traversableFilterable
-  .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const TraversableFilterable: traversableFilterable.TraversableFilterable<
-  OptionTypeLambda
-> = {
-  traverseFilterMap,
-  traversePartitionMap
-}
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const traverseFilter: <F extends TypeLambda>(
-  Applicative: applicative.Applicative<F>
-) => <B extends A, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (self: Option<B>) => Kind<F, R, O, E, Option<B>> = traversableFilterable.traverseFilter(
-  TraversableFilterable
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const traversePartition: <F extends TypeLambda>(
-  Applicative: applicative.Applicative<F>
-) => <B extends A, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (self: Option<B>) => Kind<F, R, O, E, readonly [Option<B>, Option<B>]> = traversableFilterable
-  .traversePartition(TraversableFilterable)
-
-// TODO
-// /**
-//  * Returns a *smart constructor* based on the given predicate.
-//  *
-//  * @exampleTodo
-//  * import * as O from '@fp-ts/data/Option'
-//  *
-//  * const getOption = O.liftPredicate((n: number) => n >= 0)
-//  *
-//  * assert.deepStrictEqual(getOption(-1), O.none)
-//  * assert.deepStrictEqual(getOption(1), O.some(1))
-//  *
-//  * @category lifting
-//  * @since 1.0.0
-//  */
-// export const liftPredicate: {
-//   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => Option<B>
-//   <B extends A, A = B>(predicate: Predicate<A>): (b: B) => Option<B>
-// } = fromOption_.liftPredicate(FromOption)
-
-// TODO
-// /**
-//  * @category instances
-//  * @since 1.0.0
-//  */
-// export const FromResult: fromResult_.FromResult<OptionTypeLambda> = {
-//   fromResult: fromEither
-// }
-
-// TODO
-// /**
-//  * @category lifting
-//  * @since 1.0.0
-//  */
-// export const liftResult: <A extends ReadonlyArray<unknown>, E, B>(
-//   f: (...a: A) => Result<E, B>
-// ) => (...a: A) => Option<B> = fromResult_.liftResult(FromResult)
-
-// TODO
-// /**
-//  * @category sequencing
-//  * @since 1.0.0
-//  */
-// export const flatMapResult: <A, E, B>(f: (a: A) => Result<E, B>) => (ma: Option<A>) => Option<B> =
-//   fromResult_.flatMapResult(FromResult, FlatMap)
-
-// TODO
-// /**
-//  * Tests whether a value is a member of a `Option`.
-//  *
-//  * @exampleTodo
-//  * import * as O from '@fp-ts/data/Option'
-//  * import * as N from '@fp-ts/data/number'
-//  * import { pipe } from '@fp-ts/data/Function'
-//  *
-//  * assert.strictEqual(pipe(O.some(1), O.elem(N.Eq)(1)), true)
-//  * assert.strictEqual(pipe(O.some(1), O.elem(N.Eq)(2)), false)
-//  * assert.strictEqual(pipe(O.none, O.elem(N.Eq)(1)), false)
-//  *
-//  * @since 1.0.0
-//  */
-// export const elem = <A>(a: A) =>
-//   (ma: Option<A>): boolean => isNone(ma) ? false : equals(ma.value)(a)
-
-/**
- * Returns `true` if the predicate is satisfied by the wrapped value
- *
- * @exampleTodo
- * import { some, none, exists } from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
- *
- * assert.strictEqual(
- *   pipe(
- *     some(1),
- *     exists(n => n > 0)
- *   ),
- *   true
- * )
- * assert.strictEqual(
- *   pipe(
- *     some(1),
- *     exists(n => n > 1)
- *   ),
- *   false
- * )
- * assert.strictEqual(
- *   pipe(
- *     none,
- *     exists(n => n > 0)
- *   ),
- *   false
- * )
- *
- * @since 1.0.0
- */
 export const exists = <A>(predicate: (a: A) => boolean) =>
   (ma: Option<A>): boolean => isNone(ma) ? false : predicate(ma.value)
-
-// -------------------------------------------------------------------------------------
-// do notation
-// -------------------------------------------------------------------------------------
 
 /**
  * @category do notation

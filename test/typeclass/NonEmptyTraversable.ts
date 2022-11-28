@@ -1,6 +1,6 @@
 import * as _ from "@fp-ts/core/typeclass/NonEmptyTraversable"
-import * as NERA from "../test-data/NonEmptyReadonlyArray"
-import * as O from "../test-data/Option"
+import * as NERA from "../data/NonEmptyReadonlyArray"
+import * as O from "../data/Option"
 import * as U from "../util"
 
 describe("NonEmptyTraversable", () => {
