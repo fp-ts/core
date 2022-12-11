@@ -1,6 +1,6 @@
 ---
 title: typeclass/Monoid.ts
-nav_order: 19
+nav_order: 15
 parent: Modules
 ---
 
@@ -75,8 +75,8 @@ Added in v1.0.0
 
 ```ts
 export interface Monoid<A> extends Semigroup<A> {
-  readonly empty: A
-  readonly combineAll: (collection: Iterable<A>) => A
+  empty: A
+  combineAll: (collection: Iterable<A>) => A
 }
 ```
 
@@ -103,7 +103,7 @@ Given a struct of monoids returns a monoid for the struct.
 **Signature**
 
 ```ts
-export declare const struct: <A>(monoids: { [K in keyof A]: Monoid<A[K]> }) => Monoid<{ readonly [K in keyof A]: A[K] }>
+export declare const struct: <A>(monoids: { [K in keyof A]: Monoid<A[K]> }) => Monoid<{ [K in keyof A]: A[K] }>
 ```
 
 Added in v1.0.0
@@ -115,9 +115,7 @@ Given a tuple of monoids returns a monoid for the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(
-  ...monoids: { [K in keyof A]: Monoid<A[K]> }
-) => Monoid<Readonly<A>>
+export declare const tuple: <A extends any[]>(...monoids: { [K in keyof A]: Monoid<A[K]> }) => Monoid<A>
 ```
 
 Added in v1.0.0

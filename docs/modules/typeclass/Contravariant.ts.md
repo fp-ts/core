@@ -1,6 +1,6 @@
 ---
 title: typeclass/Contravariant.ts
-nav_order: 11
+nav_order: 8
 parent: Modules
 ---
 
@@ -44,7 +44,7 @@ Added in v1.0.0
 
 ```ts
 export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
-  readonly contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 ```
 

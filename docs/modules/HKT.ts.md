@@ -1,6 +1,6 @@
 ---
 title: HKT.ts
-nav_order: 3
+nav_order: 1
 parent: Modules
 ---
 
@@ -27,20 +27,20 @@ Added in v1.0.0
 
 ```ts
 export type Kind<F extends TypeLambda, In, Out2, Out1, Target> = F extends {
-  readonly type: unknown
+  type: unknown
 }
   ? (F & {
-      readonly In: In
-      readonly Out2: Out2
-      readonly Out1: Out1
-      readonly Target: Target
+      In: In
+      Out2: Out2
+      Out1: Out1
+      Target: Target
     })['type']
   : {
-      readonly F: F
-      readonly In: (_: In) => void
-      readonly Out2: () => Out2
-      readonly Out1: () => Out1
-      readonly Target: (_: Target) => Target
+      F: F
+      In: (_: In) => void
+      Out2: () => Out2
+      Out1: () => Out1
+      Target: (_: Target) => Target
     }
 ```
 
@@ -52,7 +52,7 @@ Added in v1.0.0
 
 ```ts
 export interface TypeClass<F extends TypeLambda> {
-  readonly [URI]?: F
+  [URI]?: F
 }
 ```
 
@@ -64,10 +64,10 @@ Added in v1.0.0
 
 ```ts
 export interface TypeLambda {
-  readonly In: unknown
-  readonly Out2: unknown
-  readonly Out1: unknown
-  readonly Target: unknown
+  In: unknown
+  Out2: unknown
+  Out1: unknown
+  Target: unknown
 }
 ```
 

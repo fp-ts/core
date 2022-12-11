@@ -1,6 +1,6 @@
 ---
 title: typeclass/Invariant.ts
-nav_order: 17
+nav_order: 13
 parent: Modules
 ---
 
@@ -29,10 +29,7 @@ Added in v1.0.0
 
 ```ts
 export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
-  readonly imap: <A, B>(
-    to: (a: A) => B,
-    from: (b: B) => A
-  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 ```
 
@@ -47,9 +44,7 @@ Added in v1.0.0
 ```ts
 export declare const bindTo: <F extends TypeLambda>(
   F: Invariant<F>
-) => <N extends string>(
-  name: N
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { readonly [K in N]: A }>
+) => <N extends string>(name: N) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N]: A }>
 ```
 
 Added in v1.0.0
@@ -81,7 +76,7 @@ Added in v1.0.0
 ```ts
 export declare const tupled: <F extends TypeLambda>(
   F: Invariant<F>
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>
+) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A]>
 ```
 
 Added in v1.0.0

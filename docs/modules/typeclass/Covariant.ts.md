@@ -1,6 +1,6 @@
 ---
 title: typeclass/Covariant.ts
-nav_order: 13
+nav_order: 10
 parent: Modules
 ---
 
@@ -87,7 +87,7 @@ Added in v1.0.0
 
 ```ts
 export interface Covariant<F extends TypeLambda> extends Invariant<F> {
-  readonly map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 ```
 
@@ -119,9 +119,7 @@ export declare const let: <F extends TypeLambda>(
 ) => <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => <R, O, E>(
-  self: Kind<F, R, O, E, A>
-) => Kind<F, R, O, E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0

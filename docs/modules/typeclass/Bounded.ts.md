@@ -1,6 +1,6 @@
 ---
 title: typeclass/Bounded.ts
-nav_order: 8
+nav_order: 6
 parent: Modules
 ---
 
@@ -30,8 +30,8 @@ Added in v1.0.0
 
 ```ts
 export interface Bounded<A> extends Order<A> {
-  readonly maxBound: A
-  readonly minBound: A
+  maxBound: A
+  minBound: A
 }
 ```
 
@@ -45,7 +45,7 @@ Added in v1.0.0
 
 ```ts
 export interface BoundedTypeLambda extends TypeLambda {
-  readonly type: Bounded<this['Target']>
+  type: Bounded<this['Target']>
 }
 ```
 

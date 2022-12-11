@@ -1,6 +1,6 @@
 ---
 title: typeclass/Bicovariant.ts
-nav_order: 7
+nav_order: 5
 parent: Modules
 ---
 
@@ -29,10 +29,7 @@ Added in v1.0.0
 
 ```ts
 export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
-  readonly bimap: <E1, E2, A, B>(
-    f: (e: E1) => E2,
-    g: (a: A) => B
-  ) => <R, O>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, B>
+  bimap: <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B) => <R, O>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, B>
 }
 ```
 
