@@ -1,6 +1,6 @@
 ---
 title: typeclass/Coproduct.ts
-nav_order: 12
+nav_order: 9
 parent: Modules
 ---
 
@@ -27,9 +27,9 @@ Added in v1.0.0
 
 ```ts
 export interface Coproduct<F extends TypeLambda> extends SemiCoproduct<F> {
-  readonly zero: <A>() => Kind<F, unknown, never, never, A>
+  zero: <A>() => Kind<F, unknown, never, never, A>
 
-  readonly coproductAll: <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, A>
+  coproductAll: <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, A>
 }
 ```
 

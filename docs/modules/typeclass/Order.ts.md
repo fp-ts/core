@@ -1,6 +1,6 @@
 ---
 title: typeclass/Order.ts
-nav_order: 22
+nav_order: 18
 parent: Modules
 ---
 
@@ -124,7 +124,7 @@ Added in v1.0.0
 
 ```ts
 export interface Order<A> {
-  readonly compare: (that: A) => (self: A) => -1 | 0 | 1
+  compare: (that: A) => (self: A) => -1 | 0 | 1
 }
 ```
 
@@ -138,7 +138,7 @@ Added in v1.0.0
 
 ```ts
 export interface OrderTypeLambda extends TypeLambda {
-  readonly type: Order<this['Target']>
+  type: Order<this['Target']>
 }
 ```
 
@@ -269,7 +269,7 @@ Given a tuple of `Compare`s returns a `Compare` for the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(...orders: { [K in keyof A]: Order<A[K]> }) => Order<Readonly<A>>
+export declare const tuple: <A extends any[]>(...orders: { [K in keyof A]: Order<A[K]> }) => Order<Readonly<A>>
 ```
 
 Added in v1.0.0

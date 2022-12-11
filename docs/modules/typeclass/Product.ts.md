@@ -1,6 +1,6 @@
 ---
 title: typeclass/Product.ts
-nav_order: 24
+nav_order: 20
 parent: Modules
 ---
 
@@ -28,7 +28,7 @@ Added in v1.0.0
 
 ```ts
 export interface Product<F extends TypeLambda> extends SemiProduct<F>, Of<F> {
-  readonly productAll: <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, ReadonlyArray<A>>
+  productAll: <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Array<A>>
 }
 ```
 
@@ -50,7 +50,7 @@ export declare const struct: <F extends TypeLambda>(
   [R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never,
   [R[keyof R]] extends [Kind<F, any, infer O, any, any>] ? O : never,
   [R[keyof R]] extends [Kind<F, any, any, infer E, any>] ? E : never,
-  { readonly [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
+  { [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
 >
 ```
 
@@ -63,14 +63,14 @@ Added in v1.0.0
 ```ts
 export declare const tuple: <F extends TypeLambda>(
   F: Product<F>
-) => <T extends readonly Kind<F, any, any, any, any>[]>(
+) => <T extends Kind<F, any, any, any, any>[]>(
   ...components: T
 ) => Kind<
   F,
   [T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never,
   [T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never,
   [T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never,
-  Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
+  { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
 >
 ```
 

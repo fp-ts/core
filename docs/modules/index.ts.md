@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 4
+nav_order: 2
 parent: Modules
 ---
 
@@ -12,20 +12,15 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [data types](#data-types)
-  - [either](#either)
-  - [option](#option)
 - [typeclass](#typeclass)
   - [alternative](#alternative)
   - [applicative](#applicative)
   - [bicovariant](#bicovariant)
   - [bounded](#bounded)
   - [chainable](#chainable)
-  - [compactable](#compactable)
   - [contravariant](#contravariant)
   - [coproduct](#coproduct)
   - [covariant](#covariant)
-  - [filterable](#filterable)
   - [flatMap](#flatmap)
   - [foldable](#foldable)
   - [invariant](#invariant)
@@ -42,33 +37,10 @@ Added in v1.0.0
   - [semiProduct](#semiproduct)
   - [semigroup](#semigroup)
   - [traversable](#traversable)
-  - [traversableFilterable](#traversablefilterable)
 - [utils](#utils)
   - [hkt](#hkt)
 
 ---
-
-# data types
-
-## either
-
-**Signature**
-
-```ts
-export declare const either: typeof either
-```
-
-Added in v1.0.0
-
-## option
-
-**Signature**
-
-```ts
-export declare const option: typeof option
-```
-
-Added in v1.0.0
 
 # typeclass
 
@@ -122,16 +94,6 @@ export declare const chainable: typeof chainable
 
 Added in v1.0.0
 
-## compactable
-
-**Signature**
-
-```ts
-export declare const compactable: typeof compactable
-```
-
-Added in v1.0.0
-
 ## contravariant
 
 **Signature**
@@ -158,16 +120,6 @@ Added in v1.0.0
 
 ```ts
 export declare const covariant: typeof covariant
-```
-
-Added in v1.0.0
-
-## filterable
-
-**Signature**
-
-```ts
-export declare const filterable: typeof filterable
 ```
 
 Added in v1.0.0
@@ -328,16 +280,6 @@ Added in v1.0.0
 
 ```ts
 export declare const traversable: typeof traversable
-```
-
-Added in v1.0.0
-
-## traversableFilterable
-
-**Signature**
-
-```ts
-export declare const traversableFilterable: typeof traversableFilterable
 ```
 
 Added in v1.0.0

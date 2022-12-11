@@ -1,6 +1,6 @@
 ---
 title: typeclass/Semigroup.ts
-nav_order: 28
+nav_order: 24
 parent: Modules
 ---
 
@@ -10,8 +10,8 @@ parent: Modules
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (that: A) => (self: A) => A
-  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
+  combine: (that: A) => (self: A) => A
+  combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 ```
 
@@ -167,8 +167,8 @@ Added in v1.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (that: A) => (self: A) => A
-  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
+  combine: (that: A) => (self: A) => A
+  combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 ```
 
@@ -182,7 +182,7 @@ Added in v1.0.0
 
 ```ts
 export interface SemigroupTypeLambda extends TypeLambda {
-  readonly type: Semigroup<this['Target']>
+  type: Semigroup<this['Target']>
 }
 ```
 
@@ -229,9 +229,7 @@ Given a struct of associatives returns an associative for the struct.
 **Signature**
 
 ```ts
-export declare const struct: <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }) => Semigroup<{
-  readonly [K in keyof A]: A[K]
-}>
+export declare const struct: <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }) => Semigroup<{ [K in keyof A]: A[K] }>
 ```
 
 Added in v1.0.0
@@ -243,9 +241,7 @@ Given a tuple of associatives returns an associative for the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(
-  ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
-) => Semigroup<Readonly<A>>
+export declare const tuple: <A extends any[]>(...semigroups: { [K in keyof A]: Semigroup<A[K]> }) => Semigroup<A>
 ```
 
 Added in v1.0.0

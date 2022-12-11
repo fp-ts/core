@@ -1,6 +1,6 @@
 ---
 title: typeclass/Foldable.ts
-nav_order: 16
+nav_order: 12
 parent: Modules
 ---
 
@@ -21,8 +21,8 @@ Added in v1.0.0
   - [reduceKind](#reducekind)
   - [reduceRight](#reduceright)
   - [reduceRightKind](#reducerightkind)
-  - [toReadonlyArray](#toreadonlyarray)
-  - [toReadonlyArrayWith](#toreadonlyarraywith)
+  - [toArray](#toarray)
+  - [toArrayWith](#toarraywith)
 
 ---
 
@@ -34,7 +34,7 @@ Added in v1.0.0
 
 ```ts
 export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
-  readonly reduce: <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
+  reduce: <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 }
 ```
 
@@ -134,26 +134,24 @@ export declare const reduceRightKind: <F extends TypeLambda>(
 
 Added in v1.0.0
 
-## toReadonlyArray
+## toArray
 
 **Signature**
 
 ```ts
-export declare const toReadonlyArray: <F extends TypeLambda>(
-  F: Foldable<F>
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => readonly A[]
+export declare const toArray: <F extends TypeLambda>(F: Foldable<F>) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => A[]
 ```
 
 Added in v1.0.0
 
-## toReadonlyArrayWith
+## toArrayWith
 
 **Signature**
 
 ```ts
-export declare const toReadonlyArrayWith: <F extends TypeLambda>(
+export declare const toArrayWith: <F extends TypeLambda>(
   F: Foldable<F>
-) => <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => readonly B[]
+) => <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B[]
 ```
 
 Added in v1.0.0

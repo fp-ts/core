@@ -1,6 +1,6 @@
 ---
 title: typeclass/Of.ts
-nav_order: 21
+nav_order: 17
 parent: Modules
 ---
 
@@ -29,7 +29,7 @@ Added in v1.0.0
 
 ```ts
 export interface Of<F extends TypeLambda> extends TypeClass<F> {
-  readonly of: <A>(a: A) => Kind<F, unknown, never, never, A>
+  of: <A>(a: A) => Kind<F, unknown, never, never, A>
 }
 ```
 
