@@ -17,10 +17,12 @@ import * as O from "./Option"
 import type { Option } from "./Option"
 
 export interface ArrayTypeLambda extends TypeLambda {
-  type: Array<this["Target"]>
+  readonly input: ReadonlyArray<this["Target"]>
+  readonly type: Array<this["Target"]>
 }
 
-export const map = <A, B>(f: (a: A) => B) => (self: Array<A>): Array<B> => self.map(a => f(a))
+export const map = <A, B>(f: (a: A) => B) =>
+  (self: ReadonlyArray<A>): Array<B> => self.map(a => f(a))
 
 export const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
   (self: Array<A>): Array<B> => self.map((a, i) => f(a, i))

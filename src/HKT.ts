@@ -27,18 +27,42 @@ export interface TypeLambda {
 /**
  * @since 1.0.0
  */
-export type Kind<F extends TypeLambda, In, Out2, Out1, Target> = F extends {
-  type: unknown
-} ? (F & {
-  In: In
-  Out2: Out2
-  Out1: Out1
-  Target: Target
-})["type"]
-  : {
-    F: F
-    In: (_: In) => void
-    Out2: () => Out2
-    Out1: () => Out1
-    Target: (_: Target) => Target
-  }
+export type Kind<F extends TypeLambda, In, Out2, Out1, Target, IO extends "I" | "O" = "O"> =
+  F extends {
+    input: unknown
+    type: unknown
+  } ? IO extends "I" ? (F & {
+    In: In
+    Out2: Out2
+    Out1: Out1
+    Target: Target
+  })["input"]
+  : (F & {
+    In: In
+    Out2: Out2
+    Out1: Out1
+    Target: Target
+  })["type"]
+    : F extends {
+      type: unknown
+    } ? (F & {
+      In: In
+      Out2: Out2
+      Out1: Out1
+      Target: Target
+    })["type"]
+    : IO extends "I" ? {
+      F: F
+      In: (_: In) => void
+      Out2: () => Out2
+      Out1: () => Out1
+      Target: (_: Target) => Target
+    }
+    : {
+      F: F
+      _: "Output"
+      In: (_: In) => void
+      Out2: () => Out2
+      Out1: () => Out1
+      Target: (_: Target) => Target
+    }
