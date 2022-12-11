@@ -16,7 +16,7 @@ describe("Contravariant", () => {
 
   it("imap", () => {
     const O = _.imap<order.OrderTypeLambda>(order.contramap)(
-      (s: string) => [s] as const,
+      (s: string) => [s],
       ([s]) => s
     )(
       string.Order

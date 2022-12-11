@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Order"
+import { sort } from "../data/Array"
 import * as boolean from "../data/boolean"
 import * as number from "../data/number"
-import { sort } from "../data/ReadonlyArray"
 import * as string from "../data/string"
 import * as U from "../util"
 
@@ -22,7 +22,7 @@ describe("Order", () => {
   })
 
   it("Invariant", () => {
-    const O = _.Invariant.imap((s: string) => [s] as const, ([s]) => s)(
+    const O = _.Invariant.imap((s: string) => [s], ([s]) => s)(
       string.Order
     )
     U.deepStrictEqual(pipe(["a"], O.compare(["b"])), -1)
@@ -31,8 +31,8 @@ describe("Order", () => {
   })
 
   it("getSemigroup", () => {
-    type T = readonly [number, string]
-    const tuples: ReadonlyArray<T> = [
+    type T = [number, string]
+    const tuples: Array<T> = [
       [2, "c"],
       [1, "b"],
       [2, "a"],
@@ -74,8 +74,8 @@ describe("Order", () => {
   })
 
   it("getMonoid", () => {
-    type T = readonly [number, string]
-    const tuples: ReadonlyArray<T> = [
+    type T = [number, string]
+    const tuples: Array<T> = [
       [2, "c"],
       [1, "b"],
       [2, "a"],
@@ -158,7 +158,7 @@ describe("Order", () => {
   })
 
   it("min", () => {
-    type A = { readonly a: number }
+    type A = { a: number }
     const min = _.min(
       pipe(
         number.Order,
@@ -173,7 +173,7 @@ describe("Order", () => {
   })
 
   it("max", () => {
-    type A = { readonly a: number }
+    type A = { a: number }
     const max = _.max(
       pipe(
         number.Order,

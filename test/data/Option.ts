@@ -36,25 +36,24 @@ import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import type * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import * as nonEmptyArray from "./NonEmptyArray"
-import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
 
 export interface LazyArg<A> {
   (): A
 }
 
 export interface None {
-  readonly _tag: "None"
+  _tag: "None"
 }
 
 export interface Some<A> {
-  readonly _tag: "Some"
-  readonly value: A
+  _tag: "Some"
+  value: A
 }
 
 export type Option<A> = None | Some<A>
 
 export interface OptionTypeLambda extends TypeLambda {
-  readonly type: Option<this["Target"]>
+  type: Option<this["Target"]>
 }
 
 export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === "None"
@@ -86,7 +85,7 @@ export const fromThrowable = <A>(f: () => A): Option<A> => {
   }
 }
 
-export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
+export const liftThrowable = <A extends Array<unknown>, B>(
   f: (...a: A) => B
 ): ((...a: A) => Option<B>) => (...a) => fromThrowable(() => f(...a))
 
@@ -513,9 +512,9 @@ export const Product: product.Product<OptionTypeLambda> = {
   ...Of,
   productAll: collection => {
     const as = Array.from(collection)
-    return nonEmptyReadonlyArray.isNonEmpty(as) ?
-      SemiApplicative.productMany(nonEmptyReadonlyArray.tail(as))(
-        nonEmptyReadonlyArray.head(as)
+    return nonEmptyArray.isNonEmpty(as) ?
+      SemiApplicative.productMany(nonEmptyArray.tail(as))(
+        nonEmptyArray.head(as)
       ) :
       some([])
   }
@@ -544,9 +543,9 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
  * @category conversions
  * @since 1.0.0
  */
-export const toReadonlyArray = <A>(
+export const toArray = <A>(
   self: Option<A>
-): ReadonlyArray<A> => (isNone(self) ? [] : [self.value])
+): Array<A> => (isNone(self) ? [] : [self.value])
 
 /**
  * @category folding
@@ -642,13 +641,13 @@ export const Do: Option<{}> = some({})
  */
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = invariant.bindTo(Invariant)
+) => <A>(self: Option<A>) => Option<{ [K in N]: A }> = invariant.bindTo(Invariant)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  covariant.let(Covariant)
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant
+  .let(Covariant)
 
 export { let_ as let }
 
@@ -659,8 +658,8 @@ export { let_ as let }
 export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Option<B>
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  chainable.bind(Chainable)
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable
+  .bind(Chainable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -671,8 +670,8 @@ export const bind: <N extends string, A extends object, B>(
 export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   fb: Option<B>
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  semiProduct.andThenBind(SemiApplicative)
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+  .andThenBind(SemiApplicative)
 
 // -------------------------------------------------------------------------------------
 // tuple sequencing
@@ -682,12 +681,12 @@ export const andThenBind: <N extends string, A extends object, B>(
  * @category tuple sequencing
  * @since 1.0.0
  */
-export const Zip: Option<readonly []> = some([])
+export const Zip: Option<[]> = some([])
 
 /**
  * @since 1.0.0
  */
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tupled(Invariant)
+export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
 
 /**
  * Sequentially zips this effect with the specified effect.
@@ -697,5 +696,5 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tu
  */
 export const productFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = semiProduct
+) => <A extends Array<unknown>>(self: Option<A>) => Option<[...A, B]> = semiProduct
   .productFlatten(SemiProduct)

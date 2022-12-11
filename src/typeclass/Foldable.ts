@@ -13,7 +13,7 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
  * @since 1.0.0
  */
 export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
-  readonly reduce: <A, B>(
+  reduce: <A, B>(
     b: B,
     f: (b: B, a: A) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
@@ -42,7 +42,7 @@ export const reduceRight = <F extends TypeLambda>(
   <A, B>(
     b: B,
     f: (b: B, a: A) => B
-  ) => <R, O, E>(self: Kind<F, R, O, E, A>): B => toReadonlyArray(F)(self).reduceRight(f, b)
+  ) => <R, O, E>(self: Kind<F, R, O, E, A>): B => toArray(F)(self).reduceRight(f, b)
 
 /**
  * @since 1.0.0
@@ -50,16 +50,16 @@ export const reduceRight = <F extends TypeLambda>(
 export const foldMap = <F extends TypeLambda>(F: Foldable<F>) =>
   <M>(M: Monoid<M>) =>
     <A>(f: (a: A) => M) =>
-      <R, O, E>(self: Kind<F, R, O, E, A>): M => M.combineAll(toReadonlyArrayWith(F)(f)(self))
+      <R, O, E>(self: Kind<F, R, O, E, A>): M => M.combineAll(toArrayWith(F)(f)(self))
 
 /**
  * @since 1.0.0
  */
-export const toReadonlyArrayWith = <F extends TypeLambda>(
+export const toArrayWith = <F extends TypeLambda>(
   F: Foldable<F>
 ) =>
   <A, B>(f: (a: A) => B) =>
-    <R, O, E>(self: Kind<F, R, O, E, A>): ReadonlyArray<B> =>
+    <R, O, E>(self: Kind<F, R, O, E, A>): Array<B> =>
       F.reduce<A, Array<B>>([], (out, a) => {
         out.push(f(a))
         return out
@@ -68,9 +68,9 @@ export const toReadonlyArrayWith = <F extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const toReadonlyArray = <F extends TypeLambda>(
+export const toArray = <F extends TypeLambda>(
   F: Foldable<F>
-): <R, O, E, A>(self: Kind<F, R, O, E, A>) => ReadonlyArray<A> => toReadonlyArrayWith(F)(identity)
+): <R, O, E, A>(self: Kind<F, R, O, E, A>) => Array<A> => toArrayWith(F)(identity)
 
 /**
  * @since 1.0.0

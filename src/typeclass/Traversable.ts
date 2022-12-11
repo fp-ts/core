@@ -11,13 +11,13 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @since 1.0.0
  */
 export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
-  readonly traverse: <F extends TypeLambda>(
+  traverse: <F extends TypeLambda>(
     F: Applicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 
-  readonly sequence: <F extends TypeLambda>(F: Applicative<F>) => <TR, TO, TE, R, O, E, A>(
+  sequence: <F extends TypeLambda>(F: Applicative<F>) => <TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
 }

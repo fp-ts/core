@@ -10,8 +10,8 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
  * @since 1.0.0
  */
 export interface Monoid<A> extends Semigroup<A> {
-  readonly empty: A
-  readonly combineAll: (collection: Iterable<A>) => A
+  empty: A
+  combineAll: (collection: Iterable<A>) => A
 }
 
 /**
@@ -60,7 +60,7 @@ export const reverse = <A>(M: Monoid<A>): Monoid<A> => fromSemigroup(semigroup.r
  */
 export const struct = <A>(
   monoids: { [K in keyof A]: Monoid<A[K]> }
-): Monoid<{ readonly [K in keyof A]: A[K] }> => {
+): Monoid<{ [K in keyof A]: A[K] }> => {
   const empty: A = {} as any
   for (const k in monoids) {
     if (Object.prototype.hasOwnProperty.call(monoids, k)) {
@@ -75,9 +75,9 @@ export const struct = <A>(
  *
  * @since 1.0.0
  */
-export const tuple = <A extends ReadonlyArray<any>>(
+export const tuple = <A extends Array<any>>(
   ...monoids: { [K in keyof A]: Monoid<A[K]> }
-): Monoid<Readonly<A>> => {
+): Monoid<A> => {
   const empty: A = monoids.map((m) => m.empty) as any
-  return fromSemigroup(semigroup.tuple(...monoids), empty)
+  return fromSemigroup(semigroup.tuple<A>(...monoids), empty)
 }

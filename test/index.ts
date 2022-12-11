@@ -7,13 +7,10 @@ const getExportName = (name: string): string => {
   if (name === "HKT") {
     return name.toLowerCase()
   }
-  if (name === "Const") {
-    return "const_"
-  }
   return name.substring(0, 1).toLowerCase() + name.substring(1)
 }
 
-function getModuleNames(): ReadonlyArray<string> {
+function getModuleNames(): Array<string> {
   return glob
     .sync("./src/**/*.ts")
     .map((file) => path.parse(file))

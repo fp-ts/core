@@ -8,7 +8,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
  * @since 1.0.0
  */
 export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
-  readonly imap: <A, B>(
+  imap: <A, B>(
     to: (a: A) => B,
     from: (b: B) => A
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
@@ -38,7 +38,7 @@ export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
     name: N
   ): (<R, O, E, A>(
     self: Kind<F, R, O, E, A>
-  ) => Kind<F, R, O, E, { readonly [K in N]: A }>) =>
+  ) => Kind<F, R, O, E, { [K in N]: A }>) =>
     F.imap(a => ({ [name]: a } as any), ({ [name]: a }) => a)
 
 /**
@@ -46,5 +46,5 @@ export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
  */
 export const tupled = <F extends TypeLambda>(
   F: Invariant<F>
-): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) =>
-  F.imap(a => [a] as const, ([a]) => a)
+): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A]>) =>
+  F.imap(a => [a], ([a]) => a)
