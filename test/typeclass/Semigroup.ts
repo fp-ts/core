@@ -134,11 +134,16 @@ describe("Semigroup", () => {
   })
 
   it("product", () => {
+    type From = [[string, number], number]
+    type To = [string, number, number]
     const A = pipe(
       string.Semigroup,
       _.SemiProduct.product(number.SemigroupSum),
       _.SemiProduct.product(number.SemigroupMultiply),
-      _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
+      _.imap<From, To>(
+        ([[a, b], c]) => [a, b, c],
+        ([a, b, c]) => [[a, b], c]
+      )
     )
     U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
   })

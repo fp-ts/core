@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/internal/Function"
+import * as RA from "../data/Array"
 import * as number from "../data/number"
 import * as O from "../data/Option"
-import * as RA from "../data/ReadonlyArray"
 import * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import * as U from "../util"
 
@@ -11,7 +11,7 @@ describe("FoldableWithIndex", () => {
       RA.FoldableWithIndex,
       RA.FoldableWithIndex
     )
-    const f = (b: string, a: string, [i, j]: readonly [number, number]) => b + a + i + j
+    const f = (b: string, a: string, [i, j]: [number, number]) => b + a + i + j
     U.deepStrictEqual(pipe([], reduceWithIndex("-", f)), "-")
     U.deepStrictEqual(pipe([[]], reduceWithIndex("-", f)), "-")
     U.deepStrictEqual(
@@ -25,7 +25,7 @@ describe("FoldableWithIndex", () => {
       RA.FoldableWithIndex,
       RA.FoldableWithIndex
     )
-    const f = (b: string, a: string, [i, j]: readonly [number, number]) => b + a + i + j
+    const f = (b: string, a: string, [i, j]: [number, number]) => b + a + i + j
     U.deepStrictEqual(pipe([], reduceRightWithIndex("-", f)), "-")
     U.deepStrictEqual(pipe([[]], reduceRightWithIndex("-", f)), "-")
     U.deepStrictEqual(
@@ -34,17 +34,17 @@ describe("FoldableWithIndex", () => {
     )
   })
 
-  it("toReadonlyArray", () => {
-    const toReadonlyArray = foldableWithIndex.toReadonlyArray(O.FoldableWithIndex)
-    U.deepStrictEqual(toReadonlyArray(O.none), [])
-    U.deepStrictEqual(toReadonlyArray(O.some(2)), [2])
+  it("toArray", () => {
+    const toArray = foldableWithIndex.toArray(O.FoldableWithIndex)
+    U.deepStrictEqual(toArray(O.none), [])
+    U.deepStrictEqual(toArray(O.some(2)), [2])
   })
 
-  it("toReadonlyArrayWith", () => {
-    const toReadonlyArrayWith = foldableWithIndex.toReadonlyArrayWith(O.FoldableWithIndex)
-    U.deepStrictEqual(pipe(O.none, toReadonlyArrayWith(U.double)), [])
-    U.deepStrictEqual(pipe(O.some(2), toReadonlyArrayWith(U.double)), [4])
-    U.deepStrictEqual(pipe(O.some(2), toReadonlyArrayWith((a, i) => U.double(a) * i)), [0])
+  it("toArrayWith", () => {
+    const toArrayWith = foldableWithIndex.toArrayWith(O.FoldableWithIndex)
+    U.deepStrictEqual(pipe(O.none, toArrayWith(U.double)), [])
+    U.deepStrictEqual(pipe(O.some(2), toArrayWith(U.double)), [4])
+    U.deepStrictEqual(pipe(O.some(2), toArrayWith((a, i) => U.double(a) * i)), [0])
   })
 
   it("foldMapWithIndex", () => {

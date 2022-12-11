@@ -10,7 +10,7 @@ export interface Predicate<A> {
 }
 
 export interface PredicateTypeLambda extends TypeLambda {
-  readonly type: Predicate<this["Target"]>
+  type: Predicate<this["Target"]>
 }
 
 export const contramap = <B, A>(f: (b: B) => A) =>
@@ -72,12 +72,12 @@ export const andThenBind: <N extends string, A extends object, B>(
   fb: Predicate<B>
 ) => (
   self: Predicate<A>
-) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+) => Predicate<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
   .andThenBind(
     SemiProduct
   )
 
-export const tupled: <A>(self: Predicate<A>) => Predicate<readonly [A]> = invariant.tupled(
+export const tupled: <A>(self: Predicate<A>) => Predicate<[A]> = invariant.tupled(
   Invariant
 )
 

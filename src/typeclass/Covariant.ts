@@ -9,7 +9,7 @@ import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
  * @since 1.0.0
  */
 export interface Covariant<F extends TypeLambda> extends Invariant<F> {
-  readonly map: <A, B>(
+  map: <A, B>(
     f: (a: A) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
@@ -75,7 +75,7 @@ const let_ = <F extends TypeLambda>(
   f: (a: A) => B
 ) => <R, O, E>(
   self: Kind<F, R, O, E, A>
-) => Kind<F, R, O, E, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
+) => Kind<F, R, O, E, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
   (name, f) => F.map(a => Object.assign({}, a, { [name]: f(a) }) as any)
 
 export {

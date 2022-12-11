@@ -10,8 +10,8 @@ import type { Order } from "@fp-ts/core/typeclass/Order"
  * @since 1.0.0
  */
 export interface Bounded<A> extends Order<A> {
-  readonly maxBound: A
-  readonly minBound: A
+  maxBound: A
+  minBound: A
 }
 
 /**
@@ -19,7 +19,7 @@ export interface Bounded<A> extends Order<A> {
  * @since 1.0.0
  */
 export interface BoundedTypeLambda extends TypeLambda {
-  readonly type: Bounded<this["Target"]>
+  type: Bounded<this["Target"]>
 }
 
 /**

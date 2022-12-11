@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Foldable"
+import * as RA from "../data/Array"
 import * as number from "../data/number"
 import * as O from "../data/Option"
-import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Foldable", () => {
@@ -14,16 +14,16 @@ describe("Foldable", () => {
     U.deepStrictEqual(pipe([["a", "c"], ["b", "d"]], reduce("-", f)), "-acbd")
   })
 
-  it("toReadonlyArray", () => {
-    const toReadonlyArray = _.toReadonlyArray(O.Foldable)
-    U.deepStrictEqual(toReadonlyArray(O.none), [])
-    U.deepStrictEqual(toReadonlyArray(O.some(2)), [2])
+  it("toArray", () => {
+    const toArray = _.toArray(O.Foldable)
+    U.deepStrictEqual(toArray(O.none), [])
+    U.deepStrictEqual(toArray(O.some(2)), [2])
   })
 
-  it("toReadonlyArrayWith", () => {
-    const toReadonlyArrayWith = _.toReadonlyArrayWith(O.Foldable)
-    U.deepStrictEqual(pipe(O.none, toReadonlyArrayWith(U.double)), [])
-    U.deepStrictEqual(pipe(O.some(2), toReadonlyArrayWith(U.double)), [4])
+  it("toArrayWith", () => {
+    const toArrayWith = _.toArrayWith(O.Foldable)
+    U.deepStrictEqual(pipe(O.none, toArrayWith(U.double)), [])
+    U.deepStrictEqual(pipe(O.some(2), toArrayWith(U.double)), [4])
   })
 
   it("foldMap", () => {

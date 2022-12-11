@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Covariant"
+import * as RA from "../data/Array"
 import * as O from "../data/Option"
-import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Covariant", () => {
@@ -46,8 +46,8 @@ describe("Covariant", () => {
   })
 
   it("imap", () => {
-    const f = _.imap<O.OptionTypeLambda>(O.map)((s: string) => [s] as const, ([s]) => s)
+    const f = _.imap<O.OptionTypeLambda>(O.map)((s: string) => [s], ([s]) => s)
     U.deepStrictEqual(pipe(O.none, f), O.none)
-    U.deepStrictEqual(pipe(O.some("a"), f), O.some(["a"] as const))
+    U.deepStrictEqual(pipe(O.some("a"), f), O.some(["a"]))
   })
 })

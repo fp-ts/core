@@ -9,5 +9,5 @@ import type { Composable } from "./Composable"
  * @since 1.0.0
  */
 export interface Category<F extends TypeLambda> extends Composable<F> {
-  readonly identity: <R>() => Kind<F, R, never, never, R>
+  identity: <R>() => Kind<F, R, never, never, R>
 }

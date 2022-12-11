@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Traversable"
+import * as RA from "../data/Array"
 import * as O from "../data/Option"
-import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Traversable", () => {
@@ -26,7 +26,7 @@ describe("Traversable", () => {
   })
 
   it("sequence", () => {
-    const sequence = _.sequence<RA.ReadonlyArrayTypeLambda>(RA.Traversable.traverse)(O.Applicative)
+    const sequence = _.sequence<RA.ArrayTypeLambda>(RA.Traversable.traverse)(O.Applicative)
     U.deepStrictEqual(pipe([O.none, O.some(2)], sequence), O.none)
     U.deepStrictEqual(pipe([O.some(1), O.some(2)], sequence), O.some([1, 2]))
   })

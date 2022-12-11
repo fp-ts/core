@@ -11,25 +11,24 @@ import type * as traverse_ from "@fp-ts/core/typeclass/Traversable"
 import type * as covariantWithIndex from "../limbo/CovariantWithIndex"
 import * as foldableWithIndex from "../limbo/FoldableWithIndex"
 import type * as traversableWithIndex from "../limbo/TraversableWithIndex"
-import type { NonEmptyReadonlyArray } from "./NonEmptyReadonlyArray"
-import * as nonEmptyReadonlyArray from "./NonEmptyReadonlyArray"
+import type { NonEmptyArray } from "./NonEmptyArray"
+import * as nonEmptyArray from "./NonEmptyArray"
 import * as O from "./Option"
 import type { Option } from "./Option"
 
-export interface ReadonlyArrayTypeLambda extends TypeLambda {
-  readonly type: ReadonlyArray<this["Target"]>
+export interface ArrayTypeLambda extends TypeLambda {
+  type: Array<this["Target"]>
 }
 
-export const map = <A, B>(f: (a: A) => B) =>
-  (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map(a => f(a))
+export const map = <A, B>(f: (a: A) => B) => (self: Array<A>): Array<B> => self.map(a => f(a))
 
 export const mapWithIndex = <A, B>(f: (a: A, i: number) => B) =>
-  (self: ReadonlyArray<A>): ReadonlyArray<B> => self.map((a, i) => f(a, i))
+  (self: Array<A>): Array<B> => self.map((a, i) => f(a, i))
 
-export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(map)
+export const Covariant: covariant.Covariant<ArrayTypeLambda> = covariant.make(map)
 
 export const CovariantWithIndex: covariantWithIndex.CovariantWithIndex<
-  ReadonlyArrayTypeLambda,
+  ArrayTypeLambda,
   number
 > = {
   mapWithIndex: (f) => (self) => self.map((a, i) => f(a, i))
@@ -38,51 +37,50 @@ export const CovariantWithIndex: covariantWithIndex.CovariantWithIndex<
 export const reduceWithIndex = <A, B>(
   b: B,
   f: (b: B, a: A, i: number) => B
-) => (self: ReadonlyArray<A>) => self.reduce((b, a, i) => f(b, a, i), b)
+) => (self: Array<A>) => self.reduce((b, a, i) => f(b, a, i), b)
 
 export const reduceRightWithIndex = <A, B>(b: B, f: (b: B, a: A, i: number) => B) =>
-  (self: ReadonlyArray<A>): B => self.reduceRight((b, a, i) => f(b, a, i), b)
+  (self: Array<A>): B => self.reduceRight((b, a, i) => f(b, a, i), b)
 
 export const FoldableWithIndex: foldableWithIndex.FoldableWithIndex<
-  ReadonlyArrayTypeLambda,
+  ArrayTypeLambda,
   number
 > = {
   reduceWithIndex,
   reduceRightWithIndex
 }
 
-export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
+export const Foldable: foldable.Foldable<ArrayTypeLambda> = {
   reduce: foldableWithIndex.reduce(FoldableWithIndex)
 }
 
-export const isNonEmpty: <A>(self: ReadonlyArray<A>) => self is NonEmptyReadonlyArray<A> =
-  nonEmptyReadonlyArray.isNonEmpty
+export const isNonEmpty: <A>(self: Array<A>) => self is NonEmptyArray<A> = nonEmptyArray.isNonEmpty
 
 export const head = <A>(
-  self: ReadonlyArray<A>
+  self: Array<A>
 ): O.Option<A> => (isNonEmpty(self) ? O.some(self[0]) : O.none)
 
 export const sort = <B>(Compare: Order<B>) =>
-  <A extends B>(as: ReadonlyArray<A>): ReadonlyArray<A> =>
+  <A extends B>(as: Array<A>): Array<A> =>
     as.length <= 1 ? as : as.slice().sort((a1, a2) => Compare.compare(a2)(a1))
 
 export function concat<B>(
-  that: NonEmptyReadonlyArray<B>
-): <A>(self: ReadonlyArray<A>) => NonEmptyReadonlyArray<A | B>
+  that: NonEmptyArray<B>
+): <A>(self: Array<A>) => NonEmptyArray<A | B>
 export function concat<B>(
-  that: ReadonlyArray<B>
-): <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyReadonlyArray<A | B>
+  that: Array<B>
+): <A>(self: NonEmptyArray<A>) => NonEmptyArray<A | B>
 export function concat<B>(
-  that: ReadonlyArray<B>
-): <A>(self: NonEmptyReadonlyArray<A>) => ReadonlyArray<A | B> {
-  return <A>(self: NonEmptyReadonlyArray<A | B>) => self.concat(that)
+  that: Array<B>
+): <A>(self: NonEmptyArray<A>) => Array<A | B> {
+  return <A>(self: NonEmptyArray<A | B>) => self.concat(that)
 }
 
 export const traverseWithIndex = <F extends TypeLambda>(
   Applicative: applicative.Applicative<F>
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
-    (self: Iterable<A>): Kind<F, R, O, E, ReadonlyArray<B>> => {
+    (self: Iterable<A>): Kind<F, R, O, E, Array<B>> => {
       const fbs: Array<Kind<F, R, O, E, B>> = []
       let i = 0
       for (const a of self) {
@@ -96,24 +94,23 @@ export const traverse = <F extends TypeLambda>(
 ) =>
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
-  ): (self: ReadonlyArray<A>) => Kind<F, R, O, E, ReadonlyArray<B>> =>
-    traverseWithIndex(Applicative)(f)
+  ): (self: Array<A>) => Kind<F, R, O, E, Array<B>> => traverseWithIndex(Applicative)(f)
 
-export const Traversable: traverse_.Traversable<ReadonlyArrayTypeLambda> = {
+export const Traversable: traverse_.Traversable<ArrayTypeLambda> = {
   traverse,
   sequence: F => self => pipe(self, traverse(F)(identity))
 }
 
 export const TraversableWithIndex: traversableWithIndex.TraversableWithIndex<
-  ReadonlyArrayTypeLambda,
+  ArrayTypeLambda,
   number
 > = {
   traverseWithIndex
 }
 
-export const product = <B>(that: ReadonlyArray<B>) =>
-  <A>(self: ReadonlyArray<A>): ReadonlyArray<readonly [A, B]> => {
-    const out: Array<readonly [A, B]> = []
+export const product = <B>(that: Array<B>) =>
+  <A>(self: Array<A>): Array<[A, B]> => {
+    const out: Array<[A, B]> = []
     for (const a of self) {
       for (const b of that) {
         out.push([a, b])
@@ -122,23 +119,23 @@ export const product = <B>(that: ReadonlyArray<B>) =>
     return out
   }
 
-export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
+export const Of: of_.Of<ArrayTypeLambda> = {
   of: a => [a]
 }
 
-const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = {
+const SemiProduct: semiProduct.SemiProduct<ArrayTypeLambda> = {
   imap: Covariant.imap,
   product,
   productMany: semiProduct.productMany(Covariant, product)
 }
 
-export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeLambda> = {
+export const SemiApplicative: semiApplicative.SemiApplicative<ArrayTypeLambda> = {
   ...Covariant,
   ...SemiProduct
 }
 
 export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
-  (fa: ReadonlyArray<A>): ReadonlyArray<B> => {
+  (fa: Array<A>): Array<B> => {
     const out: Array<B> = []
     for (let i = 0; i < fa.length; i++) {
       const optionB = f(fa[i], i)
