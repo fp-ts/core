@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Foldable"
-import * as RA from "../data/Array"
 import * as number from "../data/number"
 import * as O from "../data/Option"
+import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Foldable", () => {

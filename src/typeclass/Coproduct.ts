@@ -11,9 +11,9 @@ import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
  * @since 1.0.0
  */
 export interface Coproduct<F extends TypeLambda> extends SemiCoproduct<F> {
-  zero: <A>() => Kind<F, unknown, never, never, A>
+  readonly zero: <A>() => Kind<F, unknown, never, never, A>
 
-  coproductAll: <R, O, E, A>(
+  readonly coproductAll: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => Kind<F, R, O, E, A>
 }

@@ -9,13 +9,13 @@ import * as U from "../util"
 describe("Invariant", () => {
   it("imapComposition", () => {
     const imap = _.imapComposition(semigroup.Invariant, O.Invariant)
-    const S = pipe(O.getMonoid(string.Semigroup), imap(s => [s], ([s]) => s))
+    const S = pipe(O.getMonoid(string.Semigroup), imap(s => [s] as const, ([s]) => s))
     U.deepStrictEqual(pipe(O.none, S.combine(O.none)), O.none)
-    U.deepStrictEqual(pipe(O.none, S.combine(O.some(["b"]))), O.some(["b"]))
-    U.deepStrictEqual(pipe(O.some(["a"]), S.combine(O.none)), O.some(["a"]))
+    U.deepStrictEqual(pipe(O.none, S.combine(O.some(["b"]))), O.some(["b"] as const))
+    U.deepStrictEqual(pipe(O.some(["a"] as const), S.combine(O.none)), O.some(["a"] as const))
     U.deepStrictEqual(
-      pipe(O.some(["a"]), S.combine(O.some(["b"]))),
-      O.some(["ab"])
+      pipe(O.some(["a"] as const), S.combine(O.some(["b"]))),
+      O.some(["ab"] as const)
     )
   })
 
@@ -38,7 +38,7 @@ describe("Invariant", () => {
     it("Covariant (Option)", () => {
       const tupled = _.tupled(O.Invariant)
       U.deepStrictEqual(pipe(O.none, tupled), O.none)
-      U.deepStrictEqual(pipe(O.some(1), tupled), O.some([1]))
+      U.deepStrictEqual(pipe(O.some(1), tupled), O.some([1] as const))
     })
 
     it("Contravariant (Predicate)", () => {

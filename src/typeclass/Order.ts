@@ -15,7 +15,7 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Order<A> {
-  compare: (that: A) => (self: A) => -1 | 0 | 1
+  readonly compare: (that: A) => (self: A) => -1 | 0 | 1
 }
 
 /**
@@ -23,7 +23,7 @@ export interface Order<A> {
  * @since 1.0.0
  */
 export interface OrderTypeLambda extends TypeLambda {
-  type: Order<this["Target"]>
+  readonly type: Order<this["Target"]>
 }
 
 /**
@@ -41,7 +41,7 @@ export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
  *
  * @since 1.0.0
  */
-export const tuple = <A extends Array<any>>(
+export const tuple = <A extends ReadonlyArray<any>>(
   ...orders: { [K in keyof A]: Order<A[K]> }
 ): Order<Readonly<A>> =>
   fromCompare(that =>

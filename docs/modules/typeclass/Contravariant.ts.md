@@ -44,7 +44,7 @@ Added in v1.0.0
 
 ```ts
 export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
-  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  readonly contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 ```
 

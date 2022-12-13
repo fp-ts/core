@@ -29,7 +29,10 @@ Added in v1.0.0
 
 ```ts
 export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
-  bimap: <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B) => <R, O>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, B>
+  readonly bimap: <E1, E2, A, B>(
+    f: (e: E1) => E2,
+    g: (a: A) => B
+  ) => <R, O>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, B>
 }
 ```
 

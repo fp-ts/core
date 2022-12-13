@@ -87,7 +87,7 @@ Added in v1.0.0
 
 ```ts
 export interface Covariant<F extends TypeLambda> extends Invariant<F> {
-  map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  readonly map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }
 ```
 

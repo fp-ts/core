@@ -56,7 +56,7 @@ export const bind = <F extends TypeLambda>(F: Chainable<F>) =>
     R1 & R2,
     O1 | O2,
     E1 | E2,
-    { [K in keyof A | N]: K extends keyof A ? A[K] : B }
+    { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
   > =>
     F.flatMap(a =>
       pipe(

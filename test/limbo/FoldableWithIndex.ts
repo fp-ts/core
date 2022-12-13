@@ -12,12 +12,12 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
  * @since 1.0.0
  */
 export interface FoldableWithIndex<F extends TypeLambda, I> extends TypeClass<F> {
-  reduceWithIndex: <A, B>(
+  readonly reduceWithIndex: <A, B>(
     b: B,
     f: (b: B, a: A, i: I) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
 
-  reduceRightWithIndex: <A, B>(
+  readonly reduceRightWithIndex: <A, B>(
     b: B,
     f: (b: B, a: A, i: I) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
@@ -32,7 +32,7 @@ export const reduceWithIndexComposition = <F extends TypeLambda, I, G extends Ty
   F: FoldableWithIndex<F, I>,
   G: FoldableWithIndex<G, J>
 ) =>
-  <B, A>(b: B, f: (b: B, a: A, ij: [I, J]) => B) =>
+  <B, A>(b: B, f: (b: B, a: A, ij: readonly [I, J]) => B) =>
     <FR, FO, FE, GR, GO, GE>(
       self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
     ): B =>
@@ -51,7 +51,7 @@ export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G exten
   F: FoldableWithIndex<F, I>,
   G: FoldableWithIndex<G, J>
 ) =>
-  <B, A>(b: B, f: (b: B, a: A, ij: [I, J]) => B) =>
+  <B, A>(b: B, f: (b: B, a: A, ij: readonly [I, J]) => B) =>
     <FR, FO, FE, GR, GO, GE>(
       self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
     ): B =>

@@ -10,7 +10,7 @@ import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
  * @since 1.0.0
  */
 export interface TraversableWithIndex<T extends TypeLambda, I> extends TypeClass<T> {
-  traverseWithIndex: <F extends TypeLambda>(
+  readonly traverseWithIndex: <F extends TypeLambda>(
     F: Applicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A, i: I) => Kind<F, R, O, E, B>
@@ -30,7 +30,7 @@ export const traverseWithIndexComposition = <F extends TypeLambda, I, G extends 
 ) =>
   <H extends TypeLambda>(H: Applicative<H>) =>
     <A, R, O, E, B>(
-      f: (a: A, ij: [I, J]) => Kind<H, R, O, E, B>
+      f: (a: A, ij: readonly [I, J]) => Kind<H, R, O, E, B>
     ): (<FR, FO, FE, GR, GO, GE>(
       fga: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
     ) => Kind<H, R, O, E, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>>) =>

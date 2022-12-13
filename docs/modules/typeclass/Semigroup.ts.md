@@ -167,8 +167,8 @@ Added in v1.0.0
 
 ```ts
 export interface Semigroup<A> {
-  combine: (that: A) => (self: A) => A
-  combineMany: (collection: Iterable<A>) => (self: A) => A
+  readonly combine: (that: A) => (self: A) => A
+  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 ```
 
@@ -182,7 +182,7 @@ Added in v1.0.0
 
 ```ts
 export interface SemigroupTypeLambda extends TypeLambda {
-  type: Semigroup<this['Target']>
+  readonly type: Semigroup<this['Target']>
 }
 ```
 
@@ -229,7 +229,9 @@ Given a struct of associatives returns an associative for the struct.
 **Signature**
 
 ```ts
-export declare const struct: <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }) => Semigroup<{ [K in keyof A]: A[K] }>
+export declare const struct: <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }) => Semigroup<{
+  readonly [K in keyof A]: A[K]
+}>
 ```
 
 Added in v1.0.0
@@ -241,7 +243,9 @@ Given a tuple of associatives returns an associative for the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends any[]>(...semigroups: { [K in keyof A]: Semigroup<A[K]> }) => Semigroup<A>
+export declare const tuple: <A extends readonly any[]>(
+  ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
+) => Semigroup<Readonly<A>>
 ```
 
 Added in v1.0.0

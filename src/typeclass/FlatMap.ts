@@ -9,7 +9,7 @@ import { identity, pipe } from "@fp-ts/core/internal/Function"
  * @since 1.0.0
  */
 export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
-  flatMap: <A, R2, O2, E2, B>(
+  readonly flatMap: <A, R2, O2, E2, B>(
     f: (a: A) => Kind<F, R2, O2, E2, B>
   ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
 }
