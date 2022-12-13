@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.0.10
+
+### Patch Changes
+
+- [#36](https://github.com/fp-ts/core/pull/36) [`51bb90bd`](https://github.com/fp-ts/core/commit/51bb90bd4f32bd878575a159a2bc0c8c3b3ff57b) Thanks [@gcanti](https://github.com/gcanti)! - remove readonly
+
 ## 0.0.9
 
 ### Patch Changes
