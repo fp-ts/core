@@ -67,7 +67,7 @@ export declare const bind: <F extends TypeLambda>(
   f: (a: A) => Kind<F, R2, O2, E2, B>
 ) => <R1, O1, E1>(
   self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0

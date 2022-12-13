@@ -13,7 +13,7 @@ import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
  * @since 1.0.0
  */
 export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> {
-  traverseNonEmpty: <F extends TypeLambda>(
+  readonly traverseNonEmpty: <F extends TypeLambda>(
     F: SemiApplicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
@@ -21,7 +21,7 @@ export interface NonEmptyTraversable<T extends TypeLambda> extends TypeClass<T> 
     self: Kind<T, TR, TO, TE, A>
   ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 
-  sequenceNonEmpty: <F extends TypeLambda>(
+  readonly sequenceNonEmpty: <F extends TypeLambda>(
     F: SemiApplicative<F>
   ) => <TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>

@@ -1,6 +1,6 @@
 import { pipe } from "@fp-ts/core/internal/Function"
-import * as RA from "../data/Array"
 import * as O from "../data/Option"
+import * as RA from "../data/ReadonlyArray"
 import * as _ from "../limbo/TraversableWithIndex"
 import * as U from "../util"
 

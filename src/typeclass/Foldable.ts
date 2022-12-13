@@ -13,7 +13,7 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
  * @since 1.0.0
  */
 export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
-  reduce: <A, B>(
+  readonly reduce: <A, B>(
     b: B,
     f: (b: B, a: A) => B
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => B

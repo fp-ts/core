@@ -9,7 +9,7 @@ import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
  * @since 1.0.0
  */
 export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
-  contramap: <B, A>(
+  readonly contramap: <B, A>(
     f: (b: B) => A
   ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 }

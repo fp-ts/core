@@ -11,11 +11,11 @@ describe("Product", () => {
   describe("tuple", () => {
     it("Covariant (Option)", () => {
       const tuple = _.tuple(O.Product)
-      U.deepStrictEqual(tuple(), O.some([]))
-      U.deepStrictEqual(tuple(O.some("a")), O.some(["a"]))
+      U.deepStrictEqual(tuple(), O.some([] as const))
+      U.deepStrictEqual(tuple(O.some("a")), O.some(["a"] as const))
       U.deepStrictEqual(
         tuple(O.some("a"), O.some(1), O.some(true)),
-        O.some(["a", 1, true])
+        O.some(["a", 1, true] as const)
       )
       U.deepStrictEqual(tuple(O.some("a"), O.some(1), O.none), O.none)
     })

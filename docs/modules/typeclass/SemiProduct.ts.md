@@ -39,10 +39,10 @@ export declare const productMany: <F extends TypeLambda>(
   Covariant: Covariant<F>,
   product: <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [A, B]>
+  ) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, readonly [A, B]>
 ) => <R, O, E, A>(
   collection: Iterable<Kind<F, R, O, E, A>>
-) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...A[]]>
+) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A, ...A[]]>
 ```
 
 Added in v1.0.0
@@ -55,13 +55,13 @@ Added in v1.0.0
 
 ```ts
 export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
-  product: <R2, O2, E2, B>(
+  readonly product: <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+  ) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
 
-  productMany: <R, O, E, A>(
+  readonly productMany: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
-  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...Array<A>]>
+  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A, ...Array<A>]>
 }
 ```
 
@@ -81,7 +81,7 @@ export declare const andThenBind: <F extends TypeLambda>(
   that: Kind<F, R2, O2, E2, B>
 ) => <R1, O1, E1>(
   self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0
@@ -93,14 +93,14 @@ Added in v1.0.0
 ```ts
 export declare const nonEmptyStruct: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <R extends Record<string, Kind<F, any, any, any, any>>>(
+) => <R extends Readonly<Record<string, Kind<F, any, any, any, any>>>>(
   fields: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
 ) => Kind<
   F,
   [R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never,
   [R[keyof R]] extends [Kind<F, any, infer O, any, any>] ? O : never,
   [R[keyof R]] extends [Kind<F, any, any, infer E, any>] ? E : never,
-  { [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
+  { readonly [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
 >
 ```
 
@@ -113,14 +113,14 @@ Added in v1.0.0
 ```ts
 export declare const nonEmptyTuple: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <T extends [Kind<F, any, any, any, any>, ...Kind<F, any, any, any, any>[]]>(
+) => <T extends readonly [Kind<F, any, any, any, any>, ...Kind<F, any, any, any, any>[]]>(
   ...components: T
 ) => Kind<
   F,
   [T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never,
   [T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never,
   [T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never,
-  { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
+  Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
 >
 ```
 
@@ -140,7 +140,7 @@ export declare const productComposition: <F extends TypeLambda, G extends TypeLa
   that: Kind<F, FR2, FO2, FE2, Kind<G, GR2, GO2, GE2, B>>
 ) => <FR1, FO1, FE1, GR1, GO1, GE1, A>(
   self: Kind<F, FR1, FO1, FE1, Kind<G, GR1, GO1, GE1, A>>
-) => Kind<F, FR1 & FR2, FO2 | FO1, FE2 | FE1, Kind<G, GR1 & GR2, GO2 | GO1, GE2 | GE1, [A, B]>>
+) => Kind<F, FR1 & FR2, FO2 | FO1, FE2 | FE1, Kind<G, GR1 & GR2, GO2 | GO1, GE2 | GE1, readonly [A, B]>>
 ```
 
 Added in v1.0.0
@@ -154,7 +154,9 @@ export declare const productFlatten: <F extends TypeLambda>(
   F: SemiProduct<F>
 ) => <R2, O2, E2, B>(
   that: Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1, A extends any[]>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [...A, B]>
+) => <R1, O1, E1, A extends readonly any[]>(
+  self: Kind<F, R1, O1, E1, A>
+) => Kind<F, R1 & R2, O2 | O1, E2 | E1, readonly [...A, B]>
 ```
 
 Added in v1.0.0
@@ -171,7 +173,9 @@ export declare const productManyComposition: <F extends TypeLambda, G extends Ty
   G: SemiProduct<G>
 ) => <FR, FO, FE, GR, GO, GE, A>(
   collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
-) => (self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, [A, ...A[]]>>
+) => (
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, readonly [A, ...A[]]>>
 ```
 
 Added in v1.0.0

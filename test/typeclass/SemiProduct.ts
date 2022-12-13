@@ -3,16 +3,16 @@ import { pipe } from "@fp-ts/core/internal/Function"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as _ from "@fp-ts/core/typeclass/SemiProduct"
-import * as RA from "../data/Array"
 import * as number from "../data/number"
 import * as O from "../data/Option"
 import * as P from "../data/Predicate"
+import * as RA from "../data/ReadonlyArray"
 import * as string from "../data/string"
 import * as U from "../util"
 
 describe("SemiProduct", () => {
   it("productMany", () => {
-    const curry = (f: Function, n: number, acc: Array<unknown>) =>
+    const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
       (x: unknown) => {
         const combined = Array(acc.length + 1)
         for (let i = 0; i < acc.length; i++) {
@@ -23,7 +23,7 @@ describe("SemiProduct", () => {
       }
 
     const getCurriedTupleConstructor = (len: number): (a: any) => any =>
-      curry(<T extends Array<any>>(...t: T): T => t, len - 1, [])
+      curry(<T extends ReadonlyArray<any>>(...t: T): T => t, len - 1, [])
 
     const assertSameResult = <F extends TypeLambda>(
       SemiApplicative: semiApplicative.SemiApplicative<F>
@@ -34,7 +34,7 @@ describe("SemiProduct", () => {
           const productManyFromAp = <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
             (
               self: Kind<F, R, O, E, A>
-            ): Kind<F, R, O, E, [A, ...Array<A>]> => {
+            ): Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
               const args = [self, ...Array.from(collection)]
               const len = args.length
               const f = getCurriedTupleConstructor(len)
@@ -50,9 +50,9 @@ describe("SemiProduct", () => {
           U.deepStrictEqual(actual, expected)
         }
 
-    const product = <B>(that: Array<B>) =>
-      <A>(self: Array<A>): Array<[A, B]> => {
-        const out: Array<[A, B]> = []
+    const product = <B>(that: ReadonlyArray<B>) =>
+      <A>(self: ReadonlyArray<A>): ReadonlyArray<readonly [A, B]> => {
+        const out: Array<readonly [A, B]> = []
         for (const a of self) {
           for (const b of that) {
             out.push([a, b])
@@ -79,12 +79,12 @@ describe("SemiProduct", () => {
   })
 
   describe("productComposition", () => {
-    it("Array", () => {
+    it("ReadonlyArray", () => {
       const product = _.productComposition(RA.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe([], product([O.none])), [])
       U.deepStrictEqual(pipe([O.none], product([])), [])
       U.deepStrictEqual(pipe([O.none], product([O.none])), [O.none])
-      U.deepStrictEqual(pipe([O.some(1)], product([O.some(2)])), [O.some([1, 2])])
+      U.deepStrictEqual(pipe([O.some(1)], product([O.some(2)])), [O.some([1, 2] as const)])
     })
 
     it("Option", () => {
@@ -96,17 +96,17 @@ describe("SemiProduct", () => {
       U.deepStrictEqual(pipe(O.some(O.none), product(O.some(O.some(2)))), O.some(O.none))
       U.deepStrictEqual(
         pipe(O.some(O.some(1)), product(O.some(O.some(2)))),
-        O.some(O.some([1, 2]))
+        O.some(O.some([1, 2] as const))
       )
     })
   })
 
   describe("productManyComposition", () => {
-    it("Array", () => {
+    it("ReadonlyArray", () => {
       const productMany = _.productManyComposition(RA.SemiApplicative, O.SemiProduct)
-      U.deepStrictEqual(pipe([O.some(1), O.none], productMany([])), [O.some([1]), O.none])
+      U.deepStrictEqual(pipe([O.some(1), O.none], productMany([])), [O.some([1] as const), O.none])
       U.deepStrictEqual(pipe([O.some(1), O.none], productMany([[O.some(2), O.none]])), [
-        O.some([1, 2]),
+        O.some([1, 2] as const),
         O.none,
         O.none,
         O.none
@@ -114,10 +114,10 @@ describe("SemiProduct", () => {
       U.deepStrictEqual(
         pipe([O.some(1), O.some(2)], productMany([[O.some(3), O.some(4)], [O.some(5)]])),
         [
-          O.some([1, 3, 5]),
-          O.some([1, 4, 5]),
-          O.some([2, 3, 5]),
-          O.some([2, 4, 5])
+          O.some([1, 3, 5] as const),
+          O.some([1, 4, 5] as const),
+          O.some([2, 3, 5] as const),
+          O.some([2, 4, 5] as const)
         ]
       )
     })
@@ -126,14 +126,14 @@ describe("SemiProduct", () => {
       const productMany = _.productManyComposition(O.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe(O.none, productMany([])), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), productMany([])), O.some(O.none))
-      U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1])))
+      U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1] as const)))
       U.deepStrictEqual(pipe(O.none, productMany([O.none])), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), productMany([O.none])), O.none)
       U.deepStrictEqual(pipe(O.some(O.none), productMany([O.some(O.none)])), O.some(O.none))
       U.deepStrictEqual(pipe(O.some(O.none), productMany([O.some(O.some("a"))])), O.some(O.none))
       U.deepStrictEqual(
         pipe(O.some(O.some(1)), productMany([O.some(O.some(2))])),
-        O.some(O.some([1, 2]))
+        O.some(O.some([1, 2] as const))
       )
     })
   })
@@ -160,7 +160,7 @@ describe("SemiProduct", () => {
     it("Covariant (Option)", () => {
       const productFlatten = _.productFlatten(O.SemiProduct)
       U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none)), O.none)
-      U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3]))
+      U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3] as const))
     })
 
     it("Contravariant (Predicate)", () => {
@@ -175,10 +175,10 @@ describe("SemiProduct", () => {
   describe("nonEmptyTuple", () => {
     it("Covariant (Option)", () => {
       const nonEmptyTuple = _.nonEmptyTuple(O.SemiProduct)
-      U.deepStrictEqual(nonEmptyTuple(O.some("a")), O.some(["a"]))
+      U.deepStrictEqual(nonEmptyTuple(O.some("a")), O.some(["a"] as const))
       U.deepStrictEqual(
         nonEmptyTuple(O.some("a"), O.some(1), O.some(true)),
-        O.some(["a", 1, true])
+        O.some(["a", 1, true] as const)
       )
       U.deepStrictEqual(nonEmptyTuple(O.some("a"), O.some(1), O.none), O.none)
     })

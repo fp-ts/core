@@ -4,19 +4,19 @@ import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 
 export interface Left<out E> {
-  _tag: "Left"
-  left: E
+  readonly _tag: "Left"
+  readonly left: E
 }
 
 export interface Right<out A> {
-  _tag: "Right"
-  right: A
+  readonly _tag: "Right"
+  readonly right: A
 }
 
 export type Either<E, A> = Left<E> | Right<A>
 
 export interface EitherTypeLambda extends TypeLambda {
-  type: Either<this["Out1"], this["Target"]>
+  readonly type: Either<this["Out1"], this["Target"]>
 }
 
 export const left = <E>(e: E): Either<E, never> => ({ _tag: "Left", left: e })

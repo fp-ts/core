@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Order"
-import { sort } from "../data/Array"
 import * as boolean from "../data/boolean"
 import * as number from "../data/number"
+import { sort } from "../data/ReadonlyArray"
 import * as string from "../data/string"
 import * as U from "../util"
 

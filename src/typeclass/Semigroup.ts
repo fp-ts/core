@@ -32,8 +32,8 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Semigroup<A> {
-  combine: (that: A) => (self: A) => A
-  combineMany: (collection: Iterable<A>) => (self: A) => A
+  readonly combine: (that: A) => (self: A) => A
+  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 
 /**
@@ -41,7 +41,7 @@ export interface Semigroup<A> {
  * @since 1.0.0
  */
 export interface SemigroupTypeLambda extends TypeLambda {
-  type: Semigroup<this["Target"]>
+  readonly type: Semigroup<this["Target"]>
 }
 
 /**
@@ -112,7 +112,7 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
  */
 export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semigroup<
   {
-    [K in keyof A]: A[K]
+    readonly [K in keyof A]: A[K]
   }
 > =>
   fromCombine((that) =>
@@ -132,9 +132,9 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
  *
  * @since 1.0.0
  */
-export const tuple = <A extends Array<any>>(
+export const tuple = <A extends ReadonlyArray<any>>(
   ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
-): Semigroup<A> =>
+): Semigroup<Readonly<A>> =>
   fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
 
 /**

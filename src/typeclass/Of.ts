@@ -8,7 +8,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
  * @since 1.0.0
  */
 export interface Of<F extends TypeLambda> extends TypeClass<F> {
-  of: <A>(a: A) => Kind<F, unknown, never, never, A>
+  readonly of: <A>(a: A) => Kind<F, unknown, never, never, A>
 }
 
 /**

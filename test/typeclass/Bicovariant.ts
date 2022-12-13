@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/internal/Function"
 import * as _ from "@fp-ts/core/typeclass/Bicovariant"
-import * as RA from "../data/Array"
 import type { EitherTypeLambda } from "../data/Either"
 import * as E from "../data/Either"
+import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 export const Bicovariant: _.Bicovariant<EitherTypeLambda> = {

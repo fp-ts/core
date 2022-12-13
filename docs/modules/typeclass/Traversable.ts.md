@@ -30,13 +30,13 @@ Added in v1.0.0
 
 ```ts
 export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
-  traverse: <F extends TypeLambda>(
+  readonly traverse: <F extends TypeLambda>(
     F: Applicative<F>
   ) => <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 
-  sequence: <F extends TypeLambda>(
+  readonly sequence: <F extends TypeLambda>(
     F: Applicative<F>
   ) => <TR, TO, TE, R, O, E, A>(
     self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>

@@ -30,8 +30,8 @@ Added in v1.0.0
 
 ```ts
 export interface Bounded<A> extends Order<A> {
-  maxBound: A
-  minBound: A
+  readonly maxBound: A
+  readonly minBound: A
 }
 ```
 
@@ -45,7 +45,7 @@ Added in v1.0.0
 
 ```ts
 export interface BoundedTypeLambda extends TypeLambda {
-  type: Bounded<this['Target']>
+  readonly type: Bounded<this['Target']>
 }
 ```
 
