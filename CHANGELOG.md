@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.0.11
+
+### Patch Changes
+
+- [#39](https://github.com/fp-ts/core/pull/39) [`c27db5e7`](https://github.com/fp-ts/core/commit/c27db5e796071966a64af1a860b56e417f99423e) Thanks [@gcanti](https://github.com/gcanti)! - revert 0.0.10 changes
+
 ## 0.0.10
 
 ### Patch Changes
