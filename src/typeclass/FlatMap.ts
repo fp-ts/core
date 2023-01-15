@@ -1,8 +1,8 @@
 /**
  * @since 1.0.0
  */
+import { identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import { identity, pipe } from "@fp-ts/core/internal/Function"
 
 /**
  * @category type class

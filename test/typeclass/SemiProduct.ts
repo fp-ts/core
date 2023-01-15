@@ -1,5 +1,5 @@
+import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as _ from "@fp-ts/core/typeclass/SemiProduct"

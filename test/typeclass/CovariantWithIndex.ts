@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/Function"
 import * as RA from "../data/ReadonlyArray"
 import * as _ from "../limbo/CovariantWithIndex"
 import * as U from "../util"

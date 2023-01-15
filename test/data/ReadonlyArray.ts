@@ -1,6 +1,6 @@
 import { semiProduct } from "@fp-ts/core"
+import { identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
