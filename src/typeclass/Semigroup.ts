@@ -21,7 +21,6 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { identity } from "@fp-ts/core/internal/Function"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product from "@fp-ts/core/typeclass/Product"
@@ -153,8 +152,8 @@ export const intercalate = <A>(separator: A) =>
  * @since 1.0.0
  */
 export const first = <A = never>(): Semigroup<A> => ({
-  combine: () => identity,
-  combineMany: () => identity
+  combine: () => a => a,
+  combineMany: () => a => a
 })
 
 /**

@@ -12,6 +12,7 @@ import * as hkt from "@fp-ts/core/HKT"
 // typeclasses
 // -------------------------------------------------------------------------------------
 
+import * as _function from "@fp-ts/core/Function"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
@@ -38,6 +39,10 @@ import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
 export {
+  /**
+   * @since 1.0.0
+   */
+  _function as function,
   /**
    * @category typeclass
    * @since 1.0.0

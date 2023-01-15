@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/typeclass/Contravariant"
 import * as order from "@fp-ts/core/typeclass/Order"
 import * as P from "../data/Predicate"
