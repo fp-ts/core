@@ -110,7 +110,7 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
  *
  * @since 1.0.0
  */
-export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semigroup<
+export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
   {
     readonly [K in keyof A]: A[K]
   }
@@ -133,7 +133,7 @@ export const struct = <A>(semigroups: { [K in keyof A]: Semigroup<A[K]> }): Semi
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<any>>(
-  ...semigroups: { [K in keyof A]: Semigroup<A[K]> }
+  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
 ): Semigroup<Readonly<A>> =>
   fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
 
