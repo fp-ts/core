@@ -12,6 +12,7 @@ import * as hkt from "@fp-ts/core/HKT"
 // typeclasses
 // -------------------------------------------------------------------------------------
 
+import * as boolean from "@fp-ts/core/Boolean"
 import * as _function from "@fp-ts/core/Function"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
@@ -60,6 +61,10 @@ export {
    * @since 1.0.0
    */
   bicovariant,
+  /**
+   * @since 1.0.0
+   */
+  boolean,
   /**
    * @category typeclass
    * @since 1.0.0
