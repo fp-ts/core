@@ -1,25 +1,15 @@
 import * as Function from "@fp-ts/core/Function"
+import * as Number from "@fp-ts/core/Number"
 import { deepStrictEqual, double } from "@fp-ts/core/test/util"
-import type * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as assert from "assert"
 
 const f = (n: number): number => n + 1
 const g = double
 const size = (s: string): number => s.length
 
-// TODO: replace with "@fp-ts/core/Number"
-const sum = (that: number) => (self: number): number => self + that
-const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromCombine(sum)
-const MonoidSum: monoid.Monoid<number> = {
-  ...SemigroupSum,
-  combineAll: (collection) => SemigroupSum.combineMany(collection)(0),
-  empty: 0
-}
-
 describe.concurrent("Function", () => {
   it("getSemigroup", () => {
-    const S = Function.getSemigroup(SemigroupSum)<string>()
+    const S = Function.getSemigroup(Number.SemigroupSum)<string>()
     const f = (s: string) => s === "a" ? 0 : 1
     const g = Function.pipe(size, S.combine(f))
     deepStrictEqual(g(""), 1)
@@ -29,7 +19,7 @@ describe.concurrent("Function", () => {
   })
 
   it("getMonoid", () => {
-    const M = Function.getMonoid(MonoidSum)<string>()
+    const M = Function.getMonoid(Number.MonoidSum)<string>()
     const f = (s: string) => s === "a" ? 0 : 1
     const g = Function.pipe(size, M.combine(f))
     deepStrictEqual(g(""), 1)
