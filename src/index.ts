@@ -17,6 +17,8 @@ import * as _function from "@fp-ts/core/Function"
 import * as number from "@fp-ts/core/Number"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
+import * as readonlyArray from "@fp-ts/core/ReadonlyArray"
+import * as string from "@fp-ts/core/String"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
@@ -158,6 +160,10 @@ export {
    */
   product,
   /**
+   * @since 1.0.0
+   */
+  readonlyArray,
+  /**
    * @category typeclass
    * @since 1.0.0
    */
@@ -182,6 +188,10 @@ export {
    * @since 1.0.0
    */
   semiProduct,
+  /**
+   * @since 1.0.0
+   */
+  string,
   /**
    * @category typeclass
    * @since 1.0.0
