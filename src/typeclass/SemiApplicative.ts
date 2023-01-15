@@ -1,8 +1,8 @@
 /**
  * @since 1.0.0
  */
+import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"

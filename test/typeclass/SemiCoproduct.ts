@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/typeclass/SemiCoproduct"
 import * as E from "../data/Either"
 import * as U from "../util"

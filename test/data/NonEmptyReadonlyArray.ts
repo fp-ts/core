@@ -1,5 +1,5 @@
+import { identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { identity, pipe } from "@fp-ts/core/internal/Function"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"

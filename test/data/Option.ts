@@ -12,8 +12,8 @@
  *
  * @since 1.0.0
  */
+import { identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { identity, pipe } from "@fp-ts/core/internal/Function"
 import type * as extendable from "@fp-ts/core/test/limbo/Extendable"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"

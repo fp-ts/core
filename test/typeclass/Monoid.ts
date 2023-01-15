@@ -1,4 +1,4 @@
-import { pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/Function"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as number from "../data/number"
 import * as string from "../data/string"
