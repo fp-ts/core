@@ -14,6 +14,7 @@ import * as hkt from "@fp-ts/core/HKT"
 
 import * as _function from "@fp-ts/core/Function"
 import * as ordering from "@fp-ts/core/Ordering"
+import * as predicate from "@fp-ts/core/Predicate"
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
@@ -137,6 +138,10 @@ export {
    * @since 1.0.0
    */
   pointed,
+  /**
+   * @since 1.0.0
+   */
+  predicate,
   /**
    * @category typeclass
    * @since 1.0.0
