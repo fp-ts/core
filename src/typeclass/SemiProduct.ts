@@ -156,8 +156,8 @@ type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
  * @since 1.0.0
  */
 export const nonEmptyStruct = <F extends TypeLambda>(F: SemiProduct<F>) =>
-  <R extends Readonly<Record<string, Kind<F, any, any, any, any>>>>(
-    fields: EnforceNonEmptyRecord<R> & Record<string, Kind<F, any, any, any, any>>
+  <R extends { readonly [x: PropertyKey]: Kind<F, any, any, any, any> }>(
+    fields: EnforceNonEmptyRecord<R> & { readonly [x: PropertyKey]: Kind<F, any, any, any, any> }
   ): Kind<
     F,
     ([R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never),
