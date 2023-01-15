@@ -14,6 +14,7 @@ import * as hkt from "@fp-ts/core/HKT"
 
 import * as boolean from "@fp-ts/core/Boolean"
 import * as _function from "@fp-ts/core/Function"
+import * as identity from "@fp-ts/core/Identity"
 import * as number from "@fp-ts/core/Number"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
@@ -107,6 +108,10 @@ export {
    * @since 1.0.0
    */
   hkt,
+  /**
+   * @since 1.0.0
+   */
+  identity,
   /**
    * @category typeclass
    * @since 1.0.0
