@@ -3,7 +3,7 @@
  */
 import { constFalse, constTrue } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as iterable from "@fp-ts/core/internal/Iterable"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -132,7 +132,7 @@ export const productMany = <A>(collection: Iterable<Predicate<A>>) =>
       if (self(head) === false) {
         return false
       }
-      const predicates = iterable.fromIterable(collection)
+      const predicates = readonlyArray.fromIterable(collection)
       for (let i = 0; i < predicates.length; i++) {
         if (predicates[i](tail[i]) === false) {
           return false
@@ -159,7 +159,7 @@ export const productAll = <A>(
   collection: Iterable<Predicate<A>>
 ): Predicate<ReadonlyArray<A>> =>
   (as) => {
-    const predicates = iterable.fromIterable(collection)
+    const predicates = readonlyArray.fromIterable(collection)
     for (let i = 0; i < predicates.length; i++) {
       if (predicates[i](as[i]) === false) {
         return false

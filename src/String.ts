@@ -2,8 +2,8 @@
  * @since 1.0.0
  */
 
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Refinement } from "@fp-ts/core/Predicate"
-import { isNonEmpty } from "@fp-ts/core/ReadonlyArray"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -210,7 +210,7 @@ export const size = (s: string): number => s.length
 export const split = (separator: string | RegExp) =>
   (s: string): NonEmptyReadonlyArray<string> => {
     const out = s.split(separator)
-    return isNonEmpty(out) ? out : [s]
+    return readonlyArray.isNonEmpty(out) ? out : [s]
   }
 
 /**
