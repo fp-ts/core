@@ -32,7 +32,7 @@ export const tuple = <F extends TypeLambda>(F: Product<F>) =>
  * @since 1.0.0
  */
 export const struct = <F extends TypeLambda>(F: Product<F>) =>
-  <R extends { readonly [x: PropertyKey]: Kind<F, any, any, any, any> }>(fields: R): Kind<
+  <R extends { readonly [x: string]: Kind<F, any, any, any, any> }>(fields: R): Kind<
     F,
     ([R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([R[keyof R]] extends [Kind<F, any, infer O, any, any>] ? O : never),

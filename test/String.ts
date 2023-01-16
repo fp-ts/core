@@ -24,6 +24,11 @@ describe.concurrent("String", () => {
     expect(String.Monoid.combineAll([])).toEqual("")
   })
 
+  it("Equivalence", () => {
+    expect(String.Equivalence("a", "a")).toBe(true)
+    expect(String.Equivalence("a", "b")).toBe(false)
+  })
+
   it("Order", () => {
     const lessThan = Order.lessThan(String.Order)
     const lessThanOrEqualTo = Order.lessThanOrEqualTo(String.Order)
