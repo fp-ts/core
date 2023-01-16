@@ -16,30 +16,29 @@ Functional programming in TypeScript
 
 # Typed functional programming in TypeScript
 
-This project represents the next major iteration of [`fp-ts`](https://github.com/gcanti/fp-ts) and it's objective is a reconciliation with [`Effect`](https://github.com/Effect-TS) in order to unify the ecosystems.
+This project represents the next major iteration of [`fp-ts`](https://github.com/gcanti/fp-ts) and it's objective is a reconciliation with [`@effect`](https://github.com/Effect-TS) in order to unify the ecosystems.
 
-The [`Effect`](https://github.com/Effect-TS) project will reduce it's scope to simply being an effect system and will delegate to `fp-ts org` all the lower level abstractions such as typeclasses and common data structures.
+The [`@effect`](https://github.com/Effect-TS) project will reduce it's scope to simply being an effect system and will delegate to `fp-ts org` all the lower level abstractions such as typeclasses and common data structures.
 
 The objective of the `fp-ts org` in github and in npm (`@fp-ts`) is to simplify structure and management of the project, have smaller and better scoped packages.
 
 Our "current" idea (that is well open for changes) is for `fp-ts org` to have:
 
-- `@fp-ts/core` with the new `HKT` implementation and the most common typeclasses such as `Monad`
-- `@fp-ts/data` with `Option`, `Either`, `ReadonlyArray`, `List` and the most common data structures together with data related typeclasses (i.e. `Compactable`, etc)
-- `@fp-ts/optics` with an optic implementation that will provide also optics for structures in `@fp-ts/data`
-- `@fp-ts/schema` with a concrete codec such as `io-ts` again for all the structures in `@fp-ts/data`
+- The [`@fp-ts/core`](https://github.com/fp-ts/core) library features a new implementation of the Higher Kinded Type (HKT) pattern, including common typeclasses such as `Monad` and widely-used data types like `Option`, `Either`, and `ReadonlyArray`
+- [`@fp-ts/schema`](https://github.com/fp-ts/schema) offers schema validation with static type inference, including decoders for data structures in `@fp-ts/core` and `@effect/data`
+- [`@fp-ts/optic`](https://github.com/fp-ts/optic) provides optics for structures in both `@fp-ts/core` and `@effect/data`
 
-And for [`Effect`](https://github.com/Effect-TS) to have:
+For those using [`fp-ts`](https://github.com/gcanti/fp-ts) v2 and its ecosystem, roughly these are the equivalents:
 
-- `@effect/core` with the effect system
-- `@effect/query` with the query impl
-- `@effect/*` every other effect based impl
+- [`fp-ts`](https://github.com/gcanti/fp-ts) -> [`@fp-ts/core`](https://github.com/fp-ts/core) + [`@effect/*` packages](https://github.com/Effect-TS)
+- [`io-ts`](https://github.com/gcanti/io-ts) -> [`@fp-ts/schema`](https://github.com/fp-ts/schema)
+- [`monocle-ts`](https://github.com/gcanti/monocle-ts) -> [`@fp-ts/optic`](https://github.com/fp-ts/optic)
 
-Note that [`Effect`](https://github.com/Effect-TS) will not have base structures like `Option` / `Either` / `List` and typeclasses like `Monad` / `Functor` and [`fp-ts`](https://github.com/fp-ts) will not have effect execution modules like `Task` / `IO` as both projects are made to be the same ecosystem and each answer a specific set of needs in the best way possible.
+Note that `@fp-ts/core` will not contain any effect system (e.g. `Task`, `TaskEither`, `ReaderTaskEither`) since the handling of effects is entirely delegated to the packages contained in [`@effect/*`](https://github.com/Effect-TS)."
 
 # Installation
 
-To install the **pre-alpha** version:
+To install the **alpha** version:
 
 ```
 npm install @fp-ts/core
@@ -47,7 +46,7 @@ npm install @fp-ts/core
 
 # Documentation
 
-- [Overview](./Overview.md)
+- [Typeclass overview](./Overview.md)
 - [API Reference](https://fp-ts.github.io/core/)
 
 # License
