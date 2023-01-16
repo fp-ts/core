@@ -40,12 +40,22 @@ import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
 
+import type * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
+
 /**
  * @category type lambdas
  * @since 1.0.0
  */
 export interface ReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: ReadonlyArray<this["Target"]>
+}
+
+/**
+ * @category type lambdas
+ * @since 1.0.0
+ */
+export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
+  readonly type: NonEmptyReadonlyArray<this["Target"]>
 }
 
 /**
@@ -2254,3 +2264,21 @@ export const liftOrder = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
       return number.Order.compare(bLen)(aLen)
     }
   )
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const NonEmptyCovariant: covariant.Covariant<NonEmptyReadonlyArrayTypeLambda> = covariant
+  .make(mapNonEmpty)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const NonEmptyTraversable: nonEmptyTraversable.NonEmptyTraversable<
+  NonEmptyReadonlyArrayTypeLambda
+> = {
+  traverseNonEmpty,
+  sequenceNonEmpty: F => self => pipe(self, traverseNonEmpty(F)(identity))
+}

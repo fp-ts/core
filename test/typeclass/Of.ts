@@ -1,6 +1,6 @@
+import * as O from "@fp-ts/core/Option"
+import * as RA from "@fp-ts/core/ReadonlyArray"
 import * as _ from "@fp-ts/core/typeclass/Of"
-import * as O from "../data/Option"
-import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Of", () => {

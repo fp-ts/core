@@ -1,13 +1,13 @@
 import { pipe } from "@fp-ts/core/Function"
+import * as Number from "@fp-ts/core/Number"
+import * as String from "@fp-ts/core/String"
 import * as order from "@fp-ts/core/typeclass/Order"
 import * as _ from "@fp-ts/core/typeclass/Semigroup"
-import * as number from "../data/number"
-import * as string from "../data/string"
 import * as U from "../util"
 
 describe("Semigroup", () => {
   it("reverse", () => {
-    const A = _.reverse(string.Semigroup)
+    const A = _.reverse(String.Semigroup)
     U.deepStrictEqual(pipe("a", A.combine("b")), "ba")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "ba")
@@ -22,7 +22,7 @@ describe("Semigroup", () => {
   })
 
   it("intercalate", () => {
-    const A = pipe(string.Semigroup, _.intercalate("|"))
+    const A = pipe(String.Semigroup, _.intercalate("|"))
     U.deepStrictEqual(pipe("a", A.combine("b")), "a|b")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "a|b")
@@ -31,14 +31,14 @@ describe("Semigroup", () => {
 
   describe("min", () => {
     it("should return the minimum", () => {
-      const A = _.min(number.Order)
+      const A = _.min(Number.Order)
       U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
       U.deepStrictEqual(pipe(1, A.combineMany([3, 2])), 1)
     })
 
     it("should return the last minimum", () => {
       type Item = { a: number }
-      const A = _.min(pipe(number.Order, order.contramap((_: Item) => _.a)))
+      const A = _.min(pipe(Number.Order, order.contramap((_: Item) => _.a)))
       const item: Item = { a: 1 }
       U.strictEqual(pipe({ a: 2 }, A.combineMany([{ a: 1 }, item])), item)
       U.strictEqual(pipe(item, A.combineMany([])), item)
@@ -47,14 +47,14 @@ describe("Semigroup", () => {
 
   describe("max", () => {
     it("should return the maximum", () => {
-      const A = _.max(number.Order)
+      const A = _.max(Number.Order)
       U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
       U.deepStrictEqual(pipe(1, A.combineMany([3, 2])), 3)
     })
 
     it("should return the last minimum", () => {
       type Item = { a: number }
-      const A = _.max(pipe(number.Order, order.contramap((_: Item) => _.a)))
+      const A = _.max(pipe(Number.Order, order.contramap((_: Item) => _.a)))
       const item: Item = { a: 2 }
       U.strictEqual(pipe({ a: 1 }, A.combineMany([{ a: 2 }, item])), item)
       U.strictEqual(pipe(item, A.combineMany([])), item)
@@ -63,8 +63,8 @@ describe("Semigroup", () => {
 
   it("struct", () => {
     const A = _.struct({
-      name: string.Semigroup,
-      age: number.SemigroupSum
+      name: String.Semigroup,
+      age: Number.SemigroupSum
     })
     U.deepStrictEqual(pipe({ name: "a", age: 10 }, A.combine({ name: "b", age: 20 })), {
       name: "ab",
@@ -89,8 +89,8 @@ describe("Semigroup", () => {
 
   it("tuple", () => {
     const A = _.tuple(
-      string.Semigroup,
-      number.SemigroupSum
+      String.Semigroup,
+      Number.SemigroupSum
     )
     U.deepStrictEqual(pipe(["a", 10], A.combine(["b", 20])), ["ab", 30])
     U.deepStrictEqual(pipe(["a", 10], A.combineMany([])), ["a", 10])
@@ -114,7 +114,7 @@ describe("Semigroup", () => {
 
   it("imap", () => {
     const imap = _.imap
-    const To = imap((s: string) => [s], ([s]) => s)(string.Semigroup)
+    const To = imap((s: string) => [s], ([s]) => s)(String.Semigroup)
     U.deepStrictEqual(pipe(["a"], To.combine(["b"])), ["ab"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([])), ["a"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([["b"]])), ["ab"])
@@ -123,7 +123,7 @@ describe("Semigroup", () => {
     U.deepStrictEqual(
       pipe(
         ["a"],
-        _.Invariant.imap((s: string) => [s], ([s]) => s)(string.Semigroup).combineMany([["b"], [
+        _.Invariant.imap((s: string) => [s], ([s]) => s)(String.Semigroup).combineMany([["b"], [
           "c"
         ]])
       ),
@@ -135,9 +135,9 @@ describe("Semigroup", () => {
 
   it("product", () => {
     const A = pipe(
-      string.Semigroup,
-      _.SemiProduct.product(number.SemigroupSum),
-      _.SemiProduct.product(number.SemigroupMultiply),
+      String.Semigroup,
+      _.SemiProduct.product(Number.SemigroupSum),
+      _.SemiProduct.product(Number.SemigroupMultiply),
       _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
     )
     U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
@@ -145,8 +145,8 @@ describe("Semigroup", () => {
 
   it("productMany", () => {
     const A = pipe(
-      string.Semigroup,
-      _.SemiProduct.productMany([string.Semigroup, string.Semigroup])
+      String.Semigroup,
+      _.SemiProduct.productMany([String.Semigroup, String.Semigroup])
     )
     U.deepStrictEqual(pipe(["a", "b", "c"], A.combine(["d", "e", "f"])), ["ad", "be", "cf"])
   })

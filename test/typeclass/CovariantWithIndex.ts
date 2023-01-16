@@ -1,6 +1,6 @@
 import { pipe } from "@fp-ts/core/Function"
-import * as RA from "../data/ReadonlyArray"
-import * as _ from "../limbo/CovariantWithIndex"
+import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as _ from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as U from "../util"
 
 describe("CovariantWithIndex", () => {
