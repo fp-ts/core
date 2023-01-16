@@ -3,7 +3,7 @@ import * as RA from "../data/ReadonlyArray"
 import * as _ from "../limbo/CovariantWithIndex"
 import * as U from "../util"
 
-describe("FunctorWithIndex", () => {
+describe("CovariantWithIndex", () => {
   it("mapWithIndexComposition", () => {
     const mapWithIndex = _.mapWithIndexComposition(RA.CovariantWithIndex, RA.CovariantWithIndex)
     const f = (a: string, [i, j]: readonly [number, number]) => a + i + j
