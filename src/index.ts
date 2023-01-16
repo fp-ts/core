@@ -28,6 +28,7 @@ import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -94,6 +95,11 @@ export {
    * @since 1.0.0
    */
   covariant,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  equivalence,
   /**
    * @category typeclass
    * @since 1.0.0

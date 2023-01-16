@@ -70,6 +70,13 @@ describe.concurrent("Boolean", () => {
     deepStrictEqual(match(false), "false")
   })
 
+  it("Equivalence", () => {
+    expect(Boolean.Equivalence(true, true)).toBe(true)
+    expect(Boolean.Equivalence(false, false)).toBe(true)
+    expect(Boolean.Equivalence(true, false)).toBe(false)
+    expect(Boolean.Equivalence(false, true)).toBe(false)
+  })
+
   it("Order", () => {
     deepStrictEqual(pipe(false, Boolean.Order.compare(true)), -1)
     deepStrictEqual(pipe(true, Boolean.Order.compare(false)), 1)

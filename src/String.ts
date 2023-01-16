@@ -5,6 +5,7 @@
 import type { Refinement } from "@fp-ts/core/Predicate"
 import { isNonEmpty } from "@fp-ts/core/ReadonlyArray"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -55,6 +56,12 @@ export const Monoid: monoid.Monoid<string> = {
   combineAll: (collection) => Semigroup.combineMany(collection)(empty),
   empty
 }
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Equivalence: equivalence.Equivalence<string> = equivalence.string
 
 /**
  * @example
@@ -175,7 +182,7 @@ export const slice = (start: number, end: number) => (s: string): string => s.sl
  *
  * @since 1.0.0
  */
-export const isEmpty = (s: string): boolean => s.length === 0
+export const isEmpty = (s: string): s is "" => s.length === 0
 
 /**
  * Calculate the number of characters in a `string`.

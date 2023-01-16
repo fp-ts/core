@@ -3,6 +3,7 @@
  */
 import type { LazyArg } from "@fp-ts/core/Function"
 import type { Refinement } from "@fp-ts/core/Predicate"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as order from "@fp-ts/core/typeclass/Order"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -15,11 +16,13 @@ export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolea
   typeof u === "boolean"
 
 /**
+ * @category combinators
  * @since 1.0.0
  */
 export const and = (that: boolean) => (self: boolean): boolean => self && that
 
 /**
+ * @category combinators
  * @since 1.0.0
  */
 export const or = (that: boolean) => (self: boolean): boolean => self || that
@@ -134,6 +137,12 @@ export const MonoidAny: monoid.Monoid<boolean> = {
   combineAll: (all) => SemigroupAny.combineMany(all)(false),
   empty: false
 }
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Equivalence: equivalence.Equivalence<boolean> = equivalence.boolean
 
 /**
  * @category instances
