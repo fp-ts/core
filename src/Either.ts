@@ -45,7 +45,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @since 1.0.0
  */
 export type Left<E> = {
-  readonly _tag: "Left"
+  readonly _tag: "@fp-ts/core/Either/Left"
   readonly left: E
 }
 
@@ -54,7 +54,7 @@ export type Left<E> = {
  * @since 1.0.0
  */
 export type Right<A> = {
-  readonly _tag: "Right"
+  readonly _tag: "@fp-ts/core/Either/Right"
   readonly right: A
 }
 
