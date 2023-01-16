@@ -1,6 +1,6 @@
+import * as E from "@fp-ts/core/Either"
 import { pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/typeclass/SemiCoproduct"
-import * as E from "../data/Either"
 import * as U from "../util"
 
 describe("SemiCoproduct", () => {

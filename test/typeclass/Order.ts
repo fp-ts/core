@@ -1,9 +1,9 @@
+import * as boolean from "@fp-ts/core/Boolean"
 import { pipe } from "@fp-ts/core/Function"
+import * as number from "@fp-ts/core/Number"
+import { sort } from "@fp-ts/core/ReadonlyArray"
+import * as string from "@fp-ts/core/String"
 import * as _ from "@fp-ts/core/typeclass/Order"
-import * as boolean from "../data/boolean"
-import * as number from "../data/number"
-import { sort } from "../data/ReadonlyArray"
-import * as string from "../data/string"
 import * as U from "../util"
 
 describe("Order", () => {

@@ -1,7 +1,7 @@
 import { pipe } from "@fp-ts/core/Function"
+import * as O from "@fp-ts/core/Option"
+import * as RA from "@fp-ts/core/ReadonlyArray"
 import * as _ from "@fp-ts/core/typeclass/Covariant"
-import * as O from "../data/Option"
-import * as RA from "../data/ReadonlyArray"
 import * as U from "../util"
 
 describe("Covariant", () => {
@@ -21,19 +21,19 @@ describe("Covariant", () => {
 
   it("flap", () => {
     const flap = _.flap(O.Covariant)
-    U.deepStrictEqual(pipe(O.none, flap(1)), O.none)
+    U.deepStrictEqual(pipe(O.none(), flap(1)), O.none())
     U.deepStrictEqual(pipe(O.some(U.double), flap(1)), O.some(2))
   })
 
   it("as", () => {
     const as = _.as(O.Covariant)
-    U.deepStrictEqual(pipe(O.none, as(1)), O.none)
+    U.deepStrictEqual(pipe(O.none(), as(1)), O.none())
     U.deepStrictEqual(pipe(O.some(1), as(2)), O.some(2))
   })
 
   it("asUnit", () => {
     const asUnit = _.asUnit(O.Covariant)
-    U.deepStrictEqual(pipe(O.none, asUnit), O.none)
+    U.deepStrictEqual(pipe(O.none(), asUnit), O.none())
     U.deepStrictEqual(pipe(O.some(1), asUnit), O.some(undefined))
   })
 
@@ -47,7 +47,7 @@ describe("Covariant", () => {
 
   it("imap", () => {
     const f = _.imap<O.OptionTypeLambda>(O.map)((s: string) => [s], ([s]) => s)
-    U.deepStrictEqual(pipe(O.none, f), O.none)
+    U.deepStrictEqual(pipe(O.none(), f), O.none())
     U.deepStrictEqual(pipe(O.some("a"), f), O.some(["a"]))
   })
 })
