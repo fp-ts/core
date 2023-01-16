@@ -3,7 +3,7 @@
  */
 import { identity } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as iterable from "@fp-ts/core/internal/Iterable"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as coproduct_ from "@fp-ts/core/typeclass/Coproduct"
@@ -301,7 +301,7 @@ export const productFlatten: <B>(
  * @since 1.0.0
  */
 export const productAll = <A>(collection: Iterable<Identity<A>>): Identity<ReadonlyArray<A>> =>
-  iterable.fromIterable(collection)
+  readonlyArray.fromIterable(collection)
 
 /**
  * @category instances
