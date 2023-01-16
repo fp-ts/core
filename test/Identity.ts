@@ -1,6 +1,6 @@
 import { pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/Identity"
-// import * as O from "@fp-ts/core/Option"
+import * as O from "@fp-ts/core/Option"
 import * as String from "@fp-ts/core/String"
 import * as U from "./util"
 
@@ -125,12 +125,11 @@ describe.concurrent("Identity", () => {
     U.deepStrictEqual(pipe("a", _.reduceRight("", f)), "a")
   })
 
-  // TODO
-  // it("traverse", () => {
-  //   U.deepStrictEqual(pipe(1, _.traverse(O.Applicative)(O.some)), O.some(1))
-  //   U.deepStrictEqual(pipe(1, _.traverse(O.Applicative)(() => O.none)), O.none)
+  it("traverse", () => {
+    U.deepStrictEqual(pipe(1, _.traverse(O.Applicative)(O.some)), O.some(1))
+    U.deepStrictEqual(pipe(1, _.traverse(O.Applicative)(() => O.none())), O.none())
 
-  //   U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(O.some)), O.some(1))
-  //   U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(() => O.none)), O.none)
-  // })
+    U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(O.some)), O.some(1))
+    U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(() => O.none())), O.none())
+  })
 })
