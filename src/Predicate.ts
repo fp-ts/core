@@ -185,7 +185,7 @@ export const Product: product_.Product<PredicateTypeLambda> = {
  */
 export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
-  self: Predicate<B>
+  that: Predicate<B>
 ) => (
   self: Predicate<A>
 ) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct

@@ -282,7 +282,7 @@ export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = {
  */
 export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
-  fb: Identity<B>
+  that: Identity<B>
 ) => (
   self: Identity<A>
 ) => Identity<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct

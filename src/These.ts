@@ -1090,7 +1090,7 @@ export const productAll = <E, A>(
  */
 export const andThenBind: <N extends string, A extends object, E2, B>(
   name: Exclude<N, keyof A>,
-  fb: Validated<E2, B>
+  that: Validated<E2, B>
 ) => <E1>(
   self: Validated<E1, A>
 ) => Validated<E1 | E2, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
@@ -1102,11 +1102,11 @@ export const andThenBind: <N extends string, A extends object, E2, B>(
  */
 export const andThenBindEither = <N extends string, A extends object, E2, B>(
   name: Exclude<N, keyof A>,
-  fb: Either<E2, B>
+  that: Either<E2, B>
 ): <E1>(
   self: Validated<E1, A>
 ) => Validated<E1 | E2, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =>
-  andThenBind(name, fromEither(fb))
+  andThenBind(name, fromEither(that))
 
 /**
  * @category do notation
@@ -1114,11 +1114,11 @@ export const andThenBindEither = <N extends string, A extends object, E2, B>(
  */
 export const andThenBindThese = <N extends string, A extends object, E2, B>(
   name: Exclude<N, keyof A>,
-  fb: These<E2, B>
+  that: These<E2, B>
 ): <E1>(
   self: Validated<E1, A>
 ) => Validated<E1 | E2, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =>
-  andThenBind(name, fromThese(fb))
+  andThenBind(name, fromThese(that))
 
 /**
  * @since 1.0.0
