@@ -1,8 +1,8 @@
 import { pipe } from "@fp-ts/core/Function"
+import * as P from "@fp-ts/core/Predicate"
+import * as S from "@fp-ts/core/String"
 import * as _ from "@fp-ts/core/typeclass/Contravariant"
 import * as order from "@fp-ts/core/typeclass/Order"
-import * as P from "../data/Predicate"
-import * as string from "../data/string"
 import * as U from "../util"
 
 describe("Contravariant", () => {
@@ -10,7 +10,7 @@ describe("Contravariant", () => {
     const map = _.contramapComposition(P.Contravariant, P.Contravariant)
     const emptyString: P.Predicate<P.Predicate<string>> = p => p("") === true
     const a = pipe(emptyString, map(s => s.length))
-    U.deepStrictEqual(a(P.isString), false)
+    U.deepStrictEqual(a(S.isString), false)
     U.deepStrictEqual(a(n => n === 0), true)
   })
 
@@ -19,7 +19,7 @@ describe("Contravariant", () => {
       (s: string) => [s],
       ([s]) => s
     )(
-      string.Order
+      S.Order
     )
     U.deepStrictEqual(pipe(["a"], O.compare(["b"])), -1)
     U.deepStrictEqual(pipe(["a"], O.compare(["a"])), 0)

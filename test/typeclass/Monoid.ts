@@ -1,26 +1,26 @@
 import { pipe } from "@fp-ts/core/Function"
+import * as N from "@fp-ts/core/Number"
+import * as String from "@fp-ts/core/String"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as number from "../data/number"
-import * as string from "../data/string"
 import * as U from "../util"
 
 describe("Monoid", () => {
   it("min", () => {
-    const M = monoid.min(number.Bounded)
+    const M = monoid.min(N.Bounded)
     U.deepStrictEqual(M.combineAll([]), +Infinity)
     U.deepStrictEqual(M.combineAll([1]), 1)
     U.deepStrictEqual(M.combineAll([1, -1]), -1)
   })
 
   it("max", () => {
-    const M = monoid.max(number.Bounded)
+    const M = monoid.max(N.Bounded)
     U.deepStrictEqual(M.combineAll([]), -Infinity)
     U.deepStrictEqual(M.combineAll([1]), 1)
     U.deepStrictEqual(M.combineAll([1, -1]), 1)
   })
 
   it("reverse", () => {
-    const M = monoid.reverse(string.Monoid)
+    const M = monoid.reverse(String.Monoid)
     U.deepStrictEqual(pipe("a", M.combine("b")), "ba")
     U.deepStrictEqual(pipe("a", M.combine(M.empty)), "a")
     U.deepStrictEqual(pipe(M.empty, M.combine("a")), "a")
@@ -33,8 +33,8 @@ describe("Monoid", () => {
   describe("struct", () => {
     it("baseline", () => {
       const M = monoid.struct({
-        name: string.Monoid,
-        age: number.MonoidSum
+        name: String.Monoid,
+        age: N.MonoidSum
       })
       U.deepStrictEqual(M.empty, { name: "", age: 0 })
       U.deepStrictEqual(pipe({ name: "a", age: 10 }, M.combine({ name: "b", age: 20 })), {
@@ -52,8 +52,8 @@ describe("Monoid", () => {
 
   it("tuple", () => {
     const M = monoid.tuple(
-      string.Monoid,
-      number.MonoidSum
+      String.Monoid,
+      N.MonoidSum
     )
     U.deepStrictEqual(M.empty, ["", 0])
     U.deepStrictEqual(pipe(["a", 10], M.combine(["b", 20])), ["ab", 30])
