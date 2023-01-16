@@ -17,8 +17,8 @@ import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
-import * as iterable from "@fp-ts/core/internal/Iterable"
 import * as option from "@fp-ts/core/internal/Option"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -681,7 +681,7 @@ export const coproductEither = <B>(that: Option<B>) =>
  * @since 1.0.0
  */
 export const coproductAll = <A>(collection: Iterable<Option<A>>): Option<A> => {
-  const options = iterable.fromIterable(collection)
+  const options = readonlyArray.fromIterable(collection)
   return options.length > 0 ?
     SemiCoproduct.coproductMany(options.slice(1))(options[0]) :
     option.none
