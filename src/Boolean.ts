@@ -28,6 +28,12 @@ export const and = (that: boolean) => (self: boolean): boolean => self && that
 export const or = (that: boolean) => (self: boolean): boolean => self || that
 
 /**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const not = (self: boolean): boolean => !self
+
+/**
  * Defines the match over a boolean value.
  * Takes two thunks `onTrue`, `onFalse` and a `boolean` value.
  * If `value` is `false`, `onFalse()` is returned, otherwise `onTrue()`.
