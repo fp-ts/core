@@ -13,9 +13,11 @@ import * as hkt from "@fp-ts/core/HKT"
 // -------------------------------------------------------------------------------------
 
 import * as boolean from "@fp-ts/core/Boolean"
+import * as either from "@fp-ts/core/Either"
 import * as _function from "@fp-ts/core/Function"
 import * as identity from "@fp-ts/core/Identity"
 import * as number from "@fp-ts/core/Number"
+import * as option from "@fp-ts/core/Option"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as readonlyArray from "@fp-ts/core/ReadonlyArray"
@@ -25,10 +27,12 @@ import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
+import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
+import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -84,6 +88,11 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
+  compactable,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
   contravariant,
   /**
    * @category typeclass
@@ -96,10 +105,19 @@ export {
    */
   covariant,
   /**
+   * @since 1.0.0
+   */
+  either,
+  /**
    * @category typeclass
    * @since 1.0.0
    */
   equivalence,
+  /**
+   * @category typeclass
+   * @since 1.0.0
+   */
+  filterable,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -147,6 +165,10 @@ export {
    * @since 1.0.0
    */
   of,
+  /**
+   * @since 1.0.0
+   */
+  option,
   /**
    * @category typeclass
    * @since 1.0.0
