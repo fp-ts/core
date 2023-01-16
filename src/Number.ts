@@ -4,6 +4,7 @@
 import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Refinement } from "@fp-ts/core/Predicate"
 import type * as bounded from "@fp-ts/core/typeclass/Bounded"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import type * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -39,6 +40,12 @@ export const increment = (n: number): number => n + 1
  * @since 1.0.0
  */
 export const decrement = (n: number): number => n - 1
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Equivalence: equivalence.Equivalence<number> = equivalence.number
 
 /**
  * @category instances

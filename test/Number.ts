@@ -29,6 +29,11 @@ describe.concurrent("Number", () => {
     deepStrictEqual(Number.decrement(2), 1)
   })
 
+  it("Equivalence", () => {
+    expect(Number.Equivalence(1, 1)).toBe(true)
+    expect(Number.Equivalence(1, 2)).toBe(false)
+  })
+
   it("Order", () => {
     deepStrictEqual(pipe(1, Number.Order.compare(2)), -1)
     deepStrictEqual(pipe(2, Number.Order.compare(1)), 1)
