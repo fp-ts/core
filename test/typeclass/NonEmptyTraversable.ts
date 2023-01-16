@@ -1,13 +1,19 @@
+import { identity, pipe } from "@fp-ts/core/Function"
 import * as O from "@fp-ts/core/Option"
 import * as RA from "@fp-ts/core/ReadonlyArray"
-import * as _ from "@fp-ts/core/typeclass/NonEmptyTraversable"
+import * as _ from "@fp-ts/core/test/limbo/NonEmptyTraversable"
 import * as U from "../util"
+
+const NonEmptyTraversable: _.NonEmptyTraversable<RA.NonEmptyReadonlyArrayTypeLambda> = {
+  traverseNonEmpty: RA.traverseNonEmpty,
+  sequenceNonEmpty: F => self => pipe(self, RA.traverseNonEmpty(F)(identity))
+}
 
 describe("NonEmptyTraversable", () => {
   it("traverseNonEmptyComposition", () => {
     const traverseNonEmpty = _.traverseNonEmptyComposition(
-      RA.NonEmptyTraversable,
-      RA.NonEmptyTraversable
+      NonEmptyTraversable,
+      NonEmptyTraversable
     )(O.SemiApplicative)((n: number) => (n > 0 ? O.some(n) : O.none()))
     U.deepStrictEqual(traverseNonEmpty([[1]]), O.some([[1]] as const))
     U.deepStrictEqual(traverseNonEmpty([[1, -1]]), O.none())
@@ -17,8 +23,8 @@ describe("NonEmptyTraversable", () => {
 
   it("traverseNonEmptyComposition", () => {
     const sequence = _.sequenceNonEmptyComposition(
-      { ...RA.NonEmptyTraversable, ...RA.NonEmptyCovariant },
-      RA.NonEmptyTraversable
+      { ...NonEmptyTraversable, ...RA.NonEmptyCovariant },
+      NonEmptyTraversable
     )(O.SemiApplicative)
     U.deepStrictEqual(sequence([[O.some(1)]]), O.some([[1]] as const))
     U.deepStrictEqual(sequence([[O.some(1), O.none()]]), O.none())
@@ -34,7 +40,7 @@ describe("NonEmptyTraversable", () => {
 
   it("sequenceNonEmpty", () => {
     const sequenceNonEmpty = _.sequenceNonEmpty<RA.NonEmptyReadonlyArrayTypeLambda>(
-      RA.NonEmptyTraversable.traverseNonEmpty
+      NonEmptyTraversable.traverseNonEmpty
     )(O.SemiApplicative)
     U.deepStrictEqual(sequenceNonEmpty([O.none()]), O.none())
     U.deepStrictEqual(sequenceNonEmpty([O.some(1)]), O.some([1] as const))
