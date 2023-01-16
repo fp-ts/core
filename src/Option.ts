@@ -51,7 +51,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @since 1.0.0
  */
 export type None = {
-  readonly _tag: "None"
+  readonly _tag: "@fp-ts/core/Option/None"
 }
 
 /**
@@ -59,7 +59,7 @@ export type None = {
  * @since 1.0.0
  */
 export type Some<A> = {
-  readonly _tag: "Some"
+  readonly _tag: "@fp-ts/core/Option/Some"
   readonly value: A
 }
 
