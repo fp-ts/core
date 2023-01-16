@@ -31,6 +31,11 @@ describe.concurrent("Boolean", () => {
     deepStrictEqual(pipe(false, Boolean.or(false)), false)
   })
 
+  it("not", () => {
+    deepStrictEqual(pipe(true, Boolean.not), false)
+    deepStrictEqual(pipe(false, Boolean.not), true)
+  })
+
   describe.concurrent("MonoidAll", () => {
     it("baseline", () => {
       deepStrictEqual(Boolean.MonoidAll.combineMany([true, true])(true), true)
