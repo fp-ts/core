@@ -154,7 +154,6 @@ export const matchRight = <B, A, C = B>(
 /**
  * Prepend an element to the front of an `Iterable`, creating a new `NonEmptyArray`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const prepend = <B>(
@@ -162,14 +161,12 @@ export const prepend = <B>(
 ) => <A>(self: Iterable<A>): NonEmptyArray<A | B> => [head, ...self]
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const prependAll = <B>(that: Iterable<B>) =>
   <A>(self: Iterable<A>): Array<A | B> => fromIterable<A | B>(that).concat(fromIterable(self))
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export function prependAllNonEmpty<B>(
@@ -187,7 +184,6 @@ export function prependAllNonEmpty<B>(
 /**
  * Append an element to the end of an `Iterable`, creating a new `NonEmptyArray`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const append = <B>(
@@ -195,14 +191,12 @@ export const append = <B>(
 ) => <A>(self: Iterable<A>): NonEmptyArray<A | B> => [...self, last] as any
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const appendAll = <B>(that: Iterable<B>) =>
   <A>(self: Iterable<A>): Array<A | B> => fromIterable<A | B>(self).concat(fromIterable(that))
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export function appendAllNonEmpty<B>(
@@ -624,7 +618,6 @@ export function findLast<A>(predicate: Predicate<A>): (self: Iterable<A>) => Opt
  * Insert an element at the specified index, creating a new `NonEmptyArray`,
  * or return `None` if the index is out of bounds.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const insertAt = <B>(i: number, b: B) =>
@@ -642,7 +635,6 @@ export const insertAt = <B>(i: number, b: B) =>
  * Change the element at the specified index, creating a new `Array`,
  * or return a copy of the input if the index is out of bounds.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const replace = <B>(
@@ -651,7 +643,6 @@ export const replace = <B>(
 ): (<A>(self: Iterable<A>) => Array<A | B>) => modify(i, () => b)
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const replaceOption = <B>(
@@ -663,7 +654,6 @@ export const replaceOption = <B>(
  * Apply a function to the element at the specified index, creating a new `Array`,
  * or return a copy of the input if the index is out of bounds.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const modify = <A, B>(i: number, f: (a: A) => B) =>
@@ -673,8 +663,7 @@ export const modify = <A, B>(i: number, f: (a: A) => B) =>
 /**
  * Apply a function to the element at the specified index, creating a new `Array`,
  * or return `None` if the index is out of bounds.
-
-* @category mutations
+ *
  * @since 1.0.0
  */
 export const modifyOption = <A, B>(i: number, f: (a: A) => B) =>
@@ -693,7 +682,6 @@ export const modifyOption = <A, B>(i: number, f: (a: A) => B) =>
  * Delete the element at the specified index, creating a new `Array`,
  * or return a copy of the input if the index is out of bounds.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const remove = (i: number) =>
@@ -709,7 +697,6 @@ export const remove = (i: number) =>
 /**
  * Reverse an `Iterable`, creating a new `Array`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const reverse = <A>(
@@ -808,7 +795,6 @@ export const sortByNonEmpty = <B>(
  * If one input `Iterable` is short, excess elements of the
  * longer `Iterable` are discarded.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const zip = <B>(
@@ -819,7 +805,6 @@ export const zip = <B>(
  * Apply a function to pairs of elements at the same index in two `Iterable`s, collecting the results in a new `Array`. If one
  * input `Iterable` is short, excess elements of the longer `Iterable` are discarded.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const zipWith = <B, A, C>(that: Iterable<B>, f: (a: A, b: B) => C) =>
@@ -830,7 +815,6 @@ export const zipWith = <B, A, C>(that: Iterable<B>, f: (a: A, b: B) => C) =>
   }
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const zipNonEmpty = <B>(that: NonEmptyReadonlyArray<B>) =>
@@ -841,7 +825,6 @@ export const zipNonEmpty = <B>(that: NonEmptyReadonlyArray<B>) =>
     )
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const zipNonEmptyWith = <B, A, C>(that: NonEmptyReadonlyArray<B>, f: (a: A, b: B) => C) =>
@@ -857,7 +840,6 @@ export const zipNonEmptyWith = <B, A, C>(that: NonEmptyReadonlyArray<B>, f: (a: 
 /**
  * This function is the inverse of `zip`. Takes an `Iterable` of pairs and return two corresponding `Array`s.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const unzip = <A, B>(
@@ -868,7 +850,6 @@ export const unzip = <A, B>(
 }
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const unzipNonEmpty = <A, B>(
@@ -886,7 +867,6 @@ export const unzipNonEmpty = <A, B>(
 /**
  * Places an element in between members of an `Iterable`
  *
- * @category mutations
  * @since 1.0.0
  */
 export const intersperse = <B>(middle: B) =>
@@ -898,7 +878,6 @@ export const intersperse = <B>(middle: B) =>
 /**
  * Places an element in between members of a `NonEmptyReadonlyArray`
  *
- * @category mutations
  * @since 1.0.0
  */
 export const intersperseNonEmpty = <B>(middle: B) =>
@@ -917,7 +896,6 @@ export const intersperseNonEmpty = <B>(middle: B) =>
 /**
  * Apply a function to the head, creating a new `NonEmptyReadonlyArray`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const modifyNonEmptyHead = <A, B>(f: (a: A) => B) =>
@@ -928,7 +906,6 @@ export const modifyNonEmptyHead = <A, B>(f: (a: A) => B) =>
 /**
  * Change the head, creating a new `NonEmptyReadonlyArray`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const setNonEmptyHead = <B>(
@@ -938,7 +915,6 @@ export const setNonEmptyHead = <B>(
 /**
  * Apply a function to the last element, creating a new `NonEmptyReadonlyArray`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const modifyNonEmptyLast = <A, B>(f: (a: A) => B) =>
@@ -948,7 +924,6 @@ export const modifyNonEmptyLast = <A, B>(f: (a: A) => B) =>
 /**
  * Change the last element, creating a new `NonEmptyReadonlyArray`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const setNonEmptyLast = <B>(
@@ -958,7 +933,6 @@ export const setNonEmptyLast = <B>(
 /**
  * Rotate an `Iterable` by `n` steps.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const rotate = (n: number) =>
@@ -970,7 +944,6 @@ export const rotate = (n: number) =>
 /**
  * Rotate a `NonEmptyReadonlyArray` by `n` steps.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const rotateNonEmpty = (n: number) =>
@@ -1008,7 +981,6 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
 /**
  * Remove duplicates from am `Iterable`, keeping the first occurrence of an element.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const uniq = <A>(equivalence: Equivalence<A>) =>
@@ -1020,7 +992,6 @@ export const uniq = <A>(equivalence: Equivalence<A>) =>
 /**
  * Remove duplicates from a `NonEmptyReadonlyArray`, keeping the first occurrence of an element.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const uniqNonEmpty = <A>(equivalence: Equivalence<A>) =>
@@ -1191,7 +1162,6 @@ export const groupBy = <A>(f: (a: A) => string) =>
   }
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const union = <A>(equivalence: Equivalence<A>) =>
@@ -1207,7 +1177,6 @@ export const union = <A>(equivalence: Equivalence<A>) =>
     }
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const unionNonEmpty = <A>(equivalence: Equivalence<A>): {
@@ -1223,7 +1192,6 @@ export const unionNonEmpty = <A>(equivalence: Equivalence<A>): {
  * Creates an `Array` of unique values that are included in all given `Iterable`s.
  * The order and references of result values are determined by the first `Iterable`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const intersection = <A>(equivalence: Equivalence<A>) =>
@@ -1235,7 +1203,6 @@ export const intersection = <A>(equivalence: Equivalence<A>) =>
  * Creates a `Array` of values not included in the other given `Iterable`.
  * The order and references of result values are determined by the first `Iterable`.
  *
- * @category mutations
  * @since 1.0.0
  */
 export const difference = <A>(equivalence: Equivalence<A>) =>
