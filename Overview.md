@@ -26,10 +26,27 @@ Extends:
 | reverse      | `Bounded<A>` | `Bounded<A>` |
 | clamp        | `A`          | `A`          |
 
+### Equivalence
+
+`Equivalence` defines a binary relation that is reflexive, symmetric, and transitive.
+In other words, it defines a notion of equivalence between values of a certain type.
+These properties are also known in mathematics as an "equivalence relation".
+
+| Name         | Given                                           | To                                         |
+| ------------ | ----------------------------------------------- | ------------------------------------------ |
+| strict       | `A`                                             | `Equivalence<A>`                           |
+| tuple        | `[Equivalence<A>, Equivalence<B>, ...]`         | `Equivalence<[A, B, ...]>`                 |
+| array        | `Equivalence<A>`                                | `Equivalence<A[]>`                         |
+| struct       | `{ a: Equivalence<A>, b: Equivalence<B>, ... }` | `Equivalence<{ a: A, b: B, ... }>`         |
+| record       | `Equivalence<A>`                                | `Equivalence<{ readonly [x: string]: A }>` |
+| getSemigroup | `A`                                             | `Semigroup<Equivalence<A>>`                |
+| getMonoid    | `A`                                             | `Monoid<Equivalence<A>>`                   |
+| contramap    | `Equivalence<A>`, `B => A`                      | `Equivalence<B>`                           |
+
 ### Monoid
 
-A monoid is a semigroup with an identity. A monoid is a specialization of a
-semigroup, so its operation must be associative. Additionally,
+A `Monoid` is a `Semigroup` with an identity. A `Monoid` is a specialization of a
+`Semigroup`, so its operation must be associative. Additionally,
 `x |> combine(empty) == empty |> combine(x) == x`. For example, if we have `Monoid<String>`,
 with `combine` as string concatenation, then `empty = ""`.
 
@@ -85,7 +102,7 @@ By the totality law, `x <= y` and `y <= x` cannot be both `false`.
 
 ### Semigroup
 
-A semigroup is any set `A` with an associative operation (`combine`):
+A `Semigroup` is any set `A` with an associative operation (`combine`):
 
 `x |> combine(y) |> combine(z) == x |> combine(y |> combine(z))`
 

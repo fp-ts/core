@@ -1,6 +1,7 @@
 /**
- * This module provides an implementation of the `Equivalence` type class.
- * An `Equivalence` is a binary relation that is reflexive, symmetric and transitive.
+ * This module provides an implementation of the `Equivalence` type class, which defines a binary relation
+ * that is reflexive, symmetric, and transitive. In other words, it defines a notion of equivalence between values of a certain type.
+ * These properties are also known in mathematics as an "equivalence relation".
  *
  * @since 1.0.0
  */
