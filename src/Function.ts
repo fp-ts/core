@@ -27,9 +27,9 @@ export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) 
  * Unary functions form a semigroup as long as you can provide a semigroup for the codomain.
  *
  * @example
- * import { Predicate } from '@fp-ts/data/Predicate'
- * import { pipe, getSemigroup } from '@fp-ts/data/Function'
- * import * as B from '@fp-ts/data/Boolean'
+ * import { Predicate } from '@fp-ts/core/Predicate'
+ * import { pipe, getSemigroup } from '@fp-ts/core/Function'
+ * import * as B from '@fp-ts/core/Boolean'
  *
  * const f: Predicate<number> = (n) => n <= 2
  * const g: Predicate<number> = (n) => n >= 0
@@ -55,9 +55,9 @@ export const getSemigroup = <S>(Semigroup: semigroup.Semigroup<S>) =>
  * Unary functions form a monoid as long as you can provide a monoid for the codomain.
  *
  * @example
- * import { Predicate } from '@fp-ts/data/Predicate'
- * import { getMonoid, pipe } from '@fp-ts/data/Function'
- * import * as B from '@fp-ts/data/Boolean'
+ * import { Predicate } from '@fp-ts/core/Predicate'
+ * import { getMonoid, pipe } from '@fp-ts/core/Function'
+ * import * as B from '@fp-ts/core/Boolean'
  *
  * const f: Predicate<number> = (n) => n <= 2
  * const g: Predicate<number> = (n) => n >= 0
@@ -102,7 +102,7 @@ export interface LazyArg<A> {
 
 /**
  * @example
- * import { FunctionN } from '@fp-ts/data/Function'
+ * import { FunctionN } from '@fp-ts/core/Function'
  *
  * export const sum: FunctionN<[number, number], number> = (a, b) => a + b
  *
@@ -166,7 +166,7 @@ export const constVoid: LazyArg<void> = constUndefined
  * Flips the arguments of a curried function.
  *
  * @example
- * import { flip } from '@fp-ts/data/Function'
+ * import { flip } from '@fp-ts/core/Function'
  *
  * const f = (a: number) => (b: string) => a - b.length
  *
@@ -181,7 +181,7 @@ export const flip = <A, B, C>(f: (a: A) => (b: B) => C): ((b: B) => (a: A) => C)
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
  *
  * @example
- * import { flow } from '@fp-ts/data/Function'
+ * import { flow } from '@fp-ts/core/Function'
  *
  * const len = (s: string): number => s.length
  * const double = (n: number): number => n * 2
@@ -315,7 +315,7 @@ export const absurd = <A>(_: never): A => {
  * Creates a tupled version of this function: instead of `n` arguments, it accepts a single tuple argument.
  *
  * @example
- * import { tupled } from '@fp-ts/data/Function'
+ * import { tupled } from '@fp-ts/core/Function'
  *
  * const add = tupled((x: number, y: number): number => x + y)
  *
@@ -338,7 +338,7 @@ export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (
  * Pipes the value of an expression into a pipeline of functions.
  *
  * @example
- * import { pipe } from '@fp-ts/data/Function'
+ * import { pipe } from '@fp-ts/core/Function'
  *
  * const len = (s: string): number => s.length
  * const double = (n: number): number => n * 2

@@ -96,8 +96,8 @@ export const toNull: <A>(self: Option<A>) => A | null = getOrElse(null)
  * Extracts the value out of the structure, if it exists. Otherwise returns `undefined`.
  *
  * @exampleTodo
- * import { some, none, toUndefined } from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
+ * import { some, none, toUndefined } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.strictEqual(
  *   pipe(
@@ -233,8 +233,8 @@ export const catchAll = <B>(that: LazyArg<Option<B>>) =>
  * | some(a) | some(b) | some(a)           |
  *
  * @exampleTodo
- * import * as O from '@fp-ts/data/Option'
- * import { pipe } from '@fp-ts/data/Function'
+ * import * as O from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -320,9 +320,9 @@ export const traverse = <F extends TypeLambda>(
  * `None` is considered to be less than any `Some` value.
  *
  * @exampleTodo
- * import { none, some, liftOrder } from '@fp-ts/data/Option'
- * import * as N from '@fp-ts/data/number'
- * import { pipe } from '@fp-ts/data/Function'
+ * import { none, some, liftOrder } from '@fp-ts/core/Option'
+ * import * as N from '@fp-ts/core/number'
+ * import { pipe } from '@fp-ts/core/Function'
  *
  * const O = liftOrder(N.Order)
  * assert.strictEqual(pipe(none, O.compare(none)), 0)
@@ -351,9 +351,9 @@ export const liftOrder = <A>(O: order.Order<A>): order.Order<Option<A>> =>
  * | some(a) | some(b) | some(combine(b)(a)) |
  *
  * @exampleTodo
- * import { getMonoid, some, none } from '@fp-ts/data/Option'
- * import * as N from '@fp-ts/data/number'
- * import { pipe } from '@fp-ts/data/Function'
+ * import { getMonoid, some, none } from '@fp-ts/core/Option'
+ * import * as N from '@fp-ts/core/number'
+ * import { pipe } from '@fp-ts/core/Function'
  *
  * const M = getMonoid(N.SemigroupSum)
  * assert.deepStrictEqual(pipe(none, M.combine(none)), none)
