@@ -852,7 +852,6 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
 export const merge: <E, A>(self: Either<E, A>) => E | A = match(identity, identity)
 
 /**
- * @category mutations
  * @since 1.0.0
  */
 export const reverse = <E, A>(self: Either<E, A>): Either<A, E> =>
