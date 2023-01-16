@@ -10,7 +10,7 @@ import type * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
- * @category refinements
+ * @category guards
  * @since 1.0.0
  */
 export const isNumber: Refinement<unknown, number> = (u: unknown): u is number =>
