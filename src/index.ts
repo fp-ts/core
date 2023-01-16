@@ -32,16 +32,13 @@ import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as coproduct from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as covariantWithIndex from "@fp-ts/core/typeclass/CovariantWithIndex"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
-import * as filterableWithIndex from "@fp-ts/core/typeclass/FilterableWithIndex"
 import * as flatMap from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monad from "@fp-ts/core/typeclass/Monad"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import * as nonEmptyTraversable from "@fp-ts/core/typeclass/NonEmptyTraversable"
 import * as of from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import * as pointed from "@fp-ts/core/typeclass/Pointed"
@@ -109,11 +106,6 @@ export {
    */
   covariant,
   /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  covariantWithIndex,
-  /**
    * @since 1.0.0
    */
   either,
@@ -127,11 +119,6 @@ export {
    * @since 1.0.0
    */
   filterable,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  filterableWithIndex,
   /**
    * @category typeclass
    * @since 1.0.0
@@ -165,11 +152,6 @@ export {
    * @since 1.0.0
    */
   monoid,
-  /**
-   * @category typeclass
-   * @since 1.0.0
-   */
-  nonEmptyTraversable,
   /**
    * @since 1.0.0
    */

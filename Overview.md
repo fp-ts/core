@@ -311,21 +311,6 @@ Extends:
 - `FlatMap`
 - `Pointed`
 
-### NonEmptyTraversable
-
-`NonEmptyTraversable`, also known as `Traversable1`.
-
-`NonEmptyTraversable` is like a non-empty `Traversable`. Unlike the `traverse` and `sequence`
-methods of `Traversable` it provides `traverseNonEmpty` and `sequenceNonEmpty` methods which require a `SemiApplicative`
-instance instead of `Applicative`.
-
-| Name                        | Given                                        | To           |
-| --------------------------- | -------------------------------------------- | ------------ |
-| **traverseNonEmpty**        | `SemiApplicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
-| **sequenceNonEmpty**        | `SemiApplicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
-| traverseNonEmptyComposition | `SemiApplicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
-| sequenceNonEmptyComposition | `SemiApplicative<F>`, `T<G<F<A>>>`           | `F<T<G<A>>>` |
-
 ### Of
 
 | Name          | Given | To        |

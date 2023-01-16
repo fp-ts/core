@@ -8,9 +8,7 @@ export default defineConfig({
     exclude: [
       "./test/util.ts",
       "./test/data/*.ts",
-      "./test/limbo/*.ts",
-      "./test/typeclass/FoldableWithIndex.ts",
-      "./test/typeclass/TraversableWithIndex.ts"
+      "./test/limbo/*.ts"
     ],
     globals: true
   },

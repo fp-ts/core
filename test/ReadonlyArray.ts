@@ -16,7 +16,6 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.Invariant).exist
     expect(RA.imap).exist
 
-    expect(RA.CovariantWithIndex).exist
     expect(RA.Covariant).exist
     expect(RA.map).exist
     expect(RA.let).exist
@@ -76,7 +75,6 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.compact).exist
     expect(RA.separate).exist
 
-    expect(RA.FilterableWithIndex).exist
     expect(RA.Filterable).exist
     expect(RA.filterMap).exist
     expect(RA.filter).exist

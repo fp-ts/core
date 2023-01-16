@@ -2,8 +2,12 @@ import * as E from "@fp-ts/core/Either"
 import { pipe } from "@fp-ts/core/Function"
 import * as O from "@fp-ts/core/Option"
 import * as RA from "@fp-ts/core/ReadonlyArray"
-import * as _ from "@fp-ts/core/typeclass/FilterableWithIndex"
+import * as _ from "@fp-ts/core/test/limbo/FilterableWithIndex"
 import * as U from "../util"
+
+const FilterableWithIndex: _.FilterableWithIndex<RA.ReadonlyArrayTypeLambda, number> = {
+  filterMapWithIndex: RA.filterMapWithIndex
+}
 
 describe("FilterableWithIndex", () => {
   it("filterMapComposition", () => {
@@ -12,7 +16,7 @@ describe("FilterableWithIndex", () => {
     ) => (
       self: ReadonlyArray<ReadonlyArray<A>>
     ) => ReadonlyArray<ReadonlyArray<B>> = _
-      .filterMapWithIndexComposition(RA.Covariant, RA.FilterableWithIndex)
+      .filterMapWithIndexComposition(RA.Covariant, FilterableWithIndex)
     const f = filterMapWithIndex((s: string, i: number) =>
       s.length + i > 1 ? O.some(s.length) : O.none()
     )
@@ -25,14 +29,14 @@ describe("FilterableWithIndex", () => {
   it("filterMap", () => {
     const filterMap: <A, B>(
       f: (a: A) => O.Option<B>
-    ) => (self: ReadonlyArray<A>) => ReadonlyArray<B> = _.filterMap(RA.FilterableWithIndex)
+    ) => (self: ReadonlyArray<A>) => ReadonlyArray<B> = _.filterMap(FilterableWithIndex)
     const f = (n: number) => (n % 2 === 0 ? O.none() : O.some(n))
     U.deepStrictEqual(pipe([1, 2, 3], filterMap(f)), [1, 3])
     U.deepStrictEqual(pipe([], filterMap(f)), [])
   })
 
   it("filterWithIndex", () => {
-    const filterWithIndex = _.filterWithIndex(RA.FilterableWithIndex)
+    const filterWithIndex = _.filterWithIndex(FilterableWithIndex)
     const f = (n: number) => n % 2 === 0
     U.deepStrictEqual(pipe(["a", "b", "c"], filterWithIndex((_, i) => f(i))), [
       "a",
@@ -41,7 +45,7 @@ describe("FilterableWithIndex", () => {
   })
 
   it("partitionMapWithIndex", () => {
-    const partitionMapWithIndex = _.partitionMapWithIndex(RA.FilterableWithIndex)
+    const partitionMapWithIndex = _.partitionMapWithIndex(FilterableWithIndex)
     U.deepStrictEqual(
       pipe([], partitionMapWithIndex((a) => a)),
       [[], []]
@@ -56,7 +60,7 @@ describe("FilterableWithIndex", () => {
   })
 
   it("partitionWithIndex", () => {
-    const partitionWithIndex = _.partitionWithIndex(RA.FilterableWithIndex)
+    const partitionWithIndex = _.partitionWithIndex(FilterableWithIndex)
     U.deepStrictEqual(
       pipe([], partitionWithIndex((i, n) => i + n > 2)),
       [[], []]
