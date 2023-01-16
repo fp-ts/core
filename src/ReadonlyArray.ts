@@ -3,6 +3,7 @@
  */
 
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as iterable from "@fp-ts/core/internal/Iterable"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -180,4 +181,33 @@ export const Product: product_.Product<ReadonlyArrayTypeLambda> = {
 export const Applicative: applicative.Applicative<ReadonlyArrayTypeLambda> = {
   ...SemiApplicative,
   ...Product
+}
+
+/**
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromIterable: <A>(collection: Iterable<A>) => ReadonlyArray<A> = iterable.fromIterable
+
+/**
+ * @category mutations
+ * @since 1.0.0
+ */
+export const appendAll = <B>(that: Iterable<B>) =>
+  <A>(self: Iterable<A>): Array<A | B> => fromIterable<A | B>(self).concat(fromIterable(that))
+
+/**
+ * @category mutations
+ * @since 1.0.0
+ */
+export function appendAllNonEmpty<B>(
+  that: NonEmptyReadonlyArray<B>
+): <A>(self: Iterable<A>) => NonEmptyArray<A | B>
+export function appendAllNonEmpty<B>(
+  that: Iterable<B>
+): <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyArray<A | B>
+export function appendAllNonEmpty<B>(
+  that: Iterable<B>
+): <A>(self: NonEmptyReadonlyArray<A>) => Array<A | B> {
+  return appendAll(that)
 }

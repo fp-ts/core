@@ -9,7 +9,7 @@ import type * as order from "@fp-ts/core/typeclass/Order"
 import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
- * @category refinements
+ * @category guards
  * @since 1.0.0
  */
 export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean =>
