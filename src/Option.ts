@@ -451,7 +451,7 @@ export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
  */
 export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
-  fb: Option<B>
+  that: Option<B>
 ) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
   semiProduct.andThenBind(SemiProduct)
 

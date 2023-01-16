@@ -1736,7 +1736,7 @@ export const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = {
  */
 export const andThenBind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
-  fb: ReadonlyArray<B>
+  that: ReadonlyArray<B>
 ) => (
   self: ReadonlyArray<A>
 ) => ReadonlyArray<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
