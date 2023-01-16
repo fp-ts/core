@@ -86,7 +86,7 @@ export const Order: order.Order<string> = {
  * assert.deepStrictEqual(S.isString('a'), true)
  * assert.deepStrictEqual(S.isString(1), false)
  *
- * @category refinements
+ * @category guards
  * @since 1.0.0
  */
 export const isString: Refinement<unknown, string> = (u: unknown): u is string =>
