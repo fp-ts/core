@@ -13,7 +13,7 @@ import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"
 export interface Product<F extends TypeLambda> extends SemiProduct<F>, Of<F> {
   readonly productAll: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, ReadonlyArray<A>>
+  ) => Kind<F, R, O, E, Array<A>>
 }
 
 /**

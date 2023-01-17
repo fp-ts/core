@@ -1616,7 +1616,7 @@ export const partitionMapWithIndex = <A, B, C>(f: (a: A, i: number) => Either<B,
 export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
-  ): ((self: ReadonlyArray<A>) => Kind<F, R, O, E, ReadonlyArray<B>>) => traverseWithIndex(F)(f)
+  ): ((self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>>) => traverseWithIndex(F)(f)
 
 /**
  * @category traversing
@@ -1624,7 +1624,7 @@ export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
  */
 export const traverseWithIndex = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
-    (self: ReadonlyArray<A>): Kind<F, R, O, E, ReadonlyArray<B>> => F.productAll(self.map(f))
+    (self: ReadonlyArray<A>): Kind<F, R, O, E, Array<B>> => F.productAll(self.map(f))
 
 /**
  * @category traversing
@@ -1635,7 +1635,7 @@ export const traverseNonEmpty = <F extends TypeLambda>(
 ) =>
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
-  ): ((self: NonEmptyReadonlyArray<A>) => Kind<F, R, O, E, NonEmptyReadonlyArray<B>>) =>
+  ): ((self: NonEmptyReadonlyArray<A>) => Kind<F, R, O, E, NonEmptyArray<B>>) =>
     traverseNonEmptyWithIndex(F)(f)
 
 /**
@@ -1646,7 +1646,7 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
-    (self: NonEmptyReadonlyArray<A>): Kind<F, R, O, E, NonEmptyReadonlyArray<B>> => {
+    (self: NonEmptyReadonlyArray<A>): Kind<F, R, O, E, NonEmptyArray<B>> => {
       const fbs = pipe(self, mapNonEmptyWithIndex(f))
       return pipe(headNonEmpty(fbs), F.productMany(tailNonEmpty(fbs)))
     }
@@ -1655,18 +1655,23 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
  * @category traversing
  * @since 1.0.0
  */
+// @ts-expect-error
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <R, O, E, A>(
   self: ReadonlyArray<Kind<F, R, O, E, A>>
-) => Kind<F, R, O, E, ReadonlyArray<A>> = traversable.sequence<ReadonlyArrayTypeLambda>(traverse)
+) => Kind<F, R, O, E, Array<A>> =
+  // @ts-expect-error
+  traversable.sequence<ReadonlyArrayTypeLambda>(traverse)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = {
+  // @ts-expect-error
   traverse,
+  // @ts-expect-error
   sequence
 }
 
@@ -1691,7 +1696,7 @@ export const sequenceNonEmpty = <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
 ): (<R, O, E, A>(
   self: NonEmptyReadonlyArray<Kind<F, R, O, E, A>>
-) => Kind<F, R, O, E, NonEmptyReadonlyArray<A>>) => traverseNonEmpty(F)(identity)
+) => Kind<F, R, O, E, NonEmptyArray<A>>) => traverseNonEmpty(F)(identity)
 
 /**
  * @since 1.0.0
@@ -1717,7 +1722,7 @@ export const product = <B>(
  */
 export const productMany: <A>(
   collection: Iterable<ReadonlyArray<A>>
-) => (self: ReadonlyArray<A>) => ReadonlyArray<NonEmptyReadonlyArray<A>> = semiProduct
+) => (self: ReadonlyArray<A>) => ReadonlyArray<[A, ...Array<A>]> = semiProduct
   .productMany(
     Covariant,
     product
@@ -1728,7 +1733,7 @@ export const productMany: <A>(
  */
 export const productAll = <A>(
   collection: Iterable<ReadonlyArray<A>>
-): ReadonlyArray<ReadonlyArray<A>> => {
+): ReadonlyArray<Array<A>> => {
   const arrays = Array.from(collection)
   if (isEmpty(arrays)) {
     return empty()

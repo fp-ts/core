@@ -5,6 +5,7 @@ import * as _ from "@fp-ts/core/test/limbo/TraversableWithIndex"
 import * as U from "../util"
 
 const TraversableWithIndex: _.TraversableWithIndex<RA.ReadonlyArrayTypeLambda, number> = {
+  // @ts-expect-error
   traverseWithIndex: RA.traverseWithIndex
 }
 

@@ -138,7 +138,10 @@ describe("Semigroup", () => {
       String.Semigroup,
       _.SemiProduct.product(Number.SemigroupSum),
       _.SemiProduct.product(Number.SemigroupMultiply),
-      _.imap(([[a, b], c]) => [a, b, c] as const, ([a, b, c]) => [[a, b], c] as const)
+      _.imap(
+        ([[a, b], c]): [string, number, number] => [a, b, c],
+        ([a, b, c]): [[string, number], number] => [[a, b], c]
+      )
     )
     U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
   })
