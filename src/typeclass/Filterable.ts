@@ -61,7 +61,7 @@ export const partitionMap = <F extends TypeLambda>(F: Filterable<F>) =>
   <A, B, C>(f: (a: A) => Either<B, C>) =>
     <R, O, E>(
       self: Kind<F, R, O, E, A>
-    ): readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>] => {
+    ): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>] => {
       return [
         pipe(self, F.filterMap((a) => either.getLeft(f(a)))),
         pipe(self, F.filterMap((a) => either.getRight(f(a))))
