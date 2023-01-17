@@ -163,7 +163,7 @@ export const nonEmptyStruct = <F extends TypeLambda>(F: SemiProduct<F>) =>
     ([R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([R[keyof R]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([R[keyof R]] extends [Kind<F, any, any, infer E, any>] ? E : never),
-    { readonly [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
+    { [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => {
     const keys = Object.keys(fields)
     return pipe(
