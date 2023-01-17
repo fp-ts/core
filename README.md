@@ -27,7 +27,7 @@ Our "current" idea (that is well open for changes) is for `fp-ts org` to have:
 - `@fp-ts/core` with the new `HKT` implementation and the most common typeclasses such as `Monad`
 - `@fp-ts/data` with `Option`, `Either`, `ReadonlyArray`, `List` and the most common data structures together with data related typeclasses (i.e. `Compactable`, etc)
 - `@fp-ts/optics` with an optic implementation that will provide also optics for structures in `@fp-ts/data`
-- `@fp-ts/codec` with a concrete codec such as `io-ts` again for all the structures in `@fp-ts/data`
+- `@fp-ts/schema` with a concrete codec such as `io-ts` again for all the structures in `@fp-ts/data`
 
 And for [`Effect`](https://github.com/Effect-TS) to have:
 
