@@ -80,6 +80,7 @@ export const Invariant: invariant.Invariant<PredicateTypeLambda> = {
 /**
  * @since 1.0.0
  */
+// @ts-expect-error
 export const tupled: <A>(self: Predicate<A>) => Predicate<readonly [A]> = invariant.tupled(
   Invariant
 )

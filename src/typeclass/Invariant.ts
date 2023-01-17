@@ -46,5 +46,5 @@ export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
  */
 export const tupled = <F extends TypeLambda>(
   F: Invariant<F>
-): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>) =>
-  F.imap(a => [a] as const, ([a]) => a)
+): (<R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A]>) =>
+  F.imap(a => [a], ([a]) => a)

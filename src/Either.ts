@@ -153,7 +153,7 @@ export const Invariant: invariant.Invariant<EitherTypeLambda> = {
  * @category mapping
  * @since 1.0.0
  */
-export const tupled: <E, A>(self: Either<E, A>) => Either<E, readonly [A]> = invariant.tupled(
+export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tupled(
   Invariant
 )
 

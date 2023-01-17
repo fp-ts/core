@@ -205,7 +205,7 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
 /**
  * @since 1.0.0
  */
-export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tupled(Invariant)
+export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
 
 /**
  * @category do notation

@@ -643,7 +643,7 @@ export const Invariant: invariant.Invariant<TheseTypeLambda> = {
  * @category mapping
  * @since 1.0.0
  */
-export const tupled: <E, A>(self: These<E, A>) => These<E, readonly [A]> = invariant.tupled(
+export const tupled: <E, A>(self: These<E, A>) => These<E, [A]> = invariant.tupled(
   Invariant
 )
 
