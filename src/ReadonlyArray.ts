@@ -1542,10 +1542,10 @@ export const filterWithIndex: {
 export const partition: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (
     self: ReadonlyArray<C>
-  ) => readonly [ReadonlyArray<C>, ReadonlyArray<B>]
+  ) => [ReadonlyArray<C>, ReadonlyArray<B>]
   <B extends A, A = B>(
     predicate: Predicate<A>
-  ): (self: ReadonlyArray<B>) => readonly [ReadonlyArray<B>, ReadonlyArray<B>]
+  ): (self: ReadonlyArray<B>) => [ReadonlyArray<B>, ReadonlyArray<B>]
 } = filterable.partition(Filterable)
 
 /**

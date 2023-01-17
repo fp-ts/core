@@ -76,14 +76,14 @@ export const partition: <F extends TypeLambda>(
 ) => {
   <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
     self: Kind<F, R, O, E, C>
-  ) => readonly [Kind<F, R, O, E, C>, Kind<F, R, O, E, B>]
+  ) => [Kind<F, R, O, E, C>, Kind<F, R, O, E, B>]
   <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(
     self: Kind<F, R, O, E, B>
-  ) => readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
+  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
 } = <F extends TypeLambda>(Filterable: Filterable<F>) =>
   <B extends A, A = B>(
     predicate: (a: A) => boolean
   ): (<R, O, E>(
     self: Kind<F, R, O, E, B>
-  ) => readonly [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]) =>
+  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]) =>
     partitionMap(Filterable)((b) => (predicate(b) ? either.right(b) : either.left(b)))
