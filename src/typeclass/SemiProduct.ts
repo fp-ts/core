@@ -147,7 +147,7 @@ export const nonEmptyTuple = <F extends TypeLambda>(F: SemiProduct<F>) =>
     ([T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
-    Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
+    { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => F.productMany(components.slice(1))(components[0]) as any
 
 type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
