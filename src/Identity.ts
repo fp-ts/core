@@ -94,7 +94,7 @@ const let_: <N extends string, A extends object, B>(
   f: (a: A) => B
 ) => (
   self: Identity<A>
-) => Identity<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
+) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
   Covariant
 )
 
