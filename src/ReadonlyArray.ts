@@ -1271,7 +1271,7 @@ export const Do: ReadonlyArray<{}> = of_.Do(Of)
 export const imap: <A, B>(
   to: (a: A) => B,
   from: (b: B) => A
-) => (self: ReadonlyArray<A>) => ReadonlyArray<B> = covariant.imap<ReadonlyArrayTypeLambda>(map)
+) => (self: ReadonlyArray<A>) => Array<B> = covariant.imap<ReadonlyArrayTypeLambda>(map) as any
 
 /**
  * @category instances
@@ -1285,19 +1285,17 @@ export const Invariant: invariant.Invariant<ReadonlyArrayTypeLambda> = {
  * @category mapping
  * @since 1.0.0
  */
-// @ts-expect-error
 export const tupled: <A>(self: ReadonlyArray<A>) => Array<[A]> = invariant
-  .tupled(Invariant)
+  .tupled(Invariant) as any
 
 /**
  * @category do notation
  * @since 1.0.0
  */
-// @ts-expect-error
 export const bindTo: <N extends string>(
   name: N
 ) => <A>(self: ReadonlyArray<A>) => Array<{ [K in N]: A }> = invariant
-  .bindTo(Invariant)
+  .bindTo(Invariant) as any
 
 /**
  * @category instances
@@ -1310,7 +1308,7 @@ const let_: <N extends string, A extends object, B>(
   f: (a: A) => B
 ) => (
   self: ReadonlyArray<A>
-) => ReadonlyArray<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(Covariant)
+) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(Covariant) as any
 
 export {
   /**
@@ -1326,7 +1324,7 @@ export {
  */
 export const flap: <A>(a: A) => <B>(
   self: ReadonlyArray<(a: A) => B>
-) => ReadonlyArray<B> = covariant.flap(Covariant)
+) => Array<B> = covariant.flap(Covariant) as any
 
 /**
  * Maps the success value of this effect to the specified constant value.
@@ -1334,9 +1332,9 @@ export const flap: <A>(a: A) => <B>(
  * @category mapping
  * @since 1.0.0
  */
-export const as: <B>(b: B) => (self: ReadonlyArray<unknown>) => ReadonlyArray<B> = covariant.as(
+export const as: <B>(b: B) => (self: ReadonlyArray<unknown>) => Array<B> = covariant.as(
   Covariant
-)
+) as any
 
 /**
  * @category instances
@@ -1404,8 +1402,8 @@ export const FlatMap: flatMap_.FlatMap<ReadonlyArrayTypeLambda> = {
  * @category sequencing
  * @since 1.0.0
  */
-export const flatten: <A>(self: ReadonlyArray<ReadonlyArray<A>>) => ReadonlyArray<A> = flatMap_
-  .flatten(FlatMap)
+export const flatten: <A>(self: ReadonlyArray<ReadonlyArray<A>>) => Array<A> = flatMap_
+  .flatten(FlatMap) as any
 
 /**
  * @category sequencing
@@ -1441,7 +1439,7 @@ export const bind: <N extends string, A extends object, B>(
   f: (a: A) => ReadonlyArray<B>
 ) => (
   self: ReadonlyArray<A>
-) => ReadonlyArray<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(Chainable)
+) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(Chainable) as any
 
 /**
  * @category filtering
@@ -1515,9 +1513,9 @@ export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
 export const filter: {
   <C extends A, B extends A, A = C>(
     refinement: Refinement<A, B>
-  ): (self: ReadonlyArray<C>) => ReadonlyArray<B>
-  <B extends A, A = B>(predicate: Predicate<A>): (self: ReadonlyArray<B>) => ReadonlyArray<B>
-} = filterable.filter(Filterable)
+  ): (self: ReadonlyArray<C>) => Array<B>
+  <B extends A, A = B>(predicate: Predicate<A>): (self: ReadonlyArray<B>) => Array<B>
+} = filterable.filter(Filterable) as any
 
 /**
  * @category filtering
@@ -1542,11 +1540,11 @@ export const filterWithIndex: {
 export const partition: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (
     self: ReadonlyArray<C>
-  ) => [ReadonlyArray<C>, ReadonlyArray<B>]
+  ) => [Array<C>, Array<B>]
   <B extends A, A = B>(
     predicate: Predicate<A>
-  ): (self: ReadonlyArray<B>) => [ReadonlyArray<B>, ReadonlyArray<B>]
-} = filterable.partition(Filterable)
+  ): (self: ReadonlyArray<B>) => [Array<B>, Array<B>]
+} = filterable.partition(Filterable) as any
 
 /**
  * @category filtering
@@ -1637,14 +1635,13 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
  * @category traversing
  * @since 1.0.0
  */
-// @ts-expect-error
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <R, O, E, A>(
   self: ReadonlyArray<Kind<F, R, O, E, A>>
-) => Kind<F, R, O, E, Array<A>> =
-  // @ts-expect-error
-  traversable.sequence<ReadonlyArrayTypeLambda>(traverse)
+) => Kind<F, R, O, E, Array<A>> = traversable.sequence<ReadonlyArrayTypeLambda>(
+  traverse as any
+) as any
 
 /**
  * @category instances
@@ -1665,10 +1662,8 @@ export const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, B>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, ReadonlyArray<A>> = traversable
-  .traverseTap(
-    Traversable
-  )
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<A>> = traversable
+  .traverseTap(Traversable) as any
 
 /**
  * @category traversing
@@ -1704,18 +1699,15 @@ export const product = <B>(
  */
 export const productMany: <A>(
   collection: Iterable<ReadonlyArray<A>>
-) => (self: ReadonlyArray<A>) => ReadonlyArray<[A, ...Array<A>]> = semiProduct
-  .productMany(
-    Covariant,
-    product
-  )
+) => (self: ReadonlyArray<A>) => Array<[A, ...Array<A>]> = semiProduct
+  .productMany(Covariant, product) as any
 
 /**
  * @since 1.0.0
  */
 export const productAll = <A>(
   collection: Iterable<ReadonlyArray<A>>
-): ReadonlyArray<Array<A>> => {
+): Array<Array<A>> => {
   const arrays = Array.from(collection)
   if (isEmpty(arrays)) {
     return empty()
@@ -1744,8 +1736,8 @@ export const andThenBind: <N extends string, A extends object, B>(
   that: ReadonlyArray<B>
 ) => (
   self: ReadonlyArray<A>
-) => ReadonlyArray<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
+) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+  .andThenBind(SemiProduct) as any
 
 /**
  * @category instances
@@ -1761,9 +1753,9 @@ export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeL
  */
 export const ap: <A>(
   fa: ReadonlyArray<A>
-) => <B>(self: ReadonlyArray<(a: A) => B>) => ReadonlyArray<B> = semiApplicative.ap(
+) => <B>(self: ReadonlyArray<(a: A) => B>) => Array<B> = semiApplicative.ap(
   SemiApplicative
-)
+) as any
 
 /**
  * Lifts a binary function into `ReadonlyArray`.
@@ -1773,9 +1765,9 @@ export const ap: <A>(
  */
 export const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => (fa: ReadonlyArray<A>, fb: ReadonlyArray<B>) => ReadonlyArray<C> = semiApplicative.lift2(
+) => (fa: ReadonlyArray<A>, fb: ReadonlyArray<B>) => Array<C> = semiApplicative.lift2(
   SemiApplicative
-)
+) as any
 
 /**
  * Lifts a ternary function into `ReadonlyArray`.
@@ -1785,8 +1777,8 @@ export const lift2: <A, B, C>(
  */
 export const lift3: <A, B, C, D>(
   f: (a: A, b: B, c: C) => D
-) => (fa: ReadonlyArray<A>, fb: ReadonlyArray<B>, fc: ReadonlyArray<C>) => ReadonlyArray<D> =
-  semiApplicative.lift3(SemiApplicative)
+) => (fa: ReadonlyArray<A>, fb: ReadonlyArray<B>, fc: ReadonlyArray<C>) => Array<D> =
+  semiApplicative.lift3(SemiApplicative) as any
 
 /**
  * @category lifting
@@ -1874,11 +1866,8 @@ export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
  * @category folding
  * @since 1.0.0
  */
-export const foldMap: <M>(
-  M: Monoid<M>
-) => <A>(f: (a: A) => M) => (self: ReadonlyArray<A>) => M = foldable.foldMap(
-  Foldable
-)
+export const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: ReadonlyArray<A>) => M =
+  foldable.foldMap(Foldable)
 
 /**
  * @category folding
@@ -1909,40 +1898,28 @@ export const foldMapNonEmptyWithIndex = <S>(S: Semigroup<S>) =>
  * @category folding
  * @since 1.0.0
  */
-export const reduceKind: <F extends TypeLambda>(
-  F: monad.Monad<F>
-) => <B, A, R, O, E>(
+export const reduceKind: <F extends TypeLambda>(F: monad.Monad<F>) => <B, A, R, O, E>(
   b: B,
   f: (b: B, a: A) => Kind<F, R, O, E, B>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.reduceKind(
-  Foldable
-)
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.reduceKind(Foldable)
 
 /**
  * @category folding
  * @since 1.0.0
  */
-export const reduceRightKind: <F extends TypeLambda>(
-  F: monad.Monad<F>
-) => <B, A, R, O, E>(
+export const reduceRightKind: <F extends TypeLambda>(F: monad.Monad<F>) => <B, A, R, O, E>(
   b: B,
   f: (b: B, a: A) => Kind<F, R, O, E, B>
 ) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable
-  .reduceRightKind(
-    Foldable
-  )
+  .reduceRightKind(Foldable)
 
 /**
  * @category folding
  * @since 1.0.0
  */
-export const foldMapKind: <F extends TypeLambda>(
-  F: Coproduct<F>
-) => <A, R, O, E, B>(
+export const foldMapKind: <F extends TypeLambda>(F: Coproduct<F>) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, B>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.foldMapKind(
-  Foldable
-)
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.foldMapKind(Foldable)
 
 /**
  * @category filtering
@@ -1952,8 +1929,8 @@ export const traverseFilterMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, Option<B>>
-) => (ta: ReadonlyArray<A>) => Kind<F, R, O, E, ReadonlyArray<B>> = traversableFilterable
-  .traverseFilterMap({ ...Traversable, ...Compactable })
+) => (ta: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>> = traversableFilterable
+  .traverseFilterMap({ ...Traversable, ...Compactable }) as any
 
 /**
  * @category filtering
@@ -1963,9 +1940,8 @@ export const traversePartitionMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <A, R, O, E, B, C>(
   f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, [ReadonlyArray<B>, ReadonlyArray<C>]> =
-  traversableFilterable
-    .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, [Array<B>, Array<C>]> = traversableFilterable
+  .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable }) as any
 
 /**
  * @category instances
@@ -1974,7 +1950,9 @@ export const traversePartitionMap: <F extends TypeLambda>(
 export const TraversableFilterable: traversableFilterable.TraversableFilterable<
   ReadonlyArrayTypeLambda
 > = {
+  // @ts-expect-error
   traverseFilterMap,
+  // @ts-expect-error
   traversePartitionMap
 }
 
@@ -1987,8 +1965,8 @@ export const traverseFilter: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <B extends A, R, O, E, A = B>(
   predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (self: ReadonlyArray<B>) => Kind<F, R, O, E, ReadonlyArray<B>> = traversableFilterable
-  .traverseFilter(TraversableFilterable)
+) => (self: ReadonlyArray<B>) => Kind<F, R, O, E, Array<B>> = traversableFilterable
+  .traverseFilter(TraversableFilterable) as any
 
 /**
  * @since 1.0.0
@@ -1999,8 +1977,8 @@ export const traversePartition: <F extends TypeLambda>(
   predicate: (a: A) => Kind<F, R, O, E, boolean>
 ) => (
   self: ReadonlyArray<B>
-) => Kind<F, R, O, E, [ReadonlyArray<B>, ReadonlyArray<B>]> = traversableFilterable
-  .traversePartition(TraversableFilterable)
+) => Kind<F, R, O, E, [Array<B>, Array<B>]> = traversableFilterable
+  .traversePartition(TraversableFilterable) as any
 
 /**
  * @category lifting
@@ -2064,7 +2042,7 @@ export const liftEither = <A extends Array<unknown>, E, B>(
  */
 export function every<A, B extends A>(
   refinement: Refinement<A, B>
-): Refinement<ReadonlyArray<A>, Array<B>>
+): Refinement<ReadonlyArray<A>, ReadonlyArray<B>>
 export function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>>
 export function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>> {
   return (self) => self.every(predicate)
@@ -2077,14 +2055,7 @@ export function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>> {
  * @since 1.0.0
  */
 export const some = <A>(predicate: Predicate<A>) =>
-  (self: ReadonlyArray<A>): self is NonEmptyArray<A> => self.some(predicate)
-
-/**
- * Alias of [`some`](#some)
- *
- * @since 1.0.0
- */
-export const has = some
+  (self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A> => self.some(predicate)
 
 /**
  * Fold a data structure, accumulating values in some `Monoid`, combining adjacent elements
@@ -2118,10 +2089,9 @@ export const join: (sep: string) => (self: ReadonlyArray<string>) => string = in
 /**
  * @since 1.0.0
  */
-// @ts-expect-error
 export const productFlatten: <B>(that: ReadonlyArray<B>) => <A extends ReadonlyArray<unknown>>(
   self: ReadonlyArray<A>
-) => Array<[...A, B]> = semiProduct.productFlatten(SemiProduct)
+) => Array<[...A, B]> = semiProduct.productFlatten(SemiProduct) as any
 
 /**
  * @since 1.0.0
@@ -2167,8 +2137,7 @@ export const unfold = <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>): Array<
  * @since 1.0.0
  */
 export const getUnionSemigroup = <A>(equivalence: Equivalence<A>): Semigroup<ReadonlyArray<A>> =>
-  // @ts-expect-error
-  fromCombine(union(equivalence))
+  fromCombine(union(equivalence)) as any
 
 /**
  * @category instances
@@ -2190,9 +2159,7 @@ export const getUnionMonoid = <A>(equivalence: Equivalence<A>): Monoid<ReadonlyA
  */
 export const getIntersectionSemigroup = <A>(
   equivalence: Equivalence<A>
-): Semigroup<ReadonlyArray<A>> =>
-  // @ts-expect-error
-  fromCombine(intersection(equivalence))
+): Semigroup<ReadonlyArray<A>> => fromCombine(intersection(equivalence)) as any
 
 /**
  * Returns a `Semigroup` for `ReadonlyArray<A>`.
