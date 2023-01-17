@@ -1143,13 +1143,10 @@ export const Product: product_.Product<ValidatedTypeLambda> = {
 /**
  * @since 1.0.0
  */
-export const tuple: <T extends ReadonlyArray<Validated<any, any>>>(
-  ...tuple: T
-) => Validated<
+export const tuple: <T extends ReadonlyArray<Validated<any, any>>>(...tuple: T) => Validated<
   [T[number]] extends [Validated<infer E, any>] ? E : never,
-  Readonly<{ [I in keyof T]: [T[I]] extends [Validated<any, infer A>] ? A : never }>
-> = product_
-  .tuple(Product)
+  { [I in keyof T]: [T[I]] extends [Validated<any, infer A>] ? A : never }
+> = product_.tuple(Product)
 
 /**
  * @since 1.0.0

@@ -492,8 +492,9 @@ export const Product: product_.Product<OptionTypeLambda> = {
  */
 export const tuple: <T extends ReadonlyArray<Option<any>>>(
   ...tuple: T
-) => Option<Readonly<{ [I in keyof T]: [T[I]] extends [Option<infer A>] ? A : never }>> = product_
-  .tuple(Product)
+) => Option<{ [I in keyof T]: [T[I]] extends [Option<infer A>] ? A : never }> = product_.tuple(
+  Product
+)
 
 /**
  * @since 1.0.0

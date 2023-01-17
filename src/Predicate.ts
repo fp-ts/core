@@ -208,8 +208,7 @@ export const productFlatten: <B>(that: Predicate<B>) => <A extends ReadonlyArray
 export const tuple: <T extends ReadonlyArray<Predicate<any>>>(
   ...predicates: T
 ) => Predicate<Readonly<{ [I in keyof T]: [T[I]] extends [Predicate<infer A>] ? A : never }>> =
-  product_
-    .tuple(Product)
+  product_.tuple(Product)
 
 /**
  * @since 1.0.0
