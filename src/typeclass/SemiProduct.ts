@@ -109,7 +109,7 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
       R1 & R2,
       O1 | O2,
       E1 | E2,
-      { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }
+      { [K in keyof A | N]: K extends keyof A ? A[K] : B }
     > =>
       pipe(
         self,

@@ -410,7 +410,7 @@ export const andThenBind: <N extends string, A extends object, E2, B>(
   that: Either<E2, B>
 ) => <E1>(
   self: Either<E1, A>
-) => Either<E1 | E2, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+) => Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
   .andThenBind(SemiProduct)
 
 /**
