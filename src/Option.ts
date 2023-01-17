@@ -500,7 +500,7 @@ export const tuple: <T extends ReadonlyArray<Option<any>>>(
  */
 export const struct: <R extends Record<string, Option<any>>>(
   r: R
-) => Option<{ readonly [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }> = product_
+) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }> = product_
   .struct(Product)
 
 /**

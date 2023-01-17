@@ -110,9 +110,7 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
  * @since 1.0.0
  */
 export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
-  {
-    readonly [K in keyof A]: A[K]
-  }
+  { readonly [K in keyof A]: A[K] }
 > =>
   fromCombine((that) =>
     (self) => {
