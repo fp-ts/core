@@ -1259,7 +1259,7 @@ export const bind: <N extends string, A extends object, E2, B>(
   f: (a: A) => Validated<E2, B>
 ) => <E1>(
   self: Validated<E1, A>
-) => Validated<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
+) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
   .bind(Chainable)
 
 /**
@@ -1271,7 +1271,7 @@ export const bindEither = <N extends string, A extends object, E2, B>(
   f: (a: A) => Either<E2, B>
 ): <E1>(
   self: Validated<E1, A>
-) => Validated<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
   bind(name, (a) => fromEither(f(a)))
 
 /**
@@ -1283,7 +1283,7 @@ export const bindThese = <N extends string, A extends object, E2, B>(
   f: (a: A) => These<E2, B>
 ): <E1>(
   self: Validated<E1, A>
-) => Validated<E1 | E2, { readonly [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
   bind(name, (a) => fromThese(f(a)))
 
 /**
