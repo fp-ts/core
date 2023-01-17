@@ -1589,8 +1589,6 @@ describe.concurrent("ReadonlyArray", () => {
     const isPositive: Predicate<number> = (n) => n > 0
     deepStrictEqual(pipe([-1, -2, 3], RA.some(isPositive)), true)
     deepStrictEqual(pipe([-1, -2, -3], RA.some(isPositive)), false)
-    // has is an alias of some
-    deepStrictEqual(pipe([-1, -2, -3], RA.has(isPositive)), false)
   })
 
   it("size", () => {
