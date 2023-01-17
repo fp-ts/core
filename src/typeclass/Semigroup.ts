@@ -205,7 +205,9 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
  */
 export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
   ...Invariant,
+  // @ts-expect-error
   product: that => self => tuple(self, that),
+  // @ts-expect-error
   productMany: collection => self => tuple(self, ...collection)
 }
 
@@ -216,5 +218,6 @@ export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
 export const Product: product.Product<SemigroupTypeLambda> = {
   ...SemiProduct,
   of: constant,
-  productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple<Array<A>>(...collection)
+  // @ts-expect-error
+  productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple(...collection)
 }

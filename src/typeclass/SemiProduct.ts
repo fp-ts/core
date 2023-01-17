@@ -16,11 +16,11 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
     that: Kind<F, R2, O2, E2, B>
   ) => <R1, O1, E1, A>(
     self: Kind<F, R1, O1, E1, A>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, readonly [A, B]>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
 
   readonly productMany: <R, O, E, A>(
     collection: Iterable<Kind<F, R, O, E, A>>
-  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A, ...Array<A>]>
+  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...Array<A>]>
 }
 
 /**
@@ -42,7 +42,7 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
       FR1 & FR2,
       FO1 | FO2,
       FE1 | FE2,
-      Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, readonly [A, B]>
+      Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, [A, B]>
     > => pipe(self, F.product(that), F.map(([ga, gb]) => pipe(ga, G.product(gb))))
 
 /**
@@ -59,7 +59,7 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
   ) =>
     (
       self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, readonly [A, ...Array<A>]>> =>
+    ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, [A, ...Array<A>]>> =>
       pipe(
         self,
         F.productMany(collection),
@@ -82,13 +82,13 @@ export const productMany = <F extends TypeLambda>(
     (self: Kind<F, R, O, E, A>) => {
       let out = pipe(
         self,
-        Covariant.map((a): readonly [A, ...Array<A>] => [a])
+        Covariant.map((a): [A, ...Array<A>] => [a])
       )
       for (const fa of collection) {
         out = pipe(
           out,
           product(fa),
-          Covariant.map(([[head, ...tail], a]): readonly [A, ...Array<A>] => [head, ...tail, a])
+          Covariant.map(([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a])
         )
       }
       return out

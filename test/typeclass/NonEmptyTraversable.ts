@@ -5,7 +5,9 @@ import * as _ from "@fp-ts/core/test/limbo/NonEmptyTraversable"
 import * as U from "../util"
 
 const NonEmptyTraversable: _.NonEmptyTraversable<RA.NonEmptyReadonlyArrayTypeLambda> = {
+  // @ts-expect-error
   traverseNonEmpty: RA.traverseNonEmpty,
+  // @ts-expect-error
   sequenceNonEmpty: F => self => pipe(self, RA.traverseNonEmpty(F)(identity))
 }
 

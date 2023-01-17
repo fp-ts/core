@@ -381,17 +381,17 @@ describe.concurrent("Either", () => {
   })
 
   it("product", () => {
-    deepStrictEqual(pipe(_.right(1), _.product(_.right("a"))), _.right([1, "a"] as const))
+    deepStrictEqual(pipe(_.right(1), _.product(_.right("a"))), _.right([1, "a"]))
     deepStrictEqual(pipe(_.right(1), _.product(_.left("e2"))), _.left("e2"))
     deepStrictEqual(pipe(_.left("e1"), _.product(_.right("a"))), _.left("e1"))
     deepStrictEqual(pipe(_.left("e1"), _.product(_.left("2"))), _.left("e1"))
   })
 
   it("productMany", () => {
-    deepStrictEqual(pipe(_.right(1), _.productMany([])), _.right([1] as const))
+    deepStrictEqual(pipe(_.right(1), _.productMany([])), _.right([1]))
     deepStrictEqual(
       pipe(_.right(1), _.productMany([_.right(2), _.right(3)])),
-      _.right([1, 2, 3] as const)
+      _.right([1, 2, 3])
     )
     deepStrictEqual(
       pipe(_.right(1), _.productMany([_.left("e"), _.right(3)])),
@@ -445,9 +445,8 @@ describe.concurrent("Either", () => {
   })
 
   it("productFlatten", () => {
-    deepStrictEqual(
-      pipe(_.right(1), _.tupled, _.productFlatten(_.right("b"))),
-      _.right([1, "b"] as const)
+    expect(pipe(_.right(1), _.tupled, _.productFlatten(_.right("b")))).toEqual(
+      _.right([1, "b"])
     )
   })
 

@@ -216,20 +216,20 @@ describe.concurrent("Option", () => {
     deepStrictEqual(pipe(_.none(), _.product(_.some("a"))), _.none())
     deepStrictEqual(
       pipe(_.some(1), _.product(_.some("a"))),
-      _.some([1, "a"] as const)
+      _.some([1, "a"])
     )
   })
 
   it("productMany", () => {
     deepStrictEqual(pipe(_.none(), _.SemiProduct.productMany([])), _.none())
-    deepStrictEqual(pipe(_.some(1), _.SemiProduct.productMany([])), _.some([1] as const))
+    deepStrictEqual(pipe(_.some(1), _.SemiProduct.productMany([])), _.some([1]))
     deepStrictEqual(
       pipe(_.some(1), _.SemiProduct.productMany([_.none() as _.Option<number>])),
       _.none()
     )
     deepStrictEqual(
       pipe(_.some(1), _.SemiProduct.productMany([_.some(2)])),
-      _.some([1, 2] as const)
+      _.some([1, 2])
     )
   })
 
@@ -503,9 +503,8 @@ describe.concurrent("Option", () => {
   })
 
   it("productFlatten", () => {
-    deepStrictEqual(
-      pipe(_.some(1), _.tupled, _.productFlatten(_.some("b"))),
-      _.some([1, "b"] as const)
+    expect(pipe(_.some(1), _.tupled, _.productFlatten(_.some("b")))).toEqual(
+      _.some([1, "b"])
     )
   })
 

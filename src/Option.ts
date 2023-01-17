@@ -412,14 +412,14 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
 export const product = <B>(
   that: Option<B>
 ) =>
-  <A>(self: Option<A>): Option<readonly [A, B]> =>
+  <A>(self: Option<A>): Option<[A, B]> =>
     isSome(self) && isSome(that) ? some([self.value, that.value]) : option.none
 
 /**
  * @since 1.0.0
  */
 export const productMany = <A>(collection: Iterable<Option<A>>) =>
-  (self: Option<A>): Option<readonly [A, ...Array<A>]> => {
+  (self: Option<A>): Option<[A, ...Array<A>]> => {
     if (isNone(self)) {
       return option.none
     }
@@ -466,7 +466,7 @@ export const productFlatten: <B>(
 /**
  * @since 1.0.0
  */
-export const productAll = <A>(collection: Iterable<Option<A>>): Option<ReadonlyArray<A>> => {
+export const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
   const out: Array<A> = []
   for (const o of collection) {
     if (isNone(o)) {
