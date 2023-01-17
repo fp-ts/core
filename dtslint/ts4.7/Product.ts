@@ -15,10 +15,10 @@ declare const fc: RAW<{ c: boolean }, "c", boolean>
 
 export declare const Product: _.Product<RAWTypeLambda>
 
-// $ExpectType RAW<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", readonly [string, number, boolean]>
+// $ExpectType RAW<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", [string, number, boolean]>
 _.tuple(Product)(fa, fb, fc)
 
-// $ExpectType RAW<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", { readonly fa: string; readonly fb: number; readonly fc: boolean; }>
+// $ExpectType RAW<{ a: string; } & { b: number; } & { c: boolean; }, "a" | "b" | "c", { fa: string; fb: number; fc: boolean; }>
 _.struct(Product)({ fa, fb, fc })
 
 _.tuple(Product)() // should allow empty tuple
