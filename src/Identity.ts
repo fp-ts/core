@@ -293,9 +293,8 @@ export const andThenBind: <N extends string, A extends object, B>(
  */
 export const productFlatten: <B>(
   fb: Identity<B>
-) => <A extends ReadonlyArray<unknown>>(self: Identity<A>) => Identity<readonly [...A, B]> =
-  semiProduct
-    .productFlatten(SemiProduct)
+) => <A extends ReadonlyArray<unknown>>(self: Identity<A>) => Identity<[...A, B]> = semiProduct
+  .productFlatten(SemiProduct)
 
 /**
  * @since 1.0.0

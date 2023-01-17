@@ -420,7 +420,7 @@ export const productFlatten: <E2, B>(
   that: Either<E2, B>
 ) => <E1, A extends ReadonlyArray<any>>(
   self: Either<E1, A>
-) => Either<E1 | E2, readonly [...A, B]> = semiProduct
+) => Either<E1 | E2, [...A, B]> = semiProduct
   .productFlatten(SemiProduct)
 
 /**
