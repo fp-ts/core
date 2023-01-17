@@ -26,7 +26,7 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
     f: (a: A) => Kind<F, R, O, E, Either<B, C>>
   ) => <TR, TO, TE>(
     self: Kind<T, TR, TO, TE, A>
-  ) => Kind<F, R, O, E, readonly [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>
+  ) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>
 
   readonly traverseFilterMap: <F extends TypeLambda>(
     F: Applicative<F>
@@ -97,7 +97,7 @@ export const traversePartition = <T extends TypeLambda>(
     predicate: (a: A) => Kind<F, R, O, E, boolean>
   ) => <TR, TO, TE>(
     self: Kind<T, TR, TO, TE, B>
-  ) => Kind<F, R, O, E, readonly [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, B>]>) =>
+  ) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, B>]>) =>
     (predicate) =>
       T.traversePartitionMap(F)((b) =>
         pipe(

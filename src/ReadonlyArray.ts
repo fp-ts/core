@@ -1958,7 +1958,7 @@ export const traversePartitionMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <A, R, O, E, B, C>(
   f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, readonly [ReadonlyArray<B>, ReadonlyArray<C>]> =
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, [ReadonlyArray<B>, ReadonlyArray<C>]> =
   traversableFilterable
     .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable })
 
@@ -1994,7 +1994,7 @@ export const traversePartition: <F extends TypeLambda>(
   predicate: (a: A) => Kind<F, R, O, E, boolean>
 ) => (
   self: ReadonlyArray<B>
-) => Kind<F, R, O, E, readonly [ReadonlyArray<B>, ReadonlyArray<B>]> = traversableFilterable
+) => Kind<F, R, O, E, [ReadonlyArray<B>, ReadonlyArray<B>]> = traversableFilterable
   .traversePartition(TraversableFilterable)
 
 /**
