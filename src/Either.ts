@@ -467,7 +467,7 @@ export const struct: <R extends Record<string, Either<any, any>>>(
   r: R
 ) => Either<
   [R[keyof R]] extends [Either<infer E, any>] ? E : never,
-  { readonly [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }
+  { [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }
 > = product_
   .struct(Product)
 

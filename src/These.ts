@@ -1158,7 +1158,7 @@ export const struct: <R extends Record<string, Validated<any, any>>>(
   r: R
 ) => Validated<
   [R[keyof R]] extends [Validated<infer E, any>] ? E : never,
-  { readonly [K in keyof R]: [R[K]] extends [Validated<any, infer A>] ? A : never }
+  { [K in keyof R]: [R[K]] extends [Validated<any, infer A>] ? A : never }
 > = product_
   .struct(Product)
 
