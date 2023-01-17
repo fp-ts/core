@@ -317,9 +317,9 @@ export const Product: product_.Product<IdentityTypeLambda> = {
  */
 export const tuple: <T extends ReadonlyArray<Identity<any>>>(
   ...tuple: T
-) => Identity<Readonly<{ [I in keyof T]: [T[I]] extends [Identity<infer A>] ? A : never }>> =
-  product_
-    .tuple(Product)
+) => Identity<{ [I in keyof T]: [T[I]] extends [Identity<infer A>] ? A : never }> = product_.tuple(
+  Product
+)
 
 /**
  * @since 1.0.0

@@ -25,7 +25,7 @@ export const tuple = <F extends TypeLambda>(F: Product<F>) =>
     ([T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
-    Readonly<{ [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }>
+    { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => F.productAll(components) as any
 
 /**

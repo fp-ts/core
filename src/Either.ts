@@ -456,7 +456,7 @@ export const tuple: <T extends ReadonlyArray<Either<any, any>>>(
   ...tuple: T
 ) => Either<
   [T[number]] extends [Either<infer E, any>] ? E : never,
-  Readonly<{ [I in keyof T]: [T[I]] extends [Either<any, infer A>] ? A : never }>
+  { [I in keyof T]: [T[I]] extends [Either<any, infer A>] ? A : never }
 > = product_
   .tuple(Product)
 
