@@ -961,7 +961,7 @@ export const filterMap = <A, B, E2>(
 export const product = <E2, B>(that: Validated<E2, B>) =>
   <E1, A>(
     self: Validated<E1, A>
-  ): Validated<E1 | E2, readonly [A, B]> => {
+  ): Validated<E1 | E2, [A, B]> => {
     if (isLeft(self)) {
       return self
     }
@@ -991,7 +991,7 @@ export const productMany = <E, A>(
 ) =>
   (
     self: Validated<E, A>
-  ): Validated<E, readonly [A, ...Array<A>]> =>
+  ): Validated<E, [A, ...Array<A>]> =>
     pipe(self, product(productAll(collection)), map(([a, as]) => [a, ...as]))
 
 /**
@@ -1062,7 +1062,7 @@ export const getFirstLeftSemigroup: <A, E>(
  */
 export const productAll = <E, A>(
   collection: Iterable<Validated<E, A>>
-): Validated<E, ReadonlyArray<A>> => {
+): Validated<E, Array<A>> => {
   const rights: Array<A> = []
   const lefts: Array<E> = []
   let isFatal = false

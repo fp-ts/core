@@ -365,7 +365,7 @@ export const Monad: monad.Monad<EitherTypeLambda> = {
 export const product = <E2, B>(
   that: Either<E2, B>
 ) =>
-  <E1, A>(self: Either<E1, A>): Either<E1 | E2, readonly [A, B]> =>
+  <E1, A>(self: Either<E1, A>): Either<E1 | E2, [A, B]> =>
     isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
 
 /**
@@ -375,7 +375,7 @@ export const product = <E2, B>(
 export const productMany = <E, A>(
   collection: Iterable<Either<E, A>>
 ) =>
-  (self: Either<E, A>): Either<E, readonly [A, ...Array<A>]> => {
+  (self: Either<E, A>): Either<E, [A, ...Array<A>]> => {
     if (isLeft(self)) {
       return self
     }
@@ -428,7 +428,7 @@ export const productFlatten: <E2, B>(
  */
 export const productAll = <E, A>(
   collection: Iterable<Either<E, A>>
-): Either<E, ReadonlyArray<A>> => {
+): Either<E, Array<A>> => {
   const out: Array<A> = []
   for (const e of collection) {
     if (isLeft(e)) {

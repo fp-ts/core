@@ -35,7 +35,7 @@ describe("SemiProduct", () => {
           const productManyFromAp = <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>) =>
             (
               self: Kind<F, R, O, E, A>
-            ): Kind<F, R, O, E, readonly [A, ...ReadonlyArray<A>]> => {
+            ): Kind<F, R, O, E, [A, ...Array<A>]> => {
               const args = [self, ...Array.from(collection)]
               const len = args.length
               const f = getCurriedTupleConstructor(len)
@@ -52,8 +52,8 @@ describe("SemiProduct", () => {
         }
 
     const product = <B>(that: ReadonlyArray<B>) =>
-      <A>(self: ReadonlyArray<A>): ReadonlyArray<readonly [A, B]> => {
-        const out: Array<readonly [A, B]> = []
+      <A>(self: ReadonlyArray<A>): ReadonlyArray<[A, B]> => {
+        const out: Array<[A, B]> = []
         for (const a of self) {
           for (const b of that) {
             out.push([a, b])
@@ -85,7 +85,7 @@ describe("SemiProduct", () => {
       U.deepStrictEqual(pipe([], product([O.none()])), [])
       U.deepStrictEqual(pipe([O.none()], product([])), [])
       U.deepStrictEqual(pipe([O.none()], product([O.none()])), [O.none()])
-      U.deepStrictEqual(pipe([O.some(1)], product([O.some(2)])), [O.some([1, 2] as const)])
+      expect(pipe([O.some(1)], product([O.some(2)]))).toEqual([O.some([1, 2])])
     })
 
     it("Option", () => {
@@ -97,7 +97,7 @@ describe("SemiProduct", () => {
       U.deepStrictEqual(pipe(O.some(O.none()), product(O.some(O.some(2)))), O.some(O.none()))
       U.deepStrictEqual(
         pipe(O.some(O.some(1)), product(O.some(O.some(2)))),
-        O.some(O.some([1, 2] as const))
+        O.some(O.some([1, 2]))
       )
     })
   })
@@ -105,23 +105,24 @@ describe("SemiProduct", () => {
   describe("productManyComposition", () => {
     it("ReadonlyArray", () => {
       const productMany = _.productManyComposition(RA.SemiApplicative, O.SemiProduct)
-      U.deepStrictEqual(pipe([O.some(1), O.none()], productMany([])), [
-        O.some([1] as const),
+      expect(pipe([O.some(1), O.none()], productMany([]))).toEqual([
+        O.some([1]),
         O.none()
       ])
-      U.deepStrictEqual(pipe([O.some(1), O.none()], productMany([[O.some(2), O.none()]])), [
-        O.some([1, 2] as const),
+      expect(pipe([O.some(1), O.none()], productMany([[O.some(2), O.none()]]))).toEqual([
+        O.some([1, 2]),
         O.none(),
         O.none(),
         O.none()
       ])
-      U.deepStrictEqual(
-        pipe([O.some(1), O.some(2)], productMany([[O.some(3), O.some(4)], [O.some(5)]])),
+      expect(
+        pipe([O.some(1), O.some(2)], productMany([[O.some(3), O.some(4)], [O.some(5)]]))
+      ).toEqual(
         [
-          O.some([1, 3, 5] as const),
-          O.some([1, 4, 5] as const),
-          O.some([2, 3, 5] as const),
-          O.some([2, 4, 5] as const)
+          O.some([1, 3, 5]),
+          O.some([1, 4, 5]),
+          O.some([2, 3, 5]),
+          O.some([2, 4, 5])
         ]
       )
     })
@@ -130,7 +131,7 @@ describe("SemiProduct", () => {
       const productMany = _.productManyComposition(O.SemiApplicative, O.SemiProduct)
       U.deepStrictEqual(pipe(O.none(), productMany([])), O.none())
       U.deepStrictEqual(pipe(O.some(O.none()), productMany([])), O.some(O.none()))
-      U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1] as const)))
+      U.deepStrictEqual(pipe(O.some(O.some(1)), productMany([])), O.some(O.some([1])))
       U.deepStrictEqual(pipe(O.none(), productMany([O.none()])), O.none())
       U.deepStrictEqual(pipe(O.some(O.none()), productMany([O.none()])), O.none())
       U.deepStrictEqual(pipe(O.some(O.none()), productMany([O.some(O.none())])), O.some(O.none()))
@@ -140,7 +141,7 @@ describe("SemiProduct", () => {
       )
       U.deepStrictEqual(
         pipe(O.some(O.some(1)), productMany([O.some(O.some(2))])),
-        O.some(O.some([1, 2] as const))
+        O.some(O.some([1, 2]))
       )
     })
   })
@@ -167,7 +168,7 @@ describe("SemiProduct", () => {
     it("Covariant (Option)", () => {
       const productFlatten = _.productFlatten(O.SemiProduct)
       U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none())), O.none())
-      U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.some(3))), O.some([1, 2, 3] as const))
+      expect(pipe(O.some([1, 2]), productFlatten(O.some(3)))).toEqual(O.some([1, 2, 3]))
     })
 
     it("Contravariant (Predicate)", () => {
@@ -182,10 +183,11 @@ describe("SemiProduct", () => {
   describe("nonEmptyTuple", () => {
     it("Covariant (Option)", () => {
       const nonEmptyTuple = _.nonEmptyTuple(O.SemiProduct)
-      U.deepStrictEqual(nonEmptyTuple(O.some("a")), O.some(["a"] as const))
-      U.deepStrictEqual(
-        nonEmptyTuple(O.some("a"), O.some(1), O.some(true)),
-        O.some(["a", 1, true] as const)
+      expect(nonEmptyTuple(O.some("a"))).toEqual(O.some(["a"]))
+      expect(
+        nonEmptyTuple(O.some("a"), O.some(1), O.some(true))
+      ).toEqual(
+        O.some(["a", 1, true])
       )
       U.deepStrictEqual(nonEmptyTuple(O.some("a"), O.some(1), O.none()), O.none())
     })

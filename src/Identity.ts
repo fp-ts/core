@@ -256,13 +256,13 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
  */
 export const product = <B>(
   that: Identity<B>
-) => <A>(self: Identity<A>): Identity<readonly [A, B]> => [self, that]
+) => <A>(self: Identity<A>): Identity<[A, B]> => [self, that]
 
 /**
  * @since 1.0.0
  */
 export const productMany = <A>(collection: Iterable<Identity<A>>) =>
-  (self: Identity<A>): Identity<readonly [A, ...Array<A>]> => [self, ...collection]
+  (self: Identity<A>): Identity<[A, ...Array<A>]> => [self, ...collection]
 
 /**
  * @category instances
@@ -300,7 +300,7 @@ export const productFlatten: <B>(
 /**
  * @since 1.0.0
  */
-export const productAll = <A>(collection: Iterable<Identity<A>>): Identity<ReadonlyArray<A>> =>
+export const productAll = <A>(collection: Iterable<Identity<A>>): Identity<Array<A>> =>
   readonlyArray.fromIterable(collection)
 
 /**

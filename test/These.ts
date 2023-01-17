@@ -274,15 +274,15 @@ describe("These", () => {
     const b = ["b"] as const
     const ab = ["a", "b"] as const
 
-    U.deepStrictEqual(pipe(_.right(1), _.product(_.right(2))), _.right([1, 2] as const))
+    expect(pipe(_.right(1), _.product(_.right(2)))).toEqual(_.right([1, 2]))
     U.deepStrictEqual(pipe(_.right(1), _.product(_.left(b))), _.left(b))
-    U.deepStrictEqual(pipe(_.right(1), _.product(_.both(b, 2))), _.both(b, [1, 2] as const))
+    expect(pipe(_.right(1), _.product(_.both(b, 2)))).toEqual(_.both(b, [1, 2]))
 
     U.deepStrictEqual(pipe(_.left(a), _.product(_.right(2))), _.left(a))
     U.deepStrictEqual(pipe(_.left(a), _.product(_.left(b))), _.left(a))
     U.deepStrictEqual(pipe(_.left(a), _.product(_.both(b, 2))), _.left(a))
 
-    U.deepStrictEqual(pipe(_.both(a, 1), _.product(_.right(2))), _.both(a, [1, 2] as const))
+    expect(pipe(_.both(a, 1), _.product(_.right(2)))).toEqual(_.both(a, [1, 2]))
     expect(pipe(_.both(a, 1), _.product(_.left(b)))).toEqual(_.left(ab))
     expect(pipe(_.both(a, 1), _.product(_.both(b, 2)))).toEqual(_.both(ab, [1, 2]))
   })
@@ -292,14 +292,15 @@ describe("These", () => {
     const b = ["b"] as const
     const ab = ["a", "b"] as const
 
-    U.deepStrictEqual(pipe(_.right(1), _.productMany([_.right(2)])), _.right([1, 2] as const))
+    expect(pipe(_.right(1), _.productMany([_.right(2)]))).toEqual(_.right([1, 2]))
     U.deepStrictEqual(
       pipe(_.right(1), _.productMany<string, number>([_.left(b)])),
       _.left(b)
     )
-    U.deepStrictEqual(
-      pipe(_.right(1), _.productMany<string, number>([_.both(b, 2)])),
-      _.both(b, [1, 2] as const)
+    expect(
+      pipe(_.right(1), _.productMany<string, number>([_.both(b, 2)]))
+    ).toEqual(
+      _.both(b, [1, 2])
     )
 
     U.deepStrictEqual(pipe(_.left(a), _.productMany([_.right(2)])), _.left(a))
@@ -309,7 +310,7 @@ describe("These", () => {
       _.left(a)
     )
 
-    U.deepStrictEqual(pipe(_.both(a, 1), _.productMany([_.right(2)])), _.both(a, [1, 2] as const))
+    expect(pipe(_.both(a, 1), _.productMany([_.right(2)]))).toEqual(_.both(a, [1, 2]))
     expect(pipe(_.both(a, 1), _.productMany<string, number>([_.left(b)]))).toEqual(_.left(ab))
     expect(pipe(_.both(a, 1), _.productMany<string, number>([_.both(b, 2)]))).toEqual(
       _.both(ab, [1, 2])
@@ -321,9 +322,9 @@ describe("These", () => {
     const b = ["b"] as const
     const ab = ["a", "b"] as const
 
-    U.deepStrictEqual(_.productAll([_.right(1), _.right(2)]), _.right([1, 2] as const))
+    U.deepStrictEqual(_.productAll([_.right(1), _.right(2)]), _.right([1, 2]))
     U.deepStrictEqual(_.productAll([_.right(1), _.left(b)]), _.left(b))
-    U.deepStrictEqual(_.productAll([_.right(1), _.both(b, 2)]), _.both(b, [1, 2] as const))
+    U.deepStrictEqual(_.productAll([_.right(1), _.both(b, 2)]), _.both(b, [1, 2]))
 
     U.deepStrictEqual(_.productAll([_.left(a), _.right(2)]), _.left(a))
     U.deepStrictEqual(_.productAll([_.left(a), _.left(b)]), _.left(a))
@@ -351,20 +352,8 @@ describe("These", () => {
       pipe(_.warn("e1", 2), _.flatMap(f)),
       _.warn("e1", 4)
     )
-    U.deepStrictEqual(
-      pipe(
-        _.warn("e1", 1),
-        _.flatMap(f)
-      ),
-      _.left(["e1", "e3"] as const)
-    )
-    U.deepStrictEqual(
-      pipe(
-        _.warn("e1", 6),
-        _.flatMap(f)
-      ),
-      _.both(["e1", "e2"] as const, 6)
-    )
+    expect(pipe(_.warn("e1", 1), _.flatMap(f))).toEqual(_.left(["e1", "e3"]))
+    expect(pipe(_.warn("e1", 6), _.flatMap(f))).toEqual(_.both(["e1", "e2"], 6))
   })
 
   it("flatMapNullable", () => {
@@ -435,7 +424,7 @@ describe("These", () => {
   it("getBoth", () => {
     U.deepStrictEqual(pipe(_.left("e"), _.getBoth), O.none())
     U.deepStrictEqual(pipe(_.right(1), _.getBoth), O.none())
-    U.deepStrictEqual(pipe(_.both("e", 1), _.getBoth), O.some(["e", 1] as const))
+    expect(pipe(_.both("e", 1), _.getBoth)).toEqual(O.some(["e", 1]))
   })
 
   it("getLeft", () => {
@@ -627,7 +616,7 @@ describe("These", () => {
 
   it("fromEither", () => {
     U.deepStrictEqual(_.fromEither(E.right(1)), _.right(1))
-    U.deepStrictEqual(_.fromEither(E.left("e")), _.left(["e"] as const))
+    expect(_.fromEither(E.left("e"))).toEqual(_.left(["e"]))
   })
 
   it("fromThese", () => {
@@ -671,7 +660,7 @@ describe("These", () => {
   })
 
   it("fromTuple", () => {
-    U.deepStrictEqual(pipe(["e", 1] as const, _.fromTuple), _.both("e", 1))
+    expect(pipe(["e", 1] as [string, number], _.fromTuple)).toEqual(_.both("e", 1))
   })
 
   it("reverse", () => {
