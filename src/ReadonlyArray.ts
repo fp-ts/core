@@ -47,14 +47,6 @@ export interface ReadonlyArrayTypeLambda extends TypeLambda {
 }
 
 /**
- * @category type lambdas
- * @since 1.0.0
- */
-export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
-  readonly type: NonEmptyReadonlyArray<this["Target"]>
-}
-
-/**
  * @category models
  * @since 1.0.0
  */
@@ -779,12 +771,8 @@ export const sortNonEmpty = <B>(O: Order<B>) =>
  * @category sorting
  * @since 1.0.0
  */
-export const sortBy = <B>(
-  ...orders: ReadonlyArray<Order<B>>
-) =>
-  <A extends B>(
-    self: Iterable<A>
-  ): Array<A> => {
+export const sortBy = <B>(...orders: ReadonlyArray<Order<B>>) =>
+  <A extends B>(self: Iterable<A>): Array<A> => {
     const input = fromIterable(self)
     return (isNonEmpty(input) ? sortByNonEmpty(...orders)(input) : [])
   }
@@ -805,9 +793,8 @@ export const sortByNonEmpty = <B>(
  *
  * @since 1.0.0
  */
-export const zip = <B>(
-  that: Iterable<B>
-): <A>(self: Iterable<A>) => Array<[A, B]> => zipWith(that, (a, b) => [a, b])
+export const zip = <B>(that: Iterable<B>): <A>(self: Iterable<A>) => Array<[A, B]> =>
+  zipWith(that, (a, b) => [a, b])
 
 /**
  * Apply a function to pairs of elements at the same index in two `Iterable`s, collecting the results in a new `Array`. If one
@@ -827,10 +814,7 @@ export const zipWith = <B, A, C>(that: Iterable<B>, f: (a: A, b: B) => C) =>
  */
 export const zipNonEmpty = <B>(that: NonEmptyReadonlyArray<B>) =>
   <A>(self: NonEmptyReadonlyArray<A>): NonEmptyArray<[A, B]> =>
-    pipe(
-      self,
-      zipNonEmptyWith(that, (a, b) => [a, b])
-    )
+    pipe(self, zipNonEmptyWith(that, (a, b) => [a, b]))
 
 /**
  * @since 1.0.0
@@ -850,9 +834,7 @@ export const zipNonEmptyWith = <B, A, C>(that: NonEmptyReadonlyArray<B>, f: (a: 
  *
  * @since 1.0.0
  */
-export const unzip = <A, B>(
-  self: Iterable<[A, B]>
-): [Array<A>, Array<B>] => {
+export const unzip = <A, B>(self: Iterable<[A, B]>): [Array<A>, Array<B>] => {
   const input = fromIterable(self)
   return isNonEmpty(input) ? unzipNonEmpty(input) : [[], []]
 }
@@ -2260,10 +2242,3 @@ export const liftOrder = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
       return number.Order.compare(bLen)(aLen)
     }
   )
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const NonEmptyCovariant: covariant.Covariant<NonEmptyReadonlyArrayTypeLambda> = covariant
-  .make(mapNonEmpty)
