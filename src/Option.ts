@@ -227,8 +227,8 @@ export const Covariant: covariant.Covariant<OptionTypeLambda> = {
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  covariant.let(Covariant)
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant
+  .let(Covariant)
 
 export {
   /**

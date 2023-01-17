@@ -687,7 +687,7 @@ const let_: <N extends string, A extends object, B>(
   f: (a: A) => B
 ) => <E>(
   self: These<E, A>
-) => These<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
+) => These<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
   Covariant
 )
 
