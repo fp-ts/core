@@ -163,7 +163,7 @@ export const tupled: <E, A>(self: Either<E, A>) => Either<E, readonly [A]> = inv
  */
 export const bindTo: <N extends string>(
   name: N
-) => <E, A>(self: Either<E, A>) => Either<E, { readonly [K in N]: A }> = invariant.bindTo(Invariant)
+) => <E, A>(self: Either<E, A>) => Either<E, { [K in N]: A }> = invariant.bindTo(Invariant)
 
 /**
  * @category instances

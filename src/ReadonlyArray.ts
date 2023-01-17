@@ -22,7 +22,7 @@ import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
-import type * as invariant from "@fp-ts/core/typeclass/Invariant"
+import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as of_ from "@fp-ts/core/typeclass/Of"
@@ -1298,6 +1298,17 @@ export const imap: <A, B>(
 export const Invariant: invariant.Invariant<ReadonlyArrayTypeLambda> = {
   imap
 }
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: ReadonlyArray<A>) => ReadonlyArray<{ [K in N]: A }> = invariant
+  .bindTo(
+    Invariant
+  )
 
 /**
  * @category instances

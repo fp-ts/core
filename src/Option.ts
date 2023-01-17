@@ -213,7 +213,7 @@ export const tupled: <A>(self: Option<A>) => Option<readonly [A]> = invariant.tu
  */
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Option<A>) => Option<{ readonly [K in N]: A }> = invariant.bindTo(Invariant)
+) => <A>(self: Option<A>) => Option<{ [K in N]: A }> = invariant.bindTo(Invariant)
 
 /**
  * @category instances
