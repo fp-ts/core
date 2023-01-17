@@ -38,7 +38,7 @@ export const separate = <F extends TypeLambda>(
 ) =>
   <R, O, E, A, B>(
     self: Kind<F, R, O, E, Either<A, B>>
-  ): readonly [Kind<F, R, O, E, A>, Kind<F, R, O, E, B>] => {
+  ): [Kind<F, R, O, E, A>, Kind<F, R, O, E, B>] => {
     return [
       pipe(self, F.map(either.getLeft), F.compact),
       pipe(self, F.map(either.getRight), F.compact)
