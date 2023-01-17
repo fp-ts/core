@@ -15,6 +15,8 @@ describe.concurrent("ReadonlyArray", () => {
   it("instances and derived exports", () => {
     expect(RA.Invariant).exist
     expect(RA.imap).exist
+    expect(RA.tupled).exist
+    expect(RA.bindTo).exist
 
     expect(RA.Covariant).exist
     expect(RA.map).exist

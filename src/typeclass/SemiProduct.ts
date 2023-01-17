@@ -129,11 +129,11 @@ export const productFlatten = <F extends TypeLambda>(F: SemiProduct<F>) =>
   ) =>
     <R1, O1, E1, A extends ReadonlyArray<any>>(
       self: Kind<F, R1, O1, E1, A>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, readonly [...A, B]> =>
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]> =>
       pipe(
         self,
         F.product(that),
-        F.imap(([a, b]) => [...a, b] as const, ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
+        F.imap(([a, b]) => [...a, b], ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
       )
 
 /**

@@ -197,6 +197,14 @@ export const andThenBind: <N extends string, A extends object, B>(
 /**
  * @since 1.0.0
  */
+// @ts-expect-error
+export const productFlatten: <B>(that: Predicate<B>) => <A extends ReadonlyArray<any>>(
+  self: Predicate<A>
+) => Predicate<readonly [...A, B]> = semiProduct.productFlatten(SemiProduct)
+
+/**
+ * @since 1.0.0
+ */
 export const tuple: <T extends ReadonlyArray<Predicate<any>>>(
   ...predicates: T
 ) => Predicate<Readonly<{ [I in keyof T]: [T[I]] extends [Predicate<infer A>] ? A : never }>> =
