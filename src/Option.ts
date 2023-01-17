@@ -460,7 +460,7 @@ export const andThenBind: <N extends string, A extends object, B>(
  */
 export const productFlatten: <B>(
   fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<readonly [...A, B]> = semiProduct
+) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<[...A, B]> = semiProduct
   .productFlatten(SemiProduct)
 
 /**

@@ -1127,7 +1127,7 @@ export const productFlatten: <E2, B>(
   that: Validated<E2, B>
 ) => <E1, A extends ReadonlyArray<any>>(
   self: Validated<E1, A>
-) => Validated<E1 | E2, readonly [...A, B]> = semiProduct
+) => Validated<E1 | E2, [...A, B]> = semiProduct
   .productFlatten(SemiProduct)
 
 /**

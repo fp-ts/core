@@ -2136,11 +2136,10 @@ export const join: (sep: string) => (self: ReadonlyArray<string>) => string = in
 /**
  * @since 1.0.0
  */
-export const productFlatten: <B>(
-  that: ReadonlyArray<B>
-) => <A extends ReadonlyArray<unknown>>(
+// @ts-expect-error
+export const productFlatten: <B>(that: ReadonlyArray<B>) => <A extends ReadonlyArray<unknown>>(
   self: ReadonlyArray<A>
-) => ReadonlyArray<readonly [...A, B]> = semiProduct.productFlatten(SemiProduct)
+) => Array<[...A, B]> = semiProduct.productFlatten(SemiProduct)
 
 /**
  * @since 1.0.0
