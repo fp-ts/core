@@ -749,8 +749,8 @@ export const Compactable: compactable.Compactable<OptionTypeLambda> = {
  * @category filtering
  * @since 1.0.0
  */
-export const separate: <A, B>(self: Option<Either<A, B>>) => readonly [Option<A>, Option<B>] =
-  compactable.separate({ ...Covariant, ...Compactable })
+export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>] = compactable
+  .separate({ ...Covariant, ...Compactable })
 
 /**
  * @category filtering
