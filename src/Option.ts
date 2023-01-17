@@ -347,8 +347,8 @@ export const Chainable: chainable.Chainable<OptionTypeLambda> = {
 export const bind: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => Option<B>
-) => (self: Option<A>) => Option<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  chainable.bind(Chainable)
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable
+  .bind(Chainable)
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.

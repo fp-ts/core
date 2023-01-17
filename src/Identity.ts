@@ -217,7 +217,7 @@ export const bind: <N extends string, A extends object, B>(
   f: (a: A) => Identity<B>
 ) => (
   self: Identity<A>
-) => Identity<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(
+) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(
   Chainable
 )
 
