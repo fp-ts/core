@@ -208,7 +208,7 @@ const let_: <N extends string, A extends object, B>(
   f: (a: A) => B
 ) => <E>(
   self: Either<E, A>
-) => Either<E, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
+) => Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
   Covariant
 )
 
