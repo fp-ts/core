@@ -326,9 +326,8 @@ export const tuple: <T extends ReadonlyArray<Identity<any>>>(
  */
 export const struct: <R extends Record<string, Identity<any>>>(
   r: R
-) => Identity<{ readonly [K in keyof R]: [R[K]] extends [Identity<infer A>] ? A : never }> =
-  product_
-    .struct(Product)
+) => Identity<{ [K in keyof R]: [R[K]] extends [Identity<infer A>] ? A : never }> = product_
+  .struct(Product)
 
 /**
  * @category instances
