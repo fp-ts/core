@@ -1300,15 +1300,22 @@ export const Invariant: invariant.Invariant<ReadonlyArrayTypeLambda> = {
 }
 
 /**
+ * @category mapping
+ * @since 1.0.0
+ */
+// @ts-expect-error
+export const tupled: <A>(self: ReadonlyArray<A>) => Array<[A]> = invariant
+  .tupled(Invariant)
+
+/**
  * @category do notation
  * @since 1.0.0
  */
+// @ts-expect-error
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: ReadonlyArray<A>) => ReadonlyArray<{ [K in N]: A }> = invariant
-  .bindTo(
-    Invariant
-  )
+) => <A>(self: ReadonlyArray<A>) => Array<{ [K in N]: A }> = invariant
+  .bindTo(Invariant)
 
 /**
  * @category instances

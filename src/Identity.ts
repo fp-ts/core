@@ -70,7 +70,7 @@ export const Invariant: invariant.Invariant<IdentityTypeLambda> = {
 /**
  * @since 1.0.0
  */
-export const tupled: <A>(self: Identity<A>) => Identity<readonly [A]> = invariant.tupled(Invariant)
+export const tupled: <A>(self: Identity<A>) => Identity<[A]> = invariant.tupled(Invariant)
 
 /**
  * @category do notation

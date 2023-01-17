@@ -38,7 +38,7 @@ describe("Invariant", () => {
     it("Covariant (Option)", () => {
       const tupled = _.tupled(O.Invariant)
       U.deepStrictEqual(pipe(O.none(), tupled), O.none())
-      U.deepStrictEqual(pipe(O.some(1), tupled), O.some([1] as const))
+      U.deepStrictEqual(pipe(O.some(1), tupled), O.some([1]))
     })
 
     it("Contravariant (Predicate)", () => {
