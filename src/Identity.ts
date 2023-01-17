@@ -285,7 +285,7 @@ export const andThenBind: <N extends string, A extends object, B>(
   that: Identity<B>
 ) => (
   self: Identity<A>
-) => Identity<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
   .andThenBind(SemiProduct)
 
 /**
