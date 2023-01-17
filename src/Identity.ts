@@ -78,7 +78,7 @@ export const tupled: <A>(self: Identity<A>) => Identity<readonly [A]> = invarian
  */
 export const bindTo: <N extends string>(
   name: N
-) => <A>(self: Identity<A>) => Identity<{ readonly [K in N]: A }> = invariant.bindTo(Invariant)
+) => <A>(self: Identity<A>) => Identity<{ [K in N]: A }> = invariant.bindTo(Invariant)
 
 /**
  * @category instances

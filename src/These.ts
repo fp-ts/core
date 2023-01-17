@@ -653,7 +653,7 @@ export const tupled: <E, A>(self: These<E, A>) => These<E, readonly [A]> = invar
  */
 export const bindTo: <N extends string>(
   name: N
-) => <E, A>(self: These<E, A>) => These<E, { readonly [K in N]: A }> = invariant.bindTo(Invariant)
+) => <E, A>(self: These<E, A>) => These<E, { [K in N]: A }> = invariant.bindTo(Invariant)
 
 /**
  * @category mapping
