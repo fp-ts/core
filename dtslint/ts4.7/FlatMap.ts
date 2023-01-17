@@ -1,6 +1,6 @@
 import * as _ from "@fp-ts/core/typeclass/FlatMap"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { pipe } from "@fp-ts/core/internal/Function"
+import { pipe } from "@fp-ts/core/Function"
 
 interface RAW<R, E, A> {
   (r: R): () => Promise<readonly [E, A]>
