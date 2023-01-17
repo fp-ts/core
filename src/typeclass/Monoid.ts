@@ -54,7 +54,19 @@ export const max = <A>(B: Bounded<A>): Monoid<A> => fromSemigroup(semigroup.max(
 export const reverse = <A>(M: Monoid<A>): Monoid<A> => fromSemigroup(semigroup.reverse(M), M.empty)
 
 /**
- * Given a struct of monoids returns a monoid for the struct.
+ * Given a tuple of `Monoid`s returns a `Monoid` for the tuple.
+ *
+ * @since 1.0.0
+ */
+export const tuple = <A extends ReadonlyArray<any>>(
+  ...monoids: { [K in keyof A]: Monoid<A[K]> }
+): Monoid<A> => {
+  const empty: A = monoids.map((m) => m.empty) as any
+  return fromSemigroup(semigroup.tuple<A>(...monoids), empty)
+}
+
+/**
+ * Given a struct of `Monoid`s returns a `Monoid` for the struct.
  *
  * @since 1.0.0
  */
@@ -68,16 +80,4 @@ export const struct = <A>(
     }
   }
   return fromSemigroup(semigroup.struct(monoids), empty)
-}
-
-/**
- * Given a tuple of monoids returns a monoid for the tuple.
- *
- * @since 1.0.0
- */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...monoids: { [K in keyof A]: Monoid<A[K]> }
-): Monoid<Readonly<A>> => {
-  const empty: A = monoids.map((m) => m.empty) as any
-  return fromSemigroup(semigroup.tuple<Readonly<A>>(...monoids), empty)
 }

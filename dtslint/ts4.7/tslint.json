@@ -19,6 +19,7 @@
     "no-relative-import-in-test": false,
     "no-null-undefined-union": false,
     "invalid-void": false,
-    "max-line-length": false
+    "max-line-length": false,
+    "no-useless-files": false
   }
 }

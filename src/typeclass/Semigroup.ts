@@ -105,7 +105,17 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
 })
 
 /**
- * Given a struct of associatives returns an associative for the struct.
+ * Given a tuple of `Semigroup`s returns a `Semigroup` for the tuple.
+ *
+ * @since 1.0.0
+ */
+export const tuple = <A extends ReadonlyArray<any>>(
+  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
+): Semigroup<A> =>
+  fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
+
+/**
+ * Given a struct of `Semigroup`s returns a `Semigroup` for the struct.
  *
  * @since 1.0.0
  */
@@ -123,16 +133,6 @@ export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]>
       return r
     }
   )
-
-/**
- * Given a tuple of associatives returns an associative for the tuple.
- *
- * @since 1.0.0
- */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
-): Semigroup<Readonly<A>> =>
-  fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
 
 /**
  * @since 1.0.0
@@ -203,9 +203,7 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
  */
 export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
   ...Invariant,
-  // @ts-expect-error
   product: that => self => tuple(self, that),
-  // @ts-expect-error
   productMany: collection => self => tuple(self, ...collection)
 }
 
@@ -216,6 +214,5 @@ export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
 export const Product: product.Product<SemigroupTypeLambda> = {
   ...SemiProduct,
   of: constant,
-  // @ts-expect-error
-  productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple(...collection)
+  productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple<Array<A>>(...collection)
 }

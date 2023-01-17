@@ -1,4 +1,4 @@
-import { OptionTypeLambda } from "@fp-ts/core/test/data/Option"
+import { OptionTypeLambda } from "@fp-ts/core/Option"
 import * as _ from "@fp-ts/core/typeclass/SemiProduct"
 
 export declare const SemiProduct: _.SemiProduct<OptionTypeLambda>
