@@ -444,8 +444,8 @@ describe.concurrent("Either", () => {
     )
   })
 
-  it("productFlatten", () => {
-    expect(pipe(_.right(1), _.tupled, _.productFlatten(_.right("b")))).toEqual(
+  it("element", () => {
+    expect(pipe(_.right(1), _.tupled, _.element(_.right("b")))).toEqual(
       _.right([1, "b"])
     )
   })

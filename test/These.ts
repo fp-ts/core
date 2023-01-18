@@ -47,7 +47,7 @@ describe("These", () => {
     expect(_.product).exist
     expect(_.productMany).exist
     expect(_.andThenBind).exist
-    expect(_.productFlatten).exist
+    expect(_.element).exist
 
     expect(_.Product).exist
     expect(_.productAll).exist
