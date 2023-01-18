@@ -164,16 +164,16 @@ describe("SemiProduct", () => {
     })
   })
 
-  describe("productFlatten", () => {
+  describe("element", () => {
     it("Covariant (Option)", () => {
-      const productFlatten = _.productFlatten(O.SemiProduct)
-      U.deepStrictEqual(pipe(O.some([1, 2]), productFlatten(O.none())), O.none())
-      expect(pipe(O.some([1, 2]), productFlatten(O.some(3)))).toEqual(O.some([1, 2, 3]))
+      const element = _.element(O.SemiProduct)
+      U.deepStrictEqual(pipe(O.some([1, 2]), element(O.none())), O.none())
+      expect(pipe(O.some([1, 2]), element(O.some(3)))).toEqual(O.some([1, 2, 3]))
     })
 
     it("Contravariant (Predicate)", () => {
-      const productFlatten = _.productFlatten(P.SemiProduct)
-      const p = pipe(P.tuple(String.isString, String.isString), productFlatten(Number.isNumber))
+      const element = _.element(P.SemiProduct)
+      const p = pipe(P.tuple(String.isString, String.isString), element(Number.isNumber))
       U.deepStrictEqual(p(["a", "b", 3]), true)
       U.deepStrictEqual(p(["a", "b", "c"]), false)
       U.deepStrictEqual(p([1, "b", 1]), false)

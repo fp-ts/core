@@ -2087,11 +2087,13 @@ export const join: (sep: string) => (self: ReadonlyArray<string>) => string = in
 )
 
 /**
+ * Adds an element to the end of a tuple.
+ *
  * @since 1.0.0
  */
-export const productFlatten: <B>(that: ReadonlyArray<B>) => <A extends ReadonlyArray<unknown>>(
+export const element: <B>(that: ReadonlyArray<B>) => <A extends ReadonlyArray<unknown>>(
   self: ReadonlyArray<A>
-) => Array<[...A, B]> = semiProduct.productFlatten(SemiProduct) as any
+) => Array<[...A, B]> = semiProduct.element(SemiProduct) as any
 
 /**
  * @since 1.0.0
