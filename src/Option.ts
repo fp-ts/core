@@ -456,12 +456,14 @@ export const andThenBind: <N extends string, A extends object, B>(
   .andThenBind(SemiProduct)
 
 /**
+ * Adds an element to the end of a tuple.
+ *
  * @since 1.0.0
  */
-export const productFlatten: <B>(
+export const element: <B>(
   fb: Option<B>
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<[...A, B]> = semiProduct
-  .productFlatten(SemiProduct)
+  .element(SemiProduct)
 
 /**
  * @since 1.0.0

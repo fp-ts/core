@@ -195,12 +195,13 @@ export const andThenBind: <N extends string, A extends object, B>(
   )
 
 /**
+ * Adds an element to the end of a tuple.
+ *
  * @since 1.0.0
  */
-// @ts-expect-error
-export const productFlatten: <B>(that: Predicate<B>) => <A extends ReadonlyArray<any>>(
+export const element: <B>(that: Predicate<B>) => <A extends ReadonlyArray<any>>(
   self: Predicate<A>
-) => Predicate<readonly [...A, B]> = semiProduct.productFlatten(SemiProduct)
+) => Predicate<readonly [...A, B]> = semiProduct.element(SemiProduct) as any
 
 /**
  * @since 1.0.0

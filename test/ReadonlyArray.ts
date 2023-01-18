@@ -44,7 +44,7 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.product).exist
     expect(RA.productMany).exist
     expect(RA.andThenBind).exist
-    expect(RA.productFlatten).exist
+    expect(RA.element).exist
 
     expect(RA.Product).exist
     expect(RA.productAll).exist
