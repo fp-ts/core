@@ -7,6 +7,14 @@ import * as _ from "@fp-ts/core/typeclass/Order"
 import * as U from "../util"
 
 describe("Order", () => {
+  it("bigint", () => {
+    const O = _.bigint
+    expect(pipe(1n, _.lessThanOrEqualTo(O)(2n))).toBe(true)
+    expect(pipe(1n, _.lessThanOrEqualTo(O)(1n))).toBe(true)
+    expect(pipe(1n, _.lessThan(O)(1n))).toBe(false)
+    expect(pipe(1n, _.lessThanOrEqualTo(O)(0n))).toBe(false)
+  })
+
   it("tuple", () => {
     const O = _.tuple(string.Order, number.Order, boolean.Order)
     U.deepStrictEqual(pipe(["a", 1, true], O.compare(["b", 2, true])), -1)

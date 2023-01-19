@@ -51,6 +51,14 @@ export const boolean: Order<boolean> = {
 }
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const bigint: Order<bigint> = {
+  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+}
+
+/**
  * Main constructor.
  *
  * @category constructors
