@@ -43,6 +43,13 @@ export const isString: Refinement<unknown, string> = (u: unknown): u is string =
   typeof u === "string"
 
 /**
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNumber: Refinement<unknown, number> = (u: unknown): u is number =>
+  typeof u === "number"
+
+/**
  * @category constructors
  * @since 1.0.0
  */

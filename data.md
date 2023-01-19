@@ -63,3 +63,23 @@ This section covers the various modules and combinators that work with structs.
 | String      | Semigroup   |       | `Semigroup<string>`           |
 | String      | Monoid      |       | `Monoid<string>`              |
 | String      | isString    |       | `Refinement<unknown, string>` |
+
+## numbers
+
+| Module      | Name              | Given | To                            |
+| ----------- | ----------------- | ----- | ----------------------------- |
+| Equivalence | number            |       | `Equivalence<number>`         |
+| Order       | number            |       | `Order<number>`               |
+| Bounded     | number            |       | `Bounded<number>`             |
+| Semigroup   | numberSum         |       | `Semigroup<number>`           |
+| Semigroup   | numberMultiply    |       | `Semigroup<number>`           |
+| Monoid      | numberSum         |       | `Monoid<number>`              |
+| Monoid      | numberMultiply    |       | `Monoid<number>`              |
+| Predicate   | isNumber          |       | `Refinement<unknown, number>` |
+| Number      | Equivalence       |       | `Equivalence<number>`         |
+| Number      | Order             |       | `Order<number>`               |
+| Number      | SemigroupSum      |       | `Semigroup<number>`           |
+| Number      | SemigroupMultiply |       | `Semigroup<number>`           |
+| Number      | MonoidSum         |       | `Monoid<number>`              |
+| Number      | MonoidMultiply    |       | `Monoid<number>`              |
+| Number      | isNumber          |       | `Refinement<unknown, number>` |
