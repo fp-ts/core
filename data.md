@@ -102,3 +102,16 @@ This section covers the various modules and combinators that work with structs.
 | Boolean     | booleanAny  |       | `Monoid<boolean>`              |
 | Boolean     | booleanAll  |       | `Monoid<boolean>`              |
 | Boolean     | isBoolean   |       | `Refinement<unknown, boolean>` |
+
+## bigints
+
+| Module      | Name   | Given | To                    |
+| ----------- | ------ | ----- | --------------------- |
+| Equivalence | bigint |       | `Equivalence<bigint>` |
+| Order       | bigint |       | `Order<bigint>`       |
+
+## symbols
+
+| Module      | Name   | Given | To                    |
+| ----------- | ------ | ----- | --------------------- |
+| Equivalence | symbol |       | `Equivalence<symbol>` |
