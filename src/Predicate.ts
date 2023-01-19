@@ -36,6 +36,13 @@ export interface Refinement<A, B extends A> {
 }
 
 /**
+ * @category guards
+ * @since 1.0.0
+ */
+export const isString: Refinement<unknown, string> = (u: unknown): u is string =>
+  typeof u === "string"
+
+/**
  * @category constructors
  * @since 1.0.0
  */
