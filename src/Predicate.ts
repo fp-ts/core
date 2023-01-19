@@ -50,6 +50,13 @@ export const isNumber: Refinement<unknown, number> = (u: unknown): u is number =
   typeof u === "number"
 
 /**
+ * @category guards
+ * @since 1.0.0
+ */
+export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean =>
+  typeof u === "boolean"
+
+/**
  * @category constructors
  * @since 1.0.0
  */
