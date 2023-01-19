@@ -83,3 +83,22 @@ This section covers the various modules and combinators that work with structs.
 | Number      | MonoidSum         |       | `Monoid<number>`              |
 | Number      | MonoidMultiply    |       | `Monoid<number>`              |
 | Number      | isNumber          |       | `Refinement<unknown, number>` |
+
+## booleans
+
+| Module      | Name        | Given | To                             |
+| ----------- | ----------- | ----- | ------------------------------ |
+| Equivalence | boolean     |       | `Equivalence<boolean>`         |
+| Order       | boolean     |       | `Order<boolean>`               |
+| Semigroup   | booleanAny  |       | `Semigroup<boolean>`           |
+| Semigroup   | booleanAll  |       | `Semigroup<boolean>`           |
+| Monoid      | booleanAny  |       | `Monoid<boolean>`              |
+| Monoid      | booleanAll  |       | `Monoid<boolean>`              |
+| Predicate   | isBoolean   |       | `Refinement<unknown, boolean>` |
+| Boolean     | Equivalence |       | `Equivalence<boolean>`         |
+| Boolean     | Order       |       | `Order<boolean>`               |
+| Boolean     | booleanAny  |       | `Semigroup<boolean>`           |
+| Boolean     | booleanAll  |       | `Semigroup<boolean>`           |
+| Boolean     | booleanAny  |       | `Monoid<boolean>`              |
+| Boolean     | booleanAll  |       | `Monoid<boolean>`              |
+| Boolean     | isBoolean   |       | `Refinement<unknown, boolean>` |

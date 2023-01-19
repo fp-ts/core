@@ -104,6 +104,50 @@ export const numberMultiply: Semigroup<number> = {
 }
 
 /**
+ * `boolean` semigroup under conjunction.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanAll: Semigroup<boolean> = {
+  combine: (that: boolean) => (self: boolean): boolean => self && that,
+  combineMany: (collection) =>
+    (self) => {
+      if (self === false) {
+        return false
+      }
+      for (const b of collection) {
+        if (b === false) {
+          return false
+        }
+      }
+      return true
+    }
+}
+
+/**
+ * `boolean` semigroup under disjunction.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanAny: Semigroup<boolean> = {
+  combine: (that: boolean) => (self: boolean): boolean => self || that,
+  combineMany: (collection) =>
+    (self) => {
+      if (self === true) {
+        return true
+      }
+      for (const b of collection) {
+        if (b === true) {
+          return true
+        }
+      }
+      return false
+    }
+}
+
+/**
  * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
  * The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
  * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
