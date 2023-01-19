@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as number from "@fp-ts/core/Number"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -32,6 +31,14 @@ export interface OrderTypeLambda extends TypeLambda {
  * @since 1.0.0
  */
 export const string: Order<string> = {
+  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const number: Order<number> = {
   compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
 }
 
@@ -91,7 +98,7 @@ export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
           return o
         }
       }
-      return number.Order.compare(bLen)(aLen)
+      return number.compare(bLen)(aLen)
     }
   )
 

@@ -23,6 +23,16 @@ export interface BoundedTypeLambda extends TypeLambda {
 }
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const number: Bounded<number> = {
+  compare: order.number.compare,
+  maxBound: Infinity,
+  minBound: -Infinity
+}
+
+/**
  * Clamp a value between `minBound` and `maxBound` values.
  *
  * @since 1.0.0
