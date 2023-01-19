@@ -4,58 +4,18 @@
 
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Refinement } from "@fp-ts/core/Predicate"
+import * as predicate from "@fp-ts/core/Predicate"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
-import type * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as order from "@fp-ts/core/typeclass/Order"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
+ * @category guards
  * @since 1.0.0
  */
-export const concat = (that: string) => (self: string): string => self + that
-
-/**
- * `string` semigroup under concatenation.
- *
- * @example
- * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.deepStrictEqual(pipe('a', S.Semigroup.combine('b')), 'ab')
- *
- * @category instances
- * @since 1.0.0
- */
-export const Semigroup: semigroup.Semigroup<string> = semigroup.fromCombine(concat)
-
-/**
- * An empty `string`.
- *
- * @since 1.0.0
- */
-export const empty: "" = "" as const
-
-/**
- * `string` monoid under concatenation.
- *
- * The `empty` value is `''`.
- *
- * @example
- * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.deepStrictEqual(pipe('a', S.Monoid.combine('b')), 'ab')
- * assert.deepStrictEqual(pipe('a', S.Monoid.combine(S.Monoid.empty)), 'a')
- *
- * @category instances
- * @since 1.0.0
- */
-export const Monoid: monoid.Monoid<string> = {
-  ...Semigroup,
-  combineAll: (collection) => Semigroup.combineMany(collection)(empty),
-  empty
-}
+export const isString: Refinement<unknown, string> = predicate.isString
 
 /**
  * @category instances
@@ -64,33 +24,38 @@ export const Monoid: monoid.Monoid<string> = {
 export const Equivalence: equivalence.Equivalence<string> = equivalence.string
 
 /**
- * @example
- * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.deepStrictEqual(pipe('a', S.Order.compare('a')), 0)
- * assert.deepStrictEqual(pipe('a', S.Order.compare('b')), -1)
- * assert.deepStrictEqual(pipe('b', S.Order.compare('a')), 1)
+ * @category instances
+ * @since 1.0.0
+ */
+export const Order: order.Order<string> = order.string
+
+/**
+ * `string` semigroup under concatenation.
  *
  * @category instances
  * @since 1.0.0
  */
-export const Order: order.Order<string> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
-}
+export const Semigroup: semigroup.Semigroup<string> = semigroup.string
 
 /**
- * @example
- * import * as S from '@fp-ts/core/String'
+ * `string` monoid under concatenation.
  *
- * assert.deepStrictEqual(S.isString('a'), true)
- * assert.deepStrictEqual(S.isString(1), false)
+ * The `empty` value is `''`.
  *
- * @category guards
+ * @category instances
  * @since 1.0.0
  */
-export const isString: Refinement<unknown, string> = (u: unknown): u is string =>
-  typeof u === "string"
+export const Monoid: monoid.Monoid<string> = monoid.string
+
+/**
+ * @since 1.0.0
+ */
+export const empty: "" = "" as const
+
+/**
+ * @since 1.0.0
+ */
+export const concat: (that: string) => (self: string) => string = semigroup.string.combine
 
 /**
  * @example
