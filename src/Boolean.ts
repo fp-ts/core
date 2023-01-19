@@ -3,35 +3,17 @@
  */
 import type { LazyArg } from "@fp-ts/core/Function"
 import type { Refinement } from "@fp-ts/core/Predicate"
+import * as predicate from "@fp-ts/core/Predicate"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
-import type * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as order from "@fp-ts/core/typeclass/Order"
-import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as order from "@fp-ts/core/typeclass/Order"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category guards
  * @since 1.0.0
  */
-export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean =>
-  typeof u === "boolean"
-
-/**
- * @category combinators
- * @since 1.0.0
- */
-export const and = (that: boolean) => (self: boolean): boolean => self && that
-
-/**
- * @category combinators
- * @since 1.0.0
- */
-export const or = (that: boolean) => (self: boolean): boolean => self || that
-
-/**
- * @category combinators
- * @since 1.0.0
- */
-export const not = (self: boolean): boolean => !self
+export const isBoolean: Refinement<unknown, boolean> = predicate.isBoolean
 
 /**
  * Defines the match over a boolean value.
@@ -58,6 +40,18 @@ export const match = <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
   (value: boolean): A | B => value ? onTrue() : onFalse()
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Equivalence: equivalence.Equivalence<boolean> = equivalence.boolean
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Order: order.Order<boolean> = order.boolean
+
+/**
  * `boolean` semigroup under conjunction.
  *
  * @example
@@ -70,21 +64,7 @@ export const match = <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupAll: semigroup.Semigroup<boolean> = {
-  combine: and,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === false) {
-        return false
-      }
-      for (const b of collection) {
-        if (b === false) {
-          return false
-        }
-      }
-      return true
-    }
-}
+export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.booleanAll
 
 /**
  * `boolean` semigroup under disjunction.
@@ -100,21 +80,7 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupAny: semigroup.Semigroup<boolean> = {
-  combine: or,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === true) {
-        return true
-      }
-      for (const b of collection) {
-        if (b === true) {
-          return true
-        }
-      }
-      return false
-    }
-}
+export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.booleanAny
 
 /**
  * `boolean` monoid under conjunction.
@@ -124,11 +90,7 @@ export const SemigroupAny: semigroup.Semigroup<boolean> = {
  * @category instances
  * @since 1.0.0
  */
-export const MonoidAll: monoid.Monoid<boolean> = {
-  ...SemigroupAll,
-  combineAll: (all) => SemigroupAll.combineMany(all)(true),
-  empty: true
-}
+export const MonoidAll: monoid.Monoid<boolean> = monoid.booleanAll
 
 /**
  * `boolean` monoid under disjunction.
@@ -138,22 +100,22 @@ export const MonoidAll: monoid.Monoid<boolean> = {
  * @category instances
  * @since 1.0.0
  */
-export const MonoidAny: monoid.Monoid<boolean> = {
-  ...SemigroupAny,
-  combineAll: (all) => SemigroupAny.combineMany(all)(false),
-  empty: false
-}
+export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
 
 /**
- * @category instances
+ * @category combinators
  * @since 1.0.0
  */
-export const Equivalence: equivalence.Equivalence<boolean> = equivalence.boolean
+export const and: (that: boolean) => (self: boolean) => boolean = semigroup.booleanAll.combine
 
 /**
- * @category instances
+ * @category combinators
  * @since 1.0.0
  */
-export const Order: order.Order<boolean> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
-}
+export const or: (that: boolean) => (self: boolean) => boolean = semigroup.booleanAny.combine
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const not = (self: boolean): boolean => !self

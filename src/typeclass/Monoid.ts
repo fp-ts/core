@@ -91,6 +91,34 @@ export const numberMultiply: Monoid<number> = {
 }
 
 /**
+ * `boolean` monoid under conjunction.
+ *
+ * The `empty` value is `true`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanAll: Monoid<boolean> = {
+  ...semigroup.booleanAll,
+  combineAll: (all) => semigroup.booleanAll.combineMany(all)(true),
+  empty: true
+}
+
+/**
+ * `boolean` monoid under disjunction.
+ *
+ * The `empty` value is `false`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanAny: Monoid<boolean> = {
+  ...semigroup.booleanAny,
+  combineAll: (all) => semigroup.booleanAny.combineMany(all)(false),
+  empty: false
+}
+
+/**
  * Given a tuple of `Monoid`s returns a `Monoid` for the tuple.
  *
  * @category combinators
