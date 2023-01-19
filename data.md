@@ -49,6 +49,17 @@ This section covers the various modules and combinators that work with structs.
 | Predicate   | struct         | `{ a: Predicate<A>, b: Predicate<B>, ... }`     | `Predicate<Readonly<{ a: A, b: B }>>`     |
 | These       | struct         | `{ a: These<E1, A>, b: These<E2, B>, ... }`     | `These<E1 \| E2 \| ..., { a: A, b: B }>`  |
 
+## records
+
+This section covers the various modules and combinators that work with records.
+
+| Module         | Name          | Given                                        | To                               |
+| -------------- | ------------- | -------------------------------------------- | -------------------------------- |
+| Equivalence    | record        | `Equivalence<A>`                             | `Equivalence<ReadonlyRecord<A>>` |
+| ReadonlyRecord | get           | `key: string`, `ReadonlyRecord<A>`           | `Option<A>`                      |
+| ReadonlyRecord | replaceOption | `key: string`, `B`, `ReadonlyRecord<A>`      | `Option<Record<string, A \| B>>` |
+| ReadonlyRecord | modifyOption  | `key: string`, `A => B`, `ReadonlyRecord<A>` | `Option<Record<string, A \| B>>` |
+
 ## strings
 
 | Module      | Name        | Given | To                            |
