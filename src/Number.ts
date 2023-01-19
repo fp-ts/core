@@ -3,28 +3,28 @@
  */
 import type { Ordering } from "@fp-ts/core/Ordering"
 import type { Refinement } from "@fp-ts/core/Predicate"
-import type * as bounded from "@fp-ts/core/typeclass/Bounded"
+import * as predicate from "@fp-ts/core/Predicate"
+import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
-import type * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as order from "@fp-ts/core/typeclass/Order"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category guards
  * @since 1.0.0
  */
-export const isNumber: Refinement<unknown, number> = (u: unknown): u is number =>
-  typeof u === "number"
+export const isNumber: Refinement<unknown, number> = predicate.isNumber
 
 /**
  * @since 1.0.0
  */
-export const sum = (that: number) => (self: number): number => self + that
+export const sum: (that: number) => (self: number) => number = semigroup.numberSum.combine
 
 /**
  * @since 1.0.0
  */
-export const multiply = (that: number) => (self: number): number => self * that
+export const multiply: (that: number) => (self: number) => number = semigroup.numberMultiply.combine
 
 /**
  * @since 1.0.0
@@ -51,19 +51,13 @@ export const Equivalence: equivalence.Equivalence<number> = equivalence.number
  * @category instances
  * @since 1.0.0
  */
-export const Order: order.Order<number> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
-}
+export const Order: order.Order<number> = order.number
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Bounded: bounded.Bounded<number> = {
-  compare: Order.compare,
-  maxBound: Infinity,
-  minBound: -Infinity
-}
+export const Bounded: bounded.Bounded<number> = bounded.number
 
 /**
  * `number` semigroup under addition.
@@ -77,7 +71,7 @@ export const Bounded: bounded.Bounded<number> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromCombine(sum)
+export const SemigroupSum: semigroup.Semigroup<number> = semigroup.numberSum
 
 /**
  * `number` semigroup under multiplication.
@@ -91,23 +85,7 @@ export const SemigroupSum: semigroup.Semigroup<number> = semigroup.fromCombine(s
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupMultiply: semigroup.Semigroup<number> = {
-  combine: multiply,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === 0) {
-        return 0
-      }
-      let out = self
-      for (const n of collection) {
-        if (n === 0) {
-          return 0
-        }
-        out = out * n
-      }
-      return out
-    }
-}
+export const SemigroupMultiply: semigroup.Semigroup<number> = semigroup.numberMultiply
 
 /**
  * `number` monoid under addition.
@@ -117,11 +95,7 @@ export const SemigroupMultiply: semigroup.Semigroup<number> = {
  * @category instances
  * @since 1.0.0
  */
-export const MonoidSum: monoid.Monoid<number> = {
-  ...SemigroupSum,
-  combineAll: (collection) => SemigroupSum.combineMany(collection)(0),
-  empty: 0
-}
+export const MonoidSum: monoid.Monoid<number> = monoid.numberSum
 
 /**
  * `number` monoid under multiplication.
@@ -131,11 +105,7 @@ export const MonoidSum: monoid.Monoid<number> = {
  * @category instances
  * @since 1.0.0
  */
-export const MonoidMultiply: monoid.Monoid<number> = {
-  ...SemigroupMultiply,
-  combineAll: (collection) => SemigroupMultiply.combineMany(collection)(1),
-  empty: 1
-}
+export const MonoidMultiply: monoid.Monoid<number> = monoid.numberMultiply
 
 /**
  * @since 1.0.0

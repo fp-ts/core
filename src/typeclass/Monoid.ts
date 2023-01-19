@@ -63,6 +63,34 @@ export const string: Monoid<string> = {
 }
 
 /**
+ * `number` monoid under addition.
+ *
+ * The `empty` value is `0`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const numberSum: Monoid<number> = {
+  ...semigroup.numberSum,
+  combineAll: (collection) => semigroup.numberSum.combineMany(collection)(0),
+  empty: 0
+}
+
+/**
+ * `number` monoid under multiplication.
+ *
+ * The `empty` value is `1`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const numberMultiply: Monoid<number> = {
+  ...semigroup.numberMultiply,
+  combineAll: (collection) => semigroup.numberMultiply.combineMany(collection)(1),
+  empty: 1
+}
+
+/**
  * Given a tuple of `Monoid`s returns a `Monoid` for the tuple.
  *
  * @category combinators
