@@ -5,6 +5,10 @@ import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as U from "../util"
 
 describe("Monoid", () => {
+  it("exports", () => {
+    expect(monoid.array).exists
+  })
+
   it("min", () => {
     const M = monoid.min(N.Bounded)
     U.deepStrictEqual(M.combineAll([]), +Infinity)
