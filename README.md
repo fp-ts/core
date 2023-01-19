@@ -46,7 +46,8 @@ npm install @fp-ts/core
 
 # Documentation
 
-- [Typeclass overview](./Overview.md)
+- [Typeclass overview](./typeclass.md)
+- [Data overview](./data.md)
 - [API Reference](https://fp-ts.github.io/core/)
 
 # License
