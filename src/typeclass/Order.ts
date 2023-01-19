@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as number from "@fp-ts/core/Number"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -37,8 +38,12 @@ export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
 })
 
 /**
- * Given a tuple of `Compare`s returns a `Compare` for the tuple.
+ * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
+ * The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
+ * It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
+ * of the tuple.
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<any>>(
@@ -54,6 +59,31 @@ export const tuple = <A extends ReadonlyArray<any>>(
         }
       }
       return orders[i].compare(that[i])(self[i])
+    }
+  )
+
+/**
+ * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
+ * The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
+ * If all elements are equal, the arrays are then compared based on their length.
+ * It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
+  fromCompare((that) =>
+    (self) => {
+      const aLen = self.length
+      const bLen = that.length
+      const len = Math.min(aLen, bLen)
+      for (let i = 0; i < len; i++) {
+        const o = O.compare(that[i])(self[i])
+        if (o !== 0) {
+          return o
+        }
+      }
+      return number.Order.compare(bLen)(aLen)
     }
   )
 
