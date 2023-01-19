@@ -66,6 +66,32 @@ export const tuple = <A extends ReadonlyArray<any>>(
 }
 
 /**
+ * Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
+ * The returned `Monoid`'s empty value is the empty array.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const array = <A>(): Monoid<Array<A>> => {
+  const S = semigroup.array<A>()
+  return ({
+    combine: S.combine,
+    combineMany: S.combineMany,
+    combineAll: (collection) => S.combineMany(collection)([]),
+    empty: []
+  })
+}
+
+/**
+ * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
+ * The returned `Monoid`'s empty value is the empty array.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const readonlyArray: <A>() => Monoid<ReadonlyArray<A>> = array as any
+
+/**
  * Given a struct of `Monoid`s returns a `Monoid` for the struct.
  *
  * @since 1.0.0

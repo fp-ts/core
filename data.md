@@ -27,3 +27,5 @@ This section covers the various modules and combinators that work with arrays.
 | Order       | array         | `Order<A>`       | `Order<ReadonlyArray<A>>`       |
 | Semigroup   | array         | `A`              | `Semigroup<Array<A>>`           |
 | Semigroup   | readonlyArray | `A`              | `Semigroup<ReadonlyArray<A>>`   |
+| Monoid      | array         | `A`              | `Monoid<Array<A>>`              |
+| Monoid      | readonlyArray | `A`              | `Monoid<ReadonlyArray<A>>`      |

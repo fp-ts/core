@@ -24,6 +24,7 @@ import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of_ from "@fp-ts/core/typeclass/Of"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type { Order } from "@fp-ts/core/typeclass/Order"
@@ -2176,15 +2177,7 @@ export const getSemigroup: <A>() => Semigroup<ReadonlyArray<A>> = semigroup.read
  * @category instances
  * @since 1.0.0
  */
-export const getMonoid = <A>(): Monoid<ReadonlyArray<A>> => {
-  const S = getSemigroup<A>()
-  return ({
-    combine: S.combine,
-    combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(collection)(empty()),
-    empty: empty()
-  })
-}
+export const getMonoid: <A>() => Monoid<ReadonlyArray<A>> = monoid.readonlyArray
 
 /**
  * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
