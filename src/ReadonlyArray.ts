@@ -8,7 +8,6 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
-import * as number from "@fp-ts/core/Number"
 import type { Option } from "@fp-ts/core/Option"
 import * as O from "@fp-ts/core/Option"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
@@ -2188,26 +2187,12 @@ export const getMonoid = <A>(): Monoid<ReadonlyArray<A>> => {
 }
 
 /**
- * Derives an `Order` over the `ReadonlyArray` of a given element type from the `Order` of that type. The ordering between two such
- * `ReadonlyArray`s is equal to: the first non equal comparison of each `ReadonlyArray`s elements taken pairwise in increasing order, in
- * case of equality over all the pairwise elements; the longest `ReadonlyArray` is considered the greatest, if both `ReadonlyArray`s have
- * the same length, the result is equality.
+ * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
+ * The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
+ * If all elements are equal, the arrays are then compared based on their length.
+ * It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
  *
  * @category lifting
  * @since 1.0.0
  */
-export const liftOrder = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
-  order.fromCompare((that) =>
-    (self) => {
-      const aLen = self.length
-      const bLen = that.length
-      const len = Math.min(aLen, bLen)
-      for (let i = 0; i < len; i++) {
-        const o = O.compare(that[i])(self[i])
-        if (o !== 0) {
-          return o
-        }
-      }
-      return number.Order.compare(bLen)(aLen)
-    }
-  )
+export const liftOrder: <A>(O: Order<A>) => Order<ReadonlyArray<A>> = order.array
