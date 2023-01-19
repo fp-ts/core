@@ -62,6 +62,60 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
 })
 
 /**
+ * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
+ * The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
+ * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const tuple = <A extends ReadonlyArray<any>>(
+  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
+): Semigroup<A> =>
+  fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
+
+/**
+ * Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
+ * The returned `Semigroup` combines two arrays by concatenating them.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const array = <A>(): Semigroup<Array<A>> => fromCombine(that => self => self.concat(that))
+
+/**
+ * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
+ * The returned `Semigroup` combines two arrays by concatenating them.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const readonlyArray: <A>() => Semigroup<ReadonlyArray<A>> = array as any
+
+/**
+ * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
+ * The returned `Semigroup` combines two structs of the same type by applying the corresponding `Semigroup` passed as arguments to each property in the struct.
+ * It is useful when you need to combine two structs of the same type and you have a specific way of combining each property of the struct.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
+  { readonly [K in keyof A]: A[K] }
+> =>
+  fromCombine((that) =>
+    (self) => {
+      const r = {} as any
+      for (const k in semigroups) {
+        if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
+          r[k] = semigroups[k].combine(that[k])(self[k])
+        }
+      }
+      return r
+    }
+  )
+
+/**
  * `Semigroup` that returns last minimum of elements.
  *
  * @category constructors
@@ -103,36 +157,6 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
         self
     }
 })
-
-/**
- * Given a tuple of `Semigroup`s returns a `Semigroup` for the tuple.
- *
- * @since 1.0.0
- */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
-): Semigroup<A> =>
-  fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
-
-/**
- * Given a struct of `Semigroup`s returns a `Semigroup` for the struct.
- *
- * @since 1.0.0
- */
-export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
-  { readonly [K in keyof A]: A[K] }
-> =>
-  fromCombine((that) =>
-    (self) => {
-      const r = {} as any
-      for (const k in semigroups) {
-        if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
-          r[k] = semigroups[k].combine(that[k])(self[k])
-        }
-      }
-      return r
-    }
-  )
 
 /**
  * @since 1.0.0

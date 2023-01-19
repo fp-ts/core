@@ -2168,7 +2168,7 @@ export const getIntersectionSemigroup = <A>(
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup = <A>(): Semigroup<ReadonlyArray<A>> => fromCombine(appendAll)
+export const getSemigroup: <A>() => Semigroup<ReadonlyArray<A>> = semigroup.readonlyArray
 
 /**
  * Returns a `Monoid` for `ReadonlyArray<A>`.

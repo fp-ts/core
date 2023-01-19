@@ -6,6 +6,10 @@ import * as _ from "@fp-ts/core/typeclass/Semigroup"
 import * as U from "../util"
 
 describe("Semigroup", () => {
+  it("exports", () => {
+    expect(_.array).exists
+  })
+
   it("reverse", () => {
     const A = _.reverse(String.Semigroup)
     U.deepStrictEqual(pipe("a", A.combine("b")), "ba")
