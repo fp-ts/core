@@ -48,3 +48,18 @@ This section covers the various modules and combinators that work with structs.
 | Option      | struct         | `{ a: Option<A>, b: Option<B>, ... }`           | `Option<{ a: A, b: B }>`                  |
 | Predicate   | struct         | `{ a: Predicate<A>, b: Predicate<B>, ... }`     | `Predicate<Readonly<{ a: A, b: B }>>`     |
 | These       | struct         | `{ a: These<E1, A>, b: These<E2, B>, ... }`     | `These<E1 \| E2 \| ..., { a: A, b: B }>`  |
+
+## strings
+
+| Module      | Name        | Given | To                            |
+| ----------- | ----------- | ----- | ----------------------------- |
+| Equivalence | string      |       | `Equivalence<string>`         |
+| Order       | string      |       | `Order<string>`               |
+| Semigroup   | string      |       | `Semigroup<string>`           |
+| Monoid      | string      |       | `Monoid<string>`              |
+| Predicate   | isString    |       | `Refinement<unknown, string>` |
+| String      | Equivalence |       | `Equivalence<string>`         |
+| String      | Order       |       | `Order<string>`               |
+| String      | Semigroup   |       | `Semigroup<string>`           |
+| String      | Monoid      |       | `Monoid<string>`              |
+| String      | isString    |       | `Refinement<unknown, string>` |

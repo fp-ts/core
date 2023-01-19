@@ -15,8 +15,6 @@ export interface Monoid<A> extends Semigroup<A> {
 }
 
 /**
- * Optimised.
- *
  * @category constructors
  * @since 1.0.0
  */
@@ -49,13 +47,25 @@ export const max = <A>(B: Bounded<A>): Monoid<A> => fromSemigroup(semigroup.max(
 /**
  * The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const reverse = <A>(M: Monoid<A>): Monoid<A> => fromSemigroup(semigroup.reverse(M), M.empty)
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const string: Monoid<string> = {
+  ...semigroup.string,
+  combineAll: (collection) => semigroup.string.combineMany(collection)(""),
+  empty: ""
+}
+
+/**
  * Given a tuple of `Monoid`s returns a `Monoid` for the tuple.
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<any>>(
@@ -94,6 +104,7 @@ export const readonlyArray: <A>() => Monoid<ReadonlyArray<A>> = array as any
 /**
  * Given a struct of `Monoid`s returns a `Monoid` for the struct.
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const struct = <A>(

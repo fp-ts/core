@@ -28,6 +28,14 @@ export interface OrderTypeLambda extends TypeLambda {
 }
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const string: Order<string> = {
+  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+}
+
+/**
  * Main constructor.
  *
  * @category constructors
