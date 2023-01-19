@@ -9,7 +9,7 @@
 import * as hkt from "@fp-ts/core/HKT"
 
 // -------------------------------------------------------------------------------------
-// typeclasses
+// data types
 // -------------------------------------------------------------------------------------
 
 import * as boolean from "@fp-ts/core/Boolean"
@@ -21,8 +21,14 @@ import * as option from "@fp-ts/core/Option"
 import * as ordering from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as readonlyArray from "@fp-ts/core/ReadonlyArray"
+import * as readonlyRecord from "@fp-ts/core/ReadonlyRecord"
 import * as string from "@fp-ts/core/String"
 import * as these from "@fp-ts/core/These"
+
+// -------------------------------------------------------------------------------------
+// typeclasses
+// -------------------------------------------------------------------------------------
+
 import * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
@@ -192,6 +198,10 @@ export {
    * @since 1.0.0
    */
   readonlyArray,
+  /**
+   * @since 1.0.0
+   */
+  readonlyRecord,
   /**
    * @category typeclass
    * @since 1.0.0
