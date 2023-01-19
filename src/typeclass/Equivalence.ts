@@ -6,6 +6,7 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { ReadonlyRecord } from "@fp-ts/core/ReadonlyRecord"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -122,7 +123,7 @@ export const struct = <A>(
  */
 export const record = <A>(
   equivalence: Equivalence<A>
-): Equivalence<{ readonly [x: string]: A }> =>
+): Equivalence<ReadonlyRecord<A>> =>
   (x, y) => {
     const keys = Object.keys(x)
     if (Object.keys(y).length !== keys.length) {
