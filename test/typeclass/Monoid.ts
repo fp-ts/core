@@ -25,9 +25,9 @@ describe("Monoid", () => {
 
   it("reverse", () => {
     const M = monoid.reverse(String.Monoid)
-    U.deepStrictEqual(pipe("a", M.combine("b")), "ba")
-    U.deepStrictEqual(pipe("a", M.combine(M.empty)), "a")
-    U.deepStrictEqual(pipe(M.empty, M.combine("a")), "a")
+    U.deepStrictEqual(M.combine("a", "b"), "ba")
+    U.deepStrictEqual(M.combine("a", M.empty), "a")
+    U.deepStrictEqual(M.combine(M.empty, "a"), "a")
     U.deepStrictEqual(pipe("a", M.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", M.combineMany(["b", "c", "d"])), "dcba")
     U.deepStrictEqual(pipe("a", M.combineMany([M.empty])), "a")
@@ -41,7 +41,7 @@ describe("Monoid", () => {
         age: N.MonoidSum
       })
       U.deepStrictEqual(M.empty, { name: "", age: 0 })
-      U.deepStrictEqual(pipe({ name: "a", age: 10 }, M.combine({ name: "b", age: 20 })), {
+      U.deepStrictEqual(M.combine({ name: "a", age: 10 }, { name: "b", age: 20 }), {
         name: "ab",
         age: 30
       })
@@ -60,6 +60,6 @@ describe("Monoid", () => {
       N.MonoidSum
     )
     U.deepStrictEqual(M.empty, ["", 0])
-    U.deepStrictEqual(pipe(["a", 10], M.combine(["b", 20])), ["ab", 30])
+    U.deepStrictEqual(M.combine(["a", 10], ["b", 20]), ["ab", 30])
   })
 })

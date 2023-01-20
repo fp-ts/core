@@ -21,10 +21,10 @@ describe("Ordering", () => {
   })
 
   it("Semigroup", () => {
-    deepStrictEqual(pipe(0, _.Semigroup.combine(0)), 0)
-    deepStrictEqual(pipe(0, _.Semigroup.combine(1)), 1)
-    deepStrictEqual(pipe(1, _.Semigroup.combine(-1)), 1)
-    deepStrictEqual(pipe(-1, _.Semigroup.combine(1)), -1)
+    deepStrictEqual(_.Semigroup.combine(0, 0), 0)
+    deepStrictEqual(_.Semigroup.combine(0, 1), 1)
+    deepStrictEqual(_.Semigroup.combine(1, -1), 1)
+    deepStrictEqual(_.Semigroup.combine(-1, 1), -1)
 
     deepStrictEqual(pipe(0, _.Semigroup.combineMany([])), 0)
     deepStrictEqual(pipe(1, _.Semigroup.combineMany([])), 1)
@@ -36,11 +36,11 @@ describe("Ordering", () => {
   })
 
   it("Monoid", () => {
-    deepStrictEqual(pipe(_.Monoid.empty, _.Monoid.combine(0)), 0)
-    deepStrictEqual(pipe(_.Monoid.empty, _.Monoid.combine(1)), 1)
-    deepStrictEqual(pipe(_.Monoid.empty, _.Monoid.combine(-1)), -1)
-    deepStrictEqual(pipe(0, _.Monoid.combine(_.Monoid.empty)), 0)
-    deepStrictEqual(pipe(1, _.Monoid.combine(_.Monoid.empty)), 1)
-    deepStrictEqual(pipe(-1, _.Monoid.combine(_.Monoid.empty)), -1)
+    deepStrictEqual(_.Monoid.combine(_.Monoid.empty, 0), 0)
+    deepStrictEqual(_.Monoid.combine(_.Monoid.empty, 1), 1)
+    deepStrictEqual(_.Monoid.combine(_.Monoid.empty, -1), -1)
+    deepStrictEqual(_.Monoid.combine(0, _.Monoid.empty), 0)
+    deepStrictEqual(_.Monoid.combine(1, _.Monoid.empty), 1)
+    deepStrictEqual(_.Monoid.combine(-1, _.Monoid.empty), -1)
   })
 })

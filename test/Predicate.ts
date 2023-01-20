@@ -115,7 +115,7 @@ describe.concurrent("Predicate", () => {
 
   it("getSemigroupAny", () => {
     const S = _.getSemigroupAny<number>()
-    const predicate = pipe(isPositive, S.combine(isNegative))
+    const predicate = S.combine(isPositive, isNegative)
     deepStrictEqual(predicate(0), false)
     deepStrictEqual(predicate(-1), true)
     deepStrictEqual(predicate(1), true)
@@ -123,7 +123,7 @@ describe.concurrent("Predicate", () => {
 
   it("getMonoidAny", () => {
     const M = _.getMonoidAny<number>()
-    const predicate = pipe(isPositive, M.combine(M.empty))
+    const predicate = M.combine(isPositive, M.empty)
     deepStrictEqual(predicate(0), isPositive(0))
     deepStrictEqual(predicate(-1), isPositive(-1))
     deepStrictEqual(predicate(1), isPositive(1))
@@ -131,7 +131,7 @@ describe.concurrent("Predicate", () => {
 
   it("getSemigroupAll", () => {
     const S = _.getSemigroupAll<number>()
-    const predicate = pipe(isPositive, S.combine(isLessThan2))
+    const predicate = S.combine(isPositive, isLessThan2)
     deepStrictEqual(predicate(0), false)
     deepStrictEqual(predicate(-2), false)
     deepStrictEqual(predicate(1), true)
@@ -139,7 +139,7 @@ describe.concurrent("Predicate", () => {
 
   it("getMonoidAll", () => {
     const M = _.getMonoidAll<number>()
-    const predicate = pipe(isPositive, M.combine(M.empty))
+    const predicate = M.combine(isPositive, M.empty)
     deepStrictEqual(predicate(0), isPositive(0))
     deepStrictEqual(predicate(-1), isPositive(-1))
     deepStrictEqual(predicate(1), isPositive(1))

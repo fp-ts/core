@@ -17,12 +17,14 @@ export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
 /**
  * @since 1.0.0
  */
-export const sum: (that: bigint) => (self: bigint) => bigint = semigroup.bigintSum.combine
+export const sum = (that: bigint) =>
+  (self: bigint): bigint => semigroup.bigintSum.combine(self, that)
 
 /**
  * @since 1.0.0
  */
-export const multiply: (that: bigint) => (self: bigint) => bigint = semigroup.bigintMultiply.combine
+export const multiply = (that: bigint) =>
+  (self: bigint): bigint => semigroup.bigintMultiply.combine(self, that)
 
 /**
  * @since 1.0.0

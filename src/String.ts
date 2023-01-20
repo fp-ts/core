@@ -55,7 +55,8 @@ export const empty: "" = "" as const
 /**
  * @since 1.0.0
  */
-export const concat: (that: string) => (self: string) => string = semigroup.string.combine
+export const concat = (that: string) =>
+  (self: string): string => semigroup.string.combine(self, that)
 
 /**
  * @example

@@ -55,13 +55,13 @@ describe("Order", () => {
       string.Order,
       _.contramap((x: T) => x[1])
     )
-    U.deepStrictEqual(sort(pipe(sortByFst, S.combine(sortBySnd)))(tuples), [
+    U.deepStrictEqual(sort(S.combine(sortByFst, sortBySnd))(tuples), [
       [1, "b"],
       [1, "c"],
       [2, "a"],
       [2, "c"]
     ])
-    U.deepStrictEqual(sort(pipe(sortBySnd, S.combine(sortByFst)))(tuples), [
+    U.deepStrictEqual(sort(S.combine(sortBySnd, sortByFst))(tuples), [
       [2, "a"],
       [1, "b"],
       [1, "c"],

@@ -11,7 +11,7 @@ describe.concurrent("Function", () => {
   it("getSemigroup", () => {
     const S = Function.getSemigroup(Number.SemigroupSum)<string>()
     const f = (s: string) => s === "a" ? 0 : 1
-    const g = Function.pipe(size, S.combine(f))
+    const g = S.combine(size, f)
     deepStrictEqual(g(""), 1)
     deepStrictEqual(g("a"), 1)
     deepStrictEqual(g("b"), 2)
@@ -21,12 +21,12 @@ describe.concurrent("Function", () => {
   it("getMonoid", () => {
     const M = Function.getMonoid(Number.MonoidSum)<string>()
     const f = (s: string) => s === "a" ? 0 : 1
-    const g = Function.pipe(size, M.combine(f))
+    const g = M.combine(size, f)
     deepStrictEqual(g(""), 1)
     deepStrictEqual(g("a"), 1)
     deepStrictEqual(g("b"), 2)
-    deepStrictEqual(Function.pipe(size, M.combine(M.empty))("a"), 1)
-    deepStrictEqual(Function.pipe(M.empty, M.combine(size))("a"), 1)
+    deepStrictEqual(M.combine(size, M.empty)("a"), 1)
+    deepStrictEqual(M.combine(M.empty, size)("a"), 1)
     deepStrictEqual(M.combineAll([size, size])("a"), 2)
   })
 

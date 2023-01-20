@@ -409,11 +409,11 @@ describe.concurrent("Option", () => {
 
   it("getMonoid", () => {
     const M = _.getMonoid(S.Semigroup)
-    deepStrictEqual(pipe(_.none(), M.combine(_.none())), _.none())
-    deepStrictEqual(pipe(_.none(), M.combine(_.some("a"))), _.some("a"))
-    deepStrictEqual(pipe(_.some("a"), M.combine(_.none())), _.some("a"))
-    deepStrictEqual(pipe(_.some("b"), M.combine(_.some("a"))), _.some("ba"))
-    deepStrictEqual(pipe(_.some("a"), M.combine(_.some("b"))), _.some("ab"))
+    deepStrictEqual(M.combine(_.none(), _.none()), _.none())
+    deepStrictEqual(M.combine(_.none(), _.some("a")), _.some("a"))
+    deepStrictEqual(M.combine(_.some("a"), _.none()), _.some("a"))
+    deepStrictEqual(M.combine(_.some("b"), _.some("a")), _.some("ba"))
+    deepStrictEqual(M.combine(_.some("a"), _.some("b")), _.some("ab"))
 
     deepStrictEqual(pipe(_.some("a"), M.combineMany([_.some("b")])), _.some("ab"))
     deepStrictEqual(pipe(_.none(), M.combineMany([_.some("b")])), _.some("b"))

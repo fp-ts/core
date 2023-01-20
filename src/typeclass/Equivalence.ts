@@ -142,7 +142,7 @@ export const record = <A>(
  * @since 2.10.0
  */
 export const getSemigroup = <A>(): Semigroup<Equivalence<A>> => ({
-  combine: (that) => (self) => (x, y) => self(x, y) && that(x, y),
+  combine: (self, that) => (x, y) => self(x, y) && that(x, y),
   combineMany: (collection) =>
     self =>
       (x, y) => {
