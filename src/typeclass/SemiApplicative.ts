@@ -21,13 +21,12 @@ export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, C
 export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <A, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, R, O, E, A>> => ({
     combine: (self, that) => pipe(self, F.product(that), F.map(([a1, a2]) => S.combine(a1, a2))),
-    combineMany: collection =>
-      self =>
-        pipe(
-          self,
-          F.productMany(collection),
-          F.map(([head, ...tail]) => pipe(head, S.combineMany(tail)))
-        )
+    combineMany: (self, collection) =>
+      pipe(
+        self,
+        F.productMany(collection),
+        F.map(([head, ...tail]) => S.combineMany(head, tail))
+      )
   })
 
 /**

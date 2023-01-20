@@ -1,5 +1,4 @@
 import * as Bigint from "@fp-ts/core/Bigint"
-import { pipe } from "@fp-ts/core/Function"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
 describe.concurrent("Bigint", () => {
@@ -51,8 +50,8 @@ describe.concurrent("Bigint", () => {
 
   it("SemigroupMultiply", () => {
     deepStrictEqual(Bigint.SemigroupMultiply.combine(2n, 3n), 6n)
-    deepStrictEqual(pipe(0n, Bigint.SemigroupMultiply.combineMany([1n, 2n, 3n])), 0n)
-    deepStrictEqual(pipe(2n, Bigint.SemigroupMultiply.combineMany([1n, 0n, 3n])), 0n)
+    deepStrictEqual(Bigint.SemigroupMultiply.combineMany(0n, [1n, 2n, 3n]), 0n)
+    deepStrictEqual(Bigint.SemigroupMultiply.combineMany(2n, [1n, 0n, 3n]), 0n)
   })
 
   it("MonoidMultiply", () => {

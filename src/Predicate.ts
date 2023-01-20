@@ -286,7 +286,7 @@ export const getMonoidAny = <A>(): monoid.Monoid<Predicate<A>> => {
   return ({
     combine: S.combine,
     combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(collection)(constFalse),
+    combineAll: (collection) => S.combineMany(constFalse, collection),
     empty: constFalse
   })
 }
@@ -307,7 +307,7 @@ export const getMonoidAll = <A>(): monoid.Monoid<Predicate<A>> => {
   return ({
     combine: S.combine,
     combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(collection)(constTrue),
+    combineAll: (collection) => S.combineMany(constTrue, collection),
     empty: constTrue
   })
 }

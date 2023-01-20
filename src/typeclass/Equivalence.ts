@@ -143,19 +143,18 @@ export const record = <A>(
  */
 export const getSemigroup = <A>(): Semigroup<Equivalence<A>> => ({
   combine: (self, that) => (x, y) => self(x, y) && that(x, y),
-  combineMany: (collection) =>
-    self =>
-      (x, y) => {
-        if (!self(x, y)) {
+  combineMany: (self, collection) =>
+    (x, y) => {
+      if (!self(x, y)) {
+        return false
+      }
+      for (const equivalence of collection) {
+        if (!equivalence(x, y)) {
           return false
         }
-        for (const equivalence of collection) {
-          if (!equivalence(x, y)) {
-            return false
-          }
-        }
-        return true
       }
+      return true
+    }
 })
 
 const empty: Equivalence<unknown> = () => true

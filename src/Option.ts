@@ -547,14 +547,13 @@ export const getMonoid = <A>(
     isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(self.value, that.value))
   return ({
     combine,
-    combineMany: (others) =>
-      (start) => {
-        let c = start
-        for (const o of others) {
-          c = combine(c, o)
-        }
-        return c
-      },
+    combineMany: (self, collection) => {
+      let c = self
+      for (const o of collection) {
+        c = combine(c, o)
+      }
+      return c
+    },
     combineAll: (collection: Iterable<Option<A>>): Option<A> => {
       let c: Option<A> = option.none
       for (const o of collection) {

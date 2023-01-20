@@ -415,9 +415,9 @@ describe.concurrent("Option", () => {
     deepStrictEqual(M.combine(_.some("b"), _.some("a")), _.some("ba"))
     deepStrictEqual(M.combine(_.some("a"), _.some("b")), _.some("ab"))
 
-    deepStrictEqual(pipe(_.some("a"), M.combineMany([_.some("b")])), _.some("ab"))
-    deepStrictEqual(pipe(_.none(), M.combineMany([_.some("b")])), _.some("b"))
-    deepStrictEqual(pipe(_.some("a"), M.combineMany([_.none()])), _.some("a"))
+    deepStrictEqual(M.combineMany(_.some("a"), [_.some("b")]), _.some("ab"))
+    deepStrictEqual(M.combineMany(_.none(), [_.some("b")]), _.some("b"))
+    deepStrictEqual(M.combineMany(_.some("a"), [_.none()]), _.some("a"))
 
     deepStrictEqual(pipe(M.combineAll([])), _.none())
     deepStrictEqual(pipe(M.combineAll([_.some("a")])), _.some("a"))

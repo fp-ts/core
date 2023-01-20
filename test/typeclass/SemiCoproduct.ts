@@ -9,5 +9,6 @@ describe("SemiCoproduct", () => {
     U.deepStrictEqual(S.combine(E.left("a"), E.right(2)), E.right(2))
     U.deepStrictEqual(S.combine(E.right(1), E.left("b")), E.right(1))
     U.deepStrictEqual(S.combine(E.left("a"), E.left("b")), E.left("b"))
+    U.deepStrictEqual(S.combineMany(E.left("a"), [E.left("b")]), E.left("b"))
   })
 })

@@ -405,7 +405,7 @@ export const getSemiCoproduct = <A>(
 ): semiCoproduct.SemiCoproduct<IdentityTypeLambdaFix<A>> => ({
   imap: Invariant.imap,
   coproduct: (that) => (self) => S.combine(self, that),
-  coproductMany: S.combineMany
+  coproductMany: (collection) => (self) => S.combineMany(self, collection)
 })
 
 /**

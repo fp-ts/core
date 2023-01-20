@@ -139,21 +139,20 @@ export const getSemigroup = <A>(): Semigroup<Order<A>> => ({
       }
       return O2.compare(self, that)
     }),
-  combineMany: (collection) =>
-    (self) =>
-      fromCompare((a1, a2) => {
-        let out = self.compare(a1, a2)
+  combineMany: (self, collection) =>
+    fromCompare((a1, a2) => {
+      let out = self.compare(a1, a2)
+      if (out !== 0) {
+        return out
+      }
+      for (const O of collection) {
+        out = O.compare(a1, a2)
         if (out !== 0) {
           return out
         }
-        for (const O of collection) {
-          out = O.compare(a1, a2)
-          if (out !== 0) {
-            return out
-          }
-        }
-        return out
-      })
+      }
+      return out
+    })
 })
 
 const empty: Order<unknown> = fromCompare(() => 0)

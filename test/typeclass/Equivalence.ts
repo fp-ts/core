@@ -108,7 +108,7 @@ describe("Equivalence", () => {
     expect(eqE0E1(["a", 1, true], ["b", 1, true])).toEqual(false)
     expect(eqE0E1(["a", 1, true], ["a", 2, false])).toEqual(false)
     const E2: _.Equivalence<T> = _.contramap((x: T) => x[2])(_.boolean)
-    const eqE0E1E2 = S.combineMany([E1, E2])(E0)
+    const eqE0E1E2 = S.combineMany(E0, [E1, E2])
     expect(eqE0E1E2(["a", 1, true], ["a", 1, true])).toEqual(true)
     expect(eqE0E1E2(["a", 1, true], ["b", 1, true])).toEqual(false)
     expect(eqE0E1E2(["a", 1, true], ["a", 2, true])).toEqual(false)

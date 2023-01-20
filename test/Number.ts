@@ -1,4 +1,3 @@
-import { pipe } from "@fp-ts/core/Function"
 import * as Number from "@fp-ts/core/Number"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
@@ -55,8 +54,8 @@ describe.concurrent("Number", () => {
 
   it("SemigroupMultiply", () => {
     deepStrictEqual(Number.SemigroupMultiply.combine(2, 3), 6)
-    deepStrictEqual(pipe(0, Number.SemigroupMultiply.combineMany([1, 2, 3])), 0)
-    deepStrictEqual(pipe(2, Number.SemigroupMultiply.combineMany([1, 0, 3])), 0)
+    deepStrictEqual(Number.SemigroupMultiply.combineMany(0, [1, 2, 3]), 0)
+    deepStrictEqual(Number.SemigroupMultiply.combineMany(2, [1, 0, 3]), 0)
   })
 
   it("MonoidMultiply", () => {

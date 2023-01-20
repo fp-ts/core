@@ -67,13 +67,13 @@ describe("Order", () => {
       [1, "c"],
       [2, "c"]
     ])
-    U.deepStrictEqual(sort(pipe(sortBySnd, S.combineMany([])))(tuples), [
+    U.deepStrictEqual(sort(S.combineMany(sortBySnd, []))(tuples), [
       [2, "a"],
       [1, "b"],
       [2, "c"],
       [1, "c"]
     ])
-    U.deepStrictEqual(sort(pipe(sortBySnd, S.combineMany([sortByFst])))(tuples), [
+    U.deepStrictEqual(sort(S.combineMany(sortBySnd, [sortByFst]))(tuples), [
       [2, "a"],
       [1, "b"],
       [1, "c"],
@@ -98,13 +98,13 @@ describe("Order", () => {
       string.Order,
       _.contramap((x: T) => x[1])
     )
-    U.deepStrictEqual(sort(pipe(M.empty, M.combineMany([sortByFst, sortBySnd])))(tuples), [
+    U.deepStrictEqual(sort(M.combineMany(M.empty, [sortByFst, sortBySnd]))(tuples), [
       [1, "b"],
       [1, "c"],
       [2, "a"],
       [2, "c"]
     ])
-    U.deepStrictEqual(sort(pipe(sortBySnd, M.combineMany([sortByFst, M.empty])))(tuples), [
+    U.deepStrictEqual(sort(M.combineMany(sortBySnd, [sortByFst, M.empty]))(tuples), [
       [2, "a"],
       [1, "b"],
       [1, "c"],
