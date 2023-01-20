@@ -76,7 +76,7 @@ describe.concurrent("Predicate", () => {
 
   it("productMany", () => {
     const productMany = _.SemiProduct.productMany
-    const p = pipe(isPositive, productMany([isNegative]))
+    const p = productMany(isPositive, [isNegative])
     deepStrictEqual(p([1, -1]), true)
     deepStrictEqual(p([1, 1]), false)
     deepStrictEqual(p([-1, -1]), false)

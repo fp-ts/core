@@ -23,8 +23,7 @@ export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
     combine: (self, that) => pipe(F.product(self, that), F.map(([a1, a2]) => S.combine(a1, a2))),
     combineMany: (self, collection) =>
       pipe(
-        self,
-        F.productMany(collection),
+        F.productMany(self, collection),
         F.map(([head, ...tail]) => S.combineMany(head, tail))
       )
   })

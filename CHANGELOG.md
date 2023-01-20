@@ -9,6 +9,7 @@
   - make `combineMany` binary
 - `SemiProduct`
   - make `product` binary
+  - make `productMany` binary
   - rename `productFlatten` to `element`
 - `Order`
   - make `compare` binary

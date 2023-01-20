@@ -208,10 +208,7 @@ describe("Order", () => {
     })
 
     it("productMany", () => {
-      const O = pipe(
-        string.Order,
-        _.SemiProduct.productMany([string.Order, string.Order])
-      )
+      const O = _.SemiProduct.productMany(string.Order, [string.Order, string.Order])
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "c"]), -1)
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "a"]), 1)

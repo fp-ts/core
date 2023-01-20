@@ -151,21 +151,23 @@ export const Do: Predicate<{}> = of_.Do(Of)
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
-const productMany = <A>(collection: Iterable<Predicate<A>>) =>
-  (self: Predicate<A>): Predicate<readonly [A, ...Array<A>]> => {
-    return ([head, ...tail]) => {
-      if (self(head) === false) {
+const productMany = <A>(
+  self: Predicate<A>,
+  collection: Iterable<Predicate<A>>
+): Predicate<readonly [A, ...Array<A>]> => {
+  return ([head, ...tail]) => {
+    if (self(head) === false) {
+      return false
+    }
+    const predicates = readonlyArray.fromIterable(collection)
+    for (let i = 0; i < predicates.length; i++) {
+      if (predicates[i](tail[i]) === false) {
         return false
       }
-      const predicates = readonlyArray.fromIterable(collection)
-      for (let i = 0; i < predicates.length; i++) {
-        if (predicates[i](tail[i]) === false) {
-          return false
-        }
-      }
-      return true
     }
+    return true
   }
+}
 
 /**
  * @category instances

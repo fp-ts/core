@@ -1627,8 +1627,8 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
 ) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
     (self: NonEmptyReadonlyArray<A>): Kind<F, R, O, E, NonEmptyArray<B>> => {
-      const fbs = pipe(self, mapNonEmptyWithIndex(f))
-      return pipe(headNonEmpty(fbs), F.productMany(tailNonEmpty(fbs)))
+      const [head, ...tail] = pipe(self, mapNonEmptyWithIndex(f))
+      return F.productMany(head, tail)
     }
 
 /**
@@ -1692,8 +1692,9 @@ const product = <A, B>(
 }
 
 const productMany: <A>(
+  self: ReadonlyArray<A>,
   collection: Iterable<ReadonlyArray<A>>
-) => (self: ReadonlyArray<A>) => Array<[A, ...Array<A>]> = semiProduct.productMany(
+) => Array<[A, ...Array<A>]> = semiProduct.productMany(
   Covariant,
   product
 ) as any
@@ -1701,11 +1702,8 @@ const productMany: <A>(
 const productAll = <A>(
   collection: Iterable<ReadonlyArray<A>>
 ): Array<Array<A>> => {
-  const arrays = Array.from(collection)
-  if (isEmpty(arrays)) {
-    return empty()
-  }
-  return productMany(arrays.slice(1))(arrays[0])
+  const arrays = fromIterable(collection)
+  return isEmpty(arrays) ? empty() : productMany(arrays[0], arrays.slice(1))
 }
 
 /**

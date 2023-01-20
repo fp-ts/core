@@ -219,16 +219,11 @@ describe.concurrent("Option", () => {
   })
 
   it("productMany", () => {
-    deepStrictEqual(pipe(_.none(), _.SemiProduct.productMany([])), _.none())
-    deepStrictEqual(pipe(_.some(1), _.SemiProduct.productMany([])), _.some([1]))
-    deepStrictEqual(
-      pipe(_.some(1), _.SemiProduct.productMany([_.none() as _.Option<number>])),
-      _.none()
-    )
-    deepStrictEqual(
-      pipe(_.some(1), _.SemiProduct.productMany([_.some(2)])),
-      _.some([1, 2])
-    )
+    const productMany = _.SemiProduct.productMany
+    deepStrictEqual(productMany(_.none(), []), _.none())
+    deepStrictEqual(productMany(_.some(1), []), _.some([1]))
+    deepStrictEqual(productMany(_.some(1), [_.none()]), _.none())
+    deepStrictEqual(productMany(_.some(1), [_.some(2)]), _.some([1, 2]))
   })
 
   it("productAll", () => {
