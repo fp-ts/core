@@ -81,7 +81,7 @@ describe.concurrent("Identity", () => {
   })
 
   it("SemiProduct", () => {
-    U.deepStrictEqual(pipe("a", _.SemiProduct.productMany(["b", "c"])), ["a", "b", "c"])
+    U.deepStrictEqual(_.SemiProduct.productMany("a", ["b", "c"]), ["a", "b", "c"])
   })
 
   it("Product", () => {

@@ -251,8 +251,10 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
   ...FlatMap
 }
 
-const productMany = <A>(collection: Iterable<Identity<A>>) =>
-  (self: Identity<A>): Identity<[A, ...Array<A>]> => [self, ...collection]
+const productMany = <A>(
+  self: Identity<A>,
+  collection: Iterable<Identity<A>>
+): Identity<[A, ...Array<A>]> => [self, ...collection]
 
 /**
  * @category instances

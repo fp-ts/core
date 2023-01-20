@@ -186,7 +186,7 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
 export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
   imap: Contravariant.imap,
   product: tuple,
-  productMany: collection => self => tuple(self, ...collection)
+  productMany: (self, collection) => tuple(self, ...collection)
 }
 
 /**

@@ -1613,47 +1613,6 @@ describe.concurrent("ReadonlyArray", () => {
     ])
   })
 
-  test("productMany", () => {
-    const productMany = RA.SemiProduct.productMany
-    expect(pipe(
-      [],
-      productMany([
-        [2],
-        [4, 5],
-        [8, 9, 10]
-      ])
-    )).toEqual(pipe(
-      [],
-      productMany([
-        [2],
-        [4, 5],
-        [8, 9, 10]
-      ])
-    ))
-    expect(pipe(
-      [1, 2, 3],
-      productMany([])
-    )).toEqual(pipe(
-      [1, 2, 3],
-      productMany([])
-    ))
-    expect(pipe(
-      [1, 2, 3],
-      productMany([
-        [2],
-        [4, 5],
-        [8, 9, 10]
-      ])
-    )).toEqual(pipe(
-      [1, 2, 3],
-      productMany([
-        [2],
-        [4, 5],
-        [8, 9, 10]
-      ])
-    ))
-  })
-
   test("productAll", () => {
     const productAll = RA.Product.productAll
     expect(productAll([])).toEqual([])
