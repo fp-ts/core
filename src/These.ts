@@ -978,10 +978,10 @@ const product = <E1, A, E2, B>(
 }
 
 const productMany = <E, A>(
+  self: Validated<E, A>,
   collection: Iterable<Validated<E, A>>
-) =>
-  (self: Validated<E, A>): Validated<E, [A, ...Array<A>]> =>
-    pipe(product(self, productAll(collection)), map(([a, as]) => [a, ...as]))
+): Validated<E, [A, ...Array<A>]> =>
+  pipe(product(self, productAll(collection)), map(([a, as]) => [a, ...as]))
 
 /**
  * @category instances

@@ -18,8 +18,9 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
 
   readonly productMany: <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
     collection: Iterable<Kind<F, R, O, E, A>>
-  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...Array<A>]>
+  ) => Kind<F, R, O, E, [A, ...Array<A>]>
 }
 
 /**
@@ -52,16 +53,13 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
   G: SemiProduct<G>
 ) =>
   <FR, FO, FE, GR, GO, GE, A>(
+    self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
     collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
-  ) =>
-    (
-      self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-    ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, [A, ...Array<A>]>> =>
-      pipe(
-        self,
-        F.productMany(collection),
-        F.map(([ga, ...gas]) => pipe(ga, G.productMany(gas)))
-      )
+  ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, [A, ...Array<A>]>> =>
+    pipe(
+      F.productMany(self, collection),
+      F.map(([ga, ...gas]) => G.productMany(ga, gas))
+    )
 
 /**
  * Returns a default `productMany` implementation (useful for tests).
@@ -74,21 +72,21 @@ export const productMany = <F extends TypeLambda>(
   product: SemiProduct<F>["product"]
 ): SemiProduct<F>["productMany"] =>
   <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
     collection: Iterable<Kind<F, R, O, E, A>>
-  ) =>
-    (self: Kind<F, R, O, E, A>) => {
-      let out = pipe(
-        self,
-        Covariant.map((a): [A, ...Array<A>] => [a])
+  ) => {
+    let out = pipe(
+      self,
+      Covariant.map((a): [A, ...Array<A>] => [a])
+    )
+    for (const fa of collection) {
+      out = pipe(
+        product(out, fa),
+        Covariant.map(([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a])
       )
-      for (const fa of collection) {
-        out = pipe(
-          product(out, fa),
-          Covariant.map(([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a])
-        )
-      }
-      return out
     }
+    return out
+  }
 
 /**
  * @since 1.0.0
@@ -144,7 +142,7 @@ export const nonEmptyTuple = <F extends TypeLambda>(F: SemiProduct<F>) =>
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
-  > => F.productMany(components.slice(1))(components[0]) as any
+  > => F.productMany(components[0], components.slice(1)) as any
 
 type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 
@@ -163,7 +161,7 @@ export const nonEmptyStruct = <F extends TypeLambda>(F: SemiProduct<F>) =>
   > => {
     const keys = Object.keys(fields)
     return pipe(
-      F.productMany(keys.slice(1).map(k => fields[k]))(fields[keys[0]]),
+      F.productMany(fields[keys[0]], keys.slice(1).map(k => fields[k])),
       F.imap(([value, ...values]) => {
         const out: any = { [keys[0]]: value }
         for (let i = 0; i < values.length; i++) {

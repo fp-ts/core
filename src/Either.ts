@@ -360,21 +360,21 @@ export const Monad: monad.Monad<EitherTypeLambda> = {
 }
 
 const productMany = <E, A>(
+  self: Either<E, A>,
   collection: Iterable<Either<E, A>>
-) =>
-  (self: Either<E, A>): Either<E, [A, ...Array<A>]> => {
-    if (isLeft(self)) {
-      return self
-    }
-    const out: [A, ...Array<A>] = [self.right]
-    for (const e of collection) {
-      if (isLeft(e)) {
-        return e
-      }
-      out.push(e.right)
-    }
-    return right(out)
+): Either<E, [A, ...Array<A>]> => {
+  if (isLeft(self)) {
+    return self
   }
+  const out: [A, ...Array<A>] = [self.right]
+  for (const e of collection) {
+    if (isLeft(e)) {
+      return e
+    }
+    out.push(e.right)
+  }
+  return right(out)
+}
 
 /**
  * @category instances

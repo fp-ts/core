@@ -406,20 +406,22 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
   ...FlatMap
 }
 
-const productMany = <A>(collection: Iterable<Option<A>>) =>
-  (self: Option<A>): Option<[A, ...Array<A>]> => {
-    if (isNone(self)) {
+const productMany = <A>(
+  self: Option<A>,
+  collection: Iterable<Option<A>>
+): Option<[A, ...Array<A>]> => {
+  if (isNone(self)) {
+    return option.none
+  }
+  const out: [A, ...Array<A>] = [self.value]
+  for (const o of collection) {
+    if (isNone(o)) {
       return option.none
     }
-    const out: [A, ...Array<A>] = [self.value]
-    for (const o of collection) {
-      if (isNone(o)) {
-        return option.none
-      }
-      out.push(o.value)
-    }
-    return some(out)
+    out.push(o.value)
   }
+  return some(out)
+}
 
 /**
  * @category instances

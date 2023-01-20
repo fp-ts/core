@@ -146,10 +146,7 @@ describe("Equivalence", () => {
   })
 
   it("SemiProduct/productMany", () => {
-    const eq = pipe(
-      _.string,
-      _.SemiProduct.productMany([_.string])
-    )
+    const eq = _.SemiProduct.productMany(_.string, [_.string])
     expect(eq(["a"], ["a"])).toEqual(true)
     expect(eq(["a"], ["b"])).toEqual(false)
     expect(eq(["a"], ["a", "b"])).toEqual(false)

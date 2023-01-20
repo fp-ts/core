@@ -291,30 +291,31 @@ describe("These", () => {
     const ab = ["a", "b"] as const
 
     const productMany: <E, A>(
+      self: _.Validated<E, A>,
       collection: Iterable<_.Validated<E, A>>
-    ) => (self: _.Validated<E, A>) => _.Validated<E, [A, ...Array<A>]> = _.SemiProduct.productMany
+    ) => _.Validated<E, [A, ...Array<A>]> = _.SemiProduct.productMany
 
-    expect(pipe(_.right(1), productMany([_.right(2)]))).toEqual(_.right([1, 2]))
+    expect(productMany(_.right(1), [_.right(2)])).toEqual(_.right([1, 2]))
     U.deepStrictEqual(
-      pipe(_.right(1), productMany<string, number>([_.left(b)])),
+      productMany(_.right(1), [_.left(b)]),
       _.left(b)
     )
     expect(
-      pipe(_.right(1), productMany<string, number>([_.both(b, 2)]))
+      productMany(_.right(1), [_.both(b, 2)])
     ).toEqual(
       _.both(b, [1, 2])
     )
 
-    U.deepStrictEqual(pipe(_.left(a), productMany([_.right(2)])), _.left(a))
-    U.deepStrictEqual(pipe(_.left(a), productMany<string, number>([_.left(b)])), _.left(a))
+    U.deepStrictEqual(productMany(_.left(a), [_.right(2)]), _.left(a))
+    U.deepStrictEqual(productMany(_.left(a), [_.left(b)]), _.left(a))
     U.deepStrictEqual(
-      pipe(_.left(a), productMany<string, number>([_.both(b, 2)])),
+      productMany(_.left(a), [_.both(b, 2)]),
       _.left(a)
     )
 
-    expect(pipe(_.both(a, 1), productMany([_.right(2)]))).toEqual(_.both(a, [1, 2]))
-    expect(pipe(_.both(a, 1), productMany<string, number>([_.left(b)]))).toEqual(_.left(ab))
-    expect(pipe(_.both(a, 1), productMany<string, number>([_.both(b, 2)]))).toEqual(
+    expect(productMany(_.both(a, 1), [_.right(2)])).toEqual(_.both(a, [1, 2]))
+    expect(productMany(_.both(a, 1), [_.left(b)])).toEqual(_.left(ab))
+    expect(productMany(_.both(a, 1), [_.both(b, 2)])).toEqual(
       _.both(ab, [1, 2])
     )
   })

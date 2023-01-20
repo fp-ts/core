@@ -388,20 +388,21 @@ describe.concurrent("Either", () => {
 
   it("productMany", () => {
     const productMany: <E, A>(
+      self: _.Either<E, A>,
       collection: Iterable<_.Either<E, A>>
-    ) => (self: _.Either<E, A>) => _.Either<E, [A, ...Array<A>]> = _.SemiProduct.productMany
+    ) => _.Either<E, [A, ...Array<A>]> = _.SemiProduct.productMany
 
-    deepStrictEqual(pipe(_.right(1), productMany([])), _.right([1]))
+    deepStrictEqual(productMany(_.right(1), []), _.right([1]))
     deepStrictEqual(
-      pipe(_.right(1), productMany([_.right(2), _.right(3)])),
+      productMany(_.right(1), [_.right(2), _.right(3)]),
       _.right([1, 2, 3])
     )
     deepStrictEqual(
-      pipe(_.right(1), productMany([_.left("e"), _.right(3)])),
+      productMany(_.right(1), [_.left("e"), _.right(3)]),
       _.left("e")
     )
     expect(
-      pipe(_.left("e"), productMany<string, number>([_.right(2), _.right(3)]))
+      productMany(_.left("e"), [_.right(2), _.right(3)])
     ).toEqual(_.left("e"))
   })
 

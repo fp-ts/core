@@ -145,10 +145,7 @@ describe("Semigroup", () => {
   })
 
   it("productMany", () => {
-    const S = pipe(
-      String.Semigroup,
-      _.SemiProduct.productMany([String.Semigroup, String.Semigroup])
-    )
+    const S = _.SemiProduct.productMany(String.Semigroup, [String.Semigroup, String.Semigroup])
     U.deepStrictEqual(S.combine(["a", "b", "c"], ["d", "e", "f"]), ["ad", "be", "cf"])
   })
 })
