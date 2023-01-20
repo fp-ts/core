@@ -19,12 +19,14 @@ export const isNumber: Refinement<unknown, number> = predicate.isNumber
 /**
  * @since 1.0.0
  */
-export const sum: (that: number) => (self: number) => number = semigroup.numberSum.combine
+export const sum = (that: number) =>
+  (self: number): number => semigroup.numberSum.combine(self, that)
 
 /**
  * @since 1.0.0
  */
-export const multiply: (that: number) => (self: number) => number = semigroup.numberMultiply.combine
+export const multiply = (that: number) =>
+  (self: number): number => semigroup.numberMultiply.combine(self, that)
 
 /**
  * @since 1.0.0

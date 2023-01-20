@@ -1876,7 +1876,7 @@ export const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: Readonl
 export const foldMapWithIndex = <M>(Monoid: Monoid<M>) =>
   <A>(f: (a: A, i: number) => M) =>
     (self: ReadonlyArray<A>): M =>
-      self.reduce((m, a, i) => Monoid.combine(f(a, i))(m), Monoid.empty)
+      self.reduce((m, a, i) => Monoid.combine(m, f(a, i)), Monoid.empty)
 
 /**
  * @category folding
@@ -1892,7 +1892,7 @@ export const foldMapNonEmpty = <S>(S: Semigroup<S>) =>
 export const foldMapNonEmptyWithIndex = <S>(S: Semigroup<S>) =>
   <A>(f: (a: A, i: number) => S) =>
     (self: NonEmptyReadonlyArray<A>): S =>
-      tailNonEmpty(self).reduce((s, a, i) => S.combine(f(a, i + 1))(s), f(headNonEmpty(self), 0))
+      tailNonEmpty(self).reduce((s, a, i) => S.combine(s, f(a, i + 1)), f(headNonEmpty(self), 0))
 
 /**
  * @category folding
@@ -2107,7 +2107,7 @@ export const extend = <A, B>(
  */
 export const min = <A>(O: Order<A>): ((self: NonEmptyReadonlyArray<A>) => A) => {
   const S = semigroup.min(O)
-  return (self) => self.reduce((a, acc) => S.combine(acc)(a))
+  return (self) => self.reduce(S.combine)
 }
 
 /**
@@ -2115,7 +2115,7 @@ export const min = <A>(O: Order<A>): ((self: NonEmptyReadonlyArray<A>) => A) => 
  */
 export const max = <A>(O: Order<A>): ((self: NonEmptyReadonlyArray<A>) => A) => {
   const S = semigroup.max(O)
-  return (self) => self.reduce((a, acc) => S.combine(acc)(a))
+  return (self) => self.reduce(S.combine)
 }
 
 /**
@@ -2139,7 +2139,7 @@ export const unfold = <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>): Array<
  * @since 1.0.0
  */
 export const getUnionSemigroup = <A>(equivalence: Equivalence<A>): Semigroup<ReadonlyArray<A>> =>
-  fromCombine(union(equivalence)) as any
+  fromCombine((self, that) => pipe(self, union(equivalence)(that)))
 
 /**
  * @category instances
@@ -2161,7 +2161,8 @@ export const getUnionMonoid = <A>(equivalence: Equivalence<A>): Monoid<ReadonlyA
  */
 export const getIntersectionSemigroup = <A>(
   equivalence: Equivalence<A>
-): Semigroup<ReadonlyArray<A>> => fromCombine(intersection(equivalence)) as any
+): Semigroup<ReadonlyArray<A>> =>
+  fromCombine((self, that) => pipe(self, intersection(equivalence)(that)))
 
 /**
  * Returns a `Semigroup` for `ReadonlyArray<A>`.

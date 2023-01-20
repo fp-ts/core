@@ -195,7 +195,7 @@ describe("SemiProduct", () => {
     it("Invariant (Semigroup)", () => {
       const nonEmptyTuple = _.nonEmptyTuple(semigroup.SemiProduct)
       const S = nonEmptyTuple(String.Semigroup, Number.SemigroupSum)
-      U.deepStrictEqual(pipe(["a", 2], S.combine(["b", 3])), ["ab", 5])
+      U.deepStrictEqual(S.combine(["a", 2], ["b", 3]), ["ab", 5])
     })
 
     it("Contravariant (Predicate)", () => {
@@ -223,7 +223,7 @@ describe("SemiProduct", () => {
     it("Invariant (Semigroup)", () => {
       const nonEmptyStruct = _.nonEmptyStruct(semigroup.Product)
       const S = nonEmptyStruct({ x: String.Semigroup, y: Number.SemigroupSum })
-      U.deepStrictEqual(pipe({ x: "a", y: 2 }, S.combine({ x: "b", y: 3 })), { x: "ab", y: 5 })
+      U.deepStrictEqual(S.combine({ x: "a", y: 2 }, { x: "b", y: 3 }), { x: "ab", y: 5 })
     })
 
     it("Contravariant (Predicate)", () => {

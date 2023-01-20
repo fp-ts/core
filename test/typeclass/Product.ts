@@ -1,5 +1,4 @@
 import * as Boolean from "@fp-ts/core/Boolean"
-import { pipe } from "@fp-ts/core/Function"
 import * as Number from "@fp-ts/core/Number"
 import * as O from "@fp-ts/core/Option"
 import * as P from "@fp-ts/core/Predicate"
@@ -23,9 +22,9 @@ describe("Product", () => {
 
     it("Invariant (Semigroup)", () => {
       const tuple = _.tuple(semigroup.Product)
-      U.deepStrictEqual(pipe([], tuple().combine([])), [])
+      U.deepStrictEqual(tuple().combine([], []), [])
       const S = tuple(String.Semigroup, Number.SemigroupSum)
-      U.deepStrictEqual(pipe(["a", 2], S.combine(["b", 3])), ["ab", 5])
+      U.deepStrictEqual(S.combine(["a", 2], ["b", 3]), ["ab", 5])
     })
 
     it("Contravariant (Predicate)", () => {
@@ -54,9 +53,9 @@ describe("Product", () => {
 
     it("Invariant (Semigroup)", () => {
       const struct = _.struct(semigroup.Product)
-      U.deepStrictEqual(pipe({}, struct({}).combine({})), {})
+      U.deepStrictEqual(struct({}).combine({}, {}), {})
       const S = struct({ x: String.Semigroup, y: Number.SemigroupSum })
-      U.deepStrictEqual(pipe({ x: "a", y: 2 }, S.combine({ x: "b", y: 3 })), { x: "ab", y: 5 })
+      U.deepStrictEqual(S.combine({ x: "a", y: 2 }, { x: "b", y: 3 }), { x: "ab", y: 5 })
     })
 
     it("Contravariant (Predicate)", () => {

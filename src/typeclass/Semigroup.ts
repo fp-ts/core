@@ -31,7 +31,7 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Semigroup<A> {
-  readonly combine: (that: A) => (self: A) => A
+  readonly combine: (self: A, that: A) => A
   readonly combineMany: (collection: Iterable<A>) => (self: A) => A
 }
 
@@ -55,7 +55,7 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
     (self) => {
       let out: A = self
       for (const a of collection) {
-        out = combine(a)(out)
+        out = combine(out, a)
       }
       return out
     }
@@ -65,9 +65,7 @@ export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> =
  * @category instances
  * @since 1.0.0
  */
-export const string: Semigroup<string> = fromCombine((that: string) =>
-  (self: string): string => self + that
-)
+export const string: Semigroup<string> = fromCombine((self, that) => self + that)
 
 /**
  * `number` semigroup under addition.
@@ -75,9 +73,7 @@ export const string: Semigroup<string> = fromCombine((that: string) =>
  * @category instances
  * @since 1.0.0
  */
-export const numberSum: Semigroup<number> = fromCombine((that: number) =>
-  (self: number): number => self + that
-)
+export const numberSum: Semigroup<number> = fromCombine((self, that) => self + that)
 
 /**
  * `number` semigroup under multiplication.
@@ -86,7 +82,7 @@ export const numberSum: Semigroup<number> = fromCombine((that: number) =>
  * @since 1.0.0
  */
 export const numberMultiply: Semigroup<number> = {
-  combine: (that: number) => (self: number): number => self * that,
+  combine: (self, that) => self * that,
   combineMany: (collection) =>
     (self) => {
       if (self === 0) {
@@ -109,9 +105,7 @@ export const numberMultiply: Semigroup<number> = {
  * @category instances
  * @since 1.0.0
  */
-export const bigintSum: Semigroup<bigint> = fromCombine((that: bigint) =>
-  (self: bigint): bigint => self + that
-)
+export const bigintSum: Semigroup<bigint> = fromCombine((self, that) => self + that)
 
 /**
  * `bigint` semigroup under multiplication.
@@ -120,7 +114,7 @@ export const bigintSum: Semigroup<bigint> = fromCombine((that: bigint) =>
  * @since 1.0.0
  */
 export const bigintMultiply: Semigroup<bigint> = {
-  combine: (that: bigint) => (self: bigint): bigint => self * that,
+  combine: (self, that) => self * that,
   combineMany: (collection) =>
     (self) => {
       if (self === 0n) {
@@ -144,7 +138,7 @@ export const bigintMultiply: Semigroup<bigint> = {
  * @since 1.0.0
  */
 export const booleanAll: Semigroup<boolean> = {
-  combine: (that: boolean) => (self: boolean): boolean => self && that,
+  combine: (self, that) => self && that,
   combineMany: (collection) =>
     (self) => {
       if (self === false) {
@@ -166,7 +160,7 @@ export const booleanAll: Semigroup<boolean> = {
  * @since 1.0.0
  */
 export const booleanAny: Semigroup<boolean> = {
-  combine: (that: boolean) => (self: boolean): boolean => self || that,
+  combine: (self, that) => self || that,
   combineMany: (collection) =>
     (self) => {
       if (self === true) {
@@ -192,7 +186,7 @@ export const booleanAny: Semigroup<boolean> = {
 export const tuple = <A extends ReadonlyArray<any>>(
   ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
 ): Semigroup<A> =>
-  fromCombine((that) => (self) => semigroups.map((S, i) => S.combine(that[i])(self[i])) as any)
+  fromCombine((self, that) => semigroups.map((S, i) => S.combine(self[i], that[i])) as any)
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
@@ -201,7 +195,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * @category combinators
  * @since 1.0.0
  */
-export const array = <A>(): Semigroup<Array<A>> => fromCombine(that => self => self.concat(that))
+export const array = <A>(): Semigroup<Array<A>> => fromCombine((self, that) => self.concat(that))
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
@@ -223,17 +217,15 @@ export const readonlyArray: <A>() => Semigroup<ReadonlyArray<A>> = array as any
 export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
   { readonly [K in keyof A]: A[K] }
 > =>
-  fromCombine((that) =>
-    (self) => {
-      const r = {} as any
-      for (const k in semigroups) {
-        if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
-          r[k] = semigroups[k].combine(that[k])(self[k])
-        }
+  fromCombine((self, that) => {
+    const r = {} as any
+    for (const k in semigroups) {
+      if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
+        r[k] = semigroups[k].combine(self[k], that[k])
       }
-      return r
     }
-  )
+    return r
+  })
 
 /**
  * `Semigroup` that returns last minimum of elements.
@@ -242,7 +234,7 @@ export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]>
  * @since 1.0.0
  */
 export const min = <A>(O: Order<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => O.compare(self, that) === -1 ? self : that)
+  fromCombine((self, that) => O.compare(self, that) === -1 ? self : that)
 
 /**
  * `Semigroup` that returns last maximum of elements.
@@ -251,14 +243,14 @@ export const min = <A>(O: Order<A>): Semigroup<A> =>
  * @since 1.0.0
  */
 export const max = <A>(O: Order<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => O.compare(self, that) === 1 ? self : that)
+  fromCombine((self, that) => O.compare(self, that) === 1 ? self : that)
 
 /**
  * @category constructors
  * @since 1.0.0
  */
 export const constant = <A>(a: A): Semigroup<A> => ({
-  combine: () => () => a,
+  combine: () => a,
   combineMany: () => () => a
 })
 
@@ -268,12 +260,12 @@ export const constant = <A>(a: A): Semigroup<A> => ({
  * @since 1.0.0
  */
 export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
-  combine: (that) => (self) => S.combine(self)(that),
+  combine: (self, that) => S.combine(that, self),
   combineMany: (collection) =>
     (self) => {
       const reversed = Array.from(collection).reverse()
       return reversed.length > 0 ?
-        S.combine(self)(S.combineMany(reversed.slice(1))(reversed[0])) :
+        S.combine(S.combineMany(reversed.slice(1))(reversed[0]), self) :
         self
     }
 })
@@ -283,9 +275,7 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
  */
 export const intercalate = <A>(separator: A) =>
   (S: Semigroup<A>): Semigroup<A> =>
-    fromCombine(
-      (that) => S.combineMany([separator, that])
-    )
+    fromCombine((self, that) => S.combineMany([separator, that])(self))
 
 /**
  * Always return the first argument.
@@ -294,7 +284,7 @@ export const intercalate = <A>(separator: A) =>
  * @since 1.0.0
  */
 export const first = <A = never>(): Semigroup<A> => ({
-  combine: () => a => a,
+  combine: (a) => a,
   combineMany: () => a => a
 })
 
@@ -305,7 +295,7 @@ export const first = <A = never>(): Semigroup<A> => ({
  * @since 1.0.0
  */
 export const last = <A = never>(): Semigroup<A> => ({
-  combine: second => () => second,
+  combine: (_, second) => second,
   combineMany: collection =>
     self => {
       let a: A = self
@@ -323,7 +313,7 @@ export const imap = <A, B>(
   from: (b: B) => A
 ) =>
   (S: Semigroup<A>): Semigroup<B> => ({
-    combine: that => self => to(S.combine(from(that))(from(self))),
+    combine: (self, that) => to(S.combine(from(self), from(that))),
     combineMany: (collection) =>
       self =>
         to(

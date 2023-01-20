@@ -543,23 +543,22 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
 export const getMonoid = <A>(
   Semigroup: Semigroup<A>
 ): Monoid<Option<A>> => {
-  const combine = (that: Option<A>) =>
-    (self: Option<A>): Option<A> =>
-      isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(that.value)(self.value))
+  const combine = (self: Option<A>, that: Option<A>): Option<A> =>
+    isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(self.value, that.value))
   return ({
     combine,
     combineMany: (others) =>
       (start) => {
         let c = start
         for (const o of others) {
-          c = combine(o)(c)
+          c = combine(c, o)
         }
         return c
       },
     combineAll: (collection: Iterable<Option<A>>): Option<A> => {
       let c: Option<A> = option.none
       for (const o of collection) {
-        c = combine(o)(c)
+        c = combine(c, o)
       }
       return c
     },

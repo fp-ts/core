@@ -42,7 +42,7 @@ describe.concurrent("Bigint", () => {
   })
 
   it("SemigroupSum", () => {
-    deepStrictEqual(pipe(2n, Bigint.SemigroupSum.combine(3n)), 5n)
+    deepStrictEqual(Bigint.SemigroupSum.combine(2n, 3n), 5n)
   })
 
   it("MonoidSum", () => {
@@ -50,7 +50,7 @@ describe.concurrent("Bigint", () => {
   })
 
   it("SemigroupMultiply", () => {
-    deepStrictEqual(pipe(2n, Bigint.SemigroupMultiply.combine(3n)), 6n)
+    deepStrictEqual(Bigint.SemigroupMultiply.combine(2n, 3n), 6n)
     deepStrictEqual(pipe(0n, Bigint.SemigroupMultiply.combineMany([1n, 2n, 3n])), 0n)
     deepStrictEqual(pipe(2n, Bigint.SemigroupMultiply.combineMany([1n, 0n, 3n])), 0n)
   })

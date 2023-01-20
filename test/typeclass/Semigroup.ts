@@ -12,7 +12,7 @@ describe("Semigroup", () => {
 
   it("reverse", () => {
     const A = _.reverse(String.Semigroup)
-    U.deepStrictEqual(pipe("a", A.combine("b")), "ba")
+    U.deepStrictEqual(A.combine("a", "b"), "ba")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "ba")
     U.deepStrictEqual(pipe("a", A.combineMany(["b", "c", "d"])), "dcba")
@@ -20,14 +20,14 @@ describe("Semigroup", () => {
 
   it("constant", () => {
     const A = _.constant("-")
-    U.deepStrictEqual(pipe("a", A.combine("b")), "-")
+    U.deepStrictEqual(A.combine("a", "b"), "-")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "-")
     U.deepStrictEqual(pipe("a", A.combineMany(["b", "c", "d"])), "-")
   })
 
   it("intercalate", () => {
     const A = pipe(String.Semigroup, _.intercalate("|"))
-    U.deepStrictEqual(pipe("a", A.combine("b")), "a|b")
+    U.deepStrictEqual(A.combine("a", "b"), "a|b")
     U.deepStrictEqual(pipe("a", A.combineMany([])), "a")
     U.deepStrictEqual(pipe("a", A.combineMany(["b"])), "a|b")
     U.deepStrictEqual(pipe("a", A.combineMany(["b", "c", "d"])), "a|b|c|d")
@@ -70,7 +70,7 @@ describe("Semigroup", () => {
       name: String.Semigroup,
       age: Number.SemigroupSum
     })
-    U.deepStrictEqual(pipe({ name: "a", age: 10 }, A.combine({ name: "b", age: 20 })), {
+    U.deepStrictEqual(A.combine({ name: "a", age: 10 }, { name: "b", age: 20 }), {
       name: "ab",
       age: 30
     })
@@ -96,7 +96,7 @@ describe("Semigroup", () => {
       String.Semigroup,
       Number.SemigroupSum
     )
-    U.deepStrictEqual(pipe(["a", 10], A.combine(["b", 20])), ["ab", 30])
+    U.deepStrictEqual(A.combine(["a", 10], ["b", 20]), ["ab", 30])
     U.deepStrictEqual(pipe(["a", 10], A.combineMany([])), ["a", 10])
     U.deepStrictEqual(pipe(["a", 10], A.combineMany([["b", 20]])), ["ab", 30])
     U.deepStrictEqual(pipe(["a", 10], A.combineMany([["b", 20], ["c", 30]])), ["abc", 60])
@@ -104,14 +104,14 @@ describe("Semigroup", () => {
 
   it("first", () => {
     const A = _.first<number>()
-    U.deepStrictEqual(pipe(1, A.combine(2)), 1)
+    U.deepStrictEqual(A.combine(1, 2), 1)
     U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
     U.deepStrictEqual(pipe(1, A.combineMany([2, 3, 4, 5, 6])), 1)
   })
 
   it("last", () => {
     const A = _.last<number>()
-    U.deepStrictEqual(pipe(1, A.combine(2)), 2)
+    U.deepStrictEqual(A.combine(1, 2), 2)
     U.deepStrictEqual(pipe(1, A.combineMany([])), 1)
     U.deepStrictEqual(pipe(1, A.combineMany([2, 3, 4, 5, 6])), 6)
   })
@@ -119,7 +119,7 @@ describe("Semigroup", () => {
   it("imap", () => {
     const imap = _.imap
     const To = imap((s: string) => [s], ([s]) => s)(String.Semigroup)
-    U.deepStrictEqual(pipe(["a"], To.combine(["b"])), ["ab"])
+    U.deepStrictEqual(To.combine(["a"], ["b"]), ["ab"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([])), ["a"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([["b"]])), ["ab"])
     U.deepStrictEqual(pipe(["a"], To.combineMany([["b"], ["c"]])), ["abc"])
@@ -147,7 +147,7 @@ describe("Semigroup", () => {
         ([a, b, c]): [[string, number], number] => [[a, b], c]
       )
     )
-    U.deepStrictEqual(pipe(["a", 2, 3], A.combine(["b", 3, 4])), ["ab", 5, 12])
+    U.deepStrictEqual(A.combine(["a", 2, 3], ["b", 3, 4]), ["ab", 5, 12])
   })
 
   it("productMany", () => {
@@ -155,6 +155,6 @@ describe("Semigroup", () => {
       String.Semigroup,
       _.SemiProduct.productMany([String.Semigroup, String.Semigroup])
     )
-    U.deepStrictEqual(pipe(["a", "b", "c"], A.combine(["d", "e", "f"])), ["ad", "be", "cf"])
+    U.deepStrictEqual(A.combine(["a", "b", "c"], ["d", "e", "f"]), ["ad", "be", "cf"])
   })
 })

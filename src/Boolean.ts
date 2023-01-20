@@ -106,13 +106,15 @@ export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
  * @category combinators
  * @since 1.0.0
  */
-export const and: (that: boolean) => (self: boolean) => boolean = semigroup.booleanAll.combine
+export const and = (that: boolean) =>
+  (self: boolean): boolean => semigroup.booleanAll.combine(self, that)
 
 /**
  * @category combinators
  * @since 1.0.0
  */
-export const or: (that: boolean) => (self: boolean) => boolean = semigroup.booleanAny.combine
+export const or = (that: boolean) =>
+  (self: boolean): boolean => semigroup.booleanAny.combine(self, that)
 
 /**
  * @category combinators
