@@ -123,9 +123,11 @@ This section covers the various modules and combinators that work with records.
 
 ## symbols
 
-| Module      | Name   | Given | To                    |
-| ----------- | ------ | ----- | --------------------- |
-| Equivalence | symbol |       | `Equivalence<symbol>` |
+| Module      | Name     | Given | To                            |
+| ----------- | -------- | ----- | ----------------------------- |
+| Equivalence | symbol   |       | `Equivalence<symbol>`         |
+| Predicate   | isSymbol |       | `Refinement<unknown, symbol>` |
+| Symbol      | isSymbol |       | `Refinement<unknown, symbol>` |
 
 ## bigints
 
