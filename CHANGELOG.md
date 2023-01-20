@@ -1,5 +1,43 @@
 # @fp-ts/core
 
+## next
+
+**Breaking changes**
+
+- `typeclass/Semiproduct`
+  - rename `productFlatten` to `element`
+
+**New Features**
+
+- `Boolean`
+  - add `not` combinator
+- `Order`
+  - add `array` combinator
+  - add `bigint` instance
+- `Monoid`
+  - add `array`, `readonlyArray` combinators
+- `Semigroup`
+  - add `array`, `readonlyArray` combinators
+- modules
+  - `typeclass/Equivalence`
+  - `typeclass/Filterable`
+  - `typeclass/TraversableFilterable`
+  - `Bigint`
+  - `Boolean`
+  - `Either`
+  - `Function`
+  - `Identity`
+  - `Number`
+  - `Option`
+  - `Ordering`
+  - `Predicate`
+  - `ReadonlyArray`
+  - `ReadonyRecord`
+  - `String`
+  - `Struct`
+  - `Symbol`
+  - `These`
+
 ## 0.0.11
 
 ### Patch Changes
