@@ -24,6 +24,7 @@ import * as predicate from "@fp-ts/core/Predicate"
 import * as readonlyArray from "@fp-ts/core/ReadonlyArray"
 import * as readonlyRecord from "@fp-ts/core/ReadonlyRecord"
 import * as string from "@fp-ts/core/String"
+import * as symbol from "@fp-ts/core/Symbol"
 import * as these from "@fp-ts/core/These"
 
 // -------------------------------------------------------------------------------------
@@ -236,6 +237,10 @@ export {
    * @since 1.0.0
    */
   string,
+  /**
+   * @since 1.0.0
+   */
+  symbol,
   /**
    * @since 1.0.0
    */
