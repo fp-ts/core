@@ -9,6 +9,7 @@
   - make `combineMany` binary
 - `SemiCoproduct`
   - make `coproduct` binary
+  - make `coproductMany` binary
 - `SemiProduct`
   - make `product` binary
   - make `productMany` binary

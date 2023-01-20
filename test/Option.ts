@@ -241,12 +241,12 @@ describe.concurrent("Option", () => {
     deepStrictEqual(coproduct(_.some(1), _.some(2)), _.some(1))
 
     const coproductMany = _.SemiCoproduct.coproductMany
-    deepStrictEqual(pipe(_.none(), coproductMany([])), _.none())
-    deepStrictEqual(pipe(_.none(), coproductMany([_.none()])), _.none())
-    deepStrictEqual(pipe(_.none(), coproductMany([_.some(2)])), _.some(2))
-    deepStrictEqual(pipe(_.some(1), coproductMany([])), _.some(1))
-    deepStrictEqual(pipe(_.some(1), coproductMany([_.none() as _.Option<number>])), _.some(1))
-    deepStrictEqual(pipe(_.some(1), coproductMany([_.some(2)])), _.some(1))
+    deepStrictEqual(coproductMany(_.none(), []), _.none())
+    deepStrictEqual(coproductMany(_.none(), [_.none()]), _.none())
+    deepStrictEqual(coproductMany(_.none(), [_.some(2)]), _.some(2))
+    deepStrictEqual(coproductMany(_.some(1), []), _.some(1))
+    deepStrictEqual(coproductMany(_.some(1), [_.none() as _.Option<number>]), _.some(1))
+    deepStrictEqual(coproductMany(_.some(1), [_.some(2)]), _.some(1))
   })
 
   it("fromIterable", () => {

@@ -104,13 +104,13 @@ describe.concurrent("Identity", () => {
   it("getSemiCoproduct", () => {
     const F = _.getSemiCoproduct(String.Semigroup)
     U.deepStrictEqual(F.coproduct("a", "b"), "ab")
-    U.deepStrictEqual(pipe("a", F.coproductMany(["b", "c"])), "abc")
+    U.deepStrictEqual(F.coproductMany("a", ["b", "c"]), "abc")
   })
 
   it("getSemiAlternative", () => {
     const F = _.getSemiAlternative(String.Semigroup)
     U.deepStrictEqual(F.coproduct("a", "b"), "ab")
-    U.deepStrictEqual(pipe("a", F.coproductMany(["b", "c"])), "abc")
+    U.deepStrictEqual(F.coproductMany("a", ["b", "c"]), "abc")
   })
 
   it("reduce", () => {

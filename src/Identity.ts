@@ -393,8 +393,8 @@ export const getSemiCoproduct = <A>(
   S: Semigroup<A>
 ): semiCoproduct.SemiCoproduct<IdentityTypeLambdaFix<A>> => ({
   imap: Invariant.imap,
-  coproduct: (self, that) => S.combine(self, that),
-  coproductMany: (collection) => (self) => S.combineMany(self, collection)
+  coproduct: S.combine,
+  coproductMany: S.combineMany
 })
 
 /**
