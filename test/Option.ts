@@ -60,10 +60,8 @@ describe.concurrent("Option", () => {
 
     expect(_.SemiCoproduct).exist
     expect(_.getFirstSomeSemigroup).exist // getSemigroup
-    expect(_.coproduct).exist
 
     expect(_.Coproduct).exist
-    expect(_.coproductAll).exist
 
     expect(_.SemiAlternative).exist
 
@@ -197,10 +195,11 @@ describe.concurrent("Option", () => {
   })
 
   it("coproductAll", () => {
-    deepStrictEqual(_.coproductAll([]), _.none())
-    deepStrictEqual(_.coproductAll([_.some(1)]), _.some(1))
-    deepStrictEqual(_.coproductAll([_.none(), _.some(1)]), _.some(1))
-    deepStrictEqual(_.coproductAll([_.some(1), _.some(2)]), _.some(1))
+    const coproductAll = _.Coproduct.coproductAll
+    deepStrictEqual(coproductAll([]), _.none())
+    deepStrictEqual(coproductAll([_.some(1)]), _.some(1))
+    deepStrictEqual(coproductAll([_.none(), _.some(1)]), _.some(1))
+    deepStrictEqual(coproductAll([_.some(1), _.some(2)]), _.some(1))
   })
 
   it("unit", () => {
@@ -236,10 +235,10 @@ describe.concurrent("Option", () => {
 
   it("SemiCoproduct", () => {
     const coproduct = _.SemiCoproduct.coproduct
-    deepStrictEqual(pipe(_.none(), coproduct(_.none())), _.none())
-    deepStrictEqual(pipe(_.none(), coproduct(_.some(2))), _.some(2))
-    deepStrictEqual(pipe(_.some(1), coproduct(_.none())), _.some(1))
-    deepStrictEqual(pipe(_.some(1), coproduct(_.some(2))), _.some(1))
+    deepStrictEqual(coproduct(_.none(), _.none()), _.none())
+    deepStrictEqual(coproduct(_.none(), _.some(2)), _.some(2))
+    deepStrictEqual(coproduct(_.some(1), _.none()), _.some(1))
+    deepStrictEqual(coproduct(_.some(1), _.some(2)), _.some(1))
 
     const coproductMany = _.SemiCoproduct.coproductMany
     deepStrictEqual(pipe(_.none(), coproductMany([])), _.none())

@@ -7,6 +7,8 @@
 - `Semigroup`
   - make `combine` binary
   - make `combineMany` binary
+- `SemiCoproduct`
+  - make `coproduct` binary
 - `SemiProduct`
   - make `product` binary
   - make `productMany` binary

@@ -3,8 +3,8 @@
  *
  * ```ts
  * export interface Semigroup<A> {
- *    combine: (that: A) => (self: A) => A
- *    combineMany: (collection: Iterable<A>) => (self: A) => A
+ *    combine: (self: A, that: A) => A
+ *    combineMany: (self: A, collection: Iterable<A>) => A
  * }
  * ```
  *
