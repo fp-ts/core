@@ -104,6 +104,40 @@ export const numberMultiply: Semigroup<number> = {
 }
 
 /**
+ * `bigint` semigroup under addition.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const bigintSum: Semigroup<bigint> = fromCombine((that: bigint) =>
+  (self: bigint): bigint => self + that
+)
+
+/**
+ * `bigint` semigroup under multiplication.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const bigintMultiply: Semigroup<bigint> = {
+  combine: (that: bigint) => (self: bigint): bigint => self * that,
+  combineMany: (collection) =>
+    (self) => {
+      if (self === 0n) {
+        return 0n
+      }
+      let out = self
+      for (const n of collection) {
+        if (n === 0n) {
+          return 0n
+        }
+        out = out * n
+      }
+      return out
+    }
+}
+
+/**
  * `boolean` semigroup under conjunction.
  *
  * @category instances

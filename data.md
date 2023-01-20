@@ -126,3 +126,22 @@ This section covers the various modules and combinators that work with records.
 | Module      | Name   | Given | To                    |
 | ----------- | ------ | ----- | --------------------- |
 | Equivalence | symbol |       | `Equivalence<symbol>` |
+
+## bigints
+
+| Module      | Name              | Given | To                            |
+| ----------- | ----------------- | ----- | ----------------------------- |
+| Equivalence | bigint            |       | `Equivalence<bigint>`         |
+| Order       | bigint            |       | `Order<bigint>`               |
+| Semigroup   | bigintSum         |       | `Semigroup<bigint>`           |
+| Semigroup   | bigintMultiply    |       | `Semigroup<bigint>`           |
+| Monoid      | bigintSum         |       | `Monoid<bigint>`              |
+| Monoid      | bigintMultiply    |       | `Monoid<bigint>`              |
+| Predicate   | isBigint          |       | `Refinement<unknown, bigint>` |
+| Bigint      | Equivalence       |       | `Equivalence<bigint>`         |
+| Bigint      | Order             |       | `Order<bigint>`               |
+| Bigint      | SemigroupSum      |       | `Semigroup<bigint>`           |
+| Bigint      | SemigroupMultiply |       | `Semigroup<bigint>`           |
+| Bigint      | MonoidSum         |       | `Monoid<bigint>`              |
+| Bigint      | MonoidMultiply    |       | `Monoid<bigint>`              |
+| Bigint      | isBigint          |       | `Refinement<unknown, bigint>` |
