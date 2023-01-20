@@ -108,7 +108,4 @@ export const foldMapKind = <F extends TypeLambda>(F: Foldable<F>) =>
     <A, R, O, E, B>(
       f: (a: A) => Kind<G, R, O, E, B>
     ): <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B> =>
-      F.reduce<A, Kind<G, R, O, E, B>>(
-        G.zero(),
-        (gb, a) => pipe(gb, G.coproduct(f(a)))
-      )
+      F.reduce<A, Kind<G, R, O, E, B>>(G.zero(), (gb, a) => G.coproduct(gb, f(a)))

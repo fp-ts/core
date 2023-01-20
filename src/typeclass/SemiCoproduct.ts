@@ -11,10 +11,9 @@ import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
  * @since 1.0.0
  */
 export interface SemiCoproduct<F extends TypeLambda> extends Invariant<F> {
-  readonly coproduct: <R2, O2, E2, B>(
+  readonly coproduct: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(
-    self: Kind<F, R1, O1, E1, A>
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A | B>
 
   readonly coproductMany: <R, O, E, A>(
@@ -29,6 +28,6 @@ export const getSemigroup = <F extends TypeLambda>(F: SemiCoproduct<F>) =>
   <R, O, E, A>(): Semigroup<
     Kind<F, R, O, E, A>
   > => ({
-    combine: (self, that) => pipe(self, F.coproduct(that)),
+    combine: F.coproduct,
     combineMany: (self, collection) => pipe(self, F.coproductMany(collection))
   })

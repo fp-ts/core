@@ -879,7 +879,7 @@ export const firstRightOrBothOf = <E, A>(collection: Iterable<These<E, A>>) =>
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = {
   ...Invariant,
-  coproduct: (that) => (self) => isRightOrBoth(self) ? self : that,
+  coproduct: (self, that) => isRightOrBoth(self) ? self : that,
   coproductMany: firstRightOrBothOf
 }
 
