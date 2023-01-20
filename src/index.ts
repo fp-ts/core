@@ -27,6 +27,7 @@ import * as string from "@fp-ts/core/String"
 import * as struct from "@fp-ts/core/Struct"
 import * as symbol from "@fp-ts/core/Symbol"
 import * as these from "@fp-ts/core/These"
+import * as tuple from "@fp-ts/core/Tuple"
 
 // -------------------------------------------------------------------------------------
 // typeclasses
@@ -259,5 +260,9 @@ export {
    * @category typeclass
    * @since 1.0.0
    */
-  traversableFilterable
+  traversableFilterable,
+  /**
+   * @since 1.0.0
+   */
+  tuple
 }
