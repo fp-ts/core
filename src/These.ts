@@ -50,7 +50,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @since 1.0.0
  */
 export type Both<E, A> = {
-  readonly _tag: "@fp-ts/core/These/Both"
+  readonly _tag: "Both"
   readonly left: E
   readonly right: A
 }
@@ -87,13 +87,13 @@ export interface ValidatedTypeLambda extends TypeLambda {
  * @category constructors
  * @since 1.0.0
  */
-export const left = <E>(left: E): These<E, never> => ({ _tag: "@fp-ts/core/Either/Left", left })
+export const left = <E>(left: E): These<E, never> => ({ _tag: "Left", left })
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const right = <A>(right: A): These<never, A> => ({ _tag: "@fp-ts/core/Either/Right", right })
+export const right = <A>(right: A): These<never, A> => ({ _tag: "Right", right })
 
 /**
  * Alias of `right`.
@@ -108,7 +108,7 @@ export const of = right
  * @since 1.0.0
  */
 export const both = <E, A>(left: E, right: A): These<E, A> => ({
-  _tag: "@fp-ts/core/These/Both",
+  _tag: "Both",
   left,
   right
 })
@@ -158,11 +158,11 @@ export const match = <E, B, A, C = B, D = B>(
 ) =>
   (self: These<E, A>): B | C | D => {
     switch (self._tag) {
-      case "@fp-ts/core/Either/Left":
+      case "Left":
         return onLeft(self.left)
-      case "@fp-ts/core/Either/Right":
+      case "Right":
         return onRight(self.right)
-      case "@fp-ts/core/These/Both":
+      case "Both":
         return onBoth(self.left, self.right)
     }
   }
@@ -182,15 +182,14 @@ export const reverse: <E, A>(self: These<E, A>) => These<A, E> = match(
  * @category guards
  * @since 1.0.0
  */
-export const isLeft = <E, A>(self: These<E, A>): self is Left<E> =>
-  self._tag === "@fp-ts/core/Either/Left"
+export const isLeft = <E, A>(self: These<E, A>): self is Left<E> => self._tag === "Left"
 
 /**
  * @category guards
  * @since 1.0.0
  */
 export const isLeftOrBoth = <E, A>(self: These<E, A>): self is Left<E> | Both<E, A> =>
-  self._tag !== "@fp-ts/core/Either/Right"
+  self._tag !== "Right"
 
 /**
  * Returns `true` if the these is an instance of `Right`, `false` otherwise
@@ -198,15 +197,14 @@ export const isLeftOrBoth = <E, A>(self: These<E, A>): self is Left<E> | Both<E,
  * @category guards
  * @since 1.0.0
  */
-export const isRight = <E, A>(self: These<E, A>): self is Right<A> =>
-  self._tag === "@fp-ts/core/Either/Right"
+export const isRight = <E, A>(self: These<E, A>): self is Right<A> => self._tag === "Right"
 
 /**
  * @category guards
  * @since 1.0.0
  */
 export const isRightOrBoth = <E, A>(self: These<E, A>): self is Right<A> | Both<E, A> =>
-  self._tag !== "@fp-ts/core/Either/Left"
+  self._tag !== "Left"
 
 /**
  * Returns `true` if the these is an instance of `Both`, `false` otherwise
@@ -214,8 +212,7 @@ export const isRightOrBoth = <E, A>(self: These<E, A>): self is Right<A> | Both<
  * @category guards
  * @since 1.0.0
  */
-export const isBoth = <E, A>(self: These<E, A>): self is Both<E, A> =>
-  self._tag === "@fp-ts/core/These/Both"
+export const isBoth = <E, A>(self: These<E, A>): self is Both<E, A> => self._tag === "Both"
 
 /**
  * Returns `true` if the specified value is an instance of `These`, `false`
@@ -227,8 +224,8 @@ export const isBoth = <E, A>(self: These<E, A>): self is Both<E, A> =>
 export const isThese = (u: unknown): u is These<unknown, unknown> =>
   typeof u === "object" &&
   u != null && "_tag" in u &&
-  (u["_tag"] === "@fp-ts/core/Either/Left" || u["_tag"] === "@fp-ts/core/Either/Right" ||
-    u["_tag"] === "@fp-ts/core/These/Both")
+  (u["_tag"] === "Left" || u["_tag"] === "Right" ||
+    u["_tag"] === "Both")
 
 /**
  * Constructs a new `These` from a function that might throw.
