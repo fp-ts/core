@@ -51,16 +51,18 @@ describe("SemiProduct", () => {
           U.deepStrictEqual(actual, expected)
         }
 
-    const product = <B>(that: ReadonlyArray<B>) =>
-      <A>(self: ReadonlyArray<A>): ReadonlyArray<[A, B]> => {
-        const out: Array<[A, B]> = []
-        for (const a of self) {
-          for (const b of that) {
-            out.push([a, b])
-          }
+    const product = <A, B>(
+      self: ReadonlyArray<A>,
+      that: ReadonlyArray<B>
+    ): ReadonlyArray<[A, B]> => {
+      const out: Array<[A, B]> = []
+      for (const a of self) {
+        for (const b of that) {
+          out.push([a, b])
         }
-        return out
       }
+      return out
+    }
 
     const productMany = _.productMany(
       RA.Covariant,
@@ -82,21 +84,21 @@ describe("SemiProduct", () => {
   describe("productComposition", () => {
     it("ReadonlyArray", () => {
       const product = _.productComposition(RA.SemiApplicative, O.SemiProduct)
-      U.deepStrictEqual(pipe([], product([O.none()])), [])
-      U.deepStrictEqual(pipe([O.none()], product([])), [])
-      U.deepStrictEqual(pipe([O.none()], product([O.none()])), [O.none()])
-      expect(pipe([O.some(1)], product([O.some(2)]))).toEqual([O.some([1, 2])])
+      U.deepStrictEqual(product([], [O.none()]), [])
+      U.deepStrictEqual(product([O.none()], []), [])
+      U.deepStrictEqual(product([O.none()], [O.none()]), [O.none()])
+      expect(product([O.some(1)], [O.some(2)])).toEqual([O.some([1, 2])])
     })
 
     it("Option", () => {
       const product = _.productComposition(O.SemiApplicative, O.SemiProduct)
-      U.deepStrictEqual(pipe(O.none(), product(O.none())), O.none())
-      U.deepStrictEqual(pipe(O.some(O.none()), product(O.none())), O.none())
-      U.deepStrictEqual(pipe(O.some(O.some(1)), product(O.none())), O.none())
-      U.deepStrictEqual(pipe(O.some(O.some(1)), product(O.some(O.none()))), O.some(O.none()))
-      U.deepStrictEqual(pipe(O.some(O.none()), product(O.some(O.some(2)))), O.some(O.none()))
+      U.deepStrictEqual(product(O.none(), O.none()), O.none())
+      U.deepStrictEqual(product(O.some(O.none()), O.none()), O.none())
+      U.deepStrictEqual(product(O.some(O.some(1)), O.none()), O.none())
+      U.deepStrictEqual(product(O.some(O.some(1)), O.some(O.none())), O.some(O.none()))
+      U.deepStrictEqual(product(O.some(O.none()), O.some(O.some(2))), O.some(O.none()))
       U.deepStrictEqual(
-        pipe(O.some(O.some(1)), product(O.some(O.some(2)))),
+        product(O.some(O.some(1)), O.some(O.some(2))),
         O.some(O.some([1, 2]))
       )
     })

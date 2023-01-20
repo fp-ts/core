@@ -32,13 +32,10 @@ describe.concurrent("Predicate", () => {
     expect(_.Do).exist
 
     expect(_.SemiProduct).exist
-    expect(_.product).exist
-    expect(_.productMany).exist
     expect(_.andThenBind).exist
     expect(_.element).exist
 
     expect(_.Product).exist
-    expect(_.productAll).exist
     expect(_.tuple).exist
     expect(_.struct).exist
   })
@@ -69,7 +66,8 @@ describe.concurrent("Predicate", () => {
   })
 
   it("product", () => {
-    const p = pipe(isPositive, _.product(isNegative))
+    const product = _.SemiProduct.product
+    const p = product(isPositive, isNegative)
     deepStrictEqual(p([1, -1]), true)
     deepStrictEqual(p([1, 1]), false)
     deepStrictEqual(p([-1, -1]), false)
@@ -77,7 +75,8 @@ describe.concurrent("Predicate", () => {
   })
 
   it("productMany", () => {
-    const p = pipe(isPositive, _.productMany([isNegative]))
+    const productMany = _.SemiProduct.productMany
+    const p = pipe(isPositive, productMany([isNegative]))
     deepStrictEqual(p([1, -1]), true)
     deepStrictEqual(p([1, 1]), false)
     deepStrictEqual(p([-1, -1]), false)
@@ -85,7 +84,8 @@ describe.concurrent("Predicate", () => {
   })
 
   it("productAll", () => {
-    const p = _.productAll([isPositive, isNegative])
+    const productAll = _.Product.productAll
+    const p = productAll([isPositive, isNegative])
     deepStrictEqual(p([1, -1]), true)
     deepStrictEqual(p([1, 1]), false)
     deepStrictEqual(p([-1, -1]), false)

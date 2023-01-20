@@ -151,16 +151,7 @@ export const Do: Predicate<{}> = of_.Do(Of)
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
-/**
- * @since 1.0.0
- */
-export const product = <B>(that: Predicate<B>) =>
-  <A>(self: Predicate<A>): Predicate<readonly [A, B]> => ([a, b]) => self(a) && that(b)
-
-/**
- * @since 1.0.0
- */
-export const productMany = <A>(collection: Iterable<Predicate<A>>) =>
+const productMany = <A>(collection: Iterable<Predicate<A>>) =>
   (self: Predicate<A>): Predicate<readonly [A, ...Array<A>]> => {
     return ([head, ...tail]) => {
       if (self(head) === false) {
@@ -182,14 +173,11 @@ export const productMany = <A>(collection: Iterable<Predicate<A>>) =>
  */
 export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
   imap,
-  product,
+  product: (self, that) => ([a, b]) => self(a) && that(b),
   productMany
 }
 
-/**
- * @since 1.0.0
- */
-export const productAll = <A>(
+const productAll = <A>(
   collection: Iterable<Predicate<A>>
 ): Predicate<ReadonlyArray<A>> =>
   (as) => {
@@ -207,9 +195,7 @@ export const productAll = <A>(
  * @since 1.0.0
  */
 export const Product: product_.Product<PredicateTypeLambda> = {
-  imap,
-  product,
-  productMany,
+  ...SemiProduct,
   of,
   productAll
 }

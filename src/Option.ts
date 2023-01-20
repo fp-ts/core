@@ -406,19 +406,7 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
   ...FlatMap
 }
 
-/**
- * @since 1.0.0
- */
-export const product = <B>(
-  that: Option<B>
-) =>
-  <A>(self: Option<A>): Option<[A, B]> =>
-    isSome(self) && isSome(that) ? some([self.value, that.value]) : option.none
-
-/**
- * @since 1.0.0
- */
-export const productMany = <A>(collection: Iterable<Option<A>>) =>
+const productMany = <A>(collection: Iterable<Option<A>>) =>
   (self: Option<A>): Option<[A, ...Array<A>]> => {
     if (isNone(self)) {
       return option.none
@@ -439,7 +427,8 @@ export const productMany = <A>(collection: Iterable<Option<A>>) =>
  */
 export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
   ...Invariant,
-  product,
+  product: (self, that) =>
+    isSome(self) && isSome(that) ? some([self.value, that.value]) : option.none,
   productMany
 }
 
@@ -465,10 +454,7 @@ export const element: <B>(
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<[...A, B]> = semiProduct
   .element(SemiProduct)
 
-/**
- * @since 1.0.0
- */
-export const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
+const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
   const out: Array<A> = []
   for (const o of collection) {
     if (isNone(o)) {

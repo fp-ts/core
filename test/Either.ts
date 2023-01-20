@@ -44,10 +44,8 @@ describe.concurrent("Either", () => {
     expect(_.Monad).exist
 
     expect(_.SemiProduct).exist
-    expect(_.product).exist
 
     expect(_.Product).exist
-    expect(_.productAll).exist
     expect(_.tuple).exist
     expect(_.struct).exist
 
@@ -381,36 +379,41 @@ describe.concurrent("Either", () => {
   })
 
   it("product", () => {
-    deepStrictEqual(pipe(_.right(1), _.product(_.right("a"))), _.right([1, "a"]))
-    deepStrictEqual(pipe(_.right(1), _.product(_.left("e2"))), _.left("e2"))
-    deepStrictEqual(pipe(_.left("e1"), _.product(_.right("a"))), _.left("e1"))
-    deepStrictEqual(pipe(_.left("e1"), _.product(_.left("2"))), _.left("e1"))
+    const product = _.SemiProduct.product
+    deepStrictEqual(product(_.right(1), _.right("a")), _.right([1, "a"]))
+    deepStrictEqual(product(_.right(1), _.left("e2")), _.left("e2"))
+    deepStrictEqual(product(_.left("e1"), _.right("a")), _.left("e1"))
+    deepStrictEqual(product(_.left("e1"), _.left("2")), _.left("e1"))
   })
 
   it("productMany", () => {
-    deepStrictEqual(pipe(_.right(1), _.productMany([])), _.right([1]))
+    const productMany: <E, A>(
+      collection: Iterable<_.Either<E, A>>
+    ) => (self: _.Either<E, A>) => _.Either<E, [A, ...Array<A>]> = _.SemiProduct.productMany
+
+    deepStrictEqual(pipe(_.right(1), productMany([])), _.right([1]))
     deepStrictEqual(
-      pipe(_.right(1), _.productMany([_.right(2), _.right(3)])),
+      pipe(_.right(1), productMany([_.right(2), _.right(3)])),
       _.right([1, 2, 3])
     )
     deepStrictEqual(
-      pipe(_.right(1), _.productMany([_.left("e"), _.right(3)])),
+      pipe(_.right(1), productMany([_.left("e"), _.right(3)])),
       _.left("e")
     )
-    deepStrictEqual(
-      pipe(_.left("e"), _.productMany<string, number>([_.right(2), _.right(3)])),
-      _.left("e")
-    )
+    expect(
+      pipe(_.left("e"), productMany<string, number>([_.right(2), _.right(3)]))
+    ).toEqual(_.left("e"))
   })
 
   it("productAll", () => {
-    deepStrictEqual(_.productAll([]), _.right([]))
+    const productAll = _.Product.productAll
+    deepStrictEqual(productAll([]), _.right([]))
     deepStrictEqual(
-      _.productAll([_.right(1), _.right(2), _.right(3)]),
+      productAll([_.right(1), _.right(2), _.right(3)]),
       _.right([1, 2, 3])
     )
     deepStrictEqual(
-      _.productAll([_.left("e"), _.right(2), _.right(3)]),
+      productAll([_.left("e"), _.right(2), _.right(3)]),
       _.left("e")
     )
   })

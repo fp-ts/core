@@ -12,10 +12,9 @@ import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
  * @since 1.0.0
  */
 export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
-  readonly product: <R2, O2, E2, B>(
+  readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(
-    self: Kind<F, R1, O1, E1, A>
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
 
   readonly productMany: <R, O, E, A>(
@@ -32,18 +31,16 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
   F: SemiApplicative<F>,
   G: SemiProduct<G>
 ) =>
-  <FR2, FO2, FE2, GR2, GO2, GE2, B>(
+  <FR1, FO1, FE1, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B>(
+    self: Kind<F, FR1, FO1, FE1, Kind<G, GR1, GO1, GE1, A>>,
     that: Kind<F, FR2, FO2, FE2, Kind<G, GR2, GO2, GE2, B>>
-  ) =>
-    <FR1, FO1, FE1, GR1, GO1, GE1, A>(
-      self: Kind<F, FR1, FO1, FE1, Kind<G, GR1, GO1, GE1, A>>
-    ): Kind<
-      F,
-      FR1 & FR2,
-      FO1 | FO2,
-      FE1 | FE2,
-      Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, [A, B]>
-    > => pipe(self, F.product(that), F.map(([ga, gb]) => pipe(ga, G.product(gb))))
+  ): Kind<
+    F,
+    FR1 & FR2,
+    FO1 | FO2,
+    FE1 | FE2,
+    Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, [A, B]>
+  > => pipe(F.product(self, that), F.map(([ga, gb]) => G.product(ga, gb)))
 
 /**
  * Returns a default `productMany` composition.
@@ -86,8 +83,7 @@ export const productMany = <F extends TypeLambda>(
       )
       for (const fa of collection) {
         out = pipe(
-          out,
-          product(fa),
+          product(out, fa),
           Covariant.map(([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a])
         )
       }
@@ -112,8 +108,7 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
       { [K in keyof A | N]: K extends keyof A ? A[K] : B }
     > =>
       pipe(
-        self,
-        F.product(that),
+        F.product(self, that),
         F.imap(
           ([a, b]) => Object.assign({}, a, { [name]: b }) as any,
           ({ [name]: b, ...rest }) => [rest, b] as any
@@ -133,8 +128,7 @@ export const element = <F extends TypeLambda>(F: SemiProduct<F>) =>
       self: Kind<F, R1, O1, E1, A>
     ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]> =>
       pipe(
-        self,
-        F.product(that),
+        F.product(self, that),
         F.imap(([a, b]) => [...a, b], ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
       )
 
