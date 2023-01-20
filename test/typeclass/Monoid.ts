@@ -1,4 +1,3 @@
-import { pipe } from "@fp-ts/core/Function"
 import * as N from "@fp-ts/core/Number"
 import * as String from "@fp-ts/core/String"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -28,10 +27,10 @@ describe("Monoid", () => {
     U.deepStrictEqual(M.combine("a", "b"), "ba")
     U.deepStrictEqual(M.combine("a", M.empty), "a")
     U.deepStrictEqual(M.combine(M.empty, "a"), "a")
-    U.deepStrictEqual(pipe("a", M.combineMany([])), "a")
-    U.deepStrictEqual(pipe("a", M.combineMany(["b", "c", "d"])), "dcba")
-    U.deepStrictEqual(pipe("a", M.combineMany([M.empty])), "a")
-    U.deepStrictEqual(pipe(M.empty, M.combineMany(["a"])), "a")
+    U.deepStrictEqual(M.combineMany("a", []), "a")
+    U.deepStrictEqual(M.combineMany("a", ["b", "c", "d"]), "dcba")
+    U.deepStrictEqual(M.combineMany("a", [M.empty]), "a")
+    U.deepStrictEqual(M.combineMany(M.empty, ["a"]), "a")
   })
 
   describe("struct", () => {

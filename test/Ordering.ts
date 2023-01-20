@@ -1,4 +1,3 @@
-import { pipe } from "@fp-ts/core/Function"
 import * as _ from "@fp-ts/core/Ordering"
 import { deepStrictEqual } from "./util"
 
@@ -26,13 +25,13 @@ describe("Ordering", () => {
     deepStrictEqual(_.Semigroup.combine(1, -1), 1)
     deepStrictEqual(_.Semigroup.combine(-1, 1), -1)
 
-    deepStrictEqual(pipe(0, _.Semigroup.combineMany([])), 0)
-    deepStrictEqual(pipe(1, _.Semigroup.combineMany([])), 1)
-    deepStrictEqual(pipe(-1, _.Semigroup.combineMany([])), -1)
-    deepStrictEqual(pipe(0, _.Semigroup.combineMany([0, 0, 0])), 0)
-    deepStrictEqual(pipe(0, _.Semigroup.combineMany([0, 0, 1])), 1)
-    deepStrictEqual(pipe(1, _.Semigroup.combineMany([0, 0, -1])), 1)
-    deepStrictEqual(pipe(-1, _.Semigroup.combineMany([0, 0, 1])), -1)
+    deepStrictEqual(_.Semigroup.combineMany(0, []), 0)
+    deepStrictEqual(_.Semigroup.combineMany(1, []), 1)
+    deepStrictEqual(_.Semigroup.combineMany(-1, []), -1)
+    deepStrictEqual(_.Semigroup.combineMany(0, [0, 0, 0]), 0)
+    deepStrictEqual(_.Semigroup.combineMany(0, [0, 0, 1]), 1)
+    deepStrictEqual(_.Semigroup.combineMany(1, [0, 0, -1]), 1)
+    deepStrictEqual(_.Semigroup.combineMany(-1, [0, 0, 1]), -1)
   })
 
   it("Monoid", () => {

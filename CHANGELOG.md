@@ -6,6 +6,7 @@
 
 - `Semigroup`
   - make `combine` binary
+  - make `combineMany` binary
 - `Semiproduct`
   - rename `productFlatten` to `element`
 - `Order`

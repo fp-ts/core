@@ -15,7 +15,7 @@ describe.concurrent("Function", () => {
     deepStrictEqual(g(""), 1)
     deepStrictEqual(g("a"), 1)
     deepStrictEqual(g("b"), 2)
-    deepStrictEqual(S.combineMany([size, size])(size)("a"), 3)
+    deepStrictEqual(S.combineMany(size, [size, size])("a"), 3)
   })
 
   it("getMonoid", () => {

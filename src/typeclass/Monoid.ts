@@ -21,7 +21,7 @@ export interface Monoid<A> extends Semigroup<A> {
 export const fromSemigroup = <A>(S: Semigroup<A>, empty: Monoid<A>["empty"]): Monoid<A> => ({
   ...S,
   empty,
-  combineAll: collection => S.combineMany(collection)(empty)
+  combineAll: collection => S.combineMany(empty, collection)
 })
 
 /**
@@ -58,7 +58,7 @@ export const reverse = <A>(M: Monoid<A>): Monoid<A> => fromSemigroup(semigroup.r
  */
 export const string: Monoid<string> = {
   ...semigroup.string,
-  combineAll: (collection) => semigroup.string.combineMany(collection)(""),
+  combineAll: (collection) => semigroup.string.combineMany("", collection),
   empty: ""
 }
 
@@ -72,7 +72,7 @@ export const string: Monoid<string> = {
  */
 export const numberSum: Monoid<number> = {
   ...semigroup.numberSum,
-  combineAll: (collection) => semigroup.numberSum.combineMany(collection)(0),
+  combineAll: (collection) => semigroup.numberSum.combineMany(0, collection),
   empty: 0
 }
 
@@ -86,7 +86,7 @@ export const numberSum: Monoid<number> = {
  */
 export const numberMultiply: Monoid<number> = {
   ...semigroup.numberMultiply,
-  combineAll: (collection) => semigroup.numberMultiply.combineMany(collection)(1),
+  combineAll: (collection) => semigroup.numberMultiply.combineMany(1, collection),
   empty: 1
 }
 
@@ -100,7 +100,7 @@ export const numberMultiply: Monoid<number> = {
  */
 export const bigintSum: Monoid<bigint> = {
   ...semigroup.bigintSum,
-  combineAll: (collection) => semigroup.bigintSum.combineMany(collection)(0n),
+  combineAll: (collection) => semigroup.bigintSum.combineMany(0n, collection),
   empty: 0n
 }
 
@@ -114,7 +114,7 @@ export const bigintSum: Monoid<bigint> = {
  */
 export const bigintMultiply: Monoid<bigint> = {
   ...semigroup.bigintMultiply,
-  combineAll: (collection) => semigroup.bigintMultiply.combineMany(collection)(1n),
+  combineAll: (collection) => semigroup.bigintMultiply.combineMany(1n, collection),
   empty: 1n
 }
 
@@ -128,7 +128,7 @@ export const bigintMultiply: Monoid<bigint> = {
  */
 export const booleanAll: Monoid<boolean> = {
   ...semigroup.booleanAll,
-  combineAll: (all) => semigroup.booleanAll.combineMany(all)(true),
+  combineAll: (collection) => semigroup.booleanAll.combineMany(true, collection),
   empty: true
 }
 
@@ -142,7 +142,7 @@ export const booleanAll: Monoid<boolean> = {
  */
 export const booleanAny: Monoid<boolean> = {
   ...semigroup.booleanAny,
-  combineAll: (all) => semigroup.booleanAny.combineMany(all)(false),
+  combineAll: (collection) => semigroup.booleanAny.combineMany(false, collection),
   empty: false
 }
 
@@ -171,7 +171,7 @@ export const array = <A>(): Monoid<Array<A>> => {
   return ({
     combine: S.combine,
     combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(collection)([]),
+    combineAll: (collection) => S.combineMany([], collection),
     empty: []
   })
 }

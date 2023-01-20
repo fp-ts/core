@@ -2077,7 +2077,7 @@ export const intercalateNonEmpty = <A>(
 ) =>
   (middle: A) =>
     (self: NonEmptyReadonlyArray<A>): A =>
-      semigroup.intercalate(middle)(S).combineMany(tailNonEmpty(self))(headNonEmpty(self))
+      semigroup.intercalate(middle)(S).combineMany(headNonEmpty(self), tailNonEmpty(self))
 
 /**
  * @since 1.0.0
@@ -2150,8 +2150,8 @@ export const getUnionMonoid = <A>(equivalence: Equivalence<A>): Monoid<ReadonlyA
   return ({
     combine: S.combine,
     combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(collection)(empty()),
-    empty: empty()
+    combineAll: (collection) => S.combineMany([], collection),
+    empty: []
   })
 }
 

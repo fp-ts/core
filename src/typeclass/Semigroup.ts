@@ -21,6 +21,7 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product from "@fp-ts/core/typeclass/Product"
@@ -32,7 +33,7 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  */
 export interface Semigroup<A> {
   readonly combine: (self: A, that: A) => A
-  readonly combineMany: (collection: Iterable<A>) => (self: A) => A
+  readonly combineMany: (self: A, collection: Iterable<A>) => A
 }
 
 /**
@@ -51,14 +52,13 @@ export interface SemigroupTypeLambda extends TypeLambda {
  */
 export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> => ({
   combine,
-  combineMany: (collection) =>
-    (self) => {
-      let out: A = self
-      for (const a of collection) {
-        out = combine(out, a)
-      }
-      return out
+  combineMany: (self, collection) => {
+    let out: A = self
+    for (const a of collection) {
+      out = combine(out, a)
     }
+    return out
+  }
 })
 
 /**
@@ -83,20 +83,19 @@ export const numberSum: Semigroup<number> = fromCombine((self, that) => self + t
  */
 export const numberMultiply: Semigroup<number> = {
   combine: (self, that) => self * that,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === 0) {
+  combineMany: (self, collection) => {
+    if (self === 0) {
+      return 0
+    }
+    let out = self
+    for (const n of collection) {
+      if (n === 0) {
         return 0
       }
-      let out = self
-      for (const n of collection) {
-        if (n === 0) {
-          return 0
-        }
-        out = out * n
-      }
-      return out
+      out = out * n
     }
+    return out
+  }
 }
 
 /**
@@ -115,20 +114,19 @@ export const bigintSum: Semigroup<bigint> = fromCombine((self, that) => self + t
  */
 export const bigintMultiply: Semigroup<bigint> = {
   combine: (self, that) => self * that,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === 0n) {
+  combineMany: (self, collection) => {
+    if (self === 0n) {
+      return 0n
+    }
+    let out = self
+    for (const n of collection) {
+      if (n === 0n) {
         return 0n
       }
-      let out = self
-      for (const n of collection) {
-        if (n === 0n) {
-          return 0n
-        }
-        out = out * n
-      }
-      return out
+      out = out * n
     }
+    return out
+  }
 }
 
 /**
@@ -139,18 +137,17 @@ export const bigintMultiply: Semigroup<bigint> = {
  */
 export const booleanAll: Semigroup<boolean> = {
   combine: (self, that) => self && that,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === false) {
+  combineMany: (self, collection) => {
+    if (self === false) {
+      return false
+    }
+    for (const b of collection) {
+      if (b === false) {
         return false
       }
-      for (const b of collection) {
-        if (b === false) {
-          return false
-        }
-      }
-      return true
     }
+    return true
+  }
 }
 
 /**
@@ -161,18 +158,17 @@ export const booleanAll: Semigroup<boolean> = {
  */
 export const booleanAny: Semigroup<boolean> = {
   combine: (self, that) => self || that,
-  combineMany: (collection) =>
-    (self) => {
-      if (self === true) {
+  combineMany: (self, collection) => {
+    if (self === true) {
+      return true
+    }
+    for (const b of collection) {
+      if (b === true) {
         return true
       }
-      for (const b of collection) {
-        if (b === true) {
-          return true
-        }
-      }
-      return false
     }
+    return false
+  }
 }
 
 /**
@@ -251,7 +247,7 @@ export const max = <A>(O: Order<A>): Semigroup<A> =>
  */
 export const constant = <A>(a: A): Semigroup<A> => ({
   combine: () => a,
-  combineMany: () => () => a
+  combineMany: () => a
 })
 
 /**
@@ -261,13 +257,12 @@ export const constant = <A>(a: A): Semigroup<A> => ({
  */
 export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
   combine: (self, that) => S.combine(that, self),
-  combineMany: (collection) =>
-    (self) => {
-      const reversed = Array.from(collection).reverse()
-      return reversed.length > 0 ?
-        S.combine(S.combineMany(reversed.slice(1))(reversed[0]), self) :
-        self
-    }
+  combineMany: (self, collection) => {
+    const reversed = Array.from(collection).reverse()
+    return reversed.length > 0 ?
+      S.combine(S.combineMany(reversed[0], reversed.slice(1)), self) :
+      self
+  }
 })
 
 /**
@@ -275,7 +270,7 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
  */
 export const intercalate = <A>(separator: A) =>
   (S: Semigroup<A>): Semigroup<A> =>
-    fromCombine((self, that) => S.combineMany([separator, that])(self))
+    fromCombine((self, that) => S.combineMany(self, [separator, that]))
 
 /**
  * Always return the first argument.
@@ -285,7 +280,7 @@ export const intercalate = <A>(separator: A) =>
  */
 export const first = <A = never>(): Semigroup<A> => ({
   combine: (a) => a,
-  combineMany: () => a => a
+  combineMany: (a) => a
 })
 
 /**
@@ -296,13 +291,12 @@ export const first = <A = never>(): Semigroup<A> => ({
  */
 export const last = <A = never>(): Semigroup<A> => ({
   combine: (_, second) => second,
-  combineMany: collection =>
-    self => {
-      let a: A = self
-      // eslint-disable-next-line no-empty
-      for (a of collection) {}
-      return a
-    }
+  combineMany: (self, collection) => {
+    let a: A = self
+    // eslint-disable-next-line no-empty
+    for (a of collection) {}
+    return a
+  }
 })
 
 /**
@@ -314,13 +308,8 @@ export const imap = <A, B>(
 ) =>
   (S: Semigroup<A>): Semigroup<B> => ({
     combine: (self, that) => to(S.combine(from(self), from(that))),
-    combineMany: (collection) =>
-      self =>
-        to(
-          S.combineMany(
-            (Array.isArray(collection) ? collection : Array.from(collection)).map(from)
-          )(from(self))
-        )
+    combineMany: (self, collection) =>
+      to(S.combineMany(from(self), (fromIterable(collection)).map(from)))
   })
 
 /**
