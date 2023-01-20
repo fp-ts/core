@@ -28,7 +28,7 @@
   - add `array`, `readonlyArray` combinators
 - `Semigroup`
   - add `array`, `readonlyArray` combinators
-- modules
+- new modules
   - `typeclass/Equivalence`
   - `typeclass/Filterable`
   - `typeclass/TraversableFilterable`
@@ -47,6 +47,7 @@
   - `Struct`
   - `Symbol`
   - `These`
+  - `Tuple`
 
 ## 0.0.11
 

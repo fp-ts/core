@@ -41,7 +41,6 @@ describe.concurrent("ReadonlyArray", () => {
 
     expect(RA.SemiProduct).exist
     expect(RA.andThenBind).exist
-    expect(RA.element).exist
 
     expect(RA.Product).exist
 
