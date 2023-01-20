@@ -428,25 +428,14 @@ describe.concurrent("Either", () => {
   })
 
   it("coproductMany", () => {
-    deepStrictEqual(pipe(_.right(1), _.SemiCoproduct.coproductMany([_.right(2)])), _.right(1))
+    const coproductMany = _.SemiCoproduct.coproductMany
+    deepStrictEqual(coproductMany(_.right(1), [_.right(2)]), _.right(1))
     deepStrictEqual(
-      pipe(
-        _.right(1) as _.Either<string, number>,
-        _.SemiCoproduct.coproductMany([_.left("e2") as _.Either<string, number>])
-      ),
+      coproductMany(_.right(1), [_.left("e2")]),
       _.right(1)
     )
-    deepStrictEqual(
-      pipe(
-        _.left("e1") as _.Either<string, number>,
-        _.SemiCoproduct.coproductMany([_.right(2) as _.Either<string, number>])
-      ),
-      _.right(2)
-    )
-    deepStrictEqual(
-      pipe(_.left("e1"), _.SemiCoproduct.coproductMany([_.left("e2")])),
-      _.left("e2")
-    )
+    deepStrictEqual(coproductMany(_.left("e1"), [_.right(2)]), _.right(2))
+    deepStrictEqual(coproductMany(_.left("e1"), [_.left("e2")]), _.left("e2"))
   })
 
   it("element", () => {

@@ -640,7 +640,7 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>) =>
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
   ...Invariant,
   coproduct: (self, that) => isSome(self) ? self : that,
-  coproductMany: firstSomeOf
+  coproductMany: (self, collection) => pipe(self, firstSomeOf(collection))
 }
 
 /**
@@ -661,13 +661,6 @@ export const coproductEither = <B>(that: Option<B>) =>
   <A>(self: Option<A>): Option<Either<A, B>> =>
     isNone(self) ? pipe(that, map(either.right)) : pipe(self, map(either.left))
 
-const coproductAll = <A>(collection: Iterable<Option<A>>): Option<A> => {
-  const options = readonlyArray.fromIterable(collection)
-  return options.length > 0 ?
-    SemiCoproduct.coproductMany(options.slice(1))(options[0]) :
-    option.none
-}
-
 /**
  * @category instances
  * @since 1.0.0
@@ -675,7 +668,12 @@ const coproductAll = <A>(collection: Iterable<Option<A>>): Option<A> => {
 export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
   ...SemiCoproduct,
   zero: none,
-  coproductAll
+  coproductAll: collection => {
+    const options = readonlyArray.fromIterable(collection)
+    return options.length > 0 ?
+      SemiCoproduct.coproductMany(options[0], options.slice(1)) :
+      option.none
+  }
 }
 
 /**

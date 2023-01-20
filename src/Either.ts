@@ -565,7 +565,7 @@ export const firstSuccessOf = <E, A>(collection: Iterable<Either<E, A>>) =>
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
   ...Invariant,
   coproduct: (self, that) => isRight(self) ? self : that,
-  coproductMany: firstSuccessOf
+  coproductMany: (self, collection) => pipe(self, firstSuccessOf(collection))
 }
 
 /**
