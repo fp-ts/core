@@ -3,6 +3,8 @@
  */
 
 /**
+ * Create a new object by picking properties of an existing object.
+ *
  * @since 1.0.0
  */
 export const pick = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
@@ -17,6 +19,8 @@ export const pick = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
   }
 
 /**
+ * Create a new object by omitting properties of an existing object.
+ *
  * @since 1.0.0
  */
 export const omit = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
