@@ -1139,8 +1139,8 @@ export const orElseSucceed = <B>(
  * @since 1.0.0
  */
 export const liftOrder = <A>(O: Order<A>): Order<Option<A>> =>
-  order.fromCompare((that) =>
-    (self) => isSome(self) ? (isSome(that) ? O.compare(that.value)(self.value) : 1) : -1
+  order.fromCompare((self, that) =>
+    isSome(self) ? (isSome(that) ? O.compare(self.value, that.value) : 1) : -1
   )
 
 /**

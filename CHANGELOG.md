@@ -4,8 +4,10 @@
 
 **Breaking changes**
 
-- `typeclass/Semiproduct`
+- `Semiproduct`
   - rename `productFlatten` to `element`
+- `Order`
+  - make `compare` binary
 
 **New Features**
 

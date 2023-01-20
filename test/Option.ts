@@ -357,12 +357,12 @@ describe.concurrent("Option", () => {
 
   it("liftOrder", () => {
     const OS = _.liftOrder(S.Order)
-    deepStrictEqual(pipe(_.none(), OS.compare(_.none())), 0)
-    deepStrictEqual(pipe(_.some("a"), OS.compare(_.none())), 1)
-    deepStrictEqual(pipe(_.none(), OS.compare(_.some("a"))), -1)
-    deepStrictEqual(pipe(_.some("a"), OS.compare(_.some("a"))), 0)
-    deepStrictEqual(pipe(_.some("a"), OS.compare(_.some("b"))), -1)
-    deepStrictEqual(pipe(_.some("b"), OS.compare(_.some("a"))), 1)
+    deepStrictEqual(OS.compare(_.none(), _.none()), 0)
+    deepStrictEqual(OS.compare(_.some("a"), _.none()), 1)
+    deepStrictEqual(OS.compare(_.none(), _.some("a")), -1)
+    deepStrictEqual(OS.compare(_.some("a"), _.some("a")), 0)
+    deepStrictEqual(OS.compare(_.some("a"), _.some("b")), -1)
+    deepStrictEqual(OS.compare(_.some("b"), _.some("a")), 1)
   })
 
   it("flatMapNullable", () => {

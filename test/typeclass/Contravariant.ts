@@ -21,8 +21,8 @@ describe("Contravariant", () => {
     )(
       S.Order
     )
-    U.deepStrictEqual(pipe(["a"], O.compare(["b"])), -1)
-    U.deepStrictEqual(pipe(["a"], O.compare(["a"])), 0)
-    U.deepStrictEqual(pipe(["b"], O.compare(["a"])), 1)
+    U.deepStrictEqual(O.compare(["a"], ["b"]), -1)
+    U.deepStrictEqual(O.compare(["a"], ["a"]), 0)
+    U.deepStrictEqual(O.compare(["b"], ["a"]), 1)
   })
 })

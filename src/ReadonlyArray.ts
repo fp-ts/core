@@ -751,7 +751,7 @@ export const lefts = <E, A>(self: Iterable<Either<E, A>>): Array<E> => {
 export const sort = <B>(O: Order<B>) =>
   <A extends B>(self: Iterable<A>): Array<A> => {
     const out = Array.from(self)
-    out.sort((self, that) => O.compare(that)(self))
+    out.sort(O.compare)
     return out
   }
 

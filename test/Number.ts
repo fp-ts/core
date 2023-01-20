@@ -35,9 +35,9 @@ describe.concurrent("Number", () => {
   })
 
   it("Order", () => {
-    deepStrictEqual(pipe(1, Number.Order.compare(2)), -1)
-    deepStrictEqual(pipe(2, Number.Order.compare(1)), 1)
-    deepStrictEqual(pipe(2, Number.Order.compare(2)), 0)
+    deepStrictEqual(Number.Order.compare(1, 2), -1)
+    deepStrictEqual(Number.Order.compare(2, 1), 1)
+    deepStrictEqual(Number.Order.compare(2, 2), 0)
   })
 
   it("Bounded", () => {

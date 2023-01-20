@@ -242,7 +242,7 @@ export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]>
  * @since 1.0.0
  */
 export const min = <A>(O: Order<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => O.compare(that)(self) === -1 ? self : that)
+  fromCombine((that) => (self) => O.compare(self, that) === -1 ? self : that)
 
 /**
  * `Semigroup` that returns last maximum of elements.
@@ -251,7 +251,7 @@ export const min = <A>(O: Order<A>): Semigroup<A> =>
  * @since 1.0.0
  */
 export const max = <A>(O: Order<A>): Semigroup<A> =>
-  fromCombine((that) => (self) => O.compare(that)(self) === 1 ? self : that)
+  fromCombine((that) => (self) => O.compare(self, that) === 1 ? self : that)
 
 /**
  * @category constructors
