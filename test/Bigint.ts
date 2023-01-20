@@ -3,7 +3,7 @@ import { pipe } from "@fp-ts/core/Function"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
 describe.concurrent("Bigint", () => {
-  it("isNumber", () => {
+  it("isBigint", () => {
     expect(Bigint.isBigint(1n)).toEqual(true)
     expect(Bigint.isBigint(1)).toEqual(false)
     expect(Bigint.isBigint("a")).toEqual(false)
