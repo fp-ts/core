@@ -251,17 +251,7 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
   ...FlatMap
 }
 
-/**
- * @since 1.0.0
- */
-export const product = <B>(
-  that: Identity<B>
-) => <A>(self: Identity<A>): Identity<[A, B]> => [self, that]
-
-/**
- * @since 1.0.0
- */
-export const productMany = <A>(collection: Iterable<Identity<A>>) =>
+const productMany = <A>(collection: Iterable<Identity<A>>) =>
   (self: Identity<A>): Identity<[A, ...Array<A>]> => [self, ...collection]
 
 /**
@@ -270,7 +260,7 @@ export const productMany = <A>(collection: Iterable<Identity<A>>) =>
  */
 export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = {
   ...Invariant,
-  product,
+  product: (self, that) => [self, that],
   productMany
 }
 
@@ -298,10 +288,7 @@ export const element: <B>(
 ) => <A extends ReadonlyArray<unknown>>(self: Identity<A>) => Identity<[...A, B]> = semiProduct
   .element(SemiProduct)
 
-/**
- * @since 1.0.0
- */
-export const productAll = <A>(collection: Iterable<Identity<A>>): Identity<Array<A>> =>
+const productAll = <A>(collection: Iterable<Identity<A>>): Identity<Array<A>> =>
   readonlyArray.fromIterable(collection)
 
 /**

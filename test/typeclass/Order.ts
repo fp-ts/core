@@ -197,9 +197,9 @@ describe("Order", () => {
 
   describe("SemiProduct", () => {
     it("product", () => {
-      const O = pipe(
+      const O = _.SemiProduct.product(
         string.Order,
-        _.SemiProduct.product(number.Order)
+        number.Order
       )
       U.deepStrictEqual(O.compare(["a", 1], ["a", 2]), -1)
       U.deepStrictEqual(O.compare(["a", 1], ["a", 1]), 0)

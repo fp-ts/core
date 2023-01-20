@@ -195,7 +195,7 @@ export const Invariant: invariant.Invariant<EquivalenceTypeLambda> = {
  */
 export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = {
   imap: Contravariant.imap,
-  product: that => self => tuple(self, that),
+  product: tuple,
   productMany: collection => self => tuple(self, ...collection)
 }
 

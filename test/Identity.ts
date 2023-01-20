@@ -38,13 +38,10 @@ describe.concurrent("Identity", () => {
     expect(_.Monad).exist
 
     expect(_.SemiProduct).exist
-    expect(_.product).exist
-    expect(_.productMany).exist
     expect(_.andThenBind).exist
     expect(_.element).exist
 
     expect(_.Product).exist
-    expect(_.productAll).exist
     expect(_.tuple).exist
     expect(_.struct).exist
 
@@ -100,7 +97,8 @@ describe.concurrent("Identity", () => {
   })
 
   it("product", () => {
-    U.deepStrictEqual(pipe("a", _.product("b")), ["a", "b"])
+    const product = _.SemiProduct.product
+    U.deepStrictEqual(product("a", "b"), ["a", "b"])
   })
 
   it("getSemiCoproduct", () => {

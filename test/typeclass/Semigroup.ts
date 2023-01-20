@@ -132,9 +132,10 @@ describe("Semigroup", () => {
 
   it("product", () => {
     const S = pipe(
-      String.Semigroup,
-      _.SemiProduct.product(Number.SemigroupSum),
-      _.SemiProduct.product(Number.SemigroupMultiply),
+      _.SemiProduct.product(
+        _.SemiProduct.product(String.Semigroup, Number.SemigroupSum),
+        Number.SemigroupMultiply
+      ),
       _.imap(
         ([[a, b], c]): [string, number, number] => [a, b, c],
         ([a, b, c]): [[string, number], number] => [[a, b], c]
