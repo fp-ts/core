@@ -7,7 +7,6 @@ import * as RA from "@fp-ts/core/ReadonlyArray"
 import * as String from "@fp-ts/core/String"
 import { deepStrictEqual, double, strictEqual } from "@fp-ts/core/test/util"
 import * as Order from "@fp-ts/core/typeclass/Order"
-import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as assert from "assert"
 import * as fc from "fast-check"
 
@@ -41,15 +40,10 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.Monad).exist
 
     expect(RA.SemiProduct).exist
-    expect(RA.product).exist
-    expect(RA.productMany).exist
     expect(RA.andThenBind).exist
     expect(RA.element).exist
 
     expect(RA.Product).exist
-    expect(RA.productAll).exist
-    // expect(ReadonlyArray.tuple).exist
-    // expect(ReadonlyArray.struct).exist
 
     expect(RA.SemiApplicative).exist
     expect(RA.liftSemigroup).exist
@@ -1608,9 +1602,10 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   test("product", () => {
-    expect(pipe([], RA.product(["a", "b"]))).toEqual([])
-    expect(pipe([1, 2], RA.product([]))).toEqual([])
-    expect(pipe([1, 2], RA.product(["a", "b"]))).toEqual([
+    const product = RA.SemiProduct.product
+    expect(product([], ["a", "b"])).toEqual([])
+    expect(product([1, 2], [])).toEqual([])
+    expect(product([1, 2], ["a", "b"])).toEqual([
       [1, "a"],
       [1, "b"],
       [2, "a"],
@@ -1619,10 +1614,10 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   test("productMany", () => {
-    const productMany = semiProduct.productMany(RA.Covariant, RA.product)
+    const productMany = RA.SemiProduct.productMany
     expect(pipe(
       [],
-      RA.productMany([
+      productMany([
         [2],
         [4, 5],
         [8, 9, 10]
@@ -1637,14 +1632,14 @@ describe.concurrent("ReadonlyArray", () => {
     ))
     expect(pipe(
       [1, 2, 3],
-      RA.productMany([])
+      productMany([])
     )).toEqual(pipe(
       [1, 2, 3],
       productMany([])
     ))
     expect(pipe(
       [1, 2, 3],
-      RA.productMany([
+      productMany([
         [2],
         [4, 5],
         [8, 9, 10]
@@ -1660,9 +1655,10 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   test("productAll", () => {
-    expect(RA.productAll([])).toEqual([])
-    expect(RA.productAll([[1, 2, 3]])).toEqual([[1], [2], [3]])
-    expect(RA.productAll([[1, 2, 3], [4, 5]])).toEqual([[1, 4], [1, 5], [2, 4], [2, 5], [3, 4], [
+    const productAll = RA.Product.productAll
+    expect(productAll([])).toEqual([])
+    expect(productAll([[1, 2, 3]])).toEqual([[1], [2], [3]])
+    expect(productAll([[1, 2, 3], [4, 5]])).toEqual([[1, 4], [1, 5], [2, 4], [2, 5], [3, 4], [
       3,
       5
     ]])

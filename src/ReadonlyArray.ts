@@ -1675,37 +1675,30 @@ export const sequenceNonEmpty = <F extends TypeLambda>(
   self: NonEmptyReadonlyArray<Kind<F, R, O, E, A>>
 ) => Kind<F, R, O, E, NonEmptyArray<A>>) => traverseNonEmpty(F)(identity)
 
-/**
- * @since 1.0.0
- */
-export const product = <B>(
+const product = <A, B>(
+  self: ReadonlyArray<A>,
   that: ReadonlyArray<B>
-) =>
-  <A>(self: ReadonlyArray<A>): Array<[A, B]> => {
-    if (isEmpty(self) || isEmpty(that)) {
-      return empty()
-    }
-    const out: Array<[A, B]> = []
-    for (let i = 0; i < self.length; i++) {
-      for (let j = 0; j < that.length; j++) {
-        out.push([self[i], that[j]])
-      }
-    }
-    return out
+): Array<[A, B]> => {
+  if (isEmpty(self) || isEmpty(that)) {
+    return empty()
   }
+  const out: Array<[A, B]> = []
+  for (let i = 0; i < self.length; i++) {
+    for (let j = 0; j < that.length; j++) {
+      out.push([self[i], that[j]])
+    }
+  }
+  return out
+}
 
-/**
- * @since 1.0.0
- */
-export const productMany: <A>(
+const productMany: <A>(
   collection: Iterable<ReadonlyArray<A>>
-) => (self: ReadonlyArray<A>) => Array<[A, ...Array<A>]> = semiProduct
-  .productMany(Covariant, product) as any
+) => (self: ReadonlyArray<A>) => Array<[A, ...Array<A>]> = semiProduct.productMany(
+  Covariant,
+  product
+) as any
 
-/**
- * @since 1.0.0
- */
-export const productAll = <A>(
+const productAll = <A>(
   collection: Iterable<ReadonlyArray<A>>
 ): Array<Array<A>> => {
   const arrays = Array.from(collection)

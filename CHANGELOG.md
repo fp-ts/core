@@ -7,7 +7,8 @@
 - `Semigroup`
   - make `combine` binary
   - make `combineMany` binary
-- `Semiproduct`
+- `SemiProduct`
+  - make `product` binary
   - rename `productFlatten` to `element`
 - `Order`
   - make `compare` binary

@@ -326,7 +326,7 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
  */
 export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
   ...Invariant,
-  product: that => self => tuple(self, that),
+  product: tuple,
   productMany: collection => self => tuple(self, ...collection)
 }
 

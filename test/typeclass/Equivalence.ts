@@ -137,9 +137,9 @@ describe("Equivalence", () => {
   })
 
   it("SemiProduct/product", () => {
-    const eq = pipe(
+    const eq = _.SemiProduct.product(
       _.string,
-      _.SemiProduct.product(_.string)
+      _.string
     )
     expect(eq(["a", "b"], ["a", "b"])).toEqual(true)
     expect(eq(["a", "b"], ["a", "c"])).toEqual(false)

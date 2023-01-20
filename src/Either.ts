@@ -359,20 +359,7 @@ export const Monad: monad.Monad<EitherTypeLambda> = {
   ...FlatMap
 }
 
-/**
- * @since 1.0.0
- */
-export const product = <E2, B>(
-  that: Either<E2, B>
-) =>
-  <E1, A>(self: Either<E1, A>): Either<E1 | E2, [A, B]> =>
-    isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
-
-/**
- * @category error handling
- * @since 1.0.0
- */
-export const productMany = <E, A>(
+const productMany = <E, A>(
   collection: Iterable<Either<E, A>>
 ) =>
   (self: Either<E, A>): Either<E, [A, ...Array<A>]> => {
@@ -395,7 +382,8 @@ export const productMany = <E, A>(
  */
 export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
   ...Invariant,
-  product,
+  product: (self, that) =>
+    isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self,
   productMany
 }
 
@@ -425,10 +413,7 @@ export const element: <E2, B>(
 ) => Either<E1 | E2, [...A, B]> = semiProduct
   .element(SemiProduct)
 
-/**
- * @since 1.0.0
- */
-export const productAll = <E, A>(
+const productAll = <E, A>(
   collection: Iterable<Either<E, A>>
 ): Either<E, Array<A>> => {
   const out: Array<A> = []

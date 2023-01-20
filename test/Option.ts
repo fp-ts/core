@@ -42,11 +42,8 @@ describe.concurrent("Option", () => {
     expect(_.Monad).exist
 
     expect(_.SemiProduct).exist
-    expect(_.product).exist
-    expect(_.productMany).exist
 
     expect(_.Product).exist
-    expect(_.productAll).exist
     expect(_.tuple).exist
     expect(_.struct).exist
 
@@ -211,11 +208,12 @@ describe.concurrent("Option", () => {
   })
 
   it("product", () => {
-    deepStrictEqual(pipe(_.none(), _.product(_.none())), _.none())
-    deepStrictEqual(pipe(_.some(1), _.product(_.none())), _.none())
-    deepStrictEqual(pipe(_.none(), _.product(_.some("a"))), _.none())
+    const product = _.SemiProduct.product
+    deepStrictEqual(product(_.none(), _.none()), _.none())
+    deepStrictEqual(product(_.some(1), _.none()), _.none())
+    deepStrictEqual(product(_.none(), _.some("a")), _.none())
     deepStrictEqual(
-      pipe(_.some(1), _.product(_.some("a"))),
+      product(_.some(1), _.some("a")),
       _.some([1, "a"])
     )
   })

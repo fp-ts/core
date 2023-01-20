@@ -952,44 +952,36 @@ export const filterMap = <A, B, E2>(
     return option.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
   }
 
-/**
- * @since 1.0.0
- */
-export const product = <E2, B>(that: Validated<E2, B>) =>
-  <E1, A>(
-    self: Validated<E1, A>
-  ): Validated<E1 | E2, [A, B]> => {
-    if (isLeft(self)) {
-      return self
-    }
-    if (isRight(self)) {
-      if (isLeft(that)) {
-        return that
-      }
-      if (isRight(that)) {
-        return right([self.right, that.right])
-      }
-      return both(that.left, [self.right, that.right])
-    }
+const product = <E1, A, E2, B>(
+  self: Validated<E1, A>,
+  that: Validated<E2, B>
+): Validated<E1 | E2, [A, B]> => {
+  if (isLeft(self)) {
+    return self
+  }
+  if (isRight(self)) {
     if (isLeft(that)) {
-      return left(RA.appendAllNonEmpty(that.left)(self.left))
+      return that
     }
     if (isRight(that)) {
-      return both(self.left, [self.right, that.right])
+      return right([self.right, that.right])
     }
-    return both(RA.appendAllNonEmpty(that.left)(self.left), [self.right, that.right])
+    return both(that.left, [self.right, that.right])
   }
+  if (isLeft(that)) {
+    return left(RA.appendAllNonEmpty(that.left)(self.left))
+  }
+  if (isRight(that)) {
+    return both(self.left, [self.right, that.right])
+  }
+  return both(RA.appendAllNonEmpty(that.left)(self.left), [self.right, that.right])
+}
 
-/**
- * @since 1.0.0
- */
-export const productMany = <E, A>(
+const productMany = <E, A>(
   collection: Iterable<Validated<E, A>>
 ) =>
-  (
-    self: Validated<E, A>
-  ): Validated<E, [A, ...Array<A>]> =>
-    pipe(self, product(productAll(collection)), map(([a, as]) => [a, ...as]))
+  (self: Validated<E, A>): Validated<E, [A, ...Array<A>]> =>
+    pipe(product(self, productAll(collection)), map(([a, as]) => [a, ...as]))
 
 /**
  * @category instances
@@ -1054,10 +1046,7 @@ export const getFirstLeftSemigroup: <A, E>(
 ) => Semigroup<Validated<E, A>> = semiApplicative
   .liftSemigroup(SemiApplicative)
 
-/**
- * @since 1.0.0
- */
-export const productAll = <E, A>(
+const productAll = <E, A>(
   collection: Iterable<Validated<E, A>>
 ): Validated<E, Array<A>> => {
   const rights: Array<A> = []
