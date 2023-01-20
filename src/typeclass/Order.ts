@@ -15,7 +15,7 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Order<A> {
-  readonly compare: (that: A) => (self: A) => -1 | 0 | 1
+  readonly compare: (self: A, that: A) => -1 | 0 | 1
 }
 
 /**
@@ -31,7 +31,7 @@ export interface OrderTypeLambda extends TypeLambda {
  * @since 1.0.0
  */
 export const string: Order<string> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
 }
 
 /**
@@ -39,7 +39,7 @@ export const string: Order<string> = {
  * @since 1.0.0
  */
 export const number: Order<number> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
 }
 
 /**
@@ -47,7 +47,7 @@ export const number: Order<number> = {
  * @since 1.0.0
  */
 export const boolean: Order<boolean> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
 }
 
 /**
@@ -55,7 +55,7 @@ export const boolean: Order<boolean> = {
  * @since 1.0.0
  */
 export const bigint: Order<bigint> = {
-  compare: (that) => (self) => self < that ? -1 : self > that ? 1 : 0
+  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
 }
 
 /**
@@ -65,7 +65,7 @@ export const bigint: Order<bigint> = {
  * @since 1.0.0
  */
 export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
-  compare: that => self => self === that ? 0 : compare(that)(self)
+  compare: (self, that) => self === that ? 0 : compare(self, that)
 })
 
 /**
@@ -80,18 +80,16 @@ export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
 export const tuple = <A extends ReadonlyArray<any>>(
   ...orders: { readonly [K in keyof A]: Order<A[K]> }
 ): Order<Readonly<A>> =>
-  fromCompare(that =>
-    self => {
-      let i = 0
-      for (; i < orders.length - 1; i++) {
-        const r = orders[i].compare(that[i])(self[i])
-        if (r !== 0) {
-          return r
-        }
+  fromCompare((self, that) => {
+    let i = 0
+    for (; i < orders.length - 1; i++) {
+      const r = orders[i].compare(self[i], that[i])
+      if (r !== 0) {
+        return r
       }
-      return orders[i].compare(that[i])(self[i])
     }
-  )
+    return orders[i].compare(self[i], that[i])
+  })
 
 /**
  * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
@@ -103,32 +101,30 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * @since 1.0.0
  */
 export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
-  fromCompare((that) =>
-    (self) => {
-      const aLen = self.length
-      const bLen = that.length
-      const len = Math.min(aLen, bLen)
-      for (let i = 0; i < len; i++) {
-        const o = O.compare(that[i])(self[i])
-        if (o !== 0) {
-          return o
-        }
+  fromCompare((self, that) => {
+    const aLen = self.length
+    const bLen = that.length
+    const len = Math.min(aLen, bLen)
+    for (let i = 0; i < len; i++) {
+      const o = O.compare(self[i], that[i])
+      if (o !== 0) {
+        return o
       }
-      return number.compare(bLen)(aLen)
     }
-  )
+    return number.compare(aLen, bLen)
+  })
 
 /**
  * @since 1.0.0
  */
 export const reverse = <A>(O: Order<A>): Order<A> =>
-  fromCompare(that => self => O.compare(self)(that))
+  fromCompare((self, that) => O.compare(that, self))
 
 /**
  * @since 1.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Order<A>): Order<B> => fromCompare((b2) => (b1) => self.compare(f(b2))(f(b1)))
+  (self: Order<A>): Order<B> => fromCompare((b1, b2) => self.compare(f(b1), f(b2)))
 
 /**
  * @category instances
@@ -137,35 +133,31 @@ export const contramap = <B, A>(f: (b: B) => A) =>
 export const getSemigroup = <A>(): Semigroup<Order<A>> => ({
   combine: (O2) =>
     (O1) =>
-      fromCompare(that =>
-        self => {
-          const out = O1.compare(that)(self)
-          if (out !== 0) {
-            return out
-          }
-          return O2.compare(that)(self)
-        }
-      ),
-  combineMany: (collection) =>
-    (self) =>
-      fromCompare(a2 =>
-        a1 => {
-          let out = self.compare(a2)(a1)
-          if (out !== 0) {
-            return out
-          }
-          for (const O of collection) {
-            out = O.compare(a2)(a1)
-            if (out !== 0) {
-              return out
-            }
-          }
+      fromCompare((self, that) => {
+        const out = O1.compare(self, that)
+        if (out !== 0) {
           return out
         }
-      )
+        return O2.compare(self, that)
+      }),
+  combineMany: (collection) =>
+    (self) =>
+      fromCompare((a1, a2) => {
+        let out = self.compare(a1, a2)
+        if (out !== 0) {
+          return out
+        }
+        for (const O of collection) {
+          out = O.compare(a1, a2)
+          if (out !== 0) {
+            return out
+          }
+        }
+        return out
+      })
 })
 
-const empty: Order<unknown> = fromCompare(() => () => 0)
+const empty: Order<unknown> = fromCompare(() => 0)
 
 /**
  * @category instances
@@ -214,14 +206,14 @@ export const Product: product.Product<OrderTypeLambda> = {
  *
  * @since 1.0.0
  */
-export const lessThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(that)(self) === -1
+export const lessThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(self, that) === -1
 
 /**
  * Test whether one value is _strictly greater than_ another.
  *
  * @since 1.0.0
  */
-export const greaterThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(that)(self) === 1
+export const greaterThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(self, that) === 1
 
 /**
  * Test whether one value is _non-strictly less than_ another.
@@ -229,7 +221,7 @@ export const greaterThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compa
  * @since 1.0.0
  */
 export const lessThanOrEqualTo = <A>(O: Order<A>) =>
-  (that: A) => (self: A) => O.compare(that)(self) !== 1
+  (that: A) => (self: A) => O.compare(self, that) !== 1
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
@@ -237,7 +229,7 @@ export const lessThanOrEqualTo = <A>(O: Order<A>) =>
  * @since 1.0.0
  */
 export const greaterThanOrEqualTo = <A>(O: Order<A>) =>
-  (that: A) => (self: A) => O.compare(that)(self) !== -1
+  (that: A) => (self: A) => O.compare(self, that) !== -1
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
@@ -245,7 +237,7 @@ export const greaterThanOrEqualTo = <A>(O: Order<A>) =>
  * @since 1.0.0
  */
 export const min = <A>(O: Order<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(that)(self) < 1 ? self : that
+  (that: A) => (self: A): A => self === that || O.compare(self, that) < 1 ? self : that
 
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
@@ -253,7 +245,7 @@ export const min = <A>(O: Order<A>) =>
  * @since 1.0.0
  */
 export const max = <A>(O: Order<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(that)(self) > -1 ? self : that
+  (that: A) => (self: A): A => self === that || O.compare(self, that) > -1 ? self : that
 
 /**
  * Clamp a value between a minimum and a maximum.
