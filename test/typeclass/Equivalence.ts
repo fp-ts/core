@@ -102,7 +102,7 @@ describe("Equivalence", () => {
     const S = _.getSemigroup<T>()
     const E0: _.Equivalence<T> = _.contramap((x: T) => x[0])(_.string)
     const E1: _.Equivalence<T> = _.contramap((x: T) => x[1])(_.number)
-    const eqE0E1 = pipe(E0, S.combine(E1))
+    const eqE0E1 = S.combine(E0, E1)
     expect(eqE0E1(["a", 1, true], ["a", 1, true])).toEqual(true)
     expect(eqE0E1(["a", 1, true], ["a", 1, false])).toEqual(true)
     expect(eqE0E1(["a", 1, true], ["b", 1, true])).toEqual(false)

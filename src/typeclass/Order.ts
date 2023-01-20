@@ -131,15 +131,14 @@ export const contramap = <B, A>(f: (b: B) => A) =>
  * @since 1.0.0
  */
 export const getSemigroup = <A>(): Semigroup<Order<A>> => ({
-  combine: (O2) =>
-    (O1) =>
-      fromCompare((self, that) => {
-        const out = O1.compare(self, that)
-        if (out !== 0) {
-          return out
-        }
-        return O2.compare(self, that)
-      }),
+  combine: (O1, O2) =>
+    fromCompare((self, that) => {
+      const out = O1.compare(self, that)
+      if (out !== 0) {
+        return out
+      }
+      return O2.compare(self, that)
+    }),
   combineMany: (collection) =>
     (self) =>
       fromCompare((a1, a2) => {

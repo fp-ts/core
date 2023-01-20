@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { constFalse, constTrue } from "@fp-ts/core/Function"
+import { constFalse, constTrue, pipe } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
@@ -274,7 +274,8 @@ export const and = <A>(that: Predicate<A>) =>
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroupAny = <A>(): semigroup.Semigroup<Predicate<A>> => semigroup.fromCombine(or)
+export const getSemigroupAny = <A>(): semigroup.Semigroup<Predicate<A>> =>
+  semigroup.fromCombine((self, that) => pipe(self, or(that)))
 
 /**
  * @category instances
@@ -295,7 +296,7 @@ export const getMonoidAny = <A>(): monoid.Monoid<Predicate<A>> => {
  * @since 1.0.0
  */
 export const getSemigroupAll = <A>(): semigroup.Semigroup<Predicate<A>> =>
-  semigroup.fromCombine(and)
+  semigroup.fromCombine((self, that) => pipe(self, and(that)))
 
 /**
  * @category instances

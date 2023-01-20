@@ -15,7 +15,7 @@ describe.concurrent("String", () => {
   })
 
   it("Semigroup", () => {
-    expect(String.Semigroup.combine("b")("a")).toEqual("ab")
+    expect(String.Semigroup.combine("a", "b")).toEqual("ab")
     expect(String.Semigroup.combineMany(["b", "c"])("a")).toEqual("abc")
     expect(String.Semigroup.combineMany([])("a")).toEqual("a")
   })

@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
@@ -28,6 +29,6 @@ export const getSemigroup = <F extends TypeLambda>(F: SemiCoproduct<F>) =>
   <R, O, E, A>(): Semigroup<
     Kind<F, R, O, E, A>
   > => ({
-    combine: F.coproduct,
+    combine: (self, that) => pipe(self, F.coproduct(that)),
     combineMany: F.coproductMany
   })

@@ -4,6 +4,8 @@
 
 **Breaking changes**
 
+- `Semigroup`
+  - make `combine` binary
 - `Semiproduct`
   - rename `productFlatten` to `element`
 - `Order`

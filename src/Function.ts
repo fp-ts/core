@@ -49,7 +49,7 @@ export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) 
  */
 export const getSemigroup = <S>(Semigroup: semigroup.Semigroup<S>) =>
   <A>(): semigroup.Semigroup<(a: A) => S> =>
-    semigroup.fromCombine((that) => (self) => (a) => Semigroup.combine(that(a))(self(a)))
+    semigroup.fromCombine((self, that) => (a) => Semigroup.combine(self(a), that(a)))
 
 /**
  * Unary functions form a monoid as long as you can provide a monoid for the codomain.

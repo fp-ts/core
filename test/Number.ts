@@ -46,7 +46,7 @@ describe.concurrent("Number", () => {
   })
 
   it("SemigroupSum", () => {
-    deepStrictEqual(pipe(2, Number.SemigroupSum.combine(3)), 5)
+    deepStrictEqual(Number.SemigroupSum.combine(2, 3), 5)
   })
 
   it("MonoidSum", () => {
@@ -54,7 +54,7 @@ describe.concurrent("Number", () => {
   })
 
   it("SemigroupMultiply", () => {
-    deepStrictEqual(pipe(2, Number.SemigroupMultiply.combine(3)), 6)
+    deepStrictEqual(Number.SemigroupMultiply.combine(2, 3), 6)
     deepStrictEqual(pipe(0, Number.SemigroupMultiply.combineMany([1, 2, 3])), 0)
     deepStrictEqual(pipe(2, Number.SemigroupMultiply.combineMany([1, 0, 3])), 0)
   })

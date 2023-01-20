@@ -1045,10 +1045,10 @@ describe.concurrent("ReadonlyArray", () => {
 
   it("getMonoid", () => {
     const M = RA.getMonoid<number>()
-    deepStrictEqual(M.combine([3, 4])([1, 2]), [1, 2, 3, 4])
+    deepStrictEqual(M.combine([1, 2], [3, 4]), [1, 2, 3, 4])
     const x = [1, 2]
-    deepStrictEqual(M.combine(M.empty)(x), x)
-    deepStrictEqual(M.combine(x)(M.empty), x)
+    deepStrictEqual(M.combine(x, M.empty), x)
+    deepStrictEqual(M.combine(M.empty, x), x)
 
     deepStrictEqual(M.combineAll([[1, 2], [3, 4, 5], [5, 6, 7, 1]]), [1, 2, 3, 4, 5, 5, 6, 7, 1])
   })
@@ -1460,12 +1460,12 @@ describe.concurrent("ReadonlyArray", () => {
 
   it("getSemigroup", () => {
     const S = RA.getSemigroup<number>()
-    expect(pipe([1, 2], S.combine([2, 3]))).toEqual([1, 2, 2, 3])
+    expect(S.combine([1, 2], [2, 3])).toEqual([1, 2, 2, 3])
   })
 
   it("getUnionSemigroup", () => {
     const S = RA.getUnionSemigroup(Number.Equivalence)
-    expect(pipe([1, 2], S.combine([2, 3]))).toEqual([1, 2, 3])
+    expect(S.combine([1, 2], [2, 3])).toEqual([1, 2, 3])
   })
 
   it("intersection", () => {
@@ -1485,22 +1485,22 @@ describe.concurrent("ReadonlyArray", () => {
   it("getUnionMonoid", () => {
     const M = RA.getUnionMonoid(Number.Equivalence)
     const two: ReadonlyArray<number> = [1, 2]
-    deepStrictEqual(M.combine([3, 4])(two), [1, 2, 3, 4])
-    deepStrictEqual(M.combine([2, 3])(two), [1, 2, 3])
-    deepStrictEqual(M.combine([1, 2])(two), [1, 2])
+    deepStrictEqual(M.combine(two, [3, 4]), [1, 2, 3, 4])
+    deepStrictEqual(M.combine(two, [2, 3]), [1, 2, 3])
+    deepStrictEqual(M.combine(two, [1, 2]), [1, 2])
 
-    deepStrictEqual(M.combine(two)(M.empty), two)
-    deepStrictEqual(M.combine(M.empty)(two), two)
-    deepStrictEqual(M.combine(M.empty)(M.empty), M.empty)
+    deepStrictEqual(M.combine(M.empty, two), two)
+    deepStrictEqual(M.combine(two, M.empty), two)
+    deepStrictEqual(M.combine(M.empty, M.empty), M.empty)
 
     deepStrictEqual(M.combineAll([[1, 2], [3, 4, 5], [5, 6, 7, 1]]), [1, 2, 3, 4, 5, 6, 7])
   })
 
   it("getIntersectionSemigroup", () => {
     const S = RA.getIntersectionSemigroup(Number.Equivalence)
-    deepStrictEqual(S.combine([1, 2])([3, 4]), [])
-    deepStrictEqual(S.combine([1, 2])([2, 3]), [2])
-    deepStrictEqual(S.combine([1, 2])([1, 2]), [1, 2])
+    deepStrictEqual(S.combine([3, 4], [1, 2]), [])
+    deepStrictEqual(S.combine([2, 3], [1, 2]), [2])
+    deepStrictEqual(S.combine([1, 2], [1, 2]), [1, 2])
   })
 
   it("should be safe when calling map with a binary function", () => {
