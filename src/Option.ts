@@ -616,12 +616,6 @@ export const getFirstNoneMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applic
 )
 
 /**
- * @since 1.0.0
- */
-export const coproduct = <B>(that: Option<B>) =>
-  <A>(self: Option<A>): Option<B | A> => isSome(self) ? self : that
-
-/**
  * @category error handling
  * @since 1.0.0
  */
@@ -645,7 +639,7 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>) =>
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
   ...Invariant,
-  coproduct,
+  coproduct: (self, that) => isSome(self) ? self : that,
   coproductMany: firstSomeOf
 }
 
@@ -667,10 +661,7 @@ export const coproductEither = <B>(that: Option<B>) =>
   <A>(self: Option<A>): Option<Either<A, B>> =>
     isNone(self) ? pipe(that, map(either.right)) : pipe(self, map(either.left))
 
-/**
- * @since 1.0.0
- */
-export const coproductAll = <A>(collection: Iterable<Option<A>>): Option<A> => {
+const coproductAll = <A>(collection: Iterable<Option<A>>): Option<A> => {
   const options = readonlyArray.fromIterable(collection)
   return options.length > 0 ?
     SemiCoproduct.coproductMany(options.slice(1))(options[0]) :

@@ -767,16 +767,17 @@ describe("These", () => {
   })
 
   it("coproduct", () => {
-    U.deepStrictEqual(pipe(_.right(1), _.SemiCoproduct.coproduct(_.right(2))), _.right(1))
-    U.deepStrictEqual(pipe(_.right(1), _.SemiCoproduct.coproduct(_.left("e2"))), _.right(1))
-    U.deepStrictEqual(pipe(_.left("e1"), _.SemiCoproduct.coproduct(_.right(2))), _.right(2))
-    U.deepStrictEqual(pipe(_.left("e1"), _.SemiCoproduct.coproduct(_.left("e2"))), _.left("e2"))
+    const coproduct = _.SemiCoproduct.coproduct
+    U.deepStrictEqual(coproduct(_.right(1), _.right(2)), _.right(1))
+    U.deepStrictEqual(coproduct(_.right(1), _.left("e2")), _.right(1))
+    U.deepStrictEqual(coproduct(_.left("e1"), _.right(2)), _.right(2))
+    U.deepStrictEqual(coproduct(_.left("e1"), _.left("e2")), _.left("e2"))
     U.deepStrictEqual(
-      pipe(_.both("e1", 1), _.SemiCoproduct.coproduct(_.right(2))),
+      coproduct(_.both("e1", 1), _.right(2)),
       _.both("e1", 1)
     )
     U.deepStrictEqual(
-      pipe(_.both("e1", 1), _.SemiCoproduct.coproduct(_.left("e2"))),
+      coproduct(_.both("e1", 1), _.left("e2")),
       _.both("e1", 1)
     )
   })
