@@ -38,7 +38,7 @@ describe("SemiApplicative", () => {
     U.deepStrictEqual(S.combine(O.some("a"), O.none()), O.none())
     U.deepStrictEqual(S.combine(O.some("a"), O.some("b")), O.some("ab"))
 
-    U.deepStrictEqual(pipe(O.some("a"), S.combineMany([O.some("b"), O.some("c")])), O.some("abc"))
+    U.deepStrictEqual(S.combineMany(O.some("a"), [O.some("b"), O.some("c")]), O.some("abc"))
   })
 
   it("lift2", () => {

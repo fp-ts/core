@@ -79,11 +79,7 @@ export const getMonoid = <M>(Monoid: monoid.Monoid<M>) =>
   <A>(): monoid.Monoid<(a: A) => M> => {
     const S = getSemigroup(Monoid)<A>()
     const empty = () => Monoid.empty
-    return ({
-      ...S,
-      combineAll: (collection) => S.combineMany(collection)(empty),
-      empty
-    })
+    return ({ ...S, combineAll: (collection) => S.combineMany(empty, collection), empty })
   }
 
 /**

@@ -38,9 +38,9 @@ describe.concurrent("Boolean", () => {
 
   describe.concurrent("MonoidAll", () => {
     it("baseline", () => {
-      deepStrictEqual(Boolean.MonoidAll.combineMany([true, true])(true), true)
-      deepStrictEqual(Boolean.MonoidAll.combineMany([true, false])(true), false)
-      deepStrictEqual(Boolean.MonoidAll.combineMany([true, false])(false), false)
+      deepStrictEqual(Boolean.MonoidAll.combineMany(true, [true, true]), true)
+      deepStrictEqual(Boolean.MonoidAll.combineMany(true, [true, false]), false)
+      deepStrictEqual(Boolean.MonoidAll.combineMany(false, [true, false]), false)
       deepStrictEqual(Boolean.MonoidAll.combineAll([true, true, true]), true)
       deepStrictEqual(Boolean.MonoidAll.combineAll([true, true, false]), false)
     })
@@ -54,9 +54,9 @@ describe.concurrent("Boolean", () => {
 
   describe.concurrent("MonoidAny", () => {
     it("baseline", () => {
-      deepStrictEqual(Boolean.MonoidAny.combineMany([true, true])(true), true)
-      deepStrictEqual(Boolean.MonoidAny.combineMany([true, false])(true), true)
-      deepStrictEqual(Boolean.MonoidAny.combineMany([false, false])(false), false)
+      deepStrictEqual(Boolean.MonoidAny.combineMany(true, [true, true]), true)
+      deepStrictEqual(Boolean.MonoidAny.combineMany(true, [true, false]), true)
+      deepStrictEqual(Boolean.MonoidAny.combineMany(false, [false, false]), false)
       deepStrictEqual(Boolean.MonoidAny.combineAll([true, true, true]), true)
       deepStrictEqual(Boolean.MonoidAny.combineAll([true, true, false]), true)
       deepStrictEqual(Boolean.MonoidAny.combineAll([false, false, false]), false)

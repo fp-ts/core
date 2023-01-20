@@ -30,5 +30,5 @@ export const getSemigroup = <F extends TypeLambda>(F: SemiCoproduct<F>) =>
     Kind<F, R, O, E, A>
   > => ({
     combine: (self, that) => pipe(self, F.coproduct(that)),
-    combineMany: F.coproductMany
+    combineMany: (self, collection) => pipe(self, F.coproductMany(collection))
   })
