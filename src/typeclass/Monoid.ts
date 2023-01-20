@@ -91,6 +91,34 @@ export const numberMultiply: Monoid<number> = {
 }
 
 /**
+ * `number` monoid under addition.
+ *
+ * The `bigint` value is `0n`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const bigintSum: Monoid<bigint> = {
+  ...semigroup.bigintSum,
+  combineAll: (collection) => semigroup.bigintSum.combineMany(collection)(0n),
+  empty: 0n
+}
+
+/**
+ * `bigint` monoid under multiplication.
+ *
+ * The `empty` value is `1n`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const bigintMultiply: Monoid<bigint> = {
+  ...semigroup.bigintMultiply,
+  combineAll: (collection) => semigroup.bigintMultiply.combineMany(collection)(1n),
+  empty: 1n
+}
+
+/**
  * `boolean` monoid under conjunction.
  *
  * The `empty` value is `true`.

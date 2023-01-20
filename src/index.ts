@@ -12,6 +12,7 @@ import * as hkt from "@fp-ts/core/HKT"
 // data types
 // -------------------------------------------------------------------------------------
 
+import * as bigint from "@fp-ts/core/Bigint"
 import * as boolean from "@fp-ts/core/Boolean"
 import * as either from "@fp-ts/core/Either"
 import * as _function from "@fp-ts/core/Function"
@@ -77,6 +78,10 @@ export {
    * @since 1.0.0
    */
   bicovariant,
+  /**
+   * @since 1.0.0
+   */
+  bigint,
   /**
    * @since 1.0.0
    */
