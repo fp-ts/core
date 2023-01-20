@@ -772,14 +772,18 @@ describe("These", () => {
     U.deepStrictEqual(coproduct(_.right(1), _.left("e2")), _.right(1))
     U.deepStrictEqual(coproduct(_.left("e1"), _.right(2)), _.right(2))
     U.deepStrictEqual(coproduct(_.left("e1"), _.left("e2")), _.left("e2"))
-    U.deepStrictEqual(
-      coproduct(_.both("e1", 1), _.right(2)),
-      _.both("e1", 1)
-    )
-    U.deepStrictEqual(
-      coproduct(_.both("e1", 1), _.left("e2")),
-      _.both("e1", 1)
-    )
+    U.deepStrictEqual(coproduct(_.both("e1", 1), _.right(2)), _.both("e1", 1))
+    U.deepStrictEqual(coproduct(_.both("e1", 1), _.left("e2")), _.both("e1", 1))
+  })
+
+  it("coproduct", () => {
+    const coproductMany = _.SemiCoproduct.coproductMany
+    U.deepStrictEqual(coproductMany(_.right(1), [_.right(2)]), _.right(1))
+    U.deepStrictEqual(coproductMany(_.right(1), [_.left("e2")]), _.right(1))
+    U.deepStrictEqual(coproductMany(_.left("e1"), [_.right(2)]), _.right(2))
+    U.deepStrictEqual(coproductMany(_.left("e1"), [_.left("e2")]), _.left("e2"))
+    U.deepStrictEqual(coproductMany(_.both("e1", 1), [_.right(2)]), _.both("e1", 1))
+    U.deepStrictEqual(coproductMany(_.both("e1", 1), [_.left("e2")]), _.both("e1", 1))
   })
 
   it("compact", () => {
