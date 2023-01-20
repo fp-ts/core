@@ -10,21 +10,19 @@ import type { Option } from "@fp-ts/core/Option"
 /** @internal */
 export const isEither = (u: unknown): u is Either<unknown, unknown> =>
   typeof u === "object" && u != null && "_tag" in u &&
-  (u["_tag"] === "@fp-ts/core/Either/Left" || u["_tag"] === "@fp-ts/core/Either/Right")
+  (u["_tag"] === "Left" || u["_tag"] === "Right")
 
 /** @internal */
-export const isLeft = <E, A>(ma: Either<E, A>): ma is Left<E> =>
-  ma._tag === "@fp-ts/core/Either/Left"
+export const isLeft = <E, A>(ma: Either<E, A>): ma is Left<E> => ma._tag === "Left"
 
 /** @internal */
-export const isRight = <E, A>(ma: Either<E, A>): ma is Right<A> =>
-  ma._tag === "@fp-ts/core/Either/Right"
+export const isRight = <E, A>(ma: Either<E, A>): ma is Right<A> => ma._tag === "Right"
 
 /** @internal */
-export const left = <E>(e: E): Either<E, never> => ({ _tag: "@fp-ts/core/Either/Left", left: e })
+export const left = <E>(e: E): Either<E, never> => ({ _tag: "Left", left: e })
 
 /** @internal */
-export const right = <A>(a: A): Either<never, A> => ({ _tag: "@fp-ts/core/Either/Right", right: a })
+export const right = <A>(a: A): Either<never, A> => ({ _tag: "Right", right: a })
 
 /** @internal */
 export const getLeft = <E, A>(
