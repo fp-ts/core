@@ -83,8 +83,8 @@ describe.concurrent("Boolean", () => {
   })
 
   it("Order", () => {
-    deepStrictEqual(pipe(false, Boolean.Order.compare(true)), -1)
-    deepStrictEqual(pipe(true, Boolean.Order.compare(false)), 1)
-    deepStrictEqual(pipe(true, Boolean.Order.compare(true)), 0)
+    deepStrictEqual(Boolean.Order.compare(false, true), -1)
+    deepStrictEqual(Boolean.Order.compare(true, false), 1)
+    deepStrictEqual(Boolean.Order.compare(true, true), 0)
   })
 })

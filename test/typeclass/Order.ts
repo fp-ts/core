@@ -17,25 +17,25 @@ describe("Order", () => {
 
   it("tuple", () => {
     const O = _.tuple(string.Order, number.Order, boolean.Order)
-    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["b", 2, true])), -1)
-    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 2, true])), -1)
-    U.deepStrictEqual(pipe(["a", 1, true], O.compare(["a", 1, false])), 1)
+    U.deepStrictEqual(O.compare(["a", 1, true], ["b", 2, true]), -1)
+    U.deepStrictEqual(O.compare(["a", 1, true], ["a", 2, true]), -1)
+    U.deepStrictEqual(O.compare(["a", 1, true], ["a", 1, false]), 1)
   })
 
   it("Contravariant", () => {
     const O = pipe(number.Order, _.Contravariant.contramap((s: string) => s.length))
-    U.deepStrictEqual(pipe("a", O.compare("b")), 0)
-    U.deepStrictEqual(pipe("a", O.compare("bb")), -1)
-    U.deepStrictEqual(pipe("aa", O.compare("b")), 1)
+    U.deepStrictEqual(O.compare("a", "b"), 0)
+    U.deepStrictEqual(O.compare("a", "bb"), -1)
+    U.deepStrictEqual(O.compare("aa", "b"), 1)
   })
 
   it("Invariant", () => {
     const O = _.Invariant.imap((s: string) => [s], ([s]) => s)(
       string.Order
     )
-    U.deepStrictEqual(pipe(["a"], O.compare(["b"])), -1)
-    U.deepStrictEqual(pipe(["a"], O.compare(["a"])), 0)
-    U.deepStrictEqual(pipe(["b"], O.compare(["a"])), 1)
+    U.deepStrictEqual(O.compare(["a"], ["b"]), -1)
+    U.deepStrictEqual(O.compare(["a"], ["a"]), 0)
+    U.deepStrictEqual(O.compare(["b"], ["a"]), 1)
   })
 
   it("getSemigroup", () => {
@@ -132,9 +132,9 @@ describe("Order", () => {
 
   it("reverse", () => {
     const O = _.reverse(number.Order)
-    U.deepStrictEqual(pipe(1, O.compare(2)), 1)
-    U.deepStrictEqual(pipe(2, O.compare(1)), -1)
-    U.deepStrictEqual(pipe(2, O.compare(2)), 0)
+    U.deepStrictEqual(O.compare(1, 2), 1)
+    U.deepStrictEqual(O.compare(2, 1), -1)
+    U.deepStrictEqual(O.compare(2, 2), 0)
   })
 
   it("lessThan", () => {
@@ -201,10 +201,10 @@ describe("Order", () => {
         string.Order,
         _.SemiProduct.product(number.Order)
       )
-      U.deepStrictEqual(pipe(["a", 1], O.compare(["a", 2])), -1)
-      U.deepStrictEqual(pipe(["a", 1], O.compare(["a", 1])), 0)
-      U.deepStrictEqual(pipe(["a", 1], O.compare(["a", 0])), 1)
-      U.deepStrictEqual(pipe(["a", 1], O.compare(["b", 1])), -1)
+      U.deepStrictEqual(O.compare(["a", 1], ["a", 2]), -1)
+      U.deepStrictEqual(O.compare(["a", 1], ["a", 1]), 0)
+      U.deepStrictEqual(O.compare(["a", 1], ["a", 0]), 1)
+      U.deepStrictEqual(O.compare(["a", 1], ["b", 1]), -1)
     })
 
     it("productMany", () => {
@@ -212,29 +212,29 @@ describe("Order", () => {
         string.Order,
         _.SemiProduct.productMany([string.Order, string.Order])
       )
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "c"])), -1)
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "b"])), 0)
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "a"])), 1)
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["b", "a"])), -1)
+      U.deepStrictEqual(O.compare(["a", "b"], ["a", "c"]), -1)
+      U.deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)
+      U.deepStrictEqual(O.compare(["a", "b"], ["a", "a"]), 1)
+      U.deepStrictEqual(O.compare(["a", "b"], ["b", "a"]), -1)
     })
   })
 
   describe("Product", () => {
     it("of", () => {
       const O = _.Product.of("a")
-      U.deepStrictEqual(pipe("b", O.compare("a")), 0)
-      U.deepStrictEqual(pipe("a", O.compare("a")), 0)
-      U.deepStrictEqual(pipe("a", O.compare("b")), 0)
+      U.deepStrictEqual(O.compare("b", "a"), 0)
+      U.deepStrictEqual(O.compare("a", "a"), 0)
+      U.deepStrictEqual(O.compare("a", "b"), 0)
     })
 
     it("productAll", () => {
       const O = pipe(
         _.Product.productAll([string.Order, string.Order, string.Order])
       )
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "c"])), -1)
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "b"])), 0)
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["a", "a"])), 1)
-      U.deepStrictEqual(pipe(["a", "b"], O.compare(["b", "a"])), -1)
+      U.deepStrictEqual(O.compare(["a", "b"], ["a", "c"]), -1)
+      U.deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)
+      U.deepStrictEqual(O.compare(["a", "b"], ["a", "a"]), 1)
+      U.deepStrictEqual(O.compare(["a", "b"], ["b", "a"]), -1)
     })
   })
 })

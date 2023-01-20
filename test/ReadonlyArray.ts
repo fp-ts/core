@@ -1055,28 +1055,28 @@ describe.concurrent("ReadonlyArray", () => {
 
   it("liftOrder", () => {
     const O = RA.liftOrder(String.Order)
-    deepStrictEqual(O.compare([])([]), 0)
-    deepStrictEqual(O.compare(["a"])(["a"]), 0)
+    deepStrictEqual(O.compare([], []), 0)
+    deepStrictEqual(O.compare(["a"], ["a"]), 0)
 
-    deepStrictEqual(O.compare(["b"])(["a"]), -1)
-    deepStrictEqual(O.compare(["a"])(["b"]), 1)
+    deepStrictEqual(O.compare(["a"], ["b"]), -1)
+    deepStrictEqual(O.compare(["b"], ["a"]), 1)
 
-    deepStrictEqual(O.compare(["a"])([]), -1)
-    deepStrictEqual(O.compare([])(["a"]), 1)
-    deepStrictEqual(O.compare(["a", "a"])(["a"]), -1)
-    deepStrictEqual(O.compare(["a", "a"])(["b"]), 1)
+    deepStrictEqual(O.compare([], ["a"]), -1)
+    deepStrictEqual(O.compare(["a"], []), 1)
+    deepStrictEqual(O.compare(["a"], ["a", "a"]), -1)
+    deepStrictEqual(O.compare(["b"], ["a", "a"]), 1)
 
-    deepStrictEqual(O.compare(["a", "a"])(["a", "a"]), 0)
-    deepStrictEqual(O.compare(["a", "b"])(["a", "b"]), 0)
+    deepStrictEqual(O.compare(["a", "a"], ["a", "a"]), 0)
+    deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)
 
-    deepStrictEqual(O.compare(["a", "a"])(["a", "b"]), 1)
-    deepStrictEqual(O.compare(["a", "b"])(["a", "a"]), -1)
+    deepStrictEqual(O.compare(["a", "b"], ["a", "a"]), 1)
+    deepStrictEqual(O.compare(["a", "a"], ["a", "b"]), -1)
 
-    deepStrictEqual(O.compare(["a", "b"])(["b", "a"]), 1)
-    deepStrictEqual(O.compare(["b", "a"])(["a", "a"]), -1)
-    deepStrictEqual(O.compare(["b", "a"])(["a", "b"]), -1)
-    deepStrictEqual(O.compare(["b", "b"])(["b", "a"]), -1)
-    deepStrictEqual(O.compare(["b", "a"])(["b", "b"]), 1)
+    deepStrictEqual(O.compare(["b", "a"], ["a", "b"]), 1)
+    deepStrictEqual(O.compare(["a", "a"], ["b", "a"]), -1)
+    deepStrictEqual(O.compare(["a", "b"], ["b", "a"]), -1)
+    deepStrictEqual(O.compare(["b", "a"], ["b", "b"]), -1)
+    deepStrictEqual(O.compare(["b", "b"], ["b", "a"]), 1)
   })
 
   it("isEmpty", () => {

@@ -36,9 +36,9 @@ describe.concurrent("Bigint", () => {
   })
 
   it("Order", () => {
-    deepStrictEqual(pipe(1n, Bigint.Order.compare(2n)), -1)
-    deepStrictEqual(pipe(2n, Bigint.Order.compare(1n)), 1)
-    deepStrictEqual(pipe(2n, Bigint.Order.compare(2n)), 0)
+    deepStrictEqual(Bigint.Order.compare(1n, 2n), -1)
+    deepStrictEqual(Bigint.Order.compare(2n, 1n), 1)
+    deepStrictEqual(Bigint.Order.compare(2n, 2n), 0)
   })
 
   it("SemigroupSum", () => {
