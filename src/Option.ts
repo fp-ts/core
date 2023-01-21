@@ -1,8 +1,4 @@
 /**
- * ```ts
- * type Option<A> = None | Some<A>
- * ```
- *
  * The `Option` type can be interpreted in a few ways:
  *
  * 1) `Option<A>` is a container for an optional value of type `A`. If the value of type `A` is present, the `Option<A>` is

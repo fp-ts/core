@@ -1,15 +1,13 @@
 /**
- * ```ts
- * type Either<E, A> = Left<E> | Right<A>
- * ```
+ * The `Either` data type is a powerful and flexible tool for handling potentially failed computations.
+ * It has two variants, `Left` and `Right`, which can be used to represent different outcomes.
  *
- * Represents a value of one of two possible types (a disjoint union).
+ * The `Left` variant is used to represent a failure, and it can contain useful information such as an error message
+ * or a failure code. The `Right` variant is used to represent a successful outcome, and it can contain the result
+ * of the computation.
  *
- * An instance of `Either` is either an instance of `Left` or `Right`.
- *
- * A common use of `Either` is as an alternative to `Option` for dealing with possible missing values. In this usage,
- * `None` is replaced with a `Left` which can contain useful information. `Right` takes the place of `Some`. Convention
- * dictates that `Left` is used for failure and `Right` is used for success.
+ * Unlike `Option`, `Either` allows you to attach additional information to the failure case, making it more
+ * informative than a simple `null` or `undefined`.
  *
  * @since 1.0.0
  */
@@ -1004,7 +1002,7 @@ export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
  * import * as O from '@fp-ts/core/Option'
  *
  * assert.deepStrictEqual(pipe(O.some(1), E.fromOption(() => 'error')), E.right(1))
- * assert.deepStrictEqual(pipe(O.none, E.fromOption(() => 'error')), E.left('error'))
+ * assert.deepStrictEqual(pipe(O.none(), E.fromOption(() => 'error')), E.left('error'))
  *
  * @category conversions
  * @since 1.0.0

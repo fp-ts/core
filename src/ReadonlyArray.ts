@@ -1,4 +1,6 @@
 /**
+ * This module provides utility functions for working with arrays in TypeScript.
+ *
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/Either"
