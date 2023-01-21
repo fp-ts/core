@@ -1,4 +1,8 @@
 /**
+ * This module provides utility functions and type class instances for working with the `number` type in TypeScript.
+ * It includes functions for basic arithmetic operations, as well as type class instances for
+ * `Equivalence`, `Order`, `Semigroup`, and `Monoid`.
+ *
  * @since 1.0.0
  */
 import type { Ordering } from "@fp-ts/core/Ordering"

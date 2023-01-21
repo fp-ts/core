@@ -1,4 +1,8 @@
 /**
+ * This module provides utility functions and type class instances for working with the `string` type in TypeScript.
+ * It includes functions for basic string manipulation, as well as type class instances for
+ * `Equivalence`, `Order`, `Semigroup`, and `Monoid`.
+ *
  * @since 1.0.0
  */
 
