@@ -42,18 +42,24 @@ This section covers the various modules and combinators that work with arrays.
 
 This section covers the various modules and combinators that work with structs.
 
-| Module      | Name           | Given                                           | To                                        |
-| ----------- | -------------- | ----------------------------------------------- | ----------------------------------------- |
-| Equivalence | struct         | `{ a: Equivalence<A>, b: Equivalence<B>, ... }` | `Equivalence<{ a: A, b: B, ... }>`        |
-| Order       | NA             | NA                                              | NA                                        |
-| Semigroup   | struct         | `{ a: Semigroup<A>, b: Semigroup<B>, ... }`     | `Semigroup<{ a: A, b: B, ... }>`          |
-| Monoid      | struct         | `{ a: Monoid<A>, b: Monoid<B>, ... }`           | `Monoid<{ a: A, b: B, ... }>`             |
-| SemiProduct | nonEmptyStruct | `{ a: F<A>, b: F<B>, ... }` (cannot be empty)   | `F<{ a: A, b: B, ... }>`                  |
-| Product     | struct         | `{ a: F<A>, b: F<B>, ... }`                     | `F<{ a: A, b: B, ... }>`                  |
-| Either      | struct         | `{ a: Either<E1, A>, b: Either<E2, B>, ... }`   | `Either<E1 \| E2 \| ..., { a: A, b: B }>` |
-| Option      | struct         | `{ a: Option<A>, b: Option<B>, ... }`           | `Option<{ a: A, b: B }>`                  |
-| Predicate   | struct         | `{ a: Predicate<A>, b: Predicate<B>, ... }`     | `Predicate<Readonly<{ a: A, b: B }>>`     |
-| These       | struct         | `{ a: These<E1, A>, b: These<E2, B>, ... }`     | `These<E1 \| E2 \| ..., { a: A, b: B }>`  |
+| Module      | Name            | Given                                           | To                                        |
+| ----------- | --------------- | ----------------------------------------------- | ----------------------------------------- |
+| Equivalence | struct          | `{ a: Equivalence<A>, b: Equivalence<B>, ... }` | `Equivalence<{ a: A, b: B, ... }>`        |
+| Order       | struct          | `{ a: Order<A>, b: Order<B>, ... }`             | `Order<{ a: A, b: B, ... }>`              |
+| Semigroup   | struct          | `{ a: Semigroup<A>, b: Semigroup<B>, ... }`     | `Semigroup<{ a: A, b: B, ... }>`          |
+| Monoid      | struct          | `{ a: Monoid<A>, b: Monoid<B>, ... }`           | `Monoid<{ a: A, b: B, ... }>`             |
+| SemiProduct | nonEmptyStruct  | `{ a: F<A>, b: F<B>, ... }` (cannot be empty)   | `F<{ a: A, b: B, ... }>`                  |
+| Product     | struct          | `{ a: F<A>, b: F<B>, ... }`                     | `F<{ a: A, b: B, ... }>`                  |
+| Either      | struct          | `{ a: Either<E1, A>, b: Either<E2, B>, ... }`   | `Either<E1 \| E2 \| ..., { a: A, b: B }>` |
+| Option      | struct          | `{ a: Option<A>, b: Option<B>, ... }`           | `Option<{ a: A, b: B }>`                  |
+| Predicate   | struct          | `{ a: Predicate<A>, b: Predicate<B>, ... }`     | `Predicate<Readonly<{ a: A, b: B }>>`     |
+| These       | struct          | `{ a: These<E1, A>, b: These<E2, B>, ... }`     | `These<E1 \| E2 \| ..., { a: A, b: B }>`  |
+| Struct      | getEquivalence  | `{ a: Equivalence<A>, b: Equivalence<B>, ... }` | `Equivalence<{ a: A, b: B, ... }>`        |
+| Struct      | getOrder        | `{ a: Order<A>, b: Order<B>, ... }`             | `Order<{ a: A, b: B, ... }>`              |
+| Struct      | getSemigroup    | `{ a: Semigroup<A>, b: Semigroup<B>, ... }`     | `Semigroup<{ a: A, b: B, ... }>`          |
+| Struct      | getMonoid       | `{ a: Monoid<A>, b: Monoid<B>, ... }`           | `Monoid<{ a: A, b: B, ... }>`             |
+| Struct      | nonEmptyProduct | `{ a: F<A>, b: F<B>, ... }` (cannot be empty)   | `F<{ a: A, b: B, ... }>`                  |
+| Struct      | product         | `{ a: F<A>, b: F<B>, ... }`                     | `F<{ a: A, b: B, ... }>`                  |
 
 ## records
 

@@ -1,8 +1,5 @@
-import * as boolean from "@fp-ts/core/Boolean"
 import { pipe } from "@fp-ts/core/Function"
-import * as number from "@fp-ts/core/Number"
 import { sort } from "@fp-ts/core/ReadonlyArray"
-import * as string from "@fp-ts/core/String"
 import * as _ from "@fp-ts/core/typeclass/Order"
 import * as U from "../util"
 
@@ -16,14 +13,22 @@ describe("Order", () => {
   })
 
   it("tuple", () => {
-    const O = _.tuple(string.Order, number.Order, boolean.Order)
+    const O = _.tuple(_.string, _.number, _.boolean)
     U.deepStrictEqual(O.compare(["a", 1, true], ["b", 2, true]), -1)
     U.deepStrictEqual(O.compare(["a", 1, true], ["a", 2, true]), -1)
     U.deepStrictEqual(O.compare(["a", 1, true], ["a", 1, false]), 1)
   })
 
+  it("struct", () => {
+    const O = _.struct({ a: _.string, b: _.number, c: _.boolean })
+    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "b", b: 2, c: true }), -1)
+    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 2, c: true }), -1)
+    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: false }), 1)
+    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: true }), 0)
+  })
+
   it("Contravariant", () => {
-    const O = pipe(number.Order, _.Contravariant.contramap((s: string) => s.length))
+    const O = pipe(_.number, _.Contravariant.contramap((s: string) => s.length))
     U.deepStrictEqual(O.compare("a", "b"), 0)
     U.deepStrictEqual(O.compare("a", "bb"), -1)
     U.deepStrictEqual(O.compare("aa", "b"), 1)
@@ -31,7 +36,7 @@ describe("Order", () => {
 
   it("Invariant", () => {
     const O = _.Invariant.imap((s: string) => [s], ([s]) => s)(
-      string.Order
+      _.string
     )
     U.deepStrictEqual(O.compare(["a"], ["b"]), -1)
     U.deepStrictEqual(O.compare(["a"], ["a"]), 0)
@@ -48,11 +53,11 @@ describe("Order", () => {
     ]
     const S = _.getSemigroup<T>()
     const sortByFst = pipe(
-      number.Order,
+      _.number,
       _.contramap((x: T) => x[0])
     )
     const sortBySnd = pipe(
-      string.Order,
+      _.string,
       _.contramap((x: T) => x[1])
     )
     U.deepStrictEqual(sort(S.combine(sortByFst, sortBySnd))(tuples), [
@@ -91,11 +96,11 @@ describe("Order", () => {
     ]
     const M = _.getMonoid<T>()
     const sortByFst = pipe(
-      number.Order,
+      _.number,
       _.contramap((x: T) => x[0])
     )
     const sortBySnd = pipe(
-      string.Order,
+      _.string,
       _.contramap((x: T) => x[1])
     )
     U.deepStrictEqual(sort(M.combineMany(M.empty, [sortByFst, sortBySnd]))(tuples), [
@@ -113,7 +118,7 @@ describe("Order", () => {
   })
 
   it("clamp", () => {
-    const clamp = _.clamp(number.Order)
+    const clamp = _.clamp(_.number)
     U.deepStrictEqual(clamp(1, 10)(2), 2)
     U.deepStrictEqual(clamp(1, 10)(10), 10)
     U.deepStrictEqual(clamp(1, 10)(20), 10)
@@ -122,7 +127,7 @@ describe("Order", () => {
   })
 
   it("between", () => {
-    const between = _.between(number.Order)
+    const between = _.between(_.number)
     U.deepStrictEqual(between(1, 10)(2), true)
     U.deepStrictEqual(between(1, 10)(10), true)
     U.deepStrictEqual(between(1, 10)(20), false)
@@ -131,35 +136,35 @@ describe("Order", () => {
   })
 
   it("reverse", () => {
-    const O = _.reverse(number.Order)
+    const O = _.reverse(_.number)
     U.deepStrictEqual(O.compare(1, 2), 1)
     U.deepStrictEqual(O.compare(2, 1), -1)
     U.deepStrictEqual(O.compare(2, 2), 0)
   })
 
   it("lessThan", () => {
-    const lessThan = _.lessThan(number.Order)
+    const lessThan = _.lessThan(_.number)
     U.deepStrictEqual(pipe(0, lessThan(1)), true)
     U.deepStrictEqual(pipe(1, lessThan(1)), false)
     U.deepStrictEqual(pipe(2, lessThan(1)), false)
   })
 
   it("lessThanOrEqualTo", () => {
-    const lessThanOrEqualTo = _.lessThanOrEqualTo(number.Order)
+    const lessThanOrEqualTo = _.lessThanOrEqualTo(_.number)
     U.deepStrictEqual(pipe(0, lessThanOrEqualTo(1)), true)
     U.deepStrictEqual(pipe(1, lessThanOrEqualTo(1)), true)
     U.deepStrictEqual(pipe(2, lessThanOrEqualTo(1)), false)
   })
 
   it("greaterThan", () => {
-    const greaterThan = _.greaterThan(number.Order)
+    const greaterThan = _.greaterThan(_.number)
     U.deepStrictEqual(pipe(0, greaterThan(1)), false)
     U.deepStrictEqual(pipe(1, greaterThan(1)), false)
     U.deepStrictEqual(pipe(2, greaterThan(1)), true)
   })
 
   it("greaterThanOrEqualTo", () => {
-    const greaterThanOrEqualTo = _.greaterThanOrEqualTo(number.Order)
+    const greaterThanOrEqualTo = _.greaterThanOrEqualTo(_.number)
     U.deepStrictEqual(pipe(0, greaterThanOrEqualTo(1)), false)
     U.deepStrictEqual(pipe(1, greaterThanOrEqualTo(1)), true)
     U.deepStrictEqual(pipe(2, greaterThanOrEqualTo(1)), true)
@@ -169,7 +174,7 @@ describe("Order", () => {
     type A = { a: number }
     const min = _.min(
       pipe(
-        number.Order,
+        _.number,
         _.contramap((a: A) => a.a)
       )
     )
@@ -184,7 +189,7 @@ describe("Order", () => {
     type A = { a: number }
     const max = _.max(
       pipe(
-        number.Order,
+        _.number,
         _.contramap((a: A) => a.a)
       )
     )
@@ -197,10 +202,7 @@ describe("Order", () => {
 
   describe("SemiProduct", () => {
     it("product", () => {
-      const O = _.SemiProduct.product(
-        string.Order,
-        number.Order
-      )
+      const O = _.SemiProduct.product(_.string, _.number)
       U.deepStrictEqual(O.compare(["a", 1], ["a", 2]), -1)
       U.deepStrictEqual(O.compare(["a", 1], ["a", 1]), 0)
       U.deepStrictEqual(O.compare(["a", 1], ["a", 0]), 1)
@@ -208,7 +210,7 @@ describe("Order", () => {
     })
 
     it("productMany", () => {
-      const O = _.SemiProduct.productMany(string.Order, [string.Order, string.Order])
+      const O = _.SemiProduct.productMany(_.string, [_.string, _.string])
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "c"]), -1)
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "a"]), 1)
@@ -226,7 +228,7 @@ describe("Order", () => {
 
     it("productAll", () => {
       const O = pipe(
-        _.Product.productAll([string.Order, string.Order, string.Order])
+        _.Product.productAll([_.string, _.string, _.string])
       )
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "c"]), -1)
       U.deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)

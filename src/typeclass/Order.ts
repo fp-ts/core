@@ -115,6 +115,27 @@ export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
   })
 
 /**
+ * This function creates and returns a new `Order` for a struct of values based on the given `Order`s
+ * for each property in the struct.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const struct = <A>(orders: { readonly [K in keyof A]: Order<A[K]> }): Order<
+  { readonly [K in keyof A]: A[K] }
+> => ({
+  compare: (self, that) => {
+    for (const key of Object.keys(orders)) {
+      const o = orders[key].compare(self[key], that[key])
+      if (o !== 0) {
+        return o
+      }
+    }
+    return 0
+  }
+})
+
+/**
  * @since 1.0.0
  */
 export const reverse = <A>(O: Order<A>): Order<A> =>
