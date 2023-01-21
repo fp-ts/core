@@ -238,8 +238,7 @@ export const tuple: <T extends ReadonlyArray<Predicate<any>>>(
 export const struct: <R extends Record<string, Predicate<any>>>(
   predicates: R
 ) => Predicate<{ readonly [K in keyof R]: [R[K]] extends [Predicate<infer A>] ? A : never }> =
-  product_
-    .struct(Product)
+  product_.struct(Product)
 
 /**
  * @since 1.0.0
