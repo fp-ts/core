@@ -33,7 +33,12 @@ export const multiply = (that: bigint) =>
 /**
  * @since 1.0.0
  */
-export const sub = (that: bigint) => (self: bigint): bigint => self - that
+export const subtract = (that: bigint) => (self: bigint): bigint => self - that
+
+/**
+ * @since 1.0.0
+ */
+export const divide = (that: bigint) => (self: bigint): bigint => self / that
 
 /**
  * @since 1.0.0

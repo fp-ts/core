@@ -1,4 +1,5 @@
 import * as Bigint from "@fp-ts/core/Bigint"
+import { pipe } from "@fp-ts/core/Function"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
 describe.concurrent("Bigint", () => {
@@ -10,15 +11,19 @@ describe.concurrent("Bigint", () => {
   })
 
   it("sum", () => {
-    deepStrictEqual(Bigint.sum(1n)(2n), 3n)
-  })
-
-  it("sub", () => {
-    deepStrictEqual(Bigint.sub(1n)(2n), 1n)
+    deepStrictEqual(pipe(1n, Bigint.sum(2n)), 3n)
   })
 
   it("multiply", () => {
-    deepStrictEqual(Bigint.multiply(3n)(2n), 6n)
+    deepStrictEqual(pipe(2n, Bigint.multiply(3n)), 6n)
+  })
+
+  it("subtract", () => {
+    deepStrictEqual(pipe(3n, Bigint.subtract(1n)), 2n)
+  })
+
+  it("divide", () => {
+    deepStrictEqual(pipe(6n, Bigint.divide(2n)), 3n)
   })
 
   it("increment", () => {
