@@ -16,4 +16,4 @@ declare const fb: RAW<{ b: number }, number, "fb">
 declare const SemiAlternative: _.SemiAlternative<RAWTypeLambda>
 
 // $ExpectType RAW<{ a: string; } & { b: number; }, string | number, "fa" | "fb">
-pipe(fa, SemiAlternative.coproduct(fb))
+SemiAlternative.coproduct(fa, fb)
