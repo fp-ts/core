@@ -19,6 +19,7 @@ import type { Either, Left, Right } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Option } from "@fp-ts/core/Option"
@@ -87,13 +88,13 @@ export interface ValidatedTypeLambda extends TypeLambda {
  * @category constructors
  * @since 1.0.0
  */
-export const left = <E>(left: E): These<E, never> => ({ _tag: "Left", left })
+export const left: <E>(left: E) => These<E, never> = either.left
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const right = <A>(right: A): These<never, A> => ({ _tag: "Right", right })
+export const right: <A>(right: A) => These<never, A> = either.right
 
 /**
  * Alias of `right`.
@@ -107,11 +108,11 @@ export const of = right
  * @category constructors
  * @since 1.0.0
  */
-export const both = <E, A>(left: E, right: A): These<E, A> => ({
-  _tag: "Both",
-  left,
-  right
-})
+export const both = <E, A>(left: E, right: A): These<E, A> =>
+  Object.defineProperty({ _tag: "Both", left, right }, structural, {
+    enumerable: false,
+    value: true
+  })
 
 /**
  * @category constructors
@@ -222,10 +223,8 @@ export const isBoth = <E, A>(self: These<E, A>): self is Both<E, A> => self._tag
  * @since 1.0.0
  */
 export const isThese = (u: unknown): u is These<unknown, unknown> =>
-  typeof u === "object" &&
-  u != null && "_tag" in u &&
-  (u["_tag"] === "Left" || u["_tag"] === "Right" ||
-    u["_tag"] === "Both")
+  typeof u === "object" && u != null && structural in u && "_tag" in u &&
+  (u["_tag"] === "Left" || u["_tag"] === "Right" || u["_tag"] === "Both")
 
 /**
  * Constructs a new `These` from a function that might throw.
