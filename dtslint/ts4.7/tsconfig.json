@@ -11,8 +11,8 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "target": "es2015",
-    "lib": ["es2015"],
+    "target": "ES2021",
+    "lib": ["ES2021"],
     "paths": {
       "@fp-ts/core": ["../../src/index.ts"],
       "@fp-ts/core/test/*": ["../../test/*"],
