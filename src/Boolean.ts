@@ -125,3 +125,13 @@ export const or = (that: boolean) =>
  * @since 1.0.0
  */
 export const not = (self: boolean): boolean => !self
+
+/**
+ * @since 1.0.0
+ */
+export const all = MonoidAll.combineAll
+
+/**
+ * @since 1.0.0
+ */
+export const any = MonoidAny.combineAll
