@@ -6,8 +6,10 @@ import type { None, Option, Some } from "@fp-ts/core/Option"
 
 /** @internal */
 export const isOption = (u: unknown): u is Option<unknown> =>
-  typeof u === "object" && u != null && "_tag" in u &&
+  typeof u === "object" && u != null && structural in u && "_tag" in u &&
   (u["_tag"] === "None" || u["_tag"] === "Some")
+
+const structural = Symbol.for("@effect/data/Equal/structural")
 
 /** @internal */
 export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === "None"
@@ -16,10 +18,19 @@ export const isNone = <A>(fa: Option<A>): fa is None => fa._tag === "None"
 export const isSome = <A>(fa: Option<A>): fa is Some<A> => fa._tag === "Some"
 
 /** @internal */
-export const none: Option<never> = { _tag: "None" }
+export const none: Option<never> = Object.defineProperty(
+  { _tag: "None" },
+  structural,
+  { enumerable: false, value: true }
+)
 
 /** @internal */
-export const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
+export const some = <A>(a: A): Option<A> =>
+  Object.defineProperty(
+    { _tag: "Some", value: a },
+    structural,
+    { enumerable: false, value: true }
+  )
 
 /** @internal */
 export const fromNullable = <A>(
