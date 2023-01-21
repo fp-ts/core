@@ -1,4 +1,6 @@
 /**
+ * This module provides utility functions for working with tuples in TypeScript.
+ *
  * @since 1.0.0
  */
 import * as RA from "@fp-ts/core/ReadonlyArray"

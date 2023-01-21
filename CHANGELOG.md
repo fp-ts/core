@@ -4,6 +4,7 @@
 
 **Breaking changes**
 
+- remove `NonEmptyTraversable` module
 - `Semigroup`
   - make `combine` binary
   - make `combineMany` binary

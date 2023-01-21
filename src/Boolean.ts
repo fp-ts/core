@@ -1,4 +1,8 @@
 /**
+ * This module provides utility functions and type class instances for working with the `boolean` type in TypeScript.
+ * It includes functions for basic boolean operations, as well as type class instances for
+ * `Equivalence`, `Order`, `Semigroup`, and `Monoid`.
+ *
  * @since 1.0.0
  */
 import type { LazyArg } from "@fp-ts/core/Function"

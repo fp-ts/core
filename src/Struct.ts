@@ -1,4 +1,6 @@
 /**
+ * This module provides utility functions for working with structs in TypeScript.
+ *
  * @since 1.0.0
  */
 
