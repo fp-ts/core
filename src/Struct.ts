@@ -6,7 +6,7 @@
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
-import * as _product from "@fp-ts/core/typeclass/Product"
+import * as product_ from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
@@ -70,4 +70,4 @@ export const nonEmptyProduct = semiProduct.nonEmptyStruct
 /**
  * @since 1.0.0
  */
-export const product = _product.struct
+export const product = product_.struct

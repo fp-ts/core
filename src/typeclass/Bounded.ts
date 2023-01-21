@@ -2,8 +2,11 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
 import type { Order } from "@fp-ts/core/typeclass/Order"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category type class
@@ -21,6 +24,24 @@ export interface Bounded<A> extends Order<A> {
 export interface BoundedTypeLambda extends TypeLambda {
   readonly type: Bounded<this["Target"]>
 }
+
+/**
+ * `Monoid` that returns last minimum of elements.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const min = <A>(B: Bounded<A>): Monoid<A> =>
+  monoid.fromSemigroup(semigroup.min(B), B.maxBound)
+
+/**
+ * `Monoid` that returns last maximum of elements.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const max = <A>(B: Bounded<A>): Monoid<A> =>
+  monoid.fromSemigroup(semigroup.max(B), B.minBound)
 
 /**
  * @category instances
