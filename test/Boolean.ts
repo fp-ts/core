@@ -3,11 +3,13 @@ import { pipe } from "@fp-ts/core/Function"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
 describe.concurrent("Boolean", () => {
-  it("instances and derived exports", () => {
+  it("exports", () => {
     expect(Boolean.SemigroupAll).exist
     expect(Boolean.MonoidAll).exist
     expect(Boolean.SemigroupAny).exist
     expect(Boolean.MonoidAny).exist
+    expect(Boolean.all).exist
+    expect(Boolean.any).exist
   })
 
   it("isBoolean", () => {

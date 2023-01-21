@@ -6,7 +6,7 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
-import type * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of_ from "@fp-ts/core/typeclass/Of"
 import * as product_ from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
@@ -268,15 +268,8 @@ export const getSemigroupAny = <A>(): semigroup.Semigroup<Predicate<A>> =>
  * @category instances
  * @since 1.0.0
  */
-export const getMonoidAny = <A>(): monoid.Monoid<Predicate<A>> => {
-  const S = getSemigroupAny<A>()
-  return ({
-    combine: S.combine,
-    combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(constFalse, collection),
-    empty: constFalse
-  })
-}
+export const getMonoidAny = <A>(): monoid.Monoid<Predicate<A>> =>
+  monoid.fromSemigroup(getSemigroupAny<A>(), constFalse)
 
 /**
  * @category instances
@@ -289,15 +282,8 @@ export const getSemigroupAll = <A>(): semigroup.Semigroup<Predicate<A>> =>
  * @category instances
  * @since 1.0.0
  */
-export const getMonoidAll = <A>(): monoid.Monoid<Predicate<A>> => {
-  const S = getSemigroupAll<A>()
-  return ({
-    combine: S.combine,
-    combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany(constTrue, collection),
-    empty: constTrue
-  })
-}
+export const getMonoidAll = <A>(): monoid.Monoid<Predicate<A>> =>
+  monoid.fromSemigroup(getSemigroupAll<A>(), constTrue)
 
 /**
  * @since 1.0.0
