@@ -3,6 +3,12 @@
  *
  * @since 1.0.0
  */
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as order from "@fp-ts/core/typeclass/Order"
+import * as _product from "@fp-ts/core/typeclass/Product"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * Create a new object by picking properties of an existing object.
@@ -35,3 +41,33 @@ export const omit = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
     }
     return out
   }
+
+/**
+ * @since 1.0.0
+ */
+export const getEquivalence = equivalence.struct
+
+/**
+ * @since 1.0.0
+ */
+export const getOrder = order.struct
+
+/**
+ * @since 1.0.0
+ */
+export const getSemigroup = semigroup.struct
+
+/**
+ * @since 1.0.0
+ */
+export const getMonoid = monoid.struct
+
+/**
+ * @since 1.0.0
+ */
+export const nonEmptyProduct = semiProduct.nonEmptyStruct
+
+/**
+ * @since 1.0.0
+ */
+export const product = _product.struct
