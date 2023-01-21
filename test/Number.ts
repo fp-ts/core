@@ -1,7 +1,15 @@
+import { pipe } from "@fp-ts/core/Function"
 import * as Number from "@fp-ts/core/Number"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
 describe.concurrent("Number", () => {
+  it("exports", () => {
+    expect(Number.SemigroupMax).exists
+    expect(Number.SemigroupMin).exists
+    expect(Number.MonoidMax).exists
+    expect(Number.MonoidMin).exists
+  })
+
   it("isNumber", () => {
     expect(Number.isNumber(1)).toEqual(true)
     expect(Number.isNumber("a")).toEqual(false)
@@ -9,15 +17,19 @@ describe.concurrent("Number", () => {
   })
 
   it("sum", () => {
-    deepStrictEqual(Number.sum(1)(2), 3)
-  })
-
-  it("sub", () => {
-    deepStrictEqual(Number.sub(1)(2), 1)
+    deepStrictEqual(pipe(1, Number.sum(2)), 3)
   })
 
   it("multiply", () => {
-    deepStrictEqual(Number.multiply(3)(2), 6)
+    deepStrictEqual(pipe(2, Number.multiply(3)), 6)
+  })
+
+  it("subtract", () => {
+    deepStrictEqual(pipe(3, Number.subtract(1)), 2)
+  })
+
+  it("divide", () => {
+    deepStrictEqual(pipe(6, Number.divide(2)), 3)
   })
 
   it("increment", () => {

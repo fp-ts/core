@@ -103,8 +103,12 @@ This section covers the various modules and combinators that work with records.
 | Number      | Order             |       | `Order<number>`               |
 | Number      | SemigroupSum      |       | `Semigroup<number>`           |
 | Number      | SemigroupMultiply |       | `Semigroup<number>`           |
+| Number      | SemigroupMax      |       | `Semigroup<number>`           |
+| Number      | SemigroupMin      |       | `Semigroup<number>`           |
 | Number      | MonoidSum         |       | `Monoid<number>`              |
 | Number      | MonoidMultiply    |       | `Monoid<number>`              |
+| Number      | MonoidMax         |       | `Monoid<number>`              |
+| Number      | MonoidMin         |       | `Monoid<number>`              |
 | Number      | isNumber          |       | `Refinement<unknown, number>` |
 
 ## booleans
