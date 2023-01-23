@@ -115,10 +115,14 @@ describe.concurrent("Predicate", () => {
 
   it("getSemigroupAny", () => {
     const S = _.getSemigroupAny<number>()
-    const predicate = S.combine(isPositive, isNegative)
-    deepStrictEqual(predicate(0), false)
-    deepStrictEqual(predicate(-1), true)
-    deepStrictEqual(predicate(1), true)
+    const p1 = S.combine(isPositive, isNegative)
+    deepStrictEqual(p1(0), false)
+    deepStrictEqual(p1(-1), true)
+    deepStrictEqual(p1(1), true)
+    const p2 = S.combineMany(isPositive, [isNegative])
+    deepStrictEqual(p2(0), false)
+    deepStrictEqual(p2(-1), true)
+    deepStrictEqual(p2(1), true)
   })
 
   it("getMonoidAny", () => {
@@ -131,10 +135,14 @@ describe.concurrent("Predicate", () => {
 
   it("getSemigroupAll", () => {
     const S = _.getSemigroupAll<number>()
-    const predicate = S.combine(isPositive, isLessThan2)
-    deepStrictEqual(predicate(0), false)
-    deepStrictEqual(predicate(-2), false)
-    deepStrictEqual(predicate(1), true)
+    const p1 = S.combine(isPositive, isLessThan2)
+    deepStrictEqual(p1(0), false)
+    deepStrictEqual(p1(-2), false)
+    deepStrictEqual(p1(1), true)
+    const p2 = S.combineMany(isPositive, [isLessThan2])
+    deepStrictEqual(p2(0), false)
+    deepStrictEqual(p2(-2), false)
+    deepStrictEqual(p2(1), true)
   })
 
   it("getMonoidAll", () => {

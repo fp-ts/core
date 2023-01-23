@@ -9,7 +9,7 @@ import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of_ from "@fp-ts/core/typeclass/Of"
 import * as product_ from "@fp-ts/core/typeclass/Product"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
@@ -261,8 +261,21 @@ export const and = <A>(that: Predicate<A>) =>
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroupAny = <A>(): semigroup.Semigroup<Predicate<A>> =>
-  semigroup.fromCombine((self, that) => pipe(self, or(that)))
+export const getSemigroupAny = <A>(): semigroup.Semigroup<Predicate<A>> => ({
+  combine: (self, that) => pipe(self, or(that)),
+  combineMany: (self, collection) =>
+    a => {
+      if (self(a)) {
+        return true
+      }
+      for (const p of collection) {
+        if (p(a)) {
+          return true
+        }
+      }
+      return false
+    }
+})
 
 /**
  * @category instances
@@ -275,8 +288,21 @@ export const getMonoidAny = <A>(): monoid.Monoid<Predicate<A>> =>
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroupAll = <A>(): semigroup.Semigroup<Predicate<A>> =>
-  semigroup.fromCombine((self, that) => pipe(self, and(that)))
+export const getSemigroupAll = <A>(): semigroup.Semigroup<Predicate<A>> => ({
+  combine: (self, that) => pipe(self, and(that)),
+  combineMany: (self, collection) =>
+    a => {
+      if (!self(a)) {
+        return false
+      }
+      for (const p of collection) {
+        if (!p(a)) {
+          return false
+        }
+      }
+      return true
+    }
+})
 
 /**
  * @category instances
