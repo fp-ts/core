@@ -1017,7 +1017,7 @@ export const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Eith
  * import * as O from '@fp-ts/core/Option'
  * import * as E from '@fp-ts/core/Either'
  *
- * assert.deepStrictEqual(E.getLeft(E.right('ok')), O.none)
+ * assert.deepStrictEqual(E.getLeft(E.right('ok')), O.none())
  * assert.deepStrictEqual(E.getLeft(E.left('err')), O.some('err'))
  *
  * @category getters
@@ -1033,7 +1033,7 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
  * import * as E from '@fp-ts/core/Either'
  *
  * assert.deepStrictEqual(E.getRight(E.right('ok')), O.some('ok'))
- * assert.deepStrictEqual(E.getRight(E.left('err')), O.none)
+ * assert.deepStrictEqual(E.getRight(E.left('err')), O.none())
  *
  * @category getters
  * @since 1.0.0

@@ -62,8 +62,8 @@ export const Order: order.Order<boolean> = order.boolean
  * import { SemigroupAll } from '@fp-ts/core/Boolean'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(true, SemigroupAll.combine(true)), true)
- * assert.deepStrictEqual(pipe(true, SemigroupAll.combine(false)), false)
+ * assert.deepStrictEqual(SemigroupAll.combine(true, true), true)
+ * assert.deepStrictEqual(SemigroupAll.combine(true, false), false)
  *
  * @category instances
  * @since 1.0.0
@@ -77,9 +77,9 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.booleanAll
  * import { SemigroupAny } from '@fp-ts/core/Boolean'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(true, SemigroupAny.combine(true)), true)
- * assert.deepStrictEqual(pipe(true, SemigroupAny.combine(false)), true)
- * assert.deepStrictEqual(pipe(false, SemigroupAny.combine(false)), false)
+ * assert.deepStrictEqual(SemigroupAny.combine(true, true), true)
+ * assert.deepStrictEqual(SemigroupAny.combine(true, false), true)
+ * assert.deepStrictEqual(SemigroupAny.combine(false, false), false)
  *
  * @category instances
  * @since 1.0.0

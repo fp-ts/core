@@ -93,7 +93,7 @@ export const some: <A>(a: A) => Option<A> = option.some
  * import { some, none, isOption } from '@fp-ts/core/Option'
  *
  * assert.strictEqual(isOption(some(1)), true)
- * assert.strictEqual(isOption(none), true)
+ * assert.strictEqual(isOption(none()), true)
  * assert.strictEqual(isOption({}), false)
  *
  * @category guards
@@ -108,8 +108,8 @@ export const isOption: (u: unknown) => u is Option<unknown> = option.isOption
  * @example
  * import { none, some, fromNullable } from '@fp-ts/core/Option'
  *
- * assert.deepStrictEqual(fromNullable(undefined), none)
- * assert.deepStrictEqual(fromNullable(null), none)
+ * assert.deepStrictEqual(fromNullable(undefined), none())
+ * assert.deepStrictEqual(fromNullable(null), none())
  * assert.deepStrictEqual(fromNullable(1), some(1))
  *
  * @category conversions
@@ -138,7 +138,7 @@ export const toRefinement = <A, B extends A>(f: (a: A) => Option<B>): Refinement
  *   fromThrowable(() => {
  *     throw new Error()
  *   }),
- *   none
+ *   none()
  * )
  * assert.deepStrictEqual(fromThrowable(() => 1), some(1))
  *
@@ -516,10 +516,10 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
  * import { pipe } from '@fp-ts/core/Function'
  *
  * const M = getMonoid(N.SemigroupSum)
- * assert.deepStrictEqual(pipe(none, M.combine(none)), none)
- * assert.deepStrictEqual(pipe(some(1), M.combine(none)), some(1))
- * assert.deepStrictEqual(pipe(none, M.combine(some(1))), some(1))
- * assert.deepStrictEqual(pipe(some(1), M.combine(some(2))), some(3))
+ * assert.deepStrictEqual(M.combine(none(), none()), none())
+ * assert.deepStrictEqual(M.combine(some(1), none()), some(1))
+ * assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
+ * assert.deepStrictEqual(M.combine(some(1), some(2)), some(3))
  *
  * @category lifting
  * @since 1.0.0
@@ -799,7 +799,7 @@ export const traverseTap: <F extends TypeLambda>(
  * import { some, none, isNone } from '@fp-ts/core/Option'
  *
  * assert.strictEqual(isNone(some(1)), false)
- * assert.strictEqual(isNone(none), true)
+ * assert.strictEqual(isNone(none()), true)
  *
  * @category guards
  * @since 1.0.0
@@ -813,7 +813,7 @@ export const isNone: <A>(self: Option<A>) => self is None = option.isNone
  * import { some, none, isSome } from '@fp-ts/core/Option'
  *
  * assert.strictEqual(isSome(some(1)), true)
- * assert.strictEqual(isSome(none), false)
+ * assert.strictEqual(isSome(none()), false)
  *
  * @category guards
  * @since 1.0.0
@@ -839,7 +839,7 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
  * import * as E from '@fp-ts/core/Either'
  *
  * assert.deepStrictEqual(O.fromEither(E.right(1)), O.some(1))
- * assert.deepStrictEqual(O.fromEither(E.left('a')), O.none)
+ * assert.deepStrictEqual(O.fromEither(E.left('a')), O.none())
  *
  * @category conversions
  * @since 1.0.0
@@ -871,7 +871,7 @@ export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either
  *
  * assert.strictEqual(
  *   pipe(
- *     none,
+ *     none(),
  *     match(() => 'a none', a => `a some containing ${a}`)
  *   ),
  *   'a none'
@@ -891,7 +891,7 @@ export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
  * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.strictEqual(pipe(some(1), getOrElse(() => 0)), 1)
- * assert.strictEqual(pipe(none, getOrElse(() => 0)), 0)
+ * assert.strictEqual(pipe(none(), getOrElse(() => 0)), 0)
  *
  * @category error handling
  * @since 1.0.0
@@ -913,7 +913,7 @@ export const getOrElse = <B>(onNone: LazyArg<B>) =>
  * const g = liftNullable(f)
  *
  * assert.deepStrictEqual(g('1'), some(1))
- * assert.deepStrictEqual(g('a'), none)
+ * assert.deepStrictEqual(g('a'), none())
  *
  * @category lifting
  * @since 1.0.0
@@ -960,7 +960,7 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
  *     flatMapNullable(address => address.street),
  *     flatMapNullable(street => street.name)
  *   ),
- *   none
+ *   none()
  * )
  *
  * @category sequencing
@@ -978,7 +978,7 @@ export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
  * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.strictEqual(pipe(some(1), getOrNull), 1)
- * assert.strictEqual(pipe(none, getOrNull), null)
+ * assert.strictEqual(pipe(none(), getOrNull), null)
  *
  * @category conversions
  * @since 1.0.0
@@ -993,7 +993,7 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
  * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.strictEqual(pipe(some(1), getOrUndefined), 1)
- * assert.strictEqual(pipe(none, getOrUndefined), undefined)
+ * assert.strictEqual(pipe(none(), getOrUndefined), undefined)
  *
  * @category conversions
  * @since 1.0.0
@@ -1028,21 +1028,21 @@ export const catchAll = <B>(that: LazyArg<Option<B>>) =>
  *
  * assert.deepStrictEqual(
  *   pipe(
- *     O.none,
- *     O.orElse(O.none)
+ *     O.none(),
+ *     O.orElse(O.none())
  *   ),
- *   O.none
+ *   O.none()
  * )
  * assert.deepStrictEqual(
  *   pipe(
  *     O.some('a'),
- *     O.orElse<string>(O.none)
+ *     O.orElse<string>(O.none())
  *   ),
  *   O.some('a')
  * )
  * assert.deepStrictEqual(
  *   pipe(
- *     O.none,
+ *     O.none(),
  *     O.orElse(O.some('b'))
  *   ),
  *   O.some('b')
@@ -1100,11 +1100,11 @@ export const orElseSucceed = <B>(
  * import { pipe } from '@fp-ts/core/Function'
  *
  * const O = liftOrder(N.Order)
- * assert.strictEqual(pipe(none, O.compare(none)), 0)
- * assert.strictEqual(pipe(none, O.compare(some(1))), -1)
- * assert.strictEqual(pipe(some(1), O.compare(none)), 1)
- * assert.strictEqual(pipe(some(1), O.compare(some(2))), -1)
- * assert.strictEqual(pipe(some(1), O.compare(some(1))), 0)
+ * assert.strictEqual(O.compare(none(), none()), 0)
+ * assert.strictEqual(O.compare(none(), some(1)), -1)
+ * assert.strictEqual(O.compare(some(1), none()), 1)
+ * assert.strictEqual(O.compare(some(1), some(2)), -1)
+ * assert.strictEqual(O.compare(some(1), some(1)), 0)
  *
  * @category sorting
  * @since 1.0.0
@@ -1122,7 +1122,7 @@ export const liftOrder = <A>(O: Order<A>): Order<Option<A>> =>
  *
  * const getOption = O.liftPredicate((n: number) => n >= 0)
  *
- * assert.deepStrictEqual(getOption(-1), O.none)
+ * assert.deepStrictEqual(getOption(-1), O.none())
  * assert.deepStrictEqual(getOption(1), O.some(1))
  *
  * @category lifting
@@ -1179,7 +1179,7 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
  * )
  * assert.strictEqual(
  *   pipe(
- *     none,
+ *     none(),
  *     exists(n => n > 0)
  *   ),
  *   false

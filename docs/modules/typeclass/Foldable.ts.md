@@ -1,6 +1,6 @@
 ---
 title: typeclass/Foldable.ts
-nav_order: 12
+nav_order: 31
 parent: Modules
 ---
 
@@ -47,9 +47,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMap: <F extends TypeLambda>(
+export declare const foldMap: <F extends any>(
   F: Foldable<F>
-) => <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <R, O, E>(self: Kind<F, R, O, E, A>) => M
+) => <M>(M: any) => <A>(f: (a: A) => M) => <R, O, E>(self: any) => M
 ```
 
 Added in v1.0.0
@@ -59,13 +59,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMapKind: <F extends TypeLambda>(
+export declare const foldMapKind: <F extends any>(
   F: Foldable<F>
-) => <G extends TypeLambda>(
-  G: Coproduct<G>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<G, R, O, E, B>
-) => <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B>
+) => <G extends any>(G: any) => <A, R, O, E, B>(f: (a: A) => any) => <FR, FO, FE>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -77,13 +73,10 @@ Returns a default `reduce` composition.
 **Signature**
 
 ```ts
-export declare const reduceComposition: <F extends TypeLambda, G extends TypeLambda>(
+export declare const reduceComposition: <F extends any, G extends any>(
   F: Foldable<F>,
   G: Foldable<G>
-) => <B, A>(
-  b: B,
-  f: (b: B, a: A) => B
-) => <FR, FO, FE, GR, GO, GE>(self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>) => B
+) => <B, A>(b: B, f: (b: B, a: A) => B) => <FR, FO, FE, GR, GO, GE>(self: any) => B
 ```
 
 Added in v1.0.0
@@ -93,14 +86,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceKind: <F extends TypeLambda>(
+export declare const reduceKind: <F extends any>(
   F: Foldable<F>
-) => <G extends TypeLambda>(
-  G: Monad<G>
-) => <B, A, R, O, E>(
-  b: B,
-  f: (b: B, a: A) => Kind<G, R, O, E, B>
-) => <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B>
+) => <G extends any>(G: any) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => any) => <FR, FO, FE>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -110,9 +98,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceRight: <F extends TypeLambda>(
+export declare const reduceRight: <F extends any>(
   F: Foldable<F>
-) => <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B
+) => <A, B>(b: B, f: (b: B, a: A) => B) => <R, O, E>(self: any) => B
 ```
 
 Added in v1.0.0
@@ -122,14 +110,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceRightKind: <F extends TypeLambda>(
+export declare const reduceRightKind: <F extends any>(
   F: Foldable<F>
-) => <G extends TypeLambda>(
-  G: Monad<G>
-) => <B, A, R, O, E>(
-  b: B,
-  f: (b: B, a: A) => Kind<G, R, O, E, B>
-) => <FR, FO, FE>(self: Kind<F, FR, FO, FE, A>) => Kind<G, R, O, E, B>
+) => <G extends any>(G: any) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => any) => <FR, FO, FE>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -139,7 +122,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toArray: <F extends TypeLambda>(F: Foldable<F>) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => A[]
+export declare const toArray: <F extends any>(F: Foldable<F>) => <R, O, E, A>(self: any) => A[]
 ```
 
 Added in v1.0.0
@@ -149,9 +132,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toArrayWith: <F extends TypeLambda>(
+export declare const toArrayWith: <F extends any>(
   F: Foldable<F>
-) => <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => B[]
+) => <A, B>(f: (a: A) => B) => <R, O, E>(self: any) => B[]
 ```
 
 Added in v1.0.0

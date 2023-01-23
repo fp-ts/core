@@ -1,6 +1,6 @@
 ---
 title: typeclass/SemiAlternative.ts
-nav_order: 21
+nav_order: 39
 parent: Modules
 ---
 

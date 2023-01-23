@@ -36,13 +36,13 @@ export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) 
  *
  * const S1 = getSemigroup(B.SemigroupAll)<number>()
  *
- * assert.deepStrictEqual(pipe(f, S1.combine(g))(1), true)
- * assert.deepStrictEqual(pipe(f, S1.combine(g))(3), false)
+ * assert.deepStrictEqual(S1.combine(f, g)(1), true)
+ * assert.deepStrictEqual(S1.combine(f, g)(3), false)
  *
  * const S2 = getSemigroup(B.SemigroupAny)<number>()
  *
- * assert.deepStrictEqual(pipe(f, S2.combine(g))(1), true)
- * assert.deepStrictEqual(pipe(f, S2.combine(g))(3), true)
+ * assert.deepStrictEqual(S2.combine(f, g)(1), true)
+ * assert.deepStrictEqual(S2.combine(f, g)(3), true)
  *
  * @category instances
  * @since 1.0.0
@@ -64,13 +64,13 @@ export const getSemigroup = <S>(Semigroup: semigroup.Semigroup<S>) =>
  *
  * const M1 = getMonoid(B.MonoidAll)<number>()
  *
- * assert.deepStrictEqual(pipe(f, M1.combine(g))(1), true)
- * assert.deepStrictEqual(pipe(f, M1.combine(g))(3), false)
+ * assert.deepStrictEqual(M1.combine(f, g)(1), true)
+ * assert.deepStrictEqual(M1.combine(f, g)(3), false)
  *
  * const M2 = getMonoid(B.MonoidAny)<number>()
  *
- * assert.deepStrictEqual(pipe(f, M2.combine(g))(1), true)
- * assert.deepStrictEqual(pipe(f, M2.combine(g))(3), true)
+ * assert.deepStrictEqual(M2.combine(f, g)(1), true)
+ * assert.deepStrictEqual(M2.combine(f, g)(3), true)
  *
  * @category instances
  * @since 1.0.0

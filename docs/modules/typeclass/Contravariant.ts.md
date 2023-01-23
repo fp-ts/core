@@ -1,6 +1,6 @@
 ---
 title: typeclass/Contravariant.ts
-nav_order: 8
+nav_order: 25
 parent: Modules
 ---
 
@@ -29,8 +29,8 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <F extends TypeLambda>(
-  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+export declare const make: <F extends any>(
+  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: any) => any
 ) => Contravariant<F>
 ```
 
@@ -61,14 +61,10 @@ Returns a default `map` composition.
 **Signature**
 
 ```ts
-export declare const contramapComposition: <F extends TypeLambda, G extends TypeLambda>(
+export declare const contramapComposition: <F extends any, G extends any>(
   F: Contravariant<F>,
   G: Contravariant<G>
-) => <A, B>(
-  f: (a: A) => B
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
+) => <A, B>(f: (a: A) => B) => <FR, FO, FE, GR, GO, GE>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -80,9 +76,7 @@ Returns a default `imap` implementation.
 **Signature**
 
 ```ts
-export declare const imap: <F extends TypeLambda>(
-  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
-) => <A, B>(to: (a: A) => B, from: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+export declare const imap: <F extends any>(contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: any) => any) => any
 ```
 
 Added in v1.0.0

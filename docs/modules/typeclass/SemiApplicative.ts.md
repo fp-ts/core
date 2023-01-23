@@ -1,6 +1,6 @@
 ---
 title: typeclass/SemiApplicative.ts
-nav_order: 22
+nav_order: 40
 parent: Modules
 ---
 
@@ -43,11 +43,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const andThen: <F extends TypeLambda>(
+export declare const andThen: <F extends any>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, B>(
-  that: Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
+) => <R2, O2, E2, B>(that: any) => <R1, O1, E1, _>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -57,11 +55,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const andThenDiscard: <F extends TypeLambda>(
+export declare const andThenDiscard: <F extends any>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, _>(
-  that: Kind<F, R2, O2, E2, _>
-) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
+) => <R2, O2, E2, _>(that: any) => <R1, O1, E1, A>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -71,11 +67,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <F extends TypeLambda>(
+export declare const ap: <F extends any>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, A>(
-  fa: Kind<F, R2, O2, E2, A>
-) => <R1, O1, E1, B>(self: Kind<F, R1, O1, E1, (a: A) => B>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
+) => <R2, O2, E2, A>(fa: any) => <R1, O1, E1, B>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -87,14 +81,9 @@ Lifts a binary function into `F`.
 **Signature**
 
 ```ts
-export declare const lift2: <F extends TypeLambda>(
+export declare const lift2: <F extends any>(
   F: SemiApplicative<F>
-) => <A, B, C>(
-  f: (a: A, b: B) => C
-) => <R1, O1, E1, R2, O2, E2>(
-  fa: Kind<F, R1, O1, E1, A>,
-  fb: Kind<F, R2, O2, E2, B>
-) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+) => <A, B, C>(f: (a: A, b: B) => C) => <R1, O1, E1, R2, O2, E2>(fa: any, fb: any) => any
 ```
 
 Added in v1.0.0
@@ -106,15 +95,9 @@ Lifts a ternary function into 'F'.
 **Signature**
 
 ```ts
-export declare const lift3: <F extends TypeLambda>(
+export declare const lift3: <F extends any>(
   F: SemiApplicative<F>
-) => <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => <R1, O1, E1, R2, O2, E2, R3, O3, E3>(
-  fa: Kind<F, R1, O1, E1, A>,
-  fb: Kind<F, R2, O2, E2, B>,
-  fc: Kind<F, R3, O3, E3, C>
-) => Kind<F, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D>
+) => <A, B, C, D>(f: (a: A, b: B, c: C) => D) => <R1, O1, E1, R2, O2, E2, R3, O3, E3>(fa: any, fb: any, fc: any) => any
 ```
 
 Added in v1.0.0
@@ -126,9 +109,7 @@ Lift a `Semigroup` into 'F', the inner values are combined using the provided `S
 **Signature**
 
 ```ts
-export declare const liftSemigroup: <F extends TypeLambda>(
-  F: SemiApplicative<F>
-) => <A, R, O, E>(S: Semigroup<A>) => Semigroup<Kind<F, R, O, E, A>>
+export declare const liftSemigroup: <F extends any>(F: SemiApplicative<F>) => <A, R, O, E>(S: any) => any
 ```
 
 Added in v1.0.0

@@ -1,6 +1,6 @@
 ---
 title: typeclass/Order.ts
-nav_order: 18
+nav_order: 36
 parent: Modules
 ---
 
@@ -12,6 +12,10 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [array](#array)
+  - [struct](#struct)
+  - [tuple](#tuple)
 - [constructors](#constructors)
   - [fromCompare](#fromcompare)
 - [instances](#instances)
@@ -19,8 +23,12 @@ Added in v1.0.0
   - [Invariant](#invariant)
   - [Product](#product)
   - [SemiProduct](#semiproduct)
+  - [bigint](#bigint)
+  - [boolean](#boolean)
   - [getMonoid](#getmonoid)
   - [getSemigroup](#getsemigroup)
+  - [number](#number)
+  - [string](#string)
 - [type class](#type-class)
   - [Order (interface)](#order-interface)
 - [type lambdas](#type-lambdas)
@@ -36,9 +44,57 @@ Added in v1.0.0
   - [max](#max)
   - [min](#min)
   - [reverse](#reverse)
-  - [tuple](#tuple)
 
 ---
+
+# combinators
+
+## array
+
+This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
+The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
+If all elements are equal, the arrays are then compared based on their length.
+It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
+
+**Signature**
+
+```ts
+export declare const array: <A>(O: Order<A>) => Order<readonly A[]>
+```
+
+Added in v1.0.0
+
+## struct
+
+This function creates and returns a new `Order` for a struct of values based on the given `Order`s
+for each property in the struct.
+
+**Signature**
+
+```ts
+export declare const struct: <A>(orders: { readonly [K in keyof A]: Order<A[K]> }) => Order<{
+  readonly [K in keyof A]: A[K]
+}>
+```
+
+Added in v1.0.0
+
+## tuple
+
+This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
+The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
+It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
+of the tuple.
+
+**Signature**
+
+```ts
+export declare const tuple: <A extends readonly any[]>(
+  ...orders: { readonly [K in keyof A]: Order<A[K]> }
+) => Order<Readonly<A>>
+```
+
+Added in v1.0.0
 
 # constructors
 
@@ -49,7 +105,7 @@ Main constructor.
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (that: A) => (self: A) => 0 | 1 | -1) => Order<A>
+export declare const fromCompare: <A>(compare: (self: A, that: A) => 0 | 1 | -1) => Order<A>
 ```
 
 Added in v1.0.0
@@ -61,7 +117,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Contravariant: contravariant.Contravariant<OrderTypeLambda>
+export declare const Contravariant: any
 ```
 
 Added in v1.0.0
@@ -71,7 +127,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: invariant.Invariant<OrderTypeLambda>
+export declare const Invariant: any
 ```
 
 Added in v1.0.0
@@ -81,7 +137,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: product.Product<OrderTypeLambda>
+export declare const Product: any
 ```
 
 Added in v1.0.0
@@ -91,7 +147,27 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda>
+export declare const SemiProduct: any
+```
+
+Added in v1.0.0
+
+## bigint
+
+**Signature**
+
+```ts
+export declare const bigint: Order<bigint>
+```
+
+Added in v1.0.0
+
+## boolean
+
+**Signature**
+
+```ts
+export declare const boolean: Order<boolean>
 ```
 
 Added in v1.0.0
@@ -101,7 +177,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>() => Monoid<Order<A>>
+export declare const getMonoid: <A>() => any
 ```
 
 Added in v1.0.0
@@ -111,7 +187,27 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A>() => Semigroup<Order<A>>
+export declare const getSemigroup: <A>() => any
+```
+
+Added in v1.0.0
+
+## number
+
+**Signature**
+
+```ts
+export declare const number: Order<number>
+```
+
+Added in v1.0.0
+
+## string
+
+**Signature**
+
+```ts
+export declare const string: Order<string>
 ```
 
 Added in v1.0.0
@@ -124,7 +220,7 @@ Added in v1.0.0
 
 ```ts
 export interface Order<A> {
-  readonly compare: (that: A) => (self: A) => -1 | 0 | 1
+  readonly compare: (self: A, that: A) => -1 | 0 | 1
 }
 ```
 
@@ -258,18 +354,6 @@ Added in v1.0.0
 
 ```ts
 export declare const reverse: <A>(O: Order<A>) => Order<A>
-```
-
-Added in v1.0.0
-
-## tuple
-
-Given a tuple of `Compare`s returns a `Compare` for the tuple.
-
-**Signature**
-
-```ts
-export declare const tuple: <A extends readonly any[]>(...orders: { [K in keyof A]: Order<A[K]> }) => Order<Readonly<A>>
 ```
 
 Added in v1.0.0

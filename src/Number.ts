@@ -76,7 +76,7 @@ export const Bounded = bounded.number
  * import { SemigroupSum } from '@fp-ts/core/Number'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(2, SemigroupSum.combine(3)), 5)
+ * assert.deepStrictEqual(SemigroupSum.combine(2, 3), 5)
  *
  * @category instances
  * @since 1.0.0
@@ -102,7 +102,7 @@ export const SemigroupMin = semigroup.min(Order)
  * import { SemigroupMultiply } from '@fp-ts/core/Number'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(2, SemigroupMultiply.combine(3)), 6)
+ * assert.deepStrictEqual(SemigroupMultiply.combine(2, 3), 6)
  *
  * @category instances
  * @since 1.0.0

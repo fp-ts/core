@@ -1,6 +1,6 @@
 ---
 title: typeclass/Of.ts
-nav_order: 17
+nav_order: 35
 parent: Modules
 ---
 
@@ -42,7 +42,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Do: <F extends TypeLambda>(F: Of<F>) => Kind<F, unknown, never, never, {}>
+export declare const Do: <F extends any>(F: Of<F>) => any
 ```
 
 Added in v1.0.0
@@ -54,10 +54,7 @@ Returns a default `of` composition.
 **Signature**
 
 ```ts
-export declare const ofComposition: <F extends TypeLambda, G extends TypeLambda>(
-  F: Of<F>,
-  G: Of<G>
-) => <A>(a: A) => Kind<F, unknown, never, never, Kind<G, unknown, never, never, A>>
+export declare const ofComposition: <F extends any, G extends any>(F: Of<F>, G: Of<G>) => <A>(a: A) => any
 ```
 
 Added in v1.0.0
@@ -67,7 +64,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const unit: <F extends TypeLambda>(F: Of<F>) => Kind<F, unknown, never, never, void>
+export declare const unit: <F extends any>(F: Of<F>) => any
 ```
 
 Added in v1.0.0
