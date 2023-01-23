@@ -80,12 +80,12 @@ describe.concurrent("String", () => {
     deepStrictEqual(pipe(" a ", String.trim), "a")
   })
 
-  it("trimLeft", () => {
-    deepStrictEqual(pipe(" a ", String.trimLeft), "a ")
+  it("trimStart", () => {
+    deepStrictEqual(pipe(" a ", String.trimStart), "a ")
   })
 
-  it("trimRight", () => {
-    deepStrictEqual(pipe(" a ", String.trimRight), " a")
+  it("trimEnd", () => {
+    deepStrictEqual(pipe(" a ", String.trimEnd), " a")
   })
 
   it("includes", () => {

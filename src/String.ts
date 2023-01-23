@@ -111,22 +111,22 @@ export const trim = (s: string): string => s.trim()
  * import * as S from '@fp-ts/core/String'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(' a ', S.trimLeft), 'a ')
+ * assert.deepStrictEqual(pipe(' a ', S.trimStart), 'a ')
  *
  * @since 1.0.0
  */
-export const trimLeft = (s: string): string => s.trimLeft()
+export const trimStart = (s: string): string => s.trimStart()
 
 /**
  * @example
  * import * as S from '@fp-ts/core/String'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(' a ', S.trimRight), ' a')
+ * assert.deepStrictEqual(pipe(' a ', S.trimEnd), ' a')
  *
  * @since 1.0.0
  */
-export const trimRight = (s: string): string => s.trimRight()
+export const trimEnd = (s: string): string => s.trimEnd()
 
 /**
  * @example
@@ -256,6 +256,30 @@ export const takeLeft = (n: number) => (self: string): string => self.slice(0, M
  */
 export const takeRight = (n: number) =>
   (s: string): string => s.slice(Math.max(0, s.length - Math.floor(n)), Infinity)
+
+/*
+
+  Missing:
+
+  - charCodeAt
+  - substring
+  - at
+  - charAt
+  - codePointAt
+  - indexOf
+  - lastIndexOf
+  - localeCompare
+  - match
+  - matchAll
+  - normalize
+  - padEnd
+  - padStart
+  - repeat
+  - replaceAll
+  - search
+  - toLocaleLowerCase
+  - toLocaleUpperCase
+*/
 
 // TODO: 100% coverage tests (ask Max)
 // const CR = 0x0d
