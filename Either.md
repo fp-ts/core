@@ -7,7 +7,7 @@ The `Left` variant is used to represent a failure, and it can contain useful inf
 Unlike the `Option` type, `Either` allows you to attach additional information to the failure case, making it more informative.
 In this usage, `None` is replaced with a `Left` which can contain useful information. `Right` takes the place of `Some`.
 
-## Definition
+# Definition
 
 The `Either` data type is the union of two members: `Left` and `Right`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions):
 
@@ -29,7 +29,7 @@ export type Right<A> = {
 export type Either<E, A> = Left<E> | Right<A>;
 ```
 
-## Using `Either`
+# Using `Either`
 
 To create an instance of `Either`, you can use the `right` and `left` constructors, which construct a new `Either` holding a `Right` or `Left` value respectively.
 
@@ -59,7 +59,7 @@ const failure: Either<string, number> = pipe(
 
 The `fromOption` function requires an argument because it needs to know what value to use for the `Left` variant of the `Either` type when given a `None`. In the example, the argument "error message" is used as the value for the `Left` variant when `None` is encountered. This allows `Either` to provide more information about why a failure occurred.
 
-## Working with `Either`
+# Working with `Either`
 
 Once you have an instance of `Either`, you can use the various functions provided in the `@fp-ts/core/Either` module to work with it.
 
@@ -80,7 +80,7 @@ const failure: Either<string, number> = pipe(
 ); // left("error message!")
 ```
 
-## Handling failing computations
+# Handling failing computations
 
 Let's see how to use the `Either` data type to model a computation that can fail, such as a function that can throw an exception based on certain conditions. Let's take the case of the following function:
 
@@ -113,7 +113,7 @@ console.log(parseNumber("2")); // right(2)
 console.log(parseNumber("Not a number")); // left("Cannot parse 'Not a number' as a number")
 ```
 
-## Pattern matching
+# Pattern matching
 
 The `match` function allows us to match on the `Left` and `Right` cases of an `Either` value and provide different actions for each.
 

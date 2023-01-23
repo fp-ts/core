@@ -11,7 +11,7 @@ In the first of these two interpretations, the `None` union member represents th
 
 In the second of these two interpretations, the `None` union member represents the absence of the value, while the `Some<A>` union member represents the presence of the value of type `A`
 
-## Definition
+# Definition
 
 The `Option` data type is the union of two members: `None` and `Some`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions):
 
@@ -32,7 +32,7 @@ export type Some<A> = {
 export type Option<A> = None | Some<A>;
 ```
 
-## Using `Option`
+# Using `Option`
 
 To create an instance of `Option`, you can use the `some` and `none` constructors, which construct a new `Option` holding a `Some` or `None` value respectively.
 
@@ -43,7 +43,7 @@ const success: Option<number> = some(1);
 const failure: Option<number> = none();
 ```
 
-## Working with `Option`
+# Working with `Option`
 
 Once you have an instance of `Option`, you can use the various functions provided in the `@fp-ts/core/Option` module to work with it.
 
@@ -59,7 +59,7 @@ const success: Option<number> = pipe(
 ); // some(2)
 ```
 
-## Handling failing computations
+# Handling failing computations
 
 Let's see how to use the `Option` data type to model a computation that can fail, such as a function that can throw an exception based on certain conditions. Let's take the case of the following function:
 
@@ -92,7 +92,7 @@ console.log(parseNumber("2")); // some(2)
 console.log(parseNumber("Not a number")); // none()
 ```
 
-## Pattern matching
+# Pattern matching
 
 The `match` function allows us to match on the `None` and `Some` cases of an `Option` value and provide different actions for each.
 
