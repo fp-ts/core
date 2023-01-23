@@ -1584,10 +1584,10 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(pipe([-1, -2, -3], RA.some(isPositive)), false)
   })
 
-  it("size", () => {
-    deepStrictEqual(RA.size(RA.empty()), 0)
-    deepStrictEqual(RA.size([]), 0)
-    deepStrictEqual(RA.size(["a"]), 1)
+  it("length", () => {
+    deepStrictEqual(RA.length(RA.empty()), 0)
+    deepStrictEqual(RA.length([]), 0)
+    deepStrictEqual(RA.length(["a"]), 1)
   })
 
   it("fromOption", () => {

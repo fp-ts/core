@@ -193,19 +193,19 @@ describe.concurrent("Either", () => {
   })
 
   it("map", () => {
-    const f = _.map(String.size)
+    const f = _.map(String.length)
     deepStrictEqual(pipe(_.right("abc"), f), _.right(3))
     deepStrictEqual(pipe(_.left("s"), f), _.left("s"))
   })
 
   it("flatMap", () => {
-    const f = _.flatMap<string, string, number>(flow(String.size, _.right))
+    const f = _.flatMap<string, string, number>(flow(String.length, _.right))
     deepStrictEqual(pipe(_.right("abc"), f), _.right(3))
     deepStrictEqual(pipe(_.left("maError"), f), _.left("maError"))
   })
 
   it("bimap", () => {
-    const f = _.bimap(String.size, (n: number) => n > 2)
+    const f = _.bimap(String.length, (n: number) => n > 2)
     deepStrictEqual(pipe(_.right(1), f), _.right(false))
   })
 

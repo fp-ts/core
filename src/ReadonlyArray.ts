@@ -270,7 +270,7 @@ export const isNonEmpty: <A>(self: ReadonlyArray<A>) => self is NonEmptyReadonly
  * @category getters
  * @since 1.0.0
  */
-export const size = <A>(self: ReadonlyArray<A>): number => self.length
+export const length = <A>(self: ReadonlyArray<A>): number => self.length
 
 const isOutOfBound = <A>(i: number, as: ReadonlyArray<A>): boolean => i < 0 || i >= as.length
 
