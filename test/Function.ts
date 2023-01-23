@@ -1,37 +1,37 @@
 import * as Function from "@fp-ts/core/Function"
 import * as Number from "@fp-ts/core/Number"
+import * as String from "@fp-ts/core/String"
 import { deepStrictEqual, double } from "@fp-ts/core/test/util"
 import * as assert from "assert"
 
 const f = (n: number): number => n + 1
 const g = double
-const size = (s: string): number => s.length
 
 describe.concurrent("Function", () => {
   it("getSemigroup", () => {
     const S = Function.getSemigroup(Number.SemigroupSum)<string>()
     const f = (s: string) => s === "a" ? 0 : 1
-    const g = S.combine(size, f)
+    const g = S.combine(String.length, f)
     deepStrictEqual(g(""), 1)
     deepStrictEqual(g("a"), 1)
     deepStrictEqual(g("b"), 2)
-    deepStrictEqual(S.combineMany(size, [size, size])("a"), 3)
+    deepStrictEqual(S.combineMany(String.length, [String.length, String.length])("a"), 3)
   })
 
   it("getMonoid", () => {
     const M = Function.getMonoid(Number.MonoidSum)<string>()
     const f = (s: string) => s === "a" ? 0 : 1
-    const g = M.combine(size, f)
+    const g = M.combine(String.length, f)
     deepStrictEqual(g(""), 1)
     deepStrictEqual(g("a"), 1)
     deepStrictEqual(g("b"), 2)
-    deepStrictEqual(M.combine(size, M.empty)("a"), 1)
-    deepStrictEqual(M.combine(M.empty, size)("a"), 1)
-    deepStrictEqual(M.combineAll([size, size])("a"), 2)
+    deepStrictEqual(M.combine(String.length, M.empty)("a"), 1)
+    deepStrictEqual(M.combine(M.empty, String.length)("a"), 1)
+    deepStrictEqual(M.combineAll([String.length, String.length])("a"), 2)
   })
 
   it("apply", () => {
-    deepStrictEqual(Function.apply("a")(size), 1)
+    deepStrictEqual(Function.apply("a")(String.length), 1)
   })
 
   it("flip", () => {
@@ -40,7 +40,7 @@ describe.concurrent("Function", () => {
   })
 
   it("compose", () => {
-    deepStrictEqual(Function.pipe(size, Function.compose(double))("aaa"), 6)
+    deepStrictEqual(Function.pipe(String.length, Function.compose(double))("aaa"), 6)
   })
 
   it("unsafeCoerce", () => {

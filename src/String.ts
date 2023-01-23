@@ -59,8 +59,7 @@ export const empty: "" = "" as const
 /**
  * @since 1.0.0
  */
-export const concat = (that: string) =>
-  (self: string): string => semigroup.string.combine(self, that)
+export const concat = (that: string) => (self: string): string => Semigroup.combine(self, that)
 
 /**
  * @example
@@ -155,17 +154,24 @@ export const slice = (start: number, end: number) => (s: string): string => s.sl
 export const isEmpty = (s: string): s is "" => s.length === 0
 
 /**
+ * Test whether a `string` is non empty.
+ *
+ * @since 1.0.0
+ */
+export const isNonEmpty = (s: string): boolean => s.length > 0
+
+/**
  * Calculate the number of characters in a `string`.
  *
  * @example
  * import * as S from '@fp-ts/core/String'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe('abc', S.size), 3)
+ * assert.deepStrictEqual(pipe('abc', S.length), 3)
  *
  * @since 1.0.0
  */
-export const size = (s: string): number => s.length
+export const length = (s: string): number => s.length
 
 /**
  * @example

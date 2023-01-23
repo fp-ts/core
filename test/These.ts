@@ -91,14 +91,14 @@ describe("These", () => {
   })
 
   it("bimap", () => {
-    const f = _.bimap(S.size, U.double)
+    const f = _.bimap(S.length, U.double)
     U.deepStrictEqual(pipe(_.left("e"), f), _.left(1))
     U.deepStrictEqual(pipe(_.right(2), f), _.right(4))
     U.deepStrictEqual(pipe(_.both("eee", 1), f), _.both(3, 2))
   })
 
   it("mapLeft", () => {
-    const f = _.mapLeft(S.size)
+    const f = _.mapLeft(S.length)
     U.deepStrictEqual(pipe(_.left("e"), f), _.left(1))
     U.deepStrictEqual(pipe(_.right(2), f), _.right(2))
     U.deepStrictEqual(pipe(_.both("eee", 1), f), _.both(3, 1))
@@ -411,8 +411,8 @@ describe("These", () => {
   })
 
   it("match", () => {
-    const f = (s: string, n: number) => S.size(s) + U.double(n)
-    const match = _.match(S.size, U.double, f)
+    const f = (s: string, n: number) => S.length(s) + U.double(n)
+    const match = _.match(S.length, U.double, f)
     U.deepStrictEqual(match(_.left("foo")), 3)
     U.deepStrictEqual(match(_.right(1)), 2)
     U.deepStrictEqual(match(_.both("foo", 1)), 5)

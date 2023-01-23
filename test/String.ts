@@ -44,15 +44,19 @@ describe.concurrent("String", () => {
   })
 
   it("isEmpty", () => {
-    deepStrictEqual(String.isEmpty(String.empty), true)
     deepStrictEqual(String.isEmpty(""), true)
     deepStrictEqual(String.isEmpty("a"), false)
   })
 
-  it("size", () => {
-    deepStrictEqual(String.size(String.empty), 0)
-    deepStrictEqual(String.size(""), 0)
-    deepStrictEqual(String.size("a"), 1)
+  it("isNonEmpty", () => {
+    deepStrictEqual(String.isNonEmpty(""), false)
+    deepStrictEqual(String.isNonEmpty("a"), true)
+  })
+
+  it("length", () => {
+    deepStrictEqual(String.length(""), 0)
+    deepStrictEqual(String.length("a"), 1)
+    deepStrictEqual(String.length("aaa"), 3)
   })
 
   it("toUpperCase", () => {
