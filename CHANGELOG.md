@@ -1,5 +1,15 @@
 # @fp-ts/core
 
+## 0.1.0
+
+### Minor Changes
+
+- [#46](https://github.com/fp-ts/core/pull/46) [`0bd0d604`](https://github.com/fp-ts/core/commit/0bd0d60454642d7b1692d923c2d240b747ac797b) Thanks [@gcanti](https://github.com/gcanti)! - add modules from @fp-ts/data
+
+### Patch Changes
+
+- [#46](https://github.com/fp-ts/core/pull/46) [`3c256fa8`](https://github.com/fp-ts/core/commit/3c256fa8b9bbb4379ad51c5e48781deaaac2990a) Thanks [@gcanti](https://github.com/gcanti)! - Add tracking code for Option
+
 ## next
 
 **Breaking changes**
