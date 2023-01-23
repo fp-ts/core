@@ -18,7 +18,7 @@ import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 export const tuple = <A extends ReadonlyArray<any>>(...elements: A): A => elements
 
 /**
- * Adds an element to the end of a tuple.
+ * Appends an element to the end of a tuple.
  *
  * @since 1.0.0
  */
