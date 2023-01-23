@@ -34,7 +34,7 @@ For those using [`fp-ts`](https://github.com/gcanti/fp-ts) v2 and its ecosystem,
 - [`io-ts`](https://github.com/gcanti/io-ts) -> [`@fp-ts/schema`](https://github.com/fp-ts/schema)
 - [`monocle-ts`](https://github.com/gcanti/monocle-ts) -> [`@fp-ts/optic`](https://github.com/fp-ts/optic)
 
-Note that `@fp-ts/core` will not contain any effect system (e.g. `Task`, `TaskEither`, `ReaderTaskEither`) since the handling of effects is entirely delegated to the packages contained in [`@effect/*`](https://github.com/Effect-TS)."
+Note that `@fp-ts/core` will not contain any effect system (e.g. `Task`, `TaskEither`, `ReaderTaskEither`) since the handling of effects is entirely delegated to the packages contained in [`@effect/*`](https://github.com/Effect-TS).
 
 # Installation
 
@@ -48,6 +48,8 @@ npm install @fp-ts/core
 
 - [Typeclass overview](./typeclass.md)
 - [Data overview](./data.md)
+- [The `Option` data type](./Option.md)
+- [The `Either` data type](./Either.md)
 - [API Reference](https://fp-ts.github.io/core/)
 
 # License
