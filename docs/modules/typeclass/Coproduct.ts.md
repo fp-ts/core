@@ -1,6 +1,6 @@
 ---
 title: typeclass/Coproduct.ts
-nav_order: 9
+nav_order: 26
 parent: Modules
 ---
 
@@ -42,7 +42,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoid: <F extends TypeLambda>(F: Coproduct<F>) => <R, O, E, A>() => Monoid<Kind<F, R, O, E, A>>
+export declare const getMonoid: <F extends any>(F: Coproduct<F>) => <R, O, E, A>() => any
 ```
 
 Added in v1.0.0

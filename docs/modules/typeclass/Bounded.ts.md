@@ -1,6 +1,6 @@
 ---
 title: typeclass/Bounded.ts
-nav_order: 6
+nav_order: 22
 parent: Modules
 ---
 
@@ -12,6 +12,11 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [max](#max)
+  - [min](#min)
+- [instances](#instances)
+  - [number](#number)
 - [type class](#type-class)
   - [Bounded (interface)](#bounded-interface)
 - [type lambdas](#type-lambdas)
@@ -21,6 +26,44 @@ Added in v1.0.0
   - [reverse](#reverse)
 
 ---
+
+# constructors
+
+## max
+
+`Monoid` that returns last maximum of elements.
+
+**Signature**
+
+```ts
+export declare const max: <A>(B: Bounded<A>) => any
+```
+
+Added in v1.0.0
+
+## min
+
+`Monoid` that returns last minimum of elements.
+
+**Signature**
+
+```ts
+export declare const min: <A>(B: Bounded<A>) => any
+```
+
+Added in v1.0.0
+
+# instances
+
+## number
+
+**Signature**
+
+```ts
+export declare const number: Bounded<number>
+```
+
+Added in v1.0.0
 
 # type class
 

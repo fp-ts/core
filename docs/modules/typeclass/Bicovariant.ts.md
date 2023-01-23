@@ -1,6 +1,6 @@
 ---
 title: typeclass/Bicovariant.ts
-nav_order: 5
+nav_order: 21
 parent: Modules
 ---
 
@@ -47,15 +47,10 @@ Returns a default `bimap` composition.
 **Signature**
 
 ```ts
-export declare const bimapComposition: <F extends TypeLambda, G extends TypeLambda>(
-  CovariantF: Covariant<F>,
+export declare const bimapComposition: <F extends any, G extends any>(
+  CovariantF: any,
   BicovariantG: Bicovariant<G>
-) => <E1, E2, A, B>(
-  f: (e: E1) => E2,
-  g: (a: A) => B
-) => <FR, FO, FE, GR, GO>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, E1, A>>
-) => Kind<F, FR, FO, FE, Kind<G, GR, GO, E2, B>>
+) => <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B) => <FR, FO, FE, GR, GO>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -67,9 +62,7 @@ Returns a default `map` implementation.
 **Signature**
 
 ```ts
-export declare const map: <F extends TypeLambda>(
-  F: Bicovariant<F>
-) => <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+export declare const map: <F extends any>(F: Bicovariant<F>) => any
 ```
 
 Added in v1.0.0
@@ -79,9 +72,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const mapLeft: <F extends TypeLambda>(
+export declare const mapLeft: <F extends any>(
   F: Bicovariant<F>
-) => <E1, E2>(f: (e: E1) => E2) => <R, O, A>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, A>
+) => <E1, E2>(f: (e: E1) => E2) => <R, O, A>(self: any) => any
 ```
 
 Added in v1.0.0

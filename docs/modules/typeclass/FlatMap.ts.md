@@ -1,6 +1,6 @@
 ---
 title: typeclass/FlatMap.ts
-nav_order: 11
+nav_order: 30
 parent: Modules
 ---
 
@@ -46,11 +46,9 @@ A variant of `flatMap` that ignores the value produced by this effect.
 **Signature**
 
 ```ts
-export declare const andThen: <F extends TypeLambda>(
+export declare const andThen: <F extends any>(
   F: FlatMap<F>
-) => <R2, O2, E2, B>(
-  that: Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
+) => <R2, O2, E2, B>(that: any) => <R1, O1, E1, _>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -60,11 +58,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composeKleisliArrow: <F extends TypeLambda>(
+export declare const composeKleisliArrow: <F extends any>(
   F: FlatMap<F>
-) => <B, R2, O2, E2, C>(
-  bfc: (b: B) => Kind<F, R2, O2, E2, C>
-) => <A, R1, O1, E1>(afb: (a: A) => Kind<F, R1, O1, E1, B>) => (a: A) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>
+) => <B, R2, O2, E2, C>(bfc: (b: B) => any) => <A, R1, O1, E1>(afb: (a: A) => any) => (a: A) => any
 ```
 
 Added in v1.0.0
@@ -74,11 +70,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatten: <F extends TypeLambda>(
-  F: FlatMap<F>
-) => <R2, O2, E2, R1, O1, E1, A>(
-  self: Kind<F, R2, O2, E2, Kind<F, R1, O1, E1, A>>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
+export declare const flatten: <F extends any>(F: FlatMap<F>) => <R2, O2, E2, R1, O1, E1, A>(self: any) => any
 ```
 
 Added in v1.0.0

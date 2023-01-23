@@ -1,6 +1,6 @@
 ---
 title: typeclass/Invariant.ts
-nav_order: 13
+nav_order: 32
 parent: Modules
 ---
 
@@ -45,11 +45,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bindTo: <F extends TypeLambda>(
+export declare const bindTo: <F extends any>(
   F: Invariant<F>
-) => <N extends string>(
-  name: N
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { readonly [K in N]: A }>
+) => <N extends string>(name: N) => <R, O, E, A>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -61,15 +59,10 @@ Returns a default `imap` composition.
 **Signature**
 
 ```ts
-export declare const imapComposition: <F extends TypeLambda, G extends TypeLambda>(
+export declare const imapComposition: <F extends any, G extends any>(
   F: Invariant<F>,
   G: Invariant<G>
-) => <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
-) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
+) => <A, B>(to: (a: A) => B, from: (b: B) => A) => <FR, FO, FE, GR, GO, GE>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -79,9 +72,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const tupled: <F extends TypeLambda>(
-  F: Invariant<F>
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, readonly [A]>
+export declare const tupled: <F extends any>(F: Invariant<F>) => <R, O, E, A>(self: any) => any
 ```
 
 Added in v1.0.0

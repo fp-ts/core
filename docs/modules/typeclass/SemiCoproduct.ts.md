@@ -1,6 +1,6 @@
 ---
 title: typeclass/SemiCoproduct.ts
-nav_order: 23
+nav_order: 41
 parent: Modules
 ---
 
@@ -27,13 +27,15 @@ Added in v1.0.0
 
 ```ts
 export interface SemiCoproduct<F extends TypeLambda> extends Invariant<F> {
-  readonly coproduct: <R2, O2, E2, B>(
+  readonly coproduct: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, B>
-  ) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A | B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A | B>
 
   readonly coproductMany: <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
     collection: Iterable<Kind<F, R, O, E, A>>
-  ) => (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, A>
+  ) => Kind<F, R, O, E, A>
 }
 ```
 
@@ -46,9 +48,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <F extends TypeLambda>(
-  F: SemiCoproduct<F>
-) => <R, O, E, A>() => Semigroup<Kind<F, R, O, E, A>>
+export declare const getSemigroup: <F extends any>(F: SemiCoproduct<F>) => <R, O, E, A>() => any
 ```
 
 Added in v1.0.0

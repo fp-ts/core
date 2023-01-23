@@ -1,6 +1,6 @@
 ---
 title: typeclass/Applicative.ts
-nav_order: 4
+nav_order: 20
 parent: Modules
 ---
 
@@ -40,9 +40,7 @@ Lift a monoid into 'F', the inner values are combined using the provided `Monoid
 **Signature**
 
 ```ts
-export declare const liftMonoid: <F extends TypeLambda>(
-  F: Applicative<F>
-) => <A, R, O, E>(M: Monoid<A>) => Monoid<Kind<F, R, O, E, A>>
+export declare const liftMonoid: <F extends any>(F: Applicative<F>) => <A, R, O, E>(M: any) => any
 ```
 
 Added in v1.0.0

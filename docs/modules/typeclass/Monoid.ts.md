@@ -1,6 +1,6 @@
 ---
 title: typeclass/Monoid.ts
-nav_order: 15
+nav_order: 34
 parent: Modules
 ---
 
@@ -12,77 +12,56 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [array](#array)
+  - [readonlyArray](#readonlyarray)
+  - [reverse](#reverse)
+  - [struct](#struct)
+  - [tuple](#tuple)
 - [constructors](#constructors)
   - [fromSemigroup](#fromsemigroup)
   - [max](#max)
   - [min](#min)
+- [instances](#instances)
+  - [bigintMultiply](#bigintmultiply)
+  - [bigintSum](#bigintsum)
+  - [booleanAll](#booleanall)
+  - [booleanAny](#booleanany)
+  - [numberMultiply](#numbermultiply)
+  - [numberSum](#numbersum)
+  - [string](#string)
 - [type class](#type-class)
   - [Monoid (interface)](#monoid-interface)
-- [utils](#utils)
-  - [reverse](#reverse)
-  - [struct](#struct)
-  - [tuple](#tuple)
 
 ---
 
-# constructors
+# combinators
 
-## fromSemigroup
+## array
 
-Optimised.
-
-**Signature**
-
-```ts
-export declare const fromSemigroup: <A>(S: Semigroup<A>, empty: A) => Monoid<A>
-```
-
-Added in v1.0.0
-
-## max
-
-Get a monoid where `combine` will return the maximum, based on the provided bounded order.
-
-The `empty` value is the `minimum` value.
+Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
+The returned `Monoid`'s empty value is the empty array.
 
 **Signature**
 
 ```ts
-export declare const max: <A>(B: Bounded<A>) => Monoid<A>
+export declare const array: <A>() => Monoid<A[]>
 ```
 
 Added in v1.0.0
 
-## min
+## readonlyArray
 
-Get a monoid where `combine` will return the minimum, based on the provided bounded order.
-
-The `empty` value is the `maxBound` value.
+Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
+The returned `Monoid`'s empty value is the empty array.
 
 **Signature**
 
 ```ts
-export declare const min: <A>(B: Bounded<A>) => Monoid<A>
+export declare const readonlyArray: <A>() => Monoid<readonly A[]>
 ```
 
 Added in v1.0.0
-
-# type class
-
-## Monoid (interface)
-
-**Signature**
-
-```ts
-export interface Monoid<A> extends Semigroup<A> {
-  readonly empty: A
-  readonly combineAll: (collection: Iterable<A>) => A
-}
-```
-
-Added in v1.0.0
-
-# utils
 
 ## reverse
 
@@ -98,7 +77,7 @@ Added in v1.0.0
 
 ## struct
 
-Given a struct of monoids returns a monoid for the struct.
+Given a struct of `Monoid`s returns a `Monoid` for the struct.
 
 **Signature**
 
@@ -112,14 +91,163 @@ Added in v1.0.0
 
 ## tuple
 
-Given a tuple of monoids returns a monoid for the tuple.
+Given a tuple of `Monoid`s returns a `Monoid` for the tuple.
 
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(
-  ...monoids: { [K in keyof A]: Monoid<A[K]> }
-) => Monoid<Readonly<A>>
+export declare const tuple: <A extends readonly any[]>(...monoids: { [K in keyof A]: Monoid<A[K]> }) => Monoid<A>
+```
+
+Added in v1.0.0
+
+# constructors
+
+## fromSemigroup
+
+**Signature**
+
+```ts
+export declare const fromSemigroup: <A>(S: any, empty: A) => Monoid<A>
+```
+
+Added in v1.0.0
+
+## max
+
+Get a monoid where `combine` will return the maximum, based on the provided bounded order.
+
+The `empty` value is the `minimum` value.
+
+**Signature**
+
+```ts
+export declare const max: <A>(B: any) => Monoid<A>
+```
+
+Added in v1.0.0
+
+## min
+
+Get a monoid where `combine` will return the minimum, based on the provided bounded order.
+
+The `empty` value is the `maxBound` value.
+
+**Signature**
+
+```ts
+export declare const min: <A>(B: any) => Monoid<A>
+```
+
+Added in v1.0.0
+
+# instances
+
+## bigintMultiply
+
+`bigint` monoid under multiplication.
+
+The `empty` value is `1n`.
+
+**Signature**
+
+```ts
+export declare const bigintMultiply: Monoid<bigint>
+```
+
+Added in v1.0.0
+
+## bigintSum
+
+`number` monoid under addition.
+
+The `bigint` value is `0n`.
+
+**Signature**
+
+```ts
+export declare const bigintSum: Monoid<bigint>
+```
+
+Added in v1.0.0
+
+## booleanAll
+
+`boolean` monoid under conjunction.
+
+The `empty` value is `true`.
+
+**Signature**
+
+```ts
+export declare const booleanAll: Monoid<boolean>
+```
+
+Added in v1.0.0
+
+## booleanAny
+
+`boolean` monoid under disjunction.
+
+The `empty` value is `false`.
+
+**Signature**
+
+```ts
+export declare const booleanAny: Monoid<boolean>
+```
+
+Added in v1.0.0
+
+## numberMultiply
+
+`number` monoid under multiplication.
+
+The `empty` value is `1`.
+
+**Signature**
+
+```ts
+export declare const numberMultiply: Monoid<number>
+```
+
+Added in v1.0.0
+
+## numberSum
+
+`number` monoid under addition.
+
+The `empty` value is `0`.
+
+**Signature**
+
+```ts
+export declare const numberSum: Monoid<number>
+```
+
+Added in v1.0.0
+
+## string
+
+**Signature**
+
+```ts
+export declare const string: Monoid<string>
+```
+
+Added in v1.0.0
+
+# type class
+
+## Monoid (interface)
+
+**Signature**
+
+```ts
+export interface Monoid<A> extends Semigroup<A> {
+  readonly empty: A
+  readonly combineAll: (collection: Iterable<A>) => A
+}
 ```
 
 Added in v1.0.0

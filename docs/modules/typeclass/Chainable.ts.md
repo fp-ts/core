@@ -1,6 +1,6 @@
 ---
 title: typeclass/Chainable.ts
-nav_order: 7
+nav_order: 23
 parent: Modules
 ---
 
@@ -32,11 +32,9 @@ produced by the effect.
 **Signature**
 
 ```ts
-export declare const andThenDiscard: <F extends TypeLambda>(
+export declare const andThenDiscard: <F extends any>(
   F: Chainable<F>
-) => <R2, O2, E2, _>(
-  that: Kind<F, R2, O2, E2, _>
-) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
+) => <R2, O2, E2, _>(that: any) => <R1, O1, E1, A>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -60,14 +58,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bind: <F extends TypeLambda>(
+export declare const bind: <F extends any>(
   F: Chainable<F>
 ) => <N extends string, A extends object, R2, O2, E2, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1>(
-  self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  f: (a: A) => any
+) => <R1, O1, E1>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -79,11 +75,9 @@ Returns an effect that effectfully "peeks" at the success of this effect.
 **Signature**
 
 ```ts
-export declare const tap: <F extends TypeLambda>(
+export declare const tap: <F extends any>(
   F: Chainable<F>
-) => <A, R2, O2, E2, _>(
-  f: (a: A) => Kind<F, R2, O2, E2, _>
-) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
+) => <A, R2, O2, E2, _>(f: (a: A) => any) => <R1, O1, E1>(self: any) => any
 ```
 
 Added in v1.0.0

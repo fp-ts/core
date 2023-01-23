@@ -1,6 +1,6 @@
 ---
 title: typeclass/Traversable.ts
-nav_order: 26
+nav_order: 44
 parent: Modules
 ---
 
@@ -55,17 +55,9 @@ Returns a default `sequence` implementation.
 **Signature**
 
 ```ts
-export declare const sequence: <T extends TypeLambda>(
-  traverse: <F>(
-    F: Applicative<F>
-  ) => <A, R, O, E, B>(
-    f: (a: A) => Kind<F, R, O, E, B>
-  ) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
-) => <F>(
-  F: Applicative<F>
-) => <TR, TO, TE, R, O, E, A>(
-  self: Kind<T, TR, TO, TE, Kind<F, R, O, E, A>>
-) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
+export declare const sequence: <T extends any>(
+  traverse: <F>(F: any) => <A, R, O, E, B>(f: (a: A) => any) => <TR, TO, TE>(self: any) => any
+) => <F>(F: any) => <TR, TO, TE, R, O, E, A>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -77,14 +69,10 @@ Returns a default `sequence` composition.
 **Signature**
 
 ```ts
-export declare const sequenceComposition: <T extends TypeLambda, G extends TypeLambda>(
-  T: Traversable<T> & Covariant<T>,
+export declare const sequenceComposition: <T extends any, G extends any>(
+  T: any,
   G: Traversable<G>
-) => <F extends TypeLambda>(
-  F: Applicative<F>
-) => <TR, TO, TE, GR, GO, GE, R, O, E, A>(
-  self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, Kind<F, R, O, E, A>>>
-) => Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>>
+) => <F extends any>(F: any) => <TR, TO, TE, GR, GO, GE, R, O, E, A>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -96,16 +84,10 @@ Returns a default `traverse` composition.
 **Signature**
 
 ```ts
-export declare const traverseComposition: <T extends TypeLambda, G extends TypeLambda>(
+export declare const traverseComposition: <T extends any, G extends any>(
   T: Traversable<T>,
   G: Traversable<G>
-) => <F extends TypeLambda>(
-  F: Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => <TR, TO, TE, GR, GO, GE>(
-  self: Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, A>>
-) => Kind<F, R, O, E, Kind<T, TR, TO, TE, Kind<G, GR, GO, GE, B>>>
+) => <F extends any>(F: any) => <A, R, O, E, B>(f: (a: A) => any) => <TR, TO, TE, GR, GO, GE>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -120,13 +102,9 @@ returned by the provided function.
 **Signature**
 
 ```ts
-export declare const traverseTap: <T extends TypeLambda>(
+export declare const traverseTap: <T extends any>(
   T: Traversable<T>
-) => <F extends TypeLambda>(
-  F: Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
+) => <F extends any>(F: any) => <A, R, O, E, B>(f: (a: A) => any) => <TR, TO, TE>(self: any) => any
 ```
 
 Added in v1.0.0
