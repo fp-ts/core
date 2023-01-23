@@ -1,14 +1,4 @@
 {
   "exclude": ["src/internal/**/*.ts"],
-  "theme": "mikearnaldi/just-the-docs",
-  "compilerOptions": {
-    "noEmit": true,
-    "strict": true,
-    "paths": {
-      "@fp-ts/core": ["./src/index.ts"],
-      "@fp-ts/core/test/*": ["./test/*"],
-      "@fp-ts/core/examples/*": ["./examples/*"],
-      "@fp-ts/core/*": ["./src/*"]
-    }
-  }
+  "theme": "mikearnaldi/just-the-docs"
 }

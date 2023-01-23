@@ -33,7 +33,7 @@ importers:
       c8: ^7.11.3
       concurrently: ^7.6.0
       cpx: ^1.5.0
-      docs-ts: ^0.7.0
+      docs-ts: 0.6.10
       dtslint: github:gcanti/dtslint
       eslint: ^8.28.0
       eslint-import-resolver-typescript: ^3.5.2
@@ -76,7 +76,7 @@ importers:
       c8: 7.12.0
       concurrently: 7.6.0
       cpx: 1.5.0
-      docs-ts: 0.7.0_brpckf4sz23pco3jyty2eys3iq
+      docs-ts: 0.6.10_pulkjstupuiumlrt7ngjhrpf2e_brpckf4sz23pco3jyty2eys3iq
       dtslint: github.com/gcanti/dtslint/4552d162099399c4e14f8486ced673411e5b3659
       eslint: 8.28.0
       eslint-import-resolver-typescript: 3.5.2_ktrec6dplf4now6nlbc6d67jee
@@ -2381,8 +2381,8 @@ packages:
     dev: true
     patched: true
 
-  /docs-ts/0.7.0_brpckf4sz23pco3jyty2eys3iq:
-    resolution: {integrity: sha512-S9UM7Ddh0l3qwftSJiko+3+aGJrnGTnigKq4wpsOvQBmMJz7kMmdAeiTwNCRgzQI70oT3T2uyuzR9hy5JT2xPQ==}
+  /docs-ts/0.6.10_pulkjstupuiumlrt7ngjhrpf2e_brpckf4sz23pco3jyty2eys3iq:
+    resolution: {integrity: sha512-DTX9c5AJ92ojMOKqqvwF8t77C8Gdgs9FPB8seymHs+F+Wl6aapc3ZkHUM+p8o+jwcBmPoihxssdK903dfwQ1JQ==}
     hasBin: true
     peerDependencies:
       prettier: ^2.0.0
@@ -2402,6 +2402,7 @@ packages:
       ts-node: 8.10.2_typescript@4.9.3
       typescript: 4.9.3
     dev: true
+    patched: true
 
   /doctrine/2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
