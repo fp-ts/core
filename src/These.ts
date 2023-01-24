@@ -19,7 +19,7 @@ import type { Either, Left, Right } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import { structural } from "@fp-ts/core/internal/effect"
+import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Option } from "@fp-ts/core/Option"
@@ -109,10 +109,7 @@ export const of = right
  * @since 1.0.0
  */
 export const both = <E, A>(left: E, right: A): These<E, A> =>
-  Object.defineProperty({ _tag: "Both", left, right }, structural, {
-    enumerable: false,
-    value: true
-  })
+  Object.setPrototypeOf({ _tag: "Both", left, right }, proto)
 
 /**
  * @category constructors
