@@ -1,5 +1,11 @@
 # @fp-ts/core
 
+## 0.1.1
+
+### Patch Changes
+
+- [#48](https://github.com/fp-ts/core/pull/48) [`da0bae84`](https://github.com/fp-ts/core/commit/da0bae8487d59d78c5ba6470d37727ccc66538bb) Thanks [@gcanti](https://github.com/gcanti)! - change structural tracking
+
 ## 0.1.0
 
 ### Minor Changes
