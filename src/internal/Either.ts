@@ -4,7 +4,7 @@
 
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { structural } from "@fp-ts/core/internal/effect"
+import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Option } from "@fp-ts/core/Option"
 
@@ -21,11 +21,11 @@ export const isRight = <E, A>(ma: Either<E, A>): ma is Right<A> => ma._tag === "
 
 /** @internal */
 export const left = <E>(e: E): Either<E, never> =>
-  Object.defineProperty({ _tag: "Left", left: e }, structural, { enumerable: false, value: true })
+  Object.setPrototypeOf({ _tag: "Left", left: e }, proto)
 
 /** @internal */
 export const right = <A>(a: A): Either<never, A> =>
-  Object.defineProperty({ _tag: "Right", right: a }, structural, { enumerable: false, value: true })
+  Object.setPrototypeOf({ _tag: "Right", right: a }, proto)
 
 /** @internal */
 export const getLeft = <E, A>(
