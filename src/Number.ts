@@ -20,33 +20,69 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export const isNumber = predicate.isNumber
 
 /**
+ * @example
+ * import { sum } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(2, sum(3)), 5)
+ *
  * @since 1.0.0
  */
 export const sum = (that: number) =>
   (self: number): number => semigroup.numberSum.combine(self, that)
 
 /**
+ * @example
+ * import { multiply } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(2, multiply(3)), 6)
+ *
  * @since 1.0.0
  */
 export const multiply = (that: number) =>
   (self: number): number => semigroup.numberMultiply.combine(self, that)
 
 /**
+ * @example
+ * import { subtract } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(2, subtract(3)), -1)
+ *
  * @since 1.0.0
  */
 export const subtract = (that: number) => (self: number): number => self - that
 
 /**
+ * @example
+ * import { divide } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(6, divide(3)), 2)
+ *
  * @since 1.0.0
  */
 export const divide = (that: number) => (self: number): number => self / that
 
 /**
+ * @example
+ * import { increment } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(2, increment), 3)
+ *
  * @since 1.0.0
  */
 export const increment = (n: number): number => n + 1
 
 /**
+ * @example
+ * import { decrement } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(3, decrement), 2)
+ *
  * @since 1.0.0
  */
 export const decrement = (n: number): number => n - 1

@@ -205,6 +205,15 @@ Added in v1.0.0
 export declare const decrement: (n: number) => number
 ```
 
+**Example**
+
+```ts
+import { decrement } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(3, decrement), 2)
+```
+
 Added in v1.0.0
 
 ## divide
@@ -213,6 +222,15 @@ Added in v1.0.0
 
 ```ts
 export declare const divide: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { divide } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(6, divide(3)), 2)
 ```
 
 Added in v1.0.0
@@ -225,6 +243,15 @@ Added in v1.0.0
 export declare const increment: (n: number) => number
 ```
 
+**Example**
+
+```ts
+import { increment } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, increment), 3)
+```
+
 Added in v1.0.0
 
 ## multiply
@@ -233,6 +260,15 @@ Added in v1.0.0
 
 ```ts
 export declare const multiply: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { multiply } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, multiply(3)), 6)
 ```
 
 Added in v1.0.0
@@ -255,6 +291,15 @@ Added in v1.0.0
 export declare const subtract: (that: number) => (self: number) => number
 ```
 
+**Example**
+
+```ts
+import { subtract } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, subtract(3)), -1)
+```
+
 Added in v1.0.0
 
 ## sum
@@ -263,6 +308,15 @@ Added in v1.0.0
 
 ```ts
 export declare const sum: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { sum } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, sum(3)), 5)
 ```
 
 Added in v1.0.0

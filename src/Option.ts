@@ -74,20 +74,23 @@ export interface OptionTypeLambda extends TypeLambda {
 }
 
 /**
+ * Creates a new `Option` that represents a absence of value.
+ *
  * @category constructors
  * @since 1.0.0
  */
 export const none = <A = never>(): Option<A> => option.none
 
 /**
+ * Creates a new `Option` that wraps the given value.
+ *
  * @category constructors
  * @since 1.0.0
  */
 export const some: <A>(a: A) => Option<A> = option.some
 
 /**
- * Returns `true` if the specified value is an instance of `Option`, `false`
- * otherwise.
+ * Checks if the specified value is an instance of `Option`, returns `true` if it is, `false` otherwise.
  *
  * @example
  * import { some, none, isOption } from '@fp-ts/core/Option'
@@ -164,6 +167,12 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
 ): ((...a: A) => Option<B>) => (...a) => fromThrowable(() => f(...a))
 
 /**
+ * Returns the contained value if the option is `Some`, otherwise throws an error.
+ *
+ * @param onError - A function that returns the error to be thrown when the option is `None`
+ * @param self - The option to extract the value from
+ * @throws The error returned by `onError` if the option is `None`
+ *
  * @category interop
  * @since 1.0.0
  */
@@ -176,7 +185,10 @@ export const getOrThrow = (onError: LazyArg<unknown>) =>
   }
 
 /**
- * Returns an effect whose success is mapped by the specified `f` function.
+ * Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
+ *
+ * @param f - The function to map over the value of the `Option`
+ * @param self - An option to map
  *
  * @category mapping
  * @since 1.0.0
@@ -188,7 +200,10 @@ export const map = <A, B>(f: (a: A) => B) =>
  * @category mapping
  * @since 1.0.0
  */
-export const imap = covariant.imap<OptionTypeLambda>(map)
+export const imap: <A, B>(
+  to: (a: A) => B,
+  from: (b: B) => A
+) => (self: Option<A>) => Option<B> = covariant.imap<OptionTypeLambda>(map)
 
 /**
  * @category instances
@@ -347,8 +362,29 @@ export const bind: <N extends string, A extends object, B>(
   .bind(Chainable)
 
 /**
- * Returns an effect that effectfully "peeks" at the success of this effect.
+ * Sequences the specified `that` option but ignores its value.
  *
+ * It is useful when we want to chain multiple operations, but only care about the result of `self`.
+ *
+ * @param that - The option that will be ignored in the chain and discarded
+ * @param self - The option we care about
+ *
+ * @category sequencing
+ * @since 1.0.0
+ */
+export const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>) => Option<A> = chainable
+  .andThenDiscard(Chainable)
+
+/**
+ * Applies the provided function `f` to the value of the `Option` if it is `Some` and returns the original `Option`
+ * unless `f` returns `None`, in which case it returns `None`.
+ *
+ * This function is useful for performing additional computations on the value of the input `Option` without affecting its value.
+ *
+ * @param f - Function to apply to the value of the `Option` if it is `Some`
+ * @param self - The `Option` to apply the function to
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<A> = chainable.tap(
@@ -356,6 +392,11 @@ export const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<
 )
 
 /**
+ * Useful for debugging purposes, the `onSome` callback is called with the value of `self` if it is a `Some`.
+ *
+ * @param onSome - callback function that is called with the value of `self` if it is a `Some`
+ * @param self - the `Option` to inspect
+ *
  * @category debugging
  * @since 1.0.0
  */
@@ -370,6 +411,11 @@ export const inspectSome = <A>(
   }
 
 /**
+ * Useful for debugging purposes, the `onNone` callback is is called if `self` is a `None`.
+ *
+ * @param onNone - callback function that is is called if `self` is a `None`
+ * @param self - the `Option` to inspect
+ *
  * @category debugging
  * @since 1.0.0
  */
@@ -382,16 +428,6 @@ export const inspectNone = (
     }
     return self
   }
-
-/**
- * Sequences the specified effect after this effect, but ignores the value
- * produced by the effect.
- *
- * @category sequencing
- * @since 1.0.0
- */
-export const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>) => Option<A> = chainable
-  .andThenDiscard(Chainable)
 
 /**
  * @category instances
@@ -612,6 +648,10 @@ export const getFirstNoneMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applic
 )
 
 /**
+ * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
+ *
+ * @param collection - An iterable collection of `Option` to be searched
+ *
  * @category error handling
  * @since 1.0.0
  */
@@ -854,8 +894,12 @@ export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either
   either.fromOption
 
 /**
- * Takes a (lazy) default value, a function, and an `Option` value, if the `Option` value is `None` the default value is
- * returned, otherwise the function is applied to the value inside the `Some` and the result is returned.
+ * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
+ * function when passed the `Option`'s value.
+ *
+ * @param onNone - The value to be returned if the `Option` is `None`
+ * @param onSome - The function to be called if the `Option` is `Some`, it will be passed the `Option`'s value and its result will be returned
+ * @param self - The `Option` to match
  *
  * @example
  * import { some, none, match } from '@fp-ts/core/Option'
@@ -884,8 +928,11 @@ export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
   (self: Option<A>): B | C => isNone(self) ? onNone() : onSome(self.value)
 
 /**
- * Extracts the value out of the structure, if it exists. Otherwise returns the given default value
+ * Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
  *
+ * @param onNone - Function that returns the default value to return if the `Option` is `None`
+ * @param self - The `Option` to get the value of
+ *  *
  * @example
  * import { some, none, getOrElse } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
@@ -971,7 +1018,9 @@ export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
     isNone(self) ? option.none : fromNullable(f(self.value))
 
 /**
- * Extracts the value out of the structure, if it exists. Otherwise returns `null`.
+ * Returns the value of the option if it is a `Some`, otherwise returns `null`.
+ *
+ * @param self - The option to extract the value from
  *
  * @example
  * import { some, none, getOrNull } from '@fp-ts/core/Option'
@@ -986,7 +1035,9 @@ export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
 export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
 
 /**
- * Extracts the value out of the structure, if it exists. Otherwise returns `undefined`.
+ * Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
+ *
+ * @param self - The option to extract the value from
  *
  * @example
  * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
@@ -1010,17 +1061,10 @@ export const catchAll = <B>(that: LazyArg<Option<B>>) =>
   <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 /**
- * Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
- * types of kind `* -> *`.
+ * Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
  *
- * In case of `Option` returns the left-most non-`None` value.
- *
- * | x       | y       | pipe(x, orElse(y) |
- * | ------- | ------- | ------------------|
- * | none    | none    | none              |
- * | some(a) | none    | some(a)           |
- * | none    | some(b) | some(b)           |
- * | some(a) | some(b) | some(a)           |
+ * @param that - The option to return if `self` option is `None`
+ * @param self - The first option to be checked
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -1062,8 +1106,12 @@ export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | 
   catchAll(() => that)
 
 /**
- * Returns an effect that will produce the value of this effect, unless it
- * fails, in which case, it will produce the value of the specified effect.
+ * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
+ * which contains information about which of the two options has been chosen.
+ * This is useful when it's important to know whether the value was retrieved from the first option or the second option.
+ *
+ * @param that - The second option to be considered if the first option is `None`
+ * @param self - The first option to be checked
  *
  * @category error handling
  * @since 1.0.0
