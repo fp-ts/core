@@ -14,6 +14,16 @@ Functional programming in TypeScript
   </a>
 </p>
 
+# Credits and sponsorship
+
+This library was inspired by the following projects:
+
+- [fp-ts](https://github.com/gcanti/fp-ts)
+
+A huge thanks to my sponsors who made the development of `@fp-ts/core` possible.
+
+If you also want to **become a sponsor** to ensure this library continues to improve and receive maintenance, check out my [GitHub Sponsors profile](https://github.com/sponsors/gcanti?o=sd&sc=t)
+
 # Typed functional programming in TypeScript
 
 This project represents the next major iteration of [`fp-ts`](https://github.com/gcanti/fp-ts) and it's objective is a reconciliation with [`@effect`](https://github.com/Effect-TS) in order to unify the ecosystems.
@@ -44,12 +54,15 @@ To install the **alpha** version:
 npm install @fp-ts/core
 ```
 
+**Warning**. This package is primarily published to receive early feedback and for contributors, during this development phase we cannot guarantee the stability of the APIs, consider each release to contain breaking changes.
+
 # Documentation
 
 - [Typeclass overview](./typeclass.md)
-- [Data overview](./data.md)
-- [The `Option` data type](./Option.md)
-- [The `Either` data type](./Either.md)
+- [Standard TypeScript types](./ts-types.md) (WIP)
+- Functional Error handling
+  - [The `Option` data type](./Option.md) (WIP)
+  - [The `Either` data type](./Either.md) (WIP)
 - [API Reference](https://fp-ts.github.io/core/)
 
 # License

@@ -20,6 +20,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [tap](#tap)
 - [combining](#combining)
   - [getFirstNoneMonoid](#getfirstnonemonoid)
   - [getFirstNoneSemigroup](#getfirstnonesemigroup)
@@ -127,13 +129,29 @@ Added in v1.0.0
   - [exists](#exists)
   - [flatten](#flatten)
   - [struct](#struct)
-  - [tap](#tap)
   - [toArray](#toarray)
   - [tuple](#tuple)
   - [tupled](#tupled)
   - [unit](#unit)
 
 ---
+
+# combinators
+
+## tap
+
+Applies the provided function `f` to the value of the `Option` if it is `Some` and returns the original `Option`
+unless `f` returns `None`, in which case it returns `None`.
+
+This function is useful for performing additional computations on the value of the input `Option` without affecting its value.
+
+**Signature**
+
+```ts
+export declare const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<A>
+```
+
+Added in v1.0.0
 
 # combining
 
@@ -181,6 +199,8 @@ Added in v1.0.0
 
 ## none
 
+Creates a new `Option` that represents a absence of value.
+
 **Signature**
 
 ```ts
@@ -200,6 +220,8 @@ export declare const of: <A>(a: A) => Option<A>
 Added in v1.0.0
 
 ## some
+
+Creates a new `Option` that wraps the given value.
 
 **Signature**
 
@@ -268,7 +290,7 @@ Added in v1.0.0
 
 ## getOrNull
 
-Extracts the value out of the structure, if it exists. Otherwise returns `null`.
+Returns the value of the option if it is a `Some`, otherwise returns `null`.
 
 **Signature**
 
@@ -290,7 +312,7 @@ Added in v1.0.0
 
 ## getOrUndefined
 
-Extracts the value out of the structure, if it exists. Otherwise returns `undefined`.
+Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
 
 **Signature**
 
@@ -337,6 +359,8 @@ Added in v1.0.0
 
 ## inspectNone
 
+Useful for debugging purposes, the `onNone` callback is is called if `self` is a `None`.
+
 **Signature**
 
 ```ts
@@ -346,6 +370,8 @@ export declare const inspectNone: (onNone: () => void) => <A>(self: Option<A>) =
 Added in v1.0.0
 
 ## inspectSome
+
+Useful for debugging purposes, the `onSome` callback is called with the value of `self` if it is a `Some`.
 
 **Signature**
 
@@ -434,6 +460,8 @@ Added in v1.0.0
 
 ## firstSomeOf
 
+Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
+
 **Signature**
 
 ```ts
@@ -444,7 +472,7 @@ Added in v1.0.0
 
 ## getOrElse
 
-Extracts the value out of the structure, if it exists. Otherwise returns the given default value
+Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
 
 **Signature**
 
@@ -478,17 +506,7 @@ Added in v1.0.0
 
 ## orElse
 
-Identifies an associative operation on a type constructor. It is similar to `Semigroup`, except that it applies to
-types of kind `* -> *`.
-
-In case of `Option` returns the left-most non-`None` value.
-
-| x       | y       | pipe(x, orElse(y) |
-| ------- | ------- | ----------------- |
-| none    | none    | none              |
-| some(a) | none    | some(a)           |
-| none    | some(b) | some(b)           |
-| some(a) | some(b) | some(a)           |
+Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
 
 **Signature**
 
@@ -512,8 +530,9 @@ Added in v1.0.0
 
 ## orElseEither
 
-Returns an effect that will produce the value of this effect, unless it
-fails, in which case, it will produce the value of the specified effect.
+Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
+which contains information about which of the two options has been chosen.
+This is useful when it's important to know whether the value was retrieved from the first option or the second option.
 
 **Signature**
 
@@ -608,8 +627,7 @@ Added in v1.0.0
 
 ## isOption
 
-Returns `true` if the specified value is an instance of `Option`, `false`
-otherwise.
+Checks if the specified value is an instance of `Option`, returns `true` if it is, `false` otherwise.
 
 **Signature**
 
@@ -876,6 +894,8 @@ Added in v1.0.0
 
 ## getOrThrow
 
+Returns the contained value if the option is `Some`, otherwise throws an error.
+
 **Signature**
 
 ```ts
@@ -1065,14 +1085,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const imap: any
+export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => (self: Option<A>) => Option<B>
 ```
 
 Added in v1.0.0
 
 ## map
 
-Returns an effect whose success is mapped by the specified `f` function.
+Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
 
 **Signature**
 
@@ -1123,8 +1143,8 @@ Added in v1.0.0
 
 ## match
 
-Takes a (lazy) default value, a function, and an `Option` value, if the `Option` value is `None` the default value is
-returned, otherwise the function is applied to the value inside the `Some` and the result is returned.
+Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
+function when passed the `Option`'s value.
 
 **Signature**
 
@@ -1167,8 +1187,9 @@ Added in v1.0.0
 
 ## andThenDiscard
 
-Sequences the specified effect after this effect, but ignores the value
-produced by the effect.
+Sequences the specified `that` option but ignores its value.
+
+It is useful when we want to chain multiple operations, but only care about the result of `self`.
 
 **Signature**
 
@@ -1461,18 +1482,6 @@ Added in v1.0.0
 export declare const struct: <R extends Record<string, Option<any>>>(
   r: R
 ) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }>
-```
-
-Added in v1.0.0
-
-## tap
-
-Returns an effect that effectfully "peeks" at the success of this effect.
-
-**Signature**
-
-```ts
-export declare const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<A>
 ```
 
 Added in v1.0.0
