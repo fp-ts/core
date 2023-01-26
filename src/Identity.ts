@@ -349,18 +349,6 @@ export const lift2: <A, B, C>(
 )
 
 /**
- * Lifts a ternary function into `Identity`.
- *
- * @category lifting
- * @since 1.0.0
- */
-export const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => (fa: Identity<A>, fb: Identity<B>, fc: Identity<C>) => Identity<D> = semiApplicative.lift3(
-  SemiApplicative
-)
-
-/**
  * @since 1.0.0
  */
 export const ap: <A>(

@@ -16,6 +16,7 @@ import { constNull, constUndefined, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
+import * as N from "@fp-ts/core/Number"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -35,6 +36,7 @@ import type * as semiAlternative from "@fp-ts/core/typeclass/SemiAlternative"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
@@ -484,6 +486,8 @@ export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<
     .liftSemigroup(SemiApplicative)
 
 /**
+ * Lifts a binary function into `Either` as uncurried binary function.
+ *
  * @category lifting
  * @since 1.0.0
  */
@@ -493,18 +497,24 @@ export const lift2: <A, B, C>(
   .lift2(SemiApplicative)
 
 /**
+ * Lifts a binary function into `Either` as curried binary function.
+ *
  * @category lifting
  * @since 1.0.0
  */
-export const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => <E1, E2, E3>(
-  fa: Either<E1, A>,
+export const lift2Curried: <A, B, C>(
+  f: (a: A, b: B) => C
+) => <E2>(that: Either<E2, B>) => <E1>(self: Either<E1, A>) => Either<E2 | E1, C> = semiApplicative
+  .lift2Curried(SemiApplicative)
+
+/**
+ * @category lifting
+ * @since 1.0.0
+ */
+export const map2: <E2, B, A, C>(
   fb: Either<E2, B>,
-  fc: Either<E3, C>
-) => Either<E1 | E2 | E3, D> = semiApplicative.lift3(
-  SemiApplicative
-)
+  f: (a: A, b: B) => C
+) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C> = semiApplicative.map2(SemiApplicative)
 
 /**
  * @since 1.0.0
@@ -1126,3 +1136,46 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
  */
 export const exists = <A>(predicate: Predicate<A>) =>
   <E>(self: Either<E, A>): boolean => isLeft(self) ? false : predicate(self.right)
+
+/**
+ * @since 1.0.0
+ */
+export const sum = lift2Curried(N.SemigroupSum.combine)
+
+/**
+ * @since 1.0.0
+ */
+export const multiply = lift2Curried(N.SemigroupMultiply.combine)
+
+/**
+ * @since 1.0.0
+ */
+export const subtract = lift2Curried((a: number, b: number) => a - b)
+
+/**
+ * @since 1.0.0
+ */
+export const divide = lift2Curried((a: number, b: number) => a / b)
+
+/**
+ * Semigroup returning the left-most non-`Left` value. If both operands are `Right`s then the inner values are
+ * concatenated using the provided `Semigroup`
+ *
+ * @category instances
+ * @since 2.0.0
+ */
+export const getSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E, A>> =>
+  semigroup.fromCombine((
+    x,
+    y
+  ) => (isLeft(y) ? x : isLeft(x) ? y : right(S.combine(x.right, y.right))))
+
+/**
+ * @since 1.0.0
+ */
+export const sumMany = getSemigroup(N.SemigroupSum).combineMany
+
+/**
+ * @since 1.0.0
+ */
+export const multiplyMany = getSemigroup(N.SemigroupMultiply).combineMany

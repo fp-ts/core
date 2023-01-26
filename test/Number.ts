@@ -8,6 +8,8 @@ describe.concurrent("Number", () => {
     expect(Number.SemigroupMin).exists
     expect(Number.MonoidMax).exists
     expect(Number.MonoidMin).exists
+    expect(Number.sumAll).exists
+    expect(Number.multiplyAll).exists
   })
 
   it("isNumber", () => {

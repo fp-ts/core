@@ -182,6 +182,16 @@ export const MonoidMin = bounded.min(Bounded)
  */
 export const sign = (n: number): Ordering => n < 0 ? -1 : n > 0 ? 1 : 0
 
+/**
+ * @since 1.0.0
+ */
+export const sumAll: (collection: Iterable<number>) => number = MonoidSum.combineAll
+
+/**
+ * @since 1.0.0
+ */
+export const multiplyAll: (collection: Iterable<number>) => number = MonoidMultiply.combineAll
+
 /*
 
   Missing:

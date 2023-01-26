@@ -55,7 +55,6 @@ describe("These", () => {
     expect(_.SemiApplicative).exist
     expect(_.getFirstLeftSemigroup).exist // liftSemigroup
     expect(_.lift2).exist
-    expect(_.lift3).exist
     expect(_.ap).exist
     expect(_.andThenDiscard).exist
     expect(_.andThen).exist

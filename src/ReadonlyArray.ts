@@ -1763,17 +1763,6 @@ export const lift2: <A, B, C>(
 ) as any
 
 /**
- * Lifts a ternary function into `ReadonlyArray`.
- *
- * @category lifting
- * @since 1.0.0
- */
-export const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => (fa: ReadonlyArray<A>, fb: ReadonlyArray<B>, fc: ReadonlyArray<C>) => Array<D> =
-  semiApplicative.lift3(SemiApplicative) as any
-
-/**
  * @category lifting
  * @since 1.0.0
  */
