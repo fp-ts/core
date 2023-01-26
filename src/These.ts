@@ -1011,20 +1011,6 @@ export const lift2: <A, B, C>(
   .lift2(SemiApplicative)
 
 /**
- * @category lifting
- * @since 1.0.0
- */
-export const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => <E1, E2, E3>(
-  fa: Validated<E1, A>,
-  fb: Validated<E2, B>,
-  fc: Validated<E3, C>
-) => Validated<E1 | E2 | E3, D> = semiApplicative.lift3(
-  SemiApplicative
-)
-
-/**
  * @since 1.0.0
  */
 export const ap: <E2, A>(

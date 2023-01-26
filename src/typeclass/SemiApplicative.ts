@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { pipe } from "@fp-ts/core/Function"
+import { identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
@@ -29,15 +29,24 @@ export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   })
 
 /**
+ * Binary mapping into `F` context.
+ *
+ * @since 1.0.0
+ */
+export const map2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+  <R2, O2, E2, B, A, C>(fb: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C) =>
+    <R1, O1, E1>(fa: Kind<F, R1, O1, E1, A>): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
+      pipe(F.product(fa, fb), F.map(([a, b]) => f(a, b)))
+
+/**
  * @since 1.0.0
  */
 export const ap = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <R2, O2, E2, A>(
-    fa: Kind<F, R2, O2, E2, A>
-  ) =>
-    <R1, O1, E1, B>(
-      self: Kind<F, R1, O1, E1, (a: A) => B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => pipe(F.product(self, fa), F.map(([f, a]) => f(a)))
+    that: Kind<F, R2, O2, E2, A>
+  ): <R1, O1, E1, B>(
+    self: Kind<F, R1, O1, E1, (a: A) => B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => map2(F)(that, (f, a) => f(a))
 
 /**
  * @since 1.0.0
@@ -45,10 +54,9 @@ export const ap = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 export const andThenDiscard = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <R2, O2, E2, _>(
     that: Kind<F, R2, O2, E2, _>
-  ) =>
-    <R1, O1, E1, A>(
-      self: Kind<F, R1, O1, E1, A>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => pipe(F.product(self, that), F.map(([a]) => a))
+  ): <R1, O1, E1, A>(
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => map2(F)(that, identity)
 
 /**
  * @since 1.0.0
@@ -56,13 +64,12 @@ export const andThenDiscard = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
-  ) =>
-    <R1, O1, E1, _>(
-      self: Kind<F, R1, O1, E1, _>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => pipe(F.product(self, that), F.map(([_, a]) => a))
+  ): <R1, O1, E1, _>(
+    self: Kind<F, R1, O1, E1, _>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => map2(F)(that, SK)
 
 /**
- * Lifts a binary function into `F`.
+ * Lifts a binary function into `F` as uncurried binary function.
  *
  * @since 1.0.0
  */
@@ -71,21 +78,16 @@ export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
     <R1, O1, E1, R2, O2, E2>(
       fa: Kind<F, R1, O1, E1, A>,
       fb: Kind<F, R2, O2, E2, B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(F.product(fa, fb), F.map(([a, b]) => f(a, b)))
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(fa, map2(F)(fb, (a, b) => f(a, b)))
 
 /**
- * Lifts a ternary function into 'F'.
+ * Lifts a binary function into `F` as curried binary function.
  *
  * @since 1.0.0
  */
-export const lift3 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>
-    <R1, O1, E1, R2, O2, E2, R3, O3, E3>(
-      fa: Kind<F, R1, O1, E1, A>,
-      fb: Kind<F, R2, O2, E2, B>,
-      fc: Kind<F, R3, O3, E3, C>
-    ): Kind<F, R1 & R2 & R3, O1 | O2 | O3, E1 | E2 | E3, D> =>
-      pipe(
-        F.product(F.product(fa, fb), fc),
-        F.map(([[a, b], c]) => f(a, b, c))
-      )
+export const lift2Curried = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+  <A, B, C>(f: (a: A, b: B) => C) =>
+    <R2, O2, E2>(
+      that: Kind<F, R2, O2, E2, B>
+    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
+      map2(F)(that, (a, b) => f(a, b))

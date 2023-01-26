@@ -16,6 +16,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
+import * as N from "@fp-ts/core/Number"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -30,6 +31,7 @@ import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
+import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as of_ from "@fp-ts/core/typeclass/Of"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import * as order from "@fp-ts/core/typeclass/Order"
@@ -39,6 +41,7 @@ import type * as semiAlternative from "@fp-ts/core/typeclass/SemiAlternative"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
@@ -562,31 +565,16 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
  */
 export const getMonoid = <A>(
   Semigroup: Semigroup<A>
-): Monoid<Option<A>> => {
-  const combine = (self: Option<A>, that: Option<A>): Option<A> =>
-    isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(self.value, that.value))
-  return ({
-    combine,
-    combineMany: (self, collection) => {
-      let c = self
-      for (const o of collection) {
-        c = combine(c, o)
-      }
-      return c
-    },
-    combineAll: (collection: Iterable<Option<A>>): Option<A> => {
-      let c: Option<A> = option.none
-      for (const o of collection) {
-        c = combine(c, o)
-      }
-      return c
-    },
-    empty: option.none
-  })
-}
+): Monoid<Option<A>> =>
+  monoid.fromSemigroup(
+    semigroup.fromCombine((self, that) =>
+      isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(self.value, that.value))
+    ),
+    option.none
+  )
 
 /**
- * Lifts a binary function into `Option`.
+ * Lifts a binary function into `Option` as uncurried binary function.
  *
  * @category lifting
  * @since 1.0.0
@@ -595,16 +583,22 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Optio
   semiApplicative.lift2(SemiApplicative)
 
 /**
- * Lifts a ternary function into `Option`.
+ * Lifts a binary function into `Option` as curried binary function.
  *
  * @category lifting
  * @since 1.0.0
  */
-export const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D> = semiApplicative.lift3(
-  SemiApplicative
-)
+export const lift2Curried: <A, B, C>(
+  f: (a: A, b: B) => C
+) => (that: Option<B>) => (self: Option<A>) => Option<C> = semiApplicative
+  .lift2Curried(SemiApplicative)
+
+/**
+ * @category lifting
+ * @since 1.0.0
+ */
+export const map2: <B, A, C>(fb: Option<B>, f: (a: A, b: B) => C) => (fa: Option<A>) => Option<C> =
+  semiApplicative.map2(SemiApplicative)
 
 /**
  * @since 1.0.0
@@ -616,7 +610,7 @@ export const ap: <A>(
 )
 
 /**
- * Semigroup returning the left-most `None` value. If both operands are `Right`s then the inner values
+ * Semigroup returning the left-most `None` value. If both operands are `Some`s then the inner values
  * are concatenated using the provided `Semigroup`.
  *
  * @category combining
@@ -1237,3 +1231,33 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
  */
 export const exists = <A>(predicate: Predicate<A>) =>
   (self: Option<A>): boolean => isNone(self) ? false : predicate(self.value)
+
+/**
+ * @since 1.0.0
+ */
+export const sum = lift2Curried(N.SemigroupSum.combine)
+
+/**
+ * @since 1.0.0
+ */
+export const multiply = lift2Curried(N.SemigroupMultiply.combine)
+
+/**
+ * @since 1.0.0
+ */
+export const subtract = lift2Curried((a: number, b: number) => a - b)
+
+/**
+ * @since 1.0.0
+ */
+export const divide = lift2Curried((a: number, b: number) => a / b)
+
+/**
+ * @since 1.0.0
+ */
+export const sumAll = getMonoid(N.SemigroupSum).combineAll
+
+/**
+ * @since 1.0.0
+ */
+export const multiplyAll = getMonoid(N.SemigroupMultiply).combineAll

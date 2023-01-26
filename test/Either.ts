@@ -53,7 +53,7 @@ describe.concurrent("Either", () => {
     expect(_.SemiApplicative).exist
     expect(_.getFirstLeftSemigroup).exist // liftSemigroup
     expect(_.lift2).exist
-    expect(_.lift3).exist
+    expect(_.lift2Curried).exist
     expect(_.ap).exist
     expect(_.andThenDiscard).exist
     expect(_.andThen).exist
@@ -73,6 +73,8 @@ describe.concurrent("Either", () => {
     expect(_.traverse).exist
     expect(_.sequence).exist
     expect(_.traverseTap).exist
+
+    expect(_.getSemigroup).exist
   })
 
   it("structural tracking", () => {
@@ -484,5 +486,49 @@ describe.concurrent("Either", () => {
     }, identity)
     Util.deepStrictEqual(f("a"), _.right(1))
     Util.deepStrictEqual(f(""), _.left(new Error("empty string")))
+  })
+
+  it("map2", () => {
+    expect(pipe(_.left("a"), _.map2(_.right(2), (a, b) => a + b))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.map2(_.left("a"), (a, b) => a + b))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.map2(_.right(2), (a, b) => a + b))).toEqual(_.right(3))
+  })
+
+  it("sum", () => {
+    expect(pipe(_.left("a"), _.sum(_.right(2)))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.sum(_.left("a")))).toEqual(_.left("a"))
+    expect(pipe(_.right(2), _.sum(_.right(3)))).toEqual(_.right(5))
+  })
+
+  it("multiply", () => {
+    expect(pipe(_.left("a"), _.multiply(_.right(2)))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.multiply(_.left("a")))).toEqual(_.left("a"))
+    expect(pipe(_.right(2), _.multiply(_.right(3)))).toEqual(_.right(6))
+  })
+
+  it("subtract", () => {
+    expect(pipe(_.left("a"), _.subtract(_.right(2)))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.subtract(_.left("a")))).toEqual(_.left("a"))
+    expect(pipe(_.right(2), _.subtract(_.right(3)))).toEqual(_.right(-1))
+  })
+
+  it("subtract", () => {
+    expect(pipe(_.left("a"), _.divide(_.right(2)))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.divide(_.left("a")))).toEqual(_.left("a"))
+    expect(pipe(_.right(6), _.divide(_.right(3)))).toEqual(_.right(2))
+  })
+
+  it("sumMany", () => {
+    expect(_.sumMany(_.left("a"), [])).toEqual(_.left("a"))
+    expect(_.sumMany(_.left("a"), [_.right(2), _.right(3)])).toEqual(_.right(5))
+    expect(_.sumMany(_.right(0), [_.right(2), _.right(3)])).toEqual(_.right(5))
+    expect(_.sumMany(_.right(0), [_.right(2), _.left("a"), _.right(3)])).toEqual(_.right(5))
+  })
+
+  it("multiplyMany", () => {
+    expect(_.multiplyMany(_.left("a"), [])).toEqual(_.left("a"))
+    expect(_.multiplyMany(_.left("a"), [_.right(2), _.right(3)])).toEqual(_.right(6))
+    expect(_.multiplyMany(_.right(1), [_.right(2), _.right(3)])).toEqual(_.right(6))
+    expect(_.multiplyMany(_.right(1), [_.right(2), _.left("a"), _.right(3)])).toEqual(_.right(6))
   })
 })

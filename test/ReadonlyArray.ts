@@ -47,7 +47,6 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.SemiApplicative).exist
     expect(RA.liftSemigroup).exist
     expect(RA.lift2).exist
-    expect(RA.lift3).exist
     expect(RA.ap).exist
 
     expect(RA.Applicative).exist
