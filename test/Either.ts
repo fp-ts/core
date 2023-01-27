@@ -62,7 +62,6 @@ describe.concurrent("Either", () => {
 
     expect(_.SemiCoproduct).exist
     expect(_.getFirstRightSemigroup).exist // getSemigroup
-    expect(_.firstSuccessOf).exist
 
     expect(_.SemiAlternative).exist
 
@@ -325,15 +324,15 @@ describe.concurrent("Either", () => {
     Util.deepStrictEqual(_.fromIterable(() => "e")(["a"]), _.right("a"))
   })
 
-  it("firstSuccessOf", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.firstSuccessOf([])), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("e"), _.firstSuccessOf([])), _.left("e"))
+  it("firstRightOf", () => {
+    Util.deepStrictEqual(pipe(_.right(1), _.firstRightOf([])), _.right(1))
+    Util.deepStrictEqual(pipe(_.left("e"), _.firstRightOf([])), _.left("e"))
     Util.deepStrictEqual(
-      pipe(_.left("e1"), _.firstSuccessOf([_.left("e2"), _.left("e3"), _.left("e4"), _.right(1)])),
+      pipe(_.left("e1"), _.firstRightOf([_.left("e2"), _.left("e3"), _.left("e4"), _.right(1)])),
       _.right(1)
     )
     Util.deepStrictEqual(
-      pipe(_.left("e1"), _.firstSuccessOf([_.left("e2"), _.left("e3"), _.left("e4")])),
+      pipe(_.left("e1"), _.firstRightOf([_.left("e2"), _.left("e3"), _.left("e4")])),
       _.left("e4")
     )
   })

@@ -45,7 +45,7 @@ Added in v1.0.0
   - [bindTo](#bindto)
   - [let](#let)
 - [error handling](#error-handling)
-  - [firstSuccessOf](#firstsuccessof)
+  - [firstRightOf](#firstrightof)
   - [mapLeft](#mapleft)
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
@@ -406,12 +406,12 @@ Added in v1.0.0
 
 # error handling
 
-## firstSuccessOf
+## firstRightOf
 
 **Signature**
 
 ```ts
-export declare const firstSuccessOf: <E, A>(collection: Iterable<Either<E, A>>) => (self: Either<E, A>) => Either<E, A>
+export declare const firstRightOf: <E, A>(collection: Iterable<Either<E, A>>) => (self: Either<E, A>) => Either<E, A>
 ```
 
 Added in v1.0.0

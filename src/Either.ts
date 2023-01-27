@@ -542,7 +542,7 @@ export const getFirstLeftMonoid: <A, E>(M: Monoid<A>) => Monoid<Either<E, A>> = 
  * @category error handling
  * @since 1.0.0
  */
-export const firstSuccessOf = <E, A>(collection: Iterable<Either<E, A>>) =>
+export const firstRightOf = <E, A>(collection: Iterable<Either<E, A>>) =>
   (self: Either<E, A>): Either<E, A> => {
     let out = self
     if (isRight(out)) {
@@ -563,7 +563,7 @@ export const firstSuccessOf = <E, A>(collection: Iterable<Either<E, A>>) =>
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
   ...Invariant,
   coproduct: (self, that) => isRight(self) ? self : that,
-  coproductMany: (self, collection) => pipe(self, firstSuccessOf(collection))
+  coproductMany: (self, collection) => pipe(self, firstRightOf(collection))
 }
 
 /**
