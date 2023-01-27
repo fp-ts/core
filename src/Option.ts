@@ -163,7 +163,7 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
 /**
  * Returns the contained value if the option is `Some`, otherwise throws an error.
  *
- * @param onError - An optional function that returns the error to be thrown when the option is `None`
+ * @param onNone - An optional function that returns the error to be thrown when the option is `None`
  * @param self - The option to extract the value from
  * @throws The error returned by `onError` if the option is `None`
  *
@@ -171,13 +171,13 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
  * @since 1.0.0
  */
 export const getOrThrow = (
-  onError: LazyArg<Error> = () => new Error("getOrThrow called on a None")
+  onNone: LazyArg<Error> = () => new Error("getOrThrow called on a None")
 ) =>
   <A>(self: Option<A>): A => {
     if (isSome(self)) {
       return self.value
     }
-    throw onError()
+    throw onNone()
   }
 
 /**
@@ -708,11 +708,17 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
 }
 
 /**
+ * @since 1.0.0
+ */
+export const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
+  (self: Option<A>): B => isNone(self) ? b : f(b, self.value)
+
+/**
  * @category instances
  * @since 1.0.0
  */
 export const Foldable: foldable.Foldable<OptionTypeLambda> = {
-  reduce: (b, f) => (self) => isNone(self) ? b : f(b, self.value)
+  reduce
 }
 
 /**
@@ -1208,11 +1214,38 @@ export const subtract = lift2Curried((a: number, b: number) => a - b)
 export const divide = lift2Curried((a: number, b: number) => a / b)
 
 /**
+ * Reduces an `Iterable` of `Option<A>` to a single value of type `B`.
+ *
  * @since 1.0.0
+ *
+ * @param b - The initial value of the accumulator
+ * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`
+ * @param self - The Iterable of `Option<A>` to be reduced
+ *
+ * @example
+ * import { some, none, reduceAll } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * const iterable = [some(1), none(), some(2), none()]
+ * assert.strictEqual(pipe(iterable, reduceAll(0, (b, a) => b + a)), 3)
  */
-export const sumAll = getOptionalMonoid(N.SemigroupSum).combineAll
+export const reduceAll = <B, A>(b: B, f: (b: B, a: A) => B) =>
+  (self: Iterable<Option<A>>): B => {
+    let out: B = b
+    for (const oa of self) {
+      if (isSome(oa)) {
+        out = f(out, oa.value)
+      }
+    }
+    return out
+  }
 
 /**
  * @since 1.0.0
  */
-export const multiplyAll = getOptionalMonoid(N.SemigroupMultiply).combineAll
+export const sumAll = reduceAll(0, N.SemigroupSum.combine)
+
+/**
+ * @since 1.0.0
+ */
+export const multiplyAll = reduceAll(1, N.SemigroupMultiply.combine)
