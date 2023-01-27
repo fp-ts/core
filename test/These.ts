@@ -750,12 +750,6 @@ describe("These", () => {
     Util.deepStrictEqual(pipe(_.both("e1", 1), _.orElseFail(() => "e2")), _.both("e1", 1))
   })
 
-  it("orElseSucceed", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.orElseSucceed(() => 2)), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("e"), _.orElseSucceed(() => 2)), _.right(2))
-    Util.deepStrictEqual(pipe(_.both("e", 1), _.orElseSucceed(() => 2)), _.both("e", 1))
-  })
-
   it("firstSuccessOf", () => {
     Util.deepStrictEqual(pipe(_.right(1), _.firstRightOrBothOf([])), _.right(1))
     Util.deepStrictEqual(pipe(_.left("e"), _.firstRightOrBothOf([])), _.left("e"))

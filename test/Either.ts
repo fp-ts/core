@@ -114,11 +114,6 @@ describe.concurrent("Either", () => {
     Util.deepStrictEqual(pipe(_.left("e1"), _.orElseFail(() => "e2")), _.left("e2"))
   })
 
-  it("orElseSucceed", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.orElseSucceed(() => 2)), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("e"), _.orElseSucceed(() => 2)), _.right(2))
-  })
-
   it("reduce", () => {
     Util.deepStrictEqual(pipe(_.right("bar"), _.Foldable.reduce("foo", (b, a) => b + a)), "foobar")
     Util.deepStrictEqual(pipe(_.left("bar"), _.Foldable.reduce("foo", (b, a) => b + a)), "foo")

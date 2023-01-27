@@ -150,11 +150,6 @@ describe.concurrent("Option", () => {
     expect(pipe(_.none(), _.orElseEither(_.none()))).toEqual(_.none())
   })
 
-  it("orElseSucceed", () => {
-    Util.deepStrictEqual(pipe(_.some(1), _.orElseSucceed(() => 2)), _.some(1))
-    Util.deepStrictEqual(pipe(_.none(), _.orElseSucceed(() => 2)), _.some(2))
-  })
-
   it("inspectSome", () => {
     const log: Array<number> = []
     pipe(
