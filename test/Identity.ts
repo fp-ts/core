@@ -7,7 +7,6 @@ import * as U from "./util"
 describe.concurrent("Identity", () => {
   it("instances and derived exports", () => {
     expect(_.Invariant).exist
-    expect(_.imap).exist
     expect(_.tupled).exist
     expect(_.bindTo).exist
 

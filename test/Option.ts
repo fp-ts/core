@@ -12,7 +12,6 @@ const p = (n: number): boolean => n > 2
 describe.concurrent("Option", () => {
   it("instances and derived exports", () => {
     expect(_.Invariant).exist
-    expect(_.imap).exist
     expect(_.tupled).exist
     expect(_.bindTo).exist
 

@@ -616,20 +616,11 @@ export const map: <A, B>(f: (a: A) => B) => <E>(self: These<E, A>) => These<E, B
 export const Covariant: covariant.Covariant<TheseTypeLambda> = covariant.make(map)
 
 /**
- * @category mapping
- * @since 1.0.0
- */
-export const imap: <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => <E>(self: These<E, A>) => These<E, B> = Covariant.imap
-
-/**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<TheseTypeLambda> = {
-  imap
+  imap: Covariant.imap
 }
 
 /**
@@ -984,7 +975,7 @@ const productMany = <E, A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
-  imap,
+  imap: Invariant.imap,
   product,
   productMany
 }
@@ -1212,7 +1203,7 @@ export const composeKleisliArrow: <B, E2, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<ValidatedTypeLambda> = {
-  imap,
+  imap: Invariant.imap,
   map,
   flatMap
 }
@@ -1281,7 +1272,7 @@ export const tap: <A, E2, _>(
  * @since 1.0.0
  */
 export const Monad: monad.Monad<ValidatedTypeLambda> = {
-  imap,
+  imap: Invariant.imap,
   map,
   of,
   flatMap

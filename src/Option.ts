@@ -200,20 +200,19 @@ export const map = <A, B>(f: (a: A) => B) =>
   (self: Option<A>): Option<B> => isNone(self) ? option.none : some(f(self.value))
 
 /**
- * @category mapping
+ * @category instances
  * @since 1.0.0
  */
-export const imap: <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => (self: Option<A>) => Option<B> = covariant.imap<OptionTypeLambda>(map)
+export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(
+  map
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  imap
+  imap: Covariant.imap
 }
 
 /**
@@ -228,15 +227,6 @@ export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Inva
 export const bindTo: <N extends string>(
   name: N
 ) => <A>(self: Option<A>) => Option<{ [K in N]: A }> = invariant.bindTo(Invariant)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<OptionTypeLambda> = {
-  ...Invariant,
-  map
-}
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,

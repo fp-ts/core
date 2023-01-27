@@ -19,7 +19,6 @@ const NonEmptyString: _.Refinement<string, NonEmptyString> = (s): s is NonEmptyS
 describe.concurrent("Predicate", () => {
   it("instances and derived exports", () => {
     expect(_.Invariant).exist
-    expect(_.imap).exist
     expect(_.tupled).exist
     expect(_.bindTo).exist
 
