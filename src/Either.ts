@@ -665,17 +665,6 @@ export const orElseFail = <E2>(
 ): <E1, A>(self: Either<E1, A>) => Either<E2, A> => catchAll(() => left(onLeft()))
 
 /**
- * Executes this effect and returns its value, if it succeeds, but otherwise
- * succeeds with the specified value.
- *
- * @category error handling
- * @since 1.0.0
- */
-export const orElseSucceed = <B>(
-  onLeft: LazyArg<B>
-): <E, A>(self: Either<E, A>) => Either<E, A | B> => catchAll(() => right(onLeft()))
-
-/**
  * @category instances
  * @since 1.0.0
  */

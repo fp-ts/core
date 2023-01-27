@@ -1109,17 +1109,6 @@ export const orElseEither = <B>(
       pipe<Some<A>, Option<Either<A, B>>>(self, map(either.left))
 
 /**
- * Executes this effect and returns its value, if it succeeds, but otherwise
- * succeeds with the specified value.
- *
- * @category error handling
- * @since 1.0.0
- */
-export const orElseSucceed = <B>(
-  onNone: () => B
-): <A>(self: Option<A>) => Option<A | B> => catchAll(() => some(onNone()))
-
-/**
  * The `Order` instance allows `Option` values to be compared with
  * `compare`, whenever there is an `Order` instance for
  * the type the `Option` contains.

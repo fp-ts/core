@@ -832,17 +832,6 @@ export const orElseFail = <E2>(
 ): <E1, A>(self: These<E1, A>) => These<E1 | E2, A> => catchAll(() => left(onLeft()))
 
 /**
- * Executes this effect and returns its value, if it succeeds, but otherwise
- * succeeds with the specified value.
- *
- * @category error handling
- * @since 1.0.0
- */
-export const orElseSucceed = <B>(
-  onLeft: LazyArg<B>
-): <E, A>(self: These<E, A>) => These<E, A | B> => catchAll(() => right(onLeft()))
-
-/**
  * @category error handling
  * @since 1.0.0
  */
