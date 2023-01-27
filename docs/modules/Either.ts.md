@@ -45,7 +45,6 @@ Added in v1.0.0
   - [bindTo](#bindto)
   - [let](#let)
 - [error handling](#error-handling)
-  - [catchAll](#catchall)
   - [firstSuccessOf](#firstsuccessof)
   - [mapLeft](#mapleft)
   - [orElse](#orelse)
@@ -407,20 +406,6 @@ Added in v1.0.0
 
 # error handling
 
-## catchAll
-
-Recovers from all errors.
-
-**Signature**
-
-```ts
-export declare const catchAll: <E1, E2, B>(
-  onLeft: (e: E1) => Either<E2, B>
-) => <A>(self: Either<E1, A>) => Either<E2, B | A>
-```
-
-Added in v1.0.0
-
 ## firstSuccessOf
 
 **Signature**
@@ -459,7 +444,9 @@ executes the specified effect.
 **Signature**
 
 ```ts
-export declare const orElse: <E2, B>(that: Either<E2, B>) => <E1, A>(self: Either<E1, A>) => Either<E2, B | A>
+export declare const orElse: <E1, E2, B>(
+  that: (e1: E1) => Either<E2, B>
+) => <A>(self: Either<E1, A>) => Either<E2, B | A>
 ```
 
 Added in v1.0.0
@@ -472,9 +459,9 @@ fails, in which case, it will produce the value of the specified effect.
 **Signature**
 
 ```ts
-export declare const orElseEither: <E2, B>(
-  that: Either<E2, B>
-) => <E1, A>(self: Either<E1, A>) => Either<E2, Either<A, B>>
+export declare const orElseEither: <E1, E2, B>(
+  that: (e1: E1) => Either<E2, B>
+) => <A>(self: Either<E1, A>) => Either<E2, Either<A, B>>
 ```
 
 Added in v1.0.0

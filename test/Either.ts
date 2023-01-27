@@ -190,17 +190,17 @@ describe.concurrent("Either", () => {
   })
 
   it("orElse", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(_.right(2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(_.left("b"))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(_.right(2))), _.right(2))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(_.left("b"))), _.left("b"))
+    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.right(2))), _.right(1))
+    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.left("b"))), _.right(1))
+    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.right(2))), _.right(2))
+    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.left("b"))), _.left("b"))
   })
 
   it("orElseEither", () => {
-    expect(pipe(_.right(1), _.orElseEither(_.right(2)))).toEqual(_.right(_.left(1)))
-    expect(pipe(_.right(1), _.orElseEither(_.left("b")))).toEqual(_.right(_.left(1)))
-    expect(pipe(_.left("a"), _.orElseEither(_.right(2)))).toEqual(_.right(_.right(2)))
-    expect(pipe(_.left("a"), _.orElseEither(_.left("b")))).toEqual(_.left("b"))
+    expect(pipe(_.right(1), _.orElseEither(() => _.right(2)))).toEqual(_.right(_.left(1)))
+    expect(pipe(_.right(1), _.orElseEither(() => _.left("b")))).toEqual(_.right(_.left(1)))
+    expect(pipe(_.left("a"), _.orElseEither(() => _.right(2)))).toEqual(_.right(_.right(2)))
+    expect(pipe(_.left("a"), _.orElseEither(() => _.left("b")))).toEqual(_.left("b"))
   })
 
   it("map", () => {
@@ -277,13 +277,6 @@ describe.concurrent("Either", () => {
   it("isRight", () => {
     Util.deepStrictEqual(_.isRight(_.right(1)), true)
     Util.deepStrictEqual(_.isRight(_.left(1)), false)
-  })
-
-  it("catchAll", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.catchAll(() => _.right(2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.catchAll(() => _.left("foo"))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.catchAll(() => _.right(1))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.catchAll(() => _.left("b"))), _.left("b"))
   })
 
   it("swap", () => {
