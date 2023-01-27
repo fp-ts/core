@@ -46,7 +46,6 @@ Added in v1.0.0
   - [compose](#compose)
   - [contramap](#contramap)
   - [element](#element)
-  - [imap](#imap)
   - [not](#not)
   - [of](#of)
   - [or](#or)
@@ -354,16 +353,6 @@ Adds an element to the end of a tuple.
 export declare const element: <B>(
   that: Predicate<B>
 ) => <A extends readonly any[]>(self: Predicate<A>) => Predicate<readonly [...A, B]>
-```
-
-Added in v1.0.0
-
-## imap
-
-**Signature**
-
-```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => (self: Predicate<A>) => Predicate<B>
 ```
 
 Added in v1.0.0

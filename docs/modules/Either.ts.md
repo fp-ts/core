@@ -51,7 +51,6 @@ Added in v1.0.0
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
   - [orElseFail](#orelsefail)
-  - [orElseSucceed](#orelsesucceed)
   - [tapError](#taperror)
 - [filtering](#filtering)
   - [compact](#compact)
@@ -85,22 +84,23 @@ Added in v1.0.0
   - [SemiCoproduct](#semicoproduct)
   - [SemiProduct](#semiproduct)
   - [Traversable](#traversable)
+  - [getSemigroup](#getsemigroup)
 - [interop](#interop)
   - [fromThrowable](#fromthrowable)
   - [getOrThrow](#getorthrow)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [lift2](#lift2)
-  - [lift3](#lift3)
+  - [lift2Curried](#lift2curried)
   - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
   - [liftPredicate](#liftpredicate)
+  - [map2](#map2)
 - [mapping](#mapping)
   - [as](#as)
   - [asUnit](#asunit)
   - [bimap](#bimap)
   - [flap](#flap)
-  - [imap](#imap)
   - [map](#map)
   - [tupled](#tupled)
 - [models](#models)
@@ -125,11 +125,17 @@ Added in v1.0.0
   - [ap](#ap)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
+  - [divide](#divide)
   - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
+  - [multiply](#multiply)
+  - [multiplyMany](#multiplymany)
   - [reverse](#reverse)
   - [struct](#struct)
+  - [subtract](#subtract)
+  - [sum](#sum)
+  - [sumMany](#summany)
   - [tap](#tap)
   - [tuple](#tuple)
   - [unit](#unit)
@@ -482,19 +488,6 @@ fails with the specified error.
 
 ```ts
 export declare const orElseFail: <E2>(onLeft: any) => <E1, A>(self: Either<E1, A>) => Either<E2, A>
-```
-
-Added in v1.0.0
-
-## orElseSucceed
-
-Executes this effect and returns its value, if it succeeds, but otherwise
-succeeds with the specified value.
-
-**Signature**
-
-```ts
-export declare const orElseSucceed: <B>(onLeft: any) => <E, A>(self: Either<E, A>) => Either<E, B | A>
 ```
 
 Added in v1.0.0
@@ -862,6 +855,19 @@ export declare const Traversable: any
 
 Added in v1.0.0
 
+## getSemigroup
+
+Semigroup returning the left-most non-`Left` value. If both operands are `Right`s then the inner values are
+concatenated using the provided `Semigroup`
+
+**Signature**
+
+```ts
+export declare const getSemigroup: <E, A>(S: any) => any
+```
+
+Added in v2.0.0
+
 # interop
 
 ## fromThrowable
@@ -925,6 +931,8 @@ Added in v1.0.0
 
 ## lift2
 
+Lifts a binary function into `Either` as uncurried binary function.
+
 **Signature**
 
 ```ts
@@ -935,14 +943,16 @@ export declare const lift2: <A, B, C>(
 
 Added in v1.0.0
 
-## lift3
+## lift2Curried
+
+Lifts a binary function into `Either` as curried binary function.
 
 **Signature**
 
 ```ts
-export declare const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => <E1, E2, E3>(fa: Either<E1, A>, fb: Either<E2, B>, fc: Either<E3, C>) => Either<E1 | E2 | E3, D>
+export declare const lift2Curried: <A, B, C>(
+  f: (a: A, b: B) => C
+) => <E2>(that: Either<E2, B>) => <E1>(self: Either<E1, A>) => Either<E2 | E1, C>
 ```
 
 Added in v1.0.0
@@ -1014,6 +1024,19 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
+## map2
+
+**Signature**
+
+```ts
+export declare const map2: <E2, B, A, C>(
+  fb: Either<E2, B>,
+  f: (a: A, b: B) => C
+) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C>
+```
+
+Added in v1.0.0
+
 # mapping
 
 ## as
@@ -1059,16 +1082,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flap: <A>(a: A) => <E, B>(self: Either<E, (a: A) => B>) => Either<E, B>
-```
-
-Added in v1.0.0
-
-## imap
-
-**Signature**
-
-```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => <E>(self: Either<E, A>) => Either<E, B>
 ```
 
 Added in v1.0.0
@@ -1309,6 +1322,16 @@ export declare const contains: <A>(equivalence: any) => (a: A) => <E>(self: Eith
 
 Added in v1.0.0
 
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+```
+
+Added in v1.0.0
+
 ## element
 
 Adds an element to the end of a tuple.
@@ -1357,6 +1380,28 @@ export declare const flatten: <E1, E2, A>(self: Either<E1, Either<E2, A>>) => Ei
 
 Added in v1.0.0
 
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
+## multiplyMany
+
+**Signature**
+
+```ts
+export declare const multiplyMany: any
+```
+
+Added in v1.0.0
+
 ## reverse
 
 **Signature**
@@ -1378,6 +1423,38 @@ export declare const struct: <R extends Record<string, Either<any, any>>>(
   [R[keyof R]] extends [Either<infer E, any>] ? E : never,
   { [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }
 >
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: <E2>(
+  that: Either<E2, number>
+) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: <E2>(that: Either<E2, unknown>) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
+## sumMany
+
+**Signature**
+
+```ts
+export declare const sumMany: any
 ```
 
 Added in v1.0.0

@@ -49,7 +49,6 @@ Added in v1.0.0
   - [liftSemigroup](#liftsemigroup)
 - [lifting](#lifting)
   - [lift2](#lift2)
-  - [lift3](#lift3)
 - [mapping](#mapping)
   - [as](#as)
   - [asUnit](#asunit)
@@ -72,7 +71,6 @@ Added in v1.0.0
   - [composeKleisliArrow](#composekleisliarrow)
   - [element](#element)
   - [flatten](#flatten)
-  - [imap](#imap)
   - [liftMonoid](#liftmonoid)
   - [map](#map)
   - [struct](#struct)
@@ -422,18 +420,6 @@ export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: A, fb: B) =>
 
 Added in v1.0.0
 
-## lift3
-
-Lifts a ternary function into `Identity`.
-
-**Signature**
-
-```ts
-export declare const lift3: <A, B, C, D>(f: (a: A, b: B, c: C) => D) => (fa: A, fb: B, fc: C) => D
-```
-
-Added in v1.0.0
-
 # mapping
 
 ## as
@@ -615,16 +601,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flatten: <A>(self: A) => A
-```
-
-Added in v1.0.0
-
-## imap
-
-**Signature**
-
-```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => (self: A) => B
 ```
 
 Added in v1.0.0
