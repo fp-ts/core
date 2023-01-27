@@ -122,15 +122,30 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(pipe(_.some(1), _.coproductEither(_.some("a"))), _.some(E.left(1)))
   })
 
-  it("firstSomeOf", () => {
-    Util.deepStrictEqual(pipe(_.some(1), _.firstSomeOf([])), _.some(1))
-    Util.deepStrictEqual(pipe(_.none(), _.firstSomeOf([])), _.none())
+  it("coproductMany", () => {
+    const coproductMany = _.SemiCoproduct.coproductMany
+    Util.deepStrictEqual(coproductMany(_.some(1), []), _.some(1))
+    Util.deepStrictEqual(coproductMany(_.none(), []), _.none())
     Util.deepStrictEqual(
-      pipe(_.none(), _.firstSomeOf([_.none(), _.none(), _.none(), _.some(1)])),
+      coproductMany(_.none(), [_.none(), _.none(), _.none(), _.some(1)]),
       _.some(1)
     )
     Util.deepStrictEqual(
-      pipe(_.none(), _.firstSomeOf([_.none(), _.none(), _.none()])),
+      coproductMany(_.none(), [_.none(), _.none(), _.none()]),
+      _.none()
+    )
+  })
+
+  it("firstSomeOf", () => {
+    Util.deepStrictEqual(_.firstSomeOf([]), _.none())
+    Util.deepStrictEqual(_.firstSomeOf([_.some(1)]), _.some(1))
+    Util.deepStrictEqual(_.firstSomeOf([_.none()]), _.none())
+    Util.deepStrictEqual(
+      _.firstSomeOf([_.none(), _.none(), _.none(), _.none(), _.some(1)]),
+      _.some(1)
+    )
+    Util.deepStrictEqual(
+      _.firstSomeOf([_.none(), _.none(), _.none(), _.none()]),
       _.none()
     )
   })

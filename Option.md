@@ -333,6 +333,6 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 | `getOrUndefined`      | `Option<A>`                                         | `A \| undefined`       |
 | `orElse`              | `Option<A>`, `Option<B>`                            | `Option<A \| B>`       |
 | `orElseEither`        | `Option<A>`, `Option<B>`                            | `Option<Either<A, B>>` |
-| `firstSomeOf`         | `Option<A>`, `Iterable<Option<A>>`                  | `Option<A>`            |
+| `firstSomeOf`         | `Iterable<Option<A>>`                               | `Option<A>`            |
 | `getFailureSemigroup` | `Semigroup<A>`                                      | `Semigroup<Option<A>>` |
 | `getFailureMonoid`    | `Monoid<A>`                                         | `Monoid<Option<A>>`    |
