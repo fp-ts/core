@@ -119,6 +119,8 @@ Added in v1.0.0
   - [multiply](#multiply)
   - [multiplyAll](#multiplyall)
   - [of](#of)
+  - [reduce](#reduce)
+  - [reduceAll](#reduceall)
   - [struct](#struct)
   - [subtract](#subtract)
   - [sum](#sum)
@@ -874,7 +876,7 @@ Returns the contained value if the option is `Some`, otherwise throws an error.
 **Signature**
 
 ```ts
-export declare const getOrThrow: (onError?: any) => <A>(self: Option<A>) => A
+export declare const getOrThrow: (onNone?: any) => <A>(self: Option<A>) => A
 ```
 
 Added in v1.0.0
@@ -1467,7 +1469,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiplyAll: any
+export declare const multiplyAll: (self: Iterable<Option<unknown>>) => number
 ```
 
 Added in v1.0.0
@@ -1478,6 +1480,44 @@ Added in v1.0.0
 
 ```ts
 export declare const of: <A>(a: A) => Option<A>
+```
+
+Added in v1.0.0
+
+## reduce
+
+**Signature**
+
+```ts
+export declare const reduce: <A, B>(b: B, f: (b: B, a: A) => B) => (self: Option<A>) => B
+```
+
+Added in v1.0.0
+
+## reduceAll
+
+Reduces an `Iterable` of `Option<A>` to a single value of type `B`.
+
+**Signature**
+
+```ts
+export declare const reduceAll: <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B
+```
+
+**Example**
+
+```ts
+import { some, none, reduceAll } from '@fp-ts/core/Option'
+import { pipe } from '@fp-ts/core/Function'
+
+const iterable = [some(1), none(), some(2), none()]
+assert.strictEqual(
+  pipe(
+    iterable,
+    reduceAll(0, (b, a) => b + a)
+  ),
+  3
+)
 ```
 
 Added in v1.0.0
@@ -1519,7 +1559,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sumAll: any
+export declare const sumAll: (self: Iterable<Option<unknown>>) => number
 ```
 
 Added in v1.0.0

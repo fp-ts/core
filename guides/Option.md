@@ -308,9 +308,9 @@ console.log(pipe(some(10), getOrThrow()); // 10
 console.log(pipe(none(), getOrThrow()); // throws new Error("getOrThrow called on a None")
 ```
 
-An alternative more safe is that of doing [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
+A more safe alternative is [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
 
-The `match` function allows us to match on the `None` and `Some` cases of an `Option` value and provide different actions for each.
+The `match` function allows you to match on the `None` and `Some` cases of an `Option` value and provide different actions for each.
 
 For example we can use the `match` function to handle the `Option` value returned by `parseNumber` and decide what to do based on whether it's a `None` or a `Some`.
 
@@ -318,12 +318,8 @@ For example we can use the `match` function to handle the `Option` value returne
 import { pipe } from "@fp-ts/core/Function";
 import { match } from "@fp-ts/core/Option";
 
-// parseNumber returns an Option<number>
-const result = parseNumber("Not a number");
-
-// Using pipe and match to pattern match on the result
 const output = pipe(
-  result,
+  parseNumber("Not a number"),
   match(
     // If the result is a None, return an error string
     () => `Error: ${error}`,
@@ -335,16 +331,50 @@ const output = pipe(
 console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 ```
 
+There are specializations of `match` to make working with code that does not use `Option` more convenient and faster, particularly `getOrNull` and `getOrUndefined`.
+
+```ts
+import { getOrNull, getOrUndefined } from "fp-ts/core/Option";
+
+pipe(some(5), getOrNull); // 5
+pipe(none(), getOrNull); // null
+
+pipe(some(5), getOrUndefined); // 5
+pipe(none(), getOrUndefined); // undefined
+```
+
+For greater flexibility, there is also the `getOrElse` function which allows you to set what value corresponds to the `None` case:
+
+```ts
+import { getOrElse } from "fp-ts/core/Option";
+
+pipe(
+  some(5),
+  getOrElse(() => 0)
+); // 5
+pipe(
+  none(),
+  getOrElse(() => 0)
+); // 0
+```
+
 **Cheat sheet** (error handling)
 
-| Name                  | Given                                               | To                     |
-| --------------------- | --------------------------------------------------- | ---------------------- |
-| `match`               | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`               |
-| `getOrElse`           | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
-| `getOrNull`           | `Option<A>`                                         | `A \| null`            |
-| `getOrUndefined`      | `Option<A>`                                         | `A \| undefined`       |
-| `orElse`              | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>`       |
-| `orElseEither`        | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<Either<A, B>>` |
-| `firstSomeOf`         | `Iterable<Option<A>>`                               | `Option<A>`            |
-| `getFailureSemigroup` | `Semigroup<A>`                                      | `Semigroup<Option<A>>` |
-| `getFailureMonoid`    | `Monoid<A>`                                         | `Monoid<Option<A>>`    |
+| Name             | Given                                               | To               |
+| ---------------- | --------------------------------------------------- | ---------------- |
+| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`         |
+| `getOrThrow`     | `Option<A>`, `onNone?: LazyArg<Error>`              | `A`              |
+| `getOrNull`      | `Option<A>`                                         | `A \| null`      |
+| `getOrUndefined` | `Option<A>`                                         | `A \| undefined` |
+| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`         |
+
+# Combining two or more `Option`s
+
+**Cheat sheet** (combining)
+
+| Name           | Given                                     | To                     |
+| -------------- | ----------------------------------------- | ---------------------- |
+| `orElse`       | `Option<A>`, `LazyArg<Option<B>>`         | `Option<A \| B>`       |
+| `orElseEither` | `Option<A>`, `LazyArg<Option<B>>`         | `Option<Either<A, B>>` |
+| `firstSomeOf`  | `Iterable<Option<A>>`                     | `Option<A>`            |
+| `reduceAll`    | `Iterable<Option<A>>`, `B`, `(B, A) => B` | `B`                    |
