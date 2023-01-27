@@ -255,7 +255,9 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <E>(onLeft: (e: E) => unknown) =>
+export const getOrThrow = <E>(
+  onLeft: (e: E) => Error = () => new Error("getOrThrow called on a Left")
+) =>
   <A>(self: These<E, A>): A => {
     if (isRightOrBoth(self)) {
       return self.right

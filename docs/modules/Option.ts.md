@@ -14,11 +14,8 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [tap](#tap)
-- [combining](#combining)
-  - [getFirstSomeSemigroup](#getfirstsomesemigroup)
 - [constructors](#constructors)
   - [none](#none)
-  - [of](#of)
   - [some](#some)
 - [conversions](#conversions)
   - [fromEither](#fromeither)
@@ -42,6 +39,7 @@ Added in v1.0.0
   - [firstSomeOf](#firstsomeof)
   - [getFailureMonoid](#getfailuremonoid)
   - [getFailureSemigroup](#getfailuresemigroup)
+  - [getFirstSomeSemigroup](#getfirstsomesemigroup)
   - [getOrElse](#getorelse)
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
@@ -121,6 +119,7 @@ Added in v1.0.0
   - [flatten](#flatten)
   - [multiply](#multiply)
   - [multiplyAll](#multiplyall)
+  - [of](#of)
   - [struct](#struct)
   - [subtract](#subtract)
   - [sum](#sum)
@@ -149,20 +148,6 @@ export declare const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) =>
 
 Added in v1.0.0
 
-# combining
-
-## getFirstSomeSemigroup
-
-Semigroup returning the first `Some` value encountered.
-
-**Signature**
-
-```ts
-export declare const getFirstSomeSemigroup: <A>() => any
-```
-
-Added in v1.0.0
-
 # constructors
 
 ## none
@@ -173,16 +158,6 @@ Creates a new `Option` that represents a absence of value.
 
 ```ts
 export declare const none: <A = never>() => Option<A>
-```
-
-Added in v1.0.0
-
-## of
-
-**Signature**
-
-```ts
-export declare const of: <A>(a: A) => Option<A>
 ```
 
 Added in v1.0.0
@@ -468,6 +443,18 @@ See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
 
 ```ts
 export declare const getFailureSemigroup: <A>(S: any) => any
+```
+
+Added in v1.0.0
+
+## getFirstSomeSemigroup
+
+Semigroup returning the first `Some` value encountered.
+
+**Signature**
+
+```ts
+export declare const getFirstSomeSemigroup: <A>() => any
 ```
 
 Added in v1.0.0
@@ -876,7 +863,7 @@ Returns the contained value if the option is `Some`, otherwise throws an error.
 **Signature**
 
 ```ts
-export declare const getOrThrow: (onError: any) => <A>(self: Option<A>) => A
+export declare const getOrThrow: (onError?: any) => <A>(self: Option<A>) => A
 ```
 
 Added in v1.0.0
@@ -1470,6 +1457,16 @@ Added in v1.0.0
 
 ```ts
 export declare const multiplyAll: any
+```
+
+Added in v1.0.0
+
+## of
+
+**Signature**
+
+```ts
+export declare const of: <A>(a: A) => Option<A>
 ```
 
 Added in v1.0.0

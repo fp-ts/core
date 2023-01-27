@@ -800,7 +800,9 @@ export const fromThrowable = <A, E>(
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <E>(onLeft: (e: E) => unknown) =>
+export const getOrThrow = <E>(
+  onLeft: (e: E) => Error = () => new Error("getOrThrow called on a Left")
+) =>
   <A>(self: Either<E, A>): A => {
     if (isRight(self)) {
       return self.right

@@ -163,14 +163,16 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
 /**
  * Returns the contained value if the option is `Some`, otherwise throws an error.
  *
- * @param onError - A function that returns the error to be thrown when the option is `None`
+ * @param onError - An optional function that returns the error to be thrown when the option is `None`
  * @param self - The option to extract the value from
  * @throws The error returned by `onError` if the option is `None`
  *
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = (onError: LazyArg<unknown>) =>
+export const getOrThrow = (
+  onError: LazyArg<Error> = () => new Error("getOrThrow called on a None")
+) =>
   <A>(self: Option<A>): A => {
     if (isSome(self)) {
       return self.value
@@ -258,7 +260,6 @@ export const as: <B>(b: B) => <_>(self: Option<_>) => Option<B> = covariant.as(C
 export const asUnit: <_>(self: Option<_>) => Option<void> = covariant.asUnit(Covariant)
 
 /**
- * @category constructors
  * @since 1.0.0
  */
 export const of: <A>(a: A) => Option<A> = some
@@ -647,7 +648,7 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
 /**
  * Semigroup returning the first `Some` value encountered.
  *
- * @category combining
+ * @category error handling
  * @since 1.0.0
  */
 export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduct

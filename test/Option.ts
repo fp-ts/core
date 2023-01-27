@@ -198,8 +198,11 @@ describe.concurrent("Option", () => {
 
   it("getOrThrow", () => {
     expect(pipe(_.some(1), _.getOrThrow(() => new Error("e")))).toEqual(1)
-    expect(() => pipe(_.none(), _.getOrThrow(() => new Error("e")))).toThrow(
+    expect(() => pipe(_.none(), _.getOrThrow(() => new Error("e")))).toThrowError(
       new Error("e")
+    )
+    expect(() => pipe(_.none(), _.getOrThrow())).toThrowError(
+      new Error("getOrThrow called on a None")
     )
   })
 
