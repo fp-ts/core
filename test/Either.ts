@@ -9,7 +9,6 @@ import { number } from "@fp-ts/core/typeclass/Equivalence"
 describe.concurrent("Either", () => {
   it("instances and derived exports", () => {
     expect(_.Invariant).exist
-    expect(_.imap).exist
     expect(_.tupled).exist
     expect(_.bindTo).exist
 

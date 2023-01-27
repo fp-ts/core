@@ -1267,20 +1267,19 @@ export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
 export const Do: ReadonlyArray<{}> = of_.Do(Of)
 
 /**
- * @category mapping
+ * @category instances
  * @since 1.0.0
  */
-export const imap: <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => (self: ReadonlyArray<A>) => Array<B> = covariant.imap<ReadonlyArrayTypeLambda>(map) as any
+export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(
+  map
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<ReadonlyArrayTypeLambda> = {
-  imap
+  imap: Covariant.imap
 }
 
 /**
@@ -1298,12 +1297,6 @@ export const bindTo: <N extends string>(
   name: N
 ) => <A>(self: ReadonlyArray<A>) => Array<{ [K in N]: A }> = invariant
   .bindTo(Invariant) as any
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(map)
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,

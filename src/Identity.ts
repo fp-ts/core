@@ -51,20 +51,19 @@ export interface IdentityTypeLambdaFix<A> extends TypeLambda {
 export const map = <A, B>(f: (a: A) => B) => (self: Identity<A>): Identity<B> => f(self)
 
 /**
+ * @category instances
  * @since 1.0.0
  */
-export const imap: <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => (self: Identity<A>) => Identity<B> = covariant
-  .imap<IdentityTypeLambda>(map)
+export const Covariant: covariant.Covariant<IdentityTypeLambda> = covariant.make(
+  map
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<IdentityTypeLambda> = {
-  imap
+  imap: Covariant.imap
 }
 
 /**
@@ -79,15 +78,6 @@ export const tupled: <A>(self: Identity<A>) => Identity<[A]> = invariant.tupled(
 export const bindTo: <N extends string>(
   name: N
 ) => <A>(self: Identity<A>) => Identity<{ [K in N]: A }> = invariant.bindTo(Invariant)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<IdentityTypeLambda> = {
-  ...Invariant,
-  map
-}
 
 const let_: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,

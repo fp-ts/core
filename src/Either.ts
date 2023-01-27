@@ -133,20 +133,19 @@ export const map = <A, B>(f: (a: A) => B) =>
   <E>(self: Either<E, A>): Either<E, B> => isRight(self) ? right(f(self.right)) : self
 
 /**
- * @category mapping
+ * @category instances
  * @since 1.0.0
  */
-export const imap: <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => <E>(self: Either<E, A>) => Either<E, B> = covariant.imap<EitherTypeLambda>(map)
+export const Covariant: covariant.Covariant<EitherTypeLambda> = covariant.make(
+  map
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<EitherTypeLambda> = {
-  imap
+  imap: Covariant.imap
 }
 
 /**
@@ -164,15 +163,6 @@ export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tu
 export const bindTo: <N extends string>(
   name: N
 ) => <E, A>(self: Either<E, A>) => Either<E, { [K in N]: A }> = invariant.bindTo(Invariant)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<EitherTypeLambda> = {
-  ...Invariant,
-  map
-}
 
 /**
  * @category mapping

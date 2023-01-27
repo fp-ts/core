@@ -95,19 +95,11 @@ export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = c
 )
 
 /**
- * @since 1.0.0
- */
-export const imap: <A, B>(
-  to: (a: A) => B,
-  from: (b: B) => A
-) => (self: Predicate<A>) => Predicate<B> = Contravariant.imap
-
-/**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<PredicateTypeLambda> = {
-  imap
+  imap: Contravariant.imap
 }
 
 /**
@@ -174,7 +166,7 @@ const productMany = <A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
-  imap,
+  imap: Invariant.imap,
   product: (self, that) => ([a, b]) => self(a) && that(b),
   productMany
 }
