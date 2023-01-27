@@ -1,5 +1,5 @@
 ---
-"@fp-ts/core": patch
+"@fp-ts/core": minor
 ---
 
 Option: renaming
