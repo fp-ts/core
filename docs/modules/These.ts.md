@@ -1000,7 +1000,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getOrThrow: <E>(onLeft: (e: E) => unknown) => <A>(self: any) => A
+export declare const getOrThrow: <E>(onLeft?: (e: E) => Error) => <A>(self: any) => A
 ```
 
 Added in v1.0.0

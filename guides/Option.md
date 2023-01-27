@@ -297,9 +297,22 @@ Please note that these two functions should only be used for debugging purposes 
 
 We have seen how easy and convenient it is to build pipelines involving the `Option` data type, leaving it to handle any errors that may occur at any step. However, at some point, you will be interested in manually handling the error to understand the overall result obtained from the pipeline and decide what to do accordingly.
 
+The fastest way to get the value wrapped in an option is to call the `getOrThrow` function, but be aware that, as the name suggests, an exception will be thrown in case the `Option` you are querying is a `None`:
+
+```ts
+import { getOrThrow } from "@fp-ts/core/Option";
+
+let someValue = Some(10);
+let noneValue = None;
+console.log(pipe(some(10), getOrThrow()); // 10
+console.log(pipe(none(), getOrThrow()); // throws new Error("getOrThrow called on a None")
+```
+
+An alternative more safe is that of doing [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
+
 The `match` function allows us to match on the `None` and `Some` cases of an `Option` value and provide different actions for each.
 
-We can use the `match` function to handle the `Option` value returned by `parseNumber` and decide what to do based on whether it's a `None` or a `Some`.
+For example we can use the `match` function to handle the `Option` value returned by `parseNumber` and decide what to do based on whether it's a `None` or a `Some`.
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -327,7 +340,6 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 | Name                  | Given                                               | To                     |
 | --------------------- | --------------------------------------------------- | ---------------------- |
 | `match`               | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`               |
-| `getOrThrow`          | `Option<A>`                                         | `A`                    |
 | `getOrElse`           | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
 | `getOrNull`           | `Option<A>`                                         | `A \| null`            |
 | `getOrUndefined`      | `Option<A>`                                         | `A \| undefined`       |

@@ -907,7 +907,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getOrThrow: <E>(onLeft: (e: E) => unknown) => <A>(self: Either<E, A>) => A
+export declare const getOrThrow: <E>(onLeft?: (e: E) => Error) => <A>(self: Either<E, A>) => A
 ```
 
 Added in v1.0.0
