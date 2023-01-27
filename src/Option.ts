@@ -728,19 +728,11 @@ export const Foldable: foldable.Foldable<OptionTypeLambda> = {
 export const toArray: <A>(self: Option<A>) => Array<A> = foldable.toArray(Foldable)
 
 /**
- * Alias of `flatten`.
- *
- * @category filtering
- * @since 1.0.0
- */
-export const compact: <A>(self: Option<Option<A>>) => Option<A> = flatten
-
-/**
  * @category instances
  * @since 1.0.0
  */
 export const Compactable: compactable.Compactable<OptionTypeLambda> = {
-  compact
+  compact: flatten
 }
 
 /**

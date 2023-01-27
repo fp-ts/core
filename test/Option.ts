@@ -76,7 +76,6 @@ describe.concurrent("Option", () => {
     expect(_.traverseTap).exist
 
     expect(_.Compactable).exist
-    expect(_.compact).exist
     expect(_.separate).exist
 
     expect(_.Filterable).exist
@@ -286,12 +285,6 @@ describe.concurrent("Option", () => {
     assertAlt(_.some(1), _.none(), _.some(1))
     assertAlt(_.none(), _.some(2), _.some(2))
     assertAlt(_.none(), _.none(), _.none())
-  })
-
-  it("compact", () => {
-    Util.deepStrictEqual(_.compact(_.none()), _.none())
-    Util.deepStrictEqual(_.compact(_.some(_.none())), _.none())
-    Util.deepStrictEqual(_.compact(_.some(_.some("123"))), _.some("123"))
   })
 
   it("filterMap", () => {
