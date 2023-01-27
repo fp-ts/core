@@ -1,12 +1,4 @@
 /**
- * The `Option` type can be interpreted in a few ways:
- *
- * 1) `Option<A>` is a container for an optional value of type `A`. If the value of type `A` is present, the `Option<A>` is
- * an instance of `Some<A>`, containing the present value of type `A`. If the value is absent, the `Option<A>` is an
- * instance of `None`.
- * 2) Another way to view `Option` is as a representation of a possibly failing computation.
- * 3) An option can also be thought of as a collection or foldable structure with either one or zero elements.
- *
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/Either"

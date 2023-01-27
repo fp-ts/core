@@ -19,8 +19,9 @@ Added in v1.0.0
   - [andThenDiscard](#andthendiscard)
   - [ap](#ap)
   - [lift2](#lift2)
-  - [lift3](#lift3)
+  - [lift2Curried](#lift2curried)
   - [liftSemigroup](#liftsemigroup)
+  - [map2](#map2)
 
 ---
 
@@ -69,14 +70,14 @@ Added in v1.0.0
 ```ts
 export declare const ap: <F extends any>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, A>(fa: any) => <R1, O1, E1, B>(self: any) => any
+) => <R2, O2, E2, A>(that: any) => <R1, O1, E1, B>(self: any) => any
 ```
 
 Added in v1.0.0
 
 ## lift2
 
-Lifts a binary function into `F`.
+Lifts a binary function into `F` as uncurried binary function.
 
 **Signature**
 
@@ -88,16 +89,16 @@ export declare const lift2: <F extends any>(
 
 Added in v1.0.0
 
-## lift3
+## lift2Curried
 
-Lifts a ternary function into 'F'.
+Lifts a binary function into `F` as curried binary function.
 
 **Signature**
 
 ```ts
-export declare const lift3: <F extends any>(
+export declare const lift2Curried: <F extends any>(
   F: SemiApplicative<F>
-) => <A, B, C, D>(f: (a: A, b: B, c: C) => D) => <R1, O1, E1, R2, O2, E2, R3, O3, E3>(fa: any, fb: any, fc: any) => any
+) => <A, B, C>(f: (a: A, b: B) => C) => <R2, O2, E2>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
 Added in v1.0.0
@@ -110,6 +111,20 @@ Lift a `Semigroup` into 'F', the inner values are combined using the provided `S
 
 ```ts
 export declare const liftSemigroup: <F extends any>(F: SemiApplicative<F>) => <A, R, O, E>(S: any) => any
+```
+
+Added in v1.0.0
+
+## map2
+
+Binary mapping into `F` context.
+
+**Signature**
+
+```ts
+export declare const map2: <F extends any>(
+  F: SemiApplicative<F>
+) => <R2, O2, E2, B, A, C>(fb: any, f: (a: A, b: B) => C) => <R1, O1, E1>(fa: any) => any
 ```
 
 Added in v1.0.0

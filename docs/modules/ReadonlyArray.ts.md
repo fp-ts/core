@@ -118,7 +118,6 @@ Added in v1.0.0
 - [lifting](#lifting)
   - [every](#every)
   - [lift2](#lift2)
-  - [lift3](#lift3)
   - [liftEither](#lifteither)
   - [liftMonoid](#liftmonoid)
   - [liftNullable](#liftnullable)
@@ -129,7 +128,6 @@ Added in v1.0.0
 - [mapping](#mapping)
   - [as](#as)
   - [flap](#flap)
-  - [imap](#imap)
   - [map](#map)
   - [mapNonEmpty](#mapnonempty)
   - [mapNonEmptyWithIndex](#mapnonemptywithindex)
@@ -1344,20 +1342,6 @@ export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: readonly A[]
 
 Added in v1.0.0
 
-## lift3
-
-Lifts a ternary function into `ReadonlyArray`.
-
-**Signature**
-
-```ts
-export declare const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => (fa: readonly A[], fb: readonly B[], fc: readonly C[]) => D[]
-```
-
-Added in v1.0.0
-
 ## liftEither
 
 **Signature**
@@ -1458,16 +1442,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flap: <A>(a: A) => <B>(self: readonly ((a: A) => B)[]) => B[]
-```
-
-Added in v1.0.0
-
-## imap
-
-**Signature**
-
-```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => (self: readonly A[]) => B[]
 ```
 
 Added in v1.0.0

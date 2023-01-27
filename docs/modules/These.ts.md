@@ -72,7 +72,6 @@ Added in v1.0.0
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
   - [orElseFail](#orelsefail)
-  - [orElseSucceed](#orelsesucceed)
 - [filtering](#filtering)
   - [compact](#compact)
   - [filter](#filter)
@@ -118,7 +117,6 @@ Added in v1.0.0
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [lift2](#lift2)
-  - [lift3](#lift3)
   - [liftEither](#lifteither)
   - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
@@ -129,7 +127,6 @@ Added in v1.0.0
   - [asUnit](#asunit)
   - [bimap](#bimap)
   - [flap](#flap)
-  - [imap](#imap)
   - [map](#map)
   - [tupled](#tupled)
 - [model](#model)
@@ -620,19 +617,6 @@ export declare const orElseFail: <E2>(onLeft: any) => <E1, A>(self: any) => any
 
 Added in v1.0.0
 
-## orElseSucceed
-
-Executes this effect and returns its value, if it succeeds, but otherwise
-succeeds with the specified value.
-
-**Signature**
-
-```ts
-export declare const orElseSucceed: <B>(onLeft: any) => <E, A>(self: any) => any
-```
-
-Added in v1.0.0
-
 # filtering
 
 ## compact
@@ -1058,16 +1042,6 @@ export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => <E1, E2>(fa: any,
 
 Added in v1.0.0
 
-## lift3
-
-**Signature**
-
-```ts
-export declare const lift3: <A, B, C, D>(f: (a: A, b: B, c: C) => D) => <E1, E2, E3>(fa: any, fb: any, fc: any) => any
-```
-
-Added in v1.0.0
-
 ## liftEither
 
 **Signature**
@@ -1172,16 +1146,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flap: <A>(a: A) => <E, B>(self: any) => any
-```
-
-Added in v1.0.0
-
-## imap
-
-**Signature**
-
-```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => <E>(self: any) => any
 ```
 
 Added in v1.0.0

@@ -35,9 +35,11 @@ Added in v1.0.0
   - [divide](#divide)
   - [increment](#increment)
   - [multiply](#multiply)
+  - [multiplyAll](#multiplyall)
   - [sign](#sign)
   - [subtract](#subtract)
   - [sum](#sum)
+  - [sumAll](#sumall)
 
 ---
 
@@ -273,6 +275,16 @@ assert.deepStrictEqual(pipe(2, multiply(3)), 6)
 
 Added in v1.0.0
 
+## multiplyAll
+
+**Signature**
+
+```ts
+export declare const multiplyAll: (collection: Iterable<number>) => number
+```
+
+Added in v1.0.0
+
 ## sign
 
 **Signature**
@@ -317,6 +329,16 @@ import { sum } from '@fp-ts/core/Number'
 import { pipe } from '@fp-ts/core/Function'
 
 assert.deepStrictEqual(pipe(2, sum(3)), 5)
+```
+
+Added in v1.0.0
+
+## sumAll
+
+**Signature**
+
+```ts
+export declare const sumAll: (collection: Iterable<number>) => number
 ```
 
 Added in v1.0.0

@@ -6,14 +6,6 @@ parent: Modules
 
 ## Option overview
 
-The `Option` type can be interpreted in a few ways:
-
-1. `Option<A>` is a container for an optional value of type `A`. If the value of type `A` is present, the `Option<A>` is
-   an instance of `Some<A>`, containing the present value of type `A`. If the value is absent, the `Option<A>` is an
-   instance of `None`.
-2. Another way to view `Option` is as a representation of a possibly failing computation.
-3. An option can also be thought of as a collection or foldable structure with either one or zero elements.
-
 Added in v1.0.0
 
 ---
@@ -23,8 +15,6 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
-  - [getFirstNoneMonoid](#getfirstnonemonoid)
-  - [getFirstNoneSemigroup](#getfirstnonesemigroup)
   - [getFirstSomeSemigroup](#getfirstsomesemigroup)
 - [constructors](#constructors)
   - [none](#none)
@@ -50,12 +40,12 @@ Added in v1.0.0
 - [error handling](#error-handling)
   - [catchAll](#catchall)
   - [firstSomeOf](#firstsomeof)
+  - [getFailureMonoid](#getfailuremonoid)
+  - [getFailureSemigroup](#getfailuresemigroup)
   - [getOrElse](#getorelse)
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
-  - [orElseSucceed](#orelsesucceed)
 - [filtering](#filtering)
-  - [compact](#compact)
   - [filter](#filter)
   - [filterMap](#filtermap)
   - [separate](#separate)
@@ -88,17 +78,17 @@ Added in v1.0.0
   - [getOrThrow](#getorthrow)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
-  - [getMonoid](#getmonoid)
+  - [getOptionalMonoid](#getoptionalmonoid)
   - [lift2](#lift2)
-  - [lift3](#lift3)
+  - [lift2Curried](#lift2curried)
   - [liftEither](#lifteither)
   - [liftNullable](#liftnullable)
   - [liftPredicate](#liftpredicate)
+  - [map2](#map2)
 - [mapping](#mapping)
   - [as](#as)
   - [asUnit](#asunit)
   - [flap](#flap)
-  - [imap](#imap)
   - [map](#map)
 - [models](#models)
   - [None (interface)](#none-interface)
@@ -125,10 +115,16 @@ Added in v1.0.0
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
   - [coproductEither](#coproducteither)
+  - [divide](#divide)
   - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
+  - [multiply](#multiply)
+  - [multiplyAll](#multiplyall)
   - [struct](#struct)
+  - [subtract](#subtract)
+  - [sum](#sum)
+  - [sumAll](#sumall)
   - [toArray](#toarray)
   - [tuple](#tuple)
   - [tupled](#tupled)
@@ -155,37 +151,9 @@ Added in v1.0.0
 
 # combining
 
-## getFirstNoneMonoid
-
-Monoid returning the left-most `None` value. If both operands are `Right`s then the inner values
-are concatenated using the provided `Monoid`.
-
-The `empty` value is `some(M.empty)`.
-
-**Signature**
-
-```ts
-export declare const getFirstNoneMonoid: <A>(M: any) => any
-```
-
-Added in v1.0.0
-
-## getFirstNoneSemigroup
-
-Semigroup returning the left-most `None` value. If both operands are `Right`s then the inner values
-are concatenated using the provided `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const getFirstNoneSemigroup: <A>(S: any) => any
-```
-
-Added in v1.0.0
-
 ## getFirstSomeSemigroup
 
-Semigroup returning the left-most `Some` value.
+Semigroup returning the first `Some` value encountered.
 
 **Signature**
 
@@ -465,7 +433,41 @@ Given an Iterable collection of `Option`s, the function returns the first `Some`
 **Signature**
 
 ```ts
-export declare const firstSomeOf: <A>(collection: Iterable<Option<A>>) => (self: Option<A>) => Option<A>
+export declare const firstSomeOf: <A>(collection: Iterable<Option<A>>) => Option<A>
+```
+
+Added in v1.0.0
+
+## getFailureMonoid
+
+Monoid that models the combination of computations that can fail, if at least one element is `None`
+then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+is the combination of the wrapped elements using the provided `Monoid`.
+
+The `empty` value is `some(M.empty)`.
+
+See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
+
+**Signature**
+
+```ts
+export declare const getFailureMonoid: <A>(M: any) => any
+```
+
+Added in v1.0.0
+
+## getFailureSemigroup
+
+Semigroup that models the combination of computations that can fail, if at least one element is `None`
+then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+is the combination of the wrapped elements using the provided `Semigroup`.
+
+See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const getFailureSemigroup: <A>(S: any) => any
 ```
 
 Added in v1.0.0
@@ -542,32 +544,7 @@ export declare const orElseEither: <B>(that: Option<B>) => <A>(self: Option<A>) 
 
 Added in v1.0.0
 
-## orElseSucceed
-
-Executes this effect and returns its value, if it succeeds, but otherwise
-succeeds with the specified value.
-
-**Signature**
-
-```ts
-export declare const orElseSucceed: <B>(onNone: () => B) => <A>(self: Option<A>) => Option<B | A>
-```
-
-Added in v1.0.0
-
 # filtering
-
-## compact
-
-Alias of `flatten`.
-
-**Signature**
-
-```ts
-export declare const compact: <A>(self: Option<Option<A>>) => Option<A>
-```
-
-Added in v1.0.0
 
 ## filter
 
@@ -918,32 +895,25 @@ Added in v1.0.0
 
 # lifting
 
-## getMonoid
+## getOptionalMonoid
 
-Monoid returning the left-most non-`None` value. If both operands are `Some`s then the inner values are
-combined using the provided `Semigroup`
-
-| x       | y       | combine(y)(x)       |
-| ------- | ------- | ------------------- |
-| none    | none    | none                |
-| some(a) | none    | some(a)             |
-| none    | some(a) | some(a)             |
-| some(a) | some(b) | some(combine(b)(a)) |
+Monoid that models the combination of values that may be absent, elements that are `None` are ignored
+while elements that are `Some` are combined using the provided `Semigroup`.
 
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>(Semigroup: any) => any
+export declare const getOptionalMonoid: <A>(Semigroup: any) => any
 ```
 
 **Example**
 
 ```ts
-import { getMonoid, some, none } from '@fp-ts/core/Option'
+import { getOptionalMonoid, some, none } from '@fp-ts/core/Option'
 import * as N from '@fp-ts/core/Number'
 import { pipe } from '@fp-ts/core/Function'
 
-const M = getMonoid(N.SemigroupSum)
+const M = getOptionalMonoid(N.SemigroupSum)
 assert.deepStrictEqual(M.combine(none(), none()), none())
 assert.deepStrictEqual(M.combine(some(1), none()), some(1))
 assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
@@ -954,7 +924,7 @@ Added in v1.0.0
 
 ## lift2
 
-Lifts a binary function into `Option`.
+Lifts a binary function into `Option` as uncurried binary function.
 
 **Signature**
 
@@ -964,16 +934,16 @@ export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, f
 
 Added in v1.0.0
 
-## lift3
+## lift2Curried
 
-Lifts a ternary function into `Option`.
+Lifts a binary function into `Option` as curried binary function.
 
 **Signature**
 
 ```ts
-export declare const lift3: <A, B, C, D>(
-  f: (a: A, b: B, c: C) => D
-) => (fa: Option<A>, fb: Option<B>, fc: Option<C>) => Option<D>
+export declare const lift2Curried: <A, B, C>(
+  f: (a: A, b: B) => C
+) => (that: Option<B>) => (self: Option<A>) => Option<C>
 ```
 
 Added in v1.0.0
@@ -1044,6 +1014,16 @@ assert.deepStrictEqual(getOption(1), O.some(1))
 
 Added in v1.0.0
 
+## map2
+
+**Signature**
+
+```ts
+export declare const map2: <B, A, C>(fb: Option<B>, f: (a: A, b: B) => C) => (fa: Option<A>) => Option<C>
+```
+
+Added in v1.0.0
+
 # mapping
 
 ## as
@@ -1076,16 +1056,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B>
-```
-
-Added in v1.0.0
-
-## imap
-
-**Signature**
-
-```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => (self: Option<A>) => Option<B>
 ```
 
 Added in v1.0.0
@@ -1411,6 +1381,16 @@ export declare const coproductEither: <B>(that: Option<B>) => <A>(self: Option<A
 
 Added in v1.0.0
 
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: (that: Option<number>) => (self: Option<number>) => Option<number>
+```
+
+Added in v1.0.0
+
 ## element
 
 Adds an element to the end of a tuple.
@@ -1474,6 +1454,26 @@ export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
 
 Added in v1.0.0
 
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## multiplyAll
+
+**Signature**
+
+```ts
+export declare const multiplyAll: any
+```
+
+Added in v1.0.0
+
 ## struct
 
 **Signature**
@@ -1482,6 +1482,36 @@ Added in v1.0.0
 export declare const struct: <R extends Record<string, Option<any>>>(
   r: R
 ) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }>
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: (that: Option<number>) => (self: Option<number>) => Option<number>
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## sumAll
+
+**Signature**
+
+```ts
+export declare const sumAll: any
 ```
 
 Added in v1.0.0
