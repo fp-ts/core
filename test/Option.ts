@@ -48,7 +48,7 @@ describe.concurrent("Option", () => {
     expect(_.struct).exist
 
     expect(_.SemiApplicative).exist
-    expect(_.getFirstNoneSemigroup).exist // liftSemigroup
+    expect(_.getFailureSemigroup).exist // liftSemigroup
     expect(_.lift2).exist
     expect(_.lift2Curried).exist
     expect(_.ap).exist
@@ -56,7 +56,7 @@ describe.concurrent("Option", () => {
     expect(_.andThen).exist
 
     expect(_.Applicative).exist
-    expect(_.getFirstNoneMonoid).exist // liftMonoid
+    expect(_.getFailureMonoid).exist // liftMonoid
 
     expect(_.SemiCoproduct).exist
     expect(_.getFirstSomeSemigroup).exist // getSemigroup
@@ -398,8 +398,8 @@ describe.concurrent("Option", () => {
     )
   })
 
-  it("getMonoid", () => {
-    const M = _.getMonoid(S.Semigroup)
+  it("getOptionalMonoid", () => {
+    const M = _.getOptionalMonoid(S.Semigroup)
     Util.deepStrictEqual(M.combine(_.none(), _.none()), _.none())
     Util.deepStrictEqual(M.combine(_.none(), _.some("a")), _.some("a"))
     Util.deepStrictEqual(M.combine(_.some("a"), _.none()), _.some("a"))

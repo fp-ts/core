@@ -529,22 +529,15 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
 }
 
 /**
- * Monoid returning the left-most non-`None` value. If both operands are `Some`s then the inner values are
- * combined using the provided `Semigroup`
- *
- * | x       | y       | combine(y)(x)       |
- * | ------- | ------- | ------------------- |
- * | none    | none    | none                |
- * | some(a) | none    | some(a)             |
- * | none    | some(a) | some(a)             |
- * | some(a) | some(b) | some(combine(b)(a)) |
+ * Monoid that models the combination of values that may be absent, elements that are `None` are ignored
+ * while elements that are `Some` are combined using the provided `Semigroup`.
  *
  * @example
- * import { getMonoid, some, none } from '@fp-ts/core/Option'
+ * import { getOptionalMonoid, some, none } from '@fp-ts/core/Option'
  * import * as N from '@fp-ts/core/Number'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * const M = getMonoid(N.SemigroupSum)
+ * const M = getOptionalMonoid(N.SemigroupSum)
  * assert.deepStrictEqual(M.combine(none(), none()), none())
  * assert.deepStrictEqual(M.combine(some(1), none()), some(1))
  * assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
@@ -553,7 +546,7 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
  * @category lifting
  * @since 1.0.0
  */
-export const getMonoid = <A>(
+export const getOptionalMonoid = <A>(
   Semigroup: Semigroup<A>
 ): Monoid<Option<A>> =>
   monoid.fromSemigroup(
@@ -600,13 +593,16 @@ export const ap: <A>(
 )
 
 /**
- * Semigroup returning the left-most `None` value. If both operands are `Some`s then the inner values
- * are concatenated using the provided `Semigroup`.
+ * Semigroup that models the combination of computations that can fail, if at least one element is `None`
+ * then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+ * is the combination of the wrapped elements using the provided `Semigroup`.
  *
- * @category combining
+ * See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
+ *
+ * @category error handling
  * @since 1.0.0
  */
-export const getFirstNoneSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> = semiApplicative
+export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> = semiApplicative
   .liftSemigroup(SemiApplicative)
 
 /**
@@ -619,15 +615,18 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
 }
 
 /**
- * Monoid returning the left-most `None` value. If both operands are `Right`s then the inner values
- * are concatenated using the provided `Monoid`.
+ * Monoid that models the combination of computations that can fail, if at least one element is `None`
+ * then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+ * is the combination of the wrapped elements using the provided `Monoid`.
  *
  * The `empty` value is `some(M.empty)`.
  *
- * @category combining
+ * See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
+ *
+ * @category error handling
  * @since 1.0.0
  */
-export const getFirstNoneMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicative.liftMonoid(
+export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicative.liftMonoid(
   Applicative
 )
 
@@ -664,15 +663,13 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
 }
 
 /**
- * Semigroup returning the left-most `Some` value.
+ * Semigroup returning the first `Some` value encountered.
  *
  * @category combining
  * @since 1.0.0
  */
 export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduct
-  .getSemigroup(
-    SemiCoproduct
-  )
+  .getSemigroup(SemiCoproduct)
 
 /**
  * @since 1.0.0
@@ -1226,9 +1223,9 @@ export const divide = lift2Curried((a: number, b: number) => a / b)
 /**
  * @since 1.0.0
  */
-export const sumAll = getMonoid(N.SemigroupSum).combineAll
+export const sumAll = getOptionalMonoid(N.SemigroupSum).combineAll
 
 /**
  * @since 1.0.0
  */
-export const multiplyAll = getMonoid(N.SemigroupMultiply).combineAll
+export const multiplyAll = getOptionalMonoid(N.SemigroupMultiply).combineAll

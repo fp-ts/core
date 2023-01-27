@@ -78,7 +78,7 @@ export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
     <R1, O1, E1, R2, O2, E2>(
       fa: Kind<F, R1, O1, E1, A>,
       fb: Kind<F, R2, O2, E2, B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(fa, map2(F)(fb, (a, b) => f(a, b)))
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(fa, map2(F)(fb, f))
 
 /**
  * Lifts a binary function into `F` as curried binary function.
@@ -90,4 +90,4 @@ export const lift2Curried = <F extends TypeLambda>(F: SemiApplicative<F>) =>
     <R2, O2, E2>(
       that: Kind<F, R2, O2, E2, B>
     ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
-      map2(F)(that, (a, b) => f(a, b))
+      map2(F)(that, f)
