@@ -611,16 +611,6 @@ export const getOrElse = <B>(onLeft: LazyArg<B>) =>
   <E, A>(self: Either<E, A>): A | B => isLeft(self) ? onLeft() : self.right
 
 /**
- * Recovers from all errors.
- *
- * @category error handling
- * @since 1.0.0
- */
-export const catchAll = <E1, E2, B>(
-  onLeft: (e: E1) => Either<E2, B>
-) => <A>(self: Either<E1, A>): Either<E2, A | B> => isLeft(self) ? onLeft(self.left) : self
-
-/**
  * Executes this effect and returns its value, if it succeeds, but otherwise
  * executes the specified effect.
  *
@@ -634,9 +624,9 @@ export const catchAll = <E1, E2, B>(
  * @category error handling
  * @since 1.0.0
  */
-export const orElse = <E2, B>(
-  that: Either<E2, B>
-) => <E1, A>(self: Either<E1, A>): Either<E2, A | B> => isLeft(self) ? that : self
+export const orElse = <E1, E2, B>(
+  that: (e1: E1) => Either<E2, B>
+) => <A>(self: Either<E1, A>): Either<E2, A | B> => isLeft(self) ? that(self.left) : self
 
 /**
  * Returns an effect that will produce the value of this effect, unless it
@@ -645,12 +635,12 @@ export const orElse = <E2, B>(
  * @category error handling
  * @since 1.0.0
  */
-export const orElseEither = <E2, B>(
-  that: Either<E2, B>
+export const orElseEither = <E1, E2, B>(
+  that: (e1: E1) => Either<E2, B>
 ) =>
-  <E1, A>(self: Either<E1, A>): Either<E2, Either<A, B>> =>
+  <A>(self: Either<E1, A>): Either<E2, Either<A, B>> =>
     isLeft(self) ?
-      pipe(that, map(right)) :
+      pipe(that(self.left), map(right)) :
       pipe<Right<A>, Either<E2, Either<A, B>>>(self, map(left))
 
 /**
@@ -662,7 +652,7 @@ export const orElseEither = <E2, B>(
  */
 export const orElseFail = <E2>(
   onLeft: LazyArg<E2>
-): <E1, A>(self: Either<E1, A>) => Either<E2, A> => catchAll(() => left(onLeft()))
+): <E1, A>(self: Either<E1, A>) => Either<E2, A> => orElse(() => left(onLeft()))
 
 /**
  * @category instances
