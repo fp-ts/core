@@ -15,7 +15,6 @@ import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
-import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as N from "@fp-ts/core/Number"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
@@ -630,27 +629,18 @@ export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicat
   Applicative
 )
 
-/**
- * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
- *
- * @param collection - An iterable collection of `Option` to be searched
- *
- * @category error handling
- * @since 1.0.0
- */
-export const firstSomeOf = <A>(collection: Iterable<Option<A>>) =>
-  (self: Option<A>): Option<A> => {
-    let out = self
+const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> => {
+  let out = self
+  if (isSome(out)) {
+    return out
+  }
+  for (out of collection) {
     if (isSome(out)) {
       return out
     }
-    for (out of collection) {
-      if (isSome(out)) {
-        return out
-      }
-    }
-    return out
   }
+  return out
+}
 
 /**
  * @category instances
@@ -659,7 +649,7 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>) =>
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
   ...Invariant,
   coproduct: (self, that) => isSome(self) ? self : that,
-  coproductMany: (self, collection) => pipe(self, firstSomeOf(collection))
+  coproductMany
 }
 
 /**
@@ -679,18 +669,31 @@ export const coproductEither = <B>(that: Option<B>) =>
     isNone(self) ? pipe(that, map(either.right)) : pipe(self, map(either.left))
 
 /**
+ * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
+ *
+ * @param collection - An iterable collection of `Option` to be searched
+ *
+ * @category error handling
+ * @since 1.0.0
+ */
+export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
+  let out: Option<A> = none()
+  for (out of collection) {
+    if (isSome(out)) {
+      return out
+    }
+  }
+  return out
+}
+
+/**
  * @category instances
  * @since 1.0.0
  */
 export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
   ...SemiCoproduct,
   zero: none,
-  coproductAll: collection => {
-    const options = readonlyArray.fromIterable(collection)
-    return options.length > 0 ?
-      SemiCoproduct.coproductMany(options[0], options.slice(1)) :
-      option.none
-  }
+  coproductAll: firstSomeOf
 }
 
 /**
