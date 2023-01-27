@@ -35,7 +35,6 @@ Added in v1.0.0
   - [bindTo](#bindto)
   - [let](#let)
 - [error handling](#error-handling)
-  - [catchAll](#catchall)
   - [firstSomeOf](#firstsomeof)
   - [getFailureMonoid](#getfailuremonoid)
   - [getFailureSemigroup](#getfailuresemigroup)
@@ -389,18 +388,6 @@ Added in v1.0.0
 
 # error handling
 
-## catchAll
-
-Lazy version of `orElse`.
-
-**Signature**
-
-```ts
-export declare const catchAll: <B>(that: any) => <A>(self: Option<A>) => Option<B | A>
-```
-
-Added in v1.0.0
-
 ## firstSomeOf
 
 Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
@@ -500,7 +487,7 @@ Returns the provided option `that` if `self` is `None`, otherwise returns `self`
 **Signature**
 
 ```ts
-export declare const orElse: <B>(that: Option<B>) => <A>(self: Option<A>) => Option<B | A>
+export declare const orElse: <B>(that: any) => <A>(self: Option<A>) => Option<B | A>
 ```
 
 **Example**
@@ -509,10 +496,34 @@ export declare const orElse: <B>(that: Option<B>) => <A>(self: Option<A>) => Opt
 import * as O from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe(O.none(), O.orElse(O.none())), O.none())
-assert.deepStrictEqual(pipe(O.some('a'), O.orElse<string>(O.none())), O.some('a'))
-assert.deepStrictEqual(pipe(O.none(), O.orElse(O.some('b'))), O.some('b'))
-assert.deepStrictEqual(pipe(O.some('a'), O.orElse(O.some('b'))), O.some('a'))
+assert.deepStrictEqual(
+  pipe(
+    O.none(),
+    O.orElse(() => O.none())
+  ),
+  O.none()
+)
+assert.deepStrictEqual(
+  pipe(
+    O.some('a'),
+    O.orElse(() => O.none())
+  ),
+  O.some('a')
+)
+assert.deepStrictEqual(
+  pipe(
+    O.none(),
+    O.orElse(() => O.some('b'))
+  ),
+  O.some('b')
+)
+assert.deepStrictEqual(
+  pipe(
+    O.some('a'),
+    O.orElse(() => O.some('b'))
+  ),
+  O.some('a')
+)
 ```
 
 Added in v1.0.0
@@ -526,7 +537,7 @@ This is useful when it's important to know whether the value was retrieved from 
 **Signature**
 
 ```ts
-export declare const orElseEither: <B>(that: Option<B>) => <A>(self: Option<A>) => Option<any>
+export declare const orElseEither: <B>(that: any) => <A>(self: Option<A>) => Option<any>
 ```
 
 Added in v1.0.0

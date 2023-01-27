@@ -343,8 +343,8 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 | `getOrElse`           | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
 | `getOrNull`           | `Option<A>`                                         | `A \| null`            |
 | `getOrUndefined`      | `Option<A>`                                         | `A \| undefined`       |
-| `orElse`              | `Option<A>`, `Option<B>`                            | `Option<A \| B>`       |
-| `orElseEither`        | `Option<A>`, `Option<B>`                            | `Option<Either<A, B>>` |
+| `orElse`              | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>`       |
+| `orElseEither`        | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<Either<A, B>>` |
 | `firstSomeOf`         | `Iterable<Option<A>>`                               | `Option<A>`            |
 | `getFailureSemigroup` | `Semigroup<A>`                                      | `Semigroup<Option<A>>` |
 | `getFailureMonoid`    | `Monoid<A>`                                         | `Monoid<Option<A>>`    |
