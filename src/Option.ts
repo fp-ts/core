@@ -1021,15 +1021,6 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
 export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(constUndefined)
 
 /**
- * Lazy version of `orElse`.
- *
- * @category error handling
- * @since 1.0.0
- */
-export const catchAll = <B>(that: LazyArg<Option<B>>) =>
-  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
-
-/**
  * Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
  *
  * @param that - The option to return if `self` option is `None`
@@ -1042,28 +1033,28 @@ export const catchAll = <B>(that: LazyArg<Option<B>>) =>
  * assert.deepStrictEqual(
  *   pipe(
  *     O.none(),
- *     O.orElse(O.none())
+ *     O.orElse(() => O.none())
  *   ),
  *   O.none()
  * )
  * assert.deepStrictEqual(
  *   pipe(
  *     O.some('a'),
- *     O.orElse<string>(O.none())
+ *     O.orElse(() => O.none())
  *   ),
  *   O.some('a')
  * )
  * assert.deepStrictEqual(
  *   pipe(
  *     O.none(),
- *     O.orElse(O.some('b'))
+ *     O.orElse(() => O.some('b'))
  *   ),
  *   O.some('b')
  * )
  * assert.deepStrictEqual(
  *   pipe(
  *     O.some('a'),
- *     O.orElse(O.some('b'))
+ *     O.orElse(() => O.some('b'))
  *   ),
  *   O.some('a')
  * )
@@ -1071,8 +1062,8 @@ export const catchAll = <B>(that: LazyArg<Option<B>>) =>
  * @category error handling
  * @since 1.0.0
  */
-export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | B>) =>
-  catchAll(() => that)
+export const orElse = <B>(that: LazyArg<Option<B>>) =>
+  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
 
 /**
  * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
@@ -1086,12 +1077,12 @@ export const orElse = <B>(that: Option<B>): (<A>(self: Option<A>) => Option<A | 
  * @since 1.0.0
  */
 export const orElseEither = <B>(
-  that: Option<B>
+  that: LazyArg<Option<B>>
 ) =>
   <A>(self: Option<A>): Option<Either<A, B>> =>
     isNone(self) ?
-      pipe(that, map(either.right)) :
-      pipe<Some<A>, Option<Either<A, B>>>(self, map(either.left))
+      pipe(that(), map(either.right)) :
+      pipe(self, map(either.left))
 
 /**
  * The `Order` instance allows `Option` values to be compared with

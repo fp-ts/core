@@ -150,18 +150,11 @@ describe.concurrent("Option", () => {
     )
   })
 
-  it("catchAll", () => {
-    Util.deepStrictEqual(pipe(_.some(1), _.catchAll(() => _.some(2))), _.some(1))
-    Util.deepStrictEqual(pipe(_.some(1), _.catchAll(() => _.none())), _.some(1))
-    Util.deepStrictEqual(pipe(_.none(), _.catchAll(() => _.some(1))), _.some(1))
-    Util.deepStrictEqual(pipe(_.none(), _.catchAll(() => _.none())), _.none())
-  })
-
   it("orElseEither", () => {
-    expect(pipe(_.some(1), _.orElseEither(_.some(2)))).toEqual(_.some(E.left(1)))
-    expect(pipe(_.some(1), _.orElseEither(_.none()))).toEqual(_.some(E.left(1)))
-    expect(pipe(_.none(), _.orElseEither(_.some(2)))).toEqual(_.some(E.right(2)))
-    expect(pipe(_.none(), _.orElseEither(_.none()))).toEqual(_.none())
+    expect(pipe(_.some(1), _.orElseEither(() => _.some(2)))).toEqual(_.some(E.left(1)))
+    expect(pipe(_.some(1), _.orElseEither(() => _.none()))).toEqual(_.some(E.left(1)))
+    expect(pipe(_.none(), _.orElseEither(() => _.some(2)))).toEqual(_.some(E.right(2)))
+    expect(pipe(_.none(), _.orElseEither(() => _.none()))).toEqual(_.none())
   })
 
   it("inspectSome", () => {
@@ -297,7 +290,7 @@ describe.concurrent("Option", () => {
       b: _.Option<number>,
       expected: _.Option<number>
     ) => {
-      Util.deepStrictEqual(pipe(a, _.orElse(b)), expected)
+      Util.deepStrictEqual(pipe(a, _.orElse(() => b)), expected)
     }
     assertAlt(_.some(1), _.some(2), _.some(1))
     assertAlt(_.some(1), _.none(), _.some(1))
