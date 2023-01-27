@@ -324,13 +324,15 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 
 **Cheat sheet** (error handling)
 
-| Name             | Given                                               | To                     |
-| ---------------- | --------------------------------------------------- | ---------------------- |
-| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`               |
-| `getOrThrow`     | `Option<A>`                                         | `A`                    |
-| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
-| `getOrNull`      | `Option<A>`                                         | `A \| null`            |
-| `getOrUndefined` | `Option<A>`                                         | `A \| undefined`       |
-| `orElse`         | `Option<A>`, `Option<B>`                            | `Option<A \| B>`       |
-| `orElseEither`   | `Option<A>`, `Option<B>`                            | `Option<Either<A, B>>` |
-| `firstSomeOf`    | `Option<A>`, `Iterable<Option<A>>`                  | `Option<A>`            |
+| Name                  | Given                                               | To                     |
+| --------------------- | --------------------------------------------------- | ---------------------- |
+| `match`               | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`               |
+| `getOrThrow`          | `Option<A>`                                         | `A`                    |
+| `getOrElse`           | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
+| `getOrNull`           | `Option<A>`                                         | `A \| null`            |
+| `getOrUndefined`      | `Option<A>`                                         | `A \| undefined`       |
+| `orElse`              | `Option<A>`, `Option<B>`                            | `Option<A \| B>`       |
+| `orElseEither`        | `Option<A>`, `Option<B>`                            | `Option<Either<A, B>>` |
+| `firstSomeOf`         | `Option<A>`, `Iterable<Option<A>>`                  | `Option<A>`            |
+| `getFailureSemigroup` | `Semigroup<A>`                                      | `Semigroup<Option<A>>` |
+| `getFailureMonoid`    | `Monoid<A>`                                         | `Monoid<Option<A>>`    |
