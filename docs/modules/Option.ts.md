@@ -90,7 +90,6 @@ Added in v1.0.0
   - [liftEither](#lifteither)
   - [liftNullable](#liftnullable)
   - [liftPredicate](#liftpredicate)
-  - [map2](#map2)
 - [mapping](#mapping)
   - [as](#as)
   - [asUnit](#asunit)
@@ -102,6 +101,8 @@ Added in v1.0.0
   - [Some (interface)](#some-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
+- [products](#products)
+  - [zipWith](#zipwith)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
   - [flatMap](#flatmap)
@@ -1095,16 +1096,6 @@ assert.deepStrictEqual(getOption(1), O.some(1))
 
 Added in v1.0.0
 
-## map2
-
-**Signature**
-
-```ts
-export declare const map2: <B, A, C>(fb: Option<B>, f: (a: A, b: B) => C) => (fa: Option<A>) => Option<C>
-```
-
-Added in v1.0.0
-
 # mapping
 
 ## as
@@ -1230,6 +1221,18 @@ assert.strictEqual(
   ),
   'a none'
 )
+```
+
+Added in v1.0.0
+
+# products
+
+## zipWith
+
+**Signature**
+
+```ts
+export declare const zipWith: <B, A, C>(fb: Option<B>, f: (a: A, b: B) => C) => (fa: Option<A>) => Option<C>
 ```
 
 Added in v1.0.0

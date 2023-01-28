@@ -479,13 +479,13 @@ export const lift2: <A, B, C>(
   .lift2(SemiApplicative)
 
 /**
- * @category lifting
+ * @category products
  * @since 1.0.0
  */
-export const map2: <E2, B, A, C>(
+export const zipWith: <E2, B, A, C>(
   fb: Either<E2, B>,
   f: (a: A, b: B) => C
-) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C> = semiApplicative.map2(SemiApplicative)
+) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C> = semiApplicative.zipWith(SemiApplicative)
 
 /**
  * @since 1.0.0

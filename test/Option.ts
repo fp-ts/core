@@ -564,10 +564,10 @@ describe.concurrent("Option", () => {
     )
   })
 
-  it("map2", () => {
-    expect(pipe(_.none(), _.map2(_.some(2), (a, b) => a + b))).toEqual(_.none())
-    expect(pipe(_.some(1), _.map2(_.none(), (a, b) => a + b))).toEqual(_.none())
-    expect(pipe(_.some(1), _.map2(_.some(2), (a, b) => a + b))).toEqual(_.some(3))
+  it("zipWith", () => {
+    expect(pipe(_.none(), _.zipWith(_.some(2), (a, b) => a + b))).toEqual(_.none())
+    expect(pipe(_.some(1), _.zipWith(_.none(), (a, b) => a + b))).toEqual(_.none())
+    expect(pipe(_.some(1), _.zipWith(_.some(2), (a, b) => a + b))).toEqual(_.some(3))
   })
 
   it("reduceAll", () => {

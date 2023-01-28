@@ -91,7 +91,6 @@ Added in v1.0.0
   - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
   - [liftPredicate](#liftpredicate)
-  - [map2](#map2)
 - [mapping](#mapping)
   - [as](#as)
   - [asUnit](#asunit)
@@ -105,6 +104,8 @@ Added in v1.0.0
   - [Right (interface)](#right-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
+- [products](#products)
+  - [zipWith](#zipwith)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
   - [flatMap](#flatmap)
@@ -1072,19 +1073,6 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
-## map2
-
-**Signature**
-
-```ts
-export declare const map2: <E2, B, A, C>(
-  fb: Either<E2, B>,
-  f: (a: A, b: B) => C
-) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C>
-```
-
-Added in v1.0.0
-
 # mapping
 
 ## as
@@ -1219,6 +1207,21 @@ const onRight = (value: number): string => `Ok: ${value}`
 
 assert.strictEqual(pipe(E.right(1), E.match(onLeft, onRight)), 'Ok: 1')
 assert.strictEqual(pipe(E.left(['error 1', 'error 2']), E.match(onLeft, onRight)), 'Errors: error 1, error 2')
+```
+
+Added in v1.0.0
+
+# products
+
+## zipWith
+
+**Signature**
+
+```ts
+export declare const zipWith: <E2, B, A, C>(
+  fb: Either<E2, B>,
+  f: (a: A, b: B) => C
+) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C>
 ```
 
 Added in v1.0.0
