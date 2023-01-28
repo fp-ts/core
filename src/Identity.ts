@@ -333,8 +333,8 @@ export const liftSemigroup: <A>(S: Semigroup<A>) => Semigroup<Identity<A>> = sem
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => (fa: Identity<A>, fb: Identity<B>) => Identity<C> = semiApplicative.lift2(
+  f: (a: A) => (b: B) => C
+) => (fa: Identity<A>) => (fb: Identity<B>) => Identity<C> = semiApplicative.lift2(
   SemiApplicative
 )
 

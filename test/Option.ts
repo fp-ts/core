@@ -50,7 +50,6 @@ describe.concurrent("Option", () => {
     expect(_.SemiApplicative).exist
     expect(_.getFailureSemigroup).exist // liftSemigroup
     expect(_.lift2).exist
-    expect(_.lift2Curried).exist
     expect(_.ap).exist
     expect(_.andThenDiscard).exist
     expect(_.andThen).exist
@@ -588,7 +587,7 @@ describe.concurrent("Option", () => {
     expect(pipe(_.some(2), _.subtract(_.some(3)))).toEqual(_.some(-1))
   })
 
-  it("subtract", () => {
+  it("divide", () => {
     expect(pipe(_.none(), _.divide(_.some(2)))).toEqual(_.none())
     expect(pipe(_.some(1), _.divide(_.none()))).toEqual(_.none())
     expect(pipe(_.some(6), _.divide(_.some(3)))).toEqual(_.some(2))

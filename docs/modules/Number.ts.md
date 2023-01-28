@@ -16,6 +16,13 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [algebraic operations](#algebraic-operations)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [multiplyAll](#multiplyall)
+  - [subtract](#subtract)
+  - [sum](#sum)
+  - [sumAll](#sumall)
 - [guards](#guards)
   - [isNumber](#isnumber)
 - [instances](#instances)
@@ -32,16 +39,108 @@ Added in v1.0.0
   - [SemigroupSum](#semigroupsum)
 - [utils](#utils)
   - [decrement](#decrement)
-  - [divide](#divide)
   - [increment](#increment)
-  - [multiply](#multiply)
-  - [multiplyAll](#multiplyall)
   - [sign](#sign)
-  - [subtract](#subtract)
-  - [sum](#sum)
-  - [sumAll](#sumall)
 
 ---
+
+# algebraic operations
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { divide } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(6, divide(3)), 2)
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { multiply } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, multiply(3)), 6)
+```
+
+Added in v1.0.0
+
+## multiplyAll
+
+**Signature**
+
+```ts
+export declare const multiplyAll: (collection: Iterable<number>) => number
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { subtract } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, subtract(3)), -1)
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: (that: number) => (self: number) => number
+```
+
+**Example**
+
+```ts
+import { sum } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(2, sum(3)), 5)
+```
+
+Added in v1.0.0
+
+## sumAll
+
+**Signature**
+
+```ts
+export declare const sumAll: (collection: Iterable<number>) => number
+```
+
+Added in v1.0.0
 
 # guards
 
@@ -218,25 +317,6 @@ assert.deepStrictEqual(pipe(3, decrement), 2)
 
 Added in v1.0.0
 
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: (that: number) => (self: number) => number
-```
-
-**Example**
-
-```ts
-import { divide } from '@fp-ts/core/Number'
-import { pipe } from '@fp-ts/core/Function'
-
-assert.deepStrictEqual(pipe(6, divide(3)), 2)
-```
-
-Added in v1.0.0
-
 ## increment
 
 **Signature**
@@ -256,89 +336,12 @@ assert.deepStrictEqual(pipe(2, increment), 3)
 
 Added in v1.0.0
 
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: (that: number) => (self: number) => number
-```
-
-**Example**
-
-```ts
-import { multiply } from '@fp-ts/core/Number'
-import { pipe } from '@fp-ts/core/Function'
-
-assert.deepStrictEqual(pipe(2, multiply(3)), 6)
-```
-
-Added in v1.0.0
-
-## multiplyAll
-
-**Signature**
-
-```ts
-export declare const multiplyAll: (collection: Iterable<number>) => number
-```
-
-Added in v1.0.0
-
 ## sign
 
 **Signature**
 
 ```ts
 export declare const sign: (n: number) => any
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: (that: number) => (self: number) => number
-```
-
-**Example**
-
-```ts
-import { subtract } from '@fp-ts/core/Number'
-import { pipe } from '@fp-ts/core/Function'
-
-assert.deepStrictEqual(pipe(2, subtract(3)), -1)
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: (that: number) => (self: number) => number
-```
-
-**Example**
-
-```ts
-import { sum } from '@fp-ts/core/Number'
-import { pipe } from '@fp-ts/core/Function'
-
-assert.deepStrictEqual(pipe(2, sum(3)), 5)
-```
-
-Added in v1.0.0
-
-## sumAll
-
-**Signature**
-
-```ts
-export declare const sumAll: (collection: Iterable<number>) => number
 ```
 
 Added in v1.0.0

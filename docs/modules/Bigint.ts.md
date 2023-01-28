@@ -16,6 +16,11 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [algebraic operations](#algebraic-operations)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [subtract](#subtract)
+  - [sum](#sum)
 - [guards](#guards)
   - [isBigint](#isbigint)
 - [instances](#instances)
@@ -27,13 +32,51 @@ Added in v1.0.0
   - [SemigroupSum](#semigroupsum)
 - [utils](#utils)
   - [decrement](#decrement)
-  - [divide](#divide)
   - [increment](#increment)
-  - [multiply](#multiply)
-  - [subtract](#subtract)
-  - [sum](#sum)
 
 ---
+
+# algebraic operations
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: (that: bigint) => (self: bigint) => bigint
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: (that: bigint) => (self: bigint) => bigint
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: (that: bigint) => (self: bigint) => bigint
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: (that: bigint) => (self: bigint) => bigint
+```
+
+Added in v1.0.0
 
 # guards
 
@@ -133,52 +176,12 @@ export declare const decrement: (n: bigint) => bigint
 
 Added in v1.0.0
 
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: (that: bigint) => (self: bigint) => bigint
-```
-
-Added in v1.0.0
-
 ## increment
 
 **Signature**
 
 ```ts
 export declare const increment: (n: bigint) => bigint
-```
-
-Added in v1.0.0
-
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: (that: bigint) => (self: bigint) => bigint
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: (that: bigint) => (self: bigint) => bigint
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: (that: bigint) => (self: bigint) => bigint
 ```
 
 Added in v1.0.0

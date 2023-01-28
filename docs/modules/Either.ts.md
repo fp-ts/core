@@ -22,6 +22,11 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [algebraic operations](#algebraic-operations)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [subtract](#subtract)
+  - [sum](#sum)
 - [combining](#combining)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
@@ -83,14 +88,13 @@ Added in v1.0.0
   - [SemiCoproduct](#semicoproduct)
   - [SemiProduct](#semiproduct)
   - [Traversable](#traversable)
-  - [getSemigroup](#getsemigroup)
+  - [getOptionalSemigroup](#getoptionalsemigroup)
 - [interop](#interop)
   - [fromThrowable](#fromthrowable)
   - [getOrThrow](#getorthrow)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [lift2](#lift2)
-  - [lift2Curried](#lift2curried)
   - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
   - [liftPredicate](#liftpredicate)
@@ -124,22 +128,64 @@ Added in v1.0.0
   - [ap](#ap)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
-  - [divide](#divide)
   - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
-  - [multiply](#multiply)
-  - [multiplyMany](#multiplymany)
   - [reverse](#reverse)
   - [struct](#struct)
-  - [subtract](#subtract)
-  - [sum](#sum)
-  - [sumMany](#summany)
   - [tap](#tap)
   - [tuple](#tuple)
   - [unit](#unit)
 
 ---
+
+# algebraic operations
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: <E2>(that: Either<E2, unknown>) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
 
 # combining
 
@@ -842,15 +888,15 @@ export declare const Traversable: any
 
 Added in v1.0.0
 
-## getSemigroup
+## getOptionalSemigroup
 
-Semigroup returning the left-most non-`Left` value. If both operands are `Right`s then the inner values are
-concatenated using the provided `Semigroup`
+Semigroup that models the combination of values that may be absent, elements that are `Left` are ignored
+while elements that are `Right` are combined using the provided `Semigroup`.
 
 **Signature**
 
 ```ts
-export declare const getSemigroup: <E, A>(S: any) => any
+export declare const getOptionalSemigroup: <E, A>(S: any) => any
 ```
 
 Added in v2.0.0
@@ -918,28 +964,14 @@ Added in v1.0.0
 
 ## lift2
 
-Lifts a binary function into `Either` as uncurried binary function.
+Lifts a binary function into `Either`.
 
 **Signature**
 
 ```ts
 export declare const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => <E1, E2>(fa: Either<E1, A>, fb: Either<E2, B>) => Either<E1 | E2, C>
-```
-
-Added in v1.0.0
-
-## lift2Curried
-
-Lifts a binary function into `Either` as curried binary function.
-
-**Signature**
-
-```ts
-export declare const lift2Curried: <A, B, C>(
-  f: (a: A, b: B) => C
-) => <E2>(that: Either<E2, B>) => <E1>(self: Either<E1, A>) => Either<E2 | E1, C>
+  f: (a: A) => (b: B) => C
+) => <E2>(that: Either<E2, A>) => <E1>(self: Either<E1, B>) => Either<E2 | E1, C>
 ```
 
 Added in v1.0.0
@@ -1309,16 +1341,6 @@ export declare const contains: <A>(equivalence: any) => (a: A) => <E>(self: Eith
 
 Added in v1.0.0
 
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-```
-
-Added in v1.0.0
-
 ## element
 
 Adds an element to the end of a tuple.
@@ -1367,28 +1389,6 @@ export declare const flatten: <E1, E2, A>(self: Either<E1, Either<E2, A>>) => Ei
 
 Added in v1.0.0
 
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
-```
-
-Added in v1.0.0
-
-## multiplyMany
-
-**Signature**
-
-```ts
-export declare const multiplyMany: any
-```
-
-Added in v1.0.0
-
 ## reverse
 
 **Signature**
@@ -1410,38 +1410,6 @@ export declare const struct: <R extends Record<string, Either<any, any>>>(
   [R[keyof R]] extends [Either<infer E, any>] ? E : never,
   { [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }
 >
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: <E2>(
-  that: Either<E2, number>
-) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: <E2>(that: Either<E2, unknown>) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
-```
-
-Added in v1.0.0
-
-## sumMany
-
-**Signature**
-
-```ts
-export declare const sumMany: any
 ```
 
 Added in v1.0.0

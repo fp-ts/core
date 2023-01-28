@@ -22,6 +22,7 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
+import * as N from "@fp-ts/core/Number"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
@@ -985,12 +986,12 @@ export const SemiApplicative: semiApplicative.SemiApplicative<ValidatedTypeLambd
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => <E1, E2>(
-  fa: Validated<E1, A>,
-  fb: Validated<E2, B>
-) => Validated<E1 | E2, C> = semiApplicative
-  .lift2(SemiApplicative)
+  f: (a: A) => (b: B) => C
+) => <E2>(
+  that: Validated<E2, A>
+) => <E1>(self: Validated<E1, B>) => Validated<E2 | E1, C> = semiApplicative.lift2(
+  SemiApplicative
+)
 
 /**
  * @since 1.0.0
@@ -1268,3 +1269,31 @@ export const Monad: monad.Monad<ValidatedTypeLambda> = {
   of,
   flatMap
 }
+
+// -------------------------------------------------------------------------------------
+// algebraic operations
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const sum = lift2(N.sum)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const multiply = lift2(N.multiply)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const subtract = lift2(N.subtract)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const divide = lift2(N.divide)

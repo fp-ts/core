@@ -26,6 +26,7 @@ export const isNumber = predicate.isNumber
  *
  * assert.deepStrictEqual(pipe(2, sum(3)), 5)
  *
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const sum = (that: number) =>
@@ -38,6 +39,7 @@ export const sum = (that: number) =>
  *
  * assert.deepStrictEqual(pipe(2, multiply(3)), 6)
  *
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const multiply = (that: number) =>
@@ -50,6 +52,7 @@ export const multiply = (that: number) =>
  *
  * assert.deepStrictEqual(pipe(2, subtract(3)), -1)
  *
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const subtract = (that: number) => (self: number): number => self - that
@@ -61,6 +64,7 @@ export const subtract = (that: number) => (self: number): number => self - that
  *
  * assert.deepStrictEqual(pipe(6, divide(3)), 2)
  *
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const divide = (that: number) => (self: number): number => self / that
@@ -183,11 +187,13 @@ export const MonoidMin = bounded.min(Bounded)
 export const sign = (n: number): Ordering => n < 0 ? -1 : n > 0 ? 1 : 0
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const sumAll: (collection: Iterable<number>) => number = MonoidSum.combineAll
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const multiplyAll: (collection: Iterable<number>) => number = MonoidMultiply.combineAll

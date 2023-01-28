@@ -19,7 +19,6 @@ Added in v1.0.0
   - [andThenDiscard](#andthendiscard)
   - [ap](#ap)
   - [lift2](#lift2)
-  - [lift2Curried](#lift2curried)
   - [liftSemigroup](#liftsemigroup)
   - [map2](#map2)
 
@@ -77,28 +76,14 @@ Added in v1.0.0
 
 ## lift2
 
-Lifts a binary function into `F` as uncurried binary function.
+Lifts a binary function into `F`.
 
 **Signature**
 
 ```ts
 export declare const lift2: <F extends any>(
   F: SemiApplicative<F>
-) => <A, B, C>(f: (a: A, b: B) => C) => <R1, O1, E1, R2, O2, E2>(fa: any, fb: any) => any
-```
-
-Added in v1.0.0
-
-## lift2Curried
-
-Lifts a binary function into `F` as curried binary function.
-
-**Signature**
-
-```ts
-export declare const lift2Curried: <F extends any>(
-  F: SemiApplicative<F>
-) => <A, B, C>(f: (a: A, b: B) => C) => <R2, O2, E2>(that: any) => <R1, O1, E1>(self: any) => any
+) => <A, B, C>(f: (a: A) => (b: B) => C) => <R2, O2, E2>(that: any) => <R1, O1, E1>(self: any) => any
 ```
 
 Added in v1.0.0

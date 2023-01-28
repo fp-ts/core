@@ -476,26 +476,15 @@ export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<
     .liftSemigroup(SemiApplicative)
 
 /**
- * Lifts a binary function into `Either` as uncurried binary function.
+ * Lifts a binary function into `Either`.
  *
  * @category lifting
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => <E1, E2>(fa: Either<E1, A>, fb: Either<E2, B>) => Either<E1 | E2, C> = semiApplicative
+  f: (a: A) => (b: B) => C
+) => <E2>(that: Either<E2, A>) => <E1>(self: Either<E1, B>) => Either<E2 | E1, C> = semiApplicative
   .lift2(SemiApplicative)
-
-/**
- * Lifts a binary function into `Either` as curried binary function.
- *
- * @category lifting
- * @since 1.0.0
- */
-export const lift2Curried: <A, B, C>(
-  f: (a: A, b: B) => C
-) => <E2>(that: Either<E2, B>) => <E1>(self: Either<E1, A>) => Either<E2 | E1, C> = semiApplicative
-  .lift2Curried(SemiApplicative)
 
 /**
  * @category lifting
@@ -1109,44 +1098,42 @@ export const exists = <A>(predicate: Predicate<A>) =>
   <E>(self: Either<E, A>): boolean => isLeft(self) ? false : predicate(self.right)
 
 /**
- * @since 1.0.0
- */
-export const sum = lift2Curried(N.SemigroupSum.combine)
-
-/**
- * @since 1.0.0
- */
-export const multiply = lift2Curried(N.SemigroupMultiply.combine)
-
-/**
- * @since 1.0.0
- */
-export const subtract = lift2Curried((a: number, b: number) => a - b)
-
-/**
- * @since 1.0.0
- */
-export const divide = lift2Curried((a: number, b: number) => a / b)
-
-/**
- * Semigroup returning the left-most non-`Left` value. If both operands are `Right`s then the inner values are
- * concatenated using the provided `Semigroup`
+ * Semigroup that models the combination of values that may be absent, elements that are `Left` are ignored
+ * while elements that are `Right` are combined using the provided `Semigroup`.
  *
  * @category instances
  * @since 2.0.0
  */
-export const getSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E, A>> =>
+export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E, A>> =>
   semigroup.fromCombine((
     x,
     y
   ) => (isLeft(y) ? x : isLeft(x) ? y : right(S.combine(x.right, y.right))))
 
-/**
- * @since 1.0.0
- */
-export const sumMany = getSemigroup(N.SemigroupSum).combineMany
+// -------------------------------------------------------------------------------------
+// algebraic operations
+// -------------------------------------------------------------------------------------
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyMany = getSemigroup(N.SemigroupMultiply).combineMany
+export const sum = lift2(N.sum)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const multiply = lift2(N.multiply)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const subtract = lift2(N.subtract)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const divide = lift2(N.divide)
