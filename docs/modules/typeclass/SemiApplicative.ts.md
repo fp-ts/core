@@ -105,6 +105,8 @@ Added in v1.0.0
 
 ## zipWith
 
+Zips two `F` values together using a provided function, returning a new `F` of the result.
+
 **Signature**
 
 ```ts

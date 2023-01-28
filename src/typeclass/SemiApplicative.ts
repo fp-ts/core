@@ -30,6 +30,12 @@ export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   })
 
 /**
+ * Zips two `F` values together using a provided function, returning a new `F` of the result.
+ *
+ * @param fa - The left-hand side of the zip operation
+ * @param fb - The right-hand side of the zip operation
+ * @param f - The function used to combine the values of the two `Option`s
+ *
  * @since 1.0.0
  */
 export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>) =>
