@@ -6,20 +6,6 @@ parent: Modules
 
 ## These overview
 
-A data structure providing "inclusive-or" as opposed to `Either`'s "exclusive-or".
-
-If you interpret `Either<E, A>` as suggesting the computation may either fail or succeed (exclusively), then
-`These<E, A>` may fail, succeed, or do both at the same time.
-
-There are a few ways to interpret the `Both` case:
-
-1. You can think of a computation that has a non-fatal error.
-2. You can think of a computation that went as far as it could before erroring.
-3. You can think of a computation that keeps track of errors as it completes.
-
-Another way you can think of `These<E, A>` is saying that we want to handle `E` kind of data, `A` kind of data, or
-both `E` and `A` kind of data at the same time. This is particularly useful when it comes to displaying UI's.
-
 Added in v1.0.0
 
 ---
@@ -29,8 +15,11 @@ Added in v1.0.0
 - [algebraic operations](#algebraic-operations)
   - [divide](#divide)
   - [multiply](#multiply)
+  - [multiplyBigint](#multiplybigint)
   - [subtract](#subtract)
+  - [subtractBigint](#subtractbigint)
   - [sum](#sum)
+  - [sumBigint](#sumbigint)
 - [combining](#combining)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
@@ -193,6 +182,16 @@ export declare const multiply: <E2>(that: any) => <E1>(self: any) => any
 
 Added in v1.0.0
 
+## multiplyBigint
+
+**Signature**
+
+```ts
+export declare const multiplyBigint: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
+
 ## subtract
 
 **Signature**
@@ -203,12 +202,32 @@ export declare const subtract: <E2>(that: any) => <E1>(self: any) => any
 
 Added in v1.0.0
 
+## subtractBigint
+
+**Signature**
+
+```ts
+export declare const subtractBigint: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
+
 ## sum
 
 **Signature**
 
 ```ts
 export declare const sum: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
+
+## sumBigint
+
+**Signature**
+
+```ts
+export declare const sumBigint: <E2>(that: any) => <E1>(self: any) => any
 ```
 
 Added in v1.0.0

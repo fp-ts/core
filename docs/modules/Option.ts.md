@@ -16,9 +16,12 @@ Added in v1.0.0
   - [divide](#divide)
   - [multiply](#multiply)
   - [multiplyAll](#multiplyall)
+  - [multiplyBigint](#multiplybigint)
   - [subtract](#subtract)
+  - [subtractBigint](#subtractbigint)
   - [sum](#sum)
   - [sumAll](#sumall)
+  - [sumBigint](#sumbigint)
 - [combinators](#combinators)
   - [tap](#tap)
 - [constructors](#constructors)
@@ -159,7 +162,17 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiplyAll: (self: Iterable<Option<unknown>>) => number
+export declare const multiplyAll: (self: Iterable<Option<number>>) => number
+```
+
+Added in v1.0.0
+
+## multiplyBigint
+
+**Signature**
+
+```ts
+export declare const multiplyBigint: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
 ```
 
 Added in v1.0.0
@@ -170,6 +183,16 @@ Added in v1.0.0
 
 ```ts
 export declare const subtract: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## subtractBigint
+
+**Signature**
+
+```ts
+export declare const subtractBigint: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
 ```
 
 Added in v1.0.0
@@ -189,7 +212,17 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sumAll: (self: Iterable<Option<unknown>>) => number
+export declare const sumAll: (self: Iterable<Option<number>>) => number
+```
+
+Added in v1.0.0
+
+## sumBigint
+
+**Signature**
+
+```ts
+export declare const sumBigint: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
 ```
 
 Added in v1.0.0

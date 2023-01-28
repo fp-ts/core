@@ -6,16 +6,6 @@ parent: Modules
 
 ## Either overview
 
-The `Either` data type is a powerful and flexible tool for handling potentially failed computations.
-It has two variants, `Left` and `Right`, which can be used to represent different outcomes.
-
-The `Left` variant is used to represent a failure, and it can contain useful information such as an error message
-or a failure code. The `Right` variant is used to represent a successful outcome, and it can contain the result
-of the computation.
-
-Unlike `Option`, `Either` allows you to attach additional information to the failure case, making it more
-informative than a simple `null` or `undefined`.
-
 Added in v1.0.0
 
 ---
@@ -25,8 +15,11 @@ Added in v1.0.0
 - [algebraic operations](#algebraic-operations)
   - [divide](#divide)
   - [multiply](#multiply)
+  - [multiplyBigint](#multiplybigint)
   - [subtract](#subtract)
+  - [subtractBigint](#subtractbigint)
   - [sum](#sum)
+  - [sumBigint](#sumbigint)
 - [combining](#combining)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
@@ -165,6 +158,18 @@ export declare const multiply: <E2>(
 
 Added in v1.0.0
 
+## multiplyBigint
+
+**Signature**
+
+```ts
+export declare const multiplyBigint: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
 ## subtract
 
 **Signature**
@@ -177,12 +182,36 @@ export declare const subtract: <E2>(
 
 Added in v1.0.0
 
+## subtractBigint
+
+**Signature**
+
+```ts
+export declare const subtractBigint: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
 ## sum
 
 **Signature**
 
 ```ts
 export declare const sum: <E2>(that: Either<E2, unknown>) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+```
+
+Added in v1.0.0
+
+## sumBigint
+
+**Signature**
+
+```ts
+export declare const sumBigint: <E2>(
+  that: Either<E2, unknown>
+) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
 ```
 
 Added in v1.0.0

@@ -1,16 +1,8 @@
 /**
- * The `Either` data type is a powerful and flexible tool for handling potentially failed computations.
- * It has two variants, `Left` and `Right`, which can be used to represent different outcomes.
- *
- * The `Left` variant is used to represent a failure, and it can contain useful information such as an error message
- * or a failure code. The `Right` variant is used to represent a successful outcome, and it can contain the result
- * of the computation.
- *
- * Unlike `Option`, `Either` allows you to attach additional information to the failure case, making it more
- * informative than a simple `null` or `undefined`.
- *
  * @since 1.0.0
  */
+
+import * as BI from "@fp-ts/core/Bigint"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -1137,3 +1129,21 @@ export const subtract = lift2(N.subtract)
  * @since 1.0.0
  */
 export const divide = lift2(N.divide)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const sumBigint = lift2(BI.sum)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const multiplyBigint = lift2(BI.multiply)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const subtractBigint = lift2(BI.subtract)

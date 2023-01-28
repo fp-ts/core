@@ -1,20 +1,8 @@
 /**
- * A data structure providing "inclusive-or" as opposed to `Either`'s "exclusive-or".
- *
- * If you interpret `Either<E, A>` as suggesting the computation may either fail or succeed (exclusively), then
- * `These<E, A>` may fail, succeed, or do both at the same time.
- *
- * There are a few ways to interpret the `Both` case:
- *
- * 1) You can think of a computation that has a non-fatal error.
- * 2) You can think of a computation that went as far as it could before erroring.
- * 3) You can think of a computation that keeps track of errors as it completes.
- *
- * Another way you can think of `These<E, A>` is saying that we want to handle `E` kind of data, `A` kind of data, or
- * both `E` and `A` kind of data at the same time. This is particularly useful when it comes to displaying UI's.
- *
  * @since 1.0.0
  */
+
+import * as BI from "@fp-ts/core/Bigint"
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
@@ -1297,3 +1285,21 @@ export const subtract = lift2(N.subtract)
  * @since 1.0.0
  */
 export const divide = lift2(N.divide)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const sumBigint = lift2(BI.sum)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const multiplyBigint = lift2(BI.multiply)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const subtractBigint = lift2(BI.subtract)
