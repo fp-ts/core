@@ -170,8 +170,9 @@ export const constVoid: LazyArg<void> = constUndefined
  *
  * @since 1.0.0
  */
-export const flip = <A, B, C>(f: (a: A) => (b: B) => C): ((b: B) => (a: A) => C) =>
-  (b) => (a) => f(a)(b)
+export const flip = <A extends Array<unknown>, B extends Array<unknown>, C>(
+  f: (...a: A) => (...b: B) => C
+): ((...b: B) => (...a: A) => C) => (...b) => (...a) => f(...a)(...b)
 
 /**
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
