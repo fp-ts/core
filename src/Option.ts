@@ -77,7 +77,10 @@ export interface OptionTypeLambda extends TypeLambda {
 // -------------------------------------------------------------------------------------
 
 /**
- * Creates a new `Option` that represents a absence of value.
+ * Creates a new `Option` that represents the absence of a value.
+ *
+ * This can be useful when working with optional values or to represent a computation that failed.
+ * It returns a new `Option` object that does not contain any value.
  *
  * @category constructors
  * @since 1.0.0
@@ -87,10 +90,14 @@ export const none = <A = never>(): Option<A> => option.none
 /**
  * Creates a new `Option` that wraps the given value.
  *
+ * This can be useful when working with optional values or to represent a computation that succeeded with a value.
+ *
+ * @param value - The value to wrap.
+ *
  * @category constructors
  * @since 1.0.0
  */
-export const some: <A>(a: A) => Option<A> = option.some
+export const some: <A>(value: A) => Option<A> = option.some
 
 // -------------------------------------------------------------------------------------
 // guards
@@ -98,6 +105,8 @@ export const some: <A>(a: A) => Option<A> = option.some
 
 /**
  * Checks if the specified value is an instance of `Option`, returns `true` if it is, `false` otherwise.
+ *
+ * @param input - The value to check.
  *
  * @example
  * import { some, none, isOption } from '@fp-ts/core/Option'
@@ -109,10 +118,12 @@ export const some: <A>(a: A) => Option<A> = option.some
  * @category guards
  * @since 1.0.0
  */
-export const isOption: (u: unknown) => u is Option<unknown> = option.isOption
+export const isOption: (input: unknown) => input is Option<unknown> = option.isOption
 
 /**
  * Returns `true` if the option is `None`, `false` otherwise.
+ *
+ * @param self - The option to check.
  *
  * @example
  * import { some, none, isNone } from '@fp-ts/core/Option'
@@ -127,6 +138,8 @@ export const isNone: <A>(self: Option<A>) => self is None = option.isNone
 
 /**
  * Returns `true` if the option is an instance of `Some`, `false` otherwise.
+ *
+ * @param self - The option to check.
  *
  * @example
  * import { some, none, isSome } from '@fp-ts/core/Option'
@@ -147,6 +160,8 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
  * Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
  * returns the value wrapped in a `Some`.
  *
+ * @param nullableValue - The nullable value to be converted to an `Option`.
+ *
  * @example
  * import { none, some, fromNullable } from '@fp-ts/core/Option'
  *
@@ -157,7 +172,7 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
  * @category conversions
  * @since 1.0.0
  */
-export const fromNullable: <A>(a: A) => Option<NonNullable<A>> = option.fromNullable
+export const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>> = option.fromNullable
 
 /**
  * Returns a `Refinement` from a `Option` returning function.
@@ -170,6 +185,18 @@ export const toRefinement = <A, B extends A>(f: (a: A) => Option<B>): Refinement
   (a: A): a is B => isSome(f(a))
 
 /**
+ * Converts an `Iterable` of values into an `Option`. Returns the first value of the `Iterable` wrapped in a `Some`
+ * if the `Iterable` is not empty, otherwise returns `None`.
+ *
+ * @param collection - The `Iterable` to be converted to an `Option`.
+ *
+ * @example
+ * import { fromIterable, some, none } from '@fp-ts/core/Option'
+ *
+ * const collection = [1, 2, 3]
+ * assert.deepStrictEqual(fromIterable(collection), some(1))
+ * assert.deepStrictEqual(fromIterable([]), none())
+ *
  * @category conversions
  * @since 1.0.0
  */
@@ -182,6 +209,8 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
 
 /**
  * Converts a `Either` to an `Option` discarding the error.
+ *
+ * @param self - The `Either` to convert to an `Option`.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -196,6 +225,20 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
 export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
 
 /**
+ * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
+ *
+ * @param onNone - a function that produces an error value when the option is `None`.
+ * @param self - the `Option` to convert.
+ *
+ * @example
+ * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * const onNone = () => 'error'
+ * assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
+ * assert.deepStrictEqual(pipe(O.none(), O.toEither(onNone)), E.left('error'))
+ *
  * @category conversions
  * @since 1.0.0
  */
@@ -209,9 +252,9 @@ export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either
 /**
  * Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
  *
- * @param onNone - Function that returns the default value to return if the `Option` is `None`
- * @param self - The `Option` to get the value of
- *  *
+ * @param onNone - Function that returns the default value to return if the `Option` is `None`.
+ * @param self - The `Option` to get the value of.
+ *
  * @example
  * import { some, none, getOrElse } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
@@ -228,8 +271,8 @@ export const getOrElse = <B>(onNone: LazyArg<B>) =>
 /**
  * Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
  *
- * @param that - The option to return if `self` option is `None`
- * @param self - The first option to be checked
+ * @param that - The option to return if `self` is `None`.
+ * @param self - The first option to be checked.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -273,10 +316,11 @@ export const orElse = <B>(that: LazyArg<Option<B>>) =>
 /**
  * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
  * which contains information about which of the two options has been chosen.
+ *
  * This is useful when it's important to know whether the value was retrieved from the first option or the second option.
  *
- * @param that - The second option to be considered if the first option is `None`
- * @param self - The first option to be checked
+ * @param that - The second option to be considered if the first option is `None`.
+ * @param self - The first option to be checked.
  *
  * @category error handling
  * @since 1.0.0
@@ -292,7 +336,7 @@ export const orElseEither = <B>(
 /**
  * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
  *
- * @param collection - An iterable collection of `Option` to be searched
+ * @param collection - An iterable collection of `Option` to be searched.
  *
  * @category error handling
  * @since 1.0.0
@@ -314,7 +358,7 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
 /**
  * Returns the value of the option if it is a `Some`, otherwise returns `null`.
  *
- * @param self - The option to extract the value from
+ * @param self - The option to extract the value from.
  *
  * @example
  * import { some, none, getOrNull } from '@fp-ts/core/Option'
@@ -331,7 +375,7 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
 /**
  * Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
  *
- * @param self - The option to extract the value from
+ * @param self - The option to extract the value from.
  *
  * @example
  * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
@@ -372,7 +416,7 @@ export const fromThrowable = <A>(f: () => A): Option<A> => {
 }
 
 /**
- * Lifts a function that may throw to one returning a `Option`.
+ * A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
  *
  * @category interop
  * @since 1.0.0
@@ -384,9 +428,16 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
 /**
  * Returns the contained value if the option is `Some`, otherwise throws an error.
  *
- * @param onNone - An optional function that returns the error to be thrown when the option is `None`
- * @param self - The option to extract the value from
- * @throws The error returned by `onError` if the option is `None`
+ * @param onNone - An optional function that returns the error to be thrown when the `Option` is `None`.
+ * @param self - The `Option` to extract the value from.
+ * @throws The error returned by `onNone` if the option is `None`.
+ *
+ * @example
+ * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from '@fp-ts/core/Option'
+ *
+ * assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow()), 1)
+ * assert.throws(() => pipe(O.none(), O.getOrThrow()))
  *
  * @category interop
  * @since 1.0.0
@@ -469,7 +520,7 @@ export const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B> = cov
 )
 
 /**
- * Maps the success value of this effect to the specified constant value.
+ * Maps the `Some` value of this option to the specified constant value.
  *
  * @category mapping
  * @since 1.0.0
@@ -477,7 +528,9 @@ export const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B> = cov
 export const as: <B>(b: B) => <_>(self: Option<_>) => Option<B> = covariant.as(Covariant)
 
 /**
- * Returns the effect resulting from mapping the success of this effect to unit.
+ * Returns the `Option` resulting from mapping the `Some` value to `void`.
+ *
+ * This is useful when the value of the Option is not needed, but the presence or absence of the value is important.
  *
  * @category mapping
  * @since 1.0.0
@@ -518,6 +571,8 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
 }
 
 /**
+ * Applies a function to the value of an `Option` and flattens the result, if the input is `Some`.
+ *
  * @category sequencing
  * @since 1.0.0
  */
@@ -774,7 +829,12 @@ export const getOptionalMonoid = <A>(
   )
 
 /**
- * Lifts a binary function into `Option` as uncurried binary function.
+ * Applies a function to the contained value of two options, returning a new `option` of the result.
+ * If either of the options is `None`, the result will be `None`.
+ *
+ * @param f - A function to apply to the contained values of the options
+ * @param that - An option to lift the function over
+ * @param self - An option to lift the function over
  *
  * @category lifting
  * @since 1.0.0
@@ -785,6 +845,12 @@ export const lift2: <A, B, C>(
   .lift2(SemiApplicative)
 
 /**
+ * Zips two `Option` values together using a provided function, returning a new `Option` of the result.
+ *
+ * @param fa - The left-hand side of the zip operation
+ * @param fb - The right-hand side of the zip operation
+ * @param f - The function used to combine the values of the two `Option`s
+ *
  * @category products
  * @since 1.0.0
  */

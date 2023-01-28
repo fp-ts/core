@@ -249,7 +249,10 @@ Added in v1.0.0
 
 ## none
 
-Creates a new `Option` that represents a absence of value.
+Creates a new `Option` that represents the absence of a value.
+
+This can be useful when working with optional values or to represent a computation that failed.
+It returns a new `Option` object that does not contain any value.
 
 **Signature**
 
@@ -263,10 +266,12 @@ Added in v1.0.0
 
 Creates a new `Option` that wraps the given value.
 
+This can be useful when working with optional values or to represent a computation that succeeded with a value.
+
 **Signature**
 
 ```ts
-export declare const some: <A>(a: A) => Option<A>
+export declare const some: <A>(value: A) => Option<A>
 ```
 
 Added in v1.0.0
@@ -297,10 +302,23 @@ Added in v1.0.0
 
 ## fromIterable
 
+Converts an `Iterable` of values into an `Option`. Returns the first value of the `Iterable` wrapped in a `Some`
+if the `Iterable` is not empty, otherwise returns `None`.
+
 **Signature**
 
 ```ts
 export declare const fromIterable: <A>(collection: Iterable<A>) => Option<A>
+```
+
+**Example**
+
+```ts
+import { fromIterable, some, none } from '@fp-ts/core/Option'
+
+const collection = [1, 2, 3]
+assert.deepStrictEqual(fromIterable(collection), some(1))
+assert.deepStrictEqual(fromIterable([]), none())
 ```
 
 Added in v1.0.0
@@ -313,7 +331,7 @@ returns the value wrapped in a `Some`.
 **Signature**
 
 ```ts
-export declare const fromNullable: <A>(a: A) => Option<NonNullable<A>>
+export declare const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>>
 ```
 
 **Example**
@@ -330,10 +348,24 @@ Added in v1.0.0
 
 ## toEither
 
+Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
+
 **Signature**
 
 ```ts
 export declare const toEither: <E>(onNone: any) => <A>(self: Option<A>) => any
+```
+
+**Example**
+
+```ts
+import { pipe } from '@fp-ts/core/Function'
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+const onNone = () => 'error'
+assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
+assert.deepStrictEqual(pipe(O.none(), O.toEither(onNone)), E.left('error'))
 ```
 
 Added in v1.0.0
@@ -540,6 +572,7 @@ Added in v1.0.0
 
 Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
 which contains information about which of the two options has been chosen.
+
 This is useful when it's important to know whether the value was retrieved from the first option or the second option.
 
 **Signature**
@@ -615,7 +648,7 @@ Checks if the specified value is an instance of `Option`, returns `true` if it i
 **Signature**
 
 ```ts
-export declare const isOption: (u: unknown) => u is Option<unknown>
+export declare const isOption: (input: unknown) => input is Option<unknown>
 ```
 
 **Example**
@@ -953,6 +986,16 @@ Returns the contained value if the option is `Some`, otherwise throws an error.
 export declare const getOrThrow: (onNone?: any) => <A>(self: Option<A>) => A
 ```
 
+**Example**
+
+```ts
+import { pipe } from '@fp-ts/core/Function'
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow()), 1)
+assert.throws(() => pipe(O.none(), O.getOrThrow()))
+```
+
 Added in v1.0.0
 
 ## getOrUndefined
@@ -979,7 +1022,7 @@ Added in v1.0.0
 
 ## liftThrowable
 
-Lifts a function that may throw to one returning a `Option`.
+A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
 
 **Signature**
 
@@ -1020,7 +1063,8 @@ Added in v1.0.0
 
 ## lift2
 
-Lifts a binary function into `Option` as uncurried binary function.
+Applies a function to the contained value of two options, returning a new `option` of the result.
+If either of the options is `None`, the result will be `None`.
 
 **Signature**
 
@@ -1100,7 +1144,7 @@ Added in v1.0.0
 
 ## as
 
-Maps the success value of this effect to the specified constant value.
+Maps the `Some` value of this option to the specified constant value.
 
 **Signature**
 
@@ -1112,7 +1156,9 @@ Added in v1.0.0
 
 ## asUnit
 
-Returns the effect resulting from mapping the success of this effect to unit.
+Returns the `Option` resulting from mapping the `Some` value to `void`.
+
+This is useful when the value of the Option is not needed, but the presence or absence of the value is important.
 
 **Signature**
 
@@ -1229,6 +1275,8 @@ Added in v1.0.0
 
 ## zipWith
 
+Zips two `Option` values together using a provided function, returning a new `Option` of the result.
+
 **Signature**
 
 ```ts
@@ -1254,6 +1302,8 @@ export declare const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>
 Added in v1.0.0
 
 ## flatMap
+
+Applies a function to the value of an `Option` and flattens the result, if the input is `Some`.
 
 **Signature**
 
