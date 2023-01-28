@@ -19,23 +19,27 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const sum = (that: bigint) =>
   (self: bigint): bigint => semigroup.bigintSum.combine(self, that)
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const multiply = (that: bigint) =>
   (self: bigint): bigint => semigroup.bigintMultiply.combine(self, that)
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const subtract = (that: bigint) => (self: bigint): bigint => self - that
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const divide = (that: bigint) => (self: bigint): bigint => self / that

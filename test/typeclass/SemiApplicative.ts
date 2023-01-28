@@ -40,12 +40,4 @@ describe("SemiApplicative", () => {
 
     U.deepStrictEqual(S.combineMany(O.some("a"), [O.some("b"), O.some("c")]), O.some("abc"))
   })
-
-  it("lift2", () => {
-    const sum = _.lift2(O.SemiApplicative)((a: number, b: number) => a + b)
-    U.deepStrictEqual(sum(O.none(), O.none()), O.none())
-    U.deepStrictEqual(sum(O.some(1), O.none()), O.none())
-    U.deepStrictEqual(sum(O.none(), O.some(2)), O.none())
-    U.deepStrictEqual(sum(O.some(1), O.some(2)), O.some(3))
-  })
 })

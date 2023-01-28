@@ -36,6 +36,10 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
+// -------------------------------------------------------------------------------------
+// model
+// -------------------------------------------------------------------------------------
+
 /**
  * @category models
  * @since 1.0.0
@@ -67,6 +71,10 @@ export interface OptionTypeLambda extends TypeLambda {
   readonly type: Option<this["Target"]>
 }
 
+// -------------------------------------------------------------------------------------
+// constructors
+// -------------------------------------------------------------------------------------
+
 /**
  * Creates a new `Option` that represents a absence of value.
  *
@@ -83,6 +91,10 @@ export const none = <A = never>(): Option<A> => option.none
  */
 export const some: <A>(a: A) => Option<A> = option.some
 
+// -------------------------------------------------------------------------------------
+// guards
+// -------------------------------------------------------------------------------------
+
 /**
  * Checks if the specified value is an instance of `Option`, returns `true` if it is, `false` otherwise.
  *
@@ -97,6 +109,38 @@ export const some: <A>(a: A) => Option<A> = option.some
  * @since 1.0.0
  */
 export const isOption: (u: unknown) => u is Option<unknown> = option.isOption
+
+/**
+ * Returns `true` if the option is `None`, `false` otherwise.
+ *
+ * @example
+ * import { some, none, isNone } from '@fp-ts/core/Option'
+ *
+ * assert.strictEqual(isNone(some(1)), false)
+ * assert.strictEqual(isNone(none()), true)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNone: <A>(self: Option<A>) => self is None = option.isNone
+
+/**
+ * Returns `true` if the option is an instance of `Some`, `false` otherwise.
+ *
+ * @example
+ * import { some, none, isSome } from '@fp-ts/core/Option'
+ *
+ * assert.strictEqual(isSome(some(1)), true)
+ * assert.strictEqual(isSome(none()), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
+
+// -------------------------------------------------------------------------------------
+// conversions
+// -------------------------------------------------------------------------------------
 
 /**
  * Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
@@ -123,6 +167,182 @@ export const fromNullable: <A>(a: A) => Option<NonNullable<A>> = option.fromNull
  */
 export const toRefinement = <A, B extends A>(f: (a: A) => Option<B>): Refinement<A, B> =>
   (a: A): a is B => isSome(f(a))
+
+/**
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
+  for (const a of collection) {
+    return some(a)
+  }
+  return option.none
+}
+
+/**
+ * Converts a `Either` to an `Option` discarding the error.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(O.fromEither(E.right(1)), O.some(1))
+ * assert.deepStrictEqual(O.fromEither(E.left('a')), O.none())
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
+
+/**
+ * @category conversions
+ * @since 1.0.0
+ */
+export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A> =
+  either.fromOption
+
+// -------------------------------------------------------------------------------------
+// error handling
+// -------------------------------------------------------------------------------------
+
+/**
+ * Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
+ *
+ * @param onNone - Function that returns the default value to return if the `Option` is `None`
+ * @param self - The `Option` to get the value of
+ *  *
+ * @example
+ * import { some, none, getOrElse } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.strictEqual(pipe(some(1), getOrElse(() => 0)), 1)
+ * assert.strictEqual(pipe(none(), getOrElse(() => 0)), 0)
+ *
+ * @category error handling
+ * @since 1.0.0
+ */
+export const getOrElse = <B>(onNone: LazyArg<B>) =>
+  <A>(self: Option<A>): A | B => isNone(self) ? onNone() : self.value
+
+/**
+ * Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
+ *
+ * @param that - The option to return if `self` option is `None`
+ * @param self - The first option to be checked
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.none(),
+ *     O.orElse(() => O.none())
+ *   ),
+ *   O.none()
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.some('a'),
+ *     O.orElse(() => O.none())
+ *   ),
+ *   O.some('a')
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.none(),
+ *     O.orElse(() => O.some('b'))
+ *   ),
+ *   O.some('b')
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     O.some('a'),
+ *     O.orElse(() => O.some('b'))
+ *   ),
+ *   O.some('a')
+ * )
+ *
+ * @category error handling
+ * @since 1.0.0
+ */
+export const orElse = <B>(that: LazyArg<Option<B>>) =>
+  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
+
+/**
+ * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
+ * which contains information about which of the two options has been chosen.
+ * This is useful when it's important to know whether the value was retrieved from the first option or the second option.
+ *
+ * @param that - The second option to be considered if the first option is `None`
+ * @param self - The first option to be checked
+ *
+ * @category error handling
+ * @since 1.0.0
+ */
+export const orElseEither = <B>(
+  that: LazyArg<Option<B>>
+) =>
+  <A>(self: Option<A>): Option<Either<A, B>> =>
+    isNone(self) ?
+      pipe(that(), map(either.right)) :
+      pipe(self, map(either.left))
+
+/**
+ * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
+ *
+ * @param collection - An iterable collection of `Option` to be searched
+ *
+ * @category error handling
+ * @since 1.0.0
+ */
+export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
+  let out: Option<A> = none()
+  for (out of collection) {
+    if (isSome(out)) {
+      return out
+    }
+  }
+  return out
+}
+
+// -------------------------------------------------------------------------------------
+// interop
+// -------------------------------------------------------------------------------------
+
+/**
+ * Returns the value of the option if it is a `Some`, otherwise returns `null`.
+ *
+ * @param self - The option to extract the value from
+ *
+ * @example
+ * import { some, none, getOrNull } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.strictEqual(pipe(some(1), getOrNull), 1)
+ * assert.strictEqual(pipe(none(), getOrNull), null)
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
+
+/**
+ * Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
+ *
+ * @param self - The option to extract the value from
+ *
+ * @example
+ * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.strictEqual(pipe(some(1), getOrUndefined), 1)
+ * assert.strictEqual(pipe(none(), getOrUndefined), undefined)
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(constUndefined)
 
 /**
  * Converts an exception into an `Option`. If `f` throws, returns `None`, otherwise returns the output wrapped in a
@@ -179,6 +399,10 @@ export const getOrThrow = (
     }
     throw onNone()
   }
+
+// -------------------------------------------------------------------------------------
+// instances
+// -------------------------------------------------------------------------------------
 
 /**
  * Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
@@ -554,19 +778,10 @@ export const getOptionalMonoid = <A>(
  * @category lifting
  * @since 1.0.0
  */
-export const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C> =
-  semiApplicative.lift2(SemiApplicative)
-
-/**
- * Lifts a binary function into `Option` as curried binary function.
- *
- * @category lifting
- * @since 1.0.0
- */
-export const lift2Curried: <A, B, C>(
-  f: (a: A, b: B) => C
-) => (that: Option<B>) => (self: Option<A>) => Option<C> = semiApplicative
-  .lift2Curried(SemiApplicative)
+export const lift2: <A, B, C>(
+  f: (a: A) => (b: B) => C
+) => (that: Option<A>) => (self: Option<B>) => Option<C> = semiApplicative
+  .lift2(SemiApplicative)
 
 /**
  * @category lifting
@@ -591,7 +806,7 @@ export const ap: <A>(
  *
  * See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
  *
- * @category error handling
+ * @category instances
  * @since 1.0.0
  */
 export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> = semiApplicative
@@ -615,7 +830,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
  *
  * See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
  *
- * @category error handling
+ * @category instances
  * @since 1.0.0
  */
 export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicative.liftMonoid(
@@ -648,7 +863,7 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
 /**
  * Semigroup returning the first `Some` value encountered.
  *
- * @category error handling
+ * @category instances
  * @since 1.0.0
  */
 export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduct
@@ -660,24 +875,6 @@ export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduc
 export const coproductEither = <B>(that: Option<B>) =>
   <A>(self: Option<A>): Option<Either<A, B>> =>
     isNone(self) ? pipe(that, map(either.right)) : pipe(self, map(either.left))
-
-/**
- * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
- *
- * @param collection - An iterable collection of `Option` to be searched
- *
- * @category error handling
- * @since 1.0.0
- */
-export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
-  let out: Option<A> = none()
-  for (out of collection) {
-    if (isSome(out)) {
-      return out
-    }
-  }
-  return out
-}
 
 /**
  * @category instances
@@ -808,67 +1005,6 @@ export const traverseTap: <F extends TypeLambda>(
   .traverseTap(Traversable)
 
 /**
- * Returns `true` if the option is `None`, `false` otherwise.
- *
- * @example
- * import { some, none, isNone } from '@fp-ts/core/Option'
- *
- * assert.strictEqual(isNone(some(1)), false)
- * assert.strictEqual(isNone(none()), true)
- *
- * @category guards
- * @since 1.0.0
- */
-export const isNone: <A>(self: Option<A>) => self is None = option.isNone
-
-/**
- * Returns `true` if the option is an instance of `Some`, `false` otherwise.
- *
- * @example
- * import { some, none, isSome } from '@fp-ts/core/Option'
- *
- * assert.strictEqual(isSome(some(1)), true)
- * assert.strictEqual(isSome(none()), false)
- *
- * @category guards
- * @since 1.0.0
- */
-export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
-
-/**
- * @category conversions
- * @since 1.0.0
- */
-export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
-  for (const a of collection) {
-    return some(a)
-  }
-  return option.none
-}
-
-/**
- * Converts a `Either` to an `Option` discarding the error.
- *
- * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
- *
- * assert.deepStrictEqual(O.fromEither(E.right(1)), O.some(1))
- * assert.deepStrictEqual(O.fromEither(E.left('a')), O.none())
- *
- * @category conversions
- * @since 1.0.0
- */
-export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
-
-/**
- * @category conversions
- * @since 1.0.0
- */
-export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A> =
-  either.fromOption
-
-/**
  * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
  * function when passed the `Option`'s value.
  *
@@ -901,25 +1037,6 @@ export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either
  */
 export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
   (self: Option<A>): B | C => isNone(self) ? onNone() : onSome(self.value)
-
-/**
- * Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
- *
- * @param onNone - Function that returns the default value to return if the `Option` is `None`
- * @param self - The `Option` to get the value of
- *  *
- * @example
- * import { some, none, getOrElse } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.strictEqual(pipe(some(1), getOrElse(() => 0)), 1)
- * assert.strictEqual(pipe(none(), getOrElse(() => 0)), 0)
- *
- * @category error handling
- * @since 1.0.0
- */
-export const getOrElse = <B>(onNone: LazyArg<B>) =>
-  <A>(self: Option<A>): A | B => isNone(self) ? onNone() : self.value
 
 /**
  * Returns a *smart constructor* from a function that returns a nullable value.
@@ -991,104 +1108,6 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
 export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
   (self: Option<A>): Option<NonNullable<B>> =>
     isNone(self) ? option.none : fromNullable(f(self.value))
-
-/**
- * Returns the value of the option if it is a `Some`, otherwise returns `null`.
- *
- * @param self - The option to extract the value from
- *
- * @example
- * import { some, none, getOrNull } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.strictEqual(pipe(some(1), getOrNull), 1)
- * assert.strictEqual(pipe(none(), getOrNull), null)
- *
- * @category conversions
- * @since 1.0.0
- */
-export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
-
-/**
- * Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
- *
- * @param self - The option to extract the value from
- *
- * @example
- * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.strictEqual(pipe(some(1), getOrUndefined), 1)
- * assert.strictEqual(pipe(none(), getOrUndefined), undefined)
- *
- * @category conversions
- * @since 1.0.0
- */
-export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(constUndefined)
-
-/**
- * Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
- *
- * @param that - The option to return if `self` option is `None`
- * @param self - The first option to be checked
- *
- * @example
- * import * as O from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     O.none(),
- *     O.orElse(() => O.none())
- *   ),
- *   O.none()
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     O.some('a'),
- *     O.orElse(() => O.none())
- *   ),
- *   O.some('a')
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     O.none(),
- *     O.orElse(() => O.some('b'))
- *   ),
- *   O.some('b')
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     O.some('a'),
- *     O.orElse(() => O.some('b'))
- *   ),
- *   O.some('a')
- * )
- *
- * @category error handling
- * @since 1.0.0
- */
-export const orElse = <B>(that: LazyArg<Option<B>>) =>
-  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
-
-/**
- * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
- * which contains information about which of the two options has been chosen.
- * This is useful when it's important to know whether the value was retrieved from the first option or the second option.
- *
- * @param that - The second option to be considered if the first option is `None`
- * @param self - The first option to be checked
- *
- * @category error handling
- * @since 1.0.0
- */
-export const orElseEither = <B>(
-  that: LazyArg<Option<B>>
-) =>
-  <A>(self: Option<A>): Option<Either<A, B>> =>
-    isNone(self) ?
-      pipe(that(), map(either.right)) :
-      pipe(self, map(either.left))
 
 /**
  * The `Order` instance allows `Option` values to be compared with
@@ -1194,27 +1213,7 @@ export const exists = <A>(predicate: Predicate<A>) =>
   (self: Option<A>): boolean => isNone(self) ? false : predicate(self.value)
 
 /**
- * @since 1.0.0
- */
-export const sum = lift2Curried(N.SemigroupSum.combine)
-
-/**
- * @since 1.0.0
- */
-export const multiply = lift2Curried(N.SemigroupMultiply.combine)
-
-/**
- * @since 1.0.0
- */
-export const subtract = lift2Curried((a: number, b: number) => a - b)
-
-/**
- * @since 1.0.0
- */
-export const divide = lift2Curried((a: number, b: number) => a / b)
-
-/**
- * Reduces an `Iterable` of `Option<A>` to a single value of type `B`.
+ * Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
  *
  * @since 1.0.0
  *
@@ -1240,12 +1239,42 @@ export const reduceAll = <B, A>(b: B, f: (b: B, a: A) => B) =>
     return out
   }
 
+// -------------------------------------------------------------------------------------
+// algebraic operations
+// -------------------------------------------------------------------------------------
+
 /**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const sum = lift2(N.sum)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const multiply = lift2(N.multiply)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const subtract = lift2(N.subtract)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const divide = lift2(N.divide)
+
+/**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const sumAll = reduceAll(0, N.SemigroupSum.combine)
 
 /**
+ * @category algebraic operations
  * @since 1.0.0
  */
 export const multiplyAll = reduceAll(1, N.SemigroupMultiply.combine)

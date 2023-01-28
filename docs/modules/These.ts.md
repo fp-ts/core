@@ -26,6 +26,11 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [algebraic operations](#algebraic-operations)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [subtract](#subtract)
+  - [sum](#sum)
 - [combining](#combining)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
@@ -165,6 +170,48 @@ Added in v1.0.0
   - [unit](#unit)
 
 ---
+
+# algebraic operations
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: <E2>(that: any) => <E1>(self: any) => any
+```
+
+Added in v1.0.0
 
 # combining
 
@@ -1037,7 +1084,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => <E1, E2>(fa: any, fb: any) => any
+export declare const lift2: <A, B, C>(f: (a: A) => (b: B) => C) => <E2>(that: any) => <E1>(self: any) => any
 ```
 
 Added in v1.0.0

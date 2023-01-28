@@ -69,25 +69,13 @@ export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => map2(F)(that, SK)
 
 /**
- * Lifts a binary function into `F` as uncurried binary function.
+ * Lifts a binary function into `F`.
  *
  * @since 1.0.0
  */
 export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <A, B, C>(f: (a: A, b: B) => C) =>
-    <R1, O1, E1, R2, O2, E2>(
-      fa: Kind<F, R1, O1, E1, A>,
-      fb: Kind<F, R2, O2, E2, B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(fa, map2(F)(fb, f))
-
-/**
- * Lifts a binary function into `F` as curried binary function.
- *
- * @since 1.0.0
- */
-export const lift2Curried = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <A, B, C>(f: (a: A, b: B) => C) =>
+  <A, B, C>(f: (a: A) => (b: B) => C) =>
     <R2, O2, E2>(
-      that: Kind<F, R2, O2, E2, B>
-    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
-      map2(F)(that, f)
+      that: Kind<F, R2, O2, E2, A>
+    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
+      map2(F)(that, (a, b) => f(b)(a))

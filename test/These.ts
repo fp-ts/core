@@ -821,4 +821,32 @@ describe("These", () => {
     Util.deepStrictEqual(pipe(_.both("e1", 1), _.filterMap(f, () => "e2")), _.left("e2"))
     Util.deepStrictEqual(pipe(_.both("e1", 3), _.filterMap(f, () => "e2")), _.both("e1", 4))
   })
+
+  it("sum", () => {
+    const e: _.Validated<string, number> = _.left(["a"])
+    expect(pipe(e, _.sum(_.right(2)))).toEqual(e)
+    expect(pipe(_.right(1), _.sum(e))).toEqual(e)
+    expect(pipe(_.right(2), _.sum(_.right(3)))).toEqual(_.right(5))
+  })
+
+  it("multiply", () => {
+    const e: _.Validated<string, number> = _.left(["a"])
+    expect(pipe(e, _.multiply(_.right(2)))).toEqual(e)
+    expect(pipe(_.right(1), _.multiply(e))).toEqual(e)
+    expect(pipe(_.right(2), _.multiply(_.right(3)))).toEqual(_.right(6))
+  })
+
+  it("subtract", () => {
+    const e: _.Validated<string, number> = _.left(["a"])
+    expect(pipe(e, _.subtract(_.right(2)))).toEqual(e)
+    expect(pipe(_.right(1), _.subtract(e))).toEqual(e)
+    expect(pipe(_.right(2), _.subtract(_.right(3)))).toEqual(_.right(-1))
+  })
+
+  it("divide", () => {
+    const e: _.Validated<string, number> = _.left(["a"])
+    expect(pipe(e, _.divide(_.right(2)))).toEqual(e)
+    expect(pipe(_.right(1), _.divide(e))).toEqual(e)
+    expect(pipe(_.right(6), _.divide(_.right(3)))).toEqual(_.right(2))
+  })
 })

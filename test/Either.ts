@@ -1,10 +1,10 @@
 import * as _ from "@fp-ts/core/Either"
 import { flow, identity, pipe } from "@fp-ts/core/Function"
 import { structural } from "@fp-ts/core/internal/effect"
+import * as N from "@fp-ts/core/Number"
 import * as O from "@fp-ts/core/Option"
 import * as String from "@fp-ts/core/String"
 import * as Util from "@fp-ts/core/test/util"
-import { number } from "@fp-ts/core/typeclass/Equivalence"
 
 describe.concurrent("Either", () => {
   it("instances and derived exports", () => {
@@ -52,7 +52,6 @@ describe.concurrent("Either", () => {
     expect(_.SemiApplicative).exist
     expect(_.getFirstLeftSemigroup).exist // liftSemigroup
     expect(_.lift2).exist
-    expect(_.lift2Curried).exist
     expect(_.ap).exist
     expect(_.andThenDiscard).exist
     expect(_.andThen).exist
@@ -71,8 +70,6 @@ describe.concurrent("Either", () => {
     expect(_.traverse).exist
     expect(_.sequence).exist
     expect(_.traverseTap).exist
-
-    expect(_.getSemigroup).exist
   })
 
   it("structural tracking", () => {
@@ -255,7 +252,7 @@ describe.concurrent("Either", () => {
   })
 
   it("contains", () => {
-    const contains = _.contains(number)
+    const contains = _.contains(N.Equivalence)
     Util.deepStrictEqual(pipe(_.left("a"), contains(2)), false)
     Util.deepStrictEqual(pipe(_.right(2), contains(2)), true)
     Util.deepStrictEqual(pipe(_.right(2), contains(1)), false)
@@ -501,23 +498,22 @@ describe.concurrent("Either", () => {
     expect(pipe(_.right(2), _.subtract(_.right(3)))).toEqual(_.right(-1))
   })
 
-  it("subtract", () => {
+  it("divide", () => {
     expect(pipe(_.left("a"), _.divide(_.right(2)))).toEqual(_.left("a"))
     expect(pipe(_.right(1), _.divide(_.left("a")))).toEqual(_.left("a"))
     expect(pipe(_.right(6), _.divide(_.right(3)))).toEqual(_.right(2))
   })
 
-  it("sumMany", () => {
-    expect(_.sumMany(_.left("a"), [])).toEqual(_.left("a"))
-    expect(_.sumMany(_.left("a"), [_.right(2), _.right(3)])).toEqual(_.right(5))
-    expect(_.sumMany(_.right(0), [_.right(2), _.right(3)])).toEqual(_.right(5))
-    expect(_.sumMany(_.right(0), [_.right(2), _.left("a"), _.right(3)])).toEqual(_.right(5))
-  })
+  it("getOptionalSemigroup", () => {
+    const S = _.getOptionalSemigroup(String.Semigroup)
+    Util.deepStrictEqual(S.combine(_.left("e"), _.left("e")), _.left("e"))
+    Util.deepStrictEqual(S.combine(_.left("e"), _.right("a")), _.right("a"))
+    Util.deepStrictEqual(S.combine(_.right("a"), _.left("e")), _.right("a"))
+    Util.deepStrictEqual(S.combine(_.right("b"), _.right("a")), _.right("ba"))
+    Util.deepStrictEqual(S.combine(_.right("a"), _.right("b")), _.right("ab"))
 
-  it("multiplyMany", () => {
-    expect(_.multiplyMany(_.left("a"), [])).toEqual(_.left("a"))
-    expect(_.multiplyMany(_.left("a"), [_.right(2), _.right(3)])).toEqual(_.right(6))
-    expect(_.multiplyMany(_.right(1), [_.right(2), _.right(3)])).toEqual(_.right(6))
-    expect(_.multiplyMany(_.right(1), [_.right(2), _.left("a"), _.right(3)])).toEqual(_.right(6))
+    Util.deepStrictEqual(S.combineMany(_.right("a"), [_.right("b")]), _.right("ab"))
+    Util.deepStrictEqual(S.combineMany(_.left("e"), [_.right("b")]), _.right("b"))
+    Util.deepStrictEqual(S.combineMany(_.right("a"), [_.left("e")]), _.right("a"))
   })
 })

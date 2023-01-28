@@ -12,6 +12,13 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [algebraic operations](#algebraic-operations)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [multiplyAll](#multiplyall)
+  - [subtract](#subtract)
+  - [sum](#sum)
+  - [sumAll](#sumall)
 - [combinators](#combinators)
   - [tap](#tap)
 - [constructors](#constructors)
@@ -21,8 +28,6 @@ Added in v1.0.0
   - [fromEither](#fromeither)
   - [fromIterable](#fromiterable)
   - [fromNullable](#fromnullable)
-  - [getOrNull](#getornull)
-  - [getOrUndefined](#getorundefined)
   - [toEither](#toeither)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -36,9 +41,6 @@ Added in v1.0.0
   - [let](#let)
 - [error handling](#error-handling)
   - [firstSomeOf](#firstsomeof)
-  - [getFailureMonoid](#getfailuremonoid)
-  - [getFailureSemigroup](#getfailuresemigroup)
-  - [getFirstSomeSemigroup](#getfirstsomesemigroup)
   - [getOrElse](#getorelse)
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
@@ -70,14 +72,18 @@ Added in v1.0.0
   - [SemiCoproduct](#semicoproduct)
   - [SemiProduct](#semiproduct)
   - [Traversable](#traversable)
+  - [getFailureMonoid](#getfailuremonoid)
+  - [getFailureSemigroup](#getfailuresemigroup)
+  - [getFirstSomeSemigroup](#getfirstsomesemigroup)
 - [interop](#interop)
   - [fromThrowable](#fromthrowable)
+  - [getOrNull](#getornull)
   - [getOrThrow](#getorthrow)
+  - [getOrUndefined](#getorundefined)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [getOptionalMonoid](#getoptionalmonoid)
   - [lift2](#lift2)
-  - [lift2Curried](#lift2curried)
   - [liftEither](#lifteither)
   - [liftNullable](#liftnullable)
   - [liftPredicate](#liftpredicate)
@@ -112,25 +118,81 @@ Added in v1.0.0
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
   - [coproductEither](#coproducteither)
-  - [divide](#divide)
   - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
-  - [multiply](#multiply)
-  - [multiplyAll](#multiplyall)
   - [of](#of)
   - [reduce](#reduce)
   - [reduceAll](#reduceall)
   - [struct](#struct)
-  - [subtract](#subtract)
-  - [sum](#sum)
-  - [sumAll](#sumall)
   - [toArray](#toarray)
   - [tuple](#tuple)
   - [tupled](#tupled)
   - [unit](#unit)
 
 ---
+
+# algebraic operations
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## multiplyAll
+
+**Signature**
+
+```ts
+export declare const multiplyAll: (self: Iterable<Option<unknown>>) => number
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+```
+
+Added in v1.0.0
+
+## sumAll
+
+**Signature**
+
+```ts
+export declare const sumAll: (self: Iterable<Option<unknown>>) => number
+```
+
+Added in v1.0.0
 
 # combinators
 
@@ -228,50 +290,6 @@ import { none, some, fromNullable } from '@fp-ts/core/Option'
 assert.deepStrictEqual(fromNullable(undefined), none())
 assert.deepStrictEqual(fromNullable(null), none())
 assert.deepStrictEqual(fromNullable(1), some(1))
-```
-
-Added in v1.0.0
-
-## getOrNull
-
-Returns the value of the option if it is a `Some`, otherwise returns `null`.
-
-**Signature**
-
-```ts
-export declare const getOrNull: <A>(self: Option<A>) => A | null
-```
-
-**Example**
-
-```ts
-import { some, none, getOrNull } from '@fp-ts/core/Option'
-import { pipe } from '@fp-ts/core/Function'
-
-assert.strictEqual(pipe(some(1), getOrNull), 1)
-assert.strictEqual(pipe(none(), getOrNull), null)
-```
-
-Added in v1.0.0
-
-## getOrUndefined
-
-Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
-
-**Signature**
-
-```ts
-export declare const getOrUndefined: <A>(self: Option<A>) => A | undefined
-```
-
-**Example**
-
-```ts
-import { some, none, getOrUndefined } from '@fp-ts/core/Option'
-import { pipe } from '@fp-ts/core/Function'
-
-assert.strictEqual(pipe(some(1), getOrUndefined), 1)
-assert.strictEqual(pipe(none(), getOrUndefined), undefined)
 ```
 
 Added in v1.0.0
@@ -398,52 +416,6 @@ Given an Iterable collection of `Option`s, the function returns the first `Some`
 
 ```ts
 export declare const firstSomeOf: <A>(collection: Iterable<Option<A>>) => Option<A>
-```
-
-Added in v1.0.0
-
-## getFailureMonoid
-
-Monoid that models the combination of computations that can fail, if at least one element is `None`
-then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
-is the combination of the wrapped elements using the provided `Monoid`.
-
-The `empty` value is `some(M.empty)`.
-
-See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
-
-**Signature**
-
-```ts
-export declare const getFailureMonoid: <A>(M: any) => any
-```
-
-Added in v1.0.0
-
-## getFailureSemigroup
-
-Semigroup that models the combination of computations that can fail, if at least one element is `None`
-then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
-is the combination of the wrapped elements using the provided `Semigroup`.
-
-See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const getFailureSemigroup: <A>(S: any) => any
-```
-
-Added in v1.0.0
-
-## getFirstSomeSemigroup
-
-Semigroup returning the first `Some` value encountered.
-
-**Signature**
-
-```ts
-export declare const getFirstSomeSemigroup: <A>() => any
 ```
 
 Added in v1.0.0
@@ -837,6 +809,52 @@ export declare const Traversable: any
 
 Added in v1.0.0
 
+## getFailureMonoid
+
+Monoid that models the combination of computations that can fail, if at least one element is `None`
+then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+is the combination of the wrapped elements using the provided `Monoid`.
+
+The `empty` value is `some(M.empty)`.
+
+See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
+
+**Signature**
+
+```ts
+export declare const getFailureMonoid: <A>(M: any) => any
+```
+
+Added in v1.0.0
+
+## getFailureSemigroup
+
+Semigroup that models the combination of computations that can fail, if at least one element is `None`
+then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+is the combination of the wrapped elements using the provided `Semigroup`.
+
+See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const getFailureSemigroup: <A>(S: any) => any
+```
+
+Added in v1.0.0
+
+## getFirstSomeSemigroup
+
+Semigroup returning the first `Some` value encountered.
+
+**Signature**
+
+```ts
+export declare const getFirstSomeSemigroup: <A>() => any
+```
+
+Added in v1.0.0
+
 # interop
 
 ## fromThrowable
@@ -869,6 +887,28 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
+## getOrNull
+
+Returns the value of the option if it is a `Some`, otherwise returns `null`.
+
+**Signature**
+
+```ts
+export declare const getOrNull: <A>(self: Option<A>) => A | null
+```
+
+**Example**
+
+```ts
+import { some, none, getOrNull } from '@fp-ts/core/Option'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.strictEqual(pipe(some(1), getOrNull), 1)
+assert.strictEqual(pipe(none(), getOrNull), null)
+```
+
+Added in v1.0.0
+
 ## getOrThrow
 
 Returns the contained value if the option is `Some`, otherwise throws an error.
@@ -877,6 +917,28 @@ Returns the contained value if the option is `Some`, otherwise throws an error.
 
 ```ts
 export declare const getOrThrow: (onNone?: any) => <A>(self: Option<A>) => A
+```
+
+Added in v1.0.0
+
+## getOrUndefined
+
+Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
+
+**Signature**
+
+```ts
+export declare const getOrUndefined: <A>(self: Option<A>) => A | undefined
+```
+
+**Example**
+
+```ts
+import { some, none, getOrUndefined } from '@fp-ts/core/Option'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.strictEqual(pipe(some(1), getOrUndefined), 1)
+assert.strictEqual(pipe(none(), getOrUndefined), undefined)
 ```
 
 Added in v1.0.0
@@ -929,21 +991,7 @@ Lifts a binary function into `Option` as uncurried binary function.
 **Signature**
 
 ```ts
-export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: Option<A>, fb: Option<B>) => Option<C>
-```
-
-Added in v1.0.0
-
-## lift2Curried
-
-Lifts a binary function into `Option` as curried binary function.
-
-**Signature**
-
-```ts
-export declare const lift2Curried: <A, B, C>(
-  f: (a: A, b: B) => C
-) => (that: Option<B>) => (self: Option<A>) => Option<C>
+export declare const lift2: <A, B, C>(f: (a: A) => (b: B) => C) => (that: Option<A>) => (self: Option<B>) => Option<C>
 ```
 
 Added in v1.0.0
@@ -1381,16 +1429,6 @@ export declare const coproductEither: <B>(that: Option<B>) => <A>(self: Option<A
 
 Added in v1.0.0
 
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: (that: Option<number>) => (self: Option<number>) => Option<number>
-```
-
-Added in v1.0.0
-
 ## element
 
 Adds an element to the end of a tuple.
@@ -1454,26 +1492,6 @@ export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
 
 Added in v1.0.0
 
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
-```
-
-Added in v1.0.0
-
-## multiplyAll
-
-**Signature**
-
-```ts
-export declare const multiplyAll: (self: Iterable<Option<unknown>>) => number
-```
-
-Added in v1.0.0
-
 ## of
 
 **Signature**
@@ -1496,7 +1514,7 @@ Added in v1.0.0
 
 ## reduceAll
 
-Reduces an `Iterable` of `Option<A>` to a single value of type `B`.
+Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
 
 **Signature**
 
@@ -1530,36 +1548,6 @@ Added in v1.0.0
 export declare const struct: <R extends Record<string, Option<any>>>(
   r: R
 ) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }>
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: (that: Option<number>) => (self: Option<number>) => Option<number>
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
-```
-
-Added in v1.0.0
-
-## sumAll
-
-**Signature**
-
-```ts
-export declare const sumAll: (self: Iterable<Option<unknown>>) => number
 ```
 
 Added in v1.0.0
