@@ -36,7 +36,10 @@ describe.concurrent("Function", () => {
 
   it("flip", () => {
     const f = (a: number) => (b: string) => a - b.length
+    const g = (a: number, i = 0) => (b: number) => a ** b + i
+
     deepStrictEqual(Function.flip(f)("aaa")(2), -1)
+    deepStrictEqual(Function.flip(g)(2)(2, 1), 5)
   })
 
   it("compose", () => {
