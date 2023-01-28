@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import * as BI from "@fp-ts/core/Bigint"
 import type { Either } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
@@ -1271,10 +1272,48 @@ export const divide = lift2(N.divide)
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumAll = reduceAll(0, N.SemigroupSum.combine)
+export const sumBigint = lift2(BI.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyAll = reduceAll(1, N.SemigroupMultiply.combine)
+export const multiplyBigint = lift2(BI.multiply)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const subtractBigint = lift2(BI.subtract)
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const sumAll = (self: Iterable<Option<number>>): number => {
+  let out = 0
+  for (const oa of self) {
+    if (isSome(oa)) {
+      out += oa.value
+    }
+  }
+  return out
+}
+
+/**
+ * @category algebraic operations
+ * @since 1.0.0
+ */
+export const multiplyAll = (self: Iterable<Option<number>>): number => {
+  let out = 1
+  for (const oa of self) {
+    if (isSome(oa)) {
+      const a: number = oa.value
+      if (a === 0) {
+        return 0
+      }
+      out *= a
+    }
+  }
+  return out
+}

@@ -2,6 +2,7 @@ import { equivalence } from "@fp-ts/core"
 import * as E from "@fp-ts/core/Either"
 import { pipe } from "@fp-ts/core/Function"
 import { structural } from "@fp-ts/core/internal/effect"
+import * as N from "@fp-ts/core/Number"
 import * as _ from "@fp-ts/core/Option"
 import * as ReadonlyArray from "@fp-ts/core/ReadonlyArray"
 import * as S from "@fp-ts/core/String"
@@ -569,6 +570,13 @@ describe.concurrent("Option", () => {
     expect(pipe(_.some(1), _.map2(_.some(2), (a, b) => a + b))).toEqual(_.some(3))
   })
 
+  it("reduceAll", () => {
+    const sumAll = _.reduceAll(0, N.SemigroupSum.combine)
+    expect(sumAll([])).toEqual(0)
+    expect(sumAll([_.some(2), _.some(3)])).toEqual(5)
+    expect(sumAll([_.some(2), _.none(), _.some(3)])).toEqual(5)
+  })
+
   it("sum", () => {
     expect(pipe(_.none(), _.sum(_.some(2)))).toEqual(_.none())
     expect(pipe(_.some(1), _.sum(_.none()))).toEqual(_.none())
@@ -593,6 +601,24 @@ describe.concurrent("Option", () => {
     expect(pipe(_.some(6), _.divide(_.some(3)))).toEqual(_.some(2))
   })
 
+  it("sumBigint", () => {
+    expect(pipe(_.none(), _.sumBigint(_.some(2n)))).toEqual(_.none())
+    expect(pipe(_.some(1n), _.sumBigint(_.none()))).toEqual(_.none())
+    expect(pipe(_.some(2n), _.sumBigint(_.some(3n)))).toEqual(_.some(5n))
+  })
+
+  it("multiplyBigint", () => {
+    expect(pipe(_.none(), _.multiplyBigint(_.some(2n)))).toEqual(_.none())
+    expect(pipe(_.some(1n), _.multiplyBigint(_.none()))).toEqual(_.none())
+    expect(pipe(_.some(2n), _.multiplyBigint(_.some(3n)))).toEqual(_.some(6n))
+  })
+
+  it("subtractBigint", () => {
+    expect(pipe(_.none(), _.subtractBigint(_.some(2n)))).toEqual(_.none())
+    expect(pipe(_.some(1n), _.subtractBigint(_.none()))).toEqual(_.none())
+    expect(pipe(_.some(2n), _.subtractBigint(_.some(3n)))).toEqual(_.some(-1n))
+  })
+
   it("reduce", () => {
     expect(pipe(_.none(), _.reduce(0, (b, a) => b + a))).toEqual(0)
     expect(pipe(_.some(1), _.reduce(0, (b, a) => b + a))).toEqual(1)
@@ -608,5 +634,6 @@ describe.concurrent("Option", () => {
     expect(_.multiplyAll([])).toEqual(1)
     expect(_.multiplyAll([_.some(2), _.some(3)])).toEqual(6)
     expect(_.multiplyAll([_.some(2), _.none(), _.some(3)])).toEqual(6)
+    expect(_.multiplyAll([_.some(2), _.some(0), _.some(3)])).toEqual(0)
   })
 })
