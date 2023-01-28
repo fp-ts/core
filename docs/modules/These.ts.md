@@ -131,6 +131,8 @@ Added in v1.0.0
   - [match](#match)
 - [predicates](#predicates)
   - [exists](#exists)
+- [products](#products)
+  - [zipWith](#zipwith)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
   - [flatMap](#flatmap)
@@ -1298,6 +1300,18 @@ Added in v1.0.0
 
 ```ts
 export declare const exists: <A>(predicate: any) => <E>(self: any) => boolean
+```
+
+Added in v1.0.0
+
+# products
+
+## zipWith
+
+**Signature**
+
+```ts
+export declare const zipWith: <E2, B, A, C>(fb: any, f: (a: A, b: B) => C) => <E1>(fa: any) => any
 ```
 
 Added in v1.0.0

@@ -822,6 +822,13 @@ describe("These", () => {
     Util.deepStrictEqual(pipe(_.both("e1", 3), _.filterMap(f, () => "e2")), _.both("e1", 4))
   })
 
+  it("zipWith", () => {
+    const e: _.Validated<string, number> = _.left(["a"])
+    expect(pipe(e, _.zipWith(_.right(2), (a, b) => a + b))).toEqual(e)
+    expect(pipe(_.right(1), _.zipWith(e, (a, b) => a + b))).toEqual(e)
+    expect(pipe(_.right(1), _.zipWith(_.right(2), (a, b) => a + b))).toEqual(_.right(3))
+  })
+
   it("sum", () => {
     const e: _.Validated<string, number> = _.left(["a"])
     expect(pipe(e, _.sum(_.right(2)))).toEqual(e)

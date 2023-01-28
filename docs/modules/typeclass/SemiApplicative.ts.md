@@ -12,17 +12,46 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [lifting](#lifting)
+  - [lift2](#lift2)
+  - [liftSemigroup](#liftsemigroup)
 - [type class](#type-class)
   - [SemiApplicative (interface)](#semiapplicative-interface)
 - [utils](#utils)
   - [andThen](#andthen)
   - [andThenDiscard](#andthendiscard)
   - [ap](#ap)
-  - [lift2](#lift2)
-  - [liftSemigroup](#liftsemigroup)
-  - [map2](#map2)
+  - [zipWith](#zipwith)
 
 ---
+
+# lifting
+
+## lift2
+
+Lifts a binary function into `F`.
+
+**Signature**
+
+```ts
+export declare const lift2: <F extends any>(
+  F: SemiApplicative<F>
+) => <A, B, C>(f: (a: A) => (b: B) => C) => <R2, O2, E2>(that: any) => <R1, O1, E1>(self: any) => any
+```
+
+Added in v1.0.0
+
+## liftSemigroup
+
+Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const liftSemigroup: <F extends any>(F: SemiApplicative<F>) => <A, R, O, E>(S: any) => any
+```
+
+Added in v1.0.0
 
 # type class
 
@@ -74,40 +103,12 @@ export declare const ap: <F extends any>(
 
 Added in v1.0.0
 
-## lift2
-
-Lifts a binary function into `F`.
+## zipWith
 
 **Signature**
 
 ```ts
-export declare const lift2: <F extends any>(
-  F: SemiApplicative<F>
-) => <A, B, C>(f: (a: A) => (b: B) => C) => <R2, O2, E2>(that: any) => <R1, O1, E1>(self: any) => any
-```
-
-Added in v1.0.0
-
-## liftSemigroup
-
-Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const liftSemigroup: <F extends any>(F: SemiApplicative<F>) => <A, R, O, E>(S: any) => any
-```
-
-Added in v1.0.0
-
-## map2
-
-Binary mapping into `F` context.
-
-**Signature**
-
-```ts
-export declare const map2: <F extends any>(
+export declare const zipWith: <F extends any>(
   F: SemiApplicative<F>
 ) => <R2, O2, E2, B, A, C>(fb: any, f: (a: A, b: B) => C) => <R1, O1, E1>(fa: any) => any
 ```

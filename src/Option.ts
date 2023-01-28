@@ -785,11 +785,13 @@ export const lift2: <A, B, C>(
   .lift2(SemiApplicative)
 
 /**
- * @category lifting
+ * @category products
  * @since 1.0.0
  */
-export const map2: <B, A, C>(fb: Option<B>, f: (a: A, b: B) => C) => (fa: Option<A>) => Option<C> =
-  semiApplicative.map2(SemiApplicative)
+export const zipWith: <B, A, C>(
+  fb: Option<B>,
+  f: (a: A, b: B) => C
+) => (fa: Option<A>) => Option<C> = semiApplicative.zipWith(SemiApplicative)
 
 /**
  * @since 1.0.0

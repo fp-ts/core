@@ -982,6 +982,17 @@ export const lift2: <A, B, C>(
 )
 
 /**
+ * @category products
+ * @since 1.0.0
+ */
+export const zipWith: <E2, B, A, C>(
+  fb: Validated<E2, B>,
+  f: (a: A, b: B) => C
+) => <E1>(fa: Validated<E1, A>) => Validated<E2 | E1, C> = semiApplicative.zipWith(
+  SemiApplicative
+)
+
+/**
  * @since 1.0.0
  */
 export const ap: <E2, A>(

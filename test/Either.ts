@@ -474,10 +474,10 @@ describe.concurrent("Either", () => {
     Util.deepStrictEqual(f(""), _.left(new Error("empty string")))
   })
 
-  it("map2", () => {
-    expect(pipe(_.left("a"), _.map2(_.right(2), (a, b) => a + b))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.map2(_.left("a"), (a, b) => a + b))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.map2(_.right(2), (a, b) => a + b))).toEqual(_.right(3))
+  it("zipWith", () => {
+    expect(pipe(_.left("a"), _.zipWith(_.right(2), (a, b) => a + b))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.zipWith(_.left("a"), (a, b) => a + b))).toEqual(_.left("a"))
+    expect(pipe(_.right(1), _.zipWith(_.right(2), (a, b) => a + b))).toEqual(_.right(3))
   })
 
   it("sum", () => {
