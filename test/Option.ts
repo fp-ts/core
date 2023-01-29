@@ -117,13 +117,6 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(pipe(E.right(1), _.isOption), false)
   })
 
-  it("coproductEither", () => {
-    Util.deepStrictEqual(pipe(_.none(), _.coproductEither(_.none())), _.none())
-    Util.deepStrictEqual(pipe(_.none(), _.coproductEither(_.some("a"))), _.some(E.right("a")))
-    Util.deepStrictEqual(pipe(_.some(1), _.coproductEither(_.none())), _.some(E.left(1)))
-    Util.deepStrictEqual(pipe(_.some(1), _.coproductEither(_.some("a"))), _.some(E.left(1)))
-  })
-
   it("coproductMany", () => {
     const coproductMany = _.SemiCoproduct.coproductMany
     Util.deepStrictEqual(coproductMany(_.some(1), []), _.some(1))
