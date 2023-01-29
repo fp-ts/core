@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
@@ -50,8 +51,8 @@ export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<
  * @since 1.0.0
  */
 export const flap = <F extends TypeLambda>(F: Covariant<F>) =>
-  <A>(a: A): (<R, O, E, B>(self: Kind<F, R, O, E, (a: A) => B>) => Kind<F, R, O, E, B>) =>
-    F.map(f => f(a))
+  <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>) =>
+    (a: A): Kind<F, R, O, E, B> => pipe(self, F.map(f => f(a)))
 
 /**
  * @category mapping

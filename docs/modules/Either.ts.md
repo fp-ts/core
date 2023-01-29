@@ -1117,7 +1117,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A>(a: A) => <E, B>(self: Either<E, (a: A) => B>) => Either<E, B>
+export declare const flap: <E, A, B>(self: Either<E, (a: A) => B>) => (a: A) => Either<E, B>
 ```
 
 Added in v1.0.0

@@ -160,10 +160,8 @@ export const bindTo: <N extends string>(
  * @category mapping
  * @since 1.0.0
  */
-export const flap: <A>(a: A) => <E, B>(self: Either<E, (a: A) => B>) => Either<E, B> = covariant
-  .flap(
-    Covariant
-  )
+export const flap: <E, A, B>(self: Either<E, (a: A) => B>) => (a: A) => Either<E, B> = covariant
+  .flap(Covariant)
 
 /**
  * Maps the Right value of this effect to the specified constant value.
