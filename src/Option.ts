@@ -565,8 +565,9 @@ export const Do: Option<{}> = of_.Do(Of)
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
-  ...Of,
-  ...Covariant
+  of,
+  imap: Invariant.imap,
+  map
 }
 
 /**
@@ -611,8 +612,9 @@ export const composeKleisliArrow: <B, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<OptionTypeLambda> = {
-  ...FlatMap,
-  ...Covariant
+  imap: Invariant.imap,
+  map,
+  flatMap
 }
 
 /**
@@ -698,8 +700,10 @@ export const inspectNone = (
  * @since 1.0.0
  */
 export const Monad: monad.Monad<OptionTypeLambda> = {
-  ...Pointed,
-  ...FlatMap
+  imap: Invariant.imap,
+  of,
+  map,
+  flatMap
 }
 
 const productMany = <A>(
@@ -724,7 +728,7 @@ const productMany = <A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   product: (self, that) =>
     isSome(self) && isSome(that) ? some([self.value, that.value]) : option.none,
   productMany
@@ -768,8 +772,10 @@ const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
  * @since 1.0.0
  */
 export const Product: product_.Product<OptionTypeLambda> = {
-  ...Of,
-  ...SemiProduct,
+  of,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 
@@ -795,8 +801,10 @@ export const struct: <R extends Record<string, Option<any>>>(
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> = {
-  ...SemiProduct,
-  ...Covariant
+  imap: Invariant.imap,
+  map: Covariant.map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -885,8 +893,12 @@ export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> =
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  ...SemiApplicative,
-  ...Product
+  imap: Invariant.imap,
+  of,
+  map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll
 }
 
 /**
@@ -923,7 +935,7 @@ const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Opt
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   coproduct: (self, that) => isSome(self) ? self : that,
   coproductMany
 }
@@ -952,8 +964,10 @@ export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> = {
-  ...Covariant,
-  ...SemiCoproduct
+  map,
+  imap: Invariant.imap,
+  coproduct: SemiCoproduct.coproduct,
+  coproductMany: SemiCoproduct.coproductMany
 }
 
 /**
@@ -961,8 +975,12 @@ export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> 
  * @since 1.0.0
  */
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
-  ...SemiAlternative,
-  ...Coproduct
+  map,
+  imap: Invariant.imap,
+  coproduct: SemiCoproduct.coproduct,
+  coproductMany: SemiCoproduct.coproductMany,
+  coproductAll: Coproduct.coproductAll,
+  zero: Coproduct.zero
 }
 
 /**

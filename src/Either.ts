@@ -255,8 +255,9 @@ export const Do: Either<never, {}> = of_.Do(Of)
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<EitherTypeLambda> = {
-  ...Of,
-  ...Covariant
+  of,
+  imap: Invariant.imap,
+  map
 }
 
 /**
@@ -302,8 +303,9 @@ export const composeKleisliArrow: <B, E2, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<EitherTypeLambda> = {
-  ...FlatMap,
-  ...Covariant
+  imap: Invariant.imap,
+  map,
+  flatMap
 }
 
 /**
@@ -335,8 +337,10 @@ export const andThenDiscard: <E2, _>(
  * @since 1.0.0
  */
 export const Monad: monad.Monad<EitherTypeLambda> = {
-  ...Pointed,
-  ...FlatMap
+  imap: Invariant.imap,
+  of,
+  map,
+  flatMap
 }
 
 const productMany = <E, A>(
@@ -361,7 +365,7 @@ const productMany = <E, A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   product: (self, that) =>
     isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self,
   productMany
@@ -411,8 +415,10 @@ const productAll = <E, A>(
  * @since 1.0.0
  */
 export const Product: product_.Product<EitherTypeLambda> = {
-  ...Of,
-  ...SemiProduct,
+  of,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 
@@ -443,8 +449,10 @@ export const struct: <R extends Record<string, Either<any, any>>>(
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda> = {
-  ...SemiProduct,
-  ...Covariant
+  imap: Invariant.imap,
+  map: Covariant.map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -499,8 +507,12 @@ export const ap: <E2, A>(
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<EitherTypeLambda> = {
-  ...SemiApplicative,
-  ...Product
+  imap: Invariant.imap,
+  of,
+  map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll
 }
 
 /**
@@ -540,7 +552,7 @@ export const firstRightOf = <E, A>(collection: Iterable<Either<E, A>>) =>
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   coproduct: (self, that) => isRight(self) ? self : that,
   coproductMany: (self, collection) => pipe(self, firstRightOf(collection))
 }
@@ -638,8 +650,10 @@ export const orElseFail = <E2>(
  * @since 1.0.0
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<EitherTypeLambda> = {
-  ...Covariant,
-  ...SemiCoproduct
+  map,
+  imap: Invariant.imap,
+  coproduct: SemiCoproduct.coproduct,
+  coproductMany: SemiCoproduct.coproductMany
 }
 
 /**

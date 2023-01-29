@@ -215,8 +215,10 @@ export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
  * @since 1.0.0
  */
 export const Product: product.Product<OrderTypeLambda> = {
-  ...SemiProduct,
   of: () => empty,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll: <A>(collection: Iterable<Order<A>>) => tuple<Array<A>>(...collection)
 }
 

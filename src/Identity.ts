@@ -105,8 +105,9 @@ export const Do: Identity<{}> = of_.Do(Of)
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<IdentityTypeLambda> = {
-  ...Of,
-  ...Covariant
+  of: Of.of,
+  imap: Invariant.imap,
+  map: Covariant.map
 }
 
 /**
@@ -122,8 +123,9 @@ export const FlatMap: flatMap_.FlatMap<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<IdentityTypeLambda> = {
-  ...FlatMap,
-  ...Covariant
+  imap: Invariant.imap,
+  map: Covariant.map,
+  flatMap: FlatMap.flatMap
 }
 
 /**
@@ -144,8 +146,10 @@ export const bind: <N extends string, A extends object, B>(
  * @since 1.0.0
  */
 export const Monad: monad.Monad<IdentityTypeLambda> = {
-  ...Pointed,
-  ...FlatMap
+  imap: Invariant.imap,
+  of: Of.of,
+  map: Covariant.map,
+  flatMap: FlatMap.flatMap
 }
 
 /**
@@ -153,7 +157,7 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   product: (self, that) => [self, that],
   productMany: (self, collection) => [self, ...collection]
 }
@@ -163,8 +167,10 @@ export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const Product: product_.Product<IdentityTypeLambda> = {
-  ...Of,
-  ...SemiProduct,
+  of: Of.of,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll: readonlyArray.fromIterable
 }
 
@@ -173,8 +179,10 @@ export const Product: product_.Product<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda> = {
-  ...SemiProduct,
-  ...Covariant
+  imap: Invariant.imap,
+  map: Covariant.map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -182,8 +190,12 @@ export const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<IdentityTypeLambda> = {
-  ...SemiApplicative,
-  ...Product
+  imap: Invariant.imap,
+  of: Of.of,
+  map: Covariant.map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll: Product.productAll
 }
 
 /**

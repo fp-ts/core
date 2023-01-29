@@ -189,8 +189,10 @@ const productAll = <A>(
  * @since 1.0.0
  */
 export const Product: product_.Product<PredicateTypeLambda> = {
-  ...SemiProduct,
   of,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 

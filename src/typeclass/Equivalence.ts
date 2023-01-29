@@ -204,7 +204,9 @@ export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = {
  * @since 1.0.0
  */
 export const Product: product.Product<EquivalenceTypeLambda> = {
-  ...SemiProduct,
   of: () => empty,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll: <A>(collection: Iterable<Equivalence<A>>) => tuple<Array<A>>(...collection)
 }
