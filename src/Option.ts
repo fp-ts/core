@@ -515,9 +515,8 @@ export {
  * @category mapping
  * @since 1.0.0
  */
-export const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B> = covariant.flap(
-  Covariant
-)
+export const flap: <A, B>(self: Option<(a: A) => B>) => (a: A) => Option<B> = covariant
+  .flap(Covariant)
 
 /**
  * Maps the `Some` value of this option to the specified constant value.

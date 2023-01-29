@@ -66,7 +66,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <F extends any>(F: Covariant<F>) => <A>(a: A) => <R, O, E, B>(self: any) => any
+export declare const flap: <F extends any>(F: Covariant<F>) => <R, O, E, A, B>(self: any) => (a: A) => any
 ```
 
 Added in v1.0.0

@@ -1173,7 +1173,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A>(a: A) => <B>(fab: Option<(a: A) => B>) => Option<B>
+export declare const flap: <A, B>(self: Option<(a: A) => B>) => (a: A) => Option<B>
 ```
 
 Added in v1.0.0

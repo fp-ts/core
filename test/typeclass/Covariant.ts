@@ -21,8 +21,8 @@ describe("Covariant", () => {
 
   it("flap", () => {
     const flap = _.flap(O.Covariant)
-    U.deepStrictEqual(pipe(O.none(), flap(1)), O.none())
-    U.deepStrictEqual(pipe(O.some(U.double), flap(1)), O.some(2))
+    U.deepStrictEqual(pipe(1, flap(O.none())), O.none())
+    U.deepStrictEqual(pipe(1, flap(O.some(U.double))), O.some(2))
   })
 
   it("as", () => {

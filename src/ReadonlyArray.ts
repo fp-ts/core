@@ -1317,9 +1317,9 @@ export {
  * @category mapping
  * @since 1.0.0
  */
-export const flap: <A>(a: A) => <B>(
-  self: ReadonlyArray<(a: A) => B>
-) => Array<B> = covariant.flap(Covariant) as any
+export const flap: <A, B>(self: ReadonlyArray<(a: A) => B>) => (a: A) => Array<B> = covariant.flap(
+  Covariant
+) as any
 
 /**
  * Maps the success value of this effect to the specified constant value.

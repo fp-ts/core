@@ -1441,7 +1441,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A>(a: A) => <B>(self: readonly ((a: A) => B)[]) => B[]
+export declare const flap: <A, B>(self: readonly ((a: A) => B)[]) => (a: A) => B[]
 ```
 
 Added in v1.0.0

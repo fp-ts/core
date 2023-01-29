@@ -1213,7 +1213,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A>(a: A) => <E, B>(self: any) => any
+export declare const flap: <E, A, B>(self: any) => (a: A) => any
 ```
 
 Added in v1.0.0
