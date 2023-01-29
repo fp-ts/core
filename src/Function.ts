@@ -83,9 +83,17 @@ export const getMonoid = <M>(Monoid: monoid.Monoid<M>) =>
   }
 
 /**
+ * Apply a function to a given value.
+ *
+ * @example
+ * import { pipe, apply } from '@fp-ts/core/Function'
+ * import { increment } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(pipe(2, apply(increment)), 3)
+ *
  * @since 1.0.0
  */
-export const apply = <A>(a: A) => <B>(self: (a: A) => B): B => self(a)
+export const apply = <A, B>(self: (a: A) => B) => (a: A): B => self(a)
 
 /**
  * A lazy argument
@@ -166,7 +174,7 @@ export const constVoid: LazyArg<void> = constUndefined
  *
  * const f = (a: number) => (b: string) => a - b.length
  *
- * assert.strictEqual(flip(f)('aaa')(2), -1)
+ * assert.deepStrictEqual(flip(f)('aaa')(2), -1)
  *
  * @since 1.0.0
  */
@@ -185,7 +193,7 @@ export const flip = <A extends Array<unknown>, B extends Array<unknown>, C>(
  *
  * const f = flow(len, double)
  *
- * assert.strictEqual(f('aaa'), 6)
+ * assert.deepStrictEqual(f('aaa'), 6)
  *
  * @see {@link pipe}
  * @since 1.0.0
@@ -316,7 +324,7 @@ export const absurd = <A>(_: never): A => {
  *
  * const add = tupled((x: number, y: number): number => x + y)
  *
- * assert.strictEqual(add([1, 2]), 3)
+ * assert.deepStrictEqual(add([1, 2]), 3)
  *
  * @since 1.0.0
  */
@@ -341,10 +349,10 @@ export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (
  * const double = (n: number): number => n * 2
  *
  * // without pipe
- * assert.strictEqual(double(len('aaa')), 6)
+ * assert.deepStrictEqual(double(len('aaa')), 6)
  *
  * // with pipe
- * assert.strictEqual(pipe('aaa', len, double), 6)
+ * assert.deepStrictEqual(pipe('aaa', len, double), 6)
  *
  * @see {@link flow}
  * @since 1.0.0
