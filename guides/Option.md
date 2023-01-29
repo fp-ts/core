@@ -187,7 +187,7 @@ What happens if we add a call to the `parseNumber` function to a pipeline that a
 const result = pipe(
   some("2"),
   map((s) => parseNumber(s)),
-  map((n) => n * 2) // type-checker error!
+  map((n) => n2) // type-checker error!
 );
 ```
 
@@ -211,7 +211,7 @@ import { flatMap } from "@fp-ts/core/Option";
 const result = pipe(
   some("2"),
   flatMap((s) => parseNumber(s)),
-  map((n) => n * 2) // ok! now `n` has type `number`
+  map((n) => n2) // ok! now `n` has type `number`
 );
 ```
 
@@ -232,7 +232,7 @@ The `flatMap` function offers the same convenience as the `map` function, which 
 const success: Option<number> = pipe(
   some("2"),
   flatMap((s) => parseNumber(s)), // parse the input to number
-  map((x) => x * 2), // double the parsed number
+  map((x) => x2), // double the parsed number
   map((x) => x - 3) // subtract 3
 ); // some(1)
 ```
@@ -243,7 +243,7 @@ const success: Option<number> = pipe(
 const failure: Option<number> = pipe(
   some("a"),
   flatMap((s) => parseNumber(s)), // parse the input to number
-  map((x) => x * 2), // This will not be executed because parseNumber will return None
+  map((x) => x2), // This will not be executed because parseNumber will return None
   map((x) => x - 3) // This will not be executed
 ); // none()
 ```
@@ -254,7 +254,7 @@ const failure: Option<number> = pipe(
 const noneStart: Option<number> = pipe(
   none,
   flatMap((s) => parseNumber(s)), // This will not be executed because it starts with None
-  map((x) => x * 2), // This will not be executed
+  map((x) => x2), // This will not be executed
   map((x) => x - 3) // This will not be executed
 ); // none()
 ```
@@ -284,7 +284,7 @@ const failure: Option<number> = pipe(
   inspectSome(console.log),
   flatMap((s) => parseNumber(s)),
   inspectNone(() => console.error("none")),
-  map((x) => x * 2),
+  map((x) => x2),
   map((x) => x - 3)
 );
 // "a"
@@ -302,8 +302,6 @@ The fastest way to get the value wrapped in an option is to call the `getOrThrow
 ```ts
 import { getOrThrow } from "@fp-ts/core/Option";
 
-let someValue = Some(10);
-let noneValue = None;
 console.log(pipe(some(10), getOrThrow()); // 10
 console.log(pipe(none(), getOrThrow()); // throws new Error("getOrThrow called on a None")
 ```
@@ -334,7 +332,7 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 There are specializations of `match` to make working with code that does not use `Option` more convenient and faster, particularly `getOrNull` and `getOrUndefined`.
 
 ```ts
-import { getOrNull, getOrUndefined } from "fp-ts/core/Option";
+import { getOrNull, getOrUndefined } from "@fp-ts/core/Option";
 
 pipe(some(5), getOrNull); // 5
 pipe(none(), getOrNull); // null
@@ -346,7 +344,7 @@ pipe(none(), getOrUndefined); // undefined
 For greater flexibility, there is also the `getOrElse` function which allows you to set what value corresponds to the `None` case:
 
 ```ts
-import { getOrElse } from "fp-ts/core/Option";
+import { getOrElse } from "@fp-ts/core/Option";
 
 pipe(
   some(5),
@@ -367,6 +365,116 @@ pipe(
 | `getOrNull`      | `Option<A>`                                         | `A \| null`      |
 | `getOrUndefined` | `Option<A>`                                         | `A \| undefined` |
 | `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`         |
+
+# Interop
+
+A need that arises quickly when using the `Option` data type is the ability to interoperate with code that does not share the same style, in particular code that for example uses `undefined` or `null` to indicate that a value is optional, or code that throws exceptions.
+
+The `Option` data type offers a series of APIs to make this task easier, let's start with the first of the two cases, that is when the need is to interoperate with code that use a nullable type to indicate that a value is optional.
+
+It is possible to create an `Option` from a nullable value using the `fromNullable` API, let's see an example:
+
+```ts
+import { fromNullable } from "@fp-ts/core/Option";
+
+console.log(fromNullable(null)); // none()
+console.log(fromNullable(undefined)); // none()
+console.log(fromNullable(1)); // some(1)
+```
+
+Instead of a single value, we can also modify the definition of a function that returns a nullable value to a function that returns an `Option` (a process that goes by the name of "lifting"):
+
+```ts
+import { liftNullable, none, some } from "@fp-ts/core/Option";
+
+const parse = (s: string): number | undefined => {
+  const n = parseFloat(s);
+  return isNaN(n) ? undefined : n;
+};
+
+// const parseOption: (s: string) => Option<number>
+const parseOption = liftNullable(parse);
+
+console.log(parseOption("1")); // some(1)
+console.log(parseOption("not a number")); // none()
+```
+
+On the other hand, if we have a value of type `Option` and we want to convert it into a nullable value we have two possibilities:
+
+- convert `None` to `null`
+- convert `None` to `undefined`
+
+The two APIs `getOrNull` and `getOrUndefined` respectively achieve these two tasks:
+
+```ts
+import { getOrNull, getOrUndefined, some, none } from "@fp-ts/core/Option";
+
+console.log(getOrNull(some(1))); // 1
+console.log(getOrNull(none())); // null
+
+console.log(getOrUndefined(some(1))); // 1
+console.log(getOrUndefined(none())); // undefined
+```
+
+**Cheat sheet** (interop - nullable)
+
+| Name              | Given                                              | To                                   |
+| ----------------- | -------------------------------------------------- | ------------------------------------ |
+| `fromNullable`    | `A`                                                | `Option<NonNullable<A>>`             |
+| `liftNullable`    | `(...a: A) => B \| null \| undefined`              | `(...a: A) => Option<NonNullable<B>` |
+| `flatMapNullable` | `Option<A>`, `(...a: A) => B \| null \| undefined` | `Option<NonNullable<B>>`             |
+| `getOrNull`       | `Option<A>`                                        | `A \| null`                          |
+| `getOrUndefined`  | `Option<A>`                                        | `A \| undefined`                     |
+
+Now let's see the other case, that is when we need to interoperate with code that throws exceptions.
+
+In a previous section, we saw how to convert the following function that can throw exceptions:
+
+```ts
+function parseNumber(s: string): number {
+  const n = parseFloat(s);
+  if (isNaN(n)) {
+    throw new Error();
+  }
+  return n;
+}
+```
+
+into a function that returns a `Option`:
+
+```ts
+function parseNumber(s: string): Option<number> {
+  const n = parseFloat(s);
+  return isNaN(n) ? none() : some(n);
+}
+```
+
+However, this involves tedious, error-prone, and boilerplate-heavy work. It would be much more convenient not to have to rewrite the `parseNumber` function from scratch but only to transform it into the desired result in one step, and that's exactly what the `fromThrowable` API takes care of doing:
+
+```ts
+import { liftThrowable, some, none } from "@fp-ts/core/Option";
+
+const parse = liftThrowable(JSON.parse);
+
+console.log(parse("1")); // some(1)
+console.log(parse("")); // none()
+```
+
+On the other hand, if we have a value of type `Option` and want to get the wrapped value, accepting the fact that if the `Option` is a `None` we will get an exception, we can use the `getOrThrow` API:
+
+```ts
+import { getOrThrow } from "@fp-ts/core/Option";
+
+console.log(pipe(some(10), getOrThrow()); // 10
+console.log(pipe(none(), getOrThrow()); // throws new Error("getOrThrow called on a None")
+```
+
+**Cheat sheet** (interop - throwing)
+
+| Name            | Given                                  | To                       |
+| --------------- | -------------------------------------- | ------------------------ |
+| `liftThrowable` | `(...a: A) => B` (may throw)           | `(...a: A) => Option<B>` |
+| `getOrThrow`    | `Option<A>`, `onNone?: LazyArg<Error>` | `A`                      |
 
 # Combining two or more `Option`s
 

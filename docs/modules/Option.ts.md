@@ -30,7 +30,6 @@ Added in v1.0.0
 - [conversions](#conversions)
   - [fromEither](#fromeither)
   - [fromIterable](#fromiterable)
-  - [fromNullable](#fromnullable)
   - [toEither](#toeither)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -79,6 +78,7 @@ Added in v1.0.0
   - [getFailureSemigroup](#getfailuresemigroup)
   - [getFirstSomeSemigroup](#getfirstsomesemigroup)
 - [interop](#interop)
+  - [fromNullable](#fromnullable)
   - [fromThrowable](#fromthrowable)
   - [getOrNull](#getornull)
   - [getOrThrow](#getorthrow)
@@ -340,29 +340,6 @@ import { fromIterable, some, none } from '@fp-ts/core/Option'
 const collection = [1, 2, 3]
 assert.deepStrictEqual(fromIterable(collection), some(1))
 assert.deepStrictEqual(fromIterable([]), none())
-```
-
-Added in v1.0.0
-
-## fromNullable
-
-Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
-returns the value wrapped in a `Some`.
-
-**Signature**
-
-```ts
-export declare const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>>
-```
-
-**Example**
-
-```ts
-import { none, some, fromNullable } from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(fromNullable(undefined), none())
-assert.deepStrictEqual(fromNullable(null), none())
-assert.deepStrictEqual(fromNullable(1), some(1))
 ```
 
 Added in v1.0.0
@@ -953,6 +930,29 @@ Added in v1.0.0
 
 # interop
 
+## fromNullable
+
+Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
+returns the value wrapped in a `Some`.
+
+**Signature**
+
+```ts
+export declare const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>>
+```
+
+**Example**
+
+```ts
+import { none, some, fromNullable } from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(fromNullable(undefined), none())
+assert.deepStrictEqual(fromNullable(null), none())
+assert.deepStrictEqual(fromNullable(1), some(1))
+```
+
+Added in v1.0.0
+
 ## fromThrowable
 
 Converts an exception into an `Option`. If `f` throws, returns `None`, otherwise returns the output wrapped in a
@@ -1053,10 +1053,24 @@ Added in v1.0.0
 
 A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
 
+This function is useful for any function that might throw an exception, allowing the developer to handle
+the exception in a more functional way.
+
 **Signature**
 
 ```ts
 export declare const liftThrowable: <A extends readonly unknown[], B>(f: (...a: A) => B) => (...a: A) => Option<B>
+```
+
+**Example**
+
+```ts
+import { liftThrowable, some, none } from '@fp-ts/core/Option'
+
+const parse = liftThrowable(JSON.parse)
+
+assert.deepStrictEqual(parse('1'), some(1))
+assert.deepStrictEqual(parse(''), none())
 ```
 
 Added in v1.0.0
@@ -1131,7 +1145,7 @@ Added in v1.0.0
 
 ## liftNullable
 
-Returns a _smart constructor_ from a function that returns a nullable value.
+This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.
 
 **Signature**
 
@@ -1146,15 +1160,15 @@ export declare const liftNullable: <A extends readonly unknown[], B>(
 ```ts
 import { liftNullable, none, some } from '@fp-ts/core/Option'
 
-const f = (s: string): number | undefined => {
+const parse = (s: string): number | undefined => {
   const n = parseFloat(s)
   return isNaN(n) ? undefined : n
 }
 
-const g = liftNullable(f)
+const parseOption = liftNullable(parse)
 
-assert.deepStrictEqual(g('1'), some(1))
-assert.deepStrictEqual(g('a'), none())
+assert.deepStrictEqual(parseOption('1'), some(1))
+assert.deepStrictEqual(parseOption('not a number'), none())
 ```
 
 Added in v1.0.0

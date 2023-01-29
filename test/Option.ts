@@ -512,15 +512,9 @@ describe.concurrent("Option", () => {
   })
 
   it("liftThrowable", () => {
-    const f = _.liftThrowable((s: string) => {
-      const len = s.length
-      if (len > 0) {
-        return len
-      }
-      throw new Error("empty string")
-    })
-    Util.deepStrictEqual(f("a"), _.some(1))
-    Util.deepStrictEqual(f(""), _.none())
+    const parse = _.liftThrowable(JSON.parse)
+    Util.deepStrictEqual(parse("1"), _.some(1))
+    Util.deepStrictEqual(parse(""), _.none())
   })
 
   it("liftEither", () => {
