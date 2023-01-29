@@ -1205,8 +1205,8 @@ const onLeft = (errors: ReadonlyArray<string>): string => `Errors: ${errors.join
 
 const onRight = (value: number): string => `Ok: ${value}`
 
-assert.strictEqual(pipe(E.right(1), E.match(onLeft, onRight)), 'Ok: 1')
-assert.strictEqual(pipe(E.left(['error 1', 'error 2']), E.match(onLeft, onRight)), 'Errors: error 1, error 2')
+assert.deepStrictEqual(pipe(E.right(1), E.match(onLeft, onRight)), 'Ok: 1')
+assert.deepStrictEqual(pipe(E.left(['error 1', 'error 2']), E.match(onLeft, onRight)), 'Errors: error 1, error 2')
 ```
 
 Added in v1.0.0
@@ -1404,9 +1404,9 @@ import * as E from '@fp-ts/core/Either'
 
 const f = E.exists((n: number) => n > 2)
 
-assert.strictEqual(f(E.left('a')), false)
-assert.strictEqual(f(E.right(1)), false)
-assert.strictEqual(f(E.right(3)), true)
+assert.deepStrictEqual(f(E.left('a')), false)
+assert.deepStrictEqual(f(E.right(1)), false)
+assert.deepStrictEqual(f(E.right(3)), true)
 ```
 
 Added in v1.0.0

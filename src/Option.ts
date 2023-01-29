@@ -111,9 +111,9 @@ export const some: <A>(value: A) => Option<A> = option.some
  * @example
  * import { some, none, isOption } from '@fp-ts/core/Option'
  *
- * assert.strictEqual(isOption(some(1)), true)
- * assert.strictEqual(isOption(none()), true)
- * assert.strictEqual(isOption({}), false)
+ * assert.deepStrictEqual(isOption(some(1)), true)
+ * assert.deepStrictEqual(isOption(none()), true)
+ * assert.deepStrictEqual(isOption({}), false)
  *
  * @category guards
  * @since 1.0.0
@@ -128,8 +128,8 @@ export const isOption: (input: unknown) => input is Option<unknown> = option.isO
  * @example
  * import { some, none, isNone } from '@fp-ts/core/Option'
  *
- * assert.strictEqual(isNone(some(1)), false)
- * assert.strictEqual(isNone(none()), true)
+ * assert.deepStrictEqual(isNone(some(1)), false)
+ * assert.deepStrictEqual(isNone(none()), true)
  *
  * @category guards
  * @since 1.0.0
@@ -144,8 +144,8 @@ export const isNone: <A>(self: Option<A>) => self is None = option.isNone
  * @example
  * import { some, none, isSome } from '@fp-ts/core/Option'
  *
- * assert.strictEqual(isSome(some(1)), true)
- * assert.strictEqual(isSome(none()), false)
+ * assert.deepStrictEqual(isSome(some(1)), true)
+ * assert.deepStrictEqual(isSome(none()), false)
  *
  * @category guards
  * @since 1.0.0
@@ -259,8 +259,8 @@ export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either
  * import { some, none, getOrElse } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.strictEqual(pipe(some(1), getOrElse(() => 0)), 1)
- * assert.strictEqual(pipe(none(), getOrElse(() => 0)), 0)
+ * assert.deepStrictEqual(pipe(some(1), getOrElse(() => 0)), 1)
+ * assert.deepStrictEqual(pipe(none(), getOrElse(() => 0)), 0)
  *
  * @category error handling
  * @since 1.0.0
@@ -364,8 +364,8 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
  * import { some, none, getOrNull } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.strictEqual(pipe(some(1), getOrNull), 1)
- * assert.strictEqual(pipe(none(), getOrNull), null)
+ * assert.deepStrictEqual(pipe(some(1), getOrNull), 1)
+ * assert.deepStrictEqual(pipe(none(), getOrNull), null)
  *
  * @category interop
  * @since 1.0.0
@@ -381,8 +381,8 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
  * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.strictEqual(pipe(some(1), getOrUndefined), 1)
- * assert.strictEqual(pipe(none(), getOrUndefined), undefined)
+ * assert.deepStrictEqual(pipe(some(1), getOrUndefined), 1)
+ * assert.deepStrictEqual(pipe(none(), getOrUndefined), undefined)
  *
  * @category interop
  * @since 1.0.0
@@ -1085,7 +1085,7 @@ export const traverseTap: <F extends TypeLambda>(
  * import { some, none, match } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.strictEqual(
+ * assert.deepStrictEqual(
  *   pipe(
  *     some(1),
  *     match(() => 'a none', a => `a some containing ${a}`)
@@ -1093,7 +1093,7 @@ export const traverseTap: <F extends TypeLambda>(
  *   'a some containing 1'
  * )
  *
- * assert.strictEqual(
+ * assert.deepStrictEqual(
  *   pipe(
  *     none(),
  *     match(() => 'a none', a => `a some containing ${a}`)
@@ -1191,11 +1191,11 @@ export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
  * import { pipe } from '@fp-ts/core/Function'
  *
  * const O = liftOrder(N.Order)
- * assert.strictEqual(O.compare(none(), none()), 0)
- * assert.strictEqual(O.compare(none(), some(1)), -1)
- * assert.strictEqual(O.compare(some(1), none()), 1)
- * assert.strictEqual(O.compare(some(1), some(2)), -1)
- * assert.strictEqual(O.compare(some(1), some(1)), 0)
+ * assert.deepStrictEqual(O.compare(none(), none()), 0)
+ * assert.deepStrictEqual(O.compare(none(), some(1)), -1)
+ * assert.deepStrictEqual(O.compare(some(1), none()), 1)
+ * assert.deepStrictEqual(O.compare(some(1), some(2)), -1)
+ * assert.deepStrictEqual(O.compare(some(1), some(1)), 0)
  *
  * @category sorting
  * @since 1.0.0
@@ -1254,21 +1254,21 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
  * import { some, none, exists } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.strictEqual(
+ * assert.deepStrictEqual(
  *   pipe(
  *     some(1),
  *     exists(n => n > 0)
  *   ),
  *   true
  * )
- * assert.strictEqual(
+ * assert.deepStrictEqual(
  *   pipe(
  *     some(1),
  *     exists(n => n > 1)
  *   ),
  *   false
  * )
- * assert.strictEqual(
+ * assert.deepStrictEqual(
  *   pipe(
  *     none(),
  *     exists(n => n > 0)
@@ -1295,7 +1295,7 @@ export const exists = <A>(predicate: Predicate<A>) =>
  * import { pipe } from '@fp-ts/core/Function'
  *
  * const iterable = [some(1), none(), some(2), none()]
- * assert.strictEqual(pipe(iterable, reduceAll(0, (b, a) => b + a)), 3)
+ * assert.deepStrictEqual(pipe(iterable, reduceAll(0, (b, a) => b + a)), 3)
  */
 export const reduceAll = <B, A>(b: B, f: (b: B, a: A) => B) =>
   (self: Iterable<Option<A>>): B => {

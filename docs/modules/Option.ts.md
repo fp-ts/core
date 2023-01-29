@@ -502,14 +502,14 @@ export declare const getOrElse: <B>(onNone: any) => <A>(self: Option<A>) => B | 
 import { some, none, getOrElse } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     some(1),
     getOrElse(() => 0)
   ),
   1
 )
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     none(),
     getOrElse(() => 0)
@@ -635,8 +635,8 @@ export declare const isNone: <A>(self: Option<A>) => self is None
 ```ts
 import { some, none, isNone } from '@fp-ts/core/Option'
 
-assert.strictEqual(isNone(some(1)), false)
-assert.strictEqual(isNone(none()), true)
+assert.deepStrictEqual(isNone(some(1)), false)
+assert.deepStrictEqual(isNone(none()), true)
 ```
 
 Added in v1.0.0
@@ -656,9 +656,9 @@ export declare const isOption: (input: unknown) => input is Option<unknown>
 ```ts
 import { some, none, isOption } from '@fp-ts/core/Option'
 
-assert.strictEqual(isOption(some(1)), true)
-assert.strictEqual(isOption(none()), true)
-assert.strictEqual(isOption({}), false)
+assert.deepStrictEqual(isOption(some(1)), true)
+assert.deepStrictEqual(isOption(none()), true)
+assert.deepStrictEqual(isOption({}), false)
 ```
 
 Added in v1.0.0
@@ -678,8 +678,8 @@ export declare const isSome: <A>(self: Option<A>) => self is Some<A>
 ```ts
 import { some, none, isSome } from '@fp-ts/core/Option'
 
-assert.strictEqual(isSome(some(1)), true)
-assert.strictEqual(isSome(none()), false)
+assert.deepStrictEqual(isSome(some(1)), true)
+assert.deepStrictEqual(isSome(none()), false)
 ```
 
 Added in v1.0.0
@@ -970,8 +970,8 @@ export declare const getOrNull: <A>(self: Option<A>) => A | null
 import { some, none, getOrNull } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.strictEqual(pipe(some(1), getOrNull), 1)
-assert.strictEqual(pipe(none(), getOrNull), null)
+assert.deepStrictEqual(pipe(some(1), getOrNull), 1)
+assert.deepStrictEqual(pipe(none(), getOrNull), null)
 ```
 
 Added in v1.0.0
@@ -1014,8 +1014,8 @@ export declare const getOrUndefined: <A>(self: Option<A>) => A | undefined
 import { some, none, getOrUndefined } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.strictEqual(pipe(some(1), getOrUndefined), 1)
-assert.strictEqual(pipe(none(), getOrUndefined), undefined)
+assert.deepStrictEqual(pipe(some(1), getOrUndefined), 1)
+assert.deepStrictEqual(pipe(none(), getOrUndefined), undefined)
 ```
 
 Added in v1.0.0
@@ -1246,7 +1246,7 @@ export declare const match: <B, A, C = B>(onNone: any, onSome: (a: A) => C) => (
 import { some, none, match } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     some(1),
     match(
@@ -1257,7 +1257,7 @@ assert.strictEqual(
   'a some containing 1'
 )
 
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     none(),
     match(
@@ -1402,11 +1402,11 @@ import * as N from '@fp-ts/core/Number'
 import { pipe } from '@fp-ts/core/Function'
 
 const O = liftOrder(N.Order)
-assert.strictEqual(O.compare(none(), none()), 0)
-assert.strictEqual(O.compare(none(), some(1)), -1)
-assert.strictEqual(O.compare(some(1), none()), 1)
-assert.strictEqual(O.compare(some(1), some(2)), -1)
-assert.strictEqual(O.compare(some(1), some(1)), 0)
+assert.deepStrictEqual(O.compare(none(), none()), 0)
+assert.deepStrictEqual(O.compare(none(), some(1)), -1)
+assert.deepStrictEqual(O.compare(some(1), none()), 1)
+assert.deepStrictEqual(O.compare(some(1), some(2)), -1)
+assert.deepStrictEqual(O.compare(some(1), some(1)), 0)
 ```
 
 Added in v1.0.0
@@ -1543,21 +1543,21 @@ export declare const exists: <A>(predicate: any) => (self: Option<A>) => boolean
 import { some, none, exists } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     some(1),
     exists((n) => n > 0)
   ),
   true
 )
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     some(1),
     exists((n) => n > 1)
   ),
   false
 )
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     none(),
     exists((n) => n > 0)
@@ -1615,7 +1615,7 @@ import { some, none, reduceAll } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
 const iterable = [some(1), none(), some(2), none()]
-assert.strictEqual(
+assert.deepStrictEqual(
   pipe(
     iterable,
     reduceAll(0, (b, a) => b + a)

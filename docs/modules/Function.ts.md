@@ -184,10 +184,21 @@ Added in v1.0.0
 
 ## apply
 
+Apply a function to a given value.
+
 **Signature**
 
 ```ts
-export declare const apply: <A>(a: A) => <B>(self: (a: A) => B) => B
+export declare const apply: <A, B>(self: (a: A) => B) => (a: A) => B
+```
+
+**Example**
+
+```ts
+import { pipe, apply } from '@fp-ts/core/Function'
+import { increment } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(pipe(2, apply(increment)), 3)
 ```
 
 Added in v1.0.0
@@ -302,7 +313,7 @@ import { flip } from '@fp-ts/core/Function'
 
 const f = (a: number) => (b: string) => a - b.length
 
-assert.strictEqual(flip(f)('aaa')(2), -1)
+assert.deepStrictEqual(flip(f)('aaa')(2), -1)
 ```
 
 Added in v1.0.0
@@ -387,7 +398,7 @@ const double = (n: number): number => n * 2
 
 const f = flow(len, double)
 
-assert.strictEqual(f('aaa'), 6)
+assert.deepStrictEqual(f('aaa'), 6)
 ```
 
 Added in v1.0.0
@@ -662,10 +673,10 @@ const len = (s: string): number => s.length
 const double = (n: number): number => n * 2
 
 // without pipe
-assert.strictEqual(double(len('aaa')), 6)
+assert.deepStrictEqual(double(len('aaa')), 6)
 
 // with pipe
-assert.strictEqual(pipe('aaa', len, double), 6)
+assert.deepStrictEqual(pipe('aaa', len, double), 6)
 ```
 
 Added in v1.0.0
@@ -687,7 +698,7 @@ import { tupled } from '@fp-ts/core/Function'
 
 const add = tupled((x: number, y: number): number => x + y)
 
-assert.strictEqual(add([1, 2]), 3)
+assert.deepStrictEqual(add([1, 2]), 3)
 ```
 
 Added in v1.0.0
