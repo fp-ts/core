@@ -325,7 +325,7 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   product: tuple,
   productMany: (self, collection) => tuple(self, ...collection)
 }
@@ -335,7 +335,9 @@ export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
  * @since 1.0.0
  */
 export const Product: product.Product<SemigroupTypeLambda> = {
-  ...SemiProduct,
   of: constant,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple<Array<A>>(...collection)
 }

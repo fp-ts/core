@@ -696,8 +696,9 @@ export const Do: These<never, {}> = of_.Do(Of)
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<TheseTypeLambda> = {
-  ...Of,
-  ...Covariant
+  of,
+  imap: Invariant.imap,
+  map
 }
 
 /**
@@ -843,7 +844,7 @@ export const firstRightOrBothOf = <E, A>(collection: Iterable<These<E, A>>) =>
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = {
-  ...Invariant,
+  imap: Invariant.imap,
   coproduct: (self, that) => isRightOrBoth(self) ? self : that,
   coproductMany: (self, collection) => pipe(self, firstRightOrBothOf(collection))
 }
@@ -860,8 +861,10 @@ export const getFirstRightOrBothSemigroup: <E, A>() => Semigroup<These<E, A>> = 
  * @since 1.0.0
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<TheseTypeLambda> = {
-  ...Covariant,
-  ...SemiCoproduct
+  map,
+  imap: Invariant.imap,
+  coproduct: SemiCoproduct.coproduct,
+  coproductMany: SemiCoproduct.coproductMany
 }
 
 /**
@@ -963,8 +966,10 @@ export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<ValidatedTypeLambda> = {
-  map,
-  ...SemiProduct
+  imap: Invariant.imap,
+  map: Covariant.map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -1085,8 +1090,10 @@ export const element: <E2, B>(
  * @since 1.0.0
  */
 export const Product: product_.Product<ValidatedTypeLambda> = {
-  ...SemiProduct,
   of,
+  imap: Invariant.imap,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 
@@ -1138,8 +1145,12 @@ export const flatMap = <A, E2, B>(
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<ValidatedTypeLambda> = {
-  ...SemiApplicative,
-  ...Product
+  imap: Invariant.imap,
+  of,
+  map,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll
 }
 
 /**
@@ -1262,8 +1273,8 @@ export const tap: <A, E2, _>(
  */
 export const Monad: monad.Monad<ValidatedTypeLambda> = {
   imap: Invariant.imap,
-  map,
   of,
+  map,
   flatMap
 }
 
