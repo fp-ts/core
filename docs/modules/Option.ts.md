@@ -121,7 +121,6 @@ Added in v1.0.0
   - [ap](#ap)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
-  - [coproductEither](#coproducteither)
   - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
@@ -160,10 +159,21 @@ Added in v1.0.0
 
 ## multiplyAll
 
+Multiply all numbers in an iterable of `Option<number>` ignoring the `None` values.
+
 **Signature**
 
 ```ts
 export declare const multiplyAll: (self: Iterable<Option<number>>) => number
+```
+
+**Example**
+
+```ts
+import { multiplyAll, some, none } from '@fp-ts/core/Option'
+
+const iterable = [some(2), none(), some(3), none()]
+assert.deepStrictEqual(multiplyAll(iterable), 6)
 ```
 
 Added in v1.0.0
@@ -210,10 +220,21 @@ Added in v1.0.0
 
 ## sumAll
 
+Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
+
 **Signature**
 
 ```ts
 export declare const sumAll: (self: Iterable<Option<number>>) => number
+```
+
+**Example**
+
+```ts
+import { sumAll, some, none } from '@fp-ts/core/Option'
+
+const iterable = [some(2), none(), some(3), none()]
+assert.deepStrictEqual(sumAll(iterable), 5)
 ```
 
 Added in v1.0.0
@@ -587,6 +608,10 @@ Added in v1.0.0
 
 ## filter
 
+Filters an `Option` using a predicate. If the predicate is not satisfied or the `Option` is `None` returns `None`.
+
+If you need to change the type of the `Option` in addition to filtering, see `filterMap`.
+
 **Signature**
 
 ```ts
@@ -599,6 +624,10 @@ export declare const filter: {
 Added in v1.0.0
 
 ## filterMap
+
+Maps over the value of an `Option` and filters out `None`s.
+
+Useful when in addition to filtering you also want to change the type of the `Option`.
 
 **Signature**
 
@@ -1076,10 +1105,26 @@ Added in v1.0.0
 
 ## liftEither
 
+Lifts an `Either` function to an `Option` function.
+
 **Signature**
 
 ```ts
 export declare const liftEither: <A extends readonly unknown[], E, B>(f: (...a: A) => any) => (...a: A) => Option<B>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+const parse = (s: string) => (isNaN(+s) ? E.left(`Error: ${s} is not a number`) : E.right(+s))
+
+const parseNumber = O.liftEither(parse)
+
+assert.deepEqual(parseNumber('12'), O.some(12))
+assert.deepEqual(parseNumber('not a number'), O.none())
 ```
 
 Added in v1.0.0
@@ -1315,10 +1360,25 @@ Added in v1.0.0
 
 ## flatMapEither
 
+Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+
 **Signature**
 
 ```ts
 export declare const flatMapEither: <A, E, B>(f: (a: A) => any) => (self: Option<A>) => Option<B>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+import { pipe } from '@fp-ts/core/Function'
+
+const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
+
+assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
+assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
 ```
 
 Added in v1.0.0
@@ -1491,7 +1551,7 @@ Added in v1.0.0
 
 ## contains
 
-Returns a function that checks if an `Option` contains a given value using a provided `equivalence` function.
+Returns a function that checks if an `Option` contains a given value using a provided `Equivalence` instance.
 
 **Signature**
 
@@ -1499,14 +1559,16 @@ Returns a function that checks if an `Option` contains a given value using a pro
 export declare const contains: <A>(equivalence: any) => (a: A) => (self: Option<A>) => boolean
 ```
 
-Added in v1.0.0
-
-## coproductEither
-
-**Signature**
+**Example**
 
 ```ts
-export declare const coproductEither: <B>(that: Option<B>) => <A>(self: Option<A>) => Option<any>
+import { some, none, contains } from '@fp-ts/core/Option'
+import { Equivalence } from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(pipe(some(2), contains(Equivalence)(2)), true)
+assert.deepStrictEqual(pipe(some(1), contains(Equivalence)(2)), false)
+assert.deepStrictEqual(pipe(none(), contains(Equivalence)(2)), false)
 ```
 
 Added in v1.0.0
@@ -1525,7 +1587,7 @@ Added in v1.0.0
 
 ## exists
 
-Returns `true` if the predicate is satisfied by the wrapped value
+Check if a value in an `Option` type meets a certain predicate.
 
 **Signature**
 
@@ -1539,27 +1601,11 @@ export declare const exists: <A>(predicate: any) => (self: Option<A>) => boolean
 import { some, none, exists } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(
-  pipe(
-    some(1),
-    exists((n) => n > 0)
-  ),
-  true
-)
-assert.deepStrictEqual(
-  pipe(
-    some(1),
-    exists((n) => n > 1)
-  ),
-  false
-)
-assert.deepStrictEqual(
-  pipe(
-    none(),
-    exists((n) => n > 0)
-  ),
-  false
-)
+const isEven = (n: number) => n % 2 === 0
+
+assert.deepStrictEqual(pipe(some(2), exists(isEven)), true)
+assert.deepStrictEqual(pipe(some(1), exists(isEven)), false)
+assert.deepStrictEqual(pipe(none(), exists(isEven)), false)
 ```
 
 Added in v1.0.0
@@ -1636,10 +1682,23 @@ Added in v1.0.0
 
 ## toArray
 
+Transforms an `Option` into an `Array`.
+If the input is `None`, an empty array is returned.
+If the input is `Some`, the value is wrapped in an array.
+
 **Signature**
 
 ```ts
 export declare const toArray: <A>(self: Option<A>) => A[]
+```
+
+**Example**
+
+```ts
+import { some, none, toArray } from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(toArray(some(1)), [1])
+assert.deepStrictEqual(toArray(none()), [])
 ```
 
 Added in v1.0.0

@@ -938,13 +938,6 @@ export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduc
   .getSemigroup(SemiCoproduct)
 
 /**
- * @since 1.0.0
- */
-export const coproductEither = <B>(that: Option<B>) =>
-  <A>(self: Option<A>): Option<Either<A, B>> =>
-    isNone(self) ? pipe(that, map(either.right)) : pipe(self, map(either.left))
-
-/**
  * @category instances
  * @since 1.0.0
  */
@@ -987,6 +980,18 @@ export const Foldable: foldable.Foldable<OptionTypeLambda> = {
 }
 
 /**
+ * Transforms an `Option` into an `Array`.
+ * If the input is `None`, an empty array is returned.
+ * If the input is `Some`, the value is wrapped in an array.
+ *
+ * @param self - The `Option` to convert to an array.
+ *
+ * @example
+ * import { some, none, toArray } from '@fp-ts/core/Option'
+ *
+ * assert.deepStrictEqual(toArray(some(1)), [1])
+ * assert.deepStrictEqual(toArray(none()), [])
+ *
  * @since 1.0.0
  */
 export const toArray: <A>(self: Option<A>) => Array<A> = foldable.toArray(Foldable)
@@ -1007,6 +1012,13 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
   .separate({ ...Covariant, ...Compactable })
 
 /**
+ * Maps over the value of an `Option` and filters out `None`s.
+ *
+ * Useful when in addition to filtering you also want to change the type of the `Option`.
+ *
+ * @param f - A function to apply to the value of the `Option`.
+ * @param self - The `Option` to map over.
+ *
  * @category filtering
  * @since 1.0.0
  */
@@ -1022,6 +1034,13 @@ export const Filterable: filterable.Filterable<OptionTypeLambda> = {
 }
 
 /**
+ * Filters an `Option` using a predicate. If the predicate is not satisfied or the `Option` is `None` returns `None`.
+ *
+ * If you need to change the type of the `Option` in addition to filtering, see `filterMap`.
+ *
+ * @param predicate - A predicate function to apply to the `Option` value.
+ * @param fb - The `Option` to filter.
+ *
  * @category filtering
  * @since 1.0.0
  */
@@ -1220,6 +1239,22 @@ export const liftPredicate: {
 } = <B extends A, A = B>(predicate: Predicate<A>) => (b: B) => predicate(b) ? some(b) : option.none
 
 /**
+ * Lifts an `Either` function to an `Option` function.
+ *
+ * @param f - Any variadic function that returns an `Either`.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * const parse = (s: string) =>
+ *   isNaN(+s) ? E.left(`Error: ${s} is not a number`) : E.right(+s)
+ *
+ * const parseNumber = O.liftEither(parse)
+ *
+ * assert.deepEqual(parseNumber('12'), O.some(12))
+ * assert.deepEqual(parseNumber('not a number'), O.none())
+ *
  * @category lifting
  * @since 1.0.0
  */
@@ -1228,6 +1263,21 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
 ) => (...a: A): Option<B> => fromEither(f(...a))
 
 /**
+ * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+ *
+ * @param f - The function to be applied to the contents of the `Option`.
+ * @param self - The `Option` to apply the function to.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
+ *
+ * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
+ * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
+ *
  * @category sequencing
  * @since 1.0.0
  */
@@ -1235,7 +1285,19 @@ export const flatMapEither = <A, E, B>(f: (a: A) => Either<E, B>) =>
   (self: Option<A>): Option<B> => pipe(self, flatMap(liftEither(f)))
 
 /**
- * Returns a function that checks if an `Option` contains a given value using a provided `equivalence` function.
+ * Returns a function that checks if an `Option` contains a given value using a provided `Equivalence` instance.
+ *
+ * @param equivalence - An `Equivalence` instance to compare values of the `Option`.
+ * @param a - The value to compare against the `Option`.
+ *
+ * @example
+ * import { some, none, contains } from '@fp-ts/core/Option'
+ * import { Equivalence } from '@fp-ts/core/Number'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(pipe(some(2), contains(Equivalence)(2)), true)
+ * assert.deepStrictEqual(pipe(some(1), contains(Equivalence)(2)), false)
+ * assert.deepStrictEqual(pipe(none(), contains(Equivalence)(2)), false)
  *
  * @since 1.0.0
  */
@@ -1243,33 +1305,20 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
   (a: A) => (self: Option<A>): boolean => isNone(self) ? false : equivalence(self.value, a)
 
 /**
- * Returns `true` if the predicate is satisfied by the wrapped value
+ * Check if a value in an `Option` type meets a certain predicate.
+ *
+ * @param predicate - The condition to check.
+ * @param self - The `Option` to check.
  *
  * @example
  * import { some, none, exists } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(
- *   pipe(
- *     some(1),
- *     exists(n => n > 0)
- *   ),
- *   true
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     some(1),
- *     exists(n => n > 1)
- *   ),
- *   false
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     none(),
- *     exists(n => n > 0)
- *   ),
- *   false
- * )
+ * const isEven = (n: number) => n % 2 === 0
+ *
+ * assert.deepStrictEqual(pipe(some(2), exists(isEven)), true)
+ * assert.deepStrictEqual(pipe(some(1), exists(isEven)), false)
+ * assert.deepStrictEqual(pipe(none(), exists(isEven)), false)
  *
  * @since 1.0.0
  */
@@ -1281,9 +1330,9 @@ export const exists = <A>(predicate: Predicate<A>) =>
  *
  * @since 1.0.0
  *
- * @param b - The initial value of the accumulator
- * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`
- * @param self - The Iterable of `Option<A>` to be reduced
+ * @param b - The initial value of the accumulator.
+ * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`.
+ * @param self - The Iterable of `Option<A>` to be reduced.
  *
  * @example
  * import { some, none, reduceAll } from '@fp-ts/core/Option'
@@ -1350,6 +1399,16 @@ export const multiplyBigint = lift2(BI.multiply)
 export const subtractBigint = lift2(BI.subtract)
 
 /**
+ * Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
+ *
+ * @param self - The iterable of `Option<number>` to be summed.
+ *
+ * @example
+ * import { sumAll, some, none } from '@fp-ts/core/Option'
+ *
+ * const iterable = [some(2), none(), some(3), none()]
+ * assert.deepStrictEqual(sumAll(iterable), 5)
+ *
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1364,6 +1423,16 @@ export const sumAll = (self: Iterable<Option<number>>): number => {
 }
 
 /**
+ * Multiply all numbers in an iterable of `Option<number>` ignoring the `None` values.
+ *
+ * @param self - The iterable of `Option<number>` to be multiplied.
+ *
+ * @example
+ * import { multiplyAll, some, none } from '@fp-ts/core/Option'
+ *
+ * const iterable = [some(2), none(), some(3), none()]
+ * assert.deepStrictEqual(multiplyAll(iterable), 6)
+ *
  * @category algebraic operations
  * @since 1.0.0
  */
