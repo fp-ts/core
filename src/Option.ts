@@ -157,24 +157,6 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
 // -------------------------------------------------------------------------------------
 
 /**
- * Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
- * returns the value wrapped in a `Some`.
- *
- * @param nullableValue - The nullable value to be converted to an `Option`.
- *
- * @example
- * import { none, some, fromNullable } from '@fp-ts/core/Option'
- *
- * assert.deepStrictEqual(fromNullable(undefined), none())
- * assert.deepStrictEqual(fromNullable(null), none())
- * assert.deepStrictEqual(fromNullable(1), some(1))
- *
- * @category conversions
- * @since 1.0.0
- */
-export const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>> = option.fromNullable
-
-/**
  * Returns a `Refinement` from a `Option` returning function.
  * This function ensures that a `Refinement` definition is type-safe.
  *
@@ -356,6 +338,47 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
 // -------------------------------------------------------------------------------------
 
 /**
+ * Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
+ * returns the value wrapped in a `Some`.
+ *
+ * @param nullableValue - The nullable value to be converted to an `Option`.
+ *
+ * @example
+ * import { none, some, fromNullable } from '@fp-ts/core/Option'
+ *
+ * assert.deepStrictEqual(fromNullable(undefined), none())
+ * assert.deepStrictEqual(fromNullable(null), none())
+ * assert.deepStrictEqual(fromNullable(1), some(1))
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>> = option.fromNullable
+
+/**
+ * This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.
+ *
+ * @example
+ * import { liftNullable, none, some } from '@fp-ts/core/Option'
+ *
+ * const parse = (s: string): number | undefined => {
+ *   const n = parseFloat(s)
+ *   return isNaN(n) ? undefined : n
+ * }
+ *
+ * const parseOption = liftNullable(parse)
+ *
+ * assert.deepStrictEqual(parseOption('1'), some(1))
+ * assert.deepStrictEqual(parseOption('not a number'), none())
+ *
+ * @category lifting
+ * @since 1.0.0
+ */
+export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
+  f: (...a: A) => B | null | undefined
+): ((...a: A) => Option<NonNullable<B>>) => (...a) => fromNullable(f(...a))
+
+/**
  * Returns the value of the `Option` if it is a `Some`, otherwise returns `null`.
  *
  * @param self - The `Option` to extract the value from.
@@ -390,6 +413,50 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
 export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(constUndefined)
 
 /**
+ * This is `flatMap` + `fromNullable`, useful when working with optional values.
+ *
+ * @example
+ * import { some, none, flatMapNullable } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * interface Employee {
+ *   company?: {
+ *     address?: {
+ *       street?: {
+ *         name?: string
+ *       }
+ *     }
+ *   }
+ * }
+ *
+ * const employee1: Employee = { company: { address: { street: { name: 'high street' } } } }
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     some(employee1),
+ *     flatMapNullable(employee => employee.company?.address?.street?.name),
+ *   ),
+ *   some('high street')
+ * )
+ *
+ * const employee2: Employee = { company: { address: { street: {} } } }
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     some(employee2),
+ *     flatMapNullable(employee => employee.company?.address?.street?.name),
+ *   ),
+ *   none()
+ * )
+ *
+ * @category sequencing
+ * @since 1.0.0
+ */
+export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
+  (self: Option<A>): Option<NonNullable<B>> =>
+    isNone(self) ? option.none : fromNullable(f(self.value))
+
+/**
  * Converts an exception into an `Option`. If `f` throws, returns `None`, otherwise returns the output wrapped in a
  * `Some`.
  *
@@ -417,6 +484,19 @@ export const fromThrowable = <A>(f: () => A): Option<A> => {
 
 /**
  * A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
+ *
+ * This function is useful for any function that might throw an exception, allowing the developer to handle
+ * the exception in a more functional way.
+ *
+ * @param f - the function that can throw exceptions.
+ *
+ * @example
+ * import { liftThrowable, some, none } from "@fp-ts/core/Option";
+ *
+ * const parse = liftThrowable(JSON.parse)
+ *
+ * assert.deepStrictEqual(parse("1"), some(1))
+ * assert.deepStrictEqual(parse(""), none())
  *
  * @category interop
  * @since 1.0.0
@@ -1142,73 +1222,6 @@ export const traverseTap: <F extends TypeLambda>(
  */
 export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
   (self: Option<A>): B | C => isNone(self) ? onNone() : onSome(self.value)
-
-/**
- * Returns a *smart constructor* from a function that returns a nullable value.
- *
- * @example
- * import { liftNullable, none, some } from '@fp-ts/core/Option'
- *
- * const f = (s: string): number | undefined => {
- *   const n = parseFloat(s)
- *   return isNaN(n) ? undefined : n
- * }
- *
- * const g = liftNullable(f)
- *
- * assert.deepStrictEqual(g('1'), some(1))
- * assert.deepStrictEqual(g('a'), none())
- *
- * @category lifting
- * @since 1.0.0
- */
-export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
-  f: (...a: A) => B | null | undefined
-): ((...a: A) => Option<NonNullable<B>>) => (...a) => fromNullable(f(...a))
-
-/**
- * This is `flatMap` + `fromNullable`, useful when working with optional values.
- *
- * @example
- * import { some, none, flatMapNullable } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * interface Employee {
- *   company?: {
- *     address?: {
- *       street?: {
- *         name?: string
- *       }
- *     }
- *   }
- * }
- *
- * const employee1: Employee = { company: { address: { street: { name: 'high street' } } } }
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     some(employee1),
- *     flatMapNullable(employee => employee.company?.address?.street?.name),
- *   ),
- *   some('high street')
- * )
- *
- * const employee2: Employee = { company: { address: { street: {} } } }
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     some(employee2),
- *     flatMapNullable(employee => employee.company?.address?.street?.name),
- *   ),
- *   none()
- * )
- *
- * @category sequencing
- * @since 1.0.0
- */
-export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
-  (self: Option<A>): Option<NonNullable<B>> =>
-    isNone(self) ? option.none : fromNullable(f(self.value))
 
 /**
  * The `Order` instance allows `Option` values to be compared with
