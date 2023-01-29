@@ -476,7 +476,7 @@ Added in v1.0.0
 
 ## firstSomeOf
 
-Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
+Given an Iterable collection of `Option`s, the function returns the first `Some` found in the collection.
 
 **Signature**
 
@@ -522,7 +522,7 @@ Added in v1.0.0
 
 ## orElse
 
-Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
+Returns the provided `Option` `that` if `self` is `None`, otherwise returns `self`.
 
 **Signature**
 
@@ -571,9 +571,9 @@ Added in v1.0.0
 ## orElseEither
 
 Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
-which contains information about which of the two options has been chosen.
+which contains information about which of the two `Option`s has been chosen.
 
-This is useful when it's important to know whether the value was retrieved from the first option or the second option.
+This is useful when it's important to know whether the value was retrieved from the first `Option` or the second option.
 
 **Signature**
 
@@ -622,7 +622,7 @@ Added in v1.0.0
 
 ## isNone
 
-Returns `true` if the option is `None`, `false` otherwise.
+Returns `true` if the `Option` is `None`, `false` otherwise.
 
 **Signature**
 
@@ -665,7 +665,7 @@ Added in v1.0.0
 
 ## isSome
 
-Returns `true` if the option is an instance of `Some`, `false` otherwise.
+Returns `true` if the `Option` is an instance of `Some`, `false` otherwise.
 
 **Signature**
 
@@ -956,7 +956,7 @@ Added in v1.0.0
 
 ## getOrNull
 
-Returns the value of the option if it is a `Some`, otherwise returns `null`.
+Returns the value of the `Option` if it is a `Some`, otherwise returns `null`.
 
 **Signature**
 
@@ -978,7 +978,7 @@ Added in v1.0.0
 
 ## getOrThrow
 
-Returns the contained value if the option is `Some`, otherwise throws an error.
+Returns the contained value if the `Option` is `Some`, otherwise throws an error.
 
 **Signature**
 
@@ -1000,7 +1000,7 @@ Added in v1.0.0
 
 ## getOrUndefined
 
-Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
+Returns the value of the `Option` if it is a `Some`, otherwise returns `undefined`.
 
 **Signature**
 
@@ -1063,8 +1063,8 @@ Added in v1.0.0
 
 ## lift2
 
-Applies a function to the contained value of two options, returning a new `option` of the result.
-If either of the options is `None`, the result will be `None`.
+Applies a function to the contained value of two `Option`s, returning a new `Option` of the result.
+If either of the `Option`s is `None`, the result will be `None`.
 
 **Signature**
 
@@ -1144,7 +1144,7 @@ Added in v1.0.0
 
 ## as
 
-Maps the `Some` value of this option to the specified constant value.
+Maps the `Some` value of this `Option` to the specified constant value.
 
 **Signature**
 
@@ -1158,7 +1158,7 @@ Added in v1.0.0
 
 Returns the `Option` resulting from mapping the `Some` value to `void`.
 
-This is useful when the value of the Option is not needed, but the presence or absence of the value is important.
+This is useful when the value of the `Option` is not needed, but the presence or absence of the value is important.
 
 **Signature**
 
@@ -1289,7 +1289,7 @@ Added in v1.0.0
 
 ## andThenDiscard
 
-Sequences the specified `that` option but ignores its value.
+Sequences the specified `that` `Option` but ignores its value.
 
 It is useful when we want to chain multiple operations, but only care about the result of `self`.
 
@@ -1338,7 +1338,7 @@ export declare const flatMapNullable: <A, B>(
 **Example**
 
 ```ts
-import { some, none, fromNullable, flatMapNullable } from '@fp-ts/core/Option'
+import { some, none, flatMapNullable } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
 interface Employee {
@@ -1355,10 +1355,8 @@ const employee1: Employee = { company: { address: { street: { name: 'high street
 
 assert.deepStrictEqual(
   pipe(
-    fromNullable(employee1.company),
-    flatMapNullable((company) => company.address),
-    flatMapNullable((address) => address.street),
-    flatMapNullable((street) => street.name)
+    some(employee1),
+    flatMapNullable((employee) => employee.company?.address?.street?.name)
   ),
   some('high street')
 )
@@ -1367,10 +1365,8 @@ const employee2: Employee = { company: { address: { street: {} } } }
 
 assert.deepStrictEqual(
   pipe(
-    fromNullable(employee2.company),
-    flatMapNullable((company) => company.address),
-    flatMapNullable((address) => address.street),
-    flatMapNullable((street) => street.name)
+    some(employee2),
+    flatMapNullable((employee) => employee.company?.address?.street?.name)
   ),
   none()
 )

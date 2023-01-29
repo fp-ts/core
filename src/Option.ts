@@ -121,9 +121,9 @@ export const some: <A>(value: A) => Option<A> = option.some
 export const isOption: (input: unknown) => input is Option<unknown> = option.isOption
 
 /**
- * Returns `true` if the option is `None`, `false` otherwise.
+ * Returns `true` if the `Option` is `None`, `false` otherwise.
  *
- * @param self - The option to check.
+ * @param self - The `Option` to check.
  *
  * @example
  * import { some, none, isNone } from '@fp-ts/core/Option'
@@ -137,9 +137,9 @@ export const isOption: (input: unknown) => input is Option<unknown> = option.isO
 export const isNone: <A>(self: Option<A>) => self is None = option.isNone
 
 /**
- * Returns `true` if the option is an instance of `Some`, `false` otherwise.
+ * Returns `true` if the `Option` is an instance of `Some`, `false` otherwise.
  *
- * @param self - The option to check.
+ * @param self - The `Option` to check.
  *
  * @example
  * import { some, none, isSome } from '@fp-ts/core/Option'
@@ -227,7 +227,7 @@ export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRig
 /**
  * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
  *
- * @param onNone - a function that produces an error value when the option is `None`.
+ * @param onNone - a function that produces an error value when the `Option` is `None`.
  * @param self - the `Option` to convert.
  *
  * @example
@@ -269,10 +269,10 @@ export const getOrElse = <B>(onNone: LazyArg<B>) =>
   <A>(self: Option<A>): A | B => isNone(self) ? onNone() : self.value
 
 /**
- * Returns the provided option `that` if `self` is `None`, otherwise returns `self`.
+ * Returns the provided `Option` `that` if `self` is `None`, otherwise returns `self`.
  *
- * @param that - The option to return if `self` is `None`.
- * @param self - The first option to be checked.
+ * @param that - The `Option` to return if `self` is `None`.
+ * @param self - The first `Option` to be checked.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -315,12 +315,12 @@ export const orElse = <B>(that: LazyArg<Option<B>>) =>
 
 /**
  * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
- * which contains information about which of the two options has been chosen.
+ * which contains information about which of the two `Option`s has been chosen.
  *
- * This is useful when it's important to know whether the value was retrieved from the first option or the second option.
+ * This is useful when it's important to know whether the value was retrieved from the first `Option` or the second option.
  *
- * @param that - The second option to be considered if the first option is `None`.
- * @param self - The first option to be checked.
+ * @param that - The second `Option` to be considered if the first `Option` is `None`.
+ * @param self - The first `Option` to be checked.
  *
  * @category error handling
  * @since 1.0.0
@@ -334,7 +334,7 @@ export const orElseEither = <B>(
       pipe(self, map(either.left))
 
 /**
- * Given an Iterable collection of `Option`s, the function returns the first `Some` option found in the collection.
+ * Given an Iterable collection of `Option`s, the function returns the first `Some` found in the collection.
  *
  * @param collection - An iterable collection of `Option` to be searched.
  *
@@ -356,9 +356,9 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
 // -------------------------------------------------------------------------------------
 
 /**
- * Returns the value of the option if it is a `Some`, otherwise returns `null`.
+ * Returns the value of the `Option` if it is a `Some`, otherwise returns `null`.
  *
- * @param self - The option to extract the value from.
+ * @param self - The `Option` to extract the value from.
  *
  * @example
  * import { some, none, getOrNull } from '@fp-ts/core/Option'
@@ -373,9 +373,9 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
 export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
 
 /**
- * Returns the value of the option if it is a `Some`, otherwise returns `undefined`.
+ * Returns the value of the `Option` if it is a `Some`, otherwise returns `undefined`.
  *
- * @param self - The option to extract the value from.
+ * @param self - The `Option` to extract the value from.
  *
  * @example
  * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
@@ -426,11 +426,11 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
 ): ((...a: A) => Option<B>) => (...a) => fromThrowable(() => f(...a))
 
 /**
- * Returns the contained value if the option is `Some`, otherwise throws an error.
+ * Returns the contained value if the `Option` is `Some`, otherwise throws an error.
  *
  * @param onNone - An optional function that returns the error to be thrown when the `Option` is `None`.
  * @param self - The `Option` to extract the value from.
- * @throws The error returned by `onNone` if the option is `None`.
+ * @throws The error returned by `onNone` if the `Option` is `None`.
  *
  * @example
  * import { pipe } from '@fp-ts/core/Function'
@@ -460,7 +460,7 @@ export const getOrThrow = (
  * Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
  *
  * @param f - The function to map over the value of the `Option`
- * @param self - An option to map
+ * @param self - An `Option` to map
  *
  * @category mapping
  * @since 1.0.0
@@ -519,7 +519,7 @@ export const flap: <A, B>(self: Option<(a: A) => B>) => (a: A) => Option<B> = co
   .flap(Covariant)
 
 /**
- * Maps the `Some` value of this option to the specified constant value.
+ * Maps the `Some` value of this `Option` to the specified constant value.
  *
  * @category mapping
  * @since 1.0.0
@@ -529,7 +529,7 @@ export const as: <B>(b: B) => <_>(self: Option<_>) => Option<B> = covariant.as(C
 /**
  * Returns the `Option` resulting from mapping the `Some` value to `void`.
  *
- * This is useful when the value of the Option is not needed, but the presence or absence of the value is important.
+ * This is useful when the value of the `Option` is not needed, but the presence or absence of the value is important.
  *
  * @category mapping
  * @since 1.0.0
@@ -626,12 +626,12 @@ export const bind: <N extends string, A extends object, B>(
   .bind(Chainable)
 
 /**
- * Sequences the specified `that` option but ignores its value.
+ * Sequences the specified `that` `Option` but ignores its value.
  *
  * It is useful when we want to chain multiple operations, but only care about the result of `self`.
  *
- * @param that - The option that will be ignored in the chain and discarded
- * @param self - The option we care about
+ * @param that - The `Option` that will be ignored in the chain and discarded
+ * @param self - The `Option` we care about
  *
  * @category sequencing
  * @since 1.0.0
@@ -828,12 +828,12 @@ export const getOptionalMonoid = <A>(
   )
 
 /**
- * Applies a function to the contained value of two options, returning a new `option` of the result.
- * If either of the options is `None`, the result will be `None`.
+ * Applies a function to the contained value of two `Option`s, returning a new `Option` of the result.
+ * If either of the `Option`s is `None`, the result will be `None`.
  *
- * @param f - A function to apply to the contained values of the options
- * @param that - An option to lift the function over
- * @param self - An option to lift the function over
+ * @param f - A function to apply to the contained values of the `Option`s
+ * @param that - An `Option` to lift the function over
+ * @param self - An `Option` to lift the function over
  *
  * @category lifting
  * @since 1.0.0
@@ -1133,7 +1133,7 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
  * This is `flatMap` + `fromNullable`, useful when working with optional values.
  *
  * @example
- * import { some, none, fromNullable, flatMapNullable } from '@fp-ts/core/Option'
+ * import { some, none, flatMapNullable } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
  * interface Employee {
@@ -1150,10 +1150,8 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
  *
  * assert.deepStrictEqual(
  *   pipe(
- *     fromNullable(employee1.company),
- *     flatMapNullable(company => company.address),
- *     flatMapNullable(address => address.street),
- *     flatMapNullable(street => street.name)
+ *     some(employee1),
+ *     flatMapNullable(employee => employee.company?.address?.street?.name),
  *   ),
  *   some('high street')
  * )
@@ -1162,10 +1160,8 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
  *
  * assert.deepStrictEqual(
  *   pipe(
- *     fromNullable(employee2.company),
- *     flatMapNullable(company => company.address),
- *     flatMapNullable(address => address.street),
- *     flatMapNullable(street => street.name)
+ *     some(employee2),
+ *     flatMapNullable(employee => employee.company?.address?.street?.name),
  *   ),
  *   none()
  * )
