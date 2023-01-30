@@ -133,7 +133,7 @@ Added in v1.0.0
   - [map](#map)
   - [tupled](#tupled)
 - [model](#model)
-  - [Both (type alias)](#both-type-alias)
+  - [Both (interface)](#both-interface)
   - [These (type alias)](#these-type-alias)
   - [Validated (type alias)](#validated-type-alias)
 - [pattern matching](#pattern-matching)
@@ -1210,12 +1210,12 @@ Added in v1.0.0
 
 # model
 
-## Both (type alias)
+## Both (interface)
 
 **Signature**
 
 ```ts
-export type Both<E, A> = {
+export interface Both<E, A> {
   readonly _tag: 'Both'
   readonly left: E
   readonly right: A

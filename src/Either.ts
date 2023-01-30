@@ -42,7 +42,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @category models
  * @since 1.0.0
  */
-export type Left<E> = {
+export interface Left<E> {
   readonly _tag: "Left"
   readonly left: E
 }
@@ -51,7 +51,7 @@ export type Left<E> = {
  * @category models
  * @since 1.0.0
  */
-export type Right<A> = {
+export interface Right<A> {
   readonly _tag: "Right"
   readonly right: A
 }
