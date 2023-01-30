@@ -292,22 +292,6 @@ describe.concurrent("Either", () => {
     Util.deepStrictEqual(_.fromNullable(() => "default")(1), _.right(1))
   })
 
-  it("fromThrowable", () => {
-    Util.deepStrictEqual(
-      _.fromThrowable(() => {
-        return 1
-      }, identity),
-      _.right(1)
-    )
-
-    Util.deepStrictEqual(
-      _.fromThrowable(() => {
-        throw "string error"
-      }, identity),
-      _.left("string error")
-    )
-  })
-
   it("filterMap", () => {
     const p = (n: number) => n > 2
     const f = (n: number) => (p(n) ? O.some(n + 1) : O.none())
