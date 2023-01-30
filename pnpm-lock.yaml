@@ -19,6 +19,7 @@ importers:
       '@changesets/cli': ^2.25.2
       '@effect-ts/build-utils': 0.40.3
       '@effect-ts/core': ^0.60.2
+      '@effect/language-service': ^0.0.17
       '@repo-tooling/eslint-plugin-dprint': ^0.0.4
       '@types/benchmark': ^2.1.2
       '@types/glob': ^8.0.0
@@ -62,6 +63,7 @@ importers:
       '@changesets/cli': 2.25.2
       '@effect-ts/build-utils': 0.40.3_wzvflwv62ngf22ppz3frldq37m_smskbqsf3q6kbozdrpluio47kq
       '@effect-ts/core': 0.60.4
+      '@effect/language-service': 0.0.17
       '@repo-tooling/eslint-plugin-dprint': 0.0.4_typescript@4.9.3
       '@types/benchmark': 2.1.2
       '@types/glob': 8.0.0
@@ -663,6 +665,13 @@ packages:
     resolution: {integrity: sha512-gGnOCvDv6829EeeC+NgTnwIt4XxclR0KqrG7BRemmNX5cm75cF0CKiuEB/o902wjAlt+MdrxTtFC+XsYdLnxzA==}
     dev: true
 
+  /@effect/language-service/0.0.17:
+    resolution: {integrity: sha512-98c6VtueGDvCGDfkQijsQ5uP/g4J2VhSbI83f/Rv84Gg0uJ+BbA9jno1dQubvaPRGBMIVE+1egZUduSWY6tfEg==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
+      '@fp-ts/data': 0.0.41
+    dev: true
+
   /@esbuild/android-arm/0.15.16:
     resolution: {integrity: sha512-nyB6CH++2mSgx3GbnrJsZSxzne5K0HMyNIWafDHqYy7IwxFc4fd/CgHVZXr8Eh+Q3KbIAcAe3vGyqIPhGblvMQ==}
     engines: {node: '>=12'}
@@ -705,6 +714,16 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@fp-ts/core/0.0.11:
+    resolution: {integrity: sha512-BCAJBYzghwoJpcUOARJ1tui50HoYJFlV2pJlVMlsEkDFhD8MTtq8xQVpZCRF66RmtkxtGBYINCQ+5H1lRaL35Q==}
+    dev: true
+
+  /@fp-ts/data/0.0.41:
+    resolution: {integrity: sha512-0S93kOQ91D7wp60q/PSVWvMsJjSWJutjt4qX/BvVNV7+fymuC2hTfW2HlE2OcMK11xCNiI6Rq2AkvyzoMhOlpg==}
+    dependencies:
+      '@fp-ts/core': 0.0.11
     dev: true
 
   /@humanwhocodes/config-array/0.11.7:
