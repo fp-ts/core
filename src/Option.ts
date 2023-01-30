@@ -46,7 +46,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @category models
  * @since 1.0.0
  */
-export type None = {
+export interface None {
   readonly _tag: "None"
 }
 
@@ -54,7 +54,7 @@ export type None = {
  * @category models
  * @since 1.0.0
  */
-export type Some<A> = {
+export interface Some<A> {
   readonly _tag: "Some"
   readonly value: A
 }

@@ -50,7 +50,7 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @category model
  * @since 1.0.0
  */
-export type Both<E, A> = {
+export interface Both<E, A> {
   readonly _tag: "Both"
   readonly left: E
   readonly right: A

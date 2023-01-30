@@ -105,8 +105,8 @@ Added in v1.0.0
   - [tupled](#tupled)
 - [models](#models)
   - [Either (type alias)](#either-type-alias)
-  - [Left (type alias)](#left-type-alias)
-  - [Right (type alias)](#right-type-alias)
+  - [Left (interface)](#left-interface)
+  - [Right (interface)](#right-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
 - [sequencing](#sequencing)
@@ -1107,12 +1107,12 @@ export type Either<E, A> = Left<E> | Right<A>
 
 Added in v1.0.0
 
-## Left (type alias)
+## Left (interface)
 
 **Signature**
 
 ```ts
-export type Left<E> = {
+export interface Left<E> {
   readonly _tag: 'Left'
   readonly left: E
 }
@@ -1120,12 +1120,12 @@ export type Left<E> = {
 
 Added in v1.0.0
 
-## Right (type alias)
+## Right (interface)
 
 **Signature**
 
 ```ts
-export type Right<A> = {
+export interface Right<A> {
   readonly _tag: 'Right'
   readonly right: A
 }
