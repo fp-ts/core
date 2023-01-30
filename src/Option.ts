@@ -6,6 +6,7 @@ import type { Either } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
 import * as N from "@fp-ts/core/Number"
@@ -118,7 +119,9 @@ export const some: <A>(value: A) => Option<A> = option.some
  * @category guards
  * @since 1.0.0
  */
-export const isOption: (input: unknown) => input is Option<unknown> = option.isOption
+export const isOption = (u: unknown): u is Option<unknown> =>
+  typeof u === "object" && u != null && structural in u && "_tag" in u &&
+  (u["_tag"] === "None" || u["_tag"] === "Some")
 
 /**
  * Returns `true` if the `Option` is `None`, `false` otherwise.
@@ -353,7 +356,11 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
  * @category interop
  * @since 1.0.0
  */
-export const fromNullable: <A>(nullableValue: A) => Option<NonNullable<A>> = option.fromNullable
+export const fromNullable = <A>(
+  nullableValue: A
+): Option<
+  NonNullable<A>
+> => (nullableValue == null ? none() : some(nullableValue as NonNullable<A>))
 
 /**
  * This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.

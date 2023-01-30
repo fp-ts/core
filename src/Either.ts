@@ -6,6 +6,7 @@ import * as BI from "@fp-ts/core/Bigint"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
 import * as N from "@fp-ts/core/Number"
@@ -97,7 +98,9 @@ export const of: <A>(a: A) => Either<never, A> = right
  * @category guards
  * @since 1.0.0
  */
-export const isEither: (u: unknown) => u is Either<unknown, unknown> = either.isEither
+export const isEither = (u: unknown): u is Either<unknown, unknown> =>
+  typeof u === "object" && u != null && structural in u && "_tag" in u &&
+  (u["_tag"] === "Left" || u["_tag"] === "Right")
 
 /**
  * Returns `true` if the either is an instance of `Left`, `false` otherwise.
@@ -712,8 +715,9 @@ export const match = <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C)
  * @category conversions
  * @since 1.0.0
  */
-export const fromNullable: <E>(onNullable: LazyArg<E>) => <A>(a: A) => Either<E, NonNullable<A>> =
-  either.fromNullable
+export const fromNullable = <E>(onNullable: LazyArg<E>) =>
+  <A>(a: A): Either<E, NonNullable<A>> =>
+    a == null ? left(onNullable()) : right(a as NonNullable<A>)
 
 /**
  * @category lifting
