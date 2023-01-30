@@ -124,7 +124,6 @@ Added in v1.0.0
   - [exists](#exists)
   - [flatten](#flatten)
   - [of](#of)
-  - [reduce](#reduce)
   - [reduceAll](#reduceall)
   - [struct](#struct)
   - [toArray](#toarray)
@@ -653,7 +652,7 @@ Checks if the specified value is an instance of `Option`, returns `true` if it i
 **Signature**
 
 ```ts
-export declare const isOption: (input: unknown) => input is Option<unknown>
+export declare const isOption: (u: unknown) => u is Option<unknown>
 ```
 
 **Example**
@@ -1609,16 +1608,6 @@ Added in v1.0.0
 
 ```ts
 export declare const of: <A>(a: A) => Option<A>
-```
-
-Added in v1.0.0
-
-## reduce
-
-**Signature**
-
-```ts
-export declare const reduce: <A, B>(b: B, f: (b: B, a: A) => B) => (self: Option<A>) => B
 ```
 
 Added in v1.0.0

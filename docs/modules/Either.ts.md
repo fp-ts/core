@@ -83,7 +83,6 @@ Added in v1.0.0
   - [Traversable](#traversable)
   - [getOptionalSemigroup](#getoptionalsemigroup)
 - [interop](#interop)
-  - [fromThrowable](#fromthrowable)
   - [getOrThrow](#getorthrow)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
@@ -932,38 +931,6 @@ export declare const getOptionalSemigroup: <E, A>(S: any) => any
 Added in v2.0.0
 
 # interop
-
-## fromThrowable
-
-Constructs a new `Either` from a function that might throw.
-
-**Signature**
-
-```ts
-export declare const fromThrowable: <A, E>(f: () => A, onThrow: (error: unknown) => E) => Either<E, A>
-```
-
-**Example**
-
-```ts
-import * as E from '@fp-ts/core/Either'
-import { identity } from '@fp-ts/core/Function'
-
-const unsafeHead = <A>(as: ReadonlyArray<A>): A => {
-  if (as.length > 0) {
-    return as[0]
-  } else {
-    throw new Error('empty array')
-  }
-}
-
-const head = <A>(as: ReadonlyArray<A>): E.Either<unknown, A> => E.fromThrowable(() => unsafeHead(as), identity)
-
-assert.deepStrictEqual(head([]), E.left(new Error('empty array')))
-assert.deepStrictEqual(head([1, 2, 3]), E.right(1))
-```
-
-Added in v1.0.0
 
 ## getOrThrow
 
