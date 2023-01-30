@@ -30,6 +30,7 @@ Added in v1.0.0
   - [constUndefined](#constundefined)
   - [constVoid](#constvoid)
   - [constant](#constant)
+  - [dual](#dual)
   - [flip](#flip)
   - [flow](#flow)
   - [hole](#hole)
@@ -267,6 +268,19 @@ Added in v1.0.0
 
 ```ts
 export declare const constant: <A>(a: A) => LazyArg<A>
+```
+
+Added in v1.0.0
+
+## dual
+
+**Signature**
+
+```ts
+export declare const dual: <DF extends (...args: Array<any>) => any, P extends (...args: Array<any>) => any>(
+  dfLen: Parameters<DF>['length'],
+  body: DF
+) => DF & P
 ```
 
 Added in v1.0.0
