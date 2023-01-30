@@ -186,7 +186,7 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
   for (const a of collection) {
     return some(a)
   }
-  return option.none
+  return none()
 }
 
 /**
@@ -453,34 +453,7 @@ export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(c
  * @since 1.0.0
  */
 export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
-  (self: Option<A>): Option<NonNullable<B>> =>
-    isNone(self) ? option.none : fromNullable(f(self.value))
-
-/**
- * Converts an exception into an `Option`. If `f` throws, returns `None`, otherwise returns the output wrapped in a
- * `Some`.
- *
- * @example
- * import { none, some, fromThrowable } from '@fp-ts/core/Option'
- *
- * assert.deepStrictEqual(
- *   fromThrowable(() => {
- *     throw new Error()
- *   }),
- *   none()
- * )
- * assert.deepStrictEqual(fromThrowable(() => 1), some(1))
- *
- * @category interop
- * @since 1.0.0
- */
-export const fromThrowable = <A>(f: () => A): Option<A> => {
-  try {
-    return some(f())
-  } catch (e) {
-    return option.none
-  }
-}
+  (self: Option<A>): Option<NonNullable<B>> => isNone(self) ? none() : fromNullable(f(self.value))
 
 /**
  * A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
@@ -503,7 +476,14 @@ export const fromThrowable = <A>(f: () => A): Option<A> => {
  */
 export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
   f: (...a: A) => B
-): ((...a: A) => Option<B>) => (...a) => fromThrowable(() => f(...a))
+): ((...a: A) => Option<B>) =>
+  (...a) => {
+    try {
+      return some(f(...a))
+    } catch (e) {
+      return none()
+    }
+  }
 
 /**
  * Returns the contained value if the `Option` is `Some`, otherwise throws an error.
@@ -546,7 +526,7 @@ export const getOrThrow = (
  * @since 1.0.0
  */
 export const map = <A, B>(f: (a: A) => B) =>
-  (self: Option<A>): Option<B> => isNone(self) ? option.none : some(f(self.value))
+  (self: Option<A>): Option<B> => isNone(self) ? none() : some(f(self.value))
 
 /**
  * @category instances
@@ -657,7 +637,7 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const flatMap = <A, B>(f: (a: A) => Option<B>) =>
-  (self: Option<A>): Option<B> => isNone(self) ? option.none : f(self.value)
+  (self: Option<A>): Option<B> => isNone(self) ? none() : f(self.value)
 
 /**
  * @category instances
@@ -791,12 +771,12 @@ const productMany = <A>(
   collection: Iterable<Option<A>>
 ): Option<[A, ...Array<A>]> => {
   if (isNone(self)) {
-    return option.none
+    return none()
   }
   const out: [A, ...Array<A>] = [self.value]
   for (const o of collection) {
     if (isNone(o)) {
-      return option.none
+      return none()
     }
     out.push(o.value)
   }
@@ -809,8 +789,7 @@ const productMany = <A>(
  */
 export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
   imap: Invariant.imap,
-  product: (self, that) =>
-    isSome(self) && isSome(that) ? some([self.value, that.value]) : option.none,
+  product: (self, that) => isSome(self) && isSome(that) ? some([self.value, that.value]) : none(),
   productMany
 }
 
@@ -840,7 +819,7 @@ const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
   const out: Array<A> = []
   for (const o of collection) {
     if (isNone(o)) {
-      return option.none
+      return none()
     }
     out.push(o.value)
   }
@@ -912,7 +891,7 @@ export const getOptionalMonoid = <A>(
     semigroup.fromCombine((self, that) =>
       isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(self.value, that.value))
     ),
-    option.none
+    none()
   )
 
 /**
@@ -1121,7 +1100,7 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
  * @since 1.0.0
  */
 export const filterMap = <A, B>(f: (a: A) => Option<B>) =>
-  (self: Option<A>): Option<B> => isNone(self) ? option.none : f(self.value)
+  (self: Option<A>): Option<B> => isNone(self) ? none() : f(self.value)
 
 /**
  * @category instances
@@ -1158,7 +1137,7 @@ export const traverse = <F extends TypeLambda>(
     f: (a: A) => Kind<F, R, O, E, B>
   ) =>
     (self: Option<A>): Kind<F, R, O, E, Option<B>> =>
-      isNone(self) ? F.of<Option<B>>(option.none) : pipe(f(self.value), F.map(some))
+      isNone(self) ? F.of<Option<B>>(none()) : pipe(f(self.value), F.map(some))
 
 /**
  * @category traversing
@@ -1267,7 +1246,7 @@ export const liftOrder = <A>(O: Order<A>): Order<Option<A>> =>
 export const liftPredicate: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => Option<B>
   <B extends A, A = B>(predicate: Predicate<A>): (b: B) => Option<B>
-} = <B extends A, A = B>(predicate: Predicate<A>) => (b: B) => predicate(b) ? some(b) : option.none
+} = <B extends A, A = B>(predicate: Predicate<A>) => (b: B) => predicate(b) ? some(b) : none()
 
 /**
  * Lifts an `Either` function to an `Option` function.
