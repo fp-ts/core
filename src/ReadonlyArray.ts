@@ -1265,20 +1265,23 @@ export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
  */
 export const Do: ReadonlyArray<{}> = of_.Do(Of)
 
+const imap = covariant.imap<ReadonlyArrayTypeLambda>(map)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(
+export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = {
+  imap,
   map
-)
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<ReadonlyArrayTypeLambda> = {
-  imap: Covariant.imap
+  imap
 }
 
 /**
@@ -1336,7 +1339,7 @@ export const as: <B>(b: B) => (self: ReadonlyArray<unknown>) => Array<B> = covar
  */
 export const Pointed: pointed.Pointed<ReadonlyArrayTypeLambda> = {
   of,
-  imap: Invariant.imap,
+  imap,
   map
 }
 
@@ -1421,7 +1424,7 @@ export const composeKleisliArrow: <B, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<ReadonlyArrayTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   map,
   flatMap
 }
@@ -1707,7 +1710,7 @@ const productAll = <A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   product,
   productMany
 }
@@ -1731,10 +1734,10 @@ export const andThenBind: <N extends string, A extends object, B>(
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeLambda> = {
-  imap: Invariant.imap,
-  map: Covariant.map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  imap,
+  map,
+  product,
+  productMany
 }
 
 /**
@@ -1773,9 +1776,9 @@ export const liftSemigroup: <A>(S: Semigroup<A>) => Semigroup<ReadonlyArray<A>> 
  */
 export const Product: product_.Product<ReadonlyArrayTypeLambda> = {
   of,
-  imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  imap,
+  product,
+  productMany,
   productAll
 }
 
@@ -1784,11 +1787,11 @@ export const Product: product_.Product<ReadonlyArrayTypeLambda> = {
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<ReadonlyArrayTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -1806,7 +1809,7 @@ export const liftMonoid: <A>(M: Monoid<A>) => Monoid<ReadonlyArray<A>> = applica
  * @since 1.0.0
  */
 export const Monad: monad.Monad<ReadonlyArrayTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
   flatMap
