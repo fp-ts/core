@@ -600,18 +600,23 @@ export const map: <A, B>(f: (a: A) => B) => <E>(self: These<E, A>) => These<E, B
   Bicovariant
 )
 
+const imap = covariant.imap<TheseTypeLambda>(map)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Covariant: covariant.Covariant<TheseTypeLambda> = covariant.make(map)
+export const Covariant: covariant.Covariant<TheseTypeLambda> = {
+  imap,
+  map
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<TheseTypeLambda> = {
-  imap: Covariant.imap
+  imap
 }
 
 /**
@@ -697,7 +702,7 @@ export const Do: These<never, {}> = of_.Do(Of)
  */
 export const Pointed: pointed.Pointed<TheseTypeLambda> = {
   of,
-  imap: Invariant.imap,
+  imap,
   map
 }
 
@@ -766,12 +771,15 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
 export const exists = <A>(predicate: Predicate<A>) =>
   <E>(self: These<E, A>): boolean => isLeft(self) ? false : predicate(self.right)
 
+const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
+  <E>(self: These<E, A>): B => isLeft(self) ? b : f(b, self.right)
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Foldable: foldable.Foldable<TheseTypeLambda> = {
-  reduce: (b, f) => (self) => isLeft(self) ? b : f(b, self.right)
+  reduce
 }
 
 /**
@@ -839,14 +847,24 @@ export const firstRightOrBothOf = <E, A>(collection: Iterable<These<E, A>>) =>
     return out
   }
 
+const coproduct = <E1, A, E2, B>(
+  self: These<E1, A>,
+  that: These<E2, B>
+): These<E1 | E2, A | B> => isRightOrBoth(self) ? self : that
+
+const coproductMany = <E, A>(
+  self: These<E, A>,
+  collection: Iterable<These<E, A>>
+): These<E, A> => pipe(self, firstRightOrBothOf(collection))
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = {
-  imap: Invariant.imap,
-  coproduct: (self, that) => isRightOrBoth(self) ? self : that,
-  coproductMany: (self, collection) => pipe(self, firstRightOrBothOf(collection))
+  imap,
+  coproduct,
+  coproductMany
 }
 
 /**
@@ -862,9 +880,9 @@ export const getFirstRightOrBothSemigroup: <E, A>() => Semigroup<These<E, A>> = 
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<TheseTypeLambda> = {
   map,
-  imap: Invariant.imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany
+  imap,
+  coproduct,
+  coproductMany
 }
 
 /**
@@ -956,7 +974,7 @@ const productMany = <E, A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   product,
   productMany
 }
@@ -966,10 +984,10 @@ export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<ValidatedTypeLambda> = {
-  imap: Invariant.imap,
-  map: Covariant.map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  imap,
+  map,
+  product,
+  productMany
 }
 
 /**
@@ -1091,9 +1109,9 @@ export const element: <E2, B>(
  */
 export const Product: product_.Product<ValidatedTypeLambda> = {
   of,
-  imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  imap,
+  product,
+  productMany,
   productAll
 }
 
@@ -1145,11 +1163,11 @@ export const flatMap = <A, E2, B>(
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<ValidatedTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -1203,7 +1221,7 @@ export const composeKleisliArrow: <B, E2, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<ValidatedTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   map,
   flatMap
 }
@@ -1272,7 +1290,7 @@ export const tap: <A, E2, _>(
  * @since 1.0.0
  */
 export const Monad: monad.Monad<ValidatedTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
   flatMap

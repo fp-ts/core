@@ -127,20 +127,23 @@ export const isRight: <E, A>(self: Either<E, A>) => self is Right<A> = either.is
 export const map = <A, B>(f: (a: A) => B) =>
   <E>(self: Either<E, A>): Either<E, B> => isRight(self) ? right(f(self.right)) : self
 
+const imap = covariant.imap<EitherTypeLambda>(map)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Covariant: covariant.Covariant<EitherTypeLambda> = covariant.make(
+export const Covariant: covariant.Covariant<EitherTypeLambda> = {
+  imap,
   map
-)
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<EitherTypeLambda> = {
-  imap: Covariant.imap
+  imap
 }
 
 /**
@@ -259,7 +262,7 @@ export const Do: Either<never, {}> = of_.Do(Of)
  */
 export const Pointed: pointed.Pointed<EitherTypeLambda> = {
   of,
-  imap: Invariant.imap,
+  imap,
   map
 }
 
@@ -306,7 +309,7 @@ export const composeKleisliArrow: <B, E2, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<EitherTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   map,
   flatMap
 }
@@ -340,7 +343,7 @@ export const andThenDiscard: <E2, _>(
  * @since 1.0.0
  */
 export const Monad: monad.Monad<EitherTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
   flatMap
@@ -363,14 +366,19 @@ const productMany = <E, A>(
   return right(out)
 }
 
+const product = <E1, A, E2, B>(
+  self: Either<E1, A>,
+  that: Either<E2, B>
+): Either<E1 | E2, [A, B]> =>
+  isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
-  imap: Invariant.imap,
-  product: (self, that) =>
-    isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self,
+  imap,
+  product,
   productMany
 }
 
@@ -419,9 +427,9 @@ const productAll = <E, A>(
  */
 export const Product: product_.Product<EitherTypeLambda> = {
   of,
-  imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  imap,
+  product,
+  productMany,
   productAll
 }
 
@@ -452,10 +460,10 @@ export const struct: <R extends Record<string, Either<any, any>>>(
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda> = {
-  imap: Invariant.imap,
-  map: Covariant.map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  imap,
+  map,
+  product,
+  productMany
 }
 
 /**
@@ -510,11 +518,11 @@ export const ap: <E2, A>(
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<EitherTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -550,14 +558,24 @@ export const firstRightOf = <E, A>(collection: Iterable<Either<E, A>>) =>
     return out
   }
 
+const coproduct = <E1, A, E2, B>(
+  self: Either<E1, A>,
+  that: Either<E2, B>
+): Either<E1 | E2, A | B> => isRight(self) ? self : that
+
+const coproductMany = <E, A>(
+  self: Either<E, A>,
+  collection: Iterable<Either<E, A>>
+): Either<E, A> => pipe(self, firstRightOf(collection))
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
-  imap: Invariant.imap,
-  coproduct: (self, that) => isRight(self) ? self : that,
-  coproductMany: (self, collection) => pipe(self, firstRightOf(collection))
+  imap,
+  coproduct,
+  coproductMany
 }
 
 /**
@@ -654,17 +672,20 @@ export const orElseFail = <E2>(
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<EitherTypeLambda> = {
   map,
-  imap: Invariant.imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany
+  imap,
+  coproduct,
+  coproductMany
 }
+
+const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
+  <E>(self: Either<E, A>): B => isLeft(self) ? b : f(b, self.right)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Foldable: foldable.Foldable<EitherTypeLambda> = {
-  reduce: (b, f) => (self) => isLeft(self) ? b : f(b, self.right)
+  reduce
 }
 
 /**

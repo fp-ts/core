@@ -86,20 +86,23 @@ export const compose = <A, B extends A, C extends B>(bc: Refinement<B, C>) =>
 export const contramap = <B, A>(f: (b: B) => A) =>
   (self: Predicate<A>): Predicate<B> => (b) => self(f(b))
 
+const imap = contravariant.imap<PredicateTypeLambda>(contramap)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = contravariant.make(
+export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = {
+  imap,
   contramap
-)
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<PredicateTypeLambda> = {
-  imap: Contravariant.imap
+  imap
 }
 
 /**
@@ -143,6 +146,11 @@ export const Do: Predicate<{}> = of_.Do(Of)
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
+const product = <A, B>(
+  self: Predicate<A>,
+  that: Predicate<B>
+): Predicate<[A, B]> => ([a, b]) => self(a) && that(b)
+
 const productMany = <A>(
   self: Predicate<A>,
   collection: Iterable<Predicate<A>>
@@ -166,8 +174,8 @@ const productMany = <A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
-  imap: Invariant.imap,
-  product: (self, that) => ([a, b]) => self(a) && that(b),
+  imap,
+  product,
   productMany
 }
 
@@ -190,9 +198,9 @@ const productAll = <A>(
  */
 export const Product: product_.Product<PredicateTypeLambda> = {
   of,
-  imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  imap,
+  product,
+  productMany,
   productAll
 }
 

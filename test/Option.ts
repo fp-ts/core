@@ -68,7 +68,6 @@ describe.concurrent("Option", () => {
     expect(_.Alternative).exist
 
     expect(_.Foldable).exist
-    expect(_.reduce).exist
     expect(_.reduceAll).exist
     expect(_.toArray).exist
 
@@ -596,8 +595,8 @@ describe.concurrent("Option", () => {
   })
 
   it("reduce", () => {
-    expect(pipe(_.none(), _.reduce(0, (b, a) => b + a))).toEqual(0)
-    expect(pipe(_.some(1), _.reduce(0, (b, a) => b + a))).toEqual(1)
+    expect(pipe(_.none(), _.Foldable.reduce(0, (b, a) => b + a))).toEqual(0)
+    expect(pipe(_.some(1), _.Foldable.reduce(0, (b, a) => b + a))).toEqual(1)
   })
 
   it("sumAll", () => {

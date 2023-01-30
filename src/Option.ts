@@ -535,20 +535,23 @@ export const getOrThrow = (
 export const map = <A, B>(f: (a: A) => B) =>
   (self: Option<A>): Option<B> => isNone(self) ? none() : some(f(self.value))
 
+const imap = covariant.imap<OptionTypeLambda>(map)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(
+export const Covariant: covariant.Covariant<OptionTypeLambda> = {
+  imap,
   map
-)
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  imap: Covariant.imap
+  imap
 }
 
 /**
@@ -613,7 +616,7 @@ export const of: <A>(a: A) => Option<A> = some
  * @since 1.0.0
  */
 export const Of: of_.Of<OptionTypeLambda> = {
-  of: some
+  of
 }
 
 /**
@@ -633,7 +636,7 @@ export const Do: Option<{}> = of_.Do(Of)
  */
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
   of,
-  imap: Invariant.imap,
+  imap,
   map
 }
 
@@ -679,7 +682,7 @@ export const composeKleisliArrow: <B, C>(
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<OptionTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   map,
   flatMap
 }
@@ -767,11 +770,14 @@ export const inspectNone = (
  * @since 1.0.0
  */
 export const Monad: monad.Monad<OptionTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
   flatMap
 }
+
+const product = <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]> =>
+  isSome(self) && isSome(that) ? some([self.value, that.value]) : none()
 
 const productMany = <A>(
   self: Option<A>,
@@ -795,8 +801,8 @@ const productMany = <A>(
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
-  imap: Invariant.imap,
-  product: (self, that) => isSome(self) && isSome(that) ? some([self.value, that.value]) : none(),
+  imap,
+  product,
   productMany
 }
 
@@ -839,9 +845,9 @@ const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
  */
 export const Product: product_.Product<OptionTypeLambda> = {
   of,
-  imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  imap,
+  product,
+  productMany,
   productAll
 }
 
@@ -867,10 +873,10 @@ export const struct: <R extends Record<string, Option<any>>>(
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> = {
-  imap: Invariant.imap,
-  map: Covariant.map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  imap,
+  map,
+  product,
+  productMany
 }
 
 /**
@@ -959,11 +965,11 @@ export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> =
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -983,6 +989,9 @@ export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicat
   Applicative
 )
 
+const coproduct = <A, B>(self: Option<A>, that: Option<B>): Option<A | B> =>
+  isSome(self) ? self : that
+
 const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> => {
   let out = self
   if (isSome(out)) {
@@ -1001,8 +1010,8 @@ const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Opt
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
-  imap: Invariant.imap,
-  coproduct: (self, that) => isSome(self) ? self : that,
+  imap,
+  coproduct,
   coproductMany
 }
 
@@ -1020,7 +1029,9 @@ export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduc
  * @since 1.0.0
  */
 export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
-  ...SemiCoproduct,
+  imap,
+  coproduct,
+  coproductMany,
   zero: none,
   coproductAll: firstSomeOf
 }
@@ -1031,9 +1042,9 @@ export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> = {
   map,
-  imap: Invariant.imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany
+  imap,
+  coproduct,
+  coproductMany
 }
 
 /**
@@ -1042,17 +1053,14 @@ export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> 
  */
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
   map,
-  imap: Invariant.imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany,
-  coproductAll: Coproduct.coproductAll,
-  zero: Coproduct.zero
+  imap,
+  coproduct,
+  coproductMany,
+  coproductAll: firstSomeOf,
+  zero: none
 }
 
-/**
- * @since 1.0.0
- */
-export const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
+const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
   (self: Option<A>): B => isNone(self) ? b : f(b, self.value)
 
 /**
