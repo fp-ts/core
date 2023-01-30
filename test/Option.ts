@@ -465,17 +465,6 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(pipe(_.some(2), _.exists(predicate)), true)
   })
 
-  it("fromThrowable", () => {
-    Util.deepStrictEqual(
-      _.fromThrowable(() => JSON.parse("2")),
-      _.some(2)
-    )
-    Util.deepStrictEqual(
-      _.fromThrowable(() => JSON.parse("(")),
-      _.none()
-    )
-  })
-
   it("fromEither", () => {
     Util.deepStrictEqual(_.fromEither(E.right(1)), _.some(1))
     Util.deepStrictEqual(_.fromEither(E.left("e")), _.none())

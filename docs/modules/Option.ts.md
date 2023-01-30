@@ -79,7 +79,6 @@ Added in v1.0.0
   - [getFirstSomeSemigroup](#getfirstsomesemigroup)
 - [interop](#interop)
   - [fromNullable](#fromnullable)
-  - [fromThrowable](#fromthrowable)
   - [getOrNull](#getornull)
   - [getOrThrow](#getorthrow)
   - [getOrUndefined](#getorundefined)
@@ -949,36 +948,6 @@ import { none, some, fromNullable } from '@fp-ts/core/Option'
 assert.deepStrictEqual(fromNullable(undefined), none())
 assert.deepStrictEqual(fromNullable(null), none())
 assert.deepStrictEqual(fromNullable(1), some(1))
-```
-
-Added in v1.0.0
-
-## fromThrowable
-
-Converts an exception into an `Option`. If `f` throws, returns `None`, otherwise returns the output wrapped in a
-`Some`.
-
-**Signature**
-
-```ts
-export declare const fromThrowable: <A>(f: () => A) => Option<A>
-```
-
-**Example**
-
-```ts
-import { none, some, fromThrowable } from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(
-  fromThrowable(() => {
-    throw new Error()
-  }),
-  none()
-)
-assert.deepStrictEqual(
-  fromThrowable(() => 1),
-  some(1)
-)
 ```
 
 Added in v1.0.0
