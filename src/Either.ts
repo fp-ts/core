@@ -1049,11 +1049,11 @@ export const getOrUndefined: <E, A>(self: Either<E, A>) => A | undefined = getOr
 export const liftPredicate: {
   <C extends A, B extends A, E, A = C>(
     refinement: Refinement<A, B>,
-    onFalse: LazyArg<E>
+    onFalse: (c: C) => E
   ): (c: C) => Either<E, B>
-  <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: LazyArg<E>): (b: B) => Either<E, B>
-} = <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: LazyArg<E>) =>
-  (b: B) => predicate(b) ? right(b) : left(onFalse())
+  <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: (b: B) => E): (b: B) => Either<E, B>
+} = <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: (b: B) => E) =>
+  (b: B) => predicate(b) ? right(b) : left(onFalse(b))
 
 /**
  * @category lifting

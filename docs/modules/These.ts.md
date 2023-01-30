@@ -1152,8 +1152,8 @@ Added in v1.0.0
 
 ```ts
 export declare const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: any, onFalse: any): (c: C) => any
-  <B extends A, E, A = B>(predicate: any, onFalse: any): (b: B) => any
+  <C extends A, B extends A, E, A = C>(refinement: any, onFalse: (c: C) => E): (c: C) => any
+  <B extends A, E, A = B>(predicate: any, onFalse: (b: B) => E): (b: B) => any
 }
 ```
 

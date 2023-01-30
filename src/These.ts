@@ -332,11 +332,11 @@ export const flatMapNullable = <A, B, E2>(
 export const liftPredicate: {
   <C extends A, B extends A, E, A = C>(
     refinement: Refinement<A, B>,
-    onFalse: LazyArg<E>
+    onFalse: (c: C) => E
   ): (c: C) => These<E, B>
-  <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: LazyArg<E>): (b: B) => These<E, B>
-} = <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: LazyArg<E>) =>
-  (b: B) => predicate(b) ? right(b) : left(onFalse())
+  <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: (b: B) => E): (b: B) => These<E, B>
+} = <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: (b: B) => E) =>
+  (b: B) => predicate(b) ? right(b) : left(onFalse(b))
 
 /**
  * @category conversions
