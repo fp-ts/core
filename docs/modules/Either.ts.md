@@ -1005,8 +1005,8 @@ Added in v1.0.0
 
 ```ts
 export declare const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: any, onFalse: any): (c: C) => Either<E, B>
-  <B extends A, E, A = B>(predicate: any, onFalse: any): (b: B) => Either<E, B>
+  <C extends A, B extends A, E, A = C>(refinement: any, onFalse: (c: C) => E): (c: C) => Either<E, B>
+  <B extends A, E, A = B>(predicate: any, onFalse: (b: B) => E): (b: B) => Either<E, B>
 }
 ```
 
