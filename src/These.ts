@@ -4,13 +4,13 @@
 
 import * as BI from "@fp-ts/core/Bigint"
 import type { Either, Left, Right } from "@fp-ts/core/Either"
+import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
-import * as either from "@fp-ts/core/internal/Either"
-import * as option from "@fp-ts/core/internal/Option"
 import * as N from "@fp-ts/core/Number"
+import * as O from "@fp-ts/core/Option"
 import type { Option } from "@fp-ts/core/Option"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
@@ -77,13 +77,13 @@ export interface ValidatedTypeLambda extends TypeLambda {
  * @category constructors
  * @since 1.0.0
  */
-export const left: <E>(left: E) => These<E, never> = either.left
+export const left: <E>(left: E) => These<E, never> = E.left
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const right: <A>(right: A) => These<never, A> = either.right
+export const right: <A>(right: A) => These<never, A> = E.right
 
 /**
  * Alias of `right`.
@@ -125,14 +125,14 @@ export const warn = <E, A>(e: E, a: A): Validated<E, A> => both([e], a)
  * @since 1.0.0
  */
 export const leftOrBoth = <E>(e: LazyArg<E>) =>
-  <A>(self: Option<A>): These<E, A> => option.isNone(self) ? left(e()) : both(e(), self.value)
+  <A>(self: Option<A>): These<E, A> => O.isNone(self) ? left(e()) : both(e(), self.value)
 
 /**
  * @category constructors
  * @since 1.0.0
  */
 export const rightOrBoth = <A>(a: () => A) =>
-  <E>(self: Option<E>): These<E, A> => option.isNone(self) ? right(a()) : both(self.value, a())
+  <E>(self: Option<E>): These<E, A> => O.isNone(self) ? right(a()) : both(self.value, a())
 
 /**
  * @category pattern matching
@@ -278,7 +278,7 @@ export const fromNullable = <E>(onNullable: LazyArg<E>) =>
  * @since 1.0.0
  */
 export const fromEither = <E, A>(self: Either<E, A>): Validated<E, A> =>
-  either.isLeft(self) ? left([self.left]) : self
+  E.isLeft(self) ? left([self.left]) : self
 
 /**
  * @category conversions
@@ -295,7 +295,7 @@ export const toEither = <E, A>(
 export const absolve: <E, A>(self: These<E, A>) => Either<E, A> = toEither((
   _,
   a
-) => either.right(a))
+) => E.right(a))
 
 /**
  * @category conversions
@@ -304,7 +304,7 @@ export const absolve: <E, A>(self: These<E, A>) => Either<E, A> = toEither((
 export const condemn: <E, A>(self: These<E, A>) => Either<E, A> = toEither((
   e,
   _
-) => either.left(e))
+) => E.left(e))
 
 /**
  * @category lifting
@@ -355,7 +355,7 @@ export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
  * @since 1.0.0
  */
 export const fromOption = <E>(onNone: LazyArg<E>) =>
-  <A>(self: Option<A>): These<E, A> => option.isNone(self) ? left(onNone()) : right(self.value)
+  <A>(self: Option<A>): These<E, A> => O.isNone(self) ? left(onNone()) : right(self.value)
 
 /**
  * @category conversions
@@ -421,7 +421,7 @@ export const flatMapThese = <A, E2, B>(
  */
 export const getRight = <E, A>(
   self: These<E, A>
-): Option<A> => isLeft(self) ? option.none : option.some(self.right)
+): Option<A> => isLeft(self) ? O.none() : O.some(self.right)
 
 /**
  * Returns the `A` value if and only if the value is constructed with `Right`
@@ -431,7 +431,7 @@ export const getRight = <E, A>(
  */
 export const getRightOnly = <E, A>(
   self: These<E, A>
-): Option<A> => isRight(self) ? option.some(self.right) : option.none
+): Option<A> => isRight(self) ? O.some(self.right) : O.none()
 
 /**
  * @category getters
@@ -439,7 +439,7 @@ export const getRightOnly = <E, A>(
  */
 export const getLeft = <E, A>(
   self: These<E, A>
-): Option<E> => isRight(self) ? option.none : option.some(self.left)
+): Option<E> => isRight(self) ? O.none() : O.some(self.left)
 
 /**
  * Returns the `E` value if and only if the value is constructed with `Left`
@@ -449,7 +449,7 @@ export const getLeft = <E, A>(
  */
 export const getLeftOnly = <E, A>(
   self: These<E, A>
-): Option<E> => isLeft(self) ? option.some(self.left) : option.none
+): Option<E> => isLeft(self) ? O.some(self.left) : O.none()
 
 /**
  * @category getters
@@ -457,7 +457,7 @@ export const getLeftOnly = <E, A>(
  */
 export const getBoth = <E, A>(
   self: These<E, A>
-): Option<readonly [E, A]> => isBoth(self) ? option.some([self.left, self.right]) : option.none
+): Option<readonly [E, A]> => isBoth(self) ? O.some([self.left, self.right]) : O.none()
 
 /**
  * @category getters
@@ -807,8 +807,8 @@ export const orElseEither = <E2, B>(
 ) =>
   <E1, A>(self: These<E1, A>): These<E1 | E2, Either<A, B>> =>
     isLeft(self) ?
-      pipe(that, map(either.right)) :
-      pipe(self, map(either.left))
+      pipe(that, map(E.right)) :
+      pipe(self, map(E.left))
 
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise
@@ -875,7 +875,7 @@ export const compact = <E>(onNone: LazyArg<E>) =>
   <A>(self: These<E, Option<A>>): These<E, A> =>
     isLeft(self) ?
       self :
-      option.isNone(self.right) ?
+      O.isNone(self.right) ?
       left(onNone()) :
       isBoth(self) ?
       both(self.left, self.right.value) :
@@ -914,10 +914,10 @@ export const filterMap = <A, B, E2>(
     }
     if (isRight(self)) {
       const ob = f(self.right)
-      return option.isNone(ob) ? left(onNone()) : right(ob.value)
+      return O.isNone(ob) ? left(onNone()) : right(ob.value)
     }
     const ob = f(self.right)
-    return option.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
+    return O.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
   }
 
 const product = <E1, A, E2, B>(

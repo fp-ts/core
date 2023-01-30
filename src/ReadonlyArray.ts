@@ -4,11 +4,10 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/Either"
+import * as E from "@fp-ts/core/Either"
 import { identity, pipe } from "@fp-ts/core/Function"
 import type { LazyArg } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
-import * as either from "@fp-ts/core/internal/Either"
-import * as option from "@fp-ts/core/internal/Option"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import * as O from "@fp-ts/core/Option"
@@ -119,7 +118,7 @@ export const fromIterable: <A>(collection: Iterable<A>) => Array<A> = readonlyAr
  */
 export const fromOption = <A>(
   self: Option<A>
-): Array<A> => (option.isNone(self) ? [] : [self.value])
+): Array<A> => (O.isNone(self) ? [] : [self.value])
 
 /**
  * @category conversions
@@ -127,7 +126,7 @@ export const fromOption = <A>(
  */
 export const fromEither = <E, A>(
   self: Either<E, A>
-): Array<A> => (either.isLeft(self) ? [] : [self.right])
+): Array<A> => (E.isLeft(self) ? [] : [self.right])
 
 /**
  * @category pattern matching
@@ -286,7 +285,7 @@ const clamp = <A>(i: number, as: ReadonlyArray<A>): number =>
 export const get = (index: number) =>
   <A>(self: ReadonlyArray<A>): Option<A> => {
     const i = Math.floor(index)
-    return isOutOfBound(i, self) ? option.none : option.some(self[i])
+    return isOutOfBound(i, self) ? O.none() : O.some(self[i])
   }
 
 /**
@@ -345,7 +344,7 @@ export const headNonEmpty: <A>(self: NonEmptyReadonlyArray<A>) => A = unsafeGet(
  * @since 1.0.0
  */
 export const last = <A>(self: ReadonlyArray<A>): Option<A> =>
-  isNonEmpty(self) ? option.some(lastNonEmpty(self)) : option.none
+  isNonEmpty(self) ? O.some(lastNonEmpty(self)) : O.none()
 
 /**
  * @category getters
@@ -361,7 +360,7 @@ export const lastNonEmpty = <A>(as: NonEmptyReadonlyArray<A>): A => as[as.length
  */
 export const tail = <A>(self: Iterable<A>): Option<Array<A>> => {
   const input = fromIterable(self)
-  return isNonEmpty(input) ? option.some(tailNonEmpty(input)) : option.none
+  return isNonEmpty(input) ? O.some(tailNonEmpty(input)) : O.none()
 }
 
 /**
@@ -378,7 +377,7 @@ export const tailNonEmpty = <A>(self: NonEmptyReadonlyArray<A>): Array<A> => sel
  */
 export const init = <A>(self: Iterable<A>): Option<Array<A>> => {
   const input = fromIterable(self)
-  return isNonEmpty(input) ? option.some(initNonEmpty(input)) : option.none
+  return isNonEmpty(input) ? O.some(initNonEmpty(input)) : O.none()
 }
 
 /**
@@ -542,11 +541,11 @@ export const findFirstIndex = <A>(predicate: Predicate<A>) =>
     let i = 0
     for (const a of self) {
       if (predicate(a)) {
-        return option.some(i)
+        return O.some(i)
       }
       i++
     }
-    return option.none
+    return O.none()
   }
 
 /**
@@ -560,10 +559,10 @@ export const findLastIndex = <A>(predicate: Predicate<A>) =>
     const input = fromIterable(self)
     for (let i = input.length - 1; i >= 0; i--) {
       if (predicate(input[i])) {
-        return option.some(i)
+        return O.some(i)
       }
     }
-    return option.none
+    return O.none()
   }
 
 /**
@@ -584,10 +583,10 @@ export function findFirst<A>(predicate: Predicate<A>): (self: Iterable<A>) => Op
     const input = fromIterable(self)
     for (let i = 0; i < input.length; i++) {
       if (predicate(input[i])) {
-        return option.some(input[i])
+        return O.some(input[i])
       }
     }
-    return option.none
+    return O.none()
   }
 }
 
@@ -609,10 +608,10 @@ export function findLast<A>(predicate: Predicate<A>): (self: Iterable<A>) => Opt
     const input = fromIterable(self)
     for (let i = input.length - 1; i >= 0; i--) {
       if (predicate(input[i])) {
-        return option.some(input[i])
+        return O.some(input[i])
       }
     }
-    return option.none
+    return O.none()
   }
 }
 
@@ -627,10 +626,10 @@ export const insertAt = <B>(i: number, b: B) =>
     const out: Array<A | B> = Array.from(self)
     //             v--- `= self.length` ok, it means inserting in last position
     if (i < 0 || i > out.length) {
-      return option.none
+      return O.none()
     }
     out.splice(i, 0, b)
-    return option.some(out) as any
+    return O.some(out) as any
   }
 
 /**
@@ -721,7 +720,7 @@ export const reverseNonEmpty = <A>(
 export const rights = <E, A>(self: Iterable<Either<E, A>>): Array<A> => {
   const out: Array<A> = []
   for (const a of self) {
-    if (either.isRight(a)) {
+    if (E.isRight(a)) {
       out.push(a.right)
     }
   }
@@ -737,7 +736,7 @@ export const rights = <E, A>(self: Iterable<Either<E, A>>): Array<A> => {
 export const lefts = <E, A>(self: Iterable<Either<E, A>>): Array<E> => {
   const out: Array<E> = []
   for (const a of self) {
-    if (either.isLeft(a)) {
+    if (E.isLeft(a)) {
       out.push(a.left)
     }
   }
@@ -1448,7 +1447,7 @@ export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
     const out: Array<B> = []
     for (let i = 0; i < as.length; i++) {
       const o = f(as[i], i)
-      if (option.isSome(o)) {
+      if (O.isSome(o)) {
         out.push(o.value)
       }
     }
@@ -1486,7 +1485,7 @@ export const separate = <A, B>(
   const left: Array<A> = []
   const right: Array<B> = []
   for (const e of self) {
-    if (either.isLeft(e)) {
+    if (E.isLeft(e)) {
       left.push(e.left)
     } else {
       right.push(e.right)
@@ -1528,7 +1527,7 @@ export const filterWithIndex: {
 } = <B extends A, A = B>(
   predicate: (a: A, i: number) => boolean
 ): ((self: ReadonlyArray<B>) => Array<B>) =>
-  filterMapWithIndex((b, i) => (predicate(b, i) ? option.some(b) : option.none))
+  filterMapWithIndex((b, i) => (predicate(b, i) ? O.some(b) : O.none()))
 
 /**
  * @category filtering
@@ -1557,7 +1556,7 @@ export const partitionWithIndex: {
 } = <B extends A, A = B>(
   predicate: (a: A, i: number) => boolean
 ): ((self: ReadonlyArray<B>) => [Array<B>, Array<B>]) =>
-  partitionMapWithIndex((b, i) => (predicate(b, i) ? either.right(b) : either.left(b)))
+  partitionMapWithIndex((b, i) => (predicate(b, i) ? E.right(b) : E.left(b)))
 
 /**
  * @category filtering
@@ -1577,7 +1576,7 @@ export const partitionMapWithIndex = <A, B, C>(f: (a: A, i: number) => Either<B,
     const right: Array<C> = []
     for (let i = 0; i < self.length; i++) {
       const e = f(self[i], i)
-      if (either.isLeft(e)) {
+      if (E.isLeft(e)) {
         left.push(e.left)
       } else {
         right.push(e.right)
@@ -2018,7 +2017,7 @@ export const liftEither = <A extends Array<unknown>, E, B>(
 ) =>
   (...a: A): Array<B> => {
     const e = f(...a)
-    return either.isLeft(e) ? [] : [e.right]
+    return E.isLeft(e) ? [] : [e.right]
   }
 
 /**
@@ -2104,7 +2103,7 @@ export const unfold = <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>): Array<
   const out: Array<A> = []
   let next: B = b
   let o: Option<readonly [A, B]>
-  while (option.isSome(o = f(next))) {
+  while (O.isSome(o = f(next))) {
     const [a, b] = o.value
     out.push(a)
     next = b
