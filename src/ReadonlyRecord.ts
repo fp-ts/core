@@ -4,6 +4,7 @@
  * @since 1.0.0
  */
 
+import { dual } from "@fp-ts/core/Function"
 import type { Option } from "@fp-ts/core/Option"
 import * as O from "@fp-ts/core/Option"
 
@@ -16,10 +17,10 @@ export interface ReadonlyRecord<A> {
 }
 
 /**
- * Takes an iterable and a projection function, `f`, and returns a record.
+ * Takes an iterable and a projection function and returns a record.
  * The projection function maps each value of the iterable to a tuple of a key and a value, which is then added to the resulting record.
  *
- * @param iterable - An iterable of values to be mapped to a record.
+ * @param self - An iterable of values to be mapped to a record.
  * @param f - A projection function that maps values of the iterable to a tuple of a key and a value.
  *
  * @example
@@ -35,93 +36,88 @@ export interface ReadonlyRecord<A> {
  * @category constructors
  * @since 1.0.0
  */
-export const fromIterable = <A, B>(
-  iterable: Iterable<A>,
+export const fromIterable: {
+  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]): Record<string, B>
+  <A, B>(f: (a: A) => readonly [string, B]): (self: Iterable<A>) => Record<string, B>
+} = dual<
+  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]) => Record<string, B>,
+  <A, B>(f: (a: A) => readonly [string, B]) => (self: Iterable<A>) => Record<string, B>
+>(2, <A, B>(
+  self: Iterable<A>,
   f: (a: A) => readonly [string, B]
 ): Record<string, B> => {
   const out: Record<string, B> = {}
-  for (const a of iterable) {
+  for (const a of self) {
     const [k, b] = f(a)
     out[k] = b
   }
   return out
-}
+})
 
 /**
  * Retrieve a value at a particular key from a `ReadonlyRecord`, returning it wrapped in an `Option`.
  *
- * @param key - Key to retrieve from `ReadonlyRecord`.
  * @param self - The `ReadonlyRecord` to retrieve value from.
+ * @param key - Key to retrieve from `ReadonlyRecord`.
  *
  * @example
  * import { get } from "@fp-ts/core/ReadonlyRecord"
  * import { some, none } from "@fp-ts/core/Option"
- * import { pipe } from "@fp-ts/core/Function"
  *
  * const person = { name: "John Doe", age: 35 }
  *
- * assert.deepStrictEqual(pipe(person, get("name")), some("John Doe"))
- * assert.deepStrictEqual(pipe(person, get("email")), none())
+ * assert.deepStrictEqual(get(person, "name"), some("John Doe"))
+ * assert.deepStrictEqual(get(person, "email"), none())
  *
  * @category getters
  * @since 1.0.0
  */
-export const get = (key: string) =>
-  <A>(self: ReadonlyRecord<A>): Option<A> =>
+export const get: {
+  <A>(self: ReadonlyRecord<A>, key: string): Option<A>
+  (key: string): <A>(self: ReadonlyRecord<A>) => Option<A>
+} = dual<
+  <A>(self: ReadonlyRecord<A>, key: string) => Option<A>,
+  (key: string) => <A>(self: ReadonlyRecord<A>) => Option<A>
+>(
+  2,
+  <A>(self: ReadonlyRecord<A>, key: string): Option<A> =>
     Object.prototype.hasOwnProperty.call(self, key) ? O.some(self[key]) : O.none()
-
-/**
- * Replaces a value in the record with the new value passed as parameter.
- *
- * @param key - The key to search for in the record.
- * @param b - The new value to replace the existing value with.
- * @param self - The `ReadonlyRecord` to be updated.
- *
- * @example
- * import { replaceOption } from "@fp-ts/core/ReadonlyRecord"
- * import { some, none } from "@fp-ts/core/Option"
- *
- * const record = { a: 1, b: 2, c: 3 }
- * const replaceA = replaceOption('a', 10)
- *
- * assert.deepStrictEqual(replaceA(record), some({ a: 10, b: 2, c: 3 }))
- * assert.deepStrictEqual(replaceA({}), none())
- *
- * @since 1.0.0
- */
-export const replaceOption = <B>(
-  key: string,
-  b: B
-): <A>(self: ReadonlyRecord<A>) => Option<Record<string, A | B>> => modifyOption(key, () => b)
+)
 
 /**
  * Apply a function to the element at the specified key, creating a new record,
  * or return `None` if the key doesn't exist.
  *
+ * @param self - The `ReadonlyRecord` to be updated.
  * @param key - The key of the element to modify.
  * @param f - The function to apply to the element.
- * @param self - The `ReadonlyRecord` to be updated.
  *
  * @example
  * import { modifyOption } from "@fp-ts/core/ReadonlyRecord"
- * import { pipe } from "@fp-ts/core/Function"
  * import { some, none } from "@fp-ts/core/Option"
  *
  * const f = (x: number) => x * 2
  *
  * assert.deepStrictEqual(
- *  pipe({ a: 3 }, modifyOption('a', f)),
+ *  modifyOption({ a: 3 }, 'a', f),
  *  some({ a: 6 })
  * )
  * assert.deepStrictEqual(
- *  pipe({ a: 3 }, modifyOption('b', f)),
+ *  modifyOption({ a: 3 }, 'b', f),
  *  none()
  * )
  *
  * @since 1.0.0
  */
-export const modifyOption = <A, B>(key: string, f: (a: A) => B) =>
-  (self: ReadonlyRecord<A>): Option<Record<string, A | B>> => {
+export const modifyOption: {
+  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>>
+  <A, B>(key: string, f: (a: A) => B): (self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+} = dual<
+  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B) => Option<Record<string, A | B>>,
+  <A, B>(key: string, f: (a: A) => B) => (self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+>(
+  3,
+  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>> => {
     if (!Object.prototype.hasOwnProperty.call(self, key)) {
       return O.none()
     }
@@ -129,25 +125,64 @@ export const modifyOption = <A, B>(key: string, f: (a: A) => B) =>
     out[key] = f(self[key])
     return O.some(out)
   }
+)
+
+/**
+ * Replaces a value in the record with the new value passed as parameter.
+ *
+ * @param self - The `ReadonlyRecord` to be updated.
+ * @param key - The key to search for in the record.
+ * @param b - The new value to replace the existing value with.
+ *
+ * @example
+ * import { replaceOption } from "@fp-ts/core/ReadonlyRecord"
+ * import { some, none } from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(
+ *   replaceOption({ a: 1, b: 2, c: 3 }, 'a', 10),
+ *   some({ a: 10, b: 2, c: 3 })
+ * )
+ * assert.deepStrictEqual(replaceOption({}, 'a', 10), none())
+ *
+ * @since 1.0.0
+ */
+export const replaceOption: {
+  <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>>
+  <B>(key: string, b: B): <A>(self: ReadonlyRecord<A>) => Option<Record<string, B | A>>
+} = dual<
+  <A, B>(self: ReadonlyRecord<A>, key: string, b: B) => Option<Record<string, A | B>>,
+  <B>(key: string, b: B) => <A>(self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+>(
+  3,
+  <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>> =>
+    modifyOption(self, key, () => b)
+)
 
 /**
  * Maps the values of a `ReadonlyRecord` to a new `Record` by applying a transformation function to each of its keys and values.
  *
- * @param f - A transformation function that will be applied to each of the key/values in the `ReadonlyRecord`.
  * @param self - The `ReadonlyRecord` to be mapped.
+ * @param f - A transformation function that will be applied to each of the key/values in the `ReadonlyRecord`.
  *
  * @example
  * import { mapWithKey } from "@fp-ts/core/ReadonlyRecord"
- * import { pipe } from "@fp-ts/core/Function"
  *
  * const f = (k: string, n: number) => `${k.toUpperCase()}-${n}`
  *
- * assert.deepStrictEqual(pipe({ a: 3, b: 5 }, mapWithKey(f)), { a: "A-3", b: "B-5" })
+ * assert.deepStrictEqual(mapWithKey({ a: 3, b: 5 }, f), { a: "A-3", b: "B-5" })
  *
+ * @category mapping
  * @since 1.0.0
  */
-export const mapWithKey = <A, B>(f: (k: string, a: A) => B) =>
-  (self: ReadonlyRecord<A>): Record<string, B> => {
+export const mapWithKey: {
+  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
+  <A, B>(f: (k: string, a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+} = dual<
+  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B) => Record<string, B>,
+  <A, B>(f: (k: string, a: A) => B) => (self: ReadonlyRecord<A>) => Record<string, B>
+>(
+  2,
+  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B> => {
     const out: Record<string, B> = {}
     for (const k in self) {
       if (Object.prototype.hasOwnProperty.call(self, k)) {
@@ -156,25 +191,35 @@ export const mapWithKey = <A, B>(f: (k: string, a: A) => B) =>
     }
     return out
   }
+)
 
 /**
  * Maps a `ReadonlyRecord` into another `Record` by applying a transformation function to each of its values.
  *
- * @param f - A transformation function that will be applied to each of the values in the `ReadonlyRecord`.
  * @param self - The `ReadonlyRecord` to be mapped.
+ * @param f - A transformation function that will be applied to each of the values in the `ReadonlyRecord`.
  *
  * @example
  * import { map } from "@fp-ts/core/ReadonlyRecord"
- * import { pipe } from "@fp-ts/core/Function"
  *
  * const f = (n: number) => `-${n}-`
  *
- * assert.deepStrictEqual(pipe({ a: 3, b: 5 }, map(f)), { a: "-3-", b: "-5-" })
+ * assert.deepStrictEqual(map({ a: 3, b: 5 }, f), { a: "-3-", b: "-5-" })
  *
+ * @category mapping
  * @since 1.0.0
  */
-export const map = <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B> =>
-  mapWithKey((_, a) => f(a))
+export const map: {
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
+  <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+} = dual<
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B) => Record<string, B>,
+  <A, B>(f: (a: A) => B) => (self: ReadonlyRecord<A>) => Record<string, B>
+>(
+  2,
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B> =>
+    mapWithKey(self, (_, a) => f(a))
+)
 
 /*
 
