@@ -4,6 +4,10 @@ import * as _ from "@fp-ts/core/typeclass/Order"
 import * as U from "../util"
 
 describe("Order", () => {
+  it("exports", () => {
+    expect(_.Contravariant).exist
+  })
+
   it("bigint", () => {
     const O = _.bigint
     expect(pipe(1n, _.lessThanOrEqualTo(O)(2n))).toBe(true)
@@ -27,8 +31,8 @@ describe("Order", () => {
     U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: true }), 0)
   })
 
-  it("Contravariant", () => {
-    const O = pipe(_.number, _.Contravariant.contramap((s: string) => s.length))
+  it("contramap", () => {
+    const O = _.contramap(_.number, (s: string) => s.length)
     U.deepStrictEqual(O.compare("a", "b"), 0)
     U.deepStrictEqual(O.compare("a", "bb"), -1)
     U.deepStrictEqual(O.compare("aa", "b"), 1)
@@ -119,20 +123,20 @@ describe("Order", () => {
 
   it("clamp", () => {
     const clamp = _.clamp(_.number)
-    U.deepStrictEqual(clamp(1, 10)(2), 2)
-    U.deepStrictEqual(clamp(1, 10)(10), 10)
-    U.deepStrictEqual(clamp(1, 10)(20), 10)
-    U.deepStrictEqual(clamp(1, 10)(1), 1)
-    U.deepStrictEqual(clamp(1, 10)(-10), 1)
+    U.deepStrictEqual(clamp(2, 1, 10), 2)
+    U.deepStrictEqual(clamp(10, 1, 10), 10)
+    U.deepStrictEqual(clamp(20, 1, 10), 10)
+    U.deepStrictEqual(clamp(1, 1, 10), 1)
+    U.deepStrictEqual(clamp(-10, 1, 10), 1)
   })
 
   it("between", () => {
     const between = _.between(_.number)
-    U.deepStrictEqual(between(1, 10)(2), true)
-    U.deepStrictEqual(between(1, 10)(10), true)
-    U.deepStrictEqual(between(1, 10)(20), false)
-    U.deepStrictEqual(between(1, 10)(1), true)
-    U.deepStrictEqual(between(1, 10)(-10), false)
+    U.deepStrictEqual(between(2, 1, 10), true)
+    U.deepStrictEqual(between(10, 1, 10), true)
+    U.deepStrictEqual(between(20, 1, 10), false)
+    U.deepStrictEqual(between(1, 1, 10), true)
+    U.deepStrictEqual(between(-10, 1, 10), false)
   })
 
   it("reverse", () => {
@@ -144,30 +148,30 @@ describe("Order", () => {
 
   it("lessThan", () => {
     const lessThan = _.lessThan(_.number)
-    U.deepStrictEqual(pipe(0, lessThan(1)), true)
-    U.deepStrictEqual(pipe(1, lessThan(1)), false)
-    U.deepStrictEqual(pipe(2, lessThan(1)), false)
+    U.deepStrictEqual(lessThan(0, 1), true)
+    U.deepStrictEqual(lessThan(1, 1), false)
+    U.deepStrictEqual(lessThan(2, 1), false)
   })
 
   it("lessThanOrEqualTo", () => {
     const lessThanOrEqualTo = _.lessThanOrEqualTo(_.number)
-    U.deepStrictEqual(pipe(0, lessThanOrEqualTo(1)), true)
-    U.deepStrictEqual(pipe(1, lessThanOrEqualTo(1)), true)
-    U.deepStrictEqual(pipe(2, lessThanOrEqualTo(1)), false)
+    U.deepStrictEqual(lessThanOrEqualTo(0, 1), true)
+    U.deepStrictEqual(lessThanOrEqualTo(1, 1), true)
+    U.deepStrictEqual(lessThanOrEqualTo(2, 1), false)
   })
 
   it("greaterThan", () => {
     const greaterThan = _.greaterThan(_.number)
-    U.deepStrictEqual(pipe(0, greaterThan(1)), false)
-    U.deepStrictEqual(pipe(1, greaterThan(1)), false)
-    U.deepStrictEqual(pipe(2, greaterThan(1)), true)
+    U.deepStrictEqual(greaterThan(0, 1), false)
+    U.deepStrictEqual(greaterThan(1, 1), false)
+    U.deepStrictEqual(greaterThan(2, 1), true)
   })
 
   it("greaterThanOrEqualTo", () => {
     const greaterThanOrEqualTo = _.greaterThanOrEqualTo(_.number)
-    U.deepStrictEqual(pipe(0, greaterThanOrEqualTo(1)), false)
-    U.deepStrictEqual(pipe(1, greaterThanOrEqualTo(1)), true)
-    U.deepStrictEqual(pipe(2, greaterThanOrEqualTo(1)), true)
+    U.deepStrictEqual(greaterThanOrEqualTo(0, 1), false)
+    U.deepStrictEqual(greaterThanOrEqualTo(1, 1), true)
+    U.deepStrictEqual(greaterThanOrEqualTo(2, 1), true)
   })
 
   it("min", () => {
@@ -178,11 +182,11 @@ describe("Order", () => {
         _.contramap((a: A) => a.a)
       )
     )
-    U.deepStrictEqual(pipe({ a: 1 }, min({ a: 2 })), { a: 1 })
-    U.deepStrictEqual(pipe({ a: 2 }, min({ a: 1 })), { a: 1 })
+    U.deepStrictEqual(min({ a: 1 }, { a: 2 }), { a: 1 })
+    U.deepStrictEqual(min({ a: 2 }, { a: 1 }), { a: 1 })
     const first = { a: 1 }
     const second = { a: 1 }
-    U.strictEqual(pipe(first, min(second)), first)
+    U.strictEqual(min(first, second), first)
   })
 
   it("max", () => {
@@ -193,11 +197,11 @@ describe("Order", () => {
         _.contramap((a: A) => a.a)
       )
     )
-    U.deepStrictEqual(pipe({ a: 1 }, max({ a: 2 })), { a: 2 })
-    U.deepStrictEqual(pipe({ a: 2 }, max({ a: 1 })), { a: 2 })
+    U.deepStrictEqual(max({ a: 1 }, { a: 2 }), { a: 2 })
+    U.deepStrictEqual(max({ a: 2 }, { a: 1 }), { a: 2 })
     const first = { a: 1 }
     const second = { a: 1 }
-    U.strictEqual(pipe(first, max(second)), first)
+    U.strictEqual(max(first, second), first)
   })
 
   describe("SemiProduct", () => {
