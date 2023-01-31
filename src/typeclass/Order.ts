@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -142,10 +143,20 @@ export const reverse = <A>(O: Order<A>): Order<A> =>
   fromCompare((self, that) => O.compare(that, self))
 
 /**
+ * @dual
  * @since 1.0.0
  */
-export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Order<A>): Order<B> => fromCompare((b1, b2) => self.compare(f(b1), f(b2)))
+export const contramap: {
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
+  <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
+} = dual<
+  <A, B>(self: Order<A>, f: (b: B) => A) => Order<B>,
+  <B, A>(f: (b: B) => A) => (self: Order<A>) => Order<B>
+>(
+  2,
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B> =>
+    fromCompare((b1, b2) => self.compare(f(b1), f(b2)))
+)
 
 /**
  * @category instances
@@ -184,103 +195,180 @@ const empty: Order<unknown> = fromCompare(() => 0)
  */
 export const getMonoid = <A>(): Monoid<Order<A>> => monoid.fromSemigroup(getSemigroup<A>(), empty)
 
+const imap = contravariant.imap<OrderTypeLambda>(contramap)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = contravariant.make(
+export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = {
+  imap,
   contramap
-)
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OrderTypeLambda> = {
-  imap: Contravariant.imap
+  imap
 }
+
+const productMany = <A>(
+  self: Order<A>,
+  collection: Iterable<Order<A>>
+): Order<[A, ...Array<A>]> => tuple(self, ...collection)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
-  imap: Contravariant.imap,
+  imap,
   product: tuple,
-  productMany: (self, collection) => tuple(self, ...collection)
+  productMany
 }
+
+const productAll = <A>(collection: Iterable<Order<A>>): Order<Array<A>> =>
+  tuple<Array<A>>(...collection)
+
+const of: <A>(a: A) => Order<A> = () => empty
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Product: product.Product<OrderTypeLambda> = {
-  of: () => empty,
-  imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
-  productAll: <A>(collection: Iterable<Order<A>>) => tuple<Array<A>>(...collection)
+  of,
+  imap,
+  product: tuple,
+  productMany,
+  productAll
 }
 
 /**
  * Test whether one value is _strictly less than_ another.
  *
+ * @dual
  * @since 1.0.0
  */
-export const lessThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(self, that) === -1
+export const lessThan = <A>(O: Order<A>): {
+  (self: A, that: A): boolean
+  (that: A): (self: A) => boolean
+} =>
+  dual<
+    (self: A, that: A) => boolean,
+    (that: A) => (self: A) => boolean
+  >(2, (self: A, that: A) => O.compare(self, that) === -1)
 
 /**
  * Test whether one value is _strictly greater than_ another.
  *
+ * @dual
  * @since 1.0.0
  */
-export const greaterThan = <A>(O: Order<A>) => (that: A) => (self: A) => O.compare(self, that) === 1
+export const greaterThan = <A>(O: Order<A>): {
+  (self: A, that: A): boolean
+  (that: A): (self: A) => boolean
+} =>
+  dual<
+    (self: A, that: A) => boolean,
+    (that: A) => (self: A) => boolean
+  >(2, (self: A, that: A) => O.compare(self, that) === 1)
 
 /**
  * Test whether one value is _non-strictly less than_ another.
  *
+ * @dual
  * @since 1.0.0
  */
-export const lessThanOrEqualTo = <A>(O: Order<A>) =>
-  (that: A) => (self: A) => O.compare(self, that) !== 1
+export const lessThanOrEqualTo = <A>(O: Order<A>): {
+  (self: A, that: A): boolean
+  (that: A): (self: A) => boolean
+} =>
+  dual<
+    (self: A, that: A) => boolean,
+    (that: A) => (self: A) => boolean
+  >(2, (self: A, that: A) => O.compare(self, that) !== 1)
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
  *
+ * @dual
  * @since 1.0.0
  */
-export const greaterThanOrEqualTo = <A>(O: Order<A>) =>
-  (that: A) => (self: A) => O.compare(self, that) !== -1
+export const greaterThanOrEqualTo = <A>(O: Order<A>): {
+  (self: A, that: A): boolean
+  (that: A): (self: A) => boolean
+} =>
+  dual<
+    (self: A, that: A) => boolean,
+    (that: A) => (self: A) => boolean
+  >(2, (self: A, that: A) => O.compare(self, that) !== -1)
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
  *
+ * @dual
  * @since 1.0.0
  */
-export const min = <A>(O: Order<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(self, that) < 1 ? self : that
+export const min = <A>(O: Order<A>): {
+  (self: A, that: A): A
+  (that: A): (self: A) => A
+} =>
+  dual<
+    (self: A, that: A) => A,
+    (that: A) => (self: A) => A
+  >(2, (self: A, that: A) => self === that || O.compare(self, that) < 1 ? self : that)
 
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
  *
+ * @dual
  * @since 1.0.0
  */
-export const max = <A>(O: Order<A>) =>
-  (that: A) => (self: A): A => self === that || O.compare(self, that) > -1 ? self : that
+export const max = <A>(O: Order<A>): {
+  (self: A, that: A): A
+  (that: A): (self: A) => A
+} =>
+  dual<
+    (self: A, that: A) => A,
+    (that: A) => (self: A) => A
+  >(2, (self: A, that: A) => self === that || O.compare(self, that) > -1 ? self : that)
 
 /**
  * Clamp a value between a minimum and a maximum.
  *
+ * @dual
  * @since 1.0.0
  */
-export const clamp = <A>(O: Order<A>) =>
-  (minimum: A, maximum: A) => (a: A) => min(O)(max(O)(a)(minimum))(maximum)
+export const clamp = <A>(O: Order<A>): {
+  (a: A, minimum: A, maximum: A): A
+  (minimum: A, maximum: A): (a: A) => A
+} =>
+  dual<
+    (a: A, minimum: A, maximum: A) => A,
+    (minimum: A, maximum: A) => (a: A) => A
+  >(
+    3,
+    (a: A, minimum: A, maximum: A): A => min(O)(maximum, max(O)(minimum, a))
+  )
 
 /**
  * Test whether a value is between a minimum and a maximum (inclusive).
  *
+ * @dual
  * @since 1.0.0
  */
-export const between = <A>(O: Order<A>) =>
-  (minimum: A, maximum: A) =>
-    (a: A): boolean => !lessThan(O)(minimum)(a) && !greaterThan(O)(maximum)(a)
+export const between = <A>(O: Order<A>): {
+  (a: A, minimum: A, maximum: A): boolean
+  (minimum: A, maximum: A): (a: A) => boolean
+} =>
+  dual<
+    (a: A, minimum: A, maximum: A) => boolean,
+    (minimum: A, maximum: A) => (a: A) => boolean
+  >(
+    3,
+    (a: A, minimum: A, maximum: A): boolean =>
+      !lessThan(O)(a, minimum) && !greaterThan(O)(a, maximum)
+  )
