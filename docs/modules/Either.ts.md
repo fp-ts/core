@@ -140,7 +140,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const divide: <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+export declare const divide: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
 ```
 
 Added in v1.0.0
@@ -150,9 +153,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiply: <E2>(
-  that: Either<E2, number>
-) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+export declare const multiply: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
 ```
 
 Added in v1.0.0
@@ -162,9 +166,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiplyBigint: <E2>(
-  that: Either<E2, bigint>
-) => <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+export declare const multiplyBigint: {
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
+  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+}
 ```
 
 Added in v1.0.0
@@ -174,9 +179,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtract: <E2>(
-  that: Either<E2, number>
-) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+export declare const subtract: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
 ```
 
 Added in v1.0.0
@@ -186,9 +192,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtractBigint: <E2>(
-  that: Either<E2, bigint>
-) => <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+export declare const subtractBigint: {
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
+  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+}
 ```
 
 Added in v1.0.0
@@ -198,7 +205,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sum: <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+export declare const sum: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
 ```
 
 Added in v1.0.0
@@ -208,9 +218,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sumBigint: <E2>(
-  that: Either<E2, bigint>
-) => <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+export declare const sumBigint: {
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
+  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+}
 ```
 
 Added in v1.0.0
@@ -1007,8 +1018,8 @@ Lifts a binary function into `Either`.
 
 ```ts
 export declare const lift2: <A, B, C>(
-  f: (a: A) => (b: B) => C
-) => <E2>(that: Either<E2, A>) => <E1>(self: Either<E1, B>) => Either<E2 | E1, C>
+  f: (a: A, b: B) => C
+) => <E1, E2>(self: Either<E1, A>, that: Either<E2, B>) => Either<E1 | E2, C>
 ```
 
 Added in v1.0.0

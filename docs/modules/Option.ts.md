@@ -142,7 +142,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const divide: (that: Option<number>) => (self: Option<number>) => Option<number>
+export declare const divide: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
 ```
 
 Added in v1.0.0
@@ -152,7 +155,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiply: (that: Option<number>) => (self: Option<number>) => Option<number>
+export declare const multiply: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
 ```
 
 Added in v1.0.0
@@ -183,7 +189,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiplyBigint: (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
+export declare const multiplyBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+}
 ```
 
 Added in v1.0.0
@@ -193,7 +202,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtract: (that: Option<number>) => (self: Option<number>) => Option<number>
+export declare const subtract: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
 ```
 
 Added in v1.0.0
@@ -203,7 +215,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtractBigint: (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
+export declare const subtractBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+}
 ```
 
 Added in v1.0.0
@@ -213,7 +228,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sum: (that: Option<number>) => (self: Option<number>) => Option<number>
+export declare const sum: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
 ```
 
 Added in v1.0.0
@@ -244,7 +262,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sumBigint: (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
+export declare const sumBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+}
 ```
 
 Added in v1.0.0
@@ -451,7 +472,10 @@ Useful for debugging purposes, the `onNone` callback is is called if `self` is a
 **Signature**
 
 ```ts
-export declare const inspectNone: (onNone: () => void) => <A>(self: Option<A>) => Option<A>
+export declare const inspectNone: {
+  <A>(self: Option<A>, onNone: () => void): Option<A>
+  (onNone: () => void): <A>(self: Option<A>) => Option<A>
+}
 ```
 
 Added in v1.0.0
@@ -463,7 +487,10 @@ Useful for debugging purposes, the `onSome` callback is called with the value of
 **Signature**
 
 ```ts
-export declare const inspectSome: <A>(onSome: (a: A) => void) => (self: Option<A>) => Option<A>
+export declare const inspectSome: {
+  <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
+  <A>(onSome: (a: A) => void): (self: Option<A>) => Option<A>
+}
 ```
 
 Added in v1.0.0
@@ -679,7 +706,10 @@ Useful when in addition to filtering you also want to change the type of the `Op
 **Signature**
 
 ```ts
-export declare const filterMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>
+export declare const filterMap: {
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
+  <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+}
 ```
 
 Added in v1.0.0
@@ -1182,7 +1212,7 @@ If either of the `Option`s is `None`, the result will be `None`.
 **Signature**
 
 ```ts
-export declare const lift2: <A, B, C>(f: (a: A) => (b: B) => C) => (that: Option<A>) => (self: Option<B>) => Option<C>
+export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (self: Option<A>, that: Option<B>) => Option<C>
 ```
 
 Added in v1.0.0
@@ -1217,7 +1247,8 @@ Added in v1.0.0
 
 ## liftPredicate
 
-Returns a _smart constructor_ based on the given predicate.
+Transforms a `Predicate` function into a `Some` of the input value if the predicate returns `true` or `None`
+if the predicate returns `false`.
 
 **Signature**
 
@@ -1341,7 +1372,10 @@ function when passed the `Option`'s value.
 **Signature**
 
 ```ts
-export declare const match: <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C
+export declare const match: {
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
+  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
+}
 ```
 
 **Example**
@@ -1412,7 +1446,10 @@ Applies a function to the value of an `Option` and flattens the result, if the i
 **Signature**
 
 ```ts
-export declare const flatMap: <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>
+export declare const flatMap: {
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
+  <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+}
 ```
 
 Added in v1.0.0
@@ -1424,7 +1461,10 @@ Applies a provided function that returns an `Either` to the contents of an `Opti
 **Signature**
 
 ```ts
-export declare const flatMapEither: <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>
+export declare const flatMapEither: {
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
+  <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
+}
 ```
 
 **Example**
@@ -1536,7 +1576,7 @@ Added in v1.0.0
 ```ts
 export declare const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <R, O, E, A>(fas: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>>
+) => <R, O, E, A>(self: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>>
 ```
 
 Added in v1.0.0
@@ -1548,7 +1588,10 @@ Added in v1.0.0
 ```ts
 export declare const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+) => {
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+}
 ```
 
 Added in v1.0.0
@@ -1634,7 +1677,10 @@ Returns a function that checks if an `Option` contains a given value using a pro
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => (a: A) => (self: Option<A>) => boolean
+export declare const contains: <A>(equivalence: Equivalence<A>) => {
+  (self: Option<A>, a: A): boolean
+  (a: A): (self: Option<A>) => boolean
+}
 ```
 
 **Example**
@@ -1658,7 +1704,10 @@ Check if a value in an `Option` type meets a certain predicate.
 **Signature**
 
 ```ts
-export declare const exists: <A>(predicate: Predicate<A>) => (self: Option<A>) => boolean
+export declare const exists: {
+  <A>(self: Option<A>, predicate: Predicate<A>): boolean
+  <A>(predicate: Predicate<A>): (self: Option<A>) => boolean
+}
 ```
 
 **Example**
@@ -1693,7 +1742,10 @@ Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements tha
 **Signature**
 
 ```ts
-export declare const reduceAll: <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B
+export declare const reduceAll: {
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
+}
 ```
 
 **Example**

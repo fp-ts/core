@@ -5,6 +5,7 @@
  *
  * @since 1.0.0
  */
+import { dual } from "@fp-ts/core/Function"
 import type { Ordering } from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
@@ -26,11 +27,17 @@ export const isNumber = predicate.isNumber
  *
  * assert.deepStrictEqual(pipe(2, sum(3)), 5)
  *
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = (that: number) =>
-  (self: number): number => semigroup.numberSum.combine(self, that)
+export const sum: {
+  (self: number, that: number): number
+  (that: number): (self: number) => number
+} = dual<
+  (self: number, that: number) => number,
+  (that: number) => (self: number) => number
+>(2, semigroup.numberSum.combine)
 
 /**
  * @example
@@ -39,11 +46,17 @@ export const sum = (that: number) =>
  *
  * assert.deepStrictEqual(pipe(2, multiply(3)), 6)
  *
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = (that: number) =>
-  (self: number): number => semigroup.numberMultiply.combine(self, that)
+export const multiply: {
+  (self: number, that: number): number
+  (that: number): (self: number) => number
+} = dual<
+  (self: number, that: number) => number,
+  (that: number) => (self: number) => number
+>(2, semigroup.numberMultiply.combine)
 
 /**
  * @example
@@ -52,10 +65,17 @@ export const multiply = (that: number) =>
  *
  * assert.deepStrictEqual(pipe(2, subtract(3)), -1)
  *
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = (that: number) => (self: number): number => self - that
+export const subtract: {
+  (self: number, that: number): number
+  (that: number): (self: number) => number
+} = dual<
+  (self: number, that: number) => number,
+  (that: number) => (self: number) => number
+>(2, (self: number, that: number): number => self - that)
 
 /**
  * @example
@@ -64,10 +84,17 @@ export const subtract = (that: number) => (self: number): number => self - that
  *
  * assert.deepStrictEqual(pipe(6, divide(3)), 2)
  *
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = (that: number) => (self: number): number => self / that
+export const divide: {
+  (self: number, that: number): number
+  (that: number): (self: number) => number
+} = dual<
+  (self: number, that: number) => number,
+  (that: number) => (self: number) => number
+>(2, (self: number, that: number): number => self / that)
 
 /**
  * @example

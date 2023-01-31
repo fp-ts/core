@@ -595,8 +595,8 @@ export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(
-  f: (a: A) => (b: B) => C
-) => <E2>(that: Either<E2, A>) => <E1>(self: Either<E1, B>) => Either<E2 | E1, C> = semiApplicative
+  f: (a: A, b: B) => C
+) => <E1, E2>(self: Either<E1, A>, that: Either<E2, B>) => Either<E1 | E2, C> = semiApplicative
   .lift2(SemiApplicative)
 
 /**
@@ -1165,40 +1165,82 @@ export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E,
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = lift2(N.sum)
+export const sum: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+} = dual<
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>) => Either<E1 | E2, number>,
+  <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E1 | E2, number>
+>(2, lift2<number, number, number>(N.sum))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = lift2(N.multiply)
+export const multiply: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+} = dual<
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>) => Either<E1 | E2, number>,
+  <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E1 | E2, number>
+>(2, lift2<number, number, number>(N.multiply))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = lift2(N.subtract)
+export const subtract: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+} = dual<
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>) => Either<E1 | E2, number>,
+  <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E1 | E2, number>
+>(2, lift2<number, number, number>(N.subtract))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = lift2(N.divide)
+export const divide: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+} = dual<
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>) => Either<E1 | E2, number>,
+  <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E1 | E2, number>
+>(2, lift2<number, number, number>(N.divide))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint = lift2(BI.sum)
+export const sumBigint: {
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
+  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+} = dual<
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>) => Either<E1 | E2, bigint>,
+  <E2>(that: Either<E2, bigint>) => <E1>(self: Either<E1, bigint>) => Either<E1 | E2, bigint>
+>(2, lift2<bigint, bigint, bigint>(BI.sum))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint = lift2(BI.multiply)
+export const multiplyBigint: {
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
+  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+} = dual<
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>) => Either<E1 | E2, bigint>,
+  <E2>(that: Either<E2, bigint>) => <E1>(self: Either<E1, bigint>) => Either<E1 | E2, bigint>
+>(2, lift2<bigint, bigint, bigint>(BI.multiply))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint = lift2(BI.subtract)
+export const subtractBigint: {
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
+  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+} = dual<
+  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>) => Either<E1 | E2, bigint>,
+  <E2>(that: Either<E2, bigint>) => <E1>(self: Either<E1, bigint>) => Either<E1 | E2, bigint>
+>(2, lift2<bigint, bigint, bigint>(BI.subtract))
