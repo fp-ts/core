@@ -279,8 +279,8 @@ export const toEither: {
 /**
  * Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
  *
- * @param onNone - Function that returns the default value to return if the `Option` is `None`.
  * @param self - The `Option` to get the value of.
+ * @param onNone - Function that returns the default value to return if the `Option` is `None`.
  *
  * @example
  * import { some, none, getOrElse } from '@fp-ts/core/Option'
@@ -307,8 +307,8 @@ export const getOrElse: {
 /**
  * Returns the provided `Option` `that` if `self` is `None`, otherwise returns `self`.
  *
- * @param that - The `Option` to return if `self` is `None`.
  * @param self - The first `Option` to be checked.
+ * @param that - The `Option` to return if `self` is `None`.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -364,8 +364,8 @@ export const orElse: {
  *
  * This is useful when it's important to know whether the value was retrieved from the first `Option` or the second option.
  *
- * @param that - The second `Option` to be considered if the first `Option` is `None`.
  * @param self - The first `Option` to be checked.
+ * @param that - The second `Option` to be considered if the first `Option` is `None`.
  *
  * @dual
  * @category error handling
@@ -599,8 +599,8 @@ export const getOrThrow = <A>(self: Option<A>): A => {
 /**
  * Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
  *
- * @param f - The function to map over the value of the `Option`
  * @param self - An `Option` to map
+ * @param f - The function to map over the value of the `Option`
  *
  * @dual
  * @category mapping
@@ -720,11 +720,21 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
 /**
  * Applies a function to the value of an `Option` and flattens the result, if the input is `Some`.
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMap = <A, B>(f: (a: A) => Option<B>) =>
-  (self: Option<A>): Option<B> => isNone(self) ? none() : f(self.value)
+export const flatMap: {
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
+  <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+} = dual<
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>,
+  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>
+>(
+  2,
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B> =>
+    isNone(self) ? none() : f(self.value)
+)
 
 /**
  * @category instances
@@ -811,40 +821,50 @@ export const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<
 /**
  * Useful for debugging purposes, the `onSome` callback is called with the value of `self` if it is a `Some`.
  *
- * @param onSome - callback function that is called with the value of `self` if it is a `Some`
  * @param self - the `Option` to inspect
+ * @param onSome - callback function that is called with the value of `self` if it is a `Some`
  *
+ * @dual
  * @category debugging
  * @since 1.0.0
  */
-export const inspectSome = <A>(
-  onSome: (a: A) => void
-) =>
-  (self: Option<A>): Option<A> => {
-    if (isSome(self)) {
-      onSome(self.value)
-    }
-    return self
+export const inspectSome: {
+  <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
+  <A>(onSome: (a: A) => void): (self: Option<A>) => Option<A>
+} = dual<
+  <A>(self: Option<A>, onSome: (a: A) => void) => Option<A>,
+  <A>(
+    onSome: (a: A) => void
+  ) => (self: Option<A>) => Option<A>
+>(2, <A>(self: Option<A>, onSome: (a: A) => void): Option<A> => {
+  if (isSome(self)) {
+    onSome(self.value)
   }
+  return self
+})
 
 /**
  * Useful for debugging purposes, the `onNone` callback is is called if `self` is a `None`.
  *
- * @param onNone - callback function that is is called if `self` is a `None`
  * @param self - the `Option` to inspect
+ * @param onNone - callback function that is is called if `self` is a `None`
  *
+ * @dual
  * @category debugging
  * @since 1.0.0
  */
-export const inspectNone = (
-  onNone: () => void
-) =>
-  <A>(self: Option<A>): Option<A> => {
-    if (isNone(self)) {
-      onNone()
-    }
-    return self
+export const inspectNone: {
+  <A>(self: Option<A>, onNone: () => void): Option<A>
+  (onNone: () => void): <A>(self: Option<A>) => Option<A>
+} = dual<
+  <A>(self: Option<A>, onNone: () => void) => Option<A>,
+  (onNone: () => void) => <A>(self: Option<A>) => Option<A>
+>(2, <A>(self: Option<A>, onNone: () => void): Option<A> => {
+  if (isNone(self)) {
+    onNone()
   }
+  return self
+})
 
 /**
  * @category instances
@@ -1000,8 +1020,8 @@ export const getOptionalMonoid = <A>(
  * @since 1.0.0
  */
 export const lift2: <A, B, C>(
-  f: (a: A) => (b: B) => C
-) => (that: Option<A>) => (self: Option<B>) => Option<C> = semiApplicative
+  f: (a: A, b: B) => C
+) => (self: Option<A>, that: Option<B>) => Option<C> = semiApplicative
   .lift2(SemiApplicative)
 
 /**
@@ -1189,14 +1209,24 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
  *
  * Useful when in addition to filtering you also want to change the type of the `Option`.
  *
- * @param f - A function to apply to the value of the `Option`.
  * @param self - The `Option` to map over.
+ * @param f - A function to apply to the value of the `Option`.
  *
+ * @dual
  * @category filtering
  * @since 1.0.0
  */
-export const filterMap = <A, B>(f: (a: A) => Option<B>) =>
-  (self: Option<A>): Option<B> => isNone(self) ? none() : f(self.value)
+export const filterMap: {
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
+  <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+} = dual<
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>,
+  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>
+>(
+  2,
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B> =>
+    isNone(self) ? none() : f(self.value)
+)
 
 /**
  * @category instances
@@ -1223,17 +1253,34 @@ export const filter: {
 } = filterable.filter(Filterable)
 
 /**
+ * @dual
  * @category traversing
  * @since 1.0.0
  */
 export const traverse = <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) =>
+): {
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
-  ) =>
-    (self: Option<A>): Kind<F, R, O, E, Option<B>> =>
+  ): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+} =>
+  dual<
+    <A, R, O, E, B>(
+      self: Option<A>,
+      f: (a: A) => Kind<F, R, O, E, B>
+    ) => Kind<F, R, O, E, Option<B>>,
+    <A, R, O, E, B>(
+      f: (a: A) => Kind<F, R, O, E, B>
+    ) => (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+  >(
+    2,
+    <A, R, O, E, B>(
+      self: Option<A>,
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): Kind<F, R, O, E, Option<B>> =>
       isNone(self) ? F.of<Option<B>>(none()) : pipe(f(self.value), F.map(some))
+  )
 
 /**
  * @category traversing
@@ -1241,7 +1288,7 @@ export const traverse = <F extends TypeLambda>(
  */
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <R, O, E, A>(fas: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>> = traversable
+) => <R, O, E, A>(self: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>> = traversable
   .sequence<OptionTypeLambda>(traverse)
 
 /**
@@ -1268,9 +1315,9 @@ export const traverseTap: <F extends TypeLambda>(
  * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
  * function when passed the `Option`'s value.
  *
+ * @param self - The `Option` to match
  * @param onNone - The value to be returned if the `Option` is `None`
  * @param onSome - The function to be called if the `Option` is `Some`, it will be passed the `Option`'s value and its result will be returned
- * @param self - The `Option` to match
  *
  * @example
  * import { some, none, match } from '@fp-ts/core/Option'
@@ -1292,11 +1339,21 @@ export const traverseTap: <F extends TypeLambda>(
  *   'a none'
  * )
  *
+ * @dual
  * @category pattern matching
  * @since 1.0.0
  */
-export const match = <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) =>
-  (self: Option<A>): B | C => isNone(self) ? onNone() : onSome(self.value)
+export const match: {
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
+  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
+} = dual<
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C) => B | C,
+  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C
+>(
+  3,
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C =>
+    isNone(self) ? onNone() : onSome(self.value)
+)
 
 /**
  * The `Order` instance allows `Option` values to be compared with
@@ -1326,7 +1383,10 @@ export const liftOrder = <A>(O: Order<A>): Order<Option<A>> =>
   )
 
 /**
- * Returns a *smart constructor* based on the given predicate.
+ * Transforms a `Predicate` function into a `Some` of the input value if the predicate returns `true` or `None`
+ * if the predicate returns `false`.
+ *
+ * @param predicate - A `Predicate` function that takes in a value of type `A` and returns a boolean.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -1371,8 +1431,8 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
 /**
  * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
  *
- * @param f - The function to be applied to the contents of the `Option`.
  * @param self - The `Option` to apply the function to.
+ * @param f - The function to be applied to the contents of the `Option`.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'
@@ -1384,16 +1444,27 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
  * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
  * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapEither = <A, E, B>(f: (a: A) => Either<E, B>) =>
-  (self: Option<A>): Option<B> => pipe(self, flatMap(liftEither(f)))
+export const flatMapEither: {
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
+  <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
+} = dual<
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>,
+  <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>
+>(
+  2,
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> =>
+    pipe(self, flatMap(liftEither(f)))
+)
 
 /**
  * Returns a function that checks if an `Option` contains a given value using a provided `Equivalence` instance.
  *
  * @param equivalence - An `Equivalence` instance to compare values of the `Option`.
+ * @param self - The `Option` to apply the comparison to.
  * @param a - The value to compare against the `Option`.
  *
  * @example
@@ -1405,16 +1476,23 @@ export const flatMapEither = <A, E, B>(f: (a: A) => Either<E, B>) =>
  * assert.deepStrictEqual(pipe(some(1), contains(Equivalence)(2)), false)
  * assert.deepStrictEqual(pipe(none(), contains(Equivalence)(2)), false)
  *
+ * @dual
  * @since 1.0.0
  */
-export const contains = <A>(equivalence: Equivalence<A>) =>
-  (a: A) => (self: Option<A>): boolean => isNone(self) ? false : equivalence(self.value, a)
+export const contains = <A>(equivalence: Equivalence<A>): {
+  (self: Option<A>, a: A): boolean
+  (a: A): (self: Option<A>) => boolean
+} =>
+  dual<
+    (self: Option<A>, a: A) => boolean,
+    (a: A) => (self: Option<A>) => boolean
+  >(2, (self: Option<A>, a: A): boolean => isNone(self) ? false : equivalence(self.value, a))
 
 /**
  * Check if a value in an `Option` type meets a certain predicate.
  *
- * @param predicate - The condition to check.
  * @param self - The `Option` to check.
+ * @param predicate - The condition to check.
  *
  * @example
  * import { some, none, exists } from '@fp-ts/core/Option'
@@ -1426,19 +1504,27 @@ export const contains = <A>(equivalence: Equivalence<A>) =>
  * assert.deepStrictEqual(pipe(some(1), exists(isEven)), false)
  * assert.deepStrictEqual(pipe(none(), exists(isEven)), false)
  *
+ * @dual
  * @since 1.0.0
  */
-export const exists = <A>(predicate: Predicate<A>) =>
-  (self: Option<A>): boolean => isNone(self) ? false : predicate(self.value)
+export const exists: {
+  <A>(self: Option<A>, predicate: Predicate<A>): boolean
+  <A>(predicate: Predicate<A>): (self: Option<A>) => boolean
+} = dual<
+  <A>(self: Option<A>, predicate: Predicate<A>) => boolean,
+  <A>(predicate: Predicate<A>) => (self: Option<A>) => boolean
+>(
+  2,
+  <A>(self: Option<A>, predicate: Predicate<A>): boolean =>
+    isNone(self) ? false : predicate(self.value)
+)
 
 /**
  * Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
  *
- * @since 1.0.0
- *
+ * @param self - The Iterable of `Option<A>` to be reduced.
  * @param b - The initial value of the accumulator.
  * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`.
- * @param self - The Iterable of `Option<A>` to be reduced.
  *
  * @example
  * import { some, none, reduceAll } from '@fp-ts/core/Option'
@@ -1446,9 +1532,19 @@ export const exists = <A>(predicate: Predicate<A>) =>
  *
  * const iterable = [some(1), none(), some(2), none()]
  * assert.deepStrictEqual(pipe(iterable, reduceAll(0, (b, a) => b + a)), 3)
+ *
+ * @dual
+ * @since 1.0.0
  */
-export const reduceAll = <B, A>(b: B, f: (b: B, a: A) => B) =>
-  (self: Iterable<Option<A>>): B => {
+export const reduceAll: {
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
+} = dual<
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B) => B,
+  <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B
+>(
+  3,
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B => {
     let out: B = b
     for (const oa of self) {
       if (isSome(oa)) {
@@ -1457,6 +1553,7 @@ export const reduceAll = <B, A>(b: B, f: (b: B, a: A) => B) =>
     }
     return out
   }
+)
 
 // -------------------------------------------------------------------------------------
 // algebraic operations
@@ -1466,43 +1563,85 @@ export const reduceAll = <B, A>(b: B, f: (b: B, a: A) => B) =>
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = lift2(N.sum)
+export const sum: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = dual<
+  (self: Option<number>, that: Option<number>) => Option<number>,
+  (that: Option<number>) => (self: Option<number>) => Option<number>
+>(2, lift2<number, number, number>(N.sum))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = lift2(N.multiply)
+export const multiply: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = dual<
+  (self: Option<number>, that: Option<number>) => Option<number>,
+  (that: Option<number>) => (self: Option<number>) => Option<number>
+>(2, lift2<number, number, number>(N.multiply))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = lift2(N.subtract)
+export const subtract: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = dual<
+  (self: Option<number>, that: Option<number>) => Option<number>,
+  (that: Option<number>) => (self: Option<number>) => Option<number>
+>(2, lift2<number, number, number>(N.subtract))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = lift2(N.divide)
+export const divide: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = dual<
+  (self: Option<number>, that: Option<number>) => Option<number>,
+  (that: Option<number>) => (self: Option<number>) => Option<number>
+>(2, lift2<number, number, number>(N.divide))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint = lift2(BI.sum)
+export const sumBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+} = dual<
+  (self: Option<bigint>, that: Option<bigint>) => Option<bigint>,
+  (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
+>(2, lift2<bigint, bigint, bigint>(BI.sum))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint = lift2(BI.multiply)
+export const multiplyBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+} = dual<
+  (self: Option<bigint>, that: Option<bigint>) => Option<bigint>,
+  (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
+>(2, lift2<bigint, bigint, bigint>(BI.multiply))
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint = lift2(BI.subtract)
+export const subtractBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+} = dual<
+  (self: Option<bigint>, that: Option<bigint>) => Option<bigint>,
+  (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
+>(2, lift2<bigint, bigint, bigint>(BI.subtract))
 
 /**
  * Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.

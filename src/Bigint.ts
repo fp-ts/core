@@ -6,6 +6,7 @@
  * @since 1.0.0
  */
 
+import { dual } from "@fp-ts/core/Function"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -19,30 +20,56 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = (that: bigint) =>
-  (self: bigint): bigint => semigroup.bigintSum.combine(self, that)
+export const sum: {
+  (self: bigint, that: bigint): bigint
+  (that: bigint): (self: bigint) => bigint
+} = dual<
+  (self: bigint, that: bigint) => bigint,
+  (that: bigint) => (self: bigint) => bigint
+>(2, semigroup.bigintSum.combine)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = (that: bigint) =>
-  (self: bigint): bigint => semigroup.bigintMultiply.combine(self, that)
+export const multiply: {
+  (self: bigint, that: bigint): bigint
+  (that: bigint): (self: bigint) => bigint
+} = dual<
+  (self: bigint, that: bigint) => bigint,
+  (that: bigint) => (self: bigint) => bigint
+>(2, semigroup.bigintMultiply.combine)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = (that: bigint) => (self: bigint): bigint => self - that
+export const subtract: {
+  (self: bigint, that: bigint): bigint
+  (that: bigint): (self: bigint) => bigint
+} = dual<
+  (self: bigint, that: bigint) => bigint,
+  (that: bigint) => (self: bigint) => bigint
+>(2, (self: bigint, that: bigint): bigint => self - that)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = (that: bigint) => (self: bigint): bigint => self / that
+export const divide: {
+  (self: bigint, that: bigint): bigint
+  (that: bigint): (self: bigint) => bigint
+} = dual<
+  (self: bigint, that: bigint) => bigint,
+  (that: bigint) => (self: bigint) => bigint
+>(2, (self: bigint, that: bigint): bigint => self / that)
 
 /**
  * @since 1.0.0

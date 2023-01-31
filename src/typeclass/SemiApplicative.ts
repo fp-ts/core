@@ -80,8 +80,8 @@ export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
  * @since 1.0.0
  */
 export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <A, B, C>(f: (a: A) => (b: B) => C) =>
-    <R2, O2, E2>(
-      that: Kind<F, R2, O2, E2, A>
-    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
-      zipWith(F)(that, (a, b) => f(b)(a))
+  <A, B, C>(f: (a: A, b: B) => C) =>
+    <R1, O1, E1, R2, O2, E2>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, B>
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(self, zipWith(F)(that, f))
