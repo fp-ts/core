@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { identity, pipe } from "@fp-ts/core/Function"
+import { dual, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 
 /**
@@ -27,20 +27,60 @@ export const flatten = <F extends TypeLambda>(F: FlatMap<F>) =>
  *
  * @since 1.0.0
  */
-export const andThen = <F extends TypeLambda>(F: FlatMap<F>) =>
+export const andThen = <F extends TypeLambda>(F: FlatMap<F>): {
+  <R1, O1, E1, _, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, _>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
-  ): (<R1, O1, E1, _>(
-    self: Kind<F, R1, O1, E1, _>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>) => F.flatMap(() => that)
+  ): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
+} =>
+  dual<
+    <R1, O1, E1, _, R2, O2, E2, B>(
+      self: Kind<F, R1, O1, E1, _>,
+      that: Kind<F, R2, O2, E2, B>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>,
+    <R2, O2, E2, B>(
+      that: Kind<F, R2, O2, E2, B>
+    ) => <R1, O1, E1, _>(
+      self: Kind<F, R1, O1, E1, _>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+  >(2, <R1, O1, E1, _, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, _>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => pipe(self, F.flatMap(() => that)))
 
 /**
  * @since 1.0.0
  */
 export const composeKleisliArrow = <F extends TypeLambda>(
   F: FlatMap<F>
-): <B, R2, O2, E2, C>(
-  bfc: (b: B) => Kind<F, R2, O2, E2, C>
-) => <A, R1, O1, E1>(
-  afb: (a: A) => Kind<F, R1, O1, E1, B>
-) => (a: A) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => bc => ab => a => pipe(ab(a), F.flatMap(bc))
+): {
+  <A, R1, O1, E1, B, R2, O2, E2, C>(
+    afb: (a: A) => Kind<F, R1, O1, E1, B>,
+    bfc: (b: B) => Kind<F, R2, O2, E2, C>
+  ): (a: A) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+  <B, R2, O2, E2, C>(
+    bfc: (b: B) => Kind<F, R2, O2, E2, C>
+  ): <A, R1, O1, E1>(
+    afb: (a: A) => Kind<F, R1, O1, E1, B>
+  ) => (a: A) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>
+} =>
+  dual<
+    <A, R1, O1, E1, B, R2, O2, E2, C>(
+      afb: (a: A) => Kind<F, R1, O1, E1, B>,
+      bfc: (b: B) => Kind<F, R2, O2, E2, C>
+    ) => (a: A) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>,
+    <B, R2, O2, E2, C>(
+      bfc: (b: B) => Kind<F, R2, O2, E2, C>
+    ) => <A, R1, O1, E1>(
+      afb: (a: A) => Kind<F, R1, O1, E1, B>
+    ) => (a: A) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+  >(
+    2,
+    <A, R1, O1, E1, B, R2, O2, E2, C>(
+      afb: (a: A) => Kind<F, R1, O1, E1, B>,
+      bfc: (b: B) => Kind<F, R2, O2, E2, C>
+    ): ((a: A) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>) => a => pipe(afb(a), F.flatMap(bfc))
+  )

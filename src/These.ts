@@ -1106,22 +1106,23 @@ export const flatten: <E2, E1, A>(
 /**
  * @since 1.0.0
  */
-export const andThen: <E2, B>(
-  that: Validated<E2, B>
-) => <E1, _>(
-  self: Validated<E1, _>
-) => Validated<E1 | E2, B> = flatMap_
-  .andThen(FlatMap)
+export const andThen: {
+  <E1, _, E2, B>(self: Validated<E1, _>, that: Validated<E2, B>): Validated<E1 | E2, B>
+  <E2, B>(that: Validated<E2, B>): <E1, _>(self: Validated<E1, _>) => Validated<E2 | E1, B>
+} = flatMap_.andThen(FlatMap)
 
 /**
  * @since 1.0.0
  */
-export const composeKleisliArrow: <B, E2, C>(
-  bfc: (b: B) => Validated<E2, C>
-) => <A, E1>(
-  afb: (a: A) => Validated<E1, B>
-) => (a: A) => Validated<E1 | E2, C> = flatMap_
-  .composeKleisliArrow(FlatMap)
+export const composeKleisliArrow: {
+  <A, E1, B, E2, C>(
+    afb: (a: A) => Validated<E1, B>,
+    bfc: (b: B) => Validated<E2, C>
+  ): (a: A) => Validated<E1 | E2, C>
+  <B, E2, C>(
+    bfc: (b: B) => Validated<E2, C>
+  ): <A, E1>(afb: (a: A) => Validated<E1, B>) => (a: A) => Validated<E2 | E1, C>
+} = flatMap_.composeKleisliArrow(FlatMap)
 
 /**
  * @category instances
