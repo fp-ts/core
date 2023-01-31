@@ -11,7 +11,11 @@ import * as Util from "@fp-ts/core/test/util"
 const p = (n: number): boolean => n > 2
 
 describe.concurrent("Option", () => {
-  it("instances and derived exports", () => {
+  it("exports", () => {
+    expect(_.toEither).exist
+    expect(_.getRight).exist
+    expect(_.getLeft).exist
+
     expect(_.Invariant).exist
     expect(_.tupled).exist
     expect(_.bindTo).exist

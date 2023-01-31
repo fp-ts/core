@@ -218,6 +218,38 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
 export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
 
 /**
+ * Converts a `Either` to an `Option` discarding the error.
+ *
+ * Alias of `fromEither`.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(O.getRight(E.right('ok')), O.some('ok'))
+ * assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const getRight: <E, A>(self: Either<E, A>) => Option<A> = fromEither
+
+/**
+ * Converts a `Either` to an `Option` discarding the value.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(O.getLeft(E.right('ok')), O.none())
+ * assert.deepStrictEqual(O.getLeft(E.left('err')), O.some('err'))
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
+
+/**
  * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
  *
  * @param onNone - a function that produces an error value when the `Option` is `None`.

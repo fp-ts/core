@@ -416,6 +416,8 @@ export const flatMapThese = <A, E2, B>(
 ) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => pipe(self, flatMap(liftThese(f)))
 
 /**
+ * Converts a `These` to an `Option` discarding the error (`Both` included).
+ *
  * @category getters
  * @since 1.0.0
  */
@@ -424,7 +426,7 @@ export const getRight = <E, A>(
 ): Option<A> => isLeft(self) ? O.none() : O.some(self.right)
 
 /**
- * Returns the `A` value if and only if the value is constructed with `Right`
+ * Returns the value if and only if the value is a `Right` (i.e. `Both` is excluded).
  *
  * @category getters
  * @since 1.0.0
@@ -434,6 +436,8 @@ export const getRightOnly = <E, A>(
 ): Option<A> => isRight(self) ? O.some(self.right) : O.none()
 
 /**
+ * Converts a `These` to an `Option` discarding the value (`Both` included).
+ *
  * @category getters
  * @since 1.0.0
  */
@@ -442,7 +446,7 @@ export const getLeft = <E, A>(
 ): Option<E> => isRight(self) ? O.none() : O.some(self.left)
 
 /**
- * Returns the `E` value if and only if the value is constructed with `Left`
+ * Returns the error if and only if the value is a `Left` (i.e. `Both` is excluded).
  *
  * @category getters
  * @since 1.0.0

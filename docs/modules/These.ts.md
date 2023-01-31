@@ -779,6 +779,8 @@ Added in v1.0.0
 
 ## getLeft
 
+Converts a `These` to an `Option` discarding the value (`Both` included).
+
 **Signature**
 
 ```ts
@@ -789,7 +791,7 @@ Added in v1.0.0
 
 ## getLeftOnly
 
-Returns the `E` value if and only if the value is constructed with `Left`
+Returns the error if and only if the value is a `Left` (i.e. `Both` is excluded).
 
 **Signature**
 
@@ -831,6 +833,8 @@ Added in v1.0.0
 
 ## getRight
 
+Converts a `These` to an `Option` discarding the error (`Both` included).
+
 **Signature**
 
 ```ts
@@ -841,7 +845,7 @@ Added in v1.0.0
 
 ## getRightOnly
 
-Returns the `A` value if and only if the value is constructed with `Right`
+Returns the value if and only if the value is a `Right` (i.e. `Both` is excluded).
 
 **Signature**
 
