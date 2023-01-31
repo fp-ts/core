@@ -311,7 +311,7 @@ Alias of `some`.
 **Signature**
 
 ```ts
-export declare const of: <A>(a: A) => Option<A>
+export declare const of: <A>(value: A) => Option<A>
 ```
 
 Added in v1.0.0
@@ -431,8 +431,8 @@ Converts an `Option` to an `Either`, allowing you to provide a value to be used 
 
 ```ts
 export declare const toEither: {
-  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A>
-  <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
+  <A, E>(self: Option<A>, onNone: () => E): Either<E, A>
+  <E>(onNone: () => E): <A>(self: Option<A>) => Either<E, A>
 }
 ```
 
@@ -562,7 +562,7 @@ Added in v1.0.0
 
 ## firstSomeOf
 
-Given an Iterable collection of `Option`s, the function returns the first `Some` found in the collection.
+Given an `Iterable` collection of `Option`s, the function returns the first `Some` found in the collection.
 
 **Signature**
 
