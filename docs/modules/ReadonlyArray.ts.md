@@ -301,7 +301,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const unfold: <B, A>(b: B, f: (b: B) => any) => A[]
+export declare const unfold: <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>) => A[]
 ```
 
 Added in v1.0.0
@@ -313,7 +313,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromEither: <E, A>(self: any) => A[]
+export declare const fromEither: <E, A>(self: Either<E, A>) => A[]
 ```
 
 Added in v1.0.0
@@ -343,7 +343,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromOption: <A>(self: any) => A[]
+export declare const fromOption: <A>(self: Option<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -418,7 +418,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const compact: <A>(self: Iterable<any>) => A[]
+export declare const compact: <A>(self: Iterable<Option<A>>) => A[]
 ```
 
 Added in v1.0.0
@@ -429,8 +429,8 @@ Added in v1.0.0
 
 ```ts
 export declare const filter: {
-  <C extends A, B extends A, A = C>(refinement: any): (self: readonly C[]) => B[]
-  <B extends A, A = B>(predicate: any): (self: readonly B[]) => B[]
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (self: readonly C[]) => B[]
+  <B extends A, A = B>(predicate: Predicate<A>): (self: readonly B[]) => B[]
 }
 ```
 
@@ -441,7 +441,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filterMap: <A, B>(f: (a: A) => any) => (self: Iterable<A>) => B[]
+export declare const filterMap: <A, B>(f: (a: A) => Option<B>) => (self: Iterable<A>) => B[]
 ```
 
 Added in v1.0.0
@@ -451,7 +451,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filterMapWithIndex: <A, B>(f: (a: A, i: number) => any) => (self: Iterable<A>) => B[]
+export declare const filterMapWithIndex: <A, B>(f: (a: A, i: number) => Option<B>) => (self: Iterable<A>) => B[]
 ```
 
 Added in v1.0.0
@@ -475,8 +475,8 @@ Added in v1.0.0
 
 ```ts
 export declare const partition: {
-  <C extends A, B extends A, A = C>(refinement: any): (self: readonly C[]) => [C[], B[]]
-  <B extends A, A = B>(predicate: any): (self: readonly B[]) => [B[], B[]]
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (self: readonly C[]) => [C[], B[]]
+  <B extends A, A = B>(predicate: Predicate<A>): (self: readonly B[]) => [B[], B[]]
 }
 ```
 
@@ -487,7 +487,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const partitionMap: <A, B, C>(f: (a: A) => any) => (self: readonly A[]) => [B[], C[]]
+export declare const partitionMap: <A, B, C>(f: (a: A) => Either<B, C>) => (self: readonly A[]) => [B[], C[]]
 ```
 
 Added in v1.0.0
@@ -497,7 +497,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const partitionMapWithIndex: <A, B, C>(f: (a: A, i: number) => any) => (self: readonly A[]) => [B[], C[]]
+export declare const partitionMapWithIndex: <A, B, C>(
+  f: (a: A, i: number) => Either<B, C>
+) => (self: readonly A[]) => [B[], C[]]
 ```
 
 Added in v1.0.0
@@ -520,7 +522,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const separate: <A, B>(self: readonly any[]) => [A[], B[]]
+export declare const separate: <A, B>(self: readonly Either<A, B>[]) => [A[], B[]]
 ```
 
 Added in v1.0.0
@@ -551,9 +553,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseFilterMap: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => (ta: readonly A[]) => any
+export declare const traverseFilterMap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, Option<B>>) => (ta: readonly A[]) => Kind<F, R, O, E, B[]>
 ```
 
 Added in v1.0.0
@@ -563,9 +565,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversePartitionMap: <F extends any>(
-  F: any
-) => <A, R, O, E, B, C>(f: (a: A) => any) => (self: readonly A[]) => any
+export declare const traversePartitionMap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B, C>(
+  f: (a: A) => Kind<F, R, O, E, Either<B, C>>
+) => (self: readonly A[]) => Kind<F, R, O, E, [B[], C[]]>
 ```
 
 Added in v1.0.0
@@ -577,7 +581,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMap: <M>(M: any) => <A>(f: (a: A) => M) => (self: readonly A[]) => M
+export declare const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: readonly A[]) => M
 ```
 
 Added in v1.0.0
@@ -587,9 +591,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMapKind: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => (self: readonly A[]) => any
+export declare const foldMapKind: <F extends TypeLambda>(
+  F: Coproduct<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -599,7 +603,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMapNonEmpty: <S>(S: any) => <A>(f: (a: A) => S) => (self: readonly [A, ...A[]]) => S
+export declare const foldMapNonEmpty: <S>(S: Semigroup<S>) => <A>(f: (a: A) => S) => (self: readonly [A, ...A[]]) => S
 ```
 
 Added in v1.0.0
@@ -610,7 +614,7 @@ Added in v1.0.0
 
 ```ts
 export declare const foldMapNonEmptyWithIndex: <S>(
-  S: any
+  S: Semigroup<S>
 ) => <A>(f: (a: A, i: number) => S) => (self: readonly [A, ...A[]]) => S
 ```
 
@@ -621,7 +625,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldMapWithIndex: <M>(Monoid: any) => <A>(f: (a: A, i: number) => M) => (self: readonly A[]) => M
+export declare const foldMapWithIndex: <M>(
+  Monoid: Monoid<M>
+) => <A>(f: (a: A, i: number) => M) => (self: readonly A[]) => M
 ```
 
 Added in v1.0.0
@@ -641,9 +647,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceKind: <F extends any>(
-  F: any
-) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => any) => (self: readonly A[]) => any
+export declare const reduceKind: <F extends TypeLambda>(
+  F: monad.Monad<F>
+) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -663,9 +669,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceRightKind: <F extends any>(
-  F: any
-) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => any) => (self: readonly A[]) => any
+export declare const reduceRightKind: <F extends TypeLambda>(
+  F: monad.Monad<F>
+) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -812,7 +818,7 @@ Return the first index for which a predicate holds.
 **Signature**
 
 ```ts
-export declare const findFirstIndex: <A>(predicate: any) => (self: Iterable<A>) => any
+export declare const findFirstIndex: <A>(predicate: Predicate<A>) => (self: Iterable<A>) => Option<number>
 ```
 
 Added in v1.0.0
@@ -838,7 +844,7 @@ Return the last index for which a predicate holds.
 **Signature**
 
 ```ts
-export declare const findLastIndex: <A>(predicate: any) => (self: Iterable<A>) => any
+export declare const findLastIndex: <A>(predicate: Predicate<A>) => (self: Iterable<A>) => Option<number>
 ```
 
 Added in v1.0.0
@@ -850,7 +856,7 @@ This function provides a safe way to read a value at a particular index from a `
 **Signature**
 
 ```ts
-export declare const get: (index: number) => <A>(self: readonly A[]) => any
+export declare const get: (index: number) => <A>(self: readonly A[]) => Option<A>
 ```
 
 Added in v1.0.0
@@ -862,7 +868,7 @@ Get the first element of a `ReadonlyArray`, or `None` if the `ReadonlyArray` is 
 **Signature**
 
 ```ts
-export declare const head: <A>(self: readonly A[]) => any
+export declare const head: <A>(self: readonly A[]) => Option<A>
 ```
 
 Added in v1.0.0
@@ -884,7 +890,7 @@ Get all but the last element of an `Iterable`, creating a new `Array`, or `None`
 **Signature**
 
 ```ts
-export declare const init: <A>(self: Iterable<A>) => any
+export declare const init: <A>(self: Iterable<A>) => Option<A[]>
 ```
 
 Added in v1.0.0
@@ -908,7 +914,7 @@ Get the last element in a `ReadonlyArray`, or `None` if the `ReadonlyArray` is e
 **Signature**
 
 ```ts
-export declare const last: <A>(self: readonly A[]) => any
+export declare const last: <A>(self: readonly A[]) => Option<A>
 ```
 
 Added in v1.0.0
@@ -930,7 +936,7 @@ Return all the `Left` elements from an `Interable` of `Either`s.
 **Signature**
 
 ```ts
-export declare const lefts: <E, A>(self: Iterable<any>) => E[]
+export declare const lefts: <E, A>(self: Iterable<Either<E, A>>) => E[]
 ```
 
 Added in v1.0.0
@@ -954,7 +960,7 @@ Return all the `Right` elements from an `Interable` of `Either`s.
 **Signature**
 
 ```ts
-export declare const rights: <E, A>(self: Iterable<any>) => A[]
+export declare const rights: <E, A>(self: Iterable<Either<E, A>>) => A[]
 ```
 
 Added in v1.0.0
@@ -990,7 +996,7 @@ Get all but the first element of an `Iterable`, creating a new `Array`, or `None
 **Signature**
 
 ```ts
-export declare const tail: <A>(self: Iterable<A>) => any
+export declare const tail: <A>(self: Iterable<A>) => Option<A[]>
 ```
 
 Added in v1.0.0
@@ -1079,7 +1085,9 @@ Group equal, consecutive elements of a `NonEmptyReadonlyArray` into `NonEmptyArr
 **Signature**
 
 ```ts
-export declare const group: <A>(equivalence: any) => (self: readonly [A, ...A[]]) => [[A, ...A[]], ...[A, ...A[]][]]
+export declare const group: <A>(
+  equivalence: Equivalence<A>
+) => (self: readonly [A, ...A[]]) => [[A, ...A[]], ...[A, ...A[]][]]
 ```
 
 Added in v1.0.0
@@ -1104,7 +1112,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Applicative: any
+export declare const Applicative: applicative.Applicative<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1114,7 +1122,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Chainable: any
+export declare const Chainable: chainable.Chainable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1124,7 +1132,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Compactable: any
+export declare const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1134,7 +1142,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Covariant: any
+export declare const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1144,7 +1152,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Filterable: any
+export declare const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1154,7 +1162,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FlatMap: any
+export declare const FlatMap: flatMap_.FlatMap<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1164,7 +1172,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Foldable: any
+export declare const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1174,7 +1182,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1184,7 +1192,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Monad: any
+export declare const Monad: monad.Monad<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1194,7 +1202,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Of: any
+export declare const Of: of_.Of<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1204,7 +1212,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Pointed: any
+export declare const Pointed: pointed.Pointed<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1214,7 +1222,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product_.Product<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1224,7 +1232,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiApplicative: any
+export declare const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1234,7 +1242,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1244,7 +1252,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Traversable: any
+export declare const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1254,7 +1262,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const TraversableFilterable: any
+export declare const TraversableFilterable: traversableFilterable.TraversableFilterable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1264,7 +1272,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getIntersectionSemigroup: <A>(equivalence: any) => any
+export declare const getIntersectionSemigroup: <A>(equivalence: Equivalence<A>) => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1276,7 +1284,7 @@ Returns a `Monoid` for `ReadonlyArray<A>`.
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>() => any
+export declare const getMonoid: <A>() => Monoid<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1288,7 +1296,7 @@ Returns a `Semigroup` for `ReadonlyArray<A>`.
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A>() => any
+export declare const getSemigroup: <A>() => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1298,7 +1306,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getUnionMonoid: <A>(equivalence: any) => any
+export declare const getUnionMonoid: <A>(equivalence: Equivalence<A>) => Monoid<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1308,7 +1316,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getUnionSemigroup: <A>(equivalence: any) => any
+export declare const getUnionSemigroup: <A>(equivalence: Equivalence<A>) => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1347,7 +1355,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const liftEither: <A extends unknown[], E, B>(f: (...a: A) => any) => (...a: A) => B[]
+export declare const liftEither: <A extends unknown[], E, B>(f: (...a: A) => Either<E, B>) => (...a: A) => B[]
 ```
 
 Added in v1.0.0
@@ -1357,7 +1365,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const liftMonoid: <A>(M: any) => any
+export declare const liftMonoid: <A>(M: Monoid<A>) => Monoid<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1379,7 +1387,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const liftOption: <A extends unknown[], B>(f: (...a: A) => any) => (...a: A) => B[]
+export declare const liftOption: <A extends unknown[], B>(f: (...a: A) => Option<B>) => (...a: A) => B[]
 ```
 
 Added in v1.0.0
@@ -1394,7 +1402,7 @@ It is useful when you need to compare two arrays of the same type and you have a
 **Signature**
 
 ```ts
-export declare const liftOrder: <A>(O: any) => any
+export declare const liftOrder: <A>(O: order.Order<A>) => order.Order<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1405,8 +1413,8 @@ Added in v1.0.0
 
 ```ts
 export declare const liftPredicate: {
-  <C extends A, B extends A, A = C>(refinement: any): (c: C) => B[]
-  <B extends A, A = B>(predicate: any): (b: B) => B[]
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => B[]
+  <B extends A, A = B>(predicate: Predicate<A>): (b: B) => B[]
 }
 ```
 
@@ -1417,7 +1425,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const liftSemigroup: <A>(S: any) => any
+export declare const liftSemigroup: <A>(S: Semigroup<A>) => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1528,7 +1536,7 @@ Added in v1.0.0
 
 ```ts
 export declare const match: <B, A, C = B>(
-  onEmpty: any,
+  onEmpty: LazyArg<B>,
   onNonEmpty: (head: A, tail: A[]) => C
 ) => (self: readonly A[]) => B | C
 ```
@@ -1541,7 +1549,7 @@ Added in v1.0.0
 
 ```ts
 export declare const matchRight: <B, A, C = B>(
-  onEmpty: any,
+  onEmpty: LazyArg<B>,
   onNonEmpty: (init: A[], last: A) => C
 ) => (self: readonly A[]) => B | C
 ```
@@ -1557,7 +1565,7 @@ Returns a function that checks if a `ReadonlyArray` contains a given value using
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: any) => (a: A) => (self: Iterable<A>) => boolean
+export declare const contains: <A>(equivalence: Equivalence<A>) => (a: A) => (self: Iterable<A>) => boolean
 ```
 
 Added in v1.0.0
@@ -1593,7 +1601,7 @@ Check if a predicate holds true for any `ReadonlyArray` member.
 **Signature**
 
 ```ts
-export declare const some: <A>(predicate: any) => (self: readonly A[]) => self is readonly [A, ...A[]]
+export declare const some: <A>(predicate: Predicate<A>) => (self: readonly A[]) => self is readonly [A, ...A[]]
 ```
 
 Added in v1.0.0
@@ -1687,7 +1695,7 @@ Sort the elements of an `Iterable` in increasing order, creating a new `Array`.
 **Signature**
 
 ```ts
-export declare const sort: <B>(O: any) => <A extends B>(self: Iterable<A>) => A[]
+export declare const sort: <B>(O: order.Order<B>) => <A extends B>(self: Iterable<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -1700,7 +1708,7 @@ using first `orders[0]`, then `orders[1]`, etc...
 **Signature**
 
 ```ts
-export declare const sortBy: <B>(...orders: readonly any[]) => <A extends B>(self: Iterable<A>) => A[]
+export declare const sortBy: <B>(...orders: readonly order.Order<B>[]) => <A extends B>(self: Iterable<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -1711,7 +1719,7 @@ Added in v1.0.0
 
 ```ts
 export declare const sortByNonEmpty: <B>(
-  ...orders: readonly any[]
+  ...orders: readonly order.Order<B>[]
 ) => <A extends B>(as: readonly [A, ...A[]]) => [A, ...A[]]
 ```
 
@@ -1724,7 +1732,7 @@ Sort the elements of a `NonEmptyReadonlyArray` in increasing order, creating a n
 **Signature**
 
 ```ts
-export declare const sortNonEmpty: <B>(O: any) => <A extends B>(self: readonly [A, ...A[]]) => [A, ...A[]]
+export declare const sortNonEmpty: <B>(O: order.Order<B>) => <A extends B>(self: readonly [A, ...A[]]) => [A, ...A[]]
 ```
 
 Added in v1.0.0
@@ -1736,7 +1744,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sequence: <F extends any>(F: any) => <R, O, E, A>(self: readonly any[]) => any
+export declare const sequence: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <R, O, E, A>(self: readonly Kind<F, R, O, E, A>[]) => Kind<F, R, O, E, A[]>
 ```
 
 Added in v1.0.0
@@ -1746,7 +1756,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sequenceNonEmpty: <F extends any>(F: any) => <R, O, E, A>(self: readonly [any, ...any[]]) => any
+export declare const sequenceNonEmpty: <F extends TypeLambda>(
+  F: semiApplicative.SemiApplicative<F>
+) => <R, O, E, A>(self: readonly [Kind<F, R, O, E, A>, ...Kind<F, R, O, E, A>[]]) => Kind<F, R, O, E, [A, ...A[]]>
 ```
 
 Added in v1.0.0
@@ -1756,9 +1768,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverse: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => (self: readonly A[]) => any
+export declare const traverse: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B[]>
 ```
 
 Added in v1.0.0
@@ -1768,9 +1780,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseNonEmpty: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => (self: readonly [A, ...A[]]) => any
+export declare const traverseNonEmpty: <F extends TypeLambda>(
+  F: semiApplicative.SemiApplicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly [A, ...A[]]) => Kind<F, R, O, E, [B, ...B[]]>
 ```
 
 Added in v1.0.0
@@ -1780,9 +1792,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseNonEmptyWithIndex: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A, i: number) => any) => (self: readonly [A, ...A[]]) => any
+export declare const traverseNonEmptyWithIndex: <F extends TypeLambda>(
+  F: semiApplicative.SemiApplicative<F>
+) => <A, R, O, E, B>(
+  f: (a: A, i: number) => Kind<F, R, O, E, B>
+) => (self: readonly [A, ...A[]]) => Kind<F, R, O, E, [B, ...B[]]>
 ```
 
 Added in v1.0.0
@@ -1792,9 +1806,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseTap: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => (self: readonly A[]) => any
+export declare const traverseTap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, A[]>
 ```
 
 Added in v1.0.0
@@ -1804,9 +1818,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseWithIndex: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A, i: number) => any) => (self: readonly A[]) => any
+export declare const traverseWithIndex: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B[]>
 ```
 
 Added in v1.0.0
@@ -1951,7 +1965,7 @@ The order and references of result values are determined by the first `Iterable`
 **Signature**
 
 ```ts
-export declare const difference: <A>(equivalence: any) => (that: Iterable<A>) => (self: Iterable<A>) => A[]
+export declare const difference: <A>(equivalence: Equivalence<A>) => (that: Iterable<A>) => (self: Iterable<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -1974,7 +1988,7 @@ or return `None` if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const insertAt: <B>(i: number, b: B) => <A>(self: Iterable<A>) => any
+export declare const insertAt: <B>(i: number, b: B) => <A>(self: Iterable<A>) => Option<[B | A, ...(B | A)[]]>
 ```
 
 Added in v1.0.0
@@ -1987,7 +2001,7 @@ using the specified separator.
 **Signature**
 
 ```ts
-export declare const intercalate: <A>(M: any) => (middle: A) => (self: readonly A[]) => A
+export declare const intercalate: <A>(M: Monoid<A>) => (middle: A) => (self: readonly A[]) => A
 ```
 
 Added in v1.0.0
@@ -1999,7 +2013,7 @@ Places an element in between members of a `NonEmptyReadonlyArray`, then folds th
 **Signature**
 
 ```ts
-export declare const intercalateNonEmpty: <A>(S: any) => (middle: A) => (self: readonly [A, ...A[]]) => A
+export declare const intercalateNonEmpty: <A>(S: Semigroup<A>) => (middle: A) => (self: readonly [A, ...A[]]) => A
 ```
 
 Added in v1.0.0
@@ -2012,7 +2026,7 @@ The order and references of result values are determined by the first `Iterable`
 **Signature**
 
 ```ts
-export declare const intersection: <A>(equivalence: any) => (that: Iterable<A>) => (self: Iterable<A>) => A[]
+export declare const intersection: <A>(equivalence: Equivalence<A>) => (that: Iterable<A>) => (self: Iterable<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -2056,7 +2070,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const max: <A>(O: any) => (self: readonly [A, ...A[]]) => A
+export declare const max: <A>(O: order.Order<A>) => (self: readonly [A, ...A[]]) => A
 ```
 
 Added in v1.0.0
@@ -2066,7 +2080,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const min: <A>(O: any) => (self: readonly [A, ...A[]]) => A
+export declare const min: <A>(O: order.Order<A>) => (self: readonly [A, ...A[]]) => A
 ```
 
 Added in v1.0.0
@@ -2116,7 +2130,7 @@ or return `None` if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const modifyOption: <A, B>(i: number, f: (a: A) => B) => (self: Iterable<A>) => any
+export declare const modifyOption: <A, B>(i: number, f: (a: A) => B) => (self: Iterable<A>) => Option<(A | B)[]>
 ```
 
 Added in v1.0.0
@@ -2189,7 +2203,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const replaceOption: <B>(i: number, b: B) => <A>(self: Iterable<A>) => any
+export declare const replaceOption: <B>(i: number, b: B) => <A>(self: Iterable<A>) => Option<(B | A)[]>
 ```
 
 Added in v1.0.0
@@ -2271,9 +2285,11 @@ Filter values inside a context.
 **Signature**
 
 ```ts
-export declare const traverseFilter: <F extends any>(
-  F: any
-) => <B extends A, R, O, E, A = B>(predicate: (a: A) => any) => (self: readonly B[]) => any
+export declare const traverseFilter: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <B extends A, R, O, E, A = B>(
+  predicate: (a: A) => Kind<F, R, O, E, boolean>
+) => (self: readonly B[]) => Kind<F, R, O, E, B[]>
 ```
 
 Added in v1.0.0
@@ -2283,9 +2299,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversePartition: <F extends any>(
-  F: any
-) => <B extends A, R, O, E, A = B>(predicate: (a: A) => any) => (self: readonly B[]) => any
+export declare const traversePartition: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <B extends A, R, O, E, A = B>(
+  predicate: (a: A) => Kind<F, R, O, E, boolean>
+) => (self: readonly B[]) => Kind<F, R, O, E, [B[], B[]]>
 ```
 
 Added in v1.0.0
@@ -2295,7 +2313,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const union: <A>(equivalence: any) => (that: readonly A[]) => (self: readonly A[]) => A[]
+export declare const union: <A>(equivalence: Equivalence<A>) => (that: readonly A[]) => (self: readonly A[]) => A[]
 ```
 
 Added in v1.0.0
@@ -2305,7 +2323,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const unionNonEmpty: <A>(equivalence: any) => {
+export declare const unionNonEmpty: <A>(equivalence: Equivalence<A>) => {
   (that: readonly [A, ...A[]]): (self: readonly A[]) => [A, ...A[]]
   (that: readonly A[]): (self: readonly [A, ...A[]]) => [A, ...A[]]
 }
@@ -2320,7 +2338,7 @@ Remove duplicates from am `Iterable`, keeping the first occurrence of an element
 **Signature**
 
 ```ts
-export declare const uniq: <A>(equivalence: any) => (self: Iterable<A>) => A[]
+export declare const uniq: <A>(equivalence: Equivalence<A>) => (self: Iterable<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -2332,7 +2350,7 @@ Remove duplicates from a `NonEmptyReadonlyArray`, keeping the first occurrence o
 **Signature**
 
 ```ts
-export declare const uniqNonEmpty: <A>(equivalence: any) => (self: readonly [A, ...A[]]) => [A, ...A[]]
+export declare const uniqNonEmpty: <A>(equivalence: Equivalence<A>) => (self: readonly [A, ...A[]]) => [A, ...A[]]
 ```
 
 Added in v1.0.0

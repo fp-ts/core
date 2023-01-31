@@ -118,7 +118,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromSemigroup: <A>(S: any, empty: A) => Monoid<A>
+export declare const fromSemigroup: <A>(S: Semigroup<A>, empty: A) => Monoid<A>
 ```
 
 Added in v1.0.0
@@ -132,7 +132,7 @@ The `empty` value is the `minimum` value.
 **Signature**
 
 ```ts
-export declare const max: <A>(B: any) => Monoid<A>
+export declare const max: <A>(B: Bounded<A>) => Monoid<A>
 ```
 
 Added in v1.0.0
@@ -146,7 +146,7 @@ The `empty` value is the `maxBound` value.
 **Signature**
 
 ```ts
-export declare const min: <A>(B: any) => Monoid<A>
+export declare const min: <A>(B: Bounded<A>) => Monoid<A>
 ```
 
 Added in v1.0.0

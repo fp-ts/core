@@ -34,9 +34,13 @@ Lifts a binary function into `F`.
 **Signature**
 
 ```ts
-export declare const lift2: <F extends any>(
+export declare const lift2: <F extends TypeLambda>(
   F: SemiApplicative<F>
-) => <A, B, C>(f: (a: A) => (b: B) => C) => <R2, O2, E2>(that: any) => <R1, O1, E1>(self: any) => any
+) => <A, B, C>(
+  f: (a: A) => (b: B) => C
+) => <R2, O2, E2>(
+  that: Kind<F, R2, O2, E2, A>
+) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, B>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>
 ```
 
 Added in v1.0.0
@@ -48,7 +52,9 @@ Lift a `Semigroup` into 'F', the inner values are combined using the provided `S
 **Signature**
 
 ```ts
-export declare const liftSemigroup: <F extends any>(F: SemiApplicative<F>) => <A, R, O, E>(S: any) => any
+export declare const liftSemigroup: <F extends TypeLambda>(
+  F: SemiApplicative<F>
+) => <A, R, O, E>(S: Semigroup<A>) => Semigroup<Kind<F, R, O, E, A>>
 ```
 
 Added in v1.0.0
@@ -72,9 +78,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const andThen: <F extends any>(
+export declare const andThen: <F extends TypeLambda>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, B>(that: any) => <R1, O1, E1, _>(self: any) => any
+) => <R2, O2, E2, B>(
+  that: Kind<F, R2, O2, E2, B>
+) => <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
 ```
 
 Added in v1.0.0
@@ -84,9 +92,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const andThenDiscard: <F extends any>(
+export declare const andThenDiscard: <F extends TypeLambda>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, _>(that: any) => <R1, O1, E1, A>(self: any) => any
+) => <R2, O2, E2, _>(
+  that: Kind<F, R2, O2, E2, _>
+) => <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
 ```
 
 Added in v1.0.0
@@ -96,9 +106,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <F extends any>(
+export declare const ap: <F extends TypeLambda>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, A>(that: any) => <R1, O1, E1, B>(self: any) => any
+) => <R2, O2, E2, A>(
+  that: Kind<F, R2, O2, E2, A>
+) => <R1, O1, E1, B>(self: Kind<F, R1, O1, E1, (a: A) => B>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
 ```
 
 Added in v1.0.0
@@ -110,9 +122,12 @@ Zips two `F` values together using a provided function, returning a new `F` of t
 **Signature**
 
 ```ts
-export declare const zipWith: <F extends any>(
+export declare const zipWith: <F extends TypeLambda>(
   F: SemiApplicative<F>
-) => <R2, O2, E2, B, A, C>(fb: any, f: (a: A, b: B) => C) => <R1, O1, E1>(fa: any) => any
+) => <R2, O2, E2, B, A, C>(
+  fb: Kind<F, R2, O2, E2, B>,
+  f: (a: A, b: B) => C
+) => <R1, O1, E1>(fa: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>
 ```
 
 Added in v1.0.0

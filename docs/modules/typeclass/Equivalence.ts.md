@@ -78,7 +78,7 @@ If all comparisons return true, the records are considered equal.
 **Signature**
 
 ```ts
-export declare const record: <A>(equivalence: Equivalence<A>) => Equivalence<any>
+export declare const record: <A>(equivalence: Equivalence<A>) => Equivalence<ReadonlyRecord<A>>
 ```
 
 Added in v1.0.0
@@ -134,7 +134,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Contravariant: any
+export declare const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda>
 ```
 
 Added in v1.0.0
@@ -144,7 +144,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<EquivalenceTypeLambda>
 ```
 
 Added in v1.0.0
@@ -154,7 +154,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product.Product<EquivalenceTypeLambda>
 ```
 
 Added in v1.0.0
@@ -164,7 +164,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda>
 ```
 
 Added in v1.0.0
@@ -194,7 +194,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>() => any
+export declare const getMonoid: <A>() => Monoid<Equivalence<A>>
 ```
 
 Added in v1.0.0
@@ -204,7 +204,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A>() => any
+export declare const getSemigroup: <A>() => Semigroup<Equivalence<A>>
 ```
 
 Added in v1.0.0

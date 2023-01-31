@@ -117,7 +117,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Contravariant: any
+export declare const Contravariant: contravariant.Contravariant<OrderTypeLambda>
 ```
 
 Added in v1.0.0
@@ -127,7 +127,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<OrderTypeLambda>
 ```
 
 Added in v1.0.0
@@ -137,7 +137,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product.Product<OrderTypeLambda>
 ```
 
 Added in v1.0.0
@@ -147,7 +147,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda>
 ```
 
 Added in v1.0.0
@@ -177,7 +177,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>() => any
+export declare const getMonoid: <A>() => Monoid<Order<A>>
 ```
 
 Added in v1.0.0
@@ -187,7 +187,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A>() => any
+export declare const getSemigroup: <A>() => Semigroup<Order<A>>
 ```
 
 Added in v1.0.0

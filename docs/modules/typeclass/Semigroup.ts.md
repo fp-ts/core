@@ -158,7 +158,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const max: <A>(O: any) => Semigroup<A>
+export declare const max: <A>(O: Order<A>) => Semigroup<A>
 ```
 
 Added in v1.0.0
@@ -170,7 +170,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const min: <A>(O: any) => Semigroup<A>
+export declare const min: <A>(O: Order<A>) => Semigroup<A>
 ```
 
 Added in v1.0.0
@@ -182,7 +182,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<SemigroupTypeLambda>
 ```
 
 Added in v1.0.0
@@ -192,7 +192,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product.Product<SemigroupTypeLambda>
 ```
 
 Added in v1.0.0
@@ -202,7 +202,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda>
 ```
 
 Added in v1.0.0

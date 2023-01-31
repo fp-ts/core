@@ -68,7 +68,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const alternative: any
+export declare const alternative: typeof alternative
 ```
 
 Added in v1.0.0
@@ -78,7 +78,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const applicative: any
+export declare const applicative: typeof applicative
 ```
 
 Added in v1.0.0
@@ -88,7 +88,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bicovariant: any
+export declare const bicovariant: typeof bicovariant
 ```
 
 Added in v1.0.0
@@ -98,7 +98,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bounded: any
+export declare const bounded: typeof bounded
 ```
 
 Added in v1.0.0
@@ -108,7 +108,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const chainable: any
+export declare const chainable: typeof chainable
 ```
 
 Added in v1.0.0
@@ -118,7 +118,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const compactable: any
+export declare const compactable: typeof compactable
 ```
 
 Added in v1.0.0
@@ -128,7 +128,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const contravariant: any
+export declare const contravariant: typeof contravariant
 ```
 
 Added in v1.0.0
@@ -138,7 +138,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const coproduct: any
+export declare const coproduct: typeof coproduct
 ```
 
 Added in v1.0.0
@@ -148,7 +148,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const covariant: any
+export declare const covariant: typeof covariant
 ```
 
 Added in v1.0.0
@@ -158,7 +158,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const equivalence: any
+export declare const equivalence: typeof equivalence
 ```
 
 Added in v1.0.0
@@ -168,7 +168,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filterable: any
+export declare const filterable: typeof filterable
 ```
 
 Added in v1.0.0
@@ -178,7 +178,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMap: any
+export declare const flatMap: typeof flatMap
 ```
 
 Added in v1.0.0
@@ -188,7 +188,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const foldable: any
+export declare const foldable: typeof foldable
 ```
 
 Added in v1.0.0
@@ -198,7 +198,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const invariant: any
+export declare const invariant: typeof invariant
 ```
 
 Added in v1.0.0
@@ -208,7 +208,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const monad: any
+export declare const monad: typeof monad
 ```
 
 Added in v1.0.0
@@ -218,7 +218,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const monoid: any
+export declare const monoid: typeof monoid
 ```
 
 Added in v1.0.0
@@ -228,7 +228,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const of: any
+export declare const of: typeof of
 ```
 
 Added in v1.0.0
@@ -238,7 +238,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const order: any
+export declare const order: typeof order
 ```
 
 Added in v1.0.0
@@ -248,7 +248,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const pointed: any
+export declare const pointed: typeof pointed
 ```
 
 Added in v1.0.0
@@ -258,7 +258,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const product: any
+export declare const product: typeof product
 ```
 
 Added in v1.0.0
@@ -268,7 +268,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semiAlternative: any
+export declare const semiAlternative: typeof semiAlternative
 ```
 
 Added in v1.0.0
@@ -278,7 +278,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semiApplicative: any
+export declare const semiApplicative: typeof semiApplicative
 ```
 
 Added in v1.0.0
@@ -288,7 +288,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semiCoproduct: any
+export declare const semiCoproduct: typeof semiCoproduct
 ```
 
 Added in v1.0.0
@@ -298,7 +298,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semiProduct: any
+export declare const semiProduct: typeof semiProduct
 ```
 
 Added in v1.0.0
@@ -308,7 +308,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const semigroup: any
+export declare const semigroup: typeof semigroup
 ```
 
 Added in v1.0.0
@@ -318,7 +318,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversable: any
+export declare const traversable: typeof traversable
 ```
 
 Added in v1.0.0
@@ -328,7 +328,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversableFilterable: any
+export declare const traversableFilterable: typeof traversableFilterable
 ```
 
 Added in v1.0.0
@@ -340,7 +340,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bigint: any
+export declare const bigint: typeof bigint
 ```
 
 Added in v1.0.0
@@ -350,7 +350,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const boolean: any
+export declare const boolean: typeof boolean
 ```
 
 Added in v1.0.0
@@ -360,7 +360,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const either: any
+export declare const either: typeof either
 ```
 
 Added in v1.0.0
@@ -370,7 +370,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const function: any
+export declare const function: typeof _function
 ```
 
 Added in v1.0.0
@@ -380,7 +380,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const hkt: any
+export declare const hkt: typeof hkt
 ```
 
 Added in v1.0.0
@@ -390,7 +390,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const identity: any
+export declare const identity: typeof identity
 ```
 
 Added in v1.0.0
@@ -400,7 +400,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const number: any
+export declare const number: typeof number
 ```
 
 Added in v1.0.0
@@ -410,7 +410,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const option: any
+export declare const option: typeof option
 ```
 
 Added in v1.0.0
@@ -420,7 +420,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ordering: any
+export declare const ordering: typeof ordering
 ```
 
 Added in v1.0.0
@@ -430,7 +430,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const predicate: any
+export declare const predicate: typeof predicate
 ```
 
 Added in v1.0.0
@@ -440,7 +440,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const readonlyArray: any
+export declare const readonlyArray: typeof readonlyArray
 ```
 
 Added in v1.0.0
@@ -450,7 +450,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const readonlyRecord: any
+export declare const readonlyRecord: typeof readonlyRecord
 ```
 
 Added in v1.0.0
@@ -460,7 +460,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const string: any
+export declare const string: typeof string
 ```
 
 Added in v1.0.0
@@ -470,7 +470,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const struct: any
+export declare const struct: typeof struct
 ```
 
 Added in v1.0.0
@@ -480,7 +480,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const symbol: any
+export declare const symbol: typeof symbol
 ```
 
 Added in v1.0.0
@@ -490,7 +490,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const these: any
+export declare const these: typeof these
 ```
 
 Added in v1.0.0
@@ -500,7 +500,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const tuple: any
+export declare const tuple: typeof tuple
 ```
 
 Added in v1.0.0

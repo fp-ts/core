@@ -140,7 +140,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const divide: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const divide: (that: Option<number>) => (self: Option<number>) => Option<number>
 ```
 
 Added in v1.0.0
@@ -150,7 +150,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiply: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const multiply: (that: Option<number>) => (self: Option<number>) => Option<number>
 ```
 
 Added in v1.0.0
@@ -181,7 +181,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiplyBigint: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const multiplyBigint: (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
 ```
 
 Added in v1.0.0
@@ -191,7 +191,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtract: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const subtract: (that: Option<number>) => (self: Option<number>) => Option<number>
 ```
 
 Added in v1.0.0
@@ -201,7 +201,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtractBigint: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const subtractBigint: (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
 ```
 
 Added in v1.0.0
@@ -211,7 +211,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sum: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const sum: (that: Option<number>) => (self: Option<number>) => Option<number>
 ```
 
 Added in v1.0.0
@@ -242,7 +242,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sumBigint: (that: Option<unknown>) => (self: Option<unknown>) => Option<unknown>
+export declare const sumBigint: (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
 ```
 
 Added in v1.0.0
@@ -304,7 +304,7 @@ Converts a `Either` to an `Option` discarding the error.
 **Signature**
 
 ```ts
-export declare const fromEither: <E, A>(self: any) => Option<A>
+export declare const fromEither: <E, A>(self: Either<E, A>) => Option<A>
 ```
 
 **Example**
@@ -349,7 +349,7 @@ Converts an `Option` to an `Either`, allowing you to provide a value to be used 
 **Signature**
 
 ```ts
-export declare const toEither: <E>(onNone: any) => <A>(self: Option<A>) => any
+export declare const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A>
 ```
 
 **Example**
@@ -374,7 +374,7 @@ This function ensures that a `Refinement` definition is type-safe.
 **Signature**
 
 ```ts
-export declare const toRefinement: <A, B extends A>(f: (a: A) => Option<B>) => any
+export declare const toRefinement: <A, B extends A>(f: (a: A) => Option<B>) => Refinement<A, B>
 ```
 
 Added in v1.0.0
@@ -489,7 +489,7 @@ Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
 **Signature**
 
 ```ts
-export declare const getOrElse: <B>(onNone: any) => <A>(self: Option<A>) => B | A
+export declare const getOrElse: <B>(onNone: LazyArg<B>) => <A>(self: Option<A>) => B | A
 ```
 
 **Example**
@@ -523,7 +523,7 @@ Returns the provided `Option` `that` if `self` is `None`, otherwise returns `sel
 **Signature**
 
 ```ts
-export declare const orElse: <B>(that: any) => <A>(self: Option<A>) => Option<B | A>
+export declare const orElse: <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<B | A>
 ```
 
 **Example**
@@ -574,7 +574,7 @@ This is useful when it's important to know whether the value was retrieved from 
 **Signature**
 
 ```ts
-export declare const orElseEither: <B>(that: any) => <A>(self: Option<A>) => Option<any>
+export declare const orElseEither: <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<Either<A, B>>
 ```
 
 Added in v1.0.0
@@ -591,8 +591,8 @@ If you need to change the type of the `Option` in addition to filtering, see `fi
 
 ```ts
 export declare const filter: {
-  <C extends A, B extends A, A = C>(refinement: any): (fc: Option<C>) => Option<B>
-  <B extends A, A = B>(predicate: any): (fb: Option<B>) => Option<B>
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: Option<C>) => Option<B>
+  <B extends A, A = B>(predicate: Predicate<A>): (fb: Option<B>) => Option<B>
 }
 ```
 
@@ -617,7 +617,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const separate: <A, B>(self: Option<any>) => [Option<A>, Option<B>]
+export declare const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>]
 ```
 
 Added in v1.0.0
@@ -695,7 +695,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Alternative: any
+export declare const Alternative: alternative.Alternative<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -705,7 +705,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Applicative: any
+export declare const Applicative: applicative.Applicative<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -715,7 +715,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Chainable: any
+export declare const Chainable: chainable.Chainable<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -725,7 +725,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Compactable: any
+export declare const Compactable: compactable.Compactable<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -735,7 +735,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Coproduct: any
+export declare const Coproduct: coproduct_.Coproduct<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -745,7 +745,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Covariant: any
+export declare const Covariant: covariant.Covariant<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -755,7 +755,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Filterable: any
+export declare const Filterable: filterable.Filterable<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -765,7 +765,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FlatMap: any
+export declare const FlatMap: flatMap_.FlatMap<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -775,7 +775,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Foldable: any
+export declare const Foldable: foldable.Foldable<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -785,7 +785,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -795,7 +795,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Monad: any
+export declare const Monad: monad.Monad<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -805,7 +805,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Of: any
+export declare const Of: of_.Of<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -815,7 +815,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Pointed: any
+export declare const Pointed: pointed.Pointed<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -825,7 +825,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product_.Product<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -835,7 +835,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiAlternative: any
+export declare const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -845,7 +845,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiApplicative: any
+export declare const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -855,7 +855,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiCoproduct: any
+export declare const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -865,7 +865,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -875,7 +875,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Traversable: any
+export declare const Traversable: traversable.Traversable<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -893,7 +893,7 @@ See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
 **Signature**
 
 ```ts
-export declare const getFailureMonoid: <A>(M: any) => any
+export declare const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>>
 ```
 
 Added in v1.0.0
@@ -909,7 +909,7 @@ See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
 **Signature**
 
 ```ts
-export declare const getFailureSemigroup: <A>(S: any) => any
+export declare const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>>
 ```
 
 Added in v1.0.0
@@ -921,7 +921,7 @@ Semigroup returning the first `Some` value encountered.
 **Signature**
 
 ```ts
-export declare const getFirstSomeSemigroup: <A>() => any
+export declare const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>>
 ```
 
 Added in v1.0.0
@@ -980,7 +980,7 @@ Returns the contained value if the `Option` is `Some`, otherwise throws an error
 **Signature**
 
 ```ts
-export declare const getOrThrow: (onNone?: any) => <A>(self: Option<A>) => A
+export declare const getOrThrow: (onNone?: LazyArg<Error>) => <A>(self: Option<A>) => A
 ```
 
 **Example**
@@ -1053,7 +1053,7 @@ while elements that are `Some` are combined using the provided `Semigroup`.
 **Signature**
 
 ```ts
-export declare const getOptionalMonoid: <A>(Semigroup: any) => any
+export declare const getOptionalMonoid: <A>(Semigroup: Semigroup<A>) => Monoid<Option<A>>
 ```
 
 **Example**
@@ -1092,7 +1092,9 @@ Lifts an `Either` function to an `Option` function.
 **Signature**
 
 ```ts
-export declare const liftEither: <A extends readonly unknown[], E, B>(f: (...a: A) => any) => (...a: A) => Option<B>
+export declare const liftEither: <A extends readonly unknown[], E, B>(
+  f: (...a: A) => Either<E, B>
+) => (...a: A) => Option<B>
 ```
 
 **Example**
@@ -1149,8 +1151,8 @@ Returns a _smart constructor_ based on the given predicate.
 
 ```ts
 export declare const liftPredicate: {
-  <C extends A, B extends A, A = C>(refinement: any): (c: C) => Option<B>
-  <B extends A, A = B>(predicate: any): (b: B) => Option<B>
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => Option<B>
+  <B extends A, A = B>(predicate: Predicate<A>): (b: B) => Option<B>
 }
 ```
 
@@ -1264,7 +1266,7 @@ function when passed the `Option`'s value.
 **Signature**
 
 ```ts
-export declare const match: <B, A, C = B>(onNone: any, onSome: (a: A) => C) => (self: Option<A>) => B | C
+export declare const match: <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C
 ```
 
 **Example**
@@ -1347,7 +1349,7 @@ Applies a provided function that returns an `Either` to the contents of an `Opti
 **Signature**
 
 ```ts
-export declare const flatMapEither: <A, E, B>(f: (a: A) => any) => (self: Option<A>) => Option<B>
+export declare const flatMapEither: <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>
 ```
 
 **Example**
@@ -1429,7 +1431,7 @@ the type the `Option` contains.
 **Signature**
 
 ```ts
-export declare const liftOrder: <A>(O: any) => any
+export declare const liftOrder: <A>(O: Order<A>) => Order<Option<A>>
 ```
 
 **Example**
@@ -1456,7 +1458,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sequence: <F extends any>(F: any) => <R, O, E, A>(fas: Option<any>) => any
+export declare const sequence: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <R, O, E, A>(fas: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>>
 ```
 
 Added in v1.0.0
@@ -1466,7 +1470,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverse: <F extends any>(F: any) => <A, R, O, E, B>(f: (a: A) => any) => (self: Option<A>) => any
+export declare const traverse: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: Option<A>) => Kind<F, R, O, E, Option<B>>
 ```
 
 Added in v1.0.0
@@ -1476,9 +1482,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseTap: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => (self: Option<A>) => any
+export declare const traverseTap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: Option<A>) => Kind<F, R, O, E, Option<A>>
 ```
 
 Added in v1.0.0
@@ -1552,7 +1558,7 @@ Returns a function that checks if an `Option` contains a given value using a pro
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: any) => (a: A) => (self: Option<A>) => boolean
+export declare const contains: <A>(equivalence: Equivalence<A>) => (a: A) => (self: Option<A>) => boolean
 ```
 
 **Example**
@@ -1576,7 +1582,7 @@ Check if a value in an `Option` type meets a certain predicate.
 **Signature**
 
 ```ts
-export declare const exists: <A>(predicate: any) => (self: Option<A>) => boolean
+export declare const exists: <A>(predicate: Predicate<A>) => (self: Option<A>) => boolean
 ```
 
 **Example**

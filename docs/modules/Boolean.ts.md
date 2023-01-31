@@ -76,7 +76,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const isBoolean: any
+export declare const isBoolean: Refinement<unknown, boolean>
 ```
 
 Added in v1.0.0
@@ -88,7 +88,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Equivalence: any
+export declare const Equivalence: equivalence.Equivalence<boolean>
 ```
 
 Added in v1.0.0
@@ -102,7 +102,7 @@ The `empty` value is `true`.
 **Signature**
 
 ```ts
-export declare const MonoidAll: any
+export declare const MonoidAll: monoid.Monoid<boolean>
 ```
 
 Added in v1.0.0
@@ -116,7 +116,7 @@ The `empty` value is `false`.
 **Signature**
 
 ```ts
-export declare const MonoidAny: any
+export declare const MonoidAny: monoid.Monoid<boolean>
 ```
 
 Added in v1.0.0
@@ -126,7 +126,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Order: any
+export declare const Order: order.Order<boolean>
 ```
 
 Added in v1.0.0
@@ -138,7 +138,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupAll: any
+export declare const SemigroupAll: semigroup.Semigroup<boolean>
 ```
 
 **Example**
@@ -160,7 +160,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupAny: any
+export declare const SemigroupAny: semigroup.Semigroup<boolean>
 ```
 
 **Example**
@@ -187,7 +187,7 @@ If `value` is `false`, `onFalse()` is returned, otherwise `onTrue()`.
 **Signature**
 
 ```ts
-export declare const match: <A, B = A>(onFalse: any, onTrue: any) => (value: boolean) => A | B
+export declare const match: <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) => (value: boolean) => A | B
 ```
 
 **Example**
@@ -220,7 +220,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const all: any
+export declare const all: (collection: Iterable<boolean>) => boolean
 ```
 
 Added in v1.0.0
@@ -230,7 +230,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const any: any
+export declare const any: (collection: Iterable<boolean>) => boolean
 ```
 
 Added in v1.0.0

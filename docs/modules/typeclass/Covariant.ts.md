@@ -34,7 +34,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <F extends any>(map: <A, B>(f: (a: A) => B) => <R, O, E>(self: any) => any) => Covariant<F>
+export declare const make: <F extends TypeLambda>(
+  map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+) => Covariant<F>
 ```
 
 Added in v1.0.0
@@ -46,7 +48,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const as: <F extends any>(F: Covariant<F>) => <B>(b: B) => <R, O, E, _>(self: any) => any
+export declare const as: <F extends TypeLambda>(
+  F: Covariant<F>
+) => <B>(b: B) => <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -56,7 +60,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const asUnit: <F extends any>(F: Covariant<F>) => <R, O, E, _>(self: any) => any
+export declare const asUnit: <F extends TypeLambda>(
+  F: Covariant<F>
+) => <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, void>
 ```
 
 Added in v1.0.0
@@ -66,7 +72,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <F extends any>(F: Covariant<F>) => <R, O, E, A, B>(self: any) => (a: A) => any
+export declare const flap: <F extends TypeLambda>(
+  F: Covariant<F>
+) => <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>) => (a: A) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -94,7 +102,9 @@ Returns a default `imap` implementation.
 **Signature**
 
 ```ts
-export declare const imap: <F extends any>(map: <A, B>(f: (a: A) => B) => <R, O, E>(self: any) => any) => any
+export declare const imap: <F extends TypeLambda>(
+  map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+) => <A, B>(to: (a: A) => B, from: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0
@@ -104,9 +114,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const let: <F extends any>(
+export declare const let: <F extends TypeLambda>(
   F: Covariant<F>
-) => <N extends string, A extends object, B>(name: Exclude<N, keyof A>, f: (a: A) => B) => <R, O, E>(self: any) => any
+) => <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0
@@ -118,10 +131,14 @@ Returns a default `map` composition.
 **Signature**
 
 ```ts
-export declare const mapComposition: <F extends any, G extends any>(
+export declare const mapComposition: <F extends TypeLambda, G extends TypeLambda>(
   F: Covariant<F>,
   G: Covariant<G>
-) => <A, B>(f: (a: A) => B) => <FR, FO, FE, GR, GO, GE>(self: any) => any
+) => <A, B>(
+  f: (a: A) => B
+) => <FR, FO, FE, GR, GO, GE>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
 ```
 
 Added in v1.0.0

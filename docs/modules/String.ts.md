@@ -52,7 +52,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const isString: any
+export declare const isString: Refinement<unknown, string>
 ```
 
 Added in v1.0.0
@@ -64,7 +64,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Equivalence: any
+export declare const Equivalence: equivalence.Equivalence<string>
 ```
 
 Added in v1.0.0
@@ -78,7 +78,7 @@ The `empty` value is `''`.
 **Signature**
 
 ```ts
-export declare const Monoid: any
+export declare const Monoid: monoid.Monoid<string>
 ```
 
 Added in v1.0.0
@@ -88,7 +88,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Order: any
+export declare const Order: order.Order<string>
 ```
 
 Added in v1.0.0
@@ -100,7 +100,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Semigroup: any
+export declare const Semigroup: semigroup.Semigroup<string>
 ```
 
 Added in v1.0.0
@@ -265,7 +265,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const split: (separator: string | RegExp) => (s: string) => any
+export declare const split: (separator: string | RegExp) => (s: string) => readonly [string, ...string[]]
 ```
 
 **Example**

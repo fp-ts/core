@@ -48,7 +48,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroup: <F extends any>(F: SemiCoproduct<F>) => <R, O, E, A>() => any
+export declare const getSemigroup: <F extends TypeLambda>(
+  F: SemiCoproduct<F>
+) => <R, O, E, A>() => Semigroup<Kind<F, R, O, E, A>>
 ```
 
 Added in v1.0.0

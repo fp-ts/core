@@ -96,7 +96,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Applicative: any
+export declare const Applicative: applicative.Applicative<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -106,7 +106,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Chainable: any
+export declare const Chainable: chainable.Chainable<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -116,7 +116,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Covariant: any
+export declare const Covariant: covariant.Covariant<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -126,7 +126,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FlatMap: any
+export declare const FlatMap: flatMap_.FlatMap<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -136,7 +136,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Foldable: any
+export declare const Foldable: foldable.Foldable<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -146,7 +146,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -156,7 +156,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Monad: any
+export declare const Monad: monad.Monad<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -166,7 +166,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Of: any
+export declare const Of: of_.Of<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -176,7 +176,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Pointed: any
+export declare const Pointed: pointed.Pointed<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -186,7 +186,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product_.Product<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -196,7 +196,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiApplicative: any
+export declare const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -206,7 +206,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -216,7 +216,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Traversable: any
+export declare const Traversable: traversable.Traversable<IdentityTypeLambda>
 ```
 
 Added in v1.0.0
@@ -226,7 +226,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemiAlternative: <A>(S: any) => any
+export declare const getSemiAlternative: <A>(
+  S: Semigroup<A>
+) => semiAlternative.SemiAlternative<IdentityTypeLambdaFix<A>>
 ```
 
 Added in v1.0.0
@@ -236,7 +238,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemiCoproduct: <A>(S: any) => any
+export declare const getSemiCoproduct: <A>(S: Semigroup<A>) => semiCoproduct.SemiCoproduct<IdentityTypeLambdaFix<A>>
 ```
 
 Added in v1.0.0
