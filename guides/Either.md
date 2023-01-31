@@ -75,6 +75,7 @@ The `fromOption` function requires an argument because it needs to know what val
 | `toRefinement` | `A => Either<E, B>`                  | `Refinement<A, B>` |
 | `fromIterable` | `Iterable<A>`, `onEmpty: LazyArg<E>` | `Either<E, A>`     |
 | `fromOption`   | `Option<A>`, `onNone: LazyArg<E>`    | `Either<E, A>`     |
+| `toOption`     | `Either<E, A>`                       | `Option<A>`        |
 
 # Working with `Either`
 

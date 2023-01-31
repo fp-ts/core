@@ -31,6 +31,7 @@ Added in v1.0.0
 - [conversions](#conversions)
   - [fromIterable](#fromiterable)
   - [fromOption](#fromoption)
+  - [toOption](#tooption)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
   - [inspectLeft](#inspectleft)
@@ -351,6 +352,28 @@ assert.deepStrictEqual(
   ),
   E.left('error')
 )
+```
+
+Added in v1.0.0
+
+## toOption
+
+Converts a `Either` to an `Option` discarding the error.
+
+**Signature**
+
+```ts
+export declare const toOption: <E, A>(self: Either<E, A>) => Option<A>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.toOption(E.right(1)), O.some(1))
+assert.deepStrictEqual(E.toOption(E.left('a')), O.none())
 ```
 
 Added in v1.0.0
