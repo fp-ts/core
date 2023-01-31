@@ -18,7 +18,7 @@ Added in v1.0.0
   - [SemiProduct (interface)](#semiproduct-interface)
 - [utils](#utils)
   - [andThenBind](#andthenbind)
-  - [element](#element)
+  - [appendElement](#appendelement)
   - [nonEmptyStruct](#nonemptystruct)
   - [nonEmptyTuple](#nonemptytuple)
   - [productComposition](#productcomposition)
@@ -82,14 +82,14 @@ export declare const andThenBind: <F extends any>(
 
 Added in v1.0.0
 
-## element
+## appendElement
 
-Adds an element to the end of a tuple.
+Appends an element to the end of a tuple.
 
 **Signature**
 
 ```ts
-export declare const element: <F extends any>(
+export declare const appendElement: <F extends any>(
   F: SemiProduct<F>
 ) => <R2, O2, E2, B>(that: any) => <R1, O1, E1, A extends readonly any[]>(self: any) => any
 ```

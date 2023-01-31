@@ -114,11 +114,11 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
       )
 
 /**
- * Adds an element to the end of a tuple.
+ * Appends an element to the end of a tuple.
  *
  * @since 1.0.0
  */
-export const element = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <R2, O2, E2, B>(
     that: Kind<F, R2, O2, E2, B>
   ) =>

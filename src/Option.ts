@@ -819,14 +819,14 @@ export const andThenBind: <N extends string, A extends object, B>(
   .andThenBind(SemiProduct)
 
 /**
- * Adds an element to the end of a tuple.
+ * Appends an element to the end of a tuple.
  *
  * @since 1.0.0
  */
-export const element: <B>(
+export const appendElement: <B>(
   fb: Option<B>
 ) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<[...A, B]> = semiProduct
-  .element(SemiProduct)
+  .appendElement(SemiProduct)
 
 const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
   const out: Array<A> = []

@@ -43,9 +43,9 @@ Added in v1.0.0
   - [and](#and)
   - [andThenBind](#andthenbind)
   - [any](#any)
+  - [appendElement](#appendelement)
   - [compose](#compose)
   - [contramap](#contramap)
-  - [element](#element)
   - [not](#not)
   - [of](#of)
   - [or](#or)
@@ -321,6 +321,20 @@ export declare const any: <A>(collection: Iterable<Predicate<A>>) => Predicate<A
 
 Added in v1.0.0
 
+## appendElement
+
+Appends an element to the end of a tuple.
+
+**Signature**
+
+```ts
+export declare const appendElement: <B>(
+  that: Predicate<B>
+) => <A extends readonly any[]>(self: Predicate<A>) => Predicate<readonly [...A, B]>
+```
+
+Added in v1.0.0
+
 ## compose
 
 **Signature**
@@ -339,20 +353,6 @@ Added in v1.0.0
 
 ```ts
 export declare const contramap: <B, A>(f: (b: B) => A) => (self: Predicate<A>) => Predicate<B>
-```
-
-Added in v1.0.0
-
-## element
-
-Adds an element to the end of a tuple.
-
-**Signature**
-
-```ts
-export declare const element: <B>(
-  that: Predicate<B>
-) => <A extends readonly any[]>(self: Predicate<A>) => Predicate<readonly [...A, B]>
 ```
 
 Added in v1.0.0

@@ -119,9 +119,9 @@ Added in v1.0.0
 - [utils](#utils)
   - [andThen](#andthen)
   - [ap](#ap)
+  - [appendElement](#appendelement)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
-  - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
   - [reverse](#reverse)
@@ -1316,6 +1316,20 @@ export declare const ap: <E2, A>(fa: Either<E2, A>) => <E1, B>(self: Either<E1, 
 
 Added in v1.0.0
 
+## appendElement
+
+Appends an element to the end of a tuple.
+
+**Signature**
+
+```ts
+export declare const appendElement: <E2, B>(
+  that: Either<E2, B>
+) => <E1, A extends readonly any[]>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
+```
+
+Added in v1.0.0
+
 ## composeKleisliArrow
 
 **Signature**
@@ -1336,20 +1350,6 @@ Returns a function that checks if an `Either` contains a given value using a pro
 
 ```ts
 export declare const contains: <A>(equivalence: any) => (a: A) => <E>(self: Either<E, A>) => boolean
-```
-
-Added in v1.0.0
-
-## element
-
-Adds an element to the end of a tuple.
-
-**Signature**
-
-```ts
-export declare const element: <E2, B>(
-  that: Either<E2, B>
-) => <E1, A extends readonly any[]>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
 ```
 
 Added in v1.0.0

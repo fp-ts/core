@@ -218,13 +218,13 @@ export const andThenBind: <N extends string, A extends object, B>(
   )
 
 /**
- * Adds an element to the end of a tuple.
+ * Appends an element to the end of a tuple.
  *
  * @since 1.0.0
  */
-export const element: <B>(that: Predicate<B>) => <A extends ReadonlyArray<any>>(
+export const appendElement: <B>(that: Predicate<B>) => <A extends ReadonlyArray<any>>(
   self: Predicate<A>
-) => Predicate<readonly [...A, B]> = semiProduct.element(SemiProduct) as any
+) => Predicate<readonly [...A, B]> = semiProduct.appendElement(SemiProduct) as any
 
 /**
  * @since 1.0.0

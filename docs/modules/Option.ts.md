@@ -118,9 +118,9 @@ Added in v1.0.0
 - [utils](#utils)
   - [andThen](#andthen)
   - [ap](#ap)
+  - [appendElement](#appendelement)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
-  - [element](#element)
   - [exists](#exists)
   - [flatten](#flatten)
   - [of](#of)
@@ -1519,6 +1519,20 @@ export declare const ap: <A>(fa: Option<A>) => <B>(self: Option<(a: A) => B>) =>
 
 Added in v1.0.0
 
+## appendElement
+
+Appends an element to the end of a tuple.
+
+**Signature**
+
+```ts
+export declare const appendElement: <B>(
+  fb: Option<B>
+) => <A extends readonly unknown[]>(self: Option<A>) => Option<[...A, B]>
+```
+
+Added in v1.0.0
+
 ## composeKleisliArrow
 
 **Signature**
@@ -1551,18 +1565,6 @@ import { pipe } from '@fp-ts/core/Function'
 assert.deepStrictEqual(pipe(some(2), contains(Equivalence)(2)), true)
 assert.deepStrictEqual(pipe(some(1), contains(Equivalence)(2)), false)
 assert.deepStrictEqual(pipe(none(), contains(Equivalence)(2)), false)
-```
-
-Added in v1.0.0
-
-## element
-
-Adds an element to the end of a tuple.
-
-**Signature**
-
-```ts
-export declare const element: <B>(fb: Option<B>) => <A extends readonly unknown[]>(self: Option<A>) => Option<[...A, B]>
 ```
 
 Added in v1.0.0

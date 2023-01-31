@@ -174,6 +174,7 @@ export const booleanAny: Semigroup<boolean> = {
 /**
  * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
  * The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
+ *
  * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
  *
  * @category combinators

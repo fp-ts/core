@@ -1092,16 +1092,16 @@ export const andThenBindThese = <N extends string, A extends object, E2, B>(
   andThenBind(name, fromThese(that))
 
 /**
- * Adds an element to the end of a tuple.
+ * Appends an element to the end of a tuple.
  *
  * @since 1.0.0
  */
-export const element: <E2, B>(
+export const appendElement: <E2, B>(
   that: Validated<E2, B>
 ) => <E1, A extends ReadonlyArray<any>>(
   self: Validated<E1, A>
 ) => Validated<E1 | E2, [...A, B]> = semiProduct
-  .element(SemiProduct)
+  .appendElement(SemiProduct)
 
 /**
  * @category instances
