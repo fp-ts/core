@@ -41,7 +41,8 @@
       "@fp-ts/core/test/*": ["./test/*"],
       "@fp-ts/core/examples/*": ["./examples/*"],
       "@fp-ts/core/*": ["./src/*"]
-    }
+    },
+    "plugins": [{ "name": "@effect/language-service" }]
   },
   "include": [],
   "exclude": ["node_modules", "build", "lib"]
