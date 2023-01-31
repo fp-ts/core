@@ -70,12 +70,14 @@ The `fromOption` function requires an argument because it needs to know what val
 
 **Cheat sheet** (conversions)
 
-| Name           | Given                                | To                 |
-| -------------- | ------------------------------------ | ------------------ |
-| `toRefinement` | `A => Either<E, B>`                  | `Refinement<A, B>` |
-| `fromIterable` | `Iterable<A>`, `onEmpty: LazyArg<E>` | `Either<E, A>`     |
-| `fromOption`   | `Option<A>`, `onNone: LazyArg<E>`    | `Either<E, A>`     |
-| `toOption`     | `Either<E, A>`                       | `Option<A>`        |
+| Name           | Given                                | To                 | Note                |
+| -------------- | ------------------------------------ | ------------------ | ------------------- |
+| `toRefinement` | `A => Either<E, B>`                  | `Refinement<A, B>` |                     |
+| `fromIterable` | `Iterable<A>`, `onEmpty: LazyArg<E>` | `Either<E, A>`     |                     |
+| `fromOption`   | `Option<A>`, `onNone: LazyArg<E>`    | `Either<E, A>`     |                     |
+| `toOption`     | `Either<E, A>`                       | `Option<A>`        |                     |
+| `getRight`     | `Either<E, A>`                       | `Option<A>`        | alias of `toOption` |
+| `getLeft`      | `Either<E, A>`                       | `Option<E>`        |                     |
 
 # Working with `Either`
 

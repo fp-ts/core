@@ -7,7 +7,11 @@ import * as String from "@fp-ts/core/String"
 import * as Util from "@fp-ts/core/test/util"
 
 describe.concurrent("Either", () => {
-  it("instances and derived exports", () => {
+  it("exports", () => {
+    expect(_.toOption).exist
+    expect(_.getRight).exist
+    expect(_.getLeft).exist
+
     expect(_.Invariant).exist
     expect(_.tupled).exist
     expect(_.bindTo).exist

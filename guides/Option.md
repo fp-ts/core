@@ -88,12 +88,14 @@ In this way you don't need to specify the type of the variables `optionNumber`, 
 
 **Cheat sheet** (conversions)
 
-| Name           | Given                             | To                 |
-| -------------- | --------------------------------- | ------------------ |
-| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>` |
-| `fromIterable` | `Iterable<A>`                     | `Option<A>`        |
-| `fromEither`   | `Either<E, A>`                    | `Option<A>`        |
-| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`     |
+| Name           | Given                             | To                 | Note                  |
+| -------------- | --------------------------------- | ------------------ | --------------------- |
+| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>` |                       |
+| `fromIterable` | `Iterable<A>`                     | `Option<A>`        |                       |
+| `fromEither`   | `Either<E, A>`                    | `Option<A>`        |                       |
+| `getRight`     | `Either<E, A>`                    | `Option<A>`        | alias of `fromEither` |
+| `getLeft`      | `Either<E, A>`                    | `Option<E>`        |                       |
+| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`     |                       |
 
 # Modeling optional properties with `Option`
 

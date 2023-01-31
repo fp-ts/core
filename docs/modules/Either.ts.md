@@ -31,6 +31,8 @@ Added in v1.0.0
 - [conversions](#conversions)
   - [fromIterable](#fromiterable)
   - [fromOption](#fromoption)
+  - [getLeft](#getleft)
+  - [getRight](#getright)
   - [toOption](#tooption)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -54,11 +56,9 @@ Added in v1.0.0
   - [filter](#filter)
   - [filterMap](#filtermap)
 - [getters](#getters)
-  - [getLeft](#getleft)
   - [getOrElse](#getorelse)
   - [getOrNull](#getornull)
   - [getOrUndefined](#getorundefined)
-  - [getRight](#getright)
   - [merge](#merge)
 - [guards](#guards)
   - [isEither](#iseither)
@@ -356,6 +356,52 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
+## getLeft
+
+Converts a `Either` to an `Option` discarding the value.
+
+**Signature**
+
+```ts
+export declare const getLeft: <E, A>(self: Either<E, A>) => Option<E>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.getLeft(E.right('ok')), O.none())
+assert.deepStrictEqual(E.getLeft(E.left('err')), O.some('err'))
+```
+
+Added in v1.0.0
+
+## getRight
+
+Converts a `Either` to an `Option` discarding the error.
+
+Alias of `toOption`.
+
+**Signature**
+
+```ts
+export declare const getRight: <E, A>(self: Either<E, A>) => Option<A>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.getRight(E.right('ok')), O.some('ok'))
+assert.deepStrictEqual(E.getRight(E.left('err')), O.none())
+```
+
+Added in v1.0.0
+
 ## toOption
 
 Converts a `Either` to an `Option` discarding the error.
@@ -609,28 +655,6 @@ Added in v1.0.0
 
 # getters
 
-## getLeft
-
-Converts a `Either` to an `Option` discarding the Right.
-
-**Signature**
-
-```ts
-export declare const getLeft: <E, A>(self: Either<E, A>) => Option<E>
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-import * as E from '@fp-ts/core/Either'
-
-assert.deepStrictEqual(E.getLeft(E.right('ok')), O.none())
-assert.deepStrictEqual(E.getLeft(E.left('err')), O.some('err'))
-```
-
-Added in v1.0.0
-
 ## getOrElse
 
 Returns the wrapped value if it's a `Right` or a default value if is a `Left`.
@@ -678,28 +702,6 @@ Added in v1.0.0
 
 ```ts
 export declare const getOrUndefined: <E, A>(self: Either<E, A>) => A | undefined
-```
-
-Added in v1.0.0
-
-## getRight
-
-Converts a `Either` to an `Option` discarding the error.
-
-**Signature**
-
-```ts
-export declare const getRight: <E, A>(self: Either<E, A>) => Option<A>
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-import * as E from '@fp-ts/core/Either'
-
-assert.deepStrictEqual(E.getRight(E.right('ok')), O.some('ok'))
-assert.deepStrictEqual(E.getRight(E.left('err')), O.none())
 ```
 
 Added in v1.0.0

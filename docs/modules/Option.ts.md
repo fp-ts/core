@@ -31,6 +31,8 @@ Added in v1.0.0
 - [conversions](#conversions)
   - [fromEither](#fromeither)
   - [fromIterable](#fromiterable)
+  - [getLeft](#getleft)
+  - [getRight](#getright)
   - [toEither](#toeither)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -350,6 +352,52 @@ import { fromIterable, some, none } from '@fp-ts/core/Option'
 const collection = [1, 2, 3]
 assert.deepStrictEqual(fromIterable(collection), some(1))
 assert.deepStrictEqual(fromIterable([]), none())
+```
+
+Added in v1.0.0
+
+## getLeft
+
+Converts a `Either` to an `Option` discarding the value.
+
+**Signature**
+
+```ts
+export declare const getLeft: <E, A>(self: Either<E, A>) => Option<E>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(O.getLeft(E.right('ok')), O.none())
+assert.deepStrictEqual(O.getLeft(E.left('err')), O.some('err'))
+```
+
+Added in v1.0.0
+
+## getRight
+
+Converts a `Either` to an `Option` discarding the error.
+
+Alias of `fromEither`.
+
+**Signature**
+
+```ts
+export declare const getRight: <E, A>(self: Either<E, A>) => Option<A>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(O.getRight(E.right('ok')), O.some('ok'))
+assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
 ```
 
 Added in v1.0.0

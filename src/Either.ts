@@ -174,6 +174,38 @@ export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
 export const toOption: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
 
 /**
+ * Converts a `Either` to an `Option` discarding the error.
+ *
+ * Alias of `toOption`.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(E.getRight(E.right('ok')), O.some('ok'))
+ * assert.deepStrictEqual(E.getRight(E.left('err')), O.none())
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const getRight: <E, A>(self: Either<E, A>) => Option<A> = toOption
+
+/**
+ * Converts a `Either` to an `Option` discarding the value.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(E.getLeft(E.right('ok')), O.none())
+ * assert.deepStrictEqual(E.getLeft(E.left('err')), O.some('err'))
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
+
+/**
  * @example
  * import * as E from '@fp-ts/core/Either'
  * import { pipe } from '@fp-ts/core/Function'
@@ -1025,36 +1057,6 @@ export const tapError = <E1, E2, _>(
     const out = onLeft(self.left)
     return isLeft(out) ? out : self
   }
-
-/**
- * Converts a `Either` to an `Option` discarding the Right.
- *
- * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
- *
- * assert.deepStrictEqual(E.getLeft(E.right('ok')), O.none())
- * assert.deepStrictEqual(E.getLeft(E.left('err')), O.some('err'))
- *
- * @category getters
- * @since 1.0.0
- */
-export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
-
-/**
- * Converts a `Either` to an `Option` discarding the error.
- *
- * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
- *
- * assert.deepStrictEqual(E.getRight(E.right('ok')), O.some('ok'))
- * assert.deepStrictEqual(E.getRight(E.left('err')), O.none())
- *
- * @category getters
- * @since 1.0.0
- */
-export const getRight: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
 
 /**
  * @category getters
