@@ -39,7 +39,7 @@ import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
 // -------------------------------------------------------------------------------------
-// model
+// models
 // -------------------------------------------------------------------------------------
 
 /**
@@ -99,6 +99,14 @@ export const none = <A = never>(): Option<A> => option.none
  * @since 1.0.0
  */
 export const some: <A>(value: A) => Option<A> = option.some
+
+/**
+ * Alias of `some`.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const of: <A>(a: A) => Option<A> = some
 
 // -------------------------------------------------------------------------------------
 // guards
@@ -378,7 +386,7 @@ export const fromNullable = <A>(
  * assert.deepStrictEqual(parseOption('1'), some(1))
  * assert.deepStrictEqual(parseOption('not a number'), none())
  *
- * @category lifting
+ * @category interop
  * @since 1.0.0
  */
 export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
@@ -607,11 +615,6 @@ export const as: <B>(b: B) => <_>(self: Option<_>) => Option<B> = covariant.as(C
 export const asUnit: <_>(self: Option<_>) => Option<void> = covariant.asUnit(Covariant)
 
 /**
- * @since 1.0.0
- */
-export const of: <A>(a: A) => Option<A> = some
-
-/**
  * @category instances
  * @since 1.0.0
  */
@@ -726,6 +729,10 @@ export const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>) => Opt
 export const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<A> = chainable.tap(
   Chainable
 )
+
+// -------------------------------------------------------------------------------------
+// debugging
+// -------------------------------------------------------------------------------------
 
 /**
  * Useful for debugging purposes, the `onSome` callback is called with the value of `self` if it is a `Some`.

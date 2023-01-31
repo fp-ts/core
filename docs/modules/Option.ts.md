@@ -26,6 +26,7 @@ Added in v1.0.0
   - [tap](#tap)
 - [constructors](#constructors)
   - [none](#none)
+  - [of](#of)
   - [some](#some)
 - [conversions](#conversions)
   - [fromEither](#fromeither)
@@ -82,12 +83,12 @@ Added in v1.0.0
   - [getOrNull](#getornull)
   - [getOrThrow](#getorthrow)
   - [getOrUndefined](#getorundefined)
+  - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [getOptionalMonoid](#getoptionalmonoid)
   - [lift2](#lift2)
   - [liftEither](#lifteither)
-  - [liftNullable](#liftnullable)
   - [liftPredicate](#liftpredicate)
 - [mapping](#mapping)
   - [as](#as)
@@ -123,7 +124,6 @@ Added in v1.0.0
   - [contains](#contains)
   - [exists](#exists)
   - [flatten](#flatten)
-  - [of](#of)
   - [reduceAll](#reduceall)
   - [struct](#struct)
   - [toArray](#toarray)
@@ -277,6 +277,18 @@ It returns a new `Option` object that does not contain any value.
 
 ```ts
 export declare const none: <A = never>() => Option<A>
+```
+
+Added in v1.0.0
+
+## of
+
+Alias of `some`.
+
+**Signature**
+
+```ts
+export declare const of: <A>(a: A) => Option<A>
 ```
 
 Added in v1.0.0
@@ -1017,6 +1029,36 @@ assert.deepStrictEqual(pipe(none(), getOrUndefined), undefined)
 
 Added in v1.0.0
 
+## liftNullable
+
+This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.
+
+**Signature**
+
+```ts
+export declare const liftNullable: <A extends readonly unknown[], B>(
+  f: (...a: A) => B | null | undefined
+) => (...a: A) => Option<NonNullable<B>>
+```
+
+**Example**
+
+```ts
+import { liftNullable, none, some } from '@fp-ts/core/Option'
+
+const parse = (s: string): number | undefined => {
+  const n = parseFloat(s)
+  return isNaN(n) ? undefined : n
+}
+
+const parseOption = liftNullable(parse)
+
+assert.deepStrictEqual(parseOption('1'), some(1))
+assert.deepStrictEqual(parseOption('not a number'), none())
+```
+
+Added in v1.0.0
+
 ## liftThrowable
 
 A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
@@ -1109,36 +1151,6 @@ const parseNumber = O.liftEither(parse)
 
 assert.deepEqual(parseNumber('12'), O.some(12))
 assert.deepEqual(parseNumber('not a number'), O.none())
-```
-
-Added in v1.0.0
-
-## liftNullable
-
-This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.
-
-**Signature**
-
-```ts
-export declare const liftNullable: <A extends readonly unknown[], B>(
-  f: (...a: A) => B | null | undefined
-) => (...a: A) => Option<NonNullable<B>>
-```
-
-**Example**
-
-```ts
-import { liftNullable, none, some } from '@fp-ts/core/Option'
-
-const parse = (s: string): number | undefined => {
-  const n = parseFloat(s)
-  return isNaN(n) ? undefined : n
-}
-
-const parseOption = liftNullable(parse)
-
-assert.deepStrictEqual(parseOption('1'), some(1))
-assert.deepStrictEqual(parseOption('not a number'), none())
 ```
 
 Added in v1.0.0
@@ -1606,16 +1618,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
-```
-
-Added in v1.0.0
-
-## of
-
-**Signature**
-
-```ts
-export declare const of: <A>(a: A) => Option<A>
 ```
 
 Added in v1.0.0

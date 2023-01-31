@@ -84,6 +84,17 @@ const optionBoolean = none<boolean>();
 
 In this way you don't need to specify the type of the variables `optionNumber`, `optionString`, `optionBoolean` because TypeScript infers the type from the call site.
 
+# Conversions
+
+**Cheat sheet** (conversions)
+
+| Name           | Given                             | To                 |
+| -------------- | --------------------------------- | ------------------ |
+| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>` |
+| `fromIterable` | `Iterable<A>`                     | `Option<A>`        |
+| `fromEither`   | `Either<E, A>`                    | `Option<A>`        |
+| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`     |
+
 # Modeling optional properties with `Option`
 
 Here is an example of a `User` model where the `email` field is of type `Option<string>`. This means that the value of the `email` field may or may not be present and will be of type `string` when it is present.
