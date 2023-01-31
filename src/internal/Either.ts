@@ -3,6 +3,7 @@
  */
 
 import type { Either, Left, Right } from "@fp-ts/core/Either"
+import { dual } from "@fp-ts/core/Function"
 import { proto } from "@fp-ts/core/internal/effect"
 import * as option from "@fp-ts/core/internal/Option"
 import type { Option } from "@fp-ts/core/Option"
@@ -32,5 +33,11 @@ export const getRight = <E, A>(
 ): Option<A> => (isLeft(self) ? option.none : option.some(self.right))
 
 /** @internal */
-export const fromOption = <E>(onNone: () => E) =>
-  <A>(fa: Option<A>): Either<E, A> => option.isNone(fa) ? left(onNone()) : right(fa.value)
+export const fromOption = dual<
+  <A, E>(fa: Option<A>, onNone: () => E) => Either<E, A>,
+  <E>(onNone: () => E) => <A>(fa: Option<A>) => Either<E, A>
+>(
+  2,
+  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A> =>
+    option.isNone(fa) ? left(onNone()) : right(fa.value)
+)

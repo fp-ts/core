@@ -328,7 +328,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A>
+export declare const fromOption: {
+  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A>
+  <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
+}
 ```
 
 **Example**
@@ -961,7 +964,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getOrThrow: <E>(onLeft?: (e: E) => Error) => <A>(self: Either<E, A>) => A
+export declare const getOrThrow: <E, A>(self: Either<E, A>) => A
 ```
 
 Added in v1.0.0

@@ -409,7 +409,10 @@ Converts an `Option` to an `Either`, allowing you to provide a value to be used 
 **Signature**
 
 ```ts
-export declare const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A>
+export declare const toEither: {
+  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A>
+  <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
+}
 ```
 
 **Example**
@@ -549,7 +552,10 @@ Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
 **Signature**
 
 ```ts
-export declare const getOrElse: <B>(onNone: LazyArg<B>) => <A>(self: Option<A>) => B | A
+export declare const getOrElse: {
+  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
+  <B>(onNone: LazyArg<B>): <A>(self: Option<A>) => B | A
+}
 ```
 
 **Example**
@@ -583,7 +589,10 @@ Returns the provided `Option` `that` if `self` is `None`, otherwise returns `sel
 **Signature**
 
 ```ts
-export declare const orElse: <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<B | A>
+export declare const orElse: {
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
+  <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<B | A>
+}
 ```
 
 **Example**
@@ -634,7 +643,10 @@ This is useful when it's important to know whether the value was retrieved from 
 **Signature**
 
 ```ts
-export declare const orElseEither: <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<Either<A, B>>
+export declare const orElseEither: {
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
+  <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<Either<A, B>>
+}
 ```
 
 Added in v1.0.0
@@ -1040,7 +1052,7 @@ Returns the contained value if the `Option` is `Some`, otherwise throws an error
 **Signature**
 
 ```ts
-export declare const getOrThrow: (onNone?: LazyArg<Error>) => <A>(self: Option<A>) => A
+export declare const getOrThrow: <A>(self: Option<A>) => A
 ```
 
 **Example**
@@ -1049,8 +1061,8 @@ export declare const getOrThrow: (onNone?: LazyArg<Error>) => <A>(self: Option<A
 import { pipe } from '@fp-ts/core/Function'
 import * as O from '@fp-ts/core/Option'
 
-assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow()), 1)
-assert.throws(() => pipe(O.none(), O.getOrThrow()))
+assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow), 1)
+assert.throws(() => pipe(O.none(), O.getOrThrow))
 ```
 
 Added in v1.0.0
@@ -1274,7 +1286,10 @@ Maps the given function to the value of the `Option` if it is a `Some`, otherwis
 **Signature**
 
 ```ts
-export declare const map: <A, B>(f: (a: A) => B) => (self: Option<A>) => Option<B>
+export declare const map: {
+  <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
+  <A, B>(f: (a: A) => B): (self: Option<A>) => Option<B>
+}
 ```
 
 Added in v1.0.0
@@ -1434,9 +1449,10 @@ This is `flatMap` + `fromNullable`, useful when working with optional values.
 **Signature**
 
 ```ts
-export declare const flatMapNullable: <A, B>(
-  f: (a: A) => B | null | undefined
-) => (self: Option<A>) => Option<NonNullable<B>>
+export declare const flatMapNullable: {
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
+  <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
+}
 ```
 
 **Example**

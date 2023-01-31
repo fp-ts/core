@@ -183,7 +183,7 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 | Name             | Given                                               | To               |
 | ---------------- | --------------------------------------------------- | ---------------- |
 | `match`          | `Either<E, A>`, `onLeft: E => B`, `onRight: A => C` | `B \| C`         |
-| `getOrThrow`     | `Either<E, A>`, `onLeft?: E => Error`               | `A`              |
+| `getOrThrow`     | `Either<E, A>`                                      | `A`              |
 | `getOrNull`      | `Either<E, A>`                                      | `A \| null`      |
 | `getOrUndefined` | `Either<E, A>`                                      | `A \| undefined` |
 | `getOrElse`      | `Either<E, A>`, `onLeft: E => B`                    | `A \| B`         |
@@ -202,7 +202,7 @@ console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 
 **Cheat sheet** (interop - throwing)
 
-| Name            | Given                                     | To                       |
-| --------------- | ----------------------------------------- | ------------------------ |
-| `liftThrowable` | `(...a: A) => B` (may throw)              | `(...a: A) => Option<B>` |
-| `getOrThrow`    | `Either<E, A>`, `onNone?: LazyArg<Error>` | `A`                      |
+| Name            | Given                        | To                       |
+| --------------- | ---------------------------- | ------------------------ |
+| `liftThrowable` | `(...a: A) => B` (may throw) | `(...a: A) => Option<B>` |
+| `getOrThrow`    | `Either<E, A>`               | `A`                      |

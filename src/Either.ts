@@ -217,8 +217,10 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
  * @category conversions
  * @since 1.0.0
  */
-export const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A> =
-  either.fromOption
+export const fromOption: {
+  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A>
+  <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
+} = either.fromOption
 
 /**
  * Returns an effect whose Right is mapped by the specified `f` function.
@@ -873,15 +875,12 @@ export const flatMapNullable = <A, B, E2>(
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <E>(
-  onLeft: (e: E) => Error = () => new Error("getOrThrow called on a Left")
-) =>
-  <A>(self: Either<E, A>): A => {
-    if (isRight(self)) {
-      return self.right
-    }
-    throw onLeft(self.left)
+export const getOrThrow = <E, A>(self: Either<E, A>): A => {
+  if (isRight(self)) {
+    return self.right
   }
+  throw new Error("getOrThrow called on a Left")
+}
 
 /**
  * Lifts a function that may throw to one returning a `Either`.
