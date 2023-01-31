@@ -73,7 +73,7 @@ export const symbol: Equivalence<symbol> = strict()
  * Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
  * by applying each `Equivalence` to the corresponding element of the tuple.
  *
- * @category constructors
+ * @category combinators
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<any>>(
@@ -86,7 +86,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * The returned `Equivalence` compares arrays by first checking their length and then applying the provided `Equivalence` to each element.
  * If all comparisons return true, the arrays are considered equal.
  *
- * @category constructors
+ * @category combinators
  * @since 1.0.0
  */
 export const array = <A>(
@@ -98,7 +98,7 @@ export const array = <A>(
  * Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct
  * by applying each `Equivalence` to the corresponding property of the struct.
  *
- * @category constructors
+ * @category combinators
  * @since 1.0.0
  */
 export const struct = <A>(
@@ -118,7 +118,7 @@ export const struct = <A>(
  * The returned `Equivalence` compares records by first checking their number of keys and then applying the provided `Equivalence` to each value.
  * If all comparisons return true, the records are considered equal.
  *
- * @category constructors
+ * @category combinators
  * @since 1.0.0
  */
 export const record = <A>(
@@ -139,7 +139,7 @@ export const record = <A>(
 
 /**
  * @category instances
- * @since 2.10.0
+ * @since 1.0.0
  */
 export const getSemigroup = <A>(): Semigroup<Equivalence<A>> => ({
   combine: (self, that) => (x, y) => self(x, y) && that(x, y),
@@ -161,7 +161,7 @@ const empty: Equivalence<unknown> = () => true
 
 /**
  * @category instances
- * @since 2.6.0
+ * @since 1.0.0
  */
 export const getMonoid = <A>(): Monoid<Equivalence<A>> =>
   monoid.fromSemigroup(getSemigroup<A>(), empty)

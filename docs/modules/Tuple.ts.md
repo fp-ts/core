@@ -14,31 +14,19 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [tuple](#tuple)
-- [instances](#instances)
+- [combinators](#combinators)
   - [getEquivalence](#getequivalence)
   - [getMonoid](#getmonoid)
   - [getOrder](#getorder)
   - [getSemigroup](#getsemigroup)
+- [constructors](#constructors)
+  - [tuple](#tuple)
 - [utils](#utils)
   - [appendElement](#appendelement)
 
 ---
 
-# constructors
-
-## tuple
-
-**Signature**
-
-```ts
-export declare const tuple: <A extends readonly any[]>(...elements: A) => A
-```
-
-Added in v1.0.0
-
-# instances
+# combinators
 
 ## getEquivalence
 
@@ -96,6 +84,18 @@ It is useful when you need to combine two tuples of the same type and you have a
 
 ```ts
 export declare const getSemigroup: any
+```
+
+Added in v1.0.0
+
+# constructors
+
+## tuple
+
+**Signature**
+
+```ts
+export declare const tuple: <A extends readonly any[]>(...elements: A) => A
 ```
 
 Added in v1.0.0

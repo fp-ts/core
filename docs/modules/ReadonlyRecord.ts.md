@@ -14,6 +14,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [fromIterable](#fromiterable)
 - [getters](#getters)
   - [get](#get)
 - [models](#models)
@@ -25,6 +27,34 @@ Added in v1.0.0
   - [replaceOption](#replaceoption)
 
 ---
+
+# constructors
+
+## fromIterable
+
+Takes an iterable and a projection function, `f`, and returns a record.
+The projection function maps each value of the iterable to a tuple of a key and a value, which is then added to the resulting record.
+
+**Signature**
+
+```ts
+export declare const fromIterable: <A, B>(iterable: Iterable<A>, f: (a: A) => readonly [string, B]) => Record<string, B>
+```
+
+**Example**
+
+```ts
+import { fromIterable } from '@fp-ts/core/ReadonlyRecord'
+
+const input = [1, 2, 3, 4]
+
+assert.deepStrictEqual(
+  fromIterable(input, (a) => [String(a), a * 2]),
+  { '1': 2, '2': 4, '3': 6, '4': 8 }
+)
+```
+
+Added in v1.0.0
 
 # getters
 

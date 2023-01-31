@@ -1103,7 +1103,7 @@ export const exists = <A>(predicate: Predicate<A>) =>
  * while elements that are `Right` are combined using the provided `Semigroup`.
  *
  * @category instances
- * @since 2.0.0
+ * @since 1.0.0
  */
 export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E, A>> =>
   semigroup.fromCombine((

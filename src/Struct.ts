@@ -6,9 +6,7 @@
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
-import * as product_ from "@fp-ts/core/typeclass/Product"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * Create a new object by picking properties of an existing object.
@@ -43,31 +41,51 @@ export const omit = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
   }
 
 /**
+ * Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct
+ * by applying each `Equivalence` to the corresponding property of the struct.
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const getEquivalence = equivalence.struct
 
 /**
+ * This function creates and returns a new `Order` for a struct of values based on the given `Order`s
+ * for each property in the struct.
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const getOrder = order.struct
 
 /**
+ * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
+ * The returned `Semigroup` combines two structs of the same type by applying the corresponding `Semigroup` passed as arguments to each property in the struct.
+ *
+ * It is useful when you need to combine two structs of the same type and you have a specific way of combining each property of the struct.
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const getSemigroup = semigroup.struct
 
 /**
+ * This function creates and returns a new `Monoid` for a struct of values based on the given `Monoid`s for each property in the struct.
+ * The returned `Monoid` combines two structs of the same type by applying the corresponding `Monoid` passed as arguments to each property in the struct.
+ *
+ * The `empty` value of the returned `Monoid` is a struct where each property is the `empty` value of the corresponding `Monoid` in the input `monoids` object.
+ *
+ * It is useful when you need to combine two structs of the same type and you have a specific way of combining each property of the struct.
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const getMonoid = monoid.struct
 
-/**
- * @since 1.0.0
- */
-export const nonEmptyProduct = semiProduct.nonEmptyStruct
+/*
 
-/**
- * @since 1.0.0
- */
-export const product = product_.struct
+  TODO:
+
+  - at
+
+*/

@@ -928,7 +928,7 @@ while elements that are `Right` are combined using the provided `Semigroup`.
 export declare const getOptionalSemigroup: <E, A>(S: any) => any
 ```
 
-Added in v2.0.0
+Added in v1.0.0
 
 # interop
 

@@ -17,13 +17,13 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
-  - [contramap](#contramap)
-- [constructors](#constructors)
   - [array](#array)
+  - [contramap](#contramap)
   - [record](#record)
-  - [strict](#strict)
   - [struct](#struct)
   - [tuple](#tuple)
+- [constructors](#constructors)
+  - [strict](#strict)
 - [instances](#instances)
   - [Contravariant](#contravariant)
   - [Invariant](#invariant)
@@ -45,18 +45,6 @@ Added in v1.0.0
 
 # combinators
 
-## contramap
-
-**Signature**
-
-```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (self: Equivalence<A>) => Equivalence<B>
-```
-
-Added in v1.0.0
-
-# constructors
-
 ## array
 
 Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `ReadonlyArray<A>`.
@@ -71,6 +59,16 @@ export declare const array: <A>(equivalence: Equivalence<A>) => Equivalence<read
 
 Added in v1.0.0
 
+## contramap
+
+**Signature**
+
+```ts
+export declare const contramap: <B, A>(f: (b: B) => A) => (self: Equivalence<A>) => Equivalence<B>
+```
+
+Added in v1.0.0
+
 ## record
 
 Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `{ readonly [x: string]: A }`.
@@ -81,18 +79,6 @@ If all comparisons return true, the records are considered equal.
 
 ```ts
 export declare const record: <A>(equivalence: Equivalence<A>) => Equivalence<any>
-```
-
-Added in v1.0.0
-
-## strict
-
-Return an `Equivalence` that uses strict equality (===) to compare values
-
-**Signature**
-
-```ts
-export declare const strict: <A>() => Equivalence<A>
 ```
 
 Added in v1.0.0
@@ -123,6 +109,20 @@ by applying each `Equivalence` to the corresponding element of the tuple.
 export declare const tuple: <A extends readonly any[]>(
   ...equivalences: { readonly [K in keyof A]: Equivalence<A[K]> }
 ) => Equivalence<Readonly<A>>
+```
+
+Added in v1.0.0
+
+# constructors
+
+## strict
+
+Return an `Equivalence` that uses strict equality (===) to compare values
+
+**Signature**
+
+```ts
+export declare const strict: <A>() => Equivalence<A>
 ```
 
 Added in v1.0.0
@@ -197,7 +197,7 @@ Added in v1.0.0
 export declare const getMonoid: <A>() => any
 ```
 
-Added in v2.6.0
+Added in v1.0.0
 
 ## getSemigroup
 
@@ -207,7 +207,7 @@ Added in v2.6.0
 export declare const getSemigroup: <A>() => any
 ```
 
-Added in v2.10.0
+Added in v1.0.0
 
 ## number
 
