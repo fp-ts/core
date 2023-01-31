@@ -1942,9 +1942,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composeKleisliArrow: <B, C>(
-  bfc: (b: B) => readonly C[]
-) => <A>(afb: (a: A) => readonly B[]) => (a: A) => readonly C[]
+export declare const composeKleisliArrow: {
+  <A, B, C>(afb: (a: A) => readonly B[], bfc: (b: B) => readonly C[]): (a: A) => readonly C[]
+  <B, C>(bfc: (b: B) => readonly C[]): <A>(afb: (a: A) => readonly B[]) => (a: A) => readonly C[]
+}
 ```
 
 Added in v1.0.0

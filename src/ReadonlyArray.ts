@@ -1416,10 +1416,15 @@ export const flattenNonEmpty: <A>(
 /**
  * @since 1.0.0
  */
-export const composeKleisliArrow: <B, C>(
-  bfc: (b: B) => ReadonlyArray<C>
-) => <A>(afb: (a: A) => ReadonlyArray<B>) => (a: A) => ReadonlyArray<C> = flatMap_
-  .composeKleisliArrow(FlatMap)
+export const composeKleisliArrow: {
+  <A, B, C>(
+    afb: (a: A) => ReadonlyArray<B>,
+    bfc: (b: B) => ReadonlyArray<C>
+  ): (a: A) => ReadonlyArray<C>
+  <B, C>(
+    bfc: (b: B) => ReadonlyArray<C>
+  ): <A>(afb: (a: A) => ReadonlyArray<B>) => (a: A) => ReadonlyArray<C>
+} = flatMap_.composeKleisliArrow(FlatMap)
 
 /**
  * @category instances

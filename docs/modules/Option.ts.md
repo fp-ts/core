@@ -1632,7 +1632,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const andThen: <B>(that: Option<B>) => <_>(self: Option<_>) => Option<B>
+export declare const andThen: {
+  <_, B>(self: Option<_>, that: Option<B>): Option<B>
+  <B>(that: Option<B>): <_>(self: Option<_>) => Option<B>
+}
 ```
 
 Added in v1.0.0
@@ -1666,9 +1669,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composeKleisliArrow: <B, C>(
-  bfc: (b: B) => Option<C>
-) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C>
+export declare const composeKleisliArrow: {
+  <A, B, C>(afb: (a: A) => Option<B>, bfc: (b: B) => Option<C>): (a: A) => Option<C>
+  <B, C>(bfc: (b: B) => Option<C>): <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C>
+}
 ```
 
 Added in v1.0.0

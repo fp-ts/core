@@ -368,18 +368,23 @@ export const flatten: <E1, E2, A>(self: Either<E1, Either<E2, A>>) => Either<E1 
 /**
  * @since 1.0.0
  */
-export const andThen: <E2, B>(
-  that: Either<E2, B>
-) => <E1, _>(self: Either<E1, _>) => Either<E1 | E2, B> = flatMap_
-  .andThen(FlatMap)
+export const andThen: {
+  <E1, _, E2, B>(self: Either<E1, _>, that: Either<E2, B>): Either<E1 | E2, B>
+  <E2, B>(that: Either<E2, B>): <E1, _>(self: Either<E1, _>) => Either<E2 | E1, B>
+} = flatMap_.andThen(FlatMap)
 
 /**
  * @since 1.0.0
  */
-export const composeKleisliArrow: <B, E2, C>(
-  bfc: (b: B) => Either<E2, C>
-) => <A, E1>(afb: (a: A) => Either<E1, B>) => (a: A) => Either<E1 | E2, C> = flatMap_
-  .composeKleisliArrow(FlatMap)
+export const composeKleisliArrow: {
+  <A, E1, B, E2, C>(
+    afb: (a: A) => Either<E1, B>,
+    bfc: (b: B) => Either<E2, C>
+  ): (a: A) => Either<E1 | E2, C>
+  <B, E2, C>(
+    bfc: (b: B) => Either<E2, C>
+  ): <A, E1>(afb: (a: A) => Either<E1, B>) => (a: A) => Either<E2 | E1, C>
+} = flatMap_.composeKleisliArrow(FlatMap)
 
 /**
  * @category instances

@@ -1494,9 +1494,15 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const andThen: <E2, B>(
-  that: These<readonly [E2, ...E2[]], B>
-) => <E1, _>(self: These<readonly [E1, ...E1[]], _>) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+export declare const andThen: {
+  <E1, _, E2, B>(self: These<readonly [E1, ...E1[]], _>, that: These<readonly [E2, ...E2[]], B>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+  <E2, B>(that: These<readonly [E2, ...E2[]], B>): <E1, _>(
+    self: These<readonly [E1, ...E1[]], _>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+}
 ```
 
 Added in v1.0.0
@@ -1534,9 +1540,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const composeKleisliArrow: <B, E2, C>(
-  bfc: (b: B) => These<readonly [E2, ...E2[]], C>
-) => <A, E1>(afb: (a: A) => These<readonly [E1, ...E1[]], B>) => (a: A) => These<readonly [E2 | E1, ...(E2 | E1)[]], C>
+export declare const composeKleisliArrow: {
+  <A, E1, B, E2, C>(afb: (a: A) => These<readonly [E1, ...E1[]], B>, bfc: (b: B) => These<readonly [E2, ...E2[]], C>): (
+    a: A
+  ) => These<readonly [E1 | E2, ...(E1 | E2)[]], C>
+  <B, E2, C>(bfc: (b: B) => These<readonly [E2, ...E2[]], C>): <A, E1>(
+    afb: (a: A) => These<readonly [E1, ...E1[]], B>
+  ) => (a: A) => These<readonly [E2 | E1, ...(E2 | E1)[]], C>
+}
 ```
 
 Added in v1.0.0

@@ -731,16 +731,18 @@ export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_
 /**
  * @since 1.0.0
  */
-export const andThen: <B>(that: Option<B>) => <_>(self: Option<_>) => Option<B> = flatMap_
-  .andThen(FlatMap)
+export const andThen: {
+  <_, B>(self: Option<_>, that: Option<B>): Option<B>
+  <B>(that: Option<B>): <_>(self: Option<_>) => Option<B>
+} = flatMap_.andThen(FlatMap)
 
 /**
  * @since 1.0.0
  */
-export const composeKleisliArrow: <B, C>(
-  bfc: (b: B) => Option<C>
-) => <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C> = flatMap_
-  .composeKleisliArrow(FlatMap)
+export const composeKleisliArrow: {
+  <A, B, C>(afb: (a: A) => Option<B>, bfc: (b: B) => Option<C>): (a: A) => Option<C>
+  <B, C>(bfc: (b: B) => Option<C>): <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C>
+} = flatMap_.composeKleisliArrow(FlatMap)
 
 /**
  * @category instances
