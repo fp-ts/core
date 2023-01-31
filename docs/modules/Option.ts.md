@@ -282,7 +282,10 @@ This function is useful for performing additional computations on the value of t
 **Signature**
 
 ```ts
-export declare const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<A>
+export declare const tap: {
+  <A, _>(self: Option<A>, f: (a: A) => Option<_>): Option<A>
+  <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
+}
 ```
 
 Added in v1.0.0
@@ -1437,7 +1440,10 @@ It is useful when we want to chain multiple operations, but only care about the 
 **Signature**
 
 ```ts
-export declare const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>) => Option<A>
+export declare const andThenDiscard: {
+  <A, _>(self: Option<A>, that: Option<_>): Option<A>
+  <_>(that: Option<_>): <A>(self: Option<A>) => Option<A>
+}
 ```
 
 Added in v1.0.0

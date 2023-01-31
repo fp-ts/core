@@ -610,6 +610,7 @@ export const tupled: <E, A>(self: These<E, A>) => These<E, [A]> = invariant.tupl
 )
 
 /**
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -621,6 +622,7 @@ export const flap: {
 /**
  * Maps the right value of this effect to the specified constant value.
  *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -1104,6 +1106,7 @@ export const flatten: <E2, E1, A>(
   .flatten(FlatMap)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const andThen: {
@@ -1112,6 +1115,7 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -1174,24 +1178,31 @@ export const bindThese = <N extends string, A extends object, E2, B>(
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const andThenDiscard: <E2, _>(
-  that: Validated<E2, _>
-) => <E1, A>(self: Validated<E1, A>) => Validated<E1 | E2, A> = chainable
-  .andThenDiscard(Chainable)
+export const andThenDiscard: {
+  <E1, A, E2, _>(self: Validated<E1, A>, that: Validated<E2, _>): Validated<E1 | E2, A>
+  <E2, _>(that: Validated<E2, _>): <E1, A>(self: Validated<E1, A>) => Validated<E2 | E1, A>
+} = chainable.andThenDiscard(Chainable)
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
+ * @dual
+ * @category combinators
  * @since 1.0.0
  */
-export const tap: <A, E2, _>(
-  f: (a: A) => Validated<E2, _>
-) => <E1>(self: Validated<E1, A>) => Validated<E1 | E2, A> = chainable.tap(
-  Chainable
-)
+export const tap: {
+  <E1, A, E2, _>(
+    self: Validated<E1, A>,
+    f: (a: A) => Validated<E2, _>
+  ): Validated<E1 | E2, A>
+  <A, E2, _>(
+    f: (a: A) => Validated<E2, _>
+  ): <E1>(self: Validated<E1, A>) => Validated<E2 | E1, A>
+} = chainable.tap(Chainable)
 
 /**
  * @category instances

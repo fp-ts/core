@@ -643,6 +643,7 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
 export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
 
 /**
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -654,6 +655,7 @@ export const flap: {
 /**
  * Maps the `Some` value of this `Option` to the specified constant value.
  *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -729,6 +731,7 @@ export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_
   .flatten(FlatMap)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const andThen: {
@@ -737,6 +740,7 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -762,11 +766,14 @@ export const Chainable: chainable.Chainable<OptionTypeLambda> = {
  * @param that - The `Option` that will be ignored in the chain and discarded
  * @param self - The `Option` we care about
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>) => Option<A> = chainable
-  .andThenDiscard(Chainable)
+export const andThenDiscard: {
+  <A, _>(self: Option<A>, that: Option<_>): Option<A>
+  <_>(that: Option<_>): <A>(self: Option<A>) => Option<A>
+} = chainable.andThenDiscard(Chainable)
 
 /**
  * Applies the provided function `f` to the value of the `Option` if it is `Some` and returns the original `Option`
@@ -777,12 +784,14 @@ export const andThenDiscard: <_>(that: Option<_>) => <A>(self: Option<A>) => Opt
  * @param f - Function to apply to the value of the `Option` if it is `Some`
  * @param self - The `Option` to apply the function to
  *
+ * @dual
  * @category combinators
  * @since 1.0.0
  */
-export const tap: <A, _>(f: (a: A) => Option<_>) => (self: Option<A>) => Option<A> = chainable.tap(
-  Chainable
-)
+export const tap: {
+  <A, _>(self: Option<A>, f: (a: A) => Option<_>): Option<A>
+  <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
+} = chainable.tap(Chainable)
 
 // -------------------------------------------------------------------------------------
 // debugging

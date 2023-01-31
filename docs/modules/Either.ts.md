@@ -20,6 +20,8 @@ Added in v1.0.0
   - [subtractBigint](#subtractbigint)
   - [sum](#sum)
   - [sumBigint](#sumbigint)
+- [combinators](#combinators)
+  - [tap](#tap)
 - [combining](#combining)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
@@ -127,7 +129,6 @@ Added in v1.0.0
   - [flatten](#flatten)
   - [reverse](#reverse)
   - [struct](#struct)
-  - [tap](#tap)
   - [tuple](#tuple)
   - [unit](#unit)
 
@@ -221,6 +222,23 @@ Added in v1.0.0
 export declare const sumBigint: {
   <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
   <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
+}
+```
+
+Added in v1.0.0
+
+# combinators
+
+## tap
+
+Returns an effect that effectfully "peeks" at the success of this effect.
+
+**Signature**
+
+```ts
+export declare const tap: {
+  <E1, A, E2, _>(self: Either<E1, A>, f: (a: A) => Either<E2, _>): Either<E1 | E2, A>
+  <A, E2, _>(f: (a: A) => Either<E2, _>): <E1>(self: Either<E1, A>) => Either<E2 | E1, A>
 }
 ```
 
@@ -1240,7 +1258,10 @@ produced by the effect.
 **Signature**
 
 ```ts
-export declare const andThenDiscard: <E2, _>(that: Either<E2, _>) => <E1, A>(self: Either<E1, A>) => Either<E2 | E1, A>
+export declare const andThenDiscard: {
+  <E1, A, E2, _>(self: Either<E1, A>, that: Either<E2, _>): Either<E1 | E2, A>
+  <E2, _>(that: Either<E2, _>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, A>
+}
 ```
 
 Added in v1.0.0
@@ -1454,18 +1475,6 @@ export declare const struct: <R extends Record<string, Either<any, any>>>(
   [R[keyof R]] extends [Either<infer E, any>] ? E : never,
   { [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }
 >
-```
-
-Added in v1.0.0
-
-## tap
-
-Returns an effect that effectfully "peeks" at the success of this effect.
-
-**Signature**
-
-```ts
-export declare const tap: <A, E2, _>(f: (a: A) => Either<E2, _>) => <E1>(self: Either<E1, A>) => Either<E2 | E1, A>
 ```
 
 Added in v1.0.0
