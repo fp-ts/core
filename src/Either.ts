@@ -259,6 +259,7 @@ export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tu
 )
 
 /**
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -271,6 +272,7 @@ export const flap: {
 /**
  * Maps the Right value of this effect to the specified constant value.
  *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -366,6 +368,7 @@ export const flatten: <E1, E2, A>(self: Either<E1, Either<E2, A>>) => Either<E1 
   .flatten(FlatMap)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const andThen: {
@@ -374,6 +377,7 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -400,13 +404,14 @@ export const Chainable: chainable.Chainable<EitherTypeLambda> = {
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const andThenDiscard: <E2, _>(
-  that: Either<E2, _>
-) => <E1, A>(self: Either<E1, A>) => Either<E1 | E2, A> = chainable
-  .andThenDiscard(Chainable)
+export const andThenDiscard: {
+  <E1, A, E2, _>(self: Either<E1, A>, that: Either<E2, _>): Either<E1 | E2, A>
+  <E2, _>(that: Either<E2, _>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, A>
+} = chainable.andThenDiscard(Chainable)
 
 /**
  * @category instances
@@ -945,13 +950,19 @@ export const traverseTap: <F extends TypeLambda>(
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
+ * @dual
+ * @category combinators
  * @since 1.0.0
  */
-export const tap: <A, E2, _>(
-  f: (a: A) => Either<E2, _>
-) => <E1>(self: Either<E1, A>) => Either<E1 | E2, A> = chainable.tap(
-  Chainable
-)
+export const tap: {
+  <E1, A, E2, _>(
+    self: Either<E1, A>,
+    f: (a: A) => Either<E2, _>
+  ): Either<E1 | E2, A>
+  <A, E2, _>(
+    f: (a: A) => Either<E2, _>
+  ): <E1>(self: Either<E1, A>) => Either<E2 | E1, A>
+} = chainable.tap(Chainable)
 
 // -------------------------------------------------------------------------------------
 // debugging

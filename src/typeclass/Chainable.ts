@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { pipe } from "@fp-ts/core/Function"
+import { dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { FlatMap } from "@fp-ts/core/typeclass/FlatMap"
@@ -13,34 +13,76 @@ import type { FlatMap } from "@fp-ts/core/typeclass/FlatMap"
 export interface Chainable<F extends TypeLambda> extends FlatMap<F>, Covariant<F> {}
 
 /**
- * Returns an effect that effectfully "peeks" at the success of this effect.
- *
- * @since 1.0.0
- */
-export const tap = <F extends TypeLambda>(F: Chainable<F>) =>
-  <A, R2, O2, E2, _>(
-    f: (a: A) => Kind<F, R2, O2, E2, _>
-  ): (<R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) =>
-    F.flatMap(a =>
-      pipe(
-        f(a),
-        F.map(() => a)
-      )
-    )
-
-/**
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>) =>
+export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>): {
+  <R1, O1, E1, A, R2, O2, E2, _>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, _>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
   <R2, O2, E2, _>(
     that: Kind<F, R2, O2, E2, _>
-  ): (<R1, O1, E1, A>(
-    self: Kind<F, R1, O1, E1, A>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>) => tap(F)(() => that)
+  ): <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
+} =>
+  dual<
+    <R1, O1, E1, A, R2, O2, E2, _>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, _>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>,
+    <R2, O2, E2, _>(
+      that: Kind<F, R2, O2, E2, _>
+    ) => <R1, O1, E1, A>(
+      self: Kind<F, R1, O1, E1, A>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
+  >(2, <R1, O1, E1, A, R2, O2, E2, _>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, _>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => tap(F)(self, () => that))
+
+/**
+ * Returns an effect that effectfully "peeks" at the success of this effect.
+ *
+ * @dual
+ * @since 1.0.0
+ */
+export const tap = <F extends TypeLambda>(F: Chainable<F>): {
+  <R1, O1, E1, A, R2, O2, E2, _>(
+    self: Kind<F, R1, O1, E1, A>,
+    f: (a: A) => Kind<F, R2, O2, E2, _>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
+  <A, R2, O2, E2, _>(
+    f: (a: A) => Kind<F, R2, O2, E2, _>
+  ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
+} =>
+  dual<
+    <R1, O1, E1, A, R2, O2, E2, _>(
+      self: Kind<F, R1, O1, E1, A>,
+      f: (a: A) => Kind<F, R2, O2, E2, _>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>,
+    <A, R2, O2, E2, _>(
+      f: (a: A) => Kind<F, R2, O2, E2, _>
+    ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
+  >(
+    2,
+    <R1, O1, E1, A, R2, O2, E2, _>(
+      self: Kind<F, R1, O1, E1, A>,
+      f: (a: A) => Kind<F, R2, O2, E2, _>
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> =>
+      pipe(
+        self,
+        F.flatMap(a =>
+          pipe(
+            f(a),
+            F.map(() => a)
+          )
+        )
+      )
+  )
 
 /**
  * @since 1.0.0

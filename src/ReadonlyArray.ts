@@ -1316,6 +1316,7 @@ export {
 }
 
 /**
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -1327,6 +1328,7 @@ export const flap: {
 /**
  * Maps the success value of this effect to the specified constant value.
  *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -1414,6 +1416,7 @@ export const flattenNonEmpty: <A>(
 ) => NonEmptyArray<A> = flatMapNonEmpty(identity)
 
 /**
+ * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
