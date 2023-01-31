@@ -147,7 +147,12 @@ export const booleanAny: Monoid<boolean> = {
 }
 
 /**
- * Given a tuple of `Monoid`s returns a `Monoid` for the tuple.
+ * This function creates and returns a new `Monoid` for a tuple of values based on the given `Monoid`s for each element in the tuple.
+ * The returned `Monoid` combines two tuples of the same type by applying the corresponding `Monoid` passed as arguments to each element in the tuple.
+ *
+ * The `empty` value of the returned `Monoid` is the tuple of `empty` values of the input `Monoid`s.
+ *
+ * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
  *
  * @category combinators
  * @since 1.0.0
@@ -161,7 +166,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
 
 /**
  * Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
- * The returned `Monoid`'s empty value is the empty array.
+ * The returned `Monoid`'s `empty` value is the empty array.
  *
  * @category combinators
  * @since 1.0.0

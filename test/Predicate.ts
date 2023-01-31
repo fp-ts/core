@@ -32,7 +32,7 @@ describe.concurrent("Predicate", () => {
 
     expect(_.SemiProduct).exist
     expect(_.andThenBind).exist
-    expect(_.element).exist
+    expect(_.appendElement).exist
 
     expect(_.Product).exist
     expect(_.tuple).exist

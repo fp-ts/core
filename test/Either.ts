@@ -423,7 +423,7 @@ describe.concurrent("Either", () => {
   })
 
   it("element", () => {
-    expect(pipe(_.right(1), _.tupled, _.element(_.right("b")))).toEqual(
+    expect(pipe(_.right(1), _.tupled, _.appendElement(_.right("b")))).toEqual(
       _.right([1, "b"])
     )
   })

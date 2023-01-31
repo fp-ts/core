@@ -150,9 +150,9 @@ Added in v1.0.0
 - [utils](#utils)
   - [andThen](#andthen)
   - [ap](#ap)
+  - [appendElement](#appendelement)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
-  - [element](#element)
   - [flatten](#flatten)
   - [reverse](#reverse)
   - [struct](#struct)
@@ -1464,6 +1464,18 @@ export declare const ap: <E2, A>(fa: any) => <E1, B>(self: any) => any
 
 Added in v1.0.0
 
+## appendElement
+
+Appends an element to the end of a tuple.
+
+**Signature**
+
+```ts
+export declare const appendElement: <E2, B>(that: any) => <E1, A extends readonly any[]>(self: any) => any
+```
+
+Added in v1.0.0
+
 ## composeKleisliArrow
 
 **Signature**
@@ -1482,18 +1494,6 @@ Returns a function that checks if a `These` contains a given value using a provi
 
 ```ts
 export declare const contains: <A>(equivalence: any) => (a: A) => <E>(self: any) => boolean
-```
-
-Added in v1.0.0
-
-## element
-
-Adds an element to the end of a tuple.
-
-**Signature**
-
-```ts
-export declare const element: <E2, B>(that: any) => <E1, A extends readonly any[]>(self: any) => any
 ```
 
 Added in v1.0.0
