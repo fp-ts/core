@@ -613,8 +613,10 @@ export const tupled: <E, A>(self: These<E, A>) => These<E, [A]> = invariant.tupl
  * @category mapping
  * @since 1.0.0
  */
-export const flap: <E, A, B>(self: These<E, (a: A) => B>) => (a: A) => These<E, B> = covariant
-  .flap(Covariant)
+export const flap: {
+  <A, E, B>(a: A, self: These<E, (a: A) => B>): These<E, B>
+  <E, A, B>(self: These<E, (a: A) => B>): (a: A) => These<E, B>
+} = covariant.flap(Covariant)
 
 /**
  * Maps the right value of this effect to the specified constant value.
@@ -622,9 +624,10 @@ export const flap: <E, A, B>(self: These<E, (a: A) => B>) => (a: A) => These<E, 
  * @category mapping
  * @since 1.0.0
  */
-export const as: <B>(b: B) => <E, _>(self: These<E, _>) => These<E, B> = covariant.as(
-  Covariant
-)
+export const as: {
+  <E, _, B>(self: These<E, _>, b: B): These<E, B>
+  <B>(b: B): <E, _>(self: These<E, _>) => These<E, B>
+} = covariant.as(Covariant)
 
 /**
  * Returns the effect resulting from mapping the right of this effect to unit.

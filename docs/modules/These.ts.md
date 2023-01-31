@@ -1197,7 +1197,10 @@ Maps the right value of this effect to the specified constant value.
 **Signature**
 
 ```ts
-export declare const as: <B>(b: B) => <E, _>(self: These<E, _>) => These<E, B>
+export declare const as: {
+  <E, _, B>(self: These<E, _>, b: B): These<E, B>
+  <B>(b: B): <E, _>(self: These<E, _>) => These<E, B>
+}
 ```
 
 Added in v1.0.0
@@ -1232,7 +1235,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <E, A, B>(self: These<E, (a: A) => B>) => (a: A) => These<E, B>
+export declare const flap: {
+  <A, E, B>(a: A, self: These<E, (a: A) => B>): These<E, B>
+  <E, A, B>(self: These<E, (a: A) => B>): (a: A) => These<E, B>
+}
 ```
 
 Added in v1.0.0

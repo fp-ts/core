@@ -646,8 +646,10 @@ export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Inva
  * @category mapping
  * @since 1.0.0
  */
-export const flap: <A, B>(self: Option<(a: A) => B>) => (a: A) => Option<B> = covariant
-  .flap(Covariant)
+export const flap: {
+  <A, B>(a: A, self: Option<(a: A) => B>): Option<B>
+  <A, B>(self: Option<(a: A) => B>): (a: A) => Option<B>
+} = covariant.flap(Covariant)
 
 /**
  * Maps the `Some` value of this `Option` to the specified constant value.
@@ -655,7 +657,10 @@ export const flap: <A, B>(self: Option<(a: A) => B>) => (a: A) => Option<B> = co
  * @category mapping
  * @since 1.0.0
  */
-export const as: <B>(b: B) => <_>(self: Option<_>) => Option<B> = covariant.as(Covariant)
+export const as: {
+  <_, B>(self: Option<_>, b: B): Option<B>
+  <B>(b: B): <_>(self: Option<_>) => Option<B>
+} = covariant.as(Covariant)
 
 /**
  * Returns the `Option` resulting from mapping the `Some` value to `void`.
