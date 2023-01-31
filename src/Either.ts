@@ -157,6 +157,23 @@ export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
   }
 
 /**
+ * Converts a `Either` to an `Option` discarding the error.
+ *
+ * @param self - The `Either` to convert to an `Option`.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(E.toOption(E.right(1)), O.some(1))
+ * assert.deepStrictEqual(E.toOption(E.left('a')), O.none())
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const toOption: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
+
+/**
  * @example
  * import * as E from '@fp-ts/core/Either'
  * import { pipe } from '@fp-ts/core/Function'
