@@ -166,11 +166,8 @@ describe.concurrent("Either", () => {
   })
 
   it("getOrThrow", () => {
-    expect(pipe(_.right(1), _.getOrThrow((e: string) => new Error(e)))).toEqual(1)
-    expect(() => pipe(_.left("e"), _.getOrThrow((e: string) => new Error(e)))).toThrowError(
-      new Error("e")
-    )
-    expect(() => pipe(_.left("e"), _.getOrThrow())).toThrowError(
+    expect(pipe(_.right(1), _.getOrThrow)).toEqual(1)
+    expect(() => pipe(_.left("e"), _.getOrThrow)).toThrowError(
       new Error("getOrThrow called on a Left")
     )
   })

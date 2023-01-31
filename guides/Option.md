@@ -315,8 +315,8 @@ The fastest way to get the value wrapped in an option is to call the `getOrThrow
 ```ts
 import { getOrThrow } from "@fp-ts/core/Option";
 
-console.log(pipe(some(10), getOrThrow()); // 10
-console.log(pipe(none(), getOrThrow()); // throws new Error("getOrThrow called on a None")
+console.log(pipe(some(10), getOrThrow); // 10
+console.log(pipe(none(), getOrThrow); // throws new Error("getOrThrow called on a None")
 ```
 
 A more safe alternative is [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
@@ -374,7 +374,7 @@ pipe(
 | Name             | Given                                               | To               |
 | ---------------- | --------------------------------------------------- | ---------------- |
 | `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`         |
-| `getOrThrow`     | `Option<A>`, `onNone?: LazyArg<Error>`              | `A`              |
+| `getOrThrow`     | `Option<A>`                                         | `A`              |
 | `getOrNull`      | `Option<A>`                                         | `A \| null`      |
 | `getOrUndefined` | `Option<A>`                                         | `A \| undefined` |
 | `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`         |
@@ -478,16 +478,16 @@ On the other hand, if we have a value of type `Option` and want to get the wrapp
 ```ts
 import { getOrThrow } from "@fp-ts/core/Option";
 
-console.log(pipe(some(10), getOrThrow()); // 10
-console.log(pipe(none(), getOrThrow()); // throws new Error("getOrThrow called on a None")
+console.log(pipe(some(10), getOrThrow); // 10
+console.log(pipe(none(), getOrThrow); // throws new Error("getOrThrow called on a None")
 ```
 
 **Cheat sheet** (interop - throwing)
 
-| Name            | Given                                  | To                       |
-| --------------- | -------------------------------------- | ------------------------ |
-| `liftThrowable` | `(...a: A) => B` (may throw)           | `(...a: A) => Option<B>` |
-| `getOrThrow`    | `Option<A>`, `onNone?: LazyArg<Error>` | `A`                      |
+| Name            | Given                        | To                       |
+| --------------- | ---------------------------- | ------------------------ |
+| `liftThrowable` | `(...a: A) => B` (may throw) | `(...a: A) => Option<B>` |
+| `getOrThrow`    | `Option<A>`                  | `A`                      |
 
 # Combining two or more `Option`s
 

@@ -568,23 +568,20 @@ describe("These", () => {
   })
 
   it("getOrThrow", () => {
-    expect(pipe(_.right(1), _.getOrThrow((e: string) => new Error(e)))).toEqual(1)
-    expect(pipe(_.both("e", 1), _.getOrThrow((e: string) => new Error(e)))).toEqual(1)
-    expect(() => pipe(_.left("e"), _.getOrThrow((e: string) => new Error(e)))).toThrowError(
-      new Error("e")
-    )
-    expect(() => pipe(_.left("e"), _.getOrThrow())).toThrowError(
+    expect(pipe(_.right(1), _.getOrThrow)).toEqual(1)
+    expect(pipe(_.both("e", 1), _.getOrThrow)).toEqual(1)
+    expect(() => pipe(_.left("e"), _.getOrThrow)).toThrowError(
       new Error("getOrThrow called on a Left")
     )
   })
 
   it("getRightOnlyOrThrow", () => {
-    expect(pipe(_.right(1), _.getRightOnlyOrThrow((e: string) => new Error(e)))).toEqual(1)
-    expect(() => pipe(_.left("e"), _.getRightOnlyOrThrow((e: string) => new Error(e)))).toThrow(
-      new Error("e")
+    expect(pipe(_.right(1), _.getRightOnlyOrThrow)).toEqual(1)
+    expect(() => pipe(_.left("e"), _.getRightOnlyOrThrow)).toThrow(
+      new Error("getRightOnlyOrThrow called on Left or Both")
     )
-    expect(() => pipe(_.both("e", 1), _.getRightOnlyOrThrow((e: string) => new Error(e)))).toThrow(
-      new Error("e")
+    expect(() => pipe(_.both("e", 1), _.getRightOnlyOrThrow)).toThrow(
+      new Error("getRightOnlyOrThrow called on Left or Both")
     )
   })
 

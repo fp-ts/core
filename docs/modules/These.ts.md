@@ -1107,7 +1107,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getOrThrow: <E>(onLeft?: (e: E) => Error) => <A>(self: These<E, A>) => A
+export declare const getOrThrow: <E, A>(self: These<E, A>) => A
 ```
 
 Added in v1.0.0
@@ -1117,7 +1117,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getRightOnlyOrThrow: <E>(onLeft: (e: E) => unknown) => <A>(self: These<E, A>) => A
+export declare const getRightOnlyOrThrow: <E, A>(self: These<E, A>) => A
 ```
 
 Added in v1.0.0

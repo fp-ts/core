@@ -244,27 +244,23 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <E>(
-  onLeft: (e: E) => Error = () => new Error("getOrThrow called on a Left")
-) =>
-  <A>(self: These<E, A>): A => {
-    if (isRightOrBoth(self)) {
-      return self.right
-    }
-    throw onLeft(self.left)
+export const getOrThrow = <E, A>(self: These<E, A>): A => {
+  if (isRightOrBoth(self)) {
+    return self.right
   }
+  throw new Error("getOrThrow called on a Left")
+}
 
 /**
  * @category interop
  * @since 1.0.0
  */
-export const getRightOnlyOrThrow = <E>(onLeft: (e: E) => unknown) =>
-  <A>(self: These<E, A>): A => {
-    if (isRight(self)) {
-      return self.right
-    }
-    throw onLeft(self.left)
+export const getRightOnlyOrThrow = <E, A>(self: These<E, A>): A => {
+  if (isRight(self)) {
+    return self.right
   }
+  throw new Error("getRightOnlyOrThrow called on Left or Both")
+}
 
 /**
  * @category conversions

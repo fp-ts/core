@@ -4,7 +4,7 @@
 import * as BI from "@fp-ts/core/Bigint"
 import type { Either } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
@@ -267,8 +267,10 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
  * @category conversions
  * @since 1.0.0
  */
-export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A> =
-  either.fromOption
+export const toEither: {
+  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A>
+  <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
+} = either.fromOption
 
 // -------------------------------------------------------------------------------------
 // error handling
@@ -287,11 +289,20 @@ export const toEither: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either
  * assert.deepStrictEqual(pipe(some(1), getOrElse(() => 0)), 1)
  * assert.deepStrictEqual(pipe(none(), getOrElse(() => 0)), 0)
  *
+ * @dual
  * @category error handling
  * @since 1.0.0
  */
-export const getOrElse = <B>(onNone: LazyArg<B>) =>
-  <A>(self: Option<A>): A | B => isNone(self) ? onNone() : self.value
+export const getOrElse: {
+  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
+  <B>(onNone: LazyArg<B>): <A>(self: Option<A>) => B | A
+} = dual<
+  <A, B>(self: Option<A>, onNone: LazyArg<B>) => A | B,
+  <B>(onNone: LazyArg<B>) => <A>(self: Option<A>) => A | B
+>(
+  2,
+  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B => isNone(self) ? onNone() : self.value
+)
 
 /**
  * Returns the provided `Option` `that` if `self` is `None`, otherwise returns `self`.
@@ -332,11 +343,20 @@ export const getOrElse = <B>(onNone: LazyArg<B>) =>
  *   O.some('a')
  * )
  *
+ * @dual
  * @category error handling
  * @since 1.0.0
  */
-export const orElse = <B>(that: LazyArg<Option<B>>) =>
-  <A>(self: Option<A>): Option<A | B> => isNone(self) ? that() : self
+export const orElse: {
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
+  <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<B | A>
+} = dual<
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<A | B>,
+  <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<A | B>
+>(
+  2,
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B> => isNone(self) ? that() : self
+)
 
 /**
  * Similar to `orElse`, but instead of returning a simple union, it returns an `Either` object,
@@ -347,16 +367,23 @@ export const orElse = <B>(that: LazyArg<Option<B>>) =>
  * @param that - The second `Option` to be considered if the first `Option` is `None`.
  * @param self - The first `Option` to be checked.
  *
+ * @dual
  * @category error handling
  * @since 1.0.0
  */
-export const orElseEither = <B>(
-  that: LazyArg<Option<B>>
-) =>
-  <A>(self: Option<A>): Option<Either<A, B>> =>
-    isNone(self) ?
-      pipe(that(), map(either.right)) :
-      pipe(self, map(either.left))
+export const orElseEither: {
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
+  <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<Either<A, B>>
+} = dual<
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<Either<A, B>>,
+  <B>(
+    that: LazyArg<Option<B>>
+  ) => <A>(self: Option<A>) => Option<Either<A, B>>
+>(
+  2,
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>> =>
+    isNone(self) ? map(that(), either.right) : map(self, either.left)
+)
 
 /**
  * Given an Iterable collection of `Option`s, the function returns the first `Some` found in the collection.
@@ -496,11 +523,21 @@ export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(c
  *   none()
  * )
  *
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapNullable = <A, B>(f: (a: A) => B | null | undefined) =>
-  (self: Option<A>): Option<NonNullable<B>> => isNone(self) ? none() : fromNullable(f(self.value))
+export const flatMapNullable: {
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
+  <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
+} = dual<
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined) => Option<NonNullable<B>>,
+  <A, B>(f: (a: A) => B | null | undefined) => (self: Option<A>) => Option<NonNullable<B>>
+>(
+  2,
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>> =>
+    isNone(self) ? none() : fromNullable(f(self.value))
+)
 
 /**
  * A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
@@ -535,29 +572,25 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
 /**
  * Returns the contained value if the `Option` is `Some`, otherwise throws an error.
  *
- * @param onNone - An optional function that returns the error to be thrown when the `Option` is `None`.
  * @param self - The `Option` to extract the value from.
- * @throws The error returned by `onNone` if the `Option` is `None`.
+ * @throws `Error("getOrThrow called on a None")`
  *
  * @example
  * import { pipe } from '@fp-ts/core/Function'
  * import * as O from '@fp-ts/core/Option'
  *
- * assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow()), 1)
- * assert.throws(() => pipe(O.none(), O.getOrThrow()))
+ * assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow), 1)
+ * assert.throws(() => pipe(O.none(), O.getOrThrow))
  *
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = (
-  onNone: LazyArg<Error> = () => new Error("getOrThrow called on a None")
-) =>
-  <A>(self: Option<A>): A => {
-    if (isSome(self)) {
-      return self.value
-    }
-    throw onNone()
+export const getOrThrow = <A>(self: Option<A>): A => {
+  if (isSome(self)) {
+    return self.value
   }
+  throw new Error("getOrThrow called on a None")
+}
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -569,11 +602,20 @@ export const getOrThrow = (
  * @param f - The function to map over the value of the `Option`
  * @param self - An `Option` to map
  *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
-export const map = <A, B>(f: (a: A) => B) =>
-  (self: Option<A>): Option<B> => isNone(self) ? none() : some(f(self.value))
+export const map: {
+  <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
+  <A, B>(f: (a: A) => B): (self: Option<A>) => Option<B>
+} = dual<
+  <A, B>(self: Option<A>, f: (a: A) => B) => Option<B>,
+  <A, B>(f: (a: A) => B) => (self: Option<A>) => Option<B>
+>(
+  2,
+  <A, B>(self: Option<A>, f: (a: A) => B): Option<B> => isNone(self) ? none() : some(f(self.value))
+)
 
 const imap = covariant.imap<OptionTypeLambda>(map)
 
