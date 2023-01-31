@@ -4,7 +4,7 @@
 
 import * as BI from "@fp-ts/core/Bigint"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, identity, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
@@ -32,6 +32,10 @@ import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
+
+// -------------------------------------------------------------------------------------
+// models
+// -------------------------------------------------------------------------------------
 
 /**
  * @category models
@@ -65,6 +69,10 @@ export interface EitherTypeLambda extends TypeLambda {
   readonly type: Either<this["Out1"], this["Target"]>
 }
 
+// -------------------------------------------------------------------------------------
+// constructors
+// -------------------------------------------------------------------------------------
+
 /**
  * Constructs a new `Either` holding a `Right` value. This usually represents a successful value due to the right bias
  * of this structure.
@@ -90,6 +98,10 @@ export const left: <E>(e: E) => Either<E, never> = either.left
  * @since 1.0.0
  */
 export const of: <A>(a: A) => Either<never, A> = right
+
+// -------------------------------------------------------------------------------------
+// guards
+// -------------------------------------------------------------------------------------
 
 /**
  * Returns `true` if the specified value is an instance of `Either`, `false`
@@ -117,6 +129,47 @@ export const isLeft: <E, A>(self: Either<E, A>) => self is Left<E> = either.isLe
  * @since 1.0.0
  */
 export const isRight: <E, A>(self: Either<E, A>) => self is Right<A> = either.isRight
+
+// -------------------------------------------------------------------------------------
+// conversions
+// -------------------------------------------------------------------------------------
+
+/**
+ * Returns a `Refinement` from a `Either` returning function.
+ * This function ensures that a `Refinement` definition is type-safe.
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const toRefinement = <A, E, B extends A>(f: (a: A) => Either<E, B>): Refinement<A, B> =>
+  (a: A): a is B => isRight(f(a))
+
+/**
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
+  <A>(collection: Iterable<A>): Either<E, A> => {
+    for (const a of collection) {
+      return right(a)
+    }
+    return left(onEmpty())
+  }
+
+/**
+ * @example
+ * import * as E from '@fp-ts/core/Either'
+ * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from '@fp-ts/core/Option'
+ *
+ * assert.deepStrictEqual(pipe(O.some(1), E.fromOption(() => 'error')), E.right(1))
+ * assert.deepStrictEqual(pipe(O.none(), E.fromOption(() => 'error')), E.left('error'))
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A> =
+  either.fromOption
 
 /**
  * Returns an effect whose Right is mapped by the specified `f` function.
@@ -602,25 +655,29 @@ export const getFirstRightSemigroup: <E, A>() => Semigroup<Either<E, A>> = semiC
  * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.deepStrictEqual(
- *   pipe(
- *     E.right(1),
- *     E.getOrElse(() => 0)
- *   ),
+ *   E.getOrElse(E.right(1), () => 0),
  *   1
  * )
  * assert.deepStrictEqual(
- *   pipe(
- *     E.left('error'),
- *     E.getOrElse(() => 0)
- *   ),
+ *   E.getOrElse(E.left('error'), () => 0),
  *   0
  * )
  *
+ * @dual
  * @category getters
  * @since 1.0.0
  */
-export const getOrElse = <B>(onLeft: LazyArg<B>) =>
-  <E, A>(self: Either<E, A>): A | B => isLeft(self) ? onLeft() : self.right
+export const getOrElse: {
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B
+  <E, B>(onLeft: (e: E) => B): <A>(self: Either<E, A>) => B | A
+} = dual<
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B) => A | B,
+  <E, B>(onLeft: (e: E) => B) => <A>(self: Either<E, A>) => A | B
+>(
+  2,
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B =>
+    isLeft(self) ? onLeft(self.left) : self.right
+)
 
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise
@@ -721,6 +778,10 @@ export const Foldable: foldable.Foldable<EitherTypeLambda> = {
 export const match = <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C) =>
   (self: Either<E, A>): B | C => isLeft(self) ? onLeft(self.left) : onRight(self.right)
 
+// -------------------------------------------------------------------------------------
+// interop
+// -------------------------------------------------------------------------------------
+
 /**
  * Takes a lazy default and a nullable value, if the value is not nully, turn it into a `Right`, if the value is nully use
  * the provided default as a `Left`.
@@ -733,7 +794,7 @@ export const match = <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C)
  * assert.deepStrictEqual(parse(1), E.right(1))
  * assert.deepStrictEqual(parse(null), E.left('nullable'))
  *
- * @category conversions
+ * @category interop
  * @since 1.0.0
  */
 export const fromNullable = <E>(onNullable: LazyArg<E>) =>
@@ -741,7 +802,7 @@ export const fromNullable = <E>(onNullable: LazyArg<E>) =>
     a == null ? left(onNullable()) : right(a as NonNullable<A>)
 
 /**
- * @category lifting
+ * @category interop
  * @since 1.0.0
  */
 export const liftNullable = <A extends ReadonlyArray<unknown>, B, E>(
@@ -758,16 +819,6 @@ export const flatMapNullable = <A, B, E2>(
   onNullable: (a: A) => E2
 ): (<E1>(self: Either<E1, A>) => Either<E1 | E2, NonNullable<B>>) =>
   flatMap(liftNullable(f, onNullable))
-
-/**
- * Returns a `Refinement` from a `Either` returning function.
- * This function ensures that a `Refinement` definition is type-safe.
- *
- * @category conversions
- * @since 1.0.0
- */
-export const toRefinement = <A, E, B extends A>(f: (a: A) => Either<E, B>): Refinement<A, B> =>
-  (a: A): a is B => isRight(f(a))
 
 /**
  * @category interop
@@ -909,6 +960,10 @@ export const tap: <A, E2, _>(
   Chainable
 )
 
+// -------------------------------------------------------------------------------------
+// debugging
+// -------------------------------------------------------------------------------------
+
 /**
  * @category debugging
  * @since 1.0.0
@@ -919,6 +974,20 @@ export const inspectRight = <A>(
   <E>(self: Either<E, A>): Either<E, A> => {
     if (isRight(self)) {
       onRight(self.right)
+    }
+    return self
+  }
+
+/**
+ * @category debugging
+ * @since 1.0.0
+ */
+export const inspectLeft = <E>(
+  onLeft: (e: E) => void
+) =>
+  <A>(self: Either<E, A>): Either<E, A> => {
+    if (isLeft(self)) {
+      onLeft(self.left)
     }
     return self
   }
@@ -939,47 +1008,6 @@ export const tapError = <E1, E2, _>(
     const out = onLeft(self.left)
     return isLeft(out) ? out : self
   }
-
-/**
- * @category debugging
- * @since 1.0.0
- */
-export const inspectLeft = <E>(
-  onLeft: (e: E) => void
-) =>
-  <A>(self: Either<E, A>): Either<E, A> => {
-    if (isLeft(self)) {
-      onLeft(self.left)
-    }
-    return self
-  }
-
-/**
- * @category conversions
- * @since 1.0.0
- */
-export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
-  <A>(collection: Iterable<A>): Either<E, A> => {
-    for (const a of collection) {
-      return right(a)
-    }
-    return left(onEmpty())
-  }
-
-/**
- * @example
- * import * as E from '@fp-ts/core/Either'
- * import { pipe } from '@fp-ts/core/Function'
- * import * as O from '@fp-ts/core/Option'
- *
- * assert.deepStrictEqual(pipe(O.some(1), E.fromOption(() => 'error')), E.right(1))
- * assert.deepStrictEqual(pipe(O.none(), E.fromOption(() => 'error')), E.left('error'))
- *
- * @category conversions
- * @since 1.0.0
- */
-export const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A> =
-  either.fromOption
 
 /**
  * Converts a `Either` to an `Option` discarding the Right.

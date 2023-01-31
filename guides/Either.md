@@ -40,6 +40,15 @@ const success: Either<string, number> = right(1);
 const failure: Either<string, number> = left("error message");
 ```
 
+**Cheat sheet** (constructors)
+
+| Name    | Given | To                 |
+| ------- | ----- | ------------------ |
+| `right` | `A`   | `Either<never, A>` |
+| `left`  | `E`   | `Either<E, never>` |
+
+# Conversions
+
 You can also use the `fromOption` function to convert an `Option` to an `Either`.
 
 ```ts
@@ -58,6 +67,14 @@ const failure: Either<string, number> = pipe(
 ```
 
 The `fromOption` function requires an argument because it needs to know what value to use for the `Left` variant of the `Either` type when given a `None`. In the example, the argument "error message" is used as the value for the `Left` variant when `None` is encountered. This allows `Either` to provide more information about why a failure occurred.
+
+**Cheat sheet** (conversions)
+
+| Name           | Given                                | To                 |
+| -------------- | ------------------------------------ | ------------------ |
+| `toRefinement` | `A => Either<E, B>`                  | `Refinement<A, B>` |
+| `fromIterable` | `Iterable<A>`, `onEmpty: LazyArg<E>` | `Either<E, A>`     |
+| `fromOption`   | `Option<A>`, `onNone: LazyArg<E>`    | `Either<E, A>`     |
 
 # Working with `Either`
 
@@ -113,7 +130,25 @@ console.log(parseNumber("2")); // right(2)
 console.log(parseNumber("Not a number")); // left("Cannot parse 'Not a number' as a number")
 ```
 
-# Pattern matching
+**Cheat sheet** (sequencing)
+
+| Name      | Given                                  | To                    |
+| --------- | -------------------------------------- | --------------------- |
+| `map`     | `Either<E, A>`, `A => B`               | `Either<E, B>`        |
+| `flatMap` | `Either<E1, A>`, `E1 => Either<E2, B>` | `Either<E1 \| E2, B>` |
+
+# Debugging
+
+At any time, it is possible to inspect what is happening in your pipeline using two utility functions:
+
+**Cheat sheet** (debugging)
+
+| Name           | Given                       | To             | Description                           |
+| -------------- | --------------------------- | -------------- | ------------------------------------- |
+| `inspectRight` | `Either<E, A>`, `A => void` | `Either<E, A>` | callback called if it is a `Right<A>` |
+| `inspectLeft`  | `Either<E, A>`, `E => void` | `Either<E, A>` | callback called if it is a `Left<E>`  |
+
+# Pattern matching and error handling
 
 The `match` function allows us to match on the `Left` and `Right` cases of an `Either` value and provide different actions for each.
 
@@ -139,3 +174,32 @@ const output = pipe(
 
 console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
 ```
+
+**Cheat sheet** (error handling)
+
+| Name             | Given                                               | To               |
+| ---------------- | --------------------------------------------------- | ---------------- |
+| `match`          | `Either<E, A>`, `onLeft: E => B`, `onRight: A => C` | `B \| C`         |
+| `getOrThrow`     | `Either<E, A>`, `onLeft?: E => Error`               | `A`              |
+| `getOrNull`      | `Either<E, A>`                                      | `A \| null`      |
+| `getOrUndefined` | `Either<E, A>`                                      | `A \| undefined` |
+| `getOrElse`      | `Either<E, A>`, `onLeft: E => B`                    | `A \| B`         |
+
+# Interop
+
+**Cheat sheet** (interop - nullable)
+
+| Name              | Given                                                 | To                                   |
+| ----------------- | ----------------------------------------------------- | ------------------------------------ |
+| `fromNullable`    | `A`                                                   | `Option<NonNullable<A>>`             |
+| `liftNullable`    | `(...a: A) => B \| null \| undefined`                 | `(...a: A) => Option<NonNullable<B>` |
+| `flatMapNullable` | `Either<E, A>`, `(...a: A) => B \| null \| undefined` | `Option<NonNullable<B>>`             |
+| `getOrNull`       | `Either<E, A>`                                        | `A \| null`                          |
+| `getOrUndefined`  | `Either<E, A>`                                        | `A \| undefined`                     |
+
+**Cheat sheet** (interop - throwing)
+
+| Name            | Given                                     | To                       |
+| --------------- | ----------------------------------------- | ------------------------ |
+| `liftThrowable` | `(...a: A) => B` (may throw)              | `(...a: A) => Option<B>` |
+| `getOrThrow`    | `Either<E, A>`, `onNone?: LazyArg<Error>` | `A`                      |

@@ -30,7 +30,6 @@ Added in v1.0.0
   - [right](#right)
 - [conversions](#conversions)
   - [fromIterable](#fromiterable)
-  - [fromNullable](#fromnullable)
   - [fromOption](#fromoption)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -83,11 +82,12 @@ Added in v1.0.0
   - [Traversable](#traversable)
   - [getOptionalSemigroup](#getoptionalsemigroup)
 - [interop](#interop)
+  - [fromNullable](#fromnullable)
   - [getOrThrow](#getorthrow)
+  - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [lift2](#lift2)
-  - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
   - [liftPredicate](#liftpredicate)
 - [mapping](#mapping)
@@ -318,30 +318,6 @@ Added in v1.0.0
 
 ```ts
 export declare const fromIterable: <E>(onEmpty: LazyArg<E>) => <A>(collection: Iterable<A>) => Either<E, A>
-```
-
-Added in v1.0.0
-
-## fromNullable
-
-Takes a lazy default and a nullable value, if the value is not nully, turn it into a `Right`, if the value is nully use
-the provided default as a `Left`.
-
-**Signature**
-
-```ts
-export declare const fromNullable: <E>(onNullable: LazyArg<E>) => <A>(a: A) => Either<E, NonNullable<A>>
-```
-
-**Example**
-
-```ts
-import * as E from '@fp-ts/core/Either'
-
-const parse = E.fromNullable(() => 'nullable')
-
-assert.deepStrictEqual(parse(1), E.right(1))
-assert.deepStrictEqual(parse(null), E.left('nullable'))
 ```
 
 Added in v1.0.0
@@ -639,7 +615,10 @@ Returns the wrapped value if it's a `Right` or a default value if is a `Left`.
 **Signature**
 
 ```ts
-export declare const getOrElse: <B>(onLeft: LazyArg<B>) => <E, A>(self: Either<E, A>) => B | A
+export declare const getOrElse: {
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B
+  <E, B>(onLeft: (e: E) => B): <A>(self: Either<E, A>) => B | A
+}
 ```
 
 **Example**
@@ -649,17 +628,11 @@ import * as E from '@fp-ts/core/Either'
 import { pipe } from '@fp-ts/core/Function'
 
 assert.deepStrictEqual(
-  pipe(
-    E.right(1),
-    E.getOrElse(() => 0)
-  ),
+  E.getOrElse(E.right(1), () => 0),
   1
 )
 assert.deepStrictEqual(
-  pipe(
-    E.left('error'),
-    E.getOrElse(() => 0)
-  ),
+  E.getOrElse(E.left('error'), () => 0),
   0
 )
 ```
@@ -934,12 +907,49 @@ Added in v1.0.0
 
 # interop
 
+## fromNullable
+
+Takes a lazy default and a nullable value, if the value is not nully, turn it into a `Right`, if the value is nully use
+the provided default as a `Left`.
+
+**Signature**
+
+```ts
+export declare const fromNullable: <E>(onNullable: LazyArg<E>) => <A>(a: A) => Either<E, NonNullable<A>>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+const parse = E.fromNullable(() => 'nullable')
+
+assert.deepStrictEqual(parse(1), E.right(1))
+assert.deepStrictEqual(parse(null), E.left('nullable'))
+```
+
+Added in v1.0.0
+
 ## getOrThrow
 
 **Signature**
 
 ```ts
 export declare const getOrThrow: <E>(onLeft?: (e: E) => Error) => <A>(self: Either<E, A>) => A
+```
+
+Added in v1.0.0
+
+## liftNullable
+
+**Signature**
+
+```ts
+export declare const liftNullable: <A extends readonly unknown[], B, E>(
+  f: (...a: A) => B | null | undefined,
+  onNullable: (...a: A) => E
+) => (...a: A) => Either<E, NonNullable<B>>
 ```
 
 Added in v1.0.0
@@ -971,19 +981,6 @@ Lifts a binary function into `Either`.
 export declare const lift2: <A, B, C>(
   f: (a: A) => (b: B) => C
 ) => <E2>(that: Either<E2, A>) => <E1>(self: Either<E1, B>) => Either<E2 | E1, C>
-```
-
-Added in v1.0.0
-
-## liftNullable
-
-**Signature**
-
-```ts
-export declare const liftNullable: <A extends readonly unknown[], B, E>(
-  f: (...a: A) => B | null | undefined,
-  onNullable: (...a: A) => E
-) => (...a: A) => Either<E, NonNullable<B>>
 ```
 
 Added in v1.0.0
