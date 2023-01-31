@@ -35,10 +35,13 @@ Returns a default `productMany` implementation (useful for tests).
 **Signature**
 
 ```ts
-export declare const productMany: <F extends any>(
-  Covariant: any,
-  product: <R1, O1, E1, A, R2, O2, E2, B>(self: any, that: any) => any
-) => <R, O, E, A>(self: any, collection: Iterable<any>) => any
+export declare const productMany: <F extends TypeLambda>(
+  Covariant: Covariant<F>,
+  product: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+) => <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, [A, ...A[]]>
 ```
 
 Added in v1.0.0
@@ -72,12 +75,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const andThenBind: <F extends any>(
+export declare const andThenBind: <F extends TypeLambda>(
   F: SemiProduct<F>
 ) => <N extends string, A extends object, R2, O2, E2, B>(
   name: Exclude<N, keyof A>,
-  that: any
-) => <R1, O1, E1>(self: any) => any
+  that: Kind<F, R2, O2, E2, B>
+) => <R1, O1, E1>(
+  self: Kind<F, R1, O1, E1, A>
+) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0
@@ -89,9 +94,13 @@ Appends an element to the end of a tuple.
 **Signature**
 
 ```ts
-export declare const appendElement: <F extends any>(
+export declare const appendElement: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <R2, O2, E2, B>(that: any) => <R1, O1, E1, A extends readonly any[]>(self: any) => any
+) => <R2, O2, E2, B>(
+  that: Kind<F, R2, O2, E2, B>
+) => <R1, O1, E1, A extends readonly any[]>(
+  self: Kind<F, R1, O1, E1, A>
+) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [...A, B]>
 ```
 
 Added in v1.0.0
@@ -101,9 +110,17 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const nonEmptyStruct: <F extends any>(
+export declare const nonEmptyStruct: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <R extends { readonly [x: string]: any }>(fields: EnforceNonEmptyRecord<R> & { readonly [x: string]: any }) => any
+) => <R extends { readonly [x: string]: Kind<F, any, any, any, any> }>(
+  fields: EnforceNonEmptyRecord<R> & { readonly [x: string]: Kind<F, any, any, any, any> }
+) => Kind<
+  F,
+  [R[keyof R]] extends [Kind<F, infer R, any, any, any>] ? R : never,
+  [R[keyof R]] extends [Kind<F, any, infer O, any, any>] ? O : never,
+  [R[keyof R]] extends [Kind<F, any, any, infer E, any>] ? E : never,
+  { [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
+>
 ```
 
 Added in v1.0.0
@@ -113,9 +130,17 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const nonEmptyTuple: <F extends any>(
+export declare const nonEmptyTuple: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <T extends readonly [any, ...any[]]>(...components: T) => any
+) => <T extends readonly [Kind<F, any, any, any, any>, ...Kind<F, any, any, any, any>[]]>(
+  ...components: T
+) => Kind<
+  F,
+  [T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never,
+  [T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never,
+  [T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never,
+  { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
+>
 ```
 
 Added in v1.0.0
@@ -127,10 +152,13 @@ Returns a default `product` composition.
 **Signature**
 
 ```ts
-export declare const productComposition: <F extends any, G extends any>(
-  F: any,
+export declare const productComposition: <F extends TypeLambda, G extends TypeLambda>(
+  F: SemiApplicative<F>,
   G: SemiProduct<G>
-) => <FR1, FO1, FE1, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B>(self: any, that: any) => any
+) => <FR1, FO1, FE1, GR1, GO1, GE1, A, FR2, FO2, FE2, GR2, GO2, GE2, B>(
+  self: Kind<F, FR1, FO1, FE1, Kind<G, GR1, GO1, GE1, A>>,
+  that: Kind<F, FR2, FO2, FE2, Kind<G, GR2, GO2, GE2, B>>
+) => Kind<F, FR1 & FR2, FO1 | FO2, FE1 | FE2, Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, [A, B]>>
 ```
 
 Added in v1.0.0
@@ -142,10 +170,13 @@ Returns a default `productMany` composition.
 **Signature**
 
 ```ts
-export declare const productManyComposition: <F extends any, G extends any>(
-  F: any,
+export declare const productManyComposition: <F extends TypeLambda, G extends TypeLambda>(
+  F: SemiApplicative<F>,
   G: SemiProduct<G>
-) => <FR, FO, FE, GR, GO, GE, A>(self: any, collection: Iterable<any>) => any
+) => <FR, FO, FE, GR, GO, GE, A>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
+  collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, [A, ...A[]]>>
 ```
 
 Added in v1.0.0

@@ -31,7 +31,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Monoid: any
+export declare const Monoid: monoid.Monoid<0 | 1 | -1>
 ```
 
 Added in v1.0.0
@@ -41,7 +41,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Semigroup: any
+export declare const Semigroup: semigroup.Semigroup<0 | 1 | -1>
 ```
 
 Added in v1.0.0
@@ -66,9 +66,9 @@ Added in v1.0.0
 
 ```ts
 export declare const match: <A, B, C = B>(
-  onLessThan: any,
-  onEqual: any,
-  onGreaterThan: any
+  onLessThan: LazyArg<A>,
+  onEqual: LazyArg<B>,
+  onGreaterThan: LazyArg<C>
 ) => (o: Ordering) => A | B | C
 ```
 

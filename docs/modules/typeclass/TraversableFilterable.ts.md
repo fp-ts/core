@@ -55,11 +55,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseFilter: <T extends any>(
+export declare const traverseFilter: <T extends TypeLambda>(
   T: TraversableFilterable<T>
-) => <F extends any>(
-  F: any
-) => <B extends A, R, O, E, A = B>(predicate: (a: A) => any) => <TR, TO, TE>(self: any) => any
+) => <F extends TypeLambda>(
+  F: Applicative<F>
+) => <B extends A, R, O, E, A = B>(
+  predicate: (a: A) => Kind<F, R, O, E, boolean>
+) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, B>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 ```
 
 Added in v1.0.0
@@ -71,9 +73,13 @@ Returns a default `traverseFilterMap` implementation.
 **Signature**
 
 ```ts
-export declare const traverseFilterMap: <T extends any>(
-  T: any
-) => <F>(F: any) => <A, R, O, E, B>(f: (a: A) => any) => <TR, TO, TE>(self: any) => any
+export declare const traverseFilterMap: <T extends TypeLambda>(
+  T: Traversable<T> & compactable.Compactable<T>
+) => <F>(
+  F: Applicative<F>
+) => <A, R, O, E, B>(
+  f: (a: A) => Kind<F, R, O, E, Option<B>>
+) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
 ```
 
 Added in v1.0.0
@@ -83,11 +89,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traversePartition: <T extends any>(
+export declare const traversePartition: <T extends TypeLambda>(
   T: TraversableFilterable<T>
-) => <F extends any>(
-  F: any
-) => <B extends A, R, O, E, A = B>(predicate: (a: A) => any) => <TR, TO, TE>(self: any) => any
+) => <F extends TypeLambda>(
+  F: Applicative<F>
+) => <B extends A, R, O, E, A = B>(
+  predicate: (a: A) => Kind<F, R, O, E, boolean>
+) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, B>) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, B>]>
 ```
 
 Added in v1.0.0
@@ -99,9 +107,13 @@ Returns a default `traversePartitionMap` implementation.
 **Signature**
 
 ```ts
-export declare const traversePartitionMap: <T extends any>(
-  T: any
-) => <F>(F: any) => <A, R, O, E, B, C>(f: (a: A) => any) => <TR, TO, TE>(self: any) => any
+export declare const traversePartitionMap: <T extends TypeLambda>(
+  T: Traversable<T> & Covariant<T> & compactable.Compactable<T>
+) => <F>(
+  F: Applicative<F>
+) => <A, R, O, E, B, C>(
+  f: (a: A) => Kind<F, R, O, E, Either<B, C>>
+) => <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>
 ```
 
 Added in v1.0.0

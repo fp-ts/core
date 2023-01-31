@@ -42,7 +42,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoid: <F extends any>(F: Coproduct<F>) => <R, O, E, A>() => any
+export declare const getMonoid: <F extends TypeLambda>(F: Coproduct<F>) => <R, O, E, A>() => Monoid<Kind<F, R, O, E, A>>
 ```
 
 Added in v1.0.0

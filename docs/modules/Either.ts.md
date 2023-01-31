@@ -139,9 +139,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const divide: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+export declare const divide: <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 ```
 
 Added in v1.0.0
@@ -152,8 +150,8 @@ Added in v1.0.0
 
 ```ts
 export declare const multiply: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+  that: Either<E2, number>
+) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 ```
 
 Added in v1.0.0
@@ -164,8 +162,8 @@ Added in v1.0.0
 
 ```ts
 export declare const multiplyBigint: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+  that: Either<E2, bigint>
+) => <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
 ```
 
 Added in v1.0.0
@@ -176,8 +174,8 @@ Added in v1.0.0
 
 ```ts
 export declare const subtract: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+  that: Either<E2, number>
+) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 ```
 
 Added in v1.0.0
@@ -188,8 +186,8 @@ Added in v1.0.0
 
 ```ts
 export declare const subtractBigint: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+  that: Either<E2, bigint>
+) => <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
 ```
 
 Added in v1.0.0
@@ -199,7 +197,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sum: <E2>(that: Either<E2, unknown>) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+export declare const sum: <E2>(that: Either<E2, number>) => <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 ```
 
 Added in v1.0.0
@@ -210,8 +208,8 @@ Added in v1.0.0
 
 ```ts
 export declare const sumBigint: <E2>(
-  that: Either<E2, unknown>
-) => <E1>(self: Either<E1, unknown>) => Either<E2 | E1, unknown>
+  that: Either<E2, bigint>
+) => <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
 ```
 
 Added in v1.0.0
@@ -228,7 +226,7 @@ The `empty` value is `right(M.empty)`.
 **Signature**
 
 ```ts
-export declare const getFirstLeftMonoid: <A, E>(M: any) => any
+export declare const getFirstLeftMonoid: <A, E>(M: Monoid<A>) => Monoid<Either<E, A>>
 ```
 
 Added in v1.0.0
@@ -248,7 +246,7 @@ are concatenated using the provided `Semigroup`.
 **Signature**
 
 ```ts
-export declare const getFirstLeftSemigroup: <A, E>(S: any) => any
+export declare const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<E, A>>
 ```
 
 Added in v1.0.0
@@ -267,7 +265,7 @@ Semigroup returning the left-most `Right` value.
 **Signature**
 
 ```ts
-export declare const getFirstRightSemigroup: <E, A>() => any
+export declare const getFirstRightSemigroup: <E, A>() => Semigroup<Either<E, A>>
 ```
 
 Added in v1.0.0
@@ -319,7 +317,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromIterable: <E>(onEmpty: any) => <A>(collection: Iterable<A>) => Either<E, A>
+export declare const fromIterable: <E>(onEmpty: LazyArg<E>) => <A>(collection: Iterable<A>) => Either<E, A>
 ```
 
 Added in v1.0.0
@@ -332,7 +330,7 @@ the provided default as a `Left`.
 **Signature**
 
 ```ts
-export declare const fromNullable: <E>(onNullable: any) => <A>(a: A) => Either<E, NonNullable<A>>
+export declare const fromNullable: <E>(onNullable: LazyArg<E>) => <A>(a: A) => Either<E, NonNullable<A>>
 ```
 
 **Example**
@@ -353,7 +351,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromOption: <E>(onNone: any) => <A>(self: any) => Either<E, A>
+export declare const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: Option<A>) => Either<E, A>
 ```
 
 **Example**
@@ -389,7 +387,7 @@ This function ensures that a `Refinement` definition is type-safe.
 **Signature**
 
 ```ts
-export declare const toRefinement: <A, E, B extends A>(f: (a: A) => Either<E, B>) => any
+export declare const toRefinement: <A, E, B extends A>(f: (a: A) => Either<E, B>) => Refinement<A, B>
 ```
 
 Added in v1.0.0
@@ -549,7 +547,7 @@ fails with the specified error.
 **Signature**
 
 ```ts
-export declare const orElseFail: <E2>(onLeft: any) => <E1, A>(self: Either<E1, A>) => Either<E2, A>
+export declare const orElseFail: <E2>(onLeft: LazyArg<E2>) => <E1, A>(self: Either<E1, A>) => Either<E2, A>
 ```
 
 Added in v1.0.0
@@ -575,7 +573,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const compact: <E2>(onNone: any) => <E1, A>(self: Either<E1, any>) => Either<E2 | E1, A>
+export declare const compact: <E2>(onNone: LazyArg<E2>) => <E1, A>(self: Either<E1, Option<A>>) => Either<E2 | E1, A>
 ```
 
 Added in v1.0.0
@@ -586,8 +584,12 @@ Added in v1.0.0
 
 ```ts
 export declare const filter: {
-  <C extends A, B extends A, E2, A = C>(refinement: any, onFalse: any): <E1>(self: Either<E1, C>) => Either<E2 | E1, B>
-  <B extends A, E2, A = B>(predicate: any, onFalse: any): <E1>(self: Either<E1, B>) => Either<E2 | E1, B>
+  <C extends A, B extends A, E2, A = C>(refinement: Refinement<A, B>, onFalse: LazyArg<E2>): <E1>(
+    self: Either<E1, C>
+  ) => Either<E2 | E1, B>
+  <B extends A, E2, A = B>(predicate: Predicate<A>, onFalse: LazyArg<E2>): <E1>(
+    self: Either<E1, B>
+  ) => Either<E2 | E1, B>
 }
 ```
 
@@ -599,8 +601,8 @@ Added in v1.0.0
 
 ```ts
 export declare const filterMap: <A, B, E2>(
-  f: (a: A) => any,
-  onNone: any
+  f: (a: A) => Option<B>,
+  onNone: LazyArg<E2>
 ) => <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
 ```
 
@@ -615,7 +617,7 @@ Converts a `Either` to an `Option` discarding the Right.
 **Signature**
 
 ```ts
-export declare const getLeft: <E, A>(self: Either<E, A>) => any
+export declare const getLeft: <E, A>(self: Either<E, A>) => Option<E>
 ```
 
 **Example**
@@ -637,7 +639,7 @@ Returns the wrapped value if it's a `Right` or a default value if is a `Left`.
 **Signature**
 
 ```ts
-export declare const getOrElse: <B>(onLeft: any) => <E, A>(self: Either<E, A>) => B | A
+export declare const getOrElse: <B>(onLeft: LazyArg<B>) => <E, A>(self: Either<E, A>) => B | A
 ```
 
 **Example**
@@ -691,7 +693,7 @@ Converts a `Either` to an `Option` discarding the error.
 **Signature**
 
 ```ts
-export declare const getRight: <E, A>(self: Either<E, A>) => any
+export declare const getRight: <E, A>(self: Either<E, A>) => Option<A>
 ```
 
 **Example**
@@ -762,7 +764,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Applicative: any
+export declare const Applicative: applicative.Applicative<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -772,7 +774,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Bicovariant: any
+export declare const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -782,7 +784,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Chainable: any
+export declare const Chainable: chainable.Chainable<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -792,7 +794,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Covariant: any
+export declare const Covariant: covariant.Covariant<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -802,7 +804,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const FlatMap: any
+export declare const FlatMap: flatMap_.FlatMap<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -812,7 +814,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Foldable: any
+export declare const Foldable: foldable.Foldable<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -822,7 +824,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -832,7 +834,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Monad: any
+export declare const Monad: monad.Monad<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -842,7 +844,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Of: any
+export declare const Of: of_.Of<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -852,7 +854,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Pointed: any
+export declare const Pointed: pointed.Pointed<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -862,7 +864,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product_.Product<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -872,7 +874,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiAlternative: any
+export declare const SemiAlternative: semiAlternative.SemiAlternative<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -882,7 +884,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiApplicative: any
+export declare const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -892,7 +894,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiCoproduct: any
+export declare const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -902,7 +904,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -912,7 +914,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Traversable: any
+export declare const Traversable: traversable.Traversable<EitherTypeLambda>
 ```
 
 Added in v1.0.0
@@ -925,7 +927,7 @@ while elements that are `Right` are combined using the provided `Semigroup`.
 **Signature**
 
 ```ts
-export declare const getOptionalSemigroup: <E, A>(S: any) => any
+export declare const getOptionalSemigroup: <E, A>(S: Semigroup<A>) => Semigroup<Either<E, A>>
 ```
 
 Added in v1.0.0
@@ -992,7 +994,7 @@ Added in v1.0.0
 
 ```ts
 export declare const liftOption: <A extends readonly unknown[], B, E>(
-  f: (...a: A) => any,
+  f: (...a: A) => Option<B>,
   onNone: (...a: A) => E
 ) => (...a: A) => Either<E, B>
 ```
@@ -1005,8 +1007,8 @@ Added in v1.0.0
 
 ```ts
 export declare const liftPredicate: {
-  <C extends A, B extends A, E, A = C>(refinement: any, onFalse: (c: C) => E): (c: C) => Either<E, B>
-  <B extends A, E, A = B>(predicate: any, onFalse: (b: B) => E): (b: B) => Either<E, B>
+  <C extends A, B extends A, E, A = C>(refinement: Refinement<A, B>, onFalse: (c: C) => E): (c: C) => Either<E, B>
+  <B extends A, E, A = B>(predicate: Predicate<A>, onFalse: (b: B) => E): (b: B) => Either<E, B>
 }
 ```
 
@@ -1237,7 +1239,7 @@ Added in v1.0.0
 
 ```ts
 export declare const flatMapOption: <A, B, E2>(
-  f: (a: A) => any,
+  f: (a: A) => Option<B>,
   onNone: (a: A) => E2
 ) => <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
 ```
@@ -1251,7 +1253,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sequence: <F extends any>(F: any) => <E, FR, FO, FE, A>(self: Either<E, any>) => any
+export declare const sequence: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <E, FR, FO, FE, A>(self: Either<E, Kind<F, FR, FO, FE, A>>) => Kind<F, FR, FO, FE, Either<E, A>>
 ```
 
 Added in v1.0.0
@@ -1261,9 +1265,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverse: <F extends any>(
-  F: any
-) => <A, FR, FO, FE, B>(f: (a: A) => any) => <E>(self: Either<E, A>) => any
+export declare const traverse: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, FR, FO, FE, B>(
+  f: (a: A) => Kind<F, FR, FO, FE, B>
+) => <E>(self: Either<E, A>) => Kind<F, FR, FO, FE, Either<E, B>>
 ```
 
 Added in v1.0.0
@@ -1273,9 +1279,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const traverseTap: <F extends any>(
-  F: any
-) => <A, R, O, E, B>(f: (a: A) => any) => <TE>(self: Either<TE, A>) => any
+export declare const traverseTap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, A>>
 ```
 
 Added in v1.0.0
@@ -1349,7 +1355,7 @@ Returns a function that checks if an `Either` contains a given value using a pro
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: any) => (a: A) => <E>(self: Either<E, A>) => boolean
+export declare const contains: <A>(equivalence: Equivalence<A>) => (a: A) => <E>(self: Either<E, A>) => boolean
 ```
 
 Added in v1.0.0
@@ -1361,7 +1367,7 @@ Returns `false` if `Left` or returns the Either of the application of the given 
 **Signature**
 
 ```ts
-export declare const exists: <A>(predicate: any) => <E>(self: Either<E, A>) => boolean
+export declare const exists: <A>(predicate: Predicate<A>) => <E>(self: Either<E, A>) => boolean
 ```
 
 **Example**

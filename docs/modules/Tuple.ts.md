@@ -36,7 +36,9 @@ by applying each `Equivalence` to the corresponding element of the tuple.
 **Signature**
 
 ```ts
-export declare const getEquivalence: any
+export declare const getEquivalence: <A extends readonly any[]>(
+  ...equivalences: { readonly [K in keyof A]: equivalence.Equivalence<A[K]> }
+) => equivalence.Equivalence<Readonly<A>>
 ```
 
 Added in v1.0.0
@@ -53,7 +55,9 @@ It is useful when you need to combine two tuples of the same type and you have a
 **Signature**
 
 ```ts
-export declare const getMonoid: any
+export declare const getMonoid: <A extends readonly any[]>(
+  ...monoids: { [K in keyof A]: monoid.Monoid<A[K]> }
+) => monoid.Monoid<A>
 ```
 
 Added in v1.0.0
@@ -68,7 +72,9 @@ of the tuple.
 **Signature**
 
 ```ts
-export declare const getOrder: any
+export declare const getOrder: <A extends readonly any[]>(
+  ...orders: { readonly [K in keyof A]: order.Order<A[K]> }
+) => order.Order<Readonly<A>>
 ```
 
 Added in v1.0.0
@@ -83,7 +89,9 @@ It is useful when you need to combine two tuples of the same type and you have a
 **Signature**
 
 ```ts
-export declare const getSemigroup: any
+export declare const getSemigroup: <A extends readonly any[]>(
+  ...semigroups: { readonly [K in keyof A]: semigroup.Semigroup<A[K]> }
+) => semigroup.Semigroup<A>
 ```
 
 Added in v1.0.0

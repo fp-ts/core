@@ -141,7 +141,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Contravariant: any
+export declare const Contravariant: contravariant.Contravariant<PredicateTypeLambda>
 ```
 
 Added in v1.0.0
@@ -151,7 +151,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Invariant: any
+export declare const Invariant: invariant.Invariant<PredicateTypeLambda>
 ```
 
 Added in v1.0.0
@@ -161,7 +161,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Of: any
+export declare const Of: of_.Of<PredicateTypeLambda>
 ```
 
 Added in v1.0.0
@@ -171,7 +171,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: any
+export declare const Product: product_.Product<PredicateTypeLambda>
 ```
 
 Added in v1.0.0
@@ -181,7 +181,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemiProduct: any
+export declare const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda>
 ```
 
 Added in v1.0.0
@@ -191,7 +191,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoidAll: <A>() => any
+export declare const getMonoidAll: <A>() => monoid.Monoid<Predicate<A>>
 ```
 
 Added in v1.0.0
@@ -201,7 +201,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getMonoidAny: <A>() => any
+export declare const getMonoidAny: <A>() => monoid.Monoid<Predicate<A>>
 ```
 
 Added in v1.0.0
@@ -211,7 +211,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroupAll: <A>() => any
+export declare const getSemigroupAll: <A>() => semigroup.Semigroup<Predicate<A>>
 ```
 
 Added in v1.0.0
@@ -221,7 +221,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getSemigroupAny: <A>() => any
+export declare const getSemigroupAny: <A>() => semigroup.Semigroup<Predicate<A>>
 ```
 
 Added in v1.0.0

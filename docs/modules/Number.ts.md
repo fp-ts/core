@@ -149,7 +149,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const isNumber: any
+export declare const isNumber: predicate.Refinement<unknown, number>
 ```
 
 Added in v1.0.0
@@ -161,7 +161,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Bounded: any
+export declare const Bounded: bounded.Bounded<number>
 ```
 
 Added in v1.0.0
@@ -171,7 +171,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Equivalence: any
+export declare const Equivalence: equivalence.Equivalence<number>
 ```
 
 Added in v1.0.0
@@ -181,7 +181,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MonoidMax: any
+export declare const MonoidMax: monoid.Monoid<number>
 ```
 
 Added in v1.0.0
@@ -191,7 +191,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const MonoidMin: any
+export declare const MonoidMin: monoid.Monoid<number>
 ```
 
 Added in v1.0.0
@@ -205,7 +205,7 @@ The `empty` value is `1`.
 **Signature**
 
 ```ts
-export declare const MonoidMultiply: any
+export declare const MonoidMultiply: monoid.Monoid<number>
 ```
 
 Added in v1.0.0
@@ -219,7 +219,7 @@ The `empty` value is `0`.
 **Signature**
 
 ```ts
-export declare const MonoidSum: any
+export declare const MonoidSum: monoid.Monoid<number>
 ```
 
 Added in v1.0.0
@@ -229,7 +229,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Order: any
+export declare const Order: order.Order<number>
 ```
 
 Added in v1.0.0
@@ -239,7 +239,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupMax: any
+export declare const SemigroupMax: semigroup.Semigroup<number>
 ```
 
 Added in v1.0.0
@@ -249,7 +249,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupMin: any
+export declare const SemigroupMin: semigroup.Semigroup<number>
 ```
 
 Added in v1.0.0
@@ -261,7 +261,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupMultiply: any
+export declare const SemigroupMultiply: semigroup.Semigroup<number>
 ```
 
 **Example**
@@ -282,7 +282,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupSum: any
+export declare const SemigroupSum: semigroup.Semigroup<number>
 ```
 
 **Example**
@@ -341,7 +341,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sign: (n: number) => any
+export declare const sign: (n: number) => Ordering
 ```
 
 Added in v1.0.0

@@ -40,7 +40,9 @@ Lift a monoid into 'F', the inner values are combined using the provided `Monoid
 **Signature**
 
 ```ts
-export declare const liftMonoid: <F extends any>(F: Applicative<F>) => <A, R, O, E>(M: any) => any
+export declare const liftMonoid: <F extends TypeLambda>(
+  F: Applicative<F>
+) => <A, R, O, E>(M: Monoid<A>) => Monoid<Kind<F, R, O, E, A>>
 ```
 
 Added in v1.0.0

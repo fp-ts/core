@@ -45,10 +45,12 @@ Returns a default `compact` composition.
 **Signature**
 
 ```ts
-export declare const compactComposition: <F extends any, G extends any>(
-  F: any,
+export declare const compactComposition: <F extends TypeLambda, G extends TypeLambda>(
+  F: Covariant<F>,
   G: Compactable<G>
-) => <FR, FO, FE, GR, GO, GE, A>(self: any) => any
+) => <FR, FO, FE, GR, GO, GE, A>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, Option<A>>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
 ```
 
 Added in v1.0.0
@@ -58,7 +60,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const separate: <F extends any>(F: any) => <R, O, E, A, B>(self: any) => [any, any]
+export declare const separate: <F extends TypeLambda>(
+  F: Covariant<F> & Compactable<F>
+) => <R, O, E, A, B>(self: Kind<F, R, O, E, Either<A, B>>) => [Kind<F, R, O, E, A>, Kind<F, R, O, E, B>]
 ```
 
 Added in v1.0.0

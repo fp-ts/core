@@ -45,11 +45,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filter: <F extends any>(
+export declare const filter: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
-  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(self: any) => any
-  <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(self: any) => any
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
+    self: Kind<F, R, O, E, C>
+  ) => Kind<F, R, O, E, B>
+  <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
 }
 ```
 
@@ -62,10 +64,14 @@ Returns a default `filterMap` composition.
 **Signature**
 
 ```ts
-export declare const filterMapComposition: <F extends any, G extends any>(
-  F: any,
+export declare const filterMapComposition: <F extends TypeLambda, G extends TypeLambda>(
+  F: Covariant<F>,
   G: Filterable<G>
-) => <A, B>(f: (a: A) => any) => <FR, FO, FE, GR, GO, GE>(self: any) => any
+) => <A, B>(
+  f: (a: A) => Option<B>
+) => <FR, FO, FE, GR, GO, GE>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
+) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
 ```
 
 Added in v1.0.0
@@ -75,11 +81,15 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const partition: <F extends any>(
+export declare const partition: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
-  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(self: any) => [any, any]
-  <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(self: any) => [any, any]
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
+    self: Kind<F, R, O, E, C>
+  ) => [Kind<F, R, O, E, C>, Kind<F, R, O, E, B>]
+  <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(
+    self: Kind<F, R, O, E, B>
+  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
 }
 ```
 
@@ -90,9 +100,11 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const partitionMap: <F extends any>(
+export declare const partitionMap: <F extends TypeLambda>(
   F: Filterable<F>
-) => <A, B, C>(f: (a: A) => any) => <R, O, E>(self: any) => [any, any]
+) => <A, B, C>(
+  f: (a: A) => Either<B, C>
+) => <R, O, E>(self: Kind<F, R, O, E, A>) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
 ```
 
 Added in v1.0.0

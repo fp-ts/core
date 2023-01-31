@@ -35,7 +35,9 @@ by applying each `Equivalence` to the corresponding property of the struct.
 **Signature**
 
 ```ts
-export declare const getEquivalence: any
+export declare const getEquivalence: <A>(equivalences: {
+  [K in keyof A]: equivalence.Equivalence<A[K]>
+}) => equivalence.Equivalence<{ readonly [K in keyof A]: A[K] }>
 ```
 
 Added in v1.0.0
@@ -52,7 +54,9 @@ It is useful when you need to combine two structs of the same type and you have 
 **Signature**
 
 ```ts
-export declare const getMonoid: any
+export declare const getMonoid: <A>(monoids: { readonly [K in keyof A]: monoid.Monoid<A[K]> }) => monoid.Monoid<{
+  readonly [K in keyof A]: A[K]
+}>
 ```
 
 Added in v1.0.0
@@ -65,7 +69,9 @@ for each property in the struct.
 **Signature**
 
 ```ts
-export declare const getOrder: any
+export declare const getOrder: <A>(orders: { readonly [K in keyof A]: order.Order<A[K]> }) => order.Order<{
+  readonly [K in keyof A]: A[K]
+}>
 ```
 
 Added in v1.0.0
@@ -80,7 +86,9 @@ It is useful when you need to combine two structs of the same type and you have 
 **Signature**
 
 ```ts
-export declare const getSemigroup: any
+export declare const getSemigroup: <A>(semigroups: {
+  readonly [K in keyof A]: semigroup.Semigroup<A[K]>
+}) => semigroup.Semigroup<{ readonly [K in keyof A]: A[K] }>
 ```
 
 Added in v1.0.0

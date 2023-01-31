@@ -1,5 +1,5 @@
 diff --git a/lib/Core.js b/lib/Core.js
-index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..a75fde491fec9f0d6e14c3adf2cc9b000f1c625e 100644
+index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..616f7f6223459e0621522279ea7fc1cf1868abe8 100644
 --- a/lib/Core.js
 +++ b/lib/Core.js
 @@ -167,7 +167,30 @@ var typeCheckExamples = function (modules) {
@@ -34,3 +34,22 @@ index c0f282ca9e3ddd93e44a62e1d05c1cc45b9f5c6a..a75fde491fec9f0d6e14c3adf2cc9b00
      }));
  };
  // -------------------------------------------------------------------------------------
+diff --git a/lib/index.js b/lib/index.js
+index 51bdb346c4c33e8835bbda0c16aea71bc0c3115e..7d084d363efd3f8aad76051f4253b0b59cd0c5cd 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -33,7 +33,13 @@ exports.exit = TE.fold(onLeft, function () { return onRight; });
+  * @internal
+  */
+ exports.compilerOptions = {
+-    strict: true
++    strict: true,
++    paths: {
++      "@fp-ts/core": ["./src/index.ts"],
++      "@fp-ts/core/test/*": ["./test/*"],
++      "@fp-ts/core/examples/*": ["./examples/*"],
++      "@fp-ts/core/*": ["./src/*"]
++    }
+ };
+ var capabilities = {
+     example: Example_1.Example,

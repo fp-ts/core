@@ -36,7 +36,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const max: <A>(B: Bounded<A>) => any
+export declare const max: <A>(B: Bounded<A>) => Monoid<A>
 ```
 
 Added in v1.0.0
@@ -48,7 +48,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const min: <A>(B: Bounded<A>) => any
+export declare const min: <A>(B: Bounded<A>) => Monoid<A>
 ```
 
 Added in v1.0.0

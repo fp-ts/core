@@ -97,7 +97,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Equivalence: any
+export declare const Equivalence: equivalence.Equivalence<bigint>
 ```
 
 Added in v1.0.0
@@ -111,7 +111,7 @@ The `empty` value is `1n`.
 **Signature**
 
 ```ts
-export declare const MonoidMultiply: any
+export declare const MonoidMultiply: monoid.Monoid<bigint>
 ```
 
 Added in v1.0.0
@@ -125,7 +125,7 @@ The `empty` value is `0n`.
 **Signature**
 
 ```ts
-export declare const MonoidSum: any
+export declare const MonoidSum: monoid.Monoid<bigint>
 ```
 
 Added in v1.0.0
@@ -135,7 +135,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Order: any
+export declare const Order: order.Order<bigint>
 ```
 
 Added in v1.0.0
@@ -147,7 +147,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupMultiply: any
+export declare const SemigroupMultiply: semigroup.Semigroup<bigint>
 ```
 
 Added in v1.0.0
@@ -159,7 +159,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const SemigroupSum: any
+export declare const SemigroupSum: semigroup.Semigroup<bigint>
 ```
 
 Added in v1.0.0
