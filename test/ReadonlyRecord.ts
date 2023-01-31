@@ -23,11 +23,23 @@ describe.concurrent("ReadonlyRecord", () => {
   })
 
   it("mapWithKey", () => {
-    expect(pipe({ a: 1, b: 2 }, RR.mapWithKey((k, n) => `${k}-${n}`))).toEqual,
-      ({ a: "a-1", b: "b-2" })
+    expect(pipe({ a: 1, b: 2 }, RR.mapWithKey((k, n) => `${k}-${n}`))).toEqual({
+      a: "a-1",
+      b: "b-2"
+    })
   })
 
   it("map", () => {
-    expect(pipe({ a: 1, b: 2 }, RR.map(n => n * 2))).toEqual, ({ a: 2, b: 4 })
+    expect(pipe({ a: 1, b: 2 }, RR.map(n => n * 2))).toEqual({ a: 2, b: 4 })
+  })
+
+  it("fromIterable", () => {
+    const input = [1, 2, 3, 4]
+    expect(RR.fromIterable(input, a => [String(a), a * 2])).toEqual({
+      "1": 2,
+      "2": 4,
+      "3": 6,
+      "4": 8
+    })
   })
 })

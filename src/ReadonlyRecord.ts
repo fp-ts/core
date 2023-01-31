@@ -16,6 +16,38 @@ export interface ReadonlyRecord<A> {
 }
 
 /**
+ * Takes an iterable and a projection function, `f`, and returns a record.
+ * The projection function maps each value of the iterable to a tuple of a key and a value, which is then added to the resulting record.
+ *
+ * @param iterable - An iterable of values to be mapped to a record.
+ * @param f - A projection function that maps values of the iterable to a tuple of a key and a value.
+ *
+ * @example
+ * import { fromIterable } from '@fp-ts/core/ReadonlyRecord'
+ *
+ * const input = [1, 2, 3, 4]
+ *
+ * assert.deepStrictEqual(
+ *   fromIterable(input, a => [String(a), a * 2]),
+ *   { '1': 2, '2': 4, '3': 6, '4': 8 }
+ * )
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const fromIterable = <A, B>(
+  iterable: Iterable<A>,
+  f: (a: A) => readonly [string, B]
+): Record<string, B> => {
+  const out: Record<string, B> = {}
+  for (const a of iterable) {
+    const [k, b] = f(a)
+    out[k] = b
+  }
+  return out
+}
+
+/**
  * Retrieve a value at a particular key from a `ReadonlyRecord`, returning it wrapped in an `Option`.
  *
  * @param key - Key to retrieve from `ReadonlyRecord`.
@@ -143,3 +175,33 @@ export const mapWithKey = <A, B>(f: (k: string, a: A) => B) =>
  */
 export const map = <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B> =>
   mapWithKey((_, a) => f(a))
+
+/*
+
+  TODO:
+
+  - size
+  - isEmpty
+  - collect
+  - toArray
+  - has
+  - remove
+  - pop
+  - empty
+  - filterMapWithIndex
+  - filterMap
+  - filterWithIndex
+  - filter
+  - partition
+  - partitionWithIndex
+  - partitionMap
+  - partitionMapWithIndex
+  - traverseWithKey
+  - traverse
+  - sequence
+  - compact
+  - separate
+  - traverseFilterMap
+  - traversePartitionMap
+
+*/

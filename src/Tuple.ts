@@ -18,7 +18,7 @@ export const tuple = <A extends ReadonlyArray<any>>(...elements: A): A => elemen
  * Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
  * by applying each `Equivalence` to the corresponding element of the tuple.
  *
- * @category instances
+ * @category combinators
  * @since 1.0.0
  */
 export const getEquivalence = equivalence.tuple
@@ -29,7 +29,7 @@ export const getEquivalence = equivalence.tuple
  * It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
  * of the tuple.
  *
- * @category instances
+ * @category combinators
  * @since 1.0.0
  */
 export const getOrder = order.tuple
@@ -40,7 +40,7 @@ export const getOrder = order.tuple
  *
  * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
  *
- * @category instances
+ * @category combinators
  * @since 1.0.0
  */
 export const getSemigroup = semigroup.tuple
@@ -53,7 +53,7 @@ export const getSemigroup = semigroup.tuple
  *
  * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
  *
- * @category instances
+ * @category combinators
  * @since 1.0.0
  */
 export const getMonoid = monoid.tuple
@@ -65,3 +65,17 @@ export const getMonoid = monoid.tuple
  */
 export const appendElement = <B>(that: B) =>
   <A extends ReadonlyArray<unknown>>(self: A): [...A, B] => [...self, that]
+
+/*
+
+  TODO:
+
+  - at
+  - first
+  - second
+  - swap
+  - bimap
+  - mapLeft
+  - map
+
+*/

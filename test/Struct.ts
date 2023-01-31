@@ -7,8 +7,6 @@ describe.concurrent("Struct", () => {
     expect(S.getOrder).exists
     expect(S.getSemigroup).exists
     expect(S.getMonoid).exists
-    expect(S.nonEmptyProduct).exists
-    expect(S.product).exists
   })
 
   it("pick", () => {
