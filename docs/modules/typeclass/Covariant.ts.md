@@ -14,6 +14,8 @@ Added in v1.0.0
 
 - [constructors](#constructors)
   - [make](#make)
+- [do notation](#do-notation)
+  - [let](#let)
 - [mapping](#mapping)
   - [as](#as)
   - [asUnit](#asunit)
@@ -22,7 +24,6 @@ Added in v1.0.0
   - [Covariant (interface)](#covariant-interface)
 - [utils](#utils)
   - [imap](#imap)
-  - [let](#let)
   - [mapComposition](#mapcomposition)
 
 ---
@@ -41,6 +42,23 @@ export declare const make: <F extends TypeLambda>(
 
 Added in v1.0.0
 
+# do notation
+
+## let
+
+**Signature**
+
+```ts
+export declare const let: <F extends TypeLambda>(
+  F: Covariant<F>
+) => <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+```
+
+Added in v1.0.0
+
 # mapping
 
 ## as
@@ -50,7 +68,10 @@ Added in v1.0.0
 ```ts
 export declare const as: <F extends TypeLambda>(
   F: Covariant<F>
-) => <B>(b: B) => <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>
+) => {
+  <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B>
+  <B>(b: B): <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>
+}
 ```
 
 Added in v1.0.0
@@ -74,7 +95,10 @@ Added in v1.0.0
 ```ts
 export declare const flap: <F extends TypeLambda>(
   F: Covariant<F>
-) => <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>) => (a: A) => Kind<F, R, O, E, B>
+) => {
+  <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>): Kind<F, R, O, E, B>
+  <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>): (a: A) => Kind<F, R, O, E, B>
+}
 ```
 
 Added in v1.0.0
@@ -105,21 +129,6 @@ Returns a default `imap` implementation.
 export declare const imap: <F extends TypeLambda>(
   map: <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
 ) => <A, B>(to: (a: A) => B, from: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
-```
-
-Added in v1.0.0
-
-## let
-
-**Signature**
-
-```ts
-export declare const let: <F extends TypeLambda>(
-  F: Covariant<F>
-) => <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 ```
 
 Added in v1.0.0

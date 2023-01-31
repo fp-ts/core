@@ -1281,7 +1281,7 @@ Maps the `Some` value of this `Option` to the specified constant value.
 **Signature**
 
 ```ts
-export declare const as: <B>(b: B) => <_>(self: Option<_>) => Option<B>
+export declare const as: { <_, B>(self: Option<_>, b: B): Option<B>; <B>(b: B): <_>(self: Option<_>) => Option<B> }
 ```
 
 Added in v1.0.0
@@ -1305,7 +1305,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A, B>(self: Option<(a: A) => B>) => (a: A) => Option<B>
+export declare const flap: {
+  <A, B>(a: A, self: Option<(a: A) => B>): Option<B>
+  <A, B>(self: Option<(a: A) => B>): (a: A) => Option<B>
+}
 ```
 
 Added in v1.0.0

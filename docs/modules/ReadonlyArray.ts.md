@@ -1439,7 +1439,7 @@ Maps the success value of this effect to the specified constant value.
 **Signature**
 
 ```ts
-export declare const as: <B>(b: B) => (self: ReadonlyArray<unknown>) => B[]
+export declare const as: { <_, B>(self: readonly _[], b: B): B[]; <B>(b: B): <_>(self: readonly _[]) => B[] }
 ```
 
 Added in v1.0.0
@@ -1449,7 +1449,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <A, B>(self: readonly ((a: A) => B)[]) => (a: A) => B[]
+export declare const flap: {
+  <A, B>(a: A, self: readonly ((a: A) => B)[]): B[]
+  <A, B>(self: readonly ((a: A) => B)[]): (a: A) => B[]
+}
 ```
 
 Added in v1.0.0

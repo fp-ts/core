@@ -262,7 +262,10 @@ export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tu
  * @category mapping
  * @since 1.0.0
  */
-export const flap: <E, A, B>(self: Either<E, (a: A) => B>) => (a: A) => Either<E, B> = covariant
+export const flap: {
+  <A, E, B>(a: A, self: Either<E, (a: A) => B>): Either<E, B>
+  <E, A, B>(self: Either<E, (a: A) => B>): (a: A) => Either<E, B>
+} = covariant
   .flap(Covariant)
 
 /**
@@ -271,9 +274,10 @@ export const flap: <E, A, B>(self: Either<E, (a: A) => B>) => (a: A) => Either<E
  * @category mapping
  * @since 1.0.0
  */
-export const as: <B>(b: B) => <E, _>(self: Either<E, _>) => Either<E, B> = covariant.as(
-  Covariant
-)
+export const as: {
+  <E, _, B>(self: Either<E, _>, b: B): Either<E, B>
+  <B>(b: B): <E, _>(self: Either<E, _>) => Either<E, B>
+} = covariant.as(Covariant)
 
 /**
  * Returns the effect Eithering from mapping the Right of this effect to unit.

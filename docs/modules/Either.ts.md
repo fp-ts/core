@@ -1080,7 +1080,10 @@ Maps the Right value of this effect to the specified constant value.
 **Signature**
 
 ```ts
-export declare const as: <B>(b: B) => <E, _>(self: Either<E, _>) => Either<E, B>
+export declare const as: {
+  <E, _, B>(self: Either<E, _>, b: B): Either<E, B>
+  <B>(b: B): <E, _>(self: Either<E, _>) => Either<E, B>
+}
 ```
 
 Added in v1.0.0
@@ -1115,7 +1118,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flap: <E, A, B>(self: Either<E, (a: A) => B>) => (a: A) => Either<E, B>
+export declare const flap: {
+  <A, E, B>(a: A, self: Either<E, (a: A) => B>): Either<E, B>
+  <E, A, B>(self: Either<E, (a: A) => B>): (a: A) => Either<E, B>
+}
 ```
 
 Added in v1.0.0
