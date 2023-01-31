@@ -32,7 +32,6 @@ Added in v1.0.0
   - [of](#of)
   - [right](#right)
   - [rightOrBoth](#rightorboth)
-  - [succeed](#succeed)
   - [warn](#warn)
 - [conversions](#conversions)
   - [absolve](#absolve)
@@ -52,15 +51,12 @@ Added in v1.0.0
 - [do notation](#do-notation)
   - [Do](#do)
   - [andThenBind](#andthenbind)
-  - [andThenBindEither](#andthenbindeither)
-  - [andThenBindThese](#andthenbindthese)
   - [bind](#bind)
   - [bindEither](#bindeither)
   - [bindThese](#bindthese)
   - [bindTo](#bindto)
   - [let](#let)
 - [error handling](#error-handling)
-  - [catchAll](#catchall)
   - [firstRightOrBothOf](#firstrightorbothof)
   - [mapLeft](#mapleft)
   - [orElse](#orelse)
@@ -105,7 +101,6 @@ Added in v1.0.0
   - [SemiProduct](#semiproduct)
   - [Traversable](#traversable)
 - [interop](#interop)
-  - [fromThrowable](#fromthrowable)
   - [getOrThrow](#getorthrow)
   - [getRightOnlyOrThrow](#getrightonlyorthrow)
   - [liftThrowable](#liftthrowable)
@@ -359,7 +354,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const leftOrBoth: <E>(e: LazyArg<E>) => <A>(self: O.Option<A>) => These<E, A>
+export declare const leftOrBoth: <E>(onSome: LazyArg<E>) => <A>(self: O.Option<A>) => These<E, A>
 ```
 
 Added in v1.0.0
@@ -391,19 +386,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const rightOrBoth: <A>(a: () => A) => <E>(self: O.Option<E>) => These<E, A>
-```
-
-Added in v1.0.0
-
-## succeed
-
-Alias of `right`.
-
-**Signature**
-
-```ts
-export declare const succeed: <A>(a: A) => These<readonly [never, ...never[]], A>
+export declare const rightOrBoth: <A>(onNone: LazyArg<A>) => <E>(self: O.Option<E>) => These<E, A>
 ```
 
 Added in v1.0.0
@@ -579,36 +562,6 @@ export declare const andThenBind: <N extends string, A extends object, E2, B>(
 
 Added in v1.0.0
 
-## andThenBindEither
-
-**Signature**
-
-```ts
-export declare const andThenBindEither: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Either<E2, B>
-) => <E1>(
-  self: These<readonly [E1, ...E1[]], A>
-) => These<readonly [E2 | E1, ...(E2 | E1)[]], { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
-```
-
-Added in v1.0.0
-
-## andThenBindThese
-
-**Signature**
-
-```ts
-export declare const andThenBindThese: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: These<E2, B>
-) => <E1>(
-  self: These<readonly [E1, ...E1[]], A>
-) => These<readonly [E2 | E1, ...(E2 | E1)[]], { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
-```
-
-Added in v1.0.0
-
 ## bind
 
 **Signature**
@@ -679,20 +632,6 @@ Added in v1.0.0
 
 # error handling
 
-## catchAll
-
-Recovers from all errors.
-
-**Signature**
-
-```ts
-export declare const catchAll: <E1, E2, B>(
-  onLeft: (e: E1) => These<E2, B>
-) => <A>(self: These<E1, A>) => These<E1 | E2, B | A>
-```
-
-Added in v1.0.0
-
 ## firstRightOrBothOf
 
 **Signature**
@@ -724,7 +663,9 @@ executes the specified effect.
 **Signature**
 
 ```ts
-export declare const orElse: <E2, B>(that: These<E2, B>) => <E1, A>(self: These<E1, A>) => These<E2 | E1, B | A>
+export declare const orElse: <E1, E2, B>(
+  that: (e1: E1) => These<E2, B>
+) => <A>(self: These<E1, A>) => These<E1 | E2, B | A>
 ```
 
 Added in v1.0.0
@@ -737,9 +678,9 @@ fails, in which case, it will produce the value of the specified effect.
 **Signature**
 
 ```ts
-export declare const orElseEither: <E2, B>(
-  that: These<E2, B>
-) => <E1, A>(self: These<E1, A>) => These<E2 | E1, Either<A, B>>
+export declare const orElseEither: <E1, E2, B>(
+  that: (e1: E1) => These<E2, B>
+) => <A>(self: These<E1, A>) => These<E1 | E2, Either<A, B>>
 ```
 
 Added in v1.0.0
@@ -1131,18 +1072,6 @@ export declare const Traversable: traversable.Traversable<TheseTypeLambda>
 Added in v1.0.0
 
 # interop
-
-## fromThrowable
-
-Constructs a new `These` from a function that might throw.
-
-**Signature**
-
-```ts
-export declare const fromThrowable: <A, E>(f: () => A, onThrow: (error: unknown) => E) => These<E, A>
-```
-
-Added in v1.0.0
 
 ## getOrThrow
 

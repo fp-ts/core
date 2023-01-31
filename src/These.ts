@@ -91,7 +91,7 @@ export const right: <A>(right: A) => These<never, A> = E.right
  * @category constructors
  * @since 1.0.0
  */
-export const of = right
+export const of: <A>(right: A) => These<never, A> = right
 
 /**
  * @category constructors
@@ -104,35 +104,27 @@ export const both = <E, A>(left: E, right: A): These<E, A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const fail = <E>(e: E): Validated<E, never> => left([e])
+export const leftOrBoth = <E>(onSome: LazyArg<E>) =>
+  <A>(self: Option<A>): These<E, A> => O.isNone(self) ? left(onSome()) : both(onSome(), self.value)
 
 /**
- * Alias of `right`.
- *
  * @category constructors
  * @since 1.0.0
  */
-export const succeed: <A>(a: A) => Validated<never, A> = right
+export const rightOrBoth = <A>(onNone: LazyArg<A>) =>
+  <E>(self: Option<E>): These<E, A> => O.isNone(self) ? right(onNone()) : both(self.value, onNone())
+
+/**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const fail = <E>(e: E): Validated<E, never> => left([e])
 
 /**
  * @category constructors
  * @since 1.0.0
  */
 export const warn = <E, A>(e: E, a: A): Validated<E, A> => both([e], a)
-
-/**
- * @category constructors
- * @since 1.0.0
- */
-export const leftOrBoth = <E>(e: LazyArg<E>) =>
-  <A>(self: Option<A>): These<E, A> => O.isNone(self) ? left(e()) : both(e(), self.value)
-
-/**
- * @category constructors
- * @since 1.0.0
- */
-export const rightOrBoth = <A>(a: () => A) =>
-  <E>(self: Option<E>): These<E, A> => O.isNone(self) ? right(a()) : both(self.value, a())
 
 /**
  * @category pattern matching
@@ -213,23 +205,6 @@ export const isThese = (u: unknown): u is These<unknown, unknown> =>
   (u["_tag"] === "Left" || u["_tag"] === "Right" || u["_tag"] === "Both")
 
 /**
- * Constructs a new `These` from a function that might throw.
- *
- * @category interop
- * @since 1.0.0
- */
-export const fromThrowable = <A, E>(
-  f: () => A,
-  onThrow: (error: unknown) => E
-): These<E, A> => {
-  try {
-    return right(f())
-  } catch (e) {
-    return left(onThrow(e))
-  }
-}
-
-/**
  * Lifts a function that may throw to one returning a `These`.
  *
  * @category interop
@@ -238,7 +213,14 @@ export const fromThrowable = <A, E>(
 export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => B,
   onThrow: (error: unknown) => E
-): ((...a: A) => These<E, B>) => (...a) => fromThrowable(() => f(...a), onThrow)
+): ((...a: A) => These<E, B>) =>
+  (...a) => {
+    try {
+      return right(f(...a))
+    } catch (e) {
+      return left(onThrow(e))
+    }
+  }
 
 /**
  * @category interop
@@ -628,14 +610,6 @@ export const tupled: <E, A>(self: These<E, A>) => These<E, [A]> = invariant.tupl
 )
 
 /**
- * @category do notation
- * @since 1.0.0
- */
-export const bindTo: <N extends string>(
-  name: N
-) => <E, A>(self: These<E, A>) => These<E, { [K in N]: A }> = invariant.bindTo(Invariant)
-
-/**
  * @category mapping
  * @since 1.0.0
  */
@@ -660,23 +634,6 @@ export const as: <B>(b: B) => <E, _>(self: These<E, _>) => These<E, B> = covaria
  */
 export const asUnit: <E, _>(self: These<E, _>) => These<E, void> = covariant.asUnit(Covariant)
 
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <E>(
-  self: These<E, A>
-) => These<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
-  Covariant
-)
-
-export {
-  /**
-   * @category do notation
-   * @since 1.0.0
-   */
-  let_ as let
-}
-
 /**
  * @category instances
  * @since 1.0.0
@@ -689,12 +646,6 @@ export const Of: of_.Of<TheseTypeLambda> = {
  * @since 1.0.0
  */
 export const unit: These<never, void> = of_.unit(Of)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const Do: These<never, {}> = of_.Do(Of)
 
 /**
  * @category instances
@@ -783,25 +734,15 @@ export const Foldable: foldable.Foldable<TheseTypeLambda> = {
 }
 
 /**
- * Recovers from all errors.
- *
- * @category error handling
- * @since 1.0.0
- */
-export const catchAll = <E1, E2, B>(
-  onLeft: (e: E1) => These<E2, B>
-) => <A>(self: These<E1, A>): These<E1 | E2, A | B> => isLeft(self) ? onLeft(self.left) : self
-
-/**
  * Executes this effect and returns its value, if it succeeds, but otherwise
  * executes the specified effect.
  *
  * @category error handling
  * @since 1.0.0
  */
-export const orElse = <E2, B>(
-  that: These<E2, B>
-) => <E1, A>(self: These<E1, A>): These<E1 | E2, A | B> => isLeft(self) ? that : self
+export const orElse = <E1, E2, B>(
+  that: (e1: E1) => These<E2, B>
+) => <A>(self: These<E1, A>): These<E1 | E2, A | B> => isLeft(self) ? that(self.left) : self
 
 /**
  * Returns an effect that will produce the value of this effect, unless it
@@ -810,12 +751,12 @@ export const orElse = <E2, B>(
  * @category error handling
  * @since 1.0.0
  */
-export const orElseEither = <E2, B>(
-  that: These<E2, B>
+export const orElseEither = <E1, E2, B>(
+  that: (e1: E1) => These<E2, B>
 ) =>
-  <E1, A>(self: These<E1, A>): These<E1 | E2, Either<A, B>> =>
+  <A>(self: These<E1, A>): These<E1 | E2, Either<A, B>> =>
     isLeft(self) ?
-      pipe(that, map(E.right)) :
+      pipe(that(self.left), map(E.right)) :
       pipe(self, map(E.left))
 
 /**
@@ -827,7 +768,7 @@ export const orElseEither = <E2, B>(
  */
 export const orElseFail = <E2>(
   onLeft: LazyArg<E2>
-): <E1, A>(self: These<E1, A>) => These<E1 | E2, A> => catchAll(() => left(onLeft()))
+): <E1, A>(self: These<E1, A>) => These<E1 | E2, A> => orElse(() => left(onLeft()))
 
 /**
  * @category error handling
@@ -1053,42 +994,6 @@ const productAll = <E, A>(
   }
   return right(rights)
 }
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const andThenBind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Validated<E2, B>
-) => <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const andThenBindEither = <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Either<E2, B>
-): <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> =>
-  andThenBind(name, fromEither(that))
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const andThenBindThese = <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: These<E2, B>
-): <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> =>
-  andThenBind(name, fromThese(that))
 
 /**
  * Appends an element to the end of a tuple.
@@ -1396,3 +1301,50 @@ export const subtractBigint: {
     that: Validated<E2, bigint>
   ) => <E1>(self: Validated<E1, bigint>) => Validated<E1 | E2, bigint>
 >(2, lift2<bigint, bigint, bigint>(BI.subtract))
+
+// -------------------------------------------------------------------------------------
+// do notation
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindTo: <N extends string>(
+  name: N
+) => <E, A>(self: These<E, A>) => These<E, { [K in N]: A }> = invariant.bindTo(Invariant)
+
+const let_: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => <E>(
+  self: These<E, A>
+) => These<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
+  Covariant
+)
+
+export {
+  /**
+   * @category do notation
+   * @since 1.0.0
+   */
+  let_ as let
+}
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const Do: These<never, {}> = of_.Do(Of)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const andThenBind: <N extends string, A extends object, E2, B>(
+  name: Exclude<N, keyof A>,
+  that: Validated<E2, B>
+) => <E1>(
+  self: Validated<E1, A>
+) => Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+  .andThenBind(SemiProduct)

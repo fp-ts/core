@@ -34,10 +34,10 @@ export const getRight = <E, A>(
 
 /** @internal */
 export const fromOption = dual<
-  <A, E>(fa: Option<A>, onNone: () => E) => Either<E, A>,
-  <E>(onNone: () => E) => <A>(fa: Option<A>) => Either<E, A>
+  <A, E>(self: Option<A>, onNone: () => E) => Either<E, A>,
+  <E>(onNone: () => E) => <A>(self: Option<A>) => Either<E, A>
 >(
   2,
-  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A> =>
-    option.isNone(fa) ? left(onNone()) : right(fa.value)
+  <A, E>(self: Option<A>, onNone: () => E): Either<E, A> =>
+    option.isNone(self) ? left(onNone()) : right(self.value)
 )

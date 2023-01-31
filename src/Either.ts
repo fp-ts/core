@@ -259,14 +259,6 @@ export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tu
 )
 
 /**
- * @category do notation
- * @since 1.0.0
- */
-export const bindTo: <N extends string>(
-  name: N
-) => <E, A>(self: Either<E, A>) => Either<E, { [K in N]: A }> = invariant.bindTo(Invariant)
-
-/**
  * @category mapping
  * @since 1.0.0
  */
@@ -292,23 +284,6 @@ export const as: <B>(b: B) => <E, _>(self: Either<E, _>) => Either<E, B> = covar
 export const asUnit: <E, _>(self: Either<E, _>) => Either<E, void> = covariant.asUnit(
   Covariant
 )
-
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <E>(
-  self: Either<E, A>
-) => Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
-  Covariant
-)
-
-export {
-  /**
-   * @category do notation
-   * @since 1.0.0
-   */
-  let_ as let
-}
 
 /**
  * Returns an effect whose Left and Right channels have been mapped by
@@ -353,12 +328,6 @@ export const Of: of_.Of<EitherTypeLambda> = {
  * @since 1.0.0
  */
 export const unit: Either<never, void> = of_.unit(Of)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const Do: Either<never, {}> = of_.Do(Of)
 
 /**
  * @category instances
@@ -419,18 +388,6 @@ export const Chainable: chainable.Chainable<EitherTypeLambda> = {
 }
 
 /**
- * @category do notation
- * @since 1.0.0
- */
-export const bind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Either<E2, B>
-) => <E1>(
-  self: Either<E1, A>
-) => Either<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
-  .bind(Chainable)
-
-/**
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
@@ -485,20 +442,6 @@ export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
   product,
   productMany
 }
-
-/**
- * A variant of `bind` that sequentially ignores the scope.
- *
- * @category do notation
- * @since 1.0.0
- */
-export const andThenBind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Either<E2, B>
-) => <E1>(
-  self: Either<E1, A>
-) => Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
 
 /**
  * Appends an element to the end of a tuple.
@@ -733,13 +676,6 @@ export const getOrElse: {
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise
  * executes the specified effect.
- *
- * | x          | y          | x |> orElse(y) |
- * | ---------- | ---------- | ---------------|
- * | left(a)    | left(b)    | left(b)        |
- * | left(a)    | right(2)   | right(2)       |
- * | right(1)   | left(b)    | right(1)       |
- * | right(1)   | right(2)   | right(1)       |
  *
  * @category error handling
  * @since 1.0.0
@@ -1244,3 +1180,63 @@ export const subtractBigint: {
   <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>) => Either<E1 | E2, bigint>,
   <E2>(that: Either<E2, bigint>) => <E1>(self: Either<E1, bigint>) => Either<E1 | E2, bigint>
 >(2, lift2<bigint, bigint, bigint>(BI.subtract))
+
+// -------------------------------------------------------------------------------------
+// do notation
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindTo: <N extends string>(
+  name: N
+) => <E, A>(self: Either<E, A>) => Either<E, { [K in N]: A }> = invariant.bindTo(Invariant)
+
+const let_: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => <E>(
+  self: Either<E, A>
+) => Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
+  Covariant
+)
+
+export {
+  /**
+   * @category do notation
+   * @since 1.0.0
+   */
+  let_ as let
+}
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const Do: Either<never, {}> = of_.Do(Of)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bind: <N extends string, A extends object, E2, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => Either<E2, B>
+) => <E1>(
+  self: Either<E1, A>
+) => Either<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
+  .bind(Chainable)
+
+/**
+ * A variant of `bind` that sequentially ignores the scope.
+ *
+ * @category do notation
+ * @since 1.0.0
+ */
+export const andThenBind: <N extends string, A extends object, E2, B>(
+  name: Exclude<N, keyof A>,
+  that: Either<E2, B>
+) => <E1>(
+  self: Either<E1, A>
+) => Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+  .andThenBind(SemiProduct)

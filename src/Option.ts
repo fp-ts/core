@@ -106,7 +106,7 @@ export const some: <A>(value: A) => Option<A> = option.some
  * @category constructors
  * @since 1.0.0
  */
-export const of: <A>(a: A) => Option<A> = some
+export const of: <A>(value: A) => Option<A> = some
 
 // -------------------------------------------------------------------------------------
 // guards
@@ -252,8 +252,8 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
 /**
  * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
  *
- * @param onNone - a function that produces an error value when the `Option` is `None`.
  * @param self - the `Option` to convert.
+ * @param onNone - a function that produces an error value when the `Option` is `None`.
  *
  * @example
  * import { pipe } from '@fp-ts/core/Function'
@@ -264,12 +264,13 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
  * assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
  * assert.deepStrictEqual(pipe(O.none(), O.toEither(onNone)), E.left('error'))
  *
+ * @dual
  * @category conversions
  * @since 1.0.0
  */
 export const toEither: {
-  <A, E>(fa: Option<A>, onNone: () => E): Either<E, A>
-  <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
+  <A, E>(self: Option<A>, onNone: () => E): Either<E, A>
+  <E>(onNone: () => E): <A>(self: Option<A>) => Either<E, A>
 } = either.fromOption
 
 // -------------------------------------------------------------------------------------
@@ -386,7 +387,7 @@ export const orElseEither: {
 )
 
 /**
- * Given an Iterable collection of `Option`s, the function returns the first `Some` found in the collection.
+ * Given an `Iterable` collection of `Option`s, the function returns the first `Some` found in the collection.
  *
  * @param collection - An iterable collection of `Option` to be searched.
  *
@@ -642,28 +643,6 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
 export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
 
 /**
- * @category do notation
- * @since 1.0.0
- */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Option<A>) => Option<{ [K in N]: A }> = invariant.bindTo(Invariant)
-
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant
-  .let(Covariant)
-
-export {
-  /**
-   * @category do notation
-   * @since 1.0.0
-   */
-  let_ as let
-}
-
-/**
  * @category mapping
  * @since 1.0.0
  */
@@ -700,12 +679,6 @@ export const Of: of_.Of<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const unit: Option<void> = of_.unit(Of)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const Do: Option<{}> = of_.Do(Of)
 
 /**
  * @category instances
@@ -773,16 +746,6 @@ export const Chainable: chainable.Chainable<OptionTypeLambda> = {
   map,
   flatMap
 }
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Option<B>
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable
-  .bind(Chainable)
 
 /**
  * Sequences the specified `that` `Option` but ignores its value.
@@ -906,18 +869,6 @@ export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
   product,
   productMany
 }
-
-/**
- * A variant of `bind` that sequentially ignores the scope.
- *
- * @category do notation
- * @since 1.0.0
- */
-export const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Option<B>
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
 
 /**
  * Appends an element to the end of a tuple.
@@ -1694,3 +1645,57 @@ export const multiplyAll = (self: Iterable<Option<number>>): number => {
   }
   return out
 }
+
+// -------------------------------------------------------------------------------------
+// do notation
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: Option<A>) => Option<{ [K in N]: A }> = invariant.bindTo(Invariant)
+
+const let_: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant
+  .let(Covariant)
+
+export {
+  /**
+   * @category do notation
+   * @since 1.0.0
+   */
+  let_ as let
+}
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => Option<B>
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable
+  .bind(Chainable)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const Do: Option<{}> = of_.Do(Of)
+
+/**
+ * A variant of `bind` that sequentially ignores the scope.
+ *
+ * @category do notation
+ * @since 1.0.0
+ */
+export const andThenBind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  that: Option<B>
+) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+  .andThenBind(SemiProduct)

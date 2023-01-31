@@ -566,13 +566,6 @@ Added in v1.0.0
 Executes this effect and returns its value, if it succeeds, but otherwise
 executes the specified effect.
 
-| x        | y        | x        | > orElse(y) |
-| -------- | -------- | -------- | ----------- |
-| left(a)  | left(b)  | left(b)  |
-| left(a)  | right(2) | right(2) |
-| right(1) | left(b)  | right(1) |
-| right(1) | right(2) | right(1) |
-
 **Signature**
 
 ```ts

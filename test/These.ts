@@ -132,82 +132,13 @@ describe("These", () => {
     )
   })
 
-  it("andThenBindEither", () => {
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.andThenBindEither("b", E.right(2))),
-      _.succeed({ a: 1, b: 2 })
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.andThenBindEither("b", E.left("e2"))),
-      _.fail("e2")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.fail("e1")), _.andThenBindEither("b", E.right(2))),
-      _.fail("e1")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.fail("e1")), _.andThenBindEither("b", E.left("e2"))),
-      _.fail("e1")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.warn("e1", 1)), _.andThenBindEither("b", E.right(2))),
-      _.warn("e1", { a: 1, b: 2 })
-    )
-    expect(
-      pipe(_.Do, _.bind("a", () => _.warn("e1", 1)), _.andThenBindEither("b", E.left("e2")))
-    ).toEqual(
-      _.left(["e1", "e2"])
-    )
-  })
-
-  it("andThenBindThese", () => {
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.andThenBindThese("b", _.right(2))),
-      _.succeed({ a: 1, b: 2 })
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.andThenBindThese("b", _.left("e2"))),
-      _.fail("e2")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.andThenBindThese("b", _.both("e2", 2))),
-      _.warn("e2", { a: 1, b: 2 })
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.fail("e1")), _.andThenBindThese("b", _.right(2))),
-      _.fail("e1")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.fail("e1")), _.andThenBindThese("b", _.left("e2"))),
-      _.fail("e1")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.fail("e1")), _.andThenBindThese("b", _.both("e2", 2))),
-      _.fail("e1")
-    )
-    Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.warn("e1", 1)), _.andThenBindThese("b", _.right(2))),
-      _.warn("e1", { a: 1, b: 2 })
-    )
-    expect(
-      pipe(_.Do, _.bind("a", () => _.warn("e1", 1)), _.andThenBindThese("b", _.left("e2")))
-    ).toEqual(
-      _.left(["e1", "e2"])
-    )
-    expect(
-      pipe(_.Do, _.bind("a", () => _.warn("e1", 1)), _.andThenBindThese("b", _.both("e2", 2)))
-    ).toEqual(
-      _.both(["e1", "e2"], { a: 1, b: 2 })
-    )
-  })
-
   it("andThenBind", () => {
     Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.bindEither("b", () => E.right(2))),
-      _.succeed({ a: 1, b: 2 })
+      pipe(_.Do, _.bind("a", () => _.right(1)), _.bindEither("b", () => E.right(2))),
+      _.right({ a: 1, b: 2 })
     )
     Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.bindEither("b", () => E.left("e2"))),
+      pipe(_.Do, _.bind("a", () => _.right(1)), _.bindEither("b", () => E.left("e2"))),
       _.fail("e2")
     )
     Util.deepStrictEqual(
@@ -231,15 +162,15 @@ describe("These", () => {
 
   it("andThenBind", () => {
     Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.bindThese("b", () => _.right(2))),
-      _.succeed({ a: 1, b: 2 })
+      pipe(_.Do, _.bind("a", () => _.right(1)), _.bindThese("b", () => _.right(2))),
+      _.right({ a: 1, b: 2 })
     )
     Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.bindThese("b", () => _.left("e2"))),
+      pipe(_.Do, _.bind("a", () => _.right(1)), _.bindThese("b", () => _.left("e2"))),
       _.fail("e2")
     )
     Util.deepStrictEqual(
-      pipe(_.Do, _.bind("a", () => _.succeed(1)), _.bindThese("b", () => _.both("e2", 2))),
+      pipe(_.Do, _.bind("a", () => _.right(1)), _.bindThese("b", () => _.both("e2", 2))),
       _.warn("e2", { a: 1, b: 2 })
     )
     Util.deepStrictEqual(
@@ -356,15 +287,15 @@ describe("These", () => {
     const f = (
       n: number
     ) => (n >= 2 ?
-      (n <= 5 ? _.succeed(n * 2) : _.warn("e2", n)) :
+      (n <= 5 ? _.right(n * 2) : _.warn("e2", n)) :
       _.fail("e3"))
     Util.deepStrictEqual(
       pipe(_.fail("e1"), _.flatMap(f)),
       _.fail("e1")
     )
-    Util.deepStrictEqual(pipe(_.succeed(2), _.flatMap(f)), _.succeed(4))
-    Util.deepStrictEqual(pipe(_.succeed(1), _.flatMap(f)), _.fail("e3"))
-    Util.deepStrictEqual(pipe(_.succeed(6), _.flatMap(f)), _.warn("e2", 6))
+    Util.deepStrictEqual(pipe(_.right(2), _.flatMap(f)), _.right(4))
+    Util.deepStrictEqual(pipe(_.right(1), _.flatMap(f)), _.fail("e3"))
+    Util.deepStrictEqual(pipe(_.right(6), _.flatMap(f)), _.warn("e2", 6))
     Util.deepStrictEqual(
       pipe(_.warn("e1", 2), _.flatMap(f)),
       _.warn("e1", 4)
@@ -375,8 +306,8 @@ describe("These", () => {
 
   it("flatMapNullable", () => {
     const f = _.flatMapNullable((n: number) => (n > 0 ? n : null), () => "e2")
-    Util.deepStrictEqual(f(_.succeed(1)), _.succeed(1))
-    Util.deepStrictEqual(f(_.succeed(-1)), _.fail("e2"))
+    Util.deepStrictEqual(f(_.right(1)), _.right(1))
+    Util.deepStrictEqual(f(_.right(-1)), _.fail("e2"))
     Util.deepStrictEqual(f(_.fail("e1")), _.fail("e1"))
     Util.deepStrictEqual(f(_.warn("e1", 1)), _.warn("e1", 1))
     expect(f(_.warn("e1", -1))).toEqual(_.left(["e1", "e2"]))
@@ -384,8 +315,8 @@ describe("These", () => {
 
   it("flatMapOption", () => {
     const f = _.flatMapOption((n: number) => (n > 0 ? O.some(n) : O.none()), () => "e2")
-    Util.deepStrictEqual(f(_.succeed(1)), _.succeed(1))
-    Util.deepStrictEqual(f(_.succeed(-1)), _.fail("e2"))
+    Util.deepStrictEqual(f(_.right(1)), _.right(1))
+    Util.deepStrictEqual(f(_.right(-1)), _.fail("e2"))
     Util.deepStrictEqual(f(_.fail("e1")), _.fail("e1"))
     Util.deepStrictEqual(f(_.warn("e1", 1)), _.warn("e1", 1))
     expect(f(_.warn("e1", -1))).toEqual(_.left(["e1", "e2"]))
@@ -393,8 +324,8 @@ describe("These", () => {
 
   it("flatMapEither", () => {
     const f = _.flatMapEither((n: number) => (n > 0 ? E.right(n) : E.left("e2")))
-    Util.deepStrictEqual(f(_.succeed(1)), _.succeed(1))
-    Util.deepStrictEqual(f(_.succeed(-1)), _.fail("e2"))
+    Util.deepStrictEqual(f(_.right(1)), _.right(1))
+    Util.deepStrictEqual(f(_.right(-1)), _.fail("e2"))
     Util.deepStrictEqual(f(_.fail("e1")), _.fail("e1"))
     Util.deepStrictEqual(f(_.warn("e1", 1)), _.warn("e1", 1))
     expect(f(_.warn("e1", -1))).toEqual(_.left(["e1", "e2"]))
@@ -404,9 +335,9 @@ describe("These", () => {
     const f = _.flatMapThese((
       n: number
     ) => (n > 10 ? _.both("e3", n) : n > 0 ? _.right(n) : _.left("e2")))
-    Util.deepStrictEqual(f(_.succeed(1)), _.succeed(1))
-    Util.deepStrictEqual(f(_.succeed(-1)), _.fail("e2"))
-    Util.deepStrictEqual(f(_.succeed(11)), _.warn("e3", 11))
+    Util.deepStrictEqual(f(_.right(1)), _.right(1))
+    Util.deepStrictEqual(f(_.right(-1)), _.fail("e2"))
+    Util.deepStrictEqual(f(_.right(11)), _.warn("e3", 11))
     Util.deepStrictEqual(f(_.fail("e1")), _.fail("e1"))
     Util.deepStrictEqual(f(_.warn("e1", 1)), _.warn("e1", 1))
     expect(f(_.warn("e1", -1))).toEqual(_.left(["e1", "e2"]))
@@ -505,22 +436,6 @@ describe("These", () => {
     Util.deepStrictEqual(_.isBoth(_.left("e")), false)
     Util.deepStrictEqual(_.isBoth(_.right(1)), false)
     Util.deepStrictEqual(_.isBoth(_.both("e", 1)), true)
-  })
-
-  it("fromThrowable", () => {
-    Util.deepStrictEqual(
-      _.fromThrowable(() => {
-        return 1
-      }, identity),
-      _.right(1)
-    )
-
-    Util.deepStrictEqual(
-      _.fromThrowable(() => {
-        throw "string error"
-      }, identity),
-      _.left("string error")
-    )
   })
 
   it("liftThrowable", () => {
@@ -637,7 +552,7 @@ describe("These", () => {
   })
 
   it("fromThese", () => {
-    Util.deepStrictEqual(_.fromThese(_.right(1)), _.succeed(1))
+    Util.deepStrictEqual(_.fromThese(_.right(1)), _.right(1))
     Util.deepStrictEqual(_.fromThese(_.left("e")), _.fail("e"))
     Util.deepStrictEqual(_.fromThese(_.both("e", 1)), _.warn("e", 1))
   })
@@ -666,13 +581,13 @@ describe("These", () => {
 
   it("liftEither", () => {
     const f = _.liftEither((n: number) => (n > 0 ? E.right(n) : E.left("e")))
-    Util.deepStrictEqual(f(1), _.succeed(1))
+    Util.deepStrictEqual(f(1), _.right(1))
     Util.deepStrictEqual(f(-1), _.fail("e"))
   })
 
   it("liftThese", () => {
     const f = _.liftThese((n: number) => (n > 0 ? _.right(n) : _.left("e")))
-    Util.deepStrictEqual(f(1), _.succeed(1))
+    Util.deepStrictEqual(f(1), _.right(1))
     Util.deepStrictEqual(f(-1), _.fail("e"))
   })
 
@@ -708,40 +623,30 @@ describe("These", () => {
     Util.deepStrictEqual(_.of(1), _.right(1))
   })
 
-  it("catchAll", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.catchAll(() => _.right(2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.catchAll(() => _.left("b"))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.catchAll(() => _.both("b", 2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.catchAll(() => _.right(2))), _.right(2))
-    Util.deepStrictEqual(pipe(_.left("a"), _.catchAll(() => _.left("b"))), _.left("b"))
-    Util.deepStrictEqual(pipe(_.left("a"), _.catchAll(() => _.both("b", 2))), _.both("b", 2))
-    Util.deepStrictEqual(pipe(_.both("a", 1), _.catchAll(() => _.right(2))), _.both("a", 1))
-    Util.deepStrictEqual(pipe(_.both("a", 1), _.catchAll(() => _.left("b"))), _.both("a", 1))
-    Util.deepStrictEqual(pipe(_.both("a", 1), _.catchAll(() => _.both("b", 2))), _.both("a", 1))
-  })
-
   it("orElse", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(_.right(2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(_.left("b"))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(_.both("b", 2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(_.right(2))), _.right(2))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(_.left("b"))), _.left("b"))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(_.both("b", 2))), _.both("b", 2))
-    Util.deepStrictEqual(pipe(_.both("a", 1), _.orElse(_.right(2))), _.both("a", 1))
-    Util.deepStrictEqual(pipe(_.both("a", 1), _.orElse(_.left("b"))), _.both("a", 1))
-    Util.deepStrictEqual(pipe(_.both("a", 1), _.orElse(_.both("b", 2))), _.both("a", 1))
+    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.right(2))), _.right(1))
+    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.left("b"))), _.right(1))
+    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.both("b", 2))), _.right(1))
+    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.right(2))), _.right(2))
+    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.left("b"))), _.left("b"))
+    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.both("b", 2))), _.both("b", 2))
+    Util.deepStrictEqual(pipe(_.both("a", 1), _.orElse(() => _.right(2))), _.both("a", 1))
+    Util.deepStrictEqual(pipe(_.both("a", 1), _.orElse(() => _.left("b"))), _.both("a", 1))
+    Util.deepStrictEqual(pipe(_.both("a", 1), _.orElse(() => _.both("b", 2))), _.both("a", 1))
   })
 
   it("orElseEither", () => {
-    expect(pipe(_.right(1), _.orElseEither(_.right(2)))).toEqual(_.right(E.left(1)))
-    expect(pipe(_.right(1), _.orElseEither(_.left("b")))).toEqual(_.right(E.left(1)))
-    expect(pipe(_.right(1), _.orElseEither(_.both("b", 2)))).toEqual(_.right(E.left(1)))
-    expect(pipe(_.left("a"), _.orElseEither(_.right(2)))).toEqual(_.right(E.right(2)))
-    expect(pipe(_.left("a"), _.orElseEither(_.left("b")))).toEqual(_.left("b"))
-    expect(pipe(_.left("a"), _.orElseEither(_.both("b", 2)))).toEqual(_.both("b", E.right(2)))
-    expect(pipe(_.both("a", 1), _.orElseEither(_.right(2)))).toEqual(_.both("a", E.left(1)))
-    expect(pipe(_.both("a", 1), _.orElseEither(_.left("b")))).toEqual(_.both("a", E.left(1)))
-    expect(pipe(_.both("a", 1), _.orElseEither(_.both("b", 2)))).toEqual(_.both("a", E.left(1)))
+    expect(pipe(_.right(1), _.orElseEither(() => _.right(2)))).toEqual(_.right(E.left(1)))
+    expect(pipe(_.right(1), _.orElseEither(() => _.left("b")))).toEqual(_.right(E.left(1)))
+    expect(pipe(_.right(1), _.orElseEither(() => _.both("b", 2)))).toEqual(_.right(E.left(1)))
+    expect(pipe(_.left("a"), _.orElseEither(() => _.right(2)))).toEqual(_.right(E.right(2)))
+    expect(pipe(_.left("a"), _.orElseEither(() => _.left("b")))).toEqual(_.left("b"))
+    expect(pipe(_.left("a"), _.orElseEither(() => _.both("b", 2)))).toEqual(_.both("b", E.right(2)))
+    expect(pipe(_.both("a", 1), _.orElseEither(() => _.right(2)))).toEqual(_.both("a", E.left(1)))
+    expect(pipe(_.both("a", 1), _.orElseEither(() => _.left("b")))).toEqual(_.both("a", E.left(1)))
+    expect(pipe(_.both("a", 1), _.orElseEither(() => _.both("b", 2)))).toEqual(
+      _.both("a", E.left(1))
+    )
   })
 
   it("orElseFail", () => {
