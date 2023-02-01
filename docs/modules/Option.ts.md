@@ -15,13 +15,13 @@ Added in v1.0.0
 - [algebraic operations](#algebraic-operations)
   - [divide](#divide)
   - [multiply](#multiply)
-  - [multiplyAll](#multiplyall)
   - [multiplyBigint](#multiplybigint)
+  - [multiplyCompact](#multiplycompact)
   - [subtract](#subtract)
   - [subtractBigint](#subtractbigint)
   - [sum](#sum)
-  - [sumAll](#sumall)
   - [sumBigint](#sumbigint)
+  - [sumCompact](#sumcompact)
 - [combinators](#combinators)
   - [tap](#tap)
 - [constructors](#constructors)
@@ -126,7 +126,7 @@ Added in v1.0.0
   - [contains](#contains)
   - [exists](#exists)
   - [flatten](#flatten)
-  - [reduceAll](#reduceall)
+  - [reduceCompact](#reducecompact)
   - [struct](#struct)
   - [toArray](#toarray)
   - [tuple](#tuple)
@@ -163,27 +163,6 @@ export declare const multiply: {
 
 Added in v1.0.0
 
-## multiplyAll
-
-Multiply all numbers in an iterable of `Option<number>` ignoring the `None` values.
-
-**Signature**
-
-```ts
-export declare const multiplyAll: (self: Iterable<Option<number>>) => number
-```
-
-**Example**
-
-```ts
-import { multiplyAll, some, none } from '@fp-ts/core/Option'
-
-const iterable = [some(2), none(), some(3), none()]
-assert.deepStrictEqual(multiplyAll(iterable), 6)
-```
-
-Added in v1.0.0
-
 ## multiplyBigint
 
 **Signature**
@@ -193,6 +172,27 @@ export declare const multiplyBigint: {
   (self: Option<bigint>, that: Option<bigint>): Option<bigint>
   (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
 }
+```
+
+Added in v1.0.0
+
+## multiplyCompact
+
+Multiply all numbers in an iterable of `Option<number>` ignoring the `None` values.
+
+**Signature**
+
+```ts
+export declare const multiplyCompact: (self: Iterable<Option<number>>) => number
+```
+
+**Example**
+
+```ts
+import { multiplyCompact, some, none } from '@fp-ts/core/Option'
+
+const iterable = [some(2), none(), some(3), none()]
+assert.deepStrictEqual(multiplyCompact(iterable), 6)
 ```
 
 Added in v1.0.0
@@ -236,27 +236,6 @@ export declare const sum: {
 
 Added in v1.0.0
 
-## sumAll
-
-Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
-
-**Signature**
-
-```ts
-export declare const sumAll: (self: Iterable<Option<number>>) => number
-```
-
-**Example**
-
-```ts
-import { sumAll, some, none } from '@fp-ts/core/Option'
-
-const iterable = [some(2), none(), some(3), none()]
-assert.deepStrictEqual(sumAll(iterable), 5)
-```
-
-Added in v1.0.0
-
 ## sumBigint
 
 **Signature**
@@ -266,6 +245,27 @@ export declare const sumBigint: {
   (self: Option<bigint>, that: Option<bigint>): Option<bigint>
   (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
 }
+```
+
+Added in v1.0.0
+
+## sumCompact
+
+Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
+
+**Signature**
+
+```ts
+export declare const sumCompact: (self: Iterable<Option<number>>) => number
+```
+
+**Example**
+
+```ts
+import { sumCompact, some, none } from '@fp-ts/core/Option'
+
+const iterable = [some(2), none(), some(3), none()]
+assert.deepStrictEqual(sumCompact(iterable), 5)
 ```
 
 Added in v1.0.0
@@ -1749,14 +1749,14 @@ export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
 
 Added in v1.0.0
 
-## reduceAll
+## reduceCompact
 
 Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
 
 **Signature**
 
 ```ts
-export declare const reduceAll: {
+export declare const reduceCompact: {
   <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
   <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
 }
@@ -1765,14 +1765,14 @@ export declare const reduceAll: {
 **Example**
 
 ```ts
-import { some, none, reduceAll } from '@fp-ts/core/Option'
+import { some, none, reduceCompact } from '@fp-ts/core/Option'
 import { pipe } from '@fp-ts/core/Function'
 
 const iterable = [some(1), none(), some(2), none()]
 assert.deepStrictEqual(
   pipe(
     iterable,
-    reduceAll(0, (b, a) => b + a)
+    reduceCompact(0, (b, a) => b + a)
   ),
   3
 )

@@ -1490,16 +1490,16 @@ export const exists: {
  * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`.
  *
  * @example
- * import { some, none, reduceAll } from '@fp-ts/core/Option'
+ * import { some, none, reduceCompact } from '@fp-ts/core/Option'
  * import { pipe } from '@fp-ts/core/Function'
  *
  * const iterable = [some(1), none(), some(2), none()]
- * assert.deepStrictEqual(pipe(iterable, reduceAll(0, (b, a) => b + a)), 3)
+ * assert.deepStrictEqual(pipe(iterable, reduceCompact(0, (b, a) => b + a)), 3)
  *
  * @dual
  * @since 1.0.0
  */
-export const reduceAll: {
+export const reduceCompact: {
   <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
   <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
 } = dual<
@@ -1527,49 +1527,49 @@ export const reduceAll: {
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = lift2<number, number, number>(N.sum)
+export const sum = lift2(N.sum)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = lift2<number, number, number>(N.multiply)
+export const multiply = lift2(N.multiply)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = lift2<number, number, number>(N.subtract)
+export const subtract = lift2(N.subtract)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = lift2<number, number, number>(N.divide)
+export const divide = lift2(N.divide)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint = lift2<bigint, bigint, bigint>(BI.sum)
+export const sumBigint = lift2(BI.sum)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint = lift2<bigint, bigint, bigint>(BI.multiply)
+export const multiplyBigint = lift2(BI.multiply)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint = lift2<bigint, bigint, bigint>(BI.subtract)
+export const subtractBigint = lift2(BI.subtract)
 
 /**
  * Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
@@ -1577,15 +1577,15 @@ export const subtractBigint = lift2<bigint, bigint, bigint>(BI.subtract)
  * @param self - The iterable of `Option<number>` to be summed.
  *
  * @example
- * import { sumAll, some, none } from '@fp-ts/core/Option'
+ * import { sumCompact, some, none } from '@fp-ts/core/Option'
  *
  * const iterable = [some(2), none(), some(3), none()]
- * assert.deepStrictEqual(sumAll(iterable), 5)
+ * assert.deepStrictEqual(sumCompact(iterable), 5)
  *
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumAll = (self: Iterable<Option<number>>): number => {
+export const sumCompact = (self: Iterable<Option<number>>): number => {
   let out = 0
   for (const oa of self) {
     if (isSome(oa)) {
@@ -1601,15 +1601,15 @@ export const sumAll = (self: Iterable<Option<number>>): number => {
  * @param self - The iterable of `Option<number>` to be multiplied.
  *
  * @example
- * import { multiplyAll, some, none } from '@fp-ts/core/Option'
+ * import { multiplyCompact, some, none } from '@fp-ts/core/Option'
  *
  * const iterable = [some(2), none(), some(3), none()]
- * assert.deepStrictEqual(multiplyAll(iterable), 6)
+ * assert.deepStrictEqual(multiplyCompact(iterable), 6)
  *
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyAll = (self: Iterable<Option<number>>): number => {
+export const multiplyCompact = (self: Iterable<Option<number>>): number => {
   let out = 1
   for (const oa of self) {
     if (isSome(oa)) {

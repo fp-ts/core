@@ -25,8 +25,8 @@ export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
  * @since 1.0.0
  */
 export const sum: {
-  (self: bigint, that: bigint): bigint
   (that: bigint): (self: bigint) => bigint
+  (self: bigint, that: bigint): bigint
 } = dual<
   (self: bigint, that: bigint) => bigint,
   (that: bigint) => (self: bigint) => bigint
@@ -38,8 +38,8 @@ export const sum: {
  * @since 1.0.0
  */
 export const multiply: {
-  (self: bigint, that: bigint): bigint
   (that: bigint): (self: bigint) => bigint
+  (self: bigint, that: bigint): bigint
 } = dual<
   (self: bigint, that: bigint) => bigint,
   (that: bigint) => (self: bigint) => bigint
@@ -51,8 +51,8 @@ export const multiply: {
  * @since 1.0.0
  */
 export const subtract: {
-  (self: bigint, that: bigint): bigint
   (that: bigint): (self: bigint) => bigint
+  (self: bigint, that: bigint): bigint
 } = dual<
   (self: bigint, that: bigint) => bigint,
   (that: bigint) => (self: bigint) => bigint
@@ -64,8 +64,8 @@ export const subtract: {
  * @since 1.0.0
  */
 export const divide: {
-  (self: bigint, that: bigint): bigint
   (that: bigint): (self: bigint) => bigint
+  (self: bigint, that: bigint): bigint
 } = dual<
   (self: bigint, that: bigint) => bigint,
   (that: bigint) => (self: bigint) => bigint
