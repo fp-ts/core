@@ -382,18 +382,37 @@ getOrElse(some(5), () => 0); // 5
 getOrElse(none(), () => 0); // 0
 ```
 
+It often happens that the action you want to take when a computation returns `None` is to continue with another computation that returns an `Option`, in this case you can use the `orElse` API:
+
+```ts
+import * as O from "@fp-ts/core/Option";
+import { pipe } from "@fp-ts/core/Function";
+
+const fetchData = (): O.Option<string> => {
+  // Imagine we have a function that returns an `Option` of data
+  return Math.random() < 0.5 ? O.some("Data fetched successfully") : O.none();
+};
+
+const retryFetchData = (): O.Option<string> =>
+  pipe(
+    fetchData(), // Call the function for the first time
+    O.orElse(() => fetchData()) // If it fails, call it again
+  );
+
+const result = retryFetchData();
+```
+
 **Cheat sheet** (error handling)
 
-| Name             | Given                                               | To                     |
-| ---------------- | --------------------------------------------------- | ---------------------- |
-| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`               |
-| `getOrThrow`     | `Option<A>`                                         | `A`                    |
-| `getOrNull`      | `Option<A>`                                         | `A \| null`            |
-| `getOrUndefined` | `Option<A>`                                         | `A \| undefined`       |
-| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
-| `orElse`         | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>`       |
-| `orElseEither`   | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<Either<A, B>>` |
-| `firstSomeOf`    | `Iterable<Option<A>>`                               | `Option<A>`            |
+| Name             | Given                                               | To               |
+| ---------------- | --------------------------------------------------- | ---------------- |
+| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`         |
+| `getOrThrow`     | `Option<A>`                                         | `A`              |
+| `getOrNull`      | `Option<A>`                                         | `A \| null`      |
+| `getOrUndefined` | `Option<A>`                                         | `A \| undefined` |
+| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`         |
+| `orElse`         | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>` |
+| `firstSomeOf`    | `Iterable<Option<A>>`                               | `Option<A>`      |
 
 # Interop
 
@@ -507,30 +526,67 @@ console.log(pipe(none(), getOrThrow); // throws new Error("getOrThrow called on 
 
 # Combining two or more `Option`s
 
+The `zipWith` function allows you to combine two or more `Option` values using a provided function. The resulting value is a new `Option` that holds the combined value of both original `Option`s.
+
+Let's consider the following example where we have two `Option`s that hold values of two different types, `string` and `number`:
+
+```ts
+import * as O from "@fp-ts/core/Option";
+
+const name: O.Option<string> = O.some("John");
+const age: O.Option<number> = O.some(25);
+```
+
+If we want to combine these two `Option`s into a single `Option` that holds an object with properties `name` and `age`, we can use the `zipWith` function:
+
+```ts
+const combine = O.zipWith(name, age, (n, a) => ({ name: n, age: a }));
+console.log(combine); // Some({ name: 'John', age: 25 })
+```
+
+The `zipWith` function takes three arguments: the two `Option`s that you want to combine, and a function that takes two arguments - the values held by the two `Option`s - and returns the combined value.
+
+If either of the two `Option`s is `None`, the resulting `Option` will be `None` as well:
+
+```ts
+const name: O.Option<string> = O.none;
+const age: O.Option<number> = O.some(25);
+const combine = O.zipWith(name, age, (n, a) => ({ name: n, age: a }));
+console.log(combine); // None
+```
+
+This is because the `zipWith` function only combines the values if both `Option`s are `Some`.
+
 **Cheat sheet** (combining)
 
-| Name                    | Given                                   | To                     |
-| ----------------------- | --------------------------------------- | ---------------------- |
-| `zipWith`               | `Option<A>`, `Option<B>`, `(A, B) => C` | `C`                    |
-| `ap`                    | `Option<(a: A) => B>`, `Option<A>`      | `Option<C>`            |
-| `getFailureSemigroup`   | `Semigroup<A>`                          | `Semigroup<Option<A>>` |
-| `getFailureMonoid`      | `Monoid<A>`                             | `Monoid<Option<A>>`    |
-| `getFirstSomeSemigroup` |                                         | `Semigroup<Option<A>>` |
+| Name      | Given                                   | To          |
+| --------- | --------------------------------------- | ----------- |
+| `zipWith` | `Option<A>`, `Option<B>`, `(A, B) => C` | `Option<C>` |
+| `ap`      | `Option<(a: A) => B>`, `Option<A>`      | `Option<B>` |
 
-**Cheat sheet** (folding)
+For convenience, a series of algebraic operations such as sums and products are exported.
 
-| Name            | Given                                     | To         |
-| --------------- | ----------------------------------------- | ---------- |
-| `reduceCompact` | `Iterable<Option<A>>`, `B`, `(B, A) => B` | `B`        |
-| `toArray`       | `Option<A>`                               | `Array<A>` |
+```ts
+import * as O from "@fp-ts/core/Option";
+
+const num1 = O.some(3);
+const num2 = O.some(4);
+const num3 = O.none;
+
+// Summing two `Some` values will result in a `Some` with the sum of the values
+const sumOfSome = O.sum(num1, num2);
+console.log(sumOfSome); // Output: Some(7)
+
+// Summing a `Some` and a `None` will result in a `None`
+const sumOfSomeAndNone = O.sum(num1, num3);
+console.log(sumOfSomeAndNone); // Output: None
+```
 
 **Cheat sheet** (algebraic operations)
 
-| Name              | Given                              | To               |
-| ----------------- | ---------------------------------- | ---------------- |
-| `sum`             | `Option<number>`, `Option<number>` | `Option<number>` |
-| `multiply`        | `Option<number>`, `Option<number>` | `Option<number>` |
-| `subtract`        | `Option<number>`, `Option<number>` | `Option<number>` |
-| `divide`          | `Option<number>`, `Option<number>` | `Option<number>` |
-| `sumCompact`      | `Iterable<Option<number>>`         | `number`         |
-| `multiplyCompact` | `Iterable<Option<number>>`         | `number`         |
+| Name       | Given                              | To               |
+| ---------- | ---------------------------------- | ---------------- |
+| `sum`      | `Option<number>`, `Option<number>` | `Option<number>` |
+| `multiply` | `Option<number>`, `Option<number>` | `Option<number>` |
+| `subtract` | `Option<number>`, `Option<number>` | `Option<number>` |
+| `divide`   | `Option<number>`, `Option<number>` | `Option<number>` |
