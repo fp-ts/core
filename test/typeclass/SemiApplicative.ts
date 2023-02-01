@@ -31,7 +31,7 @@ describe("SemiApplicative", () => {
   })
 
   it("liftSemigroup", () => {
-    const liftSemigroup = _.liftSemigroup(O.SemiApplicative)
+    const liftSemigroup = _.getSemigroup(O.SemiApplicative)
     const S = liftSemigroup(String.Semigroup)
     U.deepStrictEqual(S.combine(O.none(), O.none()), O.none())
     U.deepStrictEqual(S.combine(O.none(), O.some("b")), O.none())

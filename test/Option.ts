@@ -352,8 +352,8 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(_.getOrUndefined(_.some(1)), 1)
   })
 
-  it("liftOrder", () => {
-    const OS = _.liftOrder(S.Order)
+  it("getOrder", () => {
+    const OS = _.getOrder(S.Order)
     Util.deepStrictEqual(OS.compare(_.none(), _.none()), 0)
     Util.deepStrictEqual(OS.compare(_.some("a"), _.none()), 1)
     Util.deepStrictEqual(OS.compare(_.none(), _.some("a")), -1)
@@ -611,5 +611,15 @@ describe.concurrent("Option", () => {
     expect(_.multiplyCompact([_.some(2), _.some(3)])).toEqual(6)
     expect(_.multiplyCompact([_.some(2), _.none(), _.some(3)])).toEqual(6)
     expect(_.multiplyCompact([_.some(2), _.some(0), _.some(3)])).toEqual(0)
+  })
+
+  it("getEquivalence", () => {
+    const isEquivalent = _.getEquivalence(N.Equivalence)
+    expect(isEquivalent(_.none(), _.none())).toEqual(true)
+    expect(isEquivalent(_.none(), _.some(1))).toEqual(false)
+    expect(isEquivalent(_.some(1), _.none())).toEqual(false)
+    expect(isEquivalent(_.some(2), _.some(1))).toEqual(false)
+    expect(isEquivalent(_.some(1), _.some(2))).toEqual(false)
+    expect(isEquivalent(_.some(2), _.some(2))).toEqual(true)
   })
 })

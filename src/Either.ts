@@ -222,6 +222,24 @@ export const fromOption: {
   <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
 } = either.fromOption
 
+// -------------------------------------------------------------------------------------
+// equivalence
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category equivalence
+ * @since 1.0.0
+ */
+export const getEquivalence = <E, A>(
+  EE: Equivalence<E>,
+  EA: Equivalence<A>
+): Equivalence<Either<E, A>> =>
+  (x, y) =>
+    x === y ||
+    (isLeft(x) ?
+      isLeft(y) && EE(x.left, y.left) :
+      isRight(y) && EA(x.right, y.right))
+
 /**
  * Returns an effect whose Right is mapped by the specified `f` function.
  *
@@ -542,7 +560,7 @@ export const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda> 
  */
 export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<E, A>> =
   semiApplicative
-    .liftSemigroup(SemiApplicative)
+    .getSemigroup(SemiApplicative)
 
 /**
  * Lifts a binary function into `Either`.
@@ -606,7 +624,7 @@ export const Applicative: applicative.Applicative<EitherTypeLambda> = {
  * @since 1.0.0
  */
 export const getFirstLeftMonoid: <A, E>(M: Monoid<A>) => Monoid<Either<E, A>> = applicative
-  .liftMonoid(
+  .getMonoid(
     Applicative
   )
 

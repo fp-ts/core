@@ -2,7 +2,8 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import type * as monoid from "@fp-ts/core/typeclass/Monoid"
+import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
+import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 // -------------------------------------------------------------------------------------
@@ -47,8 +48,8 @@ export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) 
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup = <S>(Semigroup: semigroup.Semigroup<S>) =>
-  <A>(): semigroup.Semigroup<(a: A) => S> =>
+export const getSemigroup = <S>(Semigroup: Semigroup<S>) =>
+  <A>(): Semigroup<(a: A) => S> =>
     semigroup.fromCombine((self, that) => (a) => Semigroup.combine(self(a), that(a)))
 
 /**
@@ -75,8 +76,8 @@ export const getSemigroup = <S>(Semigroup: semigroup.Semigroup<S>) =>
  * @category instances
  * @since 1.0.0
  */
-export const getMonoid = <M>(Monoid: monoid.Monoid<M>) =>
-  <A>(): monoid.Monoid<(a: A) => M> => {
+export const getMonoid = <M>(Monoid: Monoid<M>) =>
+  <A>(): Monoid<(a: A) => M> => {
     const S = getSemigroup(Monoid)<A>()
     const empty = () => Monoid.empty
     return ({ ...S, combineAll: (collection) => S.combineMany(empty, collection), empty })

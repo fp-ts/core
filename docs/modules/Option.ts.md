@@ -46,6 +46,8 @@ Added in v1.0.0
   - [bind](#bind)
   - [bindTo](#bindto)
   - [let](#let)
+- [equivalence](#equivalence)
+  - [getEquivalence](#getequivalence)
 - [error handling](#error-handling)
   - [firstSomeOf](#firstsomeof)
   - [getOrElse](#getorelse)
@@ -55,6 +57,8 @@ Added in v1.0.0
   - [filter](#filter)
   - [filterMap](#filtermap)
   - [separate](#separate)
+- [folding](#folding)
+  - [reduceCompact](#reducecompact)
 - [guards](#guards)
   - [isNone](#isnone)
   - [isOption](#isoption)
@@ -82,6 +86,7 @@ Added in v1.0.0
   - [getFailureMonoid](#getfailuremonoid)
   - [getFailureSemigroup](#getfailuresemigroup)
   - [getFirstSomeSemigroup](#getfirstsomesemigroup)
+  - [getOptionalMonoid](#getoptionalmonoid)
 - [interop](#interop)
   - [fromNullable](#fromnullable)
   - [getOrNull](#getornull)
@@ -90,7 +95,6 @@ Added in v1.0.0
   - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
-  - [getOptionalMonoid](#getoptionalmonoid)
   - [lift2](#lift2)
   - [liftEither](#lifteither)
   - [liftPredicate](#liftpredicate)
@@ -111,7 +115,7 @@ Added in v1.0.0
   - [flatMapEither](#flatmapeither)
   - [flatMapNullable](#flatmapnullable)
 - [sorting](#sorting)
-  - [liftOrder](#liftorder)
+  - [getOrder](#getorder)
 - [traversing](#traversing)
   - [sequence](#sequence)
   - [traverse](#traverse)
@@ -126,7 +130,6 @@ Added in v1.0.0
   - [contains](#contains)
   - [exists](#exists)
   - [flatten](#flatten)
-  - [reduceCompact](#reducecompact)
   - [struct](#struct)
   - [toArray](#toarray)
   - [tuple](#tuple)
@@ -578,6 +581,32 @@ export declare const let: <N extends string, A extends object, B>(
 
 Added in v1.0.0
 
+# equivalence
+
+## getEquivalence
+
+**Signature**
+
+```ts
+export declare const getEquivalence: <A>(E: Equivalence<A>) => Equivalence<Option<A>>
+```
+
+**Example**
+
+```ts
+import { none, some, getEquivalence } from '@fp-ts/core/Option'
+import * as N from '@fp-ts/core/number'
+
+const isEquivalent = getEquivalence(N.Equivalence)
+assert.deepStrictEqual(isEquivalent(none(), none()), true)
+assert.deepStrictEqual(isEquivalent(none(), some(1)), false)
+assert.deepStrictEqual(isEquivalent(some(1), none()), false)
+assert.deepStrictEqual(isEquivalent(some(1), some(2)), false)
+assert.deepStrictEqual(isEquivalent(some(1), some(1)), true)
+```
+
+Added in v1.0.0
+
 # error handling
 
 ## firstSomeOf
@@ -740,6 +769,39 @@ Added in v1.0.0
 
 ```ts
 export declare const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>]
+```
+
+Added in v1.0.0
+
+# folding
+
+## reduceCompact
+
+Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
+
+**Signature**
+
+```ts
+export declare const reduceCompact: {
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
+}
+```
+
+**Example**
+
+```ts
+import { some, none, reduceCompact } from '@fp-ts/core/Option'
+import { pipe } from '@fp-ts/core/Function'
+
+const iterable = [some(1), none(), some(2), none()]
+assert.deepStrictEqual(
+  pipe(
+    iterable,
+    reduceCompact(0, (b, a) => b + a)
+  ),
+  3
+)
 ```
 
 Added in v1.0.0
@@ -1048,6 +1110,33 @@ export declare const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>>
 
 Added in v1.0.0
 
+## getOptionalMonoid
+
+Monoid that models the combination of values that may be absent, elements that are `None` are ignored
+while elements that are `Some` are combined using the provided `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const getOptionalMonoid: <A>(Semigroup: Semigroup<A>) => Monoid<Option<A>>
+```
+
+**Example**
+
+```ts
+import { getOptionalMonoid, some, none } from '@fp-ts/core/Option'
+import * as N from '@fp-ts/core/Number'
+import { pipe } from '@fp-ts/core/Function'
+
+const M = getOptionalMonoid(N.SemigroupSum)
+assert.deepStrictEqual(M.combine(none(), none()), none())
+assert.deepStrictEqual(M.combine(some(1), none()), some(1))
+assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
+assert.deepStrictEqual(M.combine(some(1), some(2)), some(3))
+```
+
+Added in v1.0.0
+
 # interop
 
 ## fromNullable
@@ -1196,33 +1285,6 @@ assert.deepStrictEqual(parse(''), none())
 Added in v1.0.0
 
 # lifting
-
-## getOptionalMonoid
-
-Monoid that models the combination of values that may be absent, elements that are `None` are ignored
-while elements that are `Some` are combined using the provided `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const getOptionalMonoid: <A>(Semigroup: Semigroup<A>) => Monoid<Option<A>>
-```
-
-**Example**
-
-```ts
-import { getOptionalMonoid, some, none } from '@fp-ts/core/Option'
-import * as N from '@fp-ts/core/Number'
-import { pipe } from '@fp-ts/core/Function'
-
-const M = getOptionalMonoid(N.SemigroupSum)
-assert.deepStrictEqual(M.combine(none(), none()), none())
-assert.deepStrictEqual(M.combine(some(1), none()), some(1))
-assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
-assert.deepStrictEqual(M.combine(some(1), some(2)), some(3))
-```
-
-Added in v1.0.0
 
 ## lift2
 
@@ -1549,7 +1611,7 @@ Added in v1.0.0
 
 # sorting
 
-## liftOrder
+## getOrder
 
 The `Order` instance allows `Option` values to be compared with
 `compare`, whenever there is an `Order` instance for
@@ -1560,17 +1622,17 @@ the type the `Option` contains.
 **Signature**
 
 ```ts
-export declare const liftOrder: <A>(O: Order<A>) => Order<Option<A>>
+export declare const getOrder: <A>(O: Order<A>) => Order<Option<A>>
 ```
 
 **Example**
 
 ```ts
-import { none, some, liftOrder } from '@fp-ts/core/Option'
+import { none, some, getOrder } from '@fp-ts/core/Option'
 import * as N from '@fp-ts/core/Number'
 import { pipe } from '@fp-ts/core/Function'
 
-const O = liftOrder(N.Order)
+const O = getOrder(N.Order)
 assert.deepStrictEqual(O.compare(none(), none()), 0)
 assert.deepStrictEqual(O.compare(none(), some(1)), -1)
 assert.deepStrictEqual(O.compare(some(1), none()), 1)
@@ -1751,37 +1813,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
-```
-
-Added in v1.0.0
-
-## reduceCompact
-
-Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
-
-**Signature**
-
-```ts
-export declare const reduceCompact: {
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
-  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
-}
-```
-
-**Example**
-
-```ts
-import { some, none, reduceCompact } from '@fp-ts/core/Option'
-import { pipe } from '@fp-ts/core/Function'
-
-const iterable = [some(1), none(), some(2), none()]
-assert.deepStrictEqual(
-  pipe(
-    iterable,
-    reduceCompact(0, (b, a) => b + a)
-  ),
-  3
-)
 ```
 
 Added in v1.0.0

@@ -13,8 +13,8 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [lifting](#lifting)
+  - [getSemigroup](#getsemigroup)
   - [lift2](#lift2)
-  - [liftSemigroup](#liftsemigroup)
 - [type class](#type-class)
   - [SemiApplicative (interface)](#semiapplicative-interface)
 - [utils](#utils)
@@ -26,6 +26,20 @@ Added in v1.0.0
 ---
 
 # lifting
+
+## getSemigroup
+
+Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const getSemigroup: <F extends TypeLambda>(
+  F: SemiApplicative<F>
+) => <A, R, O, E>(S: Semigroup<A>) => Semigroup<Kind<F, R, O, E, A>>
+```
+
+Added in v1.0.0
 
 ## lift2
 
@@ -45,20 +59,6 @@ export declare const lift2: <F extends TypeLambda>(
   (<R2, O2, E2>(
     that: Kind<F, R2, O2, E2, B>
   ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>)
-```
-
-Added in v1.0.0
-
-## liftSemigroup
-
-Lift a `Semigroup` into 'F', the inner values are combined using the provided `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const liftSemigroup: <F extends TypeLambda>(
-  F: SemiApplicative<F>
-) => <A, R, O, E>(S: Semigroup<A>) => Semigroup<Kind<F, R, O, E, A>>
 ```
 
 Added in v1.0.0

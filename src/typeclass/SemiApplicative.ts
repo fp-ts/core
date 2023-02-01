@@ -19,7 +19,7 @@ export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, C
  * @category lifting
  * @since 1.0.0
  */
-export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
+export const getSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <A, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, R, O, E, A>> => ({
     combine: (self, that) => pipe(F.product(self, that), F.map(([a1, a2]) => S.combine(a1, a2))),
     combineMany: (self, collection) =>
@@ -32,8 +32,8 @@ export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 /**
  * Zips two `F` values together using a provided function, returning a new `F` of the result.
  *
- * @param fa - The left-hand side of the zip operation
- * @param fb - The right-hand side of the zip operation
+ * @param self - The left-hand side of the zip operation
+ * @param that - The right-hand side of the zip operation
  * @param f - The function used to combine the values of the two `Option`s
  *
  * @since 1.0.0

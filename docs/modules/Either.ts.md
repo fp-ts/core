@@ -47,6 +47,8 @@ Added in v1.0.0
   - [bind](#bind)
   - [bindTo](#bindto)
   - [let](#let)
+- [equivalence](#equivalence)
+  - [getEquivalence](#getequivalence)
 - [error handling](#error-handling)
   - [firstRightOf](#firstrightof)
   - [mapLeft](#mapleft)
@@ -562,6 +564,18 @@ export declare const let: <N extends string, A extends object, B>(
   name: Exclude<N, keyof A>,
   f: (a: A) => B
 ) => <E>(self: Either<E, A>) => Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+```
+
+Added in v1.0.0
+
+# equivalence
+
+## getEquivalence
+
+**Signature**
+
+```ts
+export declare const getEquivalence: <E, A>(EE: Equivalence<E>, EA: Equivalence<A>) => Equivalence<Either<E, A>>
 ```
 
 Added in v1.0.0
