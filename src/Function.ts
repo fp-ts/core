@@ -20,7 +20,7 @@ export interface FunctionTypeLambda extends TypeLambda {
 /**
  * @since 1.0.0
  */
-export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C = (bc) =>
+export const compose: <B, C>(bc: (b: B) => C) => <A extends ReadonlyArray<unknown>>(ab: (...a: A) => B) => (...a: A) => C = (bc) =>
   (ab) => flow(ab, bc)
 
 /**
@@ -85,7 +85,7 @@ export const getMonoid = <M>(Monoid: monoid.Monoid<M>) =>
 /**
  * @since 1.0.0
  */
-export const apply = <A>(a: A) => <B>(self: (a: A) => B): B => self(a)
+export const apply = <A extends ReadonlyArray<unknown>>(...a: A) => <B>(self: (...a: A) => B): B => self(...a)
 
 /**
  * A lazy argument

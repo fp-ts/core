@@ -6,6 +6,7 @@ import * as assert from "assert"
 
 const f = (n: number): number => n + 1
 const g = double
+const sum = (a: number, b: number): number => a + b
 
 describe.concurrent("Function", () => {
   it("getSemigroup", () => {
@@ -32,6 +33,7 @@ describe.concurrent("Function", () => {
 
   it("apply", () => {
     deepStrictEqual(Function.apply("a")(String.length), 1)
+    deepStrictEqual(Function.apply(1, 2)(sum), 3)
   })
 
   it("flip", () => {
@@ -44,6 +46,7 @@ describe.concurrent("Function", () => {
 
   it("compose", () => {
     deepStrictEqual(Function.pipe(String.length, Function.compose(double))("aaa"), 6)
+    deepStrictEqual(Function.pipe(sum, Function.compose(double))(1, 2), 6)
   })
 
   it("unsafeCoerce", () => {
