@@ -972,10 +972,15 @@ export const Traversable: traversable.Traversable<EitherTypeLambda> = {
  */
 export const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, A>> = traversable
-  .traverseTap(Traversable)
+) => {
+  <TE, A, R, O, E, B>(
+    self: Either<TE, A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Either<TE, A>>
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, A>>
+} = traversable.traverseTap(Traversable)
 
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
