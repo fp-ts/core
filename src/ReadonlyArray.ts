@@ -1762,14 +1762,15 @@ export const ap: <A>(
 /**
  * Lifts a binary function into `ReadonlyArray`.
  *
+ * @param f - The function to lift.
+ *
  * @category lifting
  * @since 1.0.0
  */
-export const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => (fa: ReadonlyArray<A>, fb: ReadonlyArray<B>) => Array<C> = semiApplicative.lift2(
-  SemiApplicative
-) as any
+export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
+  (self: ReadonlyArray<A>, that: ReadonlyArray<B>): Array<C>
+  (that: ReadonlyArray<B>): (self: ReadonlyArray<A>) => Array<C>
+} = semiApplicative.lift2(SemiApplicative) as any
 
 /**
  * @category lifting

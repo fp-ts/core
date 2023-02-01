@@ -1345,7 +1345,9 @@ Lifts a binary function into `ReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (fa: readonly A[], fb: readonly B[]) => C[]
+export declare const lift2: <A, B, C>(
+  f: (a: A, b: B) => C
+) => { (self: readonly A[], that: readonly B[]): C[]; (that: readonly B[]): (self: readonly A[]) => C[] }
 ```
 
 Added in v1.0.0

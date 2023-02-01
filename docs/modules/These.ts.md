@@ -1135,15 +1135,22 @@ Added in v1.0.0
 
 ## lift2
 
+Lifts a binary function into `These`.
+
 **Signature**
 
 ```ts
 export declare const lift2: <A, B, C>(
   f: (a: A, b: B) => C
-) => <E1, E2>(
-  self: These<readonly [E1, ...E1[]], A>,
-  that: These<readonly [E2, ...E2[]], B>
-) => These<readonly [E1 | E2, ...(E1 | E2)[]], C>
+) => {
+  <E1, E2>(self: These<readonly [E1, ...E1[]], A>, that: These<readonly [E2, ...E2[]], B>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    C
+  >
+  <E2>(that: These<readonly [E2, ...E2[]], B>): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], C>
+}
 ```
 
 Added in v1.0.0

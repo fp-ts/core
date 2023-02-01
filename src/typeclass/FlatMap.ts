@@ -25,7 +25,6 @@ export const flatten = <F extends TypeLambda>(F: FlatMap<F>) =>
 /**
  * A variant of `flatMap` that ignores the value produced by this effect.
  *
- * @dual
  * @since 1.0.0
  */
 export const andThen = <F extends TypeLambda>(F: FlatMap<F>): {
@@ -53,7 +52,6 @@ export const andThen = <F extends TypeLambda>(F: FlatMap<F>): {
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => pipe(self, F.flatMap(() => that)))
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow = <F extends TypeLambda>(

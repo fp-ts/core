@@ -6,7 +6,7 @@ import * as BI from "@fp-ts/core/Bigint"
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -937,15 +937,17 @@ export const SemiApplicative: semiApplicative.SemiApplicative<ValidatedTypeLambd
 }
 
 /**
+ * Lifts a binary function into `These`.
+ *
+ * @param f - The function to lift.
+ *
  * @category lifting
  * @since 1.0.0
  */
-export const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => <E1, E2>(self: Validated<E1, A>, that: Validated<E2, B>) => Validated<E1 | E2, C> =
-  semiApplicative.lift2(
-    SemiApplicative
-  )
+export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
+  <E1, E2>(self: Validated<E1, A>, that: Validated<E2, B>): Validated<E1 | E2, C>
+  <E2>(that: Validated<E2, B>): <E1>(self: Validated<E1, A>) => Validated<E2 | E1, C>
+} = semiApplicative.lift2(SemiApplicative)
 
 /**
  * @category products
@@ -1195,13 +1197,8 @@ export const andThenDiscard: {
  * @since 1.0.0
  */
 export const tap: {
-  <E1, A, E2, _>(
-    self: Validated<E1, A>,
-    f: (a: A) => Validated<E2, _>
-  ): Validated<E1 | E2, A>
-  <A, E2, _>(
-    f: (a: A) => Validated<E2, _>
-  ): <E1>(self: Validated<E1, A>) => Validated<E2 | E1, A>
+  <E1, A, E2, _>(self: Validated<E1, A>, f: (a: A) => Validated<E2, _>): Validated<E1 | E2, A>
+  <A, E2, _>(f: (a: A) => Validated<E2, _>): <E1>(self: Validated<E1, A>) => Validated<E2 | E1, A>
 } = chainable.tap(Chainable)
 
 /**
@@ -1223,99 +1220,43 @@ export const Monad: monad.Monad<ValidatedTypeLambda> = {
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum: {
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
-  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
-} = dual<
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>) => Validated<E1 | E2, number>,
-  <E2>(
-    that: Validated<E2, number>
-  ) => <E1>(self: Validated<E1, number>) => Validated<E1 | E2, number>
->(2, lift2<number, number, number>(N.sum))
+export const sum = lift2<number, number, number>(N.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply: {
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
-  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
-} = dual<
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>) => Validated<E1 | E2, number>,
-  <E2>(
-    that: Validated<E2, number>
-  ) => <E1>(self: Validated<E1, number>) => Validated<E1 | E2, number>
->(2, lift2<number, number, number>(N.multiply))
+export const multiply = lift2<number, number, number>(N.multiply)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract: {
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
-  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
-} = dual<
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>) => Validated<E1 | E2, number>,
-  <E2>(
-    that: Validated<E2, number>
-  ) => <E1>(self: Validated<E1, number>) => Validated<E1 | E2, number>
->(2, lift2<number, number, number>(N.subtract))
+export const subtract = lift2<number, number, number>(N.subtract)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide: {
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
-  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
-} = dual<
-  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>) => Validated<E1 | E2, number>,
-  <E2>(
-    that: Validated<E2, number>
-  ) => <E1>(self: Validated<E1, number>) => Validated<E1 | E2, number>
->(2, lift2<number, number, number>(N.divide))
+export const divide = lift2<number, number, number>(N.divide)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint: {
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
-  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
-} = dual<
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>) => Validated<E1 | E2, bigint>,
-  <E2>(
-    that: Validated<E2, bigint>
-  ) => <E1>(self: Validated<E1, bigint>) => Validated<E1 | E2, bigint>
->(2, lift2<bigint, bigint, bigint>(BI.sum))
+export const sumBigint = lift2<bigint, bigint, bigint>(BI.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint: {
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
-  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
-} = dual<
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>) => Validated<E1 | E2, bigint>,
-  <E2>(
-    that: Validated<E2, bigint>
-  ) => <E1>(self: Validated<E1, bigint>) => Validated<E1 | E2, bigint>
->(2, lift2<bigint, bigint, bigint>(BI.multiply))
+export const multiplyBigint = lift2<bigint, bigint, bigint>(BI.multiply)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint: {
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
-  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
-} = dual<
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>) => Validated<E1 | E2, bigint>,
-  <E2>(
-    that: Validated<E2, bigint>
-  ) => <E1>(self: Validated<E1, bigint>) => Validated<E1 | E2, bigint>
->(2, lift2<bigint, bigint, bigint>(BI.subtract))
+export const subtractBigint = lift2<bigint, bigint, bigint>(BI.subtract)
 
 // -------------------------------------------------------------------------------------
 // do notation
