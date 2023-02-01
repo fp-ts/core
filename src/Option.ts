@@ -164,6 +164,54 @@ export const isNone: <A>(self: Option<A>) => self is None = option.isNone
 export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
 
 // -------------------------------------------------------------------------------------
+// pattern matching
+// -------------------------------------------------------------------------------------
+
+/**
+ * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
+ * function when passed the `Option`'s value.
+ *
+ * @param self - The `Option` to match
+ * @param onNone - The value to be returned if the `Option` is `None`
+ * @param onSome - The function to be called if the `Option` is `Some`, it will be passed the `Option`'s value and its result will be returned
+ *
+ * @example
+ * import { some, none, match } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     some(1),
+ *     match(() => 'a none', a => `a some containing ${a}`)
+ *   ),
+ *   'a some containing 1'
+ * )
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     none(),
+ *     match(() => 'a none', a => `a some containing ${a}`)
+ *   ),
+ *   'a none'
+ * )
+ *
+ * @dual
+ * @category pattern matching
+ * @since 1.0.0
+ */
+export const match: {
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
+  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
+} = dual<
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C) => B | C,
+  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C
+>(
+  3,
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C =>
+    isNone(self) ? onNone() : onSome(self.value)
+)
+
+// -------------------------------------------------------------------------------------
 // conversions
 // -------------------------------------------------------------------------------------
 
@@ -1200,12 +1248,15 @@ export const Filterable: filterable.Filterable<OptionTypeLambda> = {
  * @param predicate - A predicate function to apply to the `Option` value.
  * @param fb - The `Option` to filter.
  *
+ * @dual
  * @category filtering
  * @since 1.0.0
  */
 export const filter: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: Option<C>) => Option<B>
-  <B extends A, A = B>(predicate: Predicate<A>): (fb: Option<B>) => Option<B>
+  <C extends A, B extends A, A = C>(self: Option<C>, refinement: (a: A) => a is B): Option<B>
+  <B extends A, A = B>(self: Option<B>, predicate: (a: A) => boolean): Option<B>
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (self: Option<C>) => Option<B>
+  <B extends A, A = B>(predicate: (a: A) => boolean): (self: Option<B>) => Option<B>
 } = filterable.filter(Filterable)
 
 // -------------------------------------------------------------------------------------
@@ -1269,54 +1320,6 @@ export const traverseTap: <F extends TypeLambda>(
   f: (a: A) => Kind<F, R, O, E, B>
 ) => (self: Option<A>) => Kind<F, R, O, E, Option<A>> = traversable
   .traverseTap(Traversable)
-
-// -------------------------------------------------------------------------------------
-// pattern matching
-// -------------------------------------------------------------------------------------
-
-/**
- * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
- * function when passed the `Option`'s value.
- *
- * @param self - The `Option` to match
- * @param onNone - The value to be returned if the `Option` is `None`
- * @param onSome - The function to be called if the `Option` is `Some`, it will be passed the `Option`'s value and its result will be returned
- *
- * @example
- * import { some, none, match } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     some(1),
- *     match(() => 'a none', a => `a some containing ${a}`)
- *   ),
- *   'a some containing 1'
- * )
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     none(),
- *     match(() => 'a none', a => `a some containing ${a}`)
- *   ),
- *   'a none'
- * )
- *
- * @dual
- * @category pattern matching
- * @since 1.0.0
- */
-export const match: {
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
-  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
-} = dual<
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C) => B | C,
-  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C
->(
-  3,
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C =>
-    isNone(self) ? onNone() : onSome(self.value)
-)
 
 // -------------------------------------------------------------------------------------
 // equivalence

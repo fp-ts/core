@@ -1516,14 +1516,20 @@ export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
 }
 
 /**
+ * @dual
  * @category filtering
  * @since 1.0.0
  */
 export const filter: {
   <C extends A, B extends A, A = C>(
-    refinement: Refinement<A, B>
+    self: ReadonlyArray<C>,
+    refinement: (a: A) => a is B
+  ): Array<B>
+  <B extends A, A = B>(self: ReadonlyArray<B>, predicate: (a: A) => boolean): Array<B>
+  <C extends A, B extends A, A = C>(
+    refinement: (a: A) => a is B
   ): (self: ReadonlyArray<C>) => Array<B>
-  <B extends A, A = B>(predicate: Predicate<A>): (self: ReadonlyArray<B>) => Array<B>
+  <B extends A, A = B>(predicate: (a: A) => boolean): (self: ReadonlyArray<B>) => Array<B>
 } = filterable.filter(Filterable) as any
 
 /**

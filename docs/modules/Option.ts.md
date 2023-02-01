@@ -739,8 +739,10 @@ If you need to change the type of the `Option` in addition to filtering, see `fi
 
 ```ts
 export declare const filter: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: Option<C>) => Option<B>
-  <B extends A, A = B>(predicate: Predicate<A>): (fb: Option<B>) => Option<B>
+  <C extends A, B extends A, A = C>(self: Option<C>, refinement: (a: A) => a is B): Option<B>
+  <B extends A, A = B>(self: Option<B>, predicate: (a: A) => boolean): Option<B>
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (self: Option<C>) => Option<B>
+  <B extends A, A = B>(predicate: (a: A) => boolean): (self: Option<B>) => Option<B>
 }
 ```
 
