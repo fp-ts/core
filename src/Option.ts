@@ -1067,8 +1067,8 @@ export const getOptionalMonoid = <A>(
 /**
  * Zips two `Option` values together using a provided function, returning a new `Option` of the result.
  *
- * @param fa - The left-hand side of the zip operation
- * @param fb - The right-hand side of the zip operation
+ * @param self - The left-hand side of the zip operation
+ * @param that - The right-hand side of the zip operation
  * @param f - The function used to combine the values of the two `Option`s
  *
  * @dual
