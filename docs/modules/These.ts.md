@@ -15,11 +15,8 @@ Added in v1.0.0
 - [algebraic operations](#algebraic-operations)
   - [divide](#divide)
   - [multiply](#multiply)
-  - [multiplyBigint](#multiplybigint)
   - [subtract](#subtract)
-  - [subtractBigint](#subtractbigint)
   - [sum](#sum)
-  - [sumBigint](#sumbigint)
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
@@ -197,24 +194,6 @@ export declare const multiply: {
 
 Added in v1.0.0
 
-## multiplyBigint
-
-**Signature**
-
-```ts
-export declare const multiplyBigint: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], bigint>, that: These<readonly [E2, ...E2[]], bigint>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    bigint
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], bigint>): <E1>(
-    self: These<readonly [E1, ...E1[]], bigint>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], bigint>
-}
-```
-
-Added in v1.0.0
-
 ## subtract
 
 **Signature**
@@ -233,24 +212,6 @@ export declare const subtract: {
 
 Added in v1.0.0
 
-## subtractBigint
-
-**Signature**
-
-```ts
-export declare const subtractBigint: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], bigint>, that: These<readonly [E2, ...E2[]], bigint>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    bigint
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], bigint>): <E1>(
-    self: These<readonly [E1, ...E1[]], bigint>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], bigint>
-}
-```
-
-Added in v1.0.0
-
 ## sum
 
 **Signature**
@@ -264,24 +225,6 @@ export declare const sum: {
   <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
     self: These<readonly [E1, ...E1[]], number>
   ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
-}
-```
-
-Added in v1.0.0
-
-## sumBigint
-
-**Signature**
-
-```ts
-export declare const sumBigint: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], bigint>, that: These<readonly [E2, ...E2[]], bigint>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    bigint
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], bigint>): <E1>(
-    self: These<readonly [E1, ...E1[]], bigint>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], bigint>
 }
 ```
 

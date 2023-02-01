@@ -760,27 +760,6 @@ describe("These", () => {
     expect(pipe(_.right(6), _.divide(_.right(3)))).toEqual(_.right(2))
   })
 
-  it("sumBigint", () => {
-    const e: _.Validated<string, bigint> = _.left(["a"])
-    expect(pipe(e, _.sumBigint(_.right(2n)))).toEqual(e)
-    expect(pipe(_.right(1n), _.sumBigint(e))).toEqual(e)
-    expect(pipe(_.right(2n), _.sumBigint(_.right(3n)))).toEqual(_.right(5n))
-  })
-
-  it("multiplyBigint", () => {
-    const e: _.Validated<string, bigint> = _.left(["a"])
-    expect(pipe(e, _.multiplyBigint(_.right(2n)))).toEqual(e)
-    expect(pipe(_.right(1n), _.multiplyBigint(e))).toEqual(e)
-    expect(pipe(_.right(2n), _.multiplyBigint(_.right(3n)))).toEqual(_.right(6n))
-  })
-
-  it("subtractBigint", () => {
-    const e: _.Validated<string, bigint> = _.left(["a"])
-    expect(pipe(e, _.subtractBigint(_.right(2n)))).toEqual(e)
-    expect(pipe(_.right(1n), _.subtractBigint(e))).toEqual(e)
-    expect(pipe(_.right(2n), _.subtractBigint(_.right(3n)))).toEqual(_.right(-1n))
-  })
-
   it("getEquivalence", () => {
     const isEquivalent = _.getEquivalence(N.Equivalence, N.Equivalence)
     Util.deepStrictEqual(isEquivalent(_.left(2), _.left(2)), true)

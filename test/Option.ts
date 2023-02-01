@@ -577,24 +577,6 @@ describe.concurrent("Option", () => {
     expect(pipe(_.some(6), _.divide(_.some(3)))).toEqual(_.some(2))
   })
 
-  it("sumBigint", () => {
-    expect(pipe(_.none(), _.sumBigint(_.some(2n)))).toEqual(_.none())
-    expect(pipe(_.some(1n), _.sumBigint(_.none()))).toEqual(_.none())
-    expect(pipe(_.some(2n), _.sumBigint(_.some(3n)))).toEqual(_.some(5n))
-  })
-
-  it("multiplyBigint", () => {
-    expect(pipe(_.none(), _.multiplyBigint(_.some(2n)))).toEqual(_.none())
-    expect(pipe(_.some(1n), _.multiplyBigint(_.none()))).toEqual(_.none())
-    expect(pipe(_.some(2n), _.multiplyBigint(_.some(3n)))).toEqual(_.some(6n))
-  })
-
-  it("subtractBigint", () => {
-    expect(pipe(_.none(), _.subtractBigint(_.some(2n)))).toEqual(_.none())
-    expect(pipe(_.some(1n), _.subtractBigint(_.none()))).toEqual(_.none())
-    expect(pipe(_.some(2n), _.subtractBigint(_.some(3n)))).toEqual(_.some(-1n))
-  })
-
   it("reduce", () => {
     expect(pipe(_.none(), _.Foldable.reduce(0, (b, a) => b + a))).toEqual(0)
     expect(pipe(_.some(1), _.Foldable.reduce(0, (b, a) => b + a))).toEqual(1)

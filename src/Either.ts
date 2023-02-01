@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 
-import * as BI from "@fp-ts/core/Bigint"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, dual, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
@@ -1186,36 +1185,6 @@ export const divide: {
   <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
   <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 } = lift2(N.divide)
-
-/**
- * @dual
- * @category algebraic operations
- * @since 1.0.0
- */
-export const sumBigint: {
-  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
-  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
-} = lift2(BI.sum)
-
-/**
- * @dual
- * @category algebraic operations
- * @since 1.0.0
- */
-export const multiplyBigint: {
-  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
-  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
-} = lift2(BI.multiply)
-
-/**
- * @dual
- * @category algebraic operations
- * @since 1.0.0
- */
-export const subtractBigint: {
-  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
-  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
-} = lift2(BI.subtract)
 
 // -------------------------------------------------------------------------------------
 // do notation

@@ -15,11 +15,8 @@ Added in v1.0.0
 - [algebraic operations](#algebraic-operations)
   - [divide](#divide)
   - [multiply](#multiply)
-  - [multiplyBigint](#multiplybigint)
   - [subtract](#subtract)
-  - [subtractBigint](#subtractbigint)
   - [sum](#sum)
-  - [sumBigint](#sumbigint)
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
@@ -163,19 +160,6 @@ export declare const multiply: {
 
 Added in v1.0.0
 
-## multiplyBigint
-
-**Signature**
-
-```ts
-export declare const multiplyBigint: {
-  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
-  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
-}
-```
-
-Added in v1.0.0
-
 ## subtract
 
 **Signature**
@@ -189,19 +173,6 @@ export declare const subtract: {
 
 Added in v1.0.0
 
-## subtractBigint
-
-**Signature**
-
-```ts
-export declare const subtractBigint: {
-  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
-  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
-}
-```
-
-Added in v1.0.0
-
 ## sum
 
 **Signature**
@@ -210,19 +181,6 @@ Added in v1.0.0
 export declare const sum: {
   <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
   <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-}
-```
-
-Added in v1.0.0
-
-## sumBigint
-
-**Signature**
-
-```ts
-export declare const sumBigint: {
-  <E1, E2>(self: Either<E1, bigint>, that: Either<E2, bigint>): Either<E1 | E2, bigint>
-  <E2>(that: Either<E2, bigint>): <E1>(self: Either<E1, bigint>) => Either<E2 | E1, bigint>
 }
 ```
 

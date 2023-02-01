@@ -15,16 +15,15 @@ Added in v1.0.0
 - [algebraic operations](#algebraic-operations)
   - [divide](#divide)
   - [multiply](#multiply)
-  - [multiplyBigint](#multiplybigint)
   - [multiplyCompact](#multiplycompact)
   - [subtract](#subtract)
-  - [subtractBigint](#subtractbigint)
   - [sum](#sum)
-  - [sumBigint](#sumbigint)
   - [sumCompact](#sumcompact)
-- [combinators](#combinators)
-  - [tap](#tap)
 - [combining](#combining)
+  - [ap](#ap)
+  - [getFailureMonoid](#getfailuremonoid)
+  - [getFailureSemigroup](#getfailuresemigroup)
+  - [getFirstSomeSemigroup](#getfirstsomesemigroup)
   - [zipWith](#zipwith)
 - [constructors](#constructors)
   - [none](#none)
@@ -58,7 +57,9 @@ Added in v1.0.0
   - [filterMap](#filtermap)
   - [separate](#separate)
 - [folding](#folding)
+  - [Foldable](#foldable)
   - [reduceCompact](#reducecompact)
+  - [toArray](#toarray)
 - [guards](#guards)
   - [isNone](#isnone)
   - [isOption](#isoption)
@@ -66,26 +67,16 @@ Added in v1.0.0
 - [instances](#instances)
   - [Alternative](#alternative)
   - [Applicative](#applicative)
-  - [Chainable](#chainable)
   - [Compactable](#compactable)
   - [Coproduct](#coproduct)
-  - [Covariant](#covariant)
   - [Filterable](#filterable)
-  - [FlatMap](#flatmap)
-  - [Foldable](#foldable)
-  - [Invariant](#invariant)
   - [Monad](#monad)
-  - [Of](#of)
-  - [Pointed](#pointed)
   - [Product](#product)
   - [SemiAlternative](#semialternative)
   - [SemiApplicative](#semiapplicative)
   - [SemiCoproduct](#semicoproduct)
   - [SemiProduct](#semiproduct)
   - [Traversable](#traversable)
-  - [getFailureMonoid](#getfailuremonoid)
-  - [getFailureSemigroup](#getfailuresemigroup)
-  - [getFirstSomeSemigroup](#getfirstsomesemigroup)
   - [getOptionalMonoid](#getoptionalmonoid)
 - [interop](#interop)
   - [fromNullable](#fromnullable)
@@ -99,10 +90,13 @@ Added in v1.0.0
   - [liftEither](#lifteither)
   - [liftPredicate](#liftpredicate)
 - [mapping](#mapping)
+  - [Covariant](#covariant)
+  - [Invariant](#invariant)
   - [as](#as)
   - [asUnit](#asunit)
   - [flap](#flap)
   - [map](#map)
+  - [tupled](#tupled)
 - [models](#models)
   - [None (interface)](#none-interface)
   - [Option (type alias)](#option-type-alias)
@@ -110,10 +104,16 @@ Added in v1.0.0
 - [pattern matching](#pattern-matching)
   - [match](#match)
 - [sequencing](#sequencing)
+  - [Chainable](#chainable)
+  - [FlatMap](#flatmap)
+  - [andThen](#andthen)
   - [andThenDiscard](#andthendiscard)
+  - [composeKleisliArrow](#composekleisliarrow)
   - [flatMap](#flatmap)
   - [flatMapEither](#flatmapeither)
   - [flatMapNullable](#flatmapnullable)
+  - [flatten](#flatten)
+  - [tap](#tap)
 - [sorting](#sorting)
   - [getOrder](#getorder)
 - [traversing](#traversing)
@@ -123,17 +123,13 @@ Added in v1.0.0
 - [type lambdas](#type-lambdas)
   - [OptionTypeLambda (interface)](#optiontypelambda-interface)
 - [utils](#utils)
-  - [andThen](#andthen)
-  - [ap](#ap)
+  - [Of](#of)
+  - [Pointed](#pointed)
   - [appendElement](#appendelement)
-  - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
   - [exists](#exists)
-  - [flatten](#flatten)
   - [struct](#struct)
-  - [toArray](#toarray)
   - [tuple](#tuple)
-  - [tupled](#tupled)
   - [unit](#unit)
 
 ---
@@ -161,19 +157,6 @@ Added in v1.0.0
 export declare const multiply: {
   (self: Option<number>, that: Option<number>): Option<number>
   (that: Option<number>): (self: Option<number>) => Option<number>
-}
-```
-
-Added in v1.0.0
-
-## multiplyBigint
-
-**Signature**
-
-```ts
-export declare const multiplyBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
 }
 ```
 
@@ -213,19 +196,6 @@ export declare const subtract: {
 
 Added in v1.0.0
 
-## subtractBigint
-
-**Signature**
-
-```ts
-export declare const subtractBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-}
-```
-
-Added in v1.0.0
-
 ## sum
 
 **Signature**
@@ -234,19 +204,6 @@ Added in v1.0.0
 export declare const sum: {
   (self: Option<number>, that: Option<number>): Option<number>
   (that: Option<number>): (self: Option<number>) => Option<number>
-}
-```
-
-Added in v1.0.0
-
-## sumBigint
-
-**Signature**
-
-```ts
-export declare const sumBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
 }
 ```
 
@@ -273,27 +230,66 @@ assert.deepStrictEqual(sumCompact(iterable), 5)
 
 Added in v1.0.0
 
-# combinators
+# combining
 
-## tap
-
-Applies the provided function `f` to the value of the `Option` if it is `Some` and returns the original `Option`
-unless `f` returns `None`, in which case it returns `None`.
-
-This function is useful for performing additional computations on the value of the input `Option` without affecting its value.
+## ap
 
 **Signature**
 
 ```ts
-export declare const tap: {
-  <A, _>(self: Option<A>, f: (a: A) => Option<_>): Option<A>
-  <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
+export declare const ap: {
+  <A, B>(self: Option<(a: A) => B>, that: Option<A>): Option<B>
+  <A>(that: Option<A>): <B>(self: Option<(a: A) => B>) => Option<B>
 }
 ```
 
 Added in v1.0.0
 
-# combining
+## getFailureMonoid
+
+Monoid that models the combination of computations that can fail, if at least one element is `None`
+then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+is the combination of the wrapped elements using the provided `Monoid`.
+
+The `empty` value is `some(M.empty)`.
+
+See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
+
+**Signature**
+
+```ts
+export declare const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>>
+```
+
+Added in v1.0.0
+
+## getFailureSemigroup
+
+Semigroup that models the combination of computations that can fail, if at least one element is `None`
+then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
+is the combination of the wrapped elements using the provided `Semigroup`.
+
+See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
+
+**Signature**
+
+```ts
+export declare const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>>
+```
+
+Added in v1.0.0
+
+## getFirstSomeSemigroup
+
+Semigroup returning the first `Some` value encountered.
+
+**Signature**
+
+```ts
+export declare const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>>
+```
+
+Added in v1.0.0
 
 ## zipWith
 
@@ -777,6 +773,16 @@ Added in v1.0.0
 
 # folding
 
+## Foldable
+
+**Signature**
+
+```ts
+export declare const Foldable: foldable.Foldable<OptionTypeLambda>
+```
+
+Added in v1.0.0
+
 ## reduceCompact
 
 Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
@@ -804,6 +810,29 @@ assert.deepStrictEqual(
   ),
   3
 )
+```
+
+Added in v1.0.0
+
+## toArray
+
+Transforms an `Option` into an `Array`.
+If the input is `None`, an empty array is returned.
+If the input is `Some`, the value is wrapped in an array.
+
+**Signature**
+
+```ts
+export declare const toArray: <A>(self: Option<A>) => A[]
+```
+
+**Example**
+
+```ts
+import { some, none, toArray } from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(toArray(some(1)), [1])
+assert.deepStrictEqual(toArray(none()), [])
 ```
 
 Added in v1.0.0
@@ -896,16 +925,6 @@ export declare const Applicative: applicative.Applicative<OptionTypeLambda>
 
 Added in v1.0.0
 
-## Chainable
-
-**Signature**
-
-```ts
-export declare const Chainable: chainable.Chainable<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
 ## Compactable
 
 **Signature**
@@ -926,16 +945,6 @@ export declare const Coproduct: coproduct_.Coproduct<OptionTypeLambda>
 
 Added in v1.0.0
 
-## Covariant
-
-**Signature**
-
-```ts
-export declare const Covariant: covariant.Covariant<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
 ## Filterable
 
 **Signature**
@@ -946,62 +955,12 @@ export declare const Filterable: filterable.Filterable<OptionTypeLambda>
 
 Added in v1.0.0
 
-## FlatMap
-
-**Signature**
-
-```ts
-export declare const FlatMap: flatMap_.FlatMap<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## Foldable
-
-**Signature**
-
-```ts
-export declare const Foldable: foldable.Foldable<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## Invariant
-
-**Signature**
-
-```ts
-export declare const Invariant: invariant.Invariant<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
 ## Monad
 
 **Signature**
 
 ```ts
 export declare const Monad: monad.Monad<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## Of
-
-**Signature**
-
-```ts
-export declare const Of: of_.Of<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## Pointed
-
-**Signature**
-
-```ts
-export declare const Pointed: pointed.Pointed<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1062,52 +1021,6 @@ Added in v1.0.0
 
 ```ts
 export declare const Traversable: traversable.Traversable<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## getFailureMonoid
-
-Monoid that models the combination of computations that can fail, if at least one element is `None`
-then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
-is the combination of the wrapped elements using the provided `Monoid`.
-
-The `empty` value is `some(M.empty)`.
-
-See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
-
-**Signature**
-
-```ts
-export declare const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>>
-```
-
-Added in v1.0.0
-
-## getFailureSemigroup
-
-Semigroup that models the combination of computations that can fail, if at least one element is `None`
-then the resulting combination is `None`, otherwise if all elements are `Some` then the resulting combination
-is the combination of the wrapped elements using the provided `Semigroup`.
-
-See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
-
-**Signature**
-
-```ts
-export declare const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>>
-```
-
-Added in v1.0.0
-
-## getFirstSomeSemigroup
-
-Semigroup returning the first `Some` value encountered.
-
-**Signature**
-
-```ts
-export declare const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>>
 ```
 
 Added in v1.0.0
@@ -1359,6 +1272,26 @@ Added in v1.0.0
 
 # mapping
 
+## Covariant
+
+**Signature**
+
+```ts
+export declare const Covariant: covariant.Covariant<OptionTypeLambda>
+```
+
+Added in v1.0.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: invariant.Invariant<OptionTypeLambda>
+```
+
+Added in v1.0.0
+
 ## as
 
 Maps the `Some` value of this `Option` to the specified constant value.
@@ -1409,6 +1342,16 @@ export declare const map: {
   <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
   <A, B>(f: (a: A) => B): (self: Option<A>) => Option<B>
 }
+```
+
+Added in v1.0.0
+
+## tupled
+
+**Signature**
+
+```ts
+export declare const tupled: <A>(self: Option<A>) => Option<[A]>
 ```
 
 Added in v1.0.0
@@ -1499,6 +1442,39 @@ Added in v1.0.0
 
 # sequencing
 
+## Chainable
+
+**Signature**
+
+```ts
+export declare const Chainable: chainable.Chainable<OptionTypeLambda>
+```
+
+Added in v1.0.0
+
+## FlatMap
+
+**Signature**
+
+```ts
+export declare const FlatMap: flatMap_.FlatMap<OptionTypeLambda>
+```
+
+Added in v1.0.0
+
+## andThen
+
+**Signature**
+
+```ts
+export declare const andThen: {
+  <_, B>(self: Option<_>, that: Option<B>): Option<B>
+  <B>(that: Option<B>): <_>(self: Option<_>) => Option<B>
+}
+```
+
+Added in v1.0.0
+
 ## andThenDiscard
 
 Sequences the specified `that` `Option` but ignores its value.
@@ -1511,6 +1487,19 @@ It is useful when we want to chain multiple operations, but only care about the 
 export declare const andThenDiscard: {
   <A, _>(self: Option<A>, that: Option<_>): Option<A>
   <_>(that: Option<_>): <A>(self: Option<A>) => Option<A>
+}
+```
+
+Added in v1.0.0
+
+## composeKleisliArrow
+
+**Signature**
+
+```ts
+export declare const composeKleisliArrow: {
+  <A, B, C>(afb: (a: A) => Option<B>, bfc: (b: B) => Option<C>): (a: A) => Option<C>
+  <B, C>(bfc: (b: B) => Option<C>): <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C>
 }
 ```
 
@@ -1611,6 +1600,34 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
+## flatten
+
+**Signature**
+
+```ts
+export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
+```
+
+Added in v1.0.0
+
+## tap
+
+Applies the provided function `f` to the value of the `Option` if it is `Some` and returns the original `Option`
+unless `f` returns `None`, in which case it returns `None`.
+
+This function is useful for performing additional computations on the value of the input `Option` without affecting its value.
+
+**Signature**
+
+```ts
+export declare const tap: {
+  <A, _>(self: Option<A>, f: (a: A) => Option<_>): Option<A>
+  <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
+}
+```
+
+Added in v1.0.0
+
 # sorting
 
 ## getOrder
@@ -1704,28 +1721,22 @@ Added in v1.0.0
 
 # utils
 
-## andThen
+## Of
 
 **Signature**
 
 ```ts
-export declare const andThen: {
-  <_, B>(self: Option<_>, that: Option<B>): Option<B>
-  <B>(that: Option<B>): <_>(self: Option<_>) => Option<B>
-}
+export declare const Of: of_.Of<OptionTypeLambda>
 ```
 
 Added in v1.0.0
 
-## ap
+## Pointed
 
 **Signature**
 
 ```ts
-export declare const ap: {
-  <A, B>(self: Option<(a: A) => B>, that: Option<A>): Option<B>
-  <A>(that: Option<A>): <B>(self: Option<(a: A) => B>) => Option<B>
-}
+export declare const Pointed: pointed.Pointed<OptionTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1740,19 +1751,6 @@ Appends an element to the end of a tuple.
 export declare const appendElement: {
   <A extends readonly any[], B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
   <B>(that: Option<B>): <A extends readonly any[]>(self: Option<A>) => Option<[...A, B]>
-}
-```
-
-Added in v1.0.0
-
-## composeKleisliArrow
-
-**Signature**
-
-```ts
-export declare const composeKleisliArrow: {
-  <A, B, C>(afb: (a: A) => Option<B>, bfc: (b: B) => Option<C>): (a: A) => Option<C>
-  <B, C>(bfc: (b: B) => Option<C>): <A>(afb: (a: A) => Option<B>) => (a: A) => Option<C>
 }
 ```
 
@@ -1813,16 +1811,6 @@ assert.deepStrictEqual(pipe(none(), exists(isEven)), false)
 
 Added in v1.0.0
 
-## flatten
-
-**Signature**
-
-```ts
-export declare const flatten: <A>(self: Option<Option<A>>) => Option<A>
-```
-
-Added in v1.0.0
-
 ## struct
 
 **Signature**
@@ -1835,29 +1823,6 @@ export declare const struct: <R extends Record<string, Option<any>>>(
 
 Added in v1.0.0
 
-## toArray
-
-Transforms an `Option` into an `Array`.
-If the input is `None`, an empty array is returned.
-If the input is `Some`, the value is wrapped in an array.
-
-**Signature**
-
-```ts
-export declare const toArray: <A>(self: Option<A>) => A[]
-```
-
-**Example**
-
-```ts
-import { some, none, toArray } from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(toArray(some(1)), [1])
-assert.deepStrictEqual(toArray(none()), [])
-```
-
-Added in v1.0.0
-
 ## tuple
 
 **Signature**
@@ -1866,16 +1831,6 @@ Added in v1.0.0
 export declare const tuple: <T extends readonly Option<any>[]>(
   ...tuple: T
 ) => Option<{ [I in keyof T]: [T[I]] extends [Option<infer A>] ? A : never }>
-```
-
-Added in v1.0.0
-
-## tupled
-
-**Signature**
-
-```ts
-export declare const tupled: <A>(self: Option<A>) => Option<[A]>
 ```
 
 Added in v1.0.0
