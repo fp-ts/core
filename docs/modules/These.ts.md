@@ -26,6 +26,7 @@ Added in v1.0.0
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
   - [getFirstRightOrBothSemigroup](#getfirstrightorbothsemigroup)
+  - [zipWith](#zipwith)
 - [constructors](#constructors)
   - [both](#both)
   - [fail](#fail)
@@ -128,8 +129,6 @@ Added in v1.0.0
   - [match](#match)
 - [predicates](#predicates)
   - [exists](#exists)
-- [products](#products)
-  - [zipWith](#zipwith)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
   - [flatMap](#flatmap)
@@ -336,6 +335,25 @@ Added in v1.0.0
 
 ```ts
 export declare const getFirstRightOrBothSemigroup: <E, A>() => Semigroup<These<E, A>>
+```
+
+Added in v1.0.0
+
+## zipWith
+
+**Signature**
+
+```ts
+export declare const zipWith: {
+  <E1, A, E2, B, C>(
+    self: These<readonly [E1, ...E1[]], A>,
+    that: These<readonly [E2, ...E2[]], B>,
+    f: (a: A, b: B) => C
+  ): These<readonly [E1 | E2, ...(E1 | E2)[]], C>
+  <E2, B, A, C>(that: These<readonly [E2, ...E2[]], B>, f: (a: A, b: B) => C): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], C>
+}
 ```
 
 Added in v1.0.0
@@ -1359,21 +1377,6 @@ export declare const exists: <A>(predicate: Predicate<A>) => <E>(self: These<E, 
 
 Added in v1.0.0
 
-# products
-
-## zipWith
-
-**Signature**
-
-```ts
-export declare const zipWith: <E2, B, A, C>(
-  fb: These<readonly [E2, ...E2[]], B>,
-  f: (a: A, b: B) => C
-) => <E1>(fa: These<readonly [E1, ...E1[]], A>) => These<readonly [E2 | E1, ...(E2 | E1)[]], C>
-```
-
-Added in v1.0.0
-
 # sequencing
 
 ## andThenDiscard
@@ -1548,9 +1551,15 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <E2, A>(
-  fa: These<readonly [E2, ...E2[]], A>
-) => <E1, B>(self: These<readonly [E1, ...E1[]], (a: A) => B>) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+export declare const ap: {
+  <E1, A, B, E2>(self: These<readonly [E1, ...E1[]], (a: A) => B>, that: These<readonly [E2, ...E2[]], A>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+  <E2, A>(that: These<readonly [E2, ...E2[]], A>): <E1, B>(
+    self: These<readonly [E1, ...E1[]], (a: A) => B>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+}
 ```
 
 Added in v1.0.0

@@ -19,15 +19,7 @@ export interface Chainable<F extends TypeLambda> extends FlatMap<F>, Covariant<F
  * @category sequencing
  * @since 1.0.0
  */
-export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>): {
-  <R1, O1, E1, A, R2, O2, E2, _>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, _>
-  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
-  <R2, O2, E2, _>(
-    that: Kind<F, R2, O2, E2, _>
-  ): <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
-} =>
+export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>) =>
   dual<
     <R1, O1, E1, A, R2, O2, E2, _>(
       self: Kind<F, R1, O1, E1, A>,
@@ -48,15 +40,7 @@ export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>): {
  *
  * @since 1.0.0
  */
-export const tap = <F extends TypeLambda>(F: Chainable<F>): {
-  <R1, O1, E1, A, R2, O2, E2, _>(
-    self: Kind<F, R1, O1, E1, A>,
-    f: (a: A) => Kind<F, R2, O2, E2, _>
-  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
-  <A, R2, O2, E2, _>(
-    f: (a: A) => Kind<F, R2, O2, E2, _>
-  ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, A>
-} =>
+export const tap = <F extends TypeLambda>(F: Chainable<F>) =>
   dual<
     <R1, O1, E1, A, R2, O2, E2, _>(
       self: Kind<F, R1, O1, E1, A>,

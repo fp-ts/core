@@ -950,24 +950,34 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
 } = semiApplicative.lift2(SemiApplicative)
 
 /**
- * @category products
+ * @dual
+ * @category combining
  * @since 1.0.0
  */
-export const zipWith: <E2, B, A, C>(
-  fb: Validated<E2, B>,
-  f: (a: A, b: B) => C
-) => <E1>(fa: Validated<E1, A>) => Validated<E2 | E1, C> = semiApplicative.zipWith(
+export const zipWith: {
+  <E1, A, E2, B, C>(
+    self: Validated<E1, A>,
+    that: Validated<E2, B>,
+    f: (a: A, b: B) => C
+  ): Validated<E1 | E2, C>
+  <E2, B, A, C>(
+    that: Validated<E2, B>,
+    f: (a: A, b: B) => C
+  ): <E1>(self: Validated<E1, A>) => Validated<E2 | E1, C>
+} = semiApplicative.zipWith(
   SemiApplicative
 )
 
 /**
+ * @dual
  * @since 1.0.0
  */
-export const ap: <E2, A>(
-  fa: Validated<E2, A>
-) => <E1, B>(self: Validated<E1, (a: A) => B>) => Validated<E1 | E2, B> = semiApplicative.ap(
-  SemiApplicative
-)
+export const ap: {
+  <E1, A, B, E2>(self: Validated<E1, (a: A) => B>, that: Validated<E2, A>): Validated<E1 | E2, B>
+  <E2, A>(
+    that: Validated<E2, A>
+  ): <E1, B>(self: Validated<E1, (a: A) => B>) => Validated<E2 | E1, B>
+} = semiApplicative.ap(SemiApplicative)
 
 /**
  * @category combining
