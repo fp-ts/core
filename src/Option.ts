@@ -962,7 +962,7 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
  * assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
  * assert.deepStrictEqual(M.combine(some(1), some(2)), some(3))
  *
- * @category lifting
+ * @category instances
  * @since 1.0.0
  */
 export const getOptionalMonoid = <A>(
@@ -974,19 +974,6 @@ export const getOptionalMonoid = <A>(
     ),
     none()
   )
-
-/**
- * Lifts a binary function into `Option`.
- *
- * @param f - The function to lift.
- *
- * @category lifting
- * @since 1.0.0
- */
-export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
-  (self: Option<A>, that: Option<B>): Option<C>
-  (that: Option<B>): (self: Option<A>) => Option<C>
-} = semiApplicative.lift2(SemiApplicative)
 
 /**
  * Zips two `Option` values together using a provided function, returning a new `Option` of the result.
@@ -1024,7 +1011,7 @@ export const ap: {
  * @since 1.0.0
  */
 export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> = semiApplicative
-  .liftSemigroup(SemiApplicative)
+  .getSemigroup(SemiApplicative)
 
 /**
  * @category instances
@@ -1051,7 +1038,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicative.liftMonoid(
+export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicative.getMonoid(
   Applicative
 )
 
@@ -1169,6 +1156,10 @@ export const Compactable: compactable.Compactable<OptionTypeLambda> = {
 export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>] = compactable
   .separate({ ...Covariant, ...Compactable })
 
+// -------------------------------------------------------------------------------------
+// filtering
+// -------------------------------------------------------------------------------------
+
 /**
  * Maps over the value of an `Option` and filters out `None`s.
  *
@@ -1216,6 +1207,10 @@ export const filter: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (fc: Option<C>) => Option<B>
   <B extends A, A = B>(predicate: Predicate<A>): (fb: Option<B>) => Option<B>
 } = filterable.filter(Filterable)
+
+// -------------------------------------------------------------------------------------
+// traversing
+// -------------------------------------------------------------------------------------
 
 /**
  * @category traversing
@@ -1275,6 +1270,10 @@ export const traverseTap: <F extends TypeLambda>(
 ) => (self: Option<A>) => Kind<F, R, O, E, Option<A>> = traversable
   .traverseTap(Traversable)
 
+// -------------------------------------------------------------------------------------
+// pattern matching
+// -------------------------------------------------------------------------------------
+
 /**
  * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
  * function when passed the `Option`'s value.
@@ -1319,6 +1318,32 @@ export const match: {
     isNone(self) ? onNone() : onSome(self.value)
 )
 
+// -------------------------------------------------------------------------------------
+// equivalence
+// -------------------------------------------------------------------------------------
+
+/**
+ * @example
+ * import { none, some, getEquivalence } from '@fp-ts/core/Option'
+ * import * as N from '@fp-ts/core/number'
+ *
+ * const isEquivalent = getEquivalence(N.Equivalence)
+ * assert.deepStrictEqual(isEquivalent(none(), none()), true)
+ * assert.deepStrictEqual(isEquivalent(none(), some(1)), false)
+ * assert.deepStrictEqual(isEquivalent(some(1), none()), false)
+ * assert.deepStrictEqual(isEquivalent(some(1), some(2)), false)
+ * assert.deepStrictEqual(isEquivalent(some(1), some(1)), true)
+ *
+ * @category equivalence
+ * @since 1.0.0
+ */
+export const getEquivalence = <A>(E: Equivalence<A>): Equivalence<Option<A>> =>
+  (x, y) => x === y || (isNone(x) ? isNone(y) : isNone(y) ? false : E(x.value, y.value))
+
+// -------------------------------------------------------------------------------------
+// sorting
+// -------------------------------------------------------------------------------------
+
 /**
  * The `Order` instance allows `Option` values to be compared with
  * `compare`, whenever there is an `Order` instance for
@@ -1327,11 +1352,11 @@ export const match: {
  * `None` is considered to be less than any `Some` value.
  *
  * @example
- * import { none, some, liftOrder } from '@fp-ts/core/Option'
+ * import { none, some, getOrder } from '@fp-ts/core/Option'
  * import * as N from '@fp-ts/core/Number'
  * import { pipe } from '@fp-ts/core/Function'
  *
- * const O = liftOrder(N.Order)
+ * const O = getOrder(N.Order)
  * assert.deepStrictEqual(O.compare(none(), none()), 0)
  * assert.deepStrictEqual(O.compare(none(), some(1)), -1)
  * assert.deepStrictEqual(O.compare(some(1), none()), 1)
@@ -1341,10 +1366,27 @@ export const match: {
  * @category sorting
  * @since 1.0.0
  */
-export const liftOrder = <A>(O: Order<A>): Order<Option<A>> =>
+export const getOrder = <A>(O: Order<A>): Order<Option<A>> =>
   order.fromCompare((self, that) =>
     isSome(self) ? (isSome(that) ? O.compare(self.value, that.value) : 1) : -1
   )
+
+// -------------------------------------------------------------------------------------
+// lifting
+// -------------------------------------------------------------------------------------
+
+/**
+ * Lifts a binary function into `Option`.
+ *
+ * @param f - The function to lift.
+ *
+ * @category lifting
+ * @since 1.0.0
+ */
+export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
+  (self: Option<A>, that: Option<B>): Option<C>
+  (that: Option<B>): (self: Option<A>) => Option<C>
+} = semiApplicative.lift2(SemiApplicative)
 
 /**
  * Transforms a `Predicate` function into a `Some` of the input value if the predicate returns `true` or `None`
@@ -1392,6 +1434,10 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Either<E, B>
 ) => (...a: A): Option<B> => fromEither(f(...a))
 
+// -------------------------------------------------------------------------------------
+// sequencing
+// -------------------------------------------------------------------------------------
+
 /**
  * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
  *
@@ -1423,6 +1469,10 @@ export const flatMapEither: {
   <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> =>
     pipe(self, flatMap(liftEither(f)))
 )
+
+// -------------------------------------------------------------------------------------
+// utils
+// -------------------------------------------------------------------------------------
 
 /**
  * Returns a function that checks if an `Option` contains a given value using a provided `Equivalence` instance.
@@ -1498,6 +1548,7 @@ export const exists: {
  * assert.deepStrictEqual(pipe(iterable, reduceCompact(0, (b, a) => b + a)), 3)
  *
  * @dual
+ * @category folding
  * @since 1.0.0
  */
 export const reduceCompact: {

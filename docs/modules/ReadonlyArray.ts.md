@@ -117,14 +117,13 @@ Added in v1.0.0
   - [getUnionSemigroup](#getunionsemigroup)
 - [lifting](#lifting)
   - [every](#every)
+  - [getOrder](#getorder)
   - [lift2](#lift2)
   - [liftEither](#lifteither)
   - [liftMonoid](#liftmonoid)
   - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
-  - [liftOrder](#liftorder)
   - [liftPredicate](#liftpredicate)
-  - [liftSemigroup](#liftsemigroup)
 - [mapping](#mapping)
   - [as](#as)
   - [flap](#flap)
@@ -1338,6 +1337,21 @@ export declare function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArr
 
 Added in v1.0.0
 
+## getOrder
+
+This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
+The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
+If all elements are equal, the arrays are then compared based on their length.
+It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
+
+**Signature**
+
+```ts
+export declare const getOrder: <A>(O: order.Order<A>) => order.Order<readonly A[]>
+```
+
+Added in v1.0.0
+
 ## lift2
 
 Lifts a binary function into `ReadonlyArray`.
@@ -1394,21 +1408,6 @@ export declare const liftOption: <A extends unknown[], B>(f: (...a: A) => Option
 
 Added in v1.0.0
 
-## liftOrder
-
-This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
-The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
-If all elements are equal, the arrays are then compared based on their length.
-It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
-
-**Signature**
-
-```ts
-export declare const liftOrder: <A>(O: order.Order<A>) => order.Order<readonly A[]>
-```
-
-Added in v1.0.0
-
 ## liftPredicate
 
 **Signature**
@@ -1418,16 +1417,6 @@ export declare const liftPredicate: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => B[]
   <B extends A, A = B>(predicate: Predicate<A>): (b: B) => B[]
 }
-```
-
-Added in v1.0.0
-
-## liftSemigroup
-
-**Signature**
-
-```ts
-export declare const liftSemigroup: <A>(S: Semigroup<A>) => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0

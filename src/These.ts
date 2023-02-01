@@ -126,6 +126,25 @@ export const fail = <E>(e: E): Validated<E, never> => left([e])
  */
 export const warn = <E, A>(e: E, a: A): Validated<E, A> => both([e], a)
 
+// -------------------------------------------------------------------------------------
+// equivalence
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category equivalence
+ * @since 1.0.0
+ */
+export const getEquivalence = <E, A>(
+  EE: Equivalence<E>,
+  EA: Equivalence<A>
+): Equivalence<These<E, A>> =>
+  (x, y) =>
+    isLeft(x)
+      ? isLeft(y) && EE(x.left, y.left)
+      : isRight(x)
+      ? isRight(y) && EA(x.right, y.right)
+      : isBoth(y) && EE(x.left, y.left) && EA(x.right, y.right)
+
 /**
  * @category pattern matching
  * @since 1.0.0
@@ -986,7 +1005,7 @@ export const ap: {
 export const getFirstLeftSemigroup: <A, E>(
   S: Semigroup<A>
 ) => Semigroup<Validated<E, A>> = semiApplicative
-  .liftSemigroup(SemiApplicative)
+  .getSemigroup(SemiApplicative)
 
 const productAll = <E, A>(
   collection: Iterable<Validated<E, A>>
@@ -1097,7 +1116,7 @@ export const Applicative: applicative.Applicative<ValidatedTypeLambda> = {
  * @since 1.0.0
  */
 export const getFirstLeftMonoid: <A, E>(M: Monoid<A>) => Monoid<Validated<E, A>> = applicative
-  .liftMonoid(
+  .getMonoid(
     Applicative
   )
 

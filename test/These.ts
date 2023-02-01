@@ -1,6 +1,7 @@
 import * as E from "@fp-ts/core/Either"
 import { identity, pipe } from "@fp-ts/core/Function"
 import { structural } from "@fp-ts/core/internal/effect"
+import * as N from "@fp-ts/core/Number"
 import * as O from "@fp-ts/core/Option"
 import * as S from "@fp-ts/core/String"
 import * as _ from "@fp-ts/core/These"
@@ -778,5 +779,20 @@ describe("These", () => {
     expect(pipe(e, _.subtractBigint(_.right(2n)))).toEqual(e)
     expect(pipe(_.right(1n), _.subtractBigint(e))).toEqual(e)
     expect(pipe(_.right(2n), _.subtractBigint(_.right(3n)))).toEqual(_.right(-1n))
+  })
+
+  it("getEquivalence", () => {
+    const isEquivalent = _.getEquivalence(N.Equivalence, N.Equivalence)
+    Util.deepStrictEqual(isEquivalent(_.left(2), _.left(2)), true)
+    Util.deepStrictEqual(isEquivalent(_.left(2), _.left(3)), false)
+    Util.deepStrictEqual(isEquivalent(_.left(3), _.left(2)), false)
+    Util.deepStrictEqual(isEquivalent(_.left(2), _.right(2)), false)
+    Util.deepStrictEqual(isEquivalent(_.left(2), _.both(2, 2)), false)
+    Util.deepStrictEqual(isEquivalent(_.right(2), _.right(2)), true)
+    Util.deepStrictEqual(isEquivalent(_.right(2), _.right(3)), false)
+    Util.deepStrictEqual(isEquivalent(_.right(3), _.right(2)), false)
+    Util.deepStrictEqual(isEquivalent(_.right(2), _.both(2, 2)), false)
+    Util.deepStrictEqual(isEquivalent(_.both(2, 2), _.both(2, 2)), true)
+    Util.deepStrictEqual(isEquivalent(_.both(2, 3), _.both(3, 2)), false)
   })
 })

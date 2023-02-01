@@ -44,7 +44,6 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.Product).exist
 
     expect(RA.SemiApplicative).exist
-    expect(RA.liftSemigroup).exist
     expect(RA.lift2).exist
     expect(RA.ap).exist
 
@@ -1044,8 +1043,8 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(M.combineAll([[1, 2], [3, 4, 5], [5, 6, 7, 1]]), [1, 2, 3, 4, 5, 5, 6, 7, 1])
   })
 
-  it("liftOrder", () => {
-    const O = RA.liftOrder(String.Order)
+  it("getOrder", () => {
+    const O = RA.getOrder(String.Order)
     deepStrictEqual(O.compare([], []), 0)
     deepStrictEqual(O.compare(["a"], ["a"]), 0)
 

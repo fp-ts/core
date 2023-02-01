@@ -19,9 +19,9 @@ export interface Applicative<F extends TypeLambda> extends SemiApplicative<F>, P
  *
  * @since 1.0.0
  */
-export const liftMonoid = <F extends TypeLambda>(F: Applicative<F>) =>
+export const getMonoid = <F extends TypeLambda>(F: Applicative<F>) =>
   <A, R, O, E>(M: Monoid<A>): Monoid<Kind<F, R, O, E, A>> =>
     monoid.fromSemigroup(
-      semiApplicative.liftSemigroup(F)<A, R, O, E>(M),
+      semiApplicative.getSemigroup(F)<A, R, O, E>(M),
       F.of(M.empty)
     )

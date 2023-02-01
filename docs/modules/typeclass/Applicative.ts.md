@@ -15,7 +15,7 @@ Added in v1.0.0
 - [type class](#type-class)
   - [Applicative (interface)](#applicative-interface)
 - [utils](#utils)
-  - [liftMonoid](#liftmonoid)
+  - [getMonoid](#getmonoid)
 
 ---
 
@@ -33,14 +33,14 @@ Added in v1.0.0
 
 # utils
 
-## liftMonoid
+## getMonoid
 
 Lift a monoid into 'F', the inner values are combined using the provided `Monoid`.
 
 **Signature**
 
 ```ts
-export declare const liftMonoid: <F extends TypeLambda>(
+export declare const getMonoid: <F extends TypeLambda>(
   F: Applicative<F>
 ) => <A, R, O, E>(M: Monoid<A>) => Monoid<Kind<F, R, O, E, A>>
 ```

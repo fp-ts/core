@@ -5,7 +5,7 @@ import * as U from "../util"
 
 describe("Applicative", () => {
   it("liftMonoid", () => {
-    const liftMonoid = _.liftMonoid(O.Applicative)
+    const liftMonoid = _.getMonoid(O.Applicative)
     const M = liftMonoid(N.MonoidSum)
     U.deepStrictEqual(M.combine(O.none(), O.none()), O.none())
     U.deepStrictEqual(M.combine(O.some(1), O.none()), O.none())

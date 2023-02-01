@@ -3,7 +3,7 @@ import { flow, identity, pipe } from "@fp-ts/core/Function"
 import { structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
 import * as O from "@fp-ts/core/Option"
-import * as String from "@fp-ts/core/String"
+import * as S from "@fp-ts/core/String"
 import * as Util from "@fp-ts/core/test/util"
 
 describe.concurrent("Either", () => {
@@ -201,19 +201,19 @@ describe.concurrent("Either", () => {
   })
 
   it("map", () => {
-    const f = _.map(String.length)
+    const f = _.map(S.length)
     Util.deepStrictEqual(pipe(_.right("abc"), f), _.right(3))
     Util.deepStrictEqual(pipe(_.left("s"), f), _.left("s"))
   })
 
   it("flatMap", () => {
-    const f = _.flatMap<string, string, number>(flow(String.length, _.right))
+    const f = _.flatMap<string, string, number>(flow(S.length, _.right))
     Util.deepStrictEqual(pipe(_.right("abc"), f), _.right(3))
     Util.deepStrictEqual(pipe(_.left("maError"), f), _.left("maError"))
   })
 
   it("bimap", () => {
-    const f = _.bimap(String.length, (n: number) => n > 2)
+    const f = _.bimap(S.length, (n: number) => n > 2)
     Util.deepStrictEqual(pipe(_.right(1), f), _.right(false))
   })
 
@@ -297,7 +297,7 @@ describe.concurrent("Either", () => {
     const p = (n: number) => n > 2
     const f = (n: number) => (p(n) ? O.some(n + 1) : O.none())
     Util.deepStrictEqual(pipe(_.left("123"), _.filterMap(f, () => "")), _.left("123"))
-    Util.deepStrictEqual(pipe(_.right(1), _.filterMap(f, () => "")), _.left(String.Monoid.empty))
+    Util.deepStrictEqual(pipe(_.right(1), _.filterMap(f, () => "")), _.left(S.Monoid.empty))
     Util.deepStrictEqual(pipe(_.right(3), _.filterMap(f, () => "")), _.right(4))
   })
 
@@ -508,15 +508,25 @@ describe.concurrent("Either", () => {
   })
 
   it("getOptionalSemigroup", () => {
-    const S = _.getOptionalSemigroup(String.Semigroup)
-    Util.deepStrictEqual(S.combine(_.left("e"), _.left("e")), _.left("e"))
-    Util.deepStrictEqual(S.combine(_.left("e"), _.right("a")), _.right("a"))
-    Util.deepStrictEqual(S.combine(_.right("a"), _.left("e")), _.right("a"))
-    Util.deepStrictEqual(S.combine(_.right("b"), _.right("a")), _.right("ba"))
-    Util.deepStrictEqual(S.combine(_.right("a"), _.right("b")), _.right("ab"))
+    const OS = _.getOptionalSemigroup(S.Semigroup)
+    Util.deepStrictEqual(OS.combine(_.left("e"), _.left("e")), _.left("e"))
+    Util.deepStrictEqual(OS.combine(_.left("e"), _.right("a")), _.right("a"))
+    Util.deepStrictEqual(OS.combine(_.right("a"), _.left("e")), _.right("a"))
+    Util.deepStrictEqual(OS.combine(_.right("b"), _.right("a")), _.right("ba"))
+    Util.deepStrictEqual(OS.combine(_.right("a"), _.right("b")), _.right("ab"))
 
-    Util.deepStrictEqual(S.combineMany(_.right("a"), [_.right("b")]), _.right("ab"))
-    Util.deepStrictEqual(S.combineMany(_.left("e"), [_.right("b")]), _.right("b"))
-    Util.deepStrictEqual(S.combineMany(_.right("a"), [_.left("e")]), _.right("a"))
+    Util.deepStrictEqual(OS.combineMany(_.right("a"), [_.right("b")]), _.right("ab"))
+    Util.deepStrictEqual(OS.combineMany(_.left("e"), [_.right("b")]), _.right("b"))
+    Util.deepStrictEqual(OS.combineMany(_.right("a"), [_.left("e")]), _.right("a"))
+  })
+
+  it("getEquivalence", () => {
+    const isEquivalent = _.getEquivalence(S.Equivalence, N.Equivalence)
+    Util.deepStrictEqual(isEquivalent(_.right(1), _.right(1)), true)
+    Util.deepStrictEqual(isEquivalent(_.right(1), _.right(2)), false)
+    Util.deepStrictEqual(isEquivalent(_.right(1), _.left("foo")), false)
+    Util.deepStrictEqual(isEquivalent(_.left("foo"), _.left("foo")), true)
+    Util.deepStrictEqual(isEquivalent(_.left("foo"), _.left("bar")), false)
+    Util.deepStrictEqual(isEquivalent(_.left("foo"), _.right(1)), false)
   })
 })

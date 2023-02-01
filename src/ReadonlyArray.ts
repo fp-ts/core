@@ -1773,15 +1773,6 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
 } = semiApplicative.lift2(SemiApplicative) as any
 
 /**
- * @category lifting
- * @since 1.0.0
- */
-export const liftSemigroup: <A>(S: Semigroup<A>) => Semigroup<ReadonlyArray<A>> = semiApplicative
-  .liftSemigroup(
-    SemiApplicative
-  )
-
-/**
  * @category instances
  * @since 1.0.0
  */
@@ -1811,7 +1802,7 @@ export const Applicative: applicative.Applicative<ReadonlyArrayTypeLambda> = {
  * @since 1.0.0
  */
 export const liftMonoid: <A>(M: Monoid<A>) => Monoid<ReadonlyArray<A>> = applicative
-  .liftMonoid(
+  .getMonoid(
     Applicative
   )
 
@@ -2180,4 +2171,4 @@ export const getMonoid: <A>() => Monoid<ReadonlyArray<A>> = monoid.readonlyArray
  * @category lifting
  * @since 1.0.0
  */
-export const liftOrder: <A>(O: Order<A>) => Order<ReadonlyArray<A>> = order.array
+export const getOrder: <A>(O: Order<A>) => Order<ReadonlyArray<A>> = order.array
