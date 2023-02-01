@@ -1316,10 +1316,15 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
  */
 export const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => (self: Option<A>) => Kind<F, R, O, E, Option<A>> = traversable
-  .traverseTap(Traversable)
+) => {
+  <A, R, O, E, B>(
+    self: Option<A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Option<A>>
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): (self: Option<A>) => Kind<F, R, O, E, Option<A>>
+} = traversable.traverseTap(Traversable)
 
 // -------------------------------------------------------------------------------------
 // equivalence

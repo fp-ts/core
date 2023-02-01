@@ -726,10 +726,15 @@ export const Traversable: traversable.Traversable<TheseTypeLambda> = {
  */
 export const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => <TE>(self: These<TE, A>) => Kind<F, R, O, E, These<TE, A>> = traversable
-  .traverseTap(Traversable)
+) => {
+  <TE, A, R, O, E, B>(
+    self: These<TE, A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, These<TE, A>>
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): <TE>(self: These<TE, A>) => Kind<F, R, O, E, These<TE, A>>
+} = traversable.traverseTap(Traversable)
 
 /**
  * Returns a function that checks if a `These` contains a given value using a provided `equivalence` function.

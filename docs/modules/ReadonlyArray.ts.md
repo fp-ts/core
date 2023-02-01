@@ -1804,7 +1804,10 @@ Added in v1.0.0
 ```ts
 export declare const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, A[]>
+) => {
+  <A, R, O, E, B>(self: readonly A[], f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, A[]>
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: readonly A[]) => Kind<F, R, O, E, A[]>
+}
 ```
 
 Added in v1.0.0

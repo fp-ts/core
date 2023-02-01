@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { identity, pipe } from "@fp-ts/core/Function"
+import { dual, identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
@@ -75,7 +75,25 @@ export const sequence = <T extends TypeLambda>(
  * @since 1.0.0
  */
 export const traverseTap = <T extends TypeLambda>(T: Traversable<T>) =>
-  <F extends TypeLambda>(F: Applicative<F>) =>
-    <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): <TR, TO, TE>(
-      self: Kind<T, TR, TO, TE, A>
-    ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>> => T.traverse(F)(a => pipe(f(a), F.map(() => a)))
+  <F extends TypeLambda>(F: Applicative<F>): {
+    <TR, TO, TE, A, R, O, E, B>(
+      self: Kind<T, TR, TO, TE, A>,
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
+    <A, R, O, E, B>(
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
+  } =>
+    dual<
+      <TR, TO, TE, A, R, O, E, B>(
+        self: Kind<T, TR, TO, TE, A>,
+        f: (a: A) => Kind<F, R, O, E, B>
+      ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>,
+      <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => <TR, TO, TE>(
+        self: Kind<T, TR, TO, TE, A>
+      ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
+    >(2, <TR, TO, TE, A, R, O, E, B>(
+      self: Kind<T, TR, TO, TE, A>,
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): Kind<F, R, O, E, Kind<T, TR, TO, TE, A>> =>
+      pipe(self, T.traverse(F)(a => pipe(f(a), F.map(() => a)))))

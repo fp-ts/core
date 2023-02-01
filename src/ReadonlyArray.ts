@@ -1675,10 +1675,15 @@ export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = {
  */
 export const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, B>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<A>> = traversable
-  .traverseTap(Traversable) as any
+) => {
+  <A, R, O, E, B>(
+    self: ReadonlyArray<A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Array<A>>
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): (self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<A>>
+} = traversable.traverseTap(Traversable) as any
 
 /**
  * @category traversing

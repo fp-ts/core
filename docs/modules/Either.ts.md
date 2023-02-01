@@ -1351,7 +1351,10 @@ Added in v1.0.0
 ```ts
 export declare const traverseTap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, A>>
+) => {
+  <TE, A, R, O, E, B>(self: Either<TE, A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Either<TE, A>>
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, A>>
+}
 ```
 
 Added in v1.0.0
