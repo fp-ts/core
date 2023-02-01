@@ -14,10 +14,11 @@ Added in v1.0.0
 
 - [constructors](#constructors)
   - [productMany](#productmany)
+- [do notation](#do-notation)
+  - [andThenBind](#andthenbind)
 - [type class](#type-class)
   - [SemiProduct (interface)](#semiproduct-interface)
 - [utils](#utils)
-  - [andThenBind](#andthenbind)
   - [appendElement](#appendelement)
   - [nonEmptyStruct](#nonemptystruct)
   - [nonEmptyTuple](#nonemptytuple)
@@ -46,6 +47,25 @@ export declare const productMany: <F extends TypeLambda>(
 
 Added in v1.0.0
 
+# do notation
+
+## andThenBind
+
+**Signature**
+
+```ts
+export declare const andThenBind: <F extends TypeLambda>(
+  F: SemiProduct<F>
+) => <N extends string, A extends object, R2, O2, E2, B>(
+  name: Exclude<N, keyof A>,
+  that: Kind<F, R2, O2, E2, B>
+) => <R1, O1, E1>(
+  self: Kind<F, R1, O1, E1, A>
+) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+```
+
+Added in v1.0.0
+
 # type class
 
 ## SemiProduct (interface)
@@ -70,23 +90,6 @@ Added in v1.0.0
 
 # utils
 
-## andThenBind
-
-**Signature**
-
-```ts
-export declare const andThenBind: <F extends TypeLambda>(
-  F: SemiProduct<F>
-) => <N extends string, A extends object, R2, O2, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1>(
-  self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
-```
-
-Added in v1.0.0
-
 ## appendElement
 
 Appends an element to the end of a tuple.
@@ -96,11 +99,15 @@ Appends an element to the end of a tuple.
 ```ts
 export declare const appendElement: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <R2, O2, E2, B>(
+) => (<R1, O1, E1, A extends readonly any[], R2, O2, E2, B>(
+  self: Kind<F, R1, O1, E1, A>,
   that: Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1, A extends readonly any[]>(
-  self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [...A, B]>
+) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>) &
+  (<R2, O2, E2, B>(
+    that: Kind<F, R2, O2, E2, B>
+  ) => <R1, O1, E1, A extends readonly any[]>(
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [...A, B]>)
 ```
 
 Added in v1.0.0

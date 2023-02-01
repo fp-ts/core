@@ -328,9 +328,10 @@ Appends an element to the end of a tuple.
 **Signature**
 
 ```ts
-export declare const appendElement: <B>(
-  that: Predicate<B>
-) => <A extends readonly any[]>(self: Predicate<A>) => Predicate<readonly [...A, B]>
+export declare const appendElement: {
+  <A extends readonly any[], B>(self: Predicate<A>, that: Predicate<B>): Predicate<readonly [...A, B]>
+  <B>(that: Predicate<B>): <A extends readonly any[]>(self: Predicate<A>) => Predicate<readonly [...A, B]>
+}
 ```
 
 Added in v1.0.0

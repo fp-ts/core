@@ -939,10 +939,10 @@ export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
  *
  * @since 1.0.0
  */
-export const appendElement: <B>(
-  fb: Option<B>
-) => <A extends ReadonlyArray<unknown>>(self: Option<A>) => Option<[...A, B]> = semiProduct
-  .appendElement(SemiProduct)
+export const appendElement: {
+  <A extends ReadonlyArray<any>, B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
+  <B>(that: Option<B>): <A extends ReadonlyArray<any>>(self: Option<A>) => Option<[...A, B]>
+} = semiProduct.appendElement(SemiProduct)
 
 const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
   const out: Array<A> = []
@@ -1582,49 +1582,70 @@ export const reduceCompact: {
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = lift2(N.sum)
+export const sum: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = lift2(N.sum)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = lift2(N.multiply)
+export const multiply: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = lift2(N.multiply)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = lift2(N.subtract)
+export const subtract: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = lift2(N.subtract)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = lift2(N.divide)
+export const divide: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+} = lift2(N.divide)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint = lift2(BI.sum)
+export const sumBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+} = lift2(BI.sum)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint = lift2(BI.multiply)
+export const multiplyBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+} = lift2(BI.multiply)
 
 /**
  * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint = lift2(BI.subtract)
+export const subtractBigint: {
+  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
+  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
+} = lift2(BI.subtract)
 
 /**
  * Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.

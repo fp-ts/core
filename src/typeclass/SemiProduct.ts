@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { pipe } from "@fp-ts/core/Function"
+import { dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
@@ -89,6 +89,7 @@ export const productMany = <F extends TypeLambda>(
   }
 
 /**
+ * @category do notation
  * @since 1.0.0
  */
 export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
@@ -119,16 +120,24 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
  * @since 1.0.0
  */
 export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>) =>
-  <R2, O2, E2, B>(
-    that: Kind<F, R2, O2, E2, B>
-  ) =>
-    <R1, O1, E1, A extends ReadonlyArray<any>>(
+  dual<
+    <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, B>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>,
+    <R2, O2, E2, B>(
+      that: Kind<F, R2, O2, E2, B>
+    ) => <R1, O1, E1, A extends ReadonlyArray<any>>(
       self: Kind<F, R1, O1, E1, A>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]> =>
-      pipe(
-        F.product(self, that),
-        F.imap(([a, b]) => [...a, b], ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
-      )
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>
+  >(2, <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]> =>
+    pipe(
+      F.product(self, that),
+      F.imap(([a, b]) => [...a, b], ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
+    ))
 
 /**
  * @since 1.0.0
