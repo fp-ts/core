@@ -428,8 +428,10 @@ Added in v1.0.0
 
 ```ts
 export declare const filter: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (self: readonly C[]) => B[]
-  <B extends A, A = B>(predicate: Predicate<A>): (self: readonly B[]) => B[]
+  <C extends A, B extends A, A = C>(self: readonly C[], refinement: (a: A) => a is B): B[]
+  <B extends A, A = B>(self: readonly B[], predicate: (a: A) => boolean): B[]
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (self: readonly C[]) => B[]
+  <B extends A, A = B>(predicate: (a: A) => boolean): (self: readonly B[]) => B[]
 }
 ```
 

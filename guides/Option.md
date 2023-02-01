@@ -315,43 +315,62 @@ The fastest way to get the value wrapped in an option is to call the `getOrThrow
 ```ts
 import { getOrThrow } from "@fp-ts/core/Option";
 
-console.log(pipe(some(10), getOrThrow); // 10
-console.log(pipe(none(), getOrThrow); // throws new Error("getOrThrow called on a None")
+console.log(getOrThrow(some(10)); // 10
+console.log(getOrThrow(none()); // throws new Error("getOrThrow called on a None")
 ```
 
-A more safe alternative is [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
+A more safe alternative is using the `isSome` and `isNone` guards:
+
+```ts
+import { some, isSome } from "@fp-ts/core/Option";
+
+const option = some(1);
+
+// Use the `isSome` function to check if the `option` is an instance of `Some`
+if (isSome(option)) {
+  console.log(`Option has a value: ${option.value}`);
+} else {
+  console.log(`Option is empty.`);
+}
+// Option has a value: 1
+```
+
+Another alternative is [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
 
 The `match` function allows you to match on the `None` and `Some` cases of an `Option` value and provide different actions for each.
 
-For example we can use the `match` function to handle the `Option` value returned by `parseNumber` and decide what to do based on whether it's a `None` or a `Some`.
-
 ```ts
+import { some, match } from "@fp-ts/core/Option";
 import { pipe } from "@fp-ts/core/Function";
-import { match } from "@fp-ts/core/Option";
 
-const output = pipe(
-  parseNumber("Not a number"),
-  match(
-    // If the result is a None, return an error string
-    () => `Error: ${error}`,
-    // If the result is a Some, return a string with the number
-    (n) => `The number is ${n}`
-  )
+const option = some(1);
+
+/**
+ * Use the `match` function to conditionally return a string based on whether the `Option` is `None` or `Some`.
+ * If the `Option` is `None`, the first function will be called with no arguments.
+ * If the `Option` is `Some`, the `value` will be passed to the second function.
+ */
+const output = match(
+  option,
+  () => `Option is empty.`,
+  (value) => `Option has a value: ${value}`
 );
 
-console.log(output); // Output: Error: Cannot parse 'Not a number' as a number
+console.log(output); // Option has a value: 1
 ```
+
+One reason to use `match` instead of `isSome` is that `match` is more expressive and provides a clear way to handle both cases of an `Option`. With `match`, you can directly provide two functions to handle the case of the `Option` being `None` or `Some`, respectively. On the other hand, with `isSome`, you would need to manually check the value and take separate actions based on whether it's `Some` or `None`. With `match`, the code can be more concise and easy to understand. Additionally, if you have complex logic to handle both cases, using `match` can make the code easier to read and maintain.
 
 There are specializations of `match` to make working with code that does not use `Option` more convenient and faster, particularly `getOrNull` and `getOrUndefined`.
 
 ```ts
 import { getOrNull, getOrUndefined } from "@fp-ts/core/Option";
 
-pipe(some(5), getOrNull); // 5
-pipe(none(), getOrNull); // null
+getOrNull(some(5)); // 5
+getOrNull(none()); // null
 
-pipe(some(5), getOrUndefined); // 5
-pipe(none(), getOrUndefined); // undefined
+getOrUndefined(some(5)); // 5
+getOrUndefined(none()); // undefined
 ```
 
 For greater flexibility, there is also the `getOrElse` function which allows you to set what value corresponds to the `None` case:
@@ -359,14 +378,8 @@ For greater flexibility, there is also the `getOrElse` function which allows you
 ```ts
 import { getOrElse } from "@fp-ts/core/Option";
 
-pipe(
-  some(5),
-  getOrElse(() => 0)
-); // 5
-pipe(
-  none(),
-  getOrElse(() => 0)
-); // 0
+getOrElse(some(5), () => 0); // 5
+getOrElse(none(), () => 0); // 0
 ```
 
 **Cheat sheet** (error handling)

@@ -4,7 +4,7 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/Either"
-import { pipe } from "@fp-ts/core/Function"
+import { dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
@@ -42,6 +42,14 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
 export const filter: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
+  <R, O, E, C extends A, B extends A, A = C>(
+    self: Kind<F, R, O, E, C>,
+    refinement: (a: A) => a is B
+  ): Kind<F, R, O, E, B>
+  <R, O, E, B extends A, A = B>(
+    self: Kind<F, R, O, E, B>,
+    predicate: (a: A) => boolean
+  ): Kind<F, R, O, E, B>
   <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
     self: Kind<F, R, O, E, C>
   ) => Kind<F, R, O, E, B>
@@ -49,10 +57,16 @@ export const filter: <F extends TypeLambda>(
     predicate: (a: A) => boolean
   ): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
 } = <F extends TypeLambda>(Filterable: Filterable<F>) =>
-  <B extends A, A = B>(
-    predicate: (a: A) => boolean
-  ): (<R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>) =>
-    Filterable.filterMap((b) => (predicate(b) ? option.some(b) : option.none))
+  dual<
+    <R, O, E, A>(self: Kind<F, R, O, E, A>, predicate: (a: A) => boolean) => Kind<F, R, O, E, A>,
+    <A>(
+      predicate: (a: A) => boolean
+    ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, A>
+  >(
+    2,
+    <R, O, E, A>(self: Kind<F, R, O, E, A>, predicate: (a: A) => boolean): Kind<F, R, O, E, A> =>
+      pipe(self, Filterable.filterMap((b) => (predicate(b) ? option.some(b) : option.none)))
+  )
 
 /**
  * @since 1.0.0
