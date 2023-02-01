@@ -43,7 +43,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const divide: { (self: bigint, that: bigint): bigint; (that: bigint): (self: bigint) => bigint }
+export declare const divide: { (that: bigint): (self: bigint) => bigint; (self: bigint, that: bigint): bigint }
 ```
 
 Added in v1.0.0
@@ -53,7 +53,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiply: { (self: bigint, that: bigint): bigint; (that: bigint): (self: bigint) => bigint }
+export declare const multiply: { (that: bigint): (self: bigint) => bigint; (self: bigint, that: bigint): bigint }
 ```
 
 Added in v1.0.0
@@ -63,7 +63,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtract: { (self: bigint, that: bigint): bigint; (that: bigint): (self: bigint) => bigint }
+export declare const subtract: { (that: bigint): (self: bigint) => bigint; (self: bigint, that: bigint): bigint }
 ```
 
 Added in v1.0.0
@@ -73,7 +73,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sum: { (self: bigint, that: bigint): bigint; (that: bigint): (self: bigint) => bigint }
+export declare const sum: { (that: bigint): (self: bigint) => bigint; (self: bigint, that: bigint): bigint }
 ```
 
 Added in v1.0.0

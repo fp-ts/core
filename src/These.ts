@@ -1220,43 +1220,43 @@ export const Monad: monad.Monad<ValidatedTypeLambda> = {
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = lift2<number, number, number>(N.sum)
+export const sum = lift2(N.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = lift2<number, number, number>(N.multiply)
+export const multiply = lift2(N.multiply)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = lift2<number, number, number>(N.subtract)
+export const subtract = lift2(N.subtract)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = lift2<number, number, number>(N.divide)
+export const divide = lift2(N.divide)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint = lift2<bigint, bigint, bigint>(BI.sum)
+export const sumBigint = lift2(BI.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint = lift2<bigint, bigint, bigint>(BI.multiply)
+export const multiplyBigint = lift2(BI.multiply)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint = lift2<bigint, bigint, bigint>(BI.subtract)
+export const subtractBigint = lift2(BI.subtract)
 
 // -------------------------------------------------------------------------------------
 // do notation

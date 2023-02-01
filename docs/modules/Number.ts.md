@@ -51,7 +51,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const divide: { (self: number, that: number): number; (that: number): (self: number) => number }
+export declare const divide: { (that: number): (self: number) => number; (self: number, that: number): number }
 ```
 
 **Example**
@@ -70,7 +70,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const multiply: { (self: number, that: number): number; (that: number): (self: number) => number }
+export declare const multiply: { (that: number): (self: number) => number; (self: number, that: number): number }
 ```
 
 **Example**
@@ -99,7 +99,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const subtract: { (self: number, that: number): number; (that: number): (self: number) => number }
+export declare const subtract: { (that: number): (self: number) => number; (self: number, that: number): number }
 ```
 
 **Example**
@@ -118,7 +118,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const sum: { (self: number, that: number): number; (that: number): (self: number) => number }
+export declare const sum: { (that: number): (self: number) => number; (self: number, that: number): number }
 ```
 
 **Example**

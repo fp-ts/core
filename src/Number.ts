@@ -32,8 +32,8 @@ export const isNumber = predicate.isNumber
  * @since 1.0.0
  */
 export const sum: {
-  (self: number, that: number): number
   (that: number): (self: number) => number
+  (self: number, that: number): number
 } = dual<
   (self: number, that: number) => number,
   (that: number) => (self: number) => number
@@ -51,8 +51,8 @@ export const sum: {
  * @since 1.0.0
  */
 export const multiply: {
-  (self: number, that: number): number
   (that: number): (self: number) => number
+  (self: number, that: number): number
 } = dual<
   (self: number, that: number) => number,
   (that: number) => (self: number) => number
@@ -70,8 +70,8 @@ export const multiply: {
  * @since 1.0.0
  */
 export const subtract: {
-  (self: number, that: number): number
   (that: number): (self: number) => number
+  (self: number, that: number): number
 } = dual<
   (self: number, that: number) => number,
   (that: number) => (self: number) => number
@@ -89,8 +89,8 @@ export const subtract: {
  * @since 1.0.0
  */
 export const divide: {
-  (self: number, that: number): number
   (that: number): (self: number) => number
+  (self: number, that: number): number
 } = dual<
   (self: number, that: number) => number,
   (that: number) => (self: number) => number

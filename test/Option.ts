@@ -72,7 +72,7 @@ describe.concurrent("Option", () => {
     expect(_.Alternative).exist
 
     expect(_.Foldable).exist
-    expect(_.reduceAll).exist
+    expect(_.reduceCompact).exist
     expect(_.toArray).exist
 
     expect(_.Traversable).exist
@@ -546,11 +546,11 @@ describe.concurrent("Option", () => {
     expect(pipe(_.some(1), _.zipWith(_.some(2), (a, b) => a + b))).toEqual(_.some(3))
   })
 
-  it("reduceAll", () => {
-    const sumAll = _.reduceAll(0, N.SemigroupSum.combine)
-    expect(sumAll([])).toEqual(0)
-    expect(sumAll([_.some(2), _.some(3)])).toEqual(5)
-    expect(sumAll([_.some(2), _.none(), _.some(3)])).toEqual(5)
+  it("reduceCompact", () => {
+    const sumCompact = _.reduceCompact(0, N.sum)
+    expect(sumCompact([])).toEqual(0)
+    expect(sumCompact([_.some(2), _.some(3)])).toEqual(5)
+    expect(sumCompact([_.some(2), _.none(), _.some(3)])).toEqual(5)
   })
 
   it("sum", () => {
@@ -600,16 +600,16 @@ describe.concurrent("Option", () => {
     expect(pipe(_.some(1), _.Foldable.reduce(0, (b, a) => b + a))).toEqual(1)
   })
 
-  it("sumAll", () => {
-    expect(_.sumAll([])).toEqual(0)
-    expect(_.sumAll([_.some(2), _.some(3)])).toEqual(5)
-    expect(_.sumAll([_.some(2), _.none(), _.some(3)])).toEqual(5)
+  it("sumCompact", () => {
+    expect(_.sumCompact([])).toEqual(0)
+    expect(_.sumCompact([_.some(2), _.some(3)])).toEqual(5)
+    expect(_.sumCompact([_.some(2), _.none(), _.some(3)])).toEqual(5)
   })
 
-  it("multiplyAll", () => {
-    expect(_.multiplyAll([])).toEqual(1)
-    expect(_.multiplyAll([_.some(2), _.some(3)])).toEqual(6)
-    expect(_.multiplyAll([_.some(2), _.none(), _.some(3)])).toEqual(6)
-    expect(_.multiplyAll([_.some(2), _.some(0), _.some(3)])).toEqual(0)
+  it("multiplyCompact", () => {
+    expect(_.multiplyCompact([])).toEqual(1)
+    expect(_.multiplyCompact([_.some(2), _.some(3)])).toEqual(6)
+    expect(_.multiplyCompact([_.some(2), _.none(), _.some(3)])).toEqual(6)
+    expect(_.multiplyCompact([_.some(2), _.some(0), _.some(3)])).toEqual(0)
   })
 })
