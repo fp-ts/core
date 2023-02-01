@@ -976,20 +976,17 @@ export const getOptionalMonoid = <A>(
   )
 
 /**
- * Applies a function to the contained value of two `Option`s, returning a new `Option` of the result.
- * If either of the `Option`s is `None`, the result will be `None`.
+ * Lifts a binary function into `Option`.
  *
- * @param f - A function to apply to the contained values of the `Option`s
- * @param that - An `Option` to lift the function over
- * @param self - An `Option` to lift the function over
+ * @param f - The function to lift.
  *
  * @category lifting
  * @since 1.0.0
  */
-export const lift2: <A, B, C>(
-  f: (a: A, b: B) => C
-) => (self: Option<A>, that: Option<B>) => Option<C> = semiApplicative
-  .lift2(SemiApplicative)
+export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
+  (self: Option<A>, that: Option<B>): Option<C>
+  (that: Option<B>): (self: Option<A>) => Option<C>
+} = semiApplicative.lift2(SemiApplicative)
 
 /**
  * Zips two `Option` values together using a provided function, returning a new `Option` of the result.
@@ -1220,7 +1217,6 @@ export const filter: {
 } = filterable.filter(Filterable)
 
 /**
- * @dual
  * @category traversing
  * @since 1.0.0
  */
@@ -1527,88 +1523,53 @@ export const reduceAll: {
 // -------------------------------------------------------------------------------------
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-} = dual<
-  (self: Option<number>, that: Option<number>) => Option<number>,
-  (that: Option<number>) => (self: Option<number>) => Option<number>
->(2, lift2<number, number, number>(N.sum))
+export const sum = lift2<number, number, number>(N.sum)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-} = dual<
-  (self: Option<number>, that: Option<number>) => Option<number>,
-  (that: Option<number>) => (self: Option<number>) => Option<number>
->(2, lift2<number, number, number>(N.multiply))
+export const multiply = lift2<number, number, number>(N.multiply)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-} = dual<
-  (self: Option<number>, that: Option<number>) => Option<number>,
-  (that: Option<number>) => (self: Option<number>) => Option<number>
->(2, lift2<number, number, number>(N.subtract))
+export const subtract = lift2<number, number, number>(N.subtract)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-} = dual<
-  (self: Option<number>, that: Option<number>) => Option<number>,
-  (that: Option<number>) => (self: Option<number>) => Option<number>
->(2, lift2<number, number, number>(N.divide))
+export const divide = lift2<number, number, number>(N.divide)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-} = dual<
-  (self: Option<bigint>, that: Option<bigint>) => Option<bigint>,
-  (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
->(2, lift2<bigint, bigint, bigint>(BI.sum))
+export const sumBigint = lift2<bigint, bigint, bigint>(BI.sum)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-} = dual<
-  (self: Option<bigint>, that: Option<bigint>) => Option<bigint>,
-  (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
->(2, lift2<bigint, bigint, bigint>(BI.multiply))
+export const multiplyBigint = lift2<bigint, bigint, bigint>(BI.multiply)
 
 /**
+ * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-} = dual<
-  (self: Option<bigint>, that: Option<bigint>) => Option<bigint>,
-  (that: Option<bigint>) => (self: Option<bigint>) => Option<bigint>
->(2, lift2<bigint, bigint, bigint>(BI.subtract))
+export const subtractBigint = lift2<bigint, bigint, bigint>(BI.subtract)
 
 /**
  * Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.

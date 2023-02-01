@@ -47,7 +47,6 @@ export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<
 })
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -65,7 +64,6 @@ export const flap = <F extends TypeLambda>(F: Covariant<F>): {
   )
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */

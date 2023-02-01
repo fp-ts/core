@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { identity, pipe, SK } from "@fp-ts/core/Function"
+import { dual, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
@@ -76,12 +76,22 @@ export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
 /**
  * Lifts a binary function into `F`.
  *
+ * @param f - The function to lift.
+ *
  * @category lifting
  * @since 1.0.0
  */
 export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <A, B, C>(f: (a: A, b: B) => C) =>
-    <R1, O1, E1, R2, O2, E2>(
+    dual<
+      <R1, O1, E1, R2, O2, E2>(
+        self: Kind<F, R1, O1, E1, A>,
+        that: Kind<F, R2, O2, E2, B>
+      ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>,
+      <R2, O2, E2>(
+        that: Kind<F, R2, O2, E2, B>
+      ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+    >(2, <R1, O1, E1, R2, O2, E2>(
       self: Kind<F, R1, O1, E1, A>,
       that: Kind<F, R2, O2, E2, B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(self, zipWith(F)(that, f))
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(self, zipWith(F)(that, f)))

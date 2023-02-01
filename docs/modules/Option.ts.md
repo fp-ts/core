@@ -1209,13 +1209,14 @@ Added in v1.0.0
 
 ## lift2
 
-Applies a function to the contained value of two `Option`s, returning a new `Option` of the result.
-If either of the `Option`s is `None`, the result will be `None`.
+Lifts a binary function into `Option`.
 
 **Signature**
 
 ```ts
-export declare const lift2: <A, B, C>(f: (a: A, b: B) => C) => (self: Option<A>, that: Option<B>) => Option<C>
+export declare const lift2: <A, B, C>(
+  f: (a: A, b: B) => C
+) => { (self: Option<A>, that: Option<B>): Option<C>; (that: Option<B>): (self: Option<A>) => Option<C> }
 ```
 
 Added in v1.0.0

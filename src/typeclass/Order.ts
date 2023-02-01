@@ -249,7 +249,6 @@ export const Product: product.Product<OrderTypeLambda> = {
 /**
  * Test whether one value is _strictly less than_ another.
  *
- * @dual
  * @since 1.0.0
  */
 export const lessThan = <A>(O: Order<A>): {
@@ -264,7 +263,6 @@ export const lessThan = <A>(O: Order<A>): {
 /**
  * Test whether one value is _strictly greater than_ another.
  *
- * @dual
  * @since 1.0.0
  */
 export const greaterThan = <A>(O: Order<A>): {
@@ -279,7 +277,6 @@ export const greaterThan = <A>(O: Order<A>): {
 /**
  * Test whether one value is _non-strictly less than_ another.
  *
- * @dual
  * @since 1.0.0
  */
 export const lessThanOrEqualTo = <A>(O: Order<A>): {
@@ -294,7 +291,6 @@ export const lessThanOrEqualTo = <A>(O: Order<A>): {
 /**
  * Test whether one value is _non-strictly greater than_ another.
  *
- * @dual
  * @since 1.0.0
  */
 export const greaterThanOrEqualTo = <A>(O: Order<A>): {
@@ -309,7 +305,6 @@ export const greaterThanOrEqualTo = <A>(O: Order<A>): {
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
  *
- * @dual
  * @since 1.0.0
  */
 export const min = <A>(O: Order<A>): {
@@ -324,7 +319,6 @@ export const min = <A>(O: Order<A>): {
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
  *
- * @dual
  * @since 1.0.0
  */
 export const max = <A>(O: Order<A>): {
@@ -339,7 +333,6 @@ export const max = <A>(O: Order<A>): {
 /**
  * Clamp a value between a minimum and a maximum.
  *
- * @dual
  * @since 1.0.0
  */
 export const clamp = <A>(O: Order<A>): {
@@ -357,7 +350,6 @@ export const clamp = <A>(O: Order<A>): {
 /**
  * Test whether a value is between a minimum and a maximum (inclusive).
  *
- * @dual
  * @since 1.0.0
  */
 export const between = <A>(O: Order<A>): {
