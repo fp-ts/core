@@ -35,8 +35,8 @@ export const sum: {
   (that: number): (self: number) => number
   (self: number, that: number): number
 } = dual<
-  (self: number, that: number) => number,
-  (that: number) => (self: number) => number
+  (that: number) => (self: number) => number,
+  (self: number, that: number) => number
 >(2, semigroup.numberSum.combine)
 
 /**

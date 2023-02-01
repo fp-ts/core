@@ -656,13 +656,21 @@ export const SK = <A, B>(_: A, b: B): B => b
 /**
  * @since 1.0.0
  */
+export type SelectDataFirst<
+  F extends (...args: Array<any>) => any,
+  G extends (...args: Array<any>) => any
+> = [...Parameters<F>, 0]["length"] extends Parameters<G>["length"] ? G : F
+
+/**
+ * @since 1.0.0
+ */
 export const dual = <
-  DF extends (...args: Array<any>) => any,
-  P extends (...args: Array<any>) => any
+  F extends (...args: Array<any>) => any,
+  G extends (...args: Array<any>) => any
 >(
-  dfLen: Parameters<DF>["length"],
-  body: DF
-): DF & P => {
+  dfLen: Parameters<SelectDataFirst<F, G>>["length"],
+  body: SelectDataFirst<F, G>
+): F & G => {
   // @ts-expect-error
   return function() {
     if (arguments.length === dfLen) {
