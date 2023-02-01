@@ -222,9 +222,15 @@ export const andThenBind: <N extends string, A extends object, B>(
  *
  * @since 1.0.0
  */
-export const appendElement: <B>(that: Predicate<B>) => <A extends ReadonlyArray<any>>(
-  self: Predicate<A>
-) => Predicate<readonly [...A, B]> = semiProduct.appendElement(SemiProduct) as any
+export const appendElement: {
+  <A extends ReadonlyArray<any>, B>(
+    self: Predicate<A>,
+    that: Predicate<B>
+  ): Predicate<readonly [...A, B]>
+  <B>(
+    that: Predicate<B>
+  ): <A extends ReadonlyArray<any>>(self: Predicate<A>) => Predicate<readonly [...A, B]>
+} = semiProduct.appendElement(SemiProduct) as any
 
 /**
  * @since 1.0.0

@@ -1734,9 +1734,10 @@ Appends an element to the end of a tuple.
 **Signature**
 
 ```ts
-export declare const appendElement: <B>(
-  fb: Option<B>
-) => <A extends readonly unknown[]>(self: Option<A>) => Option<[...A, B]>
+export declare const appendElement: {
+  <A extends readonly any[], B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
+  <B>(that: Option<B>): <A extends readonly any[]>(self: Option<A>) => Option<[...A, B]>
+}
 ```
 
 Added in v1.0.0

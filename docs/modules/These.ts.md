@@ -1585,11 +1585,15 @@ Appends an element to the end of a tuple.
 **Signature**
 
 ```ts
-export declare const appendElement: <E2, B>(
-  that: These<readonly [E2, ...E2[]], B>
-) => <E1, A extends readonly any[]>(
-  self: These<readonly [E1, ...E1[]], A>
-) => These<readonly [E2 | E1, ...(E2 | E1)[]], [...A, B]>
+export declare const appendElement: {
+  <E1, A extends readonly any[], E2, B>(
+    self: These<readonly [E1, ...E1[]], A>,
+    that: These<readonly [E2, ...E2[]], B>
+  ): These<readonly [E1 | E2, ...(E1 | E2)[]], [...A, B]>
+  <E2, B>(that: These<readonly [E2, ...E2[]], B>): <E1, A extends readonly any[]>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], [...A, B]>
+}
 ```
 
 Added in v1.0.0

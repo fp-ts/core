@@ -1036,12 +1036,15 @@ const productAll = <E, A>(
  *
  * @since 1.0.0
  */
-export const appendElement: <E2, B>(
-  that: Validated<E2, B>
-) => <E1, A extends ReadonlyArray<any>>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, [...A, B]> = semiProduct
-  .appendElement(SemiProduct)
+export const appendElement: {
+  <E1, A extends ReadonlyArray<any>, E2, B>(
+    self: Validated<E1, A>,
+    that: Validated<E2, B>
+  ): Validated<E1 | E2, [...A, B]>
+  <E2, B>(
+    that: Validated<E2, B>
+  ): <E1, A extends ReadonlyArray<any>>(self: Validated<E1, A>) => Validated<E2 | E1, [...A, B]>
+} = semiProduct.appendElement(SemiProduct)
 
 /**
  * @category instances
@@ -1249,43 +1252,64 @@ export const Monad: monad.Monad<ValidatedTypeLambda> = {
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sum = lift2(N.sum)
+export const sum: {
+  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
+  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
+} = lift2(N.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiply = lift2(N.multiply)
+export const multiply: {
+  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
+  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
+} = lift2(N.multiply)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtract = lift2(N.subtract)
+export const subtract: {
+  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
+  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
+} = lift2(N.subtract)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const divide = lift2(N.divide)
+export const divide: {
+  <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
+  <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
+} = lift2(N.divide)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const sumBigint = lift2(BI.sum)
+export const sumBigint: {
+  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
+  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
+} = lift2(BI.sum)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const multiplyBigint = lift2(BI.multiply)
+export const multiplyBigint: {
+  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
+  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
+} = lift2(BI.multiply)
 
 /**
  * @category algebraic operations
  * @since 1.0.0
  */
-export const subtractBigint = lift2(BI.subtract)
+export const subtractBigint: {
+  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
+  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
+} = lift2(BI.subtract)
 
 // -------------------------------------------------------------------------------------
 // do notation
