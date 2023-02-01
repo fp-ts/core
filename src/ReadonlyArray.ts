@@ -1751,13 +1751,13 @@ export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeL
 }
 
 /**
+ * @dual
  * @since 1.0.0
  */
-export const ap: <A>(
-  fa: ReadonlyArray<A>
-) => <B>(self: ReadonlyArray<(a: A) => B>) => Array<B> = semiApplicative.ap(
-  SemiApplicative
-) as any
+export const ap: {
+  <A, B>(self: ReadonlyArray<(a: A) => B>, that: ReadonlyArray<A>): Array<B>
+  <A>(that: ReadonlyArray<A>): <B>(self: ReadonlyArray<(a: A) => B>) => Array<B>
+} = semiApplicative.ap(SemiApplicative) as any
 
 /**
  * Lifts a binary function into `ReadonlyArray`.

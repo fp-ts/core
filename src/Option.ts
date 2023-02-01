@@ -995,22 +995,23 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
  * @param fb - The right-hand side of the zip operation
  * @param f - The function used to combine the values of the two `Option`s
  *
- * @category products
+ * @dual
+ * @category combining
  * @since 1.0.0
  */
-export const zipWith: <B, A, C>(
-  fb: Option<B>,
-  f: (a: A, b: B) => C
-) => (fa: Option<A>) => Option<C> = semiApplicative.zipWith(SemiApplicative)
+export const zipWith: {
+  <A, B, C>(self: Option<A>, that: Option<B>, f: (a: A, b: B) => C): Option<C>
+  <B, A, C>(that: Option<B>, f: (a: A, b: B) => C): (self: Option<A>) => Option<C>
+} = semiApplicative.zipWith(SemiApplicative)
 
 /**
+ * @dual
  * @since 1.0.0
  */
-export const ap: <A>(
-  fa: Option<A>
-) => <B>(self: Option<(a: A) => B>) => Option<B> = semiApplicative.ap(
-  SemiApplicative
-)
+export const ap: {
+  <A, B>(self: Option<(a: A) => B>, that: Option<A>): Option<B>
+  <A>(that: Option<A>): <B>(self: Option<(a: A) => B>) => Option<B>
+} = semiApplicative.ap(SemiApplicative)
 
 /**
  * Semigroup that models the combination of computations that can fail, if at least one element is `None`

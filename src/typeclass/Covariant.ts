@@ -50,10 +50,7 @@ export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<
  * @category mapping
  * @since 1.0.0
  */
-export const flap = <F extends TypeLambda>(F: Covariant<F>): {
-  <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>): Kind<F, R, O, E, B>
-  <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>): (a: A) => Kind<F, R, O, E, B>
-} =>
+export const flap = <F extends TypeLambda>(F: Covariant<F>) =>
   dual<
     <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>) => Kind<F, R, O, E, B>,
     <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>) => (a: A) => Kind<F, R, O, E, B>
@@ -67,10 +64,7 @@ export const flap = <F extends TypeLambda>(F: Covariant<F>): {
  * @category mapping
  * @since 1.0.0
  */
-export const as = <F extends TypeLambda>(F: Covariant<F>): {
-  <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B>
-  <B>(b: B): <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>
-} =>
+export const as = <F extends TypeLambda>(F: Covariant<F>) =>
   dual<
     <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B) => Kind<F, R, O, E, B>,
     <B>(b: B) => <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>

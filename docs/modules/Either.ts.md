@@ -26,6 +26,7 @@ Added in v1.0.0
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
   - [getFirstRightSemigroup](#getfirstrightsemigroup)
+  - [zipWith](#zipwith)
 - [constructors](#constructors)
   - [left](#left)
   - [of](#of)
@@ -106,8 +107,6 @@ Added in v1.0.0
   - [Right (interface)](#right-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
-- [products](#products)
-  - [zipWith](#zipwith)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
   - [flatMap](#flatmap)
@@ -296,6 +295,19 @@ Semigroup returning the left-most `Right` value.
 
 ```ts
 export declare const getFirstRightSemigroup: <E, A>() => Semigroup<Either<E, A>>
+```
+
+Added in v1.0.0
+
+## zipWith
+
+**Signature**
+
+```ts
+export declare const zipWith: {
+  <E1, A, E2, B, C>(self: Either<E1, A>, that: Either<E2, B>, f: (a: A, b: B) => C): Either<E1 | E2, C>
+  <E2, B, A, C>(that: Either<E2, B>, f: (a: A, b: B) => C): <E1>(self: Either<E1, A>) => Either<E2 | E1, C>
+}
 ```
 
 Added in v1.0.0
@@ -1236,21 +1248,6 @@ assert.deepStrictEqual(pipe(E.left(['error 1', 'error 2']), E.match(onLeft, onRi
 
 Added in v1.0.0
 
-# products
-
-## zipWith
-
-**Signature**
-
-```ts
-export declare const zipWith: <E2, B, A, C>(
-  fb: Either<E2, B>,
-  f: (a: A, b: B) => C
-) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C>
-```
-
-Added in v1.0.0
-
 # sequencing
 
 ## andThenDiscard
@@ -1379,7 +1376,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <E2, A>(fa: Either<E2, A>) => <E1, B>(self: Either<E1, (a: A) => B>) => Either<E2 | E1, B>
+export declare const ap: {
+  <E1, A, B, E2>(self: Either<E1, (a: A) => B>, that: Either<E2, A>): Either<E1 | E2, B>
+  <E2, A>(that: Either<E2, A>): <E1, B>(self: Either<E1, (a: A) => B>) => Either<E2 | E1, B>
+}
 ```
 
 Added in v1.0.0

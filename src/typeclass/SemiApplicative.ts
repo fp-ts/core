@@ -39,39 +39,82 @@ export const liftSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
  * @since 1.0.0
  */
 export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <R2, O2, E2, B, A, C>(fb: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C) =>
-    <R1, O1, E1>(fa: Kind<F, R1, O1, E1, A>): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
-      pipe(F.product(fa, fb), F.map(([a, b]) => f(a, b)))
+  dual<
+    <R1, O1, E1, A, R2, O2, E2, B, C>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, B>,
+      f: (a: A, b: B) => C
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>,
+    <R2, O2, E2, B, A, C>(
+      that: Kind<F, R2, O2, E2, B>,
+      f: (a: A, b: B) => C
+    ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+  >(
+    3,
+    <R1, O1, E1, A, R2, O2, E2, B, C>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, B>,
+      f: (a: A, b: B) => C
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
+      pipe(F.product(self, that), F.map(([a, b]) => f(a, b)))
+  )
 
 /**
  * @since 1.0.0
  */
 export const ap = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <R2, O2, E2, A>(
+  dual<
+    <R1, O1, E1, A, B, R2, O2, E2>(
+      self: Kind<F, R1, O1, E1, (a: A) => B>,
+      that: Kind<F, R2, O2, E2, A>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>,
+    <R2, O2, E2, A>(
+      that: Kind<F, R2, O2, E2, A>
+    ) => <R1, O1, E1, B>(
+      self: Kind<F, R1, O1, E1, (a: A) => B>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+  >(2, <R1, O1, E1, A, B, R2, O2, E2>(
+    self: Kind<F, R1, O1, E1, (a: A) => B>,
     that: Kind<F, R2, O2, E2, A>
-  ): <R1, O1, E1, B>(
-    self: Kind<F, R1, O1, E1, (a: A) => B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(that, (f, a) => f(a))
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, (f, a) => f(a)))
 
 /**
  * @since 1.0.0
  */
 export const andThenDiscard = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <R2, O2, E2, _>(
+  dual<
+    <R1, O1, E1, A, R2, O2, E2, _>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, _>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>,
+    <R2, O2, E2, _>(
+      that: Kind<F, R2, O2, E2, _>
+    ) => <R1, O1, E1, A>(
+      self: Kind<F, R1, O1, E1, A>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
+  >(2, <R1, O1, E1, A, R2, O2, E2, _>(
+    self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, _>
-  ): <R1, O1, E1, A>(
-    self: Kind<F, R1, O1, E1, A>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => zipWith(F)(that, identity)
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => zipWith(F)(self, that, identity))
 
 /**
  * @since 1.0.0
  */
 export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <R2, O2, E2, B>(
+  dual<
+    <R1, O1, E1, _, R2, O2, E2, B>(
+      self: Kind<F, R1, O1, E1, _>,
+      that: Kind<F, R2, O2, E2, B>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>,
+    <R2, O2, E2, B>(
+      that: Kind<F, R2, O2, E2, B>
+    ) => <R1, O1, E1, _>(
+      self: Kind<F, R1, O1, E1, _>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+  >(2, <R1, O1, E1, _, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, _>,
     that: Kind<F, R2, O2, E2, B>
-  ): <R1, O1, E1, _>(
-    self: Kind<F, R1, O1, E1, _>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(that, SK)
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK))
 
 /**
  * Lifts a binary function into `F`.
@@ -94,4 +137,4 @@ export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
     >(2, <R1, O1, E1, R2, O2, E2>(
       self: Kind<F, R1, O1, E1, A>,
       that: Kind<F, R2, O2, E2, B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => pipe(self, zipWith(F)(that, f)))
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => zipWith(F)(self, that, f))

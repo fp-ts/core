@@ -68,10 +68,8 @@ Added in v1.0.0
 ```ts
 export declare const as: <F extends TypeLambda>(
   F: Covariant<F>
-) => {
-  <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B>
-  <B>(b: B): <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>
-}
+) => (<R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B) => Kind<F, R, O, E, B>) &
+  (<B>(b: B) => <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>)
 ```
 
 Added in v1.0.0
@@ -95,10 +93,8 @@ Added in v1.0.0
 ```ts
 export declare const flap: <F extends TypeLambda>(
   F: Covariant<F>
-) => {
-  <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>): Kind<F, R, O, E, B>
-  <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>): (a: A) => Kind<F, R, O, E, B>
-}
+) => (<A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>) => Kind<F, R, O, E, B>) &
+  (<R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>) => (a: A) => Kind<F, R, O, E, B>)
 ```
 
 Added in v1.0.0

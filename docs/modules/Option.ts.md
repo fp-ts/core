@@ -24,6 +24,8 @@ Added in v1.0.0
   - [sumCompact](#sumcompact)
 - [combinators](#combinators)
   - [tap](#tap)
+- [combining](#combining)
+  - [zipWith](#zipwith)
 - [constructors](#constructors)
   - [none](#none)
   - [of](#of)
@@ -103,8 +105,6 @@ Added in v1.0.0
   - [Some (interface)](#some-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
-- [products](#products)
-  - [zipWith](#zipwith)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
   - [flatMap](#flatmap)
@@ -285,6 +285,23 @@ This function is useful for performing additional computations on the value of t
 export declare const tap: {
   <A, _>(self: Option<A>, f: (a: A) => Option<_>): Option<A>
   <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
+}
+```
+
+Added in v1.0.0
+
+# combining
+
+## zipWith
+
+Zips two `Option` values together using a provided function, returning a new `Option` of the result.
+
+**Signature**
+
+```ts
+export declare const zipWith: {
+  <A, B, C>(self: Option<A>, that: Option<B>, f: (a: A, b: B) => C): Option<C>
+  <B, A, C>(that: Option<B>, f: (a: A, b: B) => C): (self: Option<A>) => Option<C>
 }
 ```
 
@@ -1416,20 +1433,6 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
-# products
-
-## zipWith
-
-Zips two `Option` values together using a provided function, returning a new `Option` of the result.
-
-**Signature**
-
-```ts
-export declare const zipWith: <B, A, C>(fb: Option<B>, f: (a: A, b: B) => C) => (fa: Option<A>) => Option<C>
-```
-
-Added in v1.0.0
-
 # sequencing
 
 ## andThenDiscard
@@ -1652,7 +1655,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <A>(fa: Option<A>) => <B>(self: Option<(a: A) => B>) => Option<B>
+export declare const ap: {
+  <A, B>(self: Option<(a: A) => B>, that: Option<A>): Option<B>
+  <A>(that: Option<A>): <B>(self: Option<(a: A) => B>) => Option<B>
+}
 ```
 
 Added in v1.0.0

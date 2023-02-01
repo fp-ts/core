@@ -1865,7 +1865,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const ap: <A>(fa: readonly A[]) => <B>(self: readonly ((a: A) => B)[]) => B[]
+export declare const ap: {
+  <A, B>(self: readonly ((a: A) => B)[], that: readonly A[]): B[]
+  <A>(that: readonly A[]): <B>(self: readonly ((a: A) => B)[]) => B[]
+}
 ```
 
 Added in v1.0.0

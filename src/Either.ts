@@ -558,22 +558,30 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
 } = semiApplicative.lift2(SemiApplicative)
 
 /**
- * @category products
+ * @dual
+ * @category combining
  * @since 1.0.0
  */
-export const zipWith: <E2, B, A, C>(
-  fb: Either<E2, B>,
-  f: (a: A, b: B) => C
-) => <E1>(fa: Either<E1, A>) => Either<E2 | E1, C> = semiApplicative.zipWith(SemiApplicative)
+export const zipWith: {
+  <E1, A, E2, B, C>(
+    self: Either<E1, A>,
+    that: Either<E2, B>,
+    f: (a: A, b: B) => C
+  ): Either<E1 | E2, C>
+  <E2, B, A, C>(
+    that: Either<E2, B>,
+    f: (a: A, b: B) => C
+  ): <E1>(self: Either<E1, A>) => Either<E2 | E1, C>
+} = semiApplicative.zipWith(SemiApplicative)
 
 /**
+ * @dual
  * @since 1.0.0
  */
-export const ap: <E2, A>(
-  fa: Either<E2, A>
-) => <E1, B>(self: Either<E1, (a: A) => B>) => Either<E1 | E2, B> = semiApplicative.ap(
-  SemiApplicative
-)
+export const ap: {
+  <E1, A, B, E2>(self: Either<E1, (a: A) => B>, that: Either<E2, A>): Either<E1 | E2, B>
+  <E2, A>(that: Either<E2, A>): <E1, B>(self: Either<E1, (a: A) => B>) => Either<E2 | E1, B>
+} = semiApplicative.ap(SemiApplicative)
 
 /**
  * @category instances
