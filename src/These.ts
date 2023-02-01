@@ -2,7 +2,6 @@
  * @since 1.0.0
  */
 
-import * as BI from "@fp-ts/core/Bigint"
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
@@ -1288,33 +1287,6 @@ export const divide: {
   <E1, E2>(self: Validated<E1, number>, that: Validated<E2, number>): Validated<E1 | E2, number>
   <E2>(that: Validated<E2, number>): <E1>(self: Validated<E1, number>) => Validated<E2 | E1, number>
 } = lift2(N.divide)
-
-/**
- * @category algebraic operations
- * @since 1.0.0
- */
-export const sumBigint: {
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
-  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
-} = lift2(BI.sum)
-
-/**
- * @category algebraic operations
- * @since 1.0.0
- */
-export const multiplyBigint: {
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
-  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
-} = lift2(BI.multiply)
-
-/**
- * @category algebraic operations
- * @since 1.0.0
- */
-export const subtractBigint: {
-  <E1, E2>(self: Validated<E1, bigint>, that: Validated<E2, bigint>): Validated<E1 | E2, bigint>
-  <E2>(that: Validated<E2, bigint>): <E1>(self: Validated<E1, bigint>) => Validated<E2 | E1, bigint>
-} = lift2(BI.subtract)
 
 // -------------------------------------------------------------------------------------
 // do notation

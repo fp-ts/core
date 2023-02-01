@@ -1,7 +1,6 @@
 /**
  * @since 1.0.0
  */
-import * as BI from "@fp-ts/core/Bigint"
 import type { Either } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
 import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
@@ -536,59 +535,6 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
 export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(constUndefined)
 
 /**
- * This is `flatMap` + `fromNullable`, useful when working with optional values.
- *
- * @example
- * import { some, none, flatMapNullable } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * interface Employee {
- *   company?: {
- *     address?: {
- *       street?: {
- *         name?: string
- *       }
- *     }
- *   }
- * }
- *
- * const employee1: Employee = { company: { address: { street: { name: 'high street' } } } }
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     some(employee1),
- *     flatMapNullable(employee => employee.company?.address?.street?.name),
- *   ),
- *   some('high street')
- * )
- *
- * const employee2: Employee = { company: { address: { street: {} } } }
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     some(employee2),
- *     flatMapNullable(employee => employee.company?.address?.street?.name),
- *   ),
- *   none()
- * )
- *
- * @dual
- * @category sequencing
- * @since 1.0.0
- */
-export const flatMapNullable: {
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
-  <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
-} = dual<
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined) => Option<NonNullable<B>>,
-  <A, B>(f: (a: A) => B | null | undefined) => (self: Option<A>) => Option<NonNullable<B>>
->(
-  2,
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>> =>
-    isNone(self) ? none() : fromNullable(f(self.value))
-)
-
-/**
  * A utility function that lifts a function that throws exceptions into a function that returns an `Option`.
  *
  * This function is useful for any function that might throw an exception, allowing the developer to handle
@@ -642,7 +588,7 @@ export const getOrThrow = <A>(self: Option<A>): A => {
 }
 
 // -------------------------------------------------------------------------------------
-// instances
+// mapping
 // -------------------------------------------------------------------------------------
 
 /**
@@ -669,7 +615,15 @@ export const map: {
 const imap = covariant.imap<OptionTypeLambda>(map)
 
 /**
- * @category instances
+ * @category mapping
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<OptionTypeLambda> = {
+  imap
+}
+
+/**
+ * @category mapping
  * @since 1.0.0
  */
 export const Covariant: covariant.Covariant<OptionTypeLambda> = {
@@ -678,14 +632,7 @@ export const Covariant: covariant.Covariant<OptionTypeLambda> = {
 }
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Invariant: invariant.Invariant<OptionTypeLambda> = {
-  imap
-}
-
-/**
+ * @category mapping
  * @since 1.0.0
  */
 export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
@@ -723,7 +670,6 @@ export const as: {
 export const asUnit: <_>(self: Option<_>) => Option<void> = covariant.asUnit(Covariant)
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Of: of_.Of<OptionTypeLambda> = {
@@ -736,7 +682,6 @@ export const Of: of_.Of<OptionTypeLambda> = {
 export const unit: Option<void> = of_.unit(Of)
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<OptionTypeLambda> = {
@@ -744,6 +689,10 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
   imap,
   map
 }
+
+// -------------------------------------------------------------------------------------
+// sequencing
+// -------------------------------------------------------------------------------------
 
 /**
  * Applies a function to the value of an `Option` and flattens the result, if the input is `Some`.
@@ -765,7 +714,92 @@ export const flatMap: {
 )
 
 /**
- * @category instances
+ * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+ *
+ * @param self - The `Option` to apply the function to.
+ * @param f - The function to be applied to the contents of the `Option`.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ * import * as E from '@fp-ts/core/Either'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
+ *
+ * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
+ * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
+ *
+ * @dual
+ * @category sequencing
+ * @since 1.0.0
+ */
+export const flatMapEither: {
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
+  <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
+} = dual<
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>,
+  <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>
+>(
+  2,
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> =>
+    pipe(self, flatMap(liftEither(f)))
+)
+
+/**
+ * This is `flatMap` + `fromNullable`, useful when working with optional values.
+ *
+ * @example
+ * import { some, none, flatMapNullable } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * interface Employee {
+ *   company?: {
+ *     address?: {
+ *       street?: {
+ *         name?: string
+ *       }
+ *     }
+ *   }
+ * }
+ *
+ * const employee1: Employee = { company: { address: { street: { name: 'high street' } } } }
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     some(employee1),
+ *     flatMapNullable(employee => employee.company?.address?.street?.name),
+ *   ),
+ *   some('high street')
+ * )
+ *
+ * const employee2: Employee = { company: { address: { street: {} } } }
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     some(employee2),
+ *     flatMapNullable(employee => employee.company?.address?.street?.name),
+ *   ),
+ *   none()
+ * )
+ *
+ * @dual
+ * @category sequencing
+ * @since 1.0.0
+ */
+export const flatMapNullable: {
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
+  <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
+} = dual<
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined) => Option<NonNullable<B>>,
+  <A, B>(f: (a: A) => B | null | undefined) => (self: Option<A>) => Option<NonNullable<B>>
+>(
+  2,
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>> =>
+    isNone(self) ? none() : fromNullable(f(self.value))
+)
+
+/**
+ * @category sequencing
  * @since 1.0.0
  */
 export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
@@ -773,6 +807,7 @@ export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
 }
 
 /**
+ * @category sequencing
  * @since 1.0.0
  */
 export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_
@@ -780,6 +815,7 @@ export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_
 
 /**
  * @dual
+ * @category sequencing
  * @since 1.0.0
  */
 export const andThen: {
@@ -789,6 +825,7 @@ export const andThen: {
 
 /**
  * @dual
+ * @category sequencing
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -797,7 +834,7 @@ export const composeKleisliArrow: {
 } = flatMap_.composeKleisliArrow(FlatMap)
 
 /**
- * @category instances
+ * @category sequencing
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<OptionTypeLambda> = {
@@ -833,7 +870,7 @@ export const andThenDiscard: {
  * @param self - The `Option` to apply the function to
  *
  * @dual
- * @category combinators
+ * @category sequencing
  * @since 1.0.0
  */
 export const tap: {
@@ -1023,6 +1060,10 @@ export const getOptionalMonoid = <A>(
     none()
   )
 
+// -------------------------------------------------------------------------------------
+// combining
+// -------------------------------------------------------------------------------------
+
 /**
  * Zips two `Option` values together using a provided function, returning a new `Option` of the result.
  *
@@ -1041,6 +1082,7 @@ export const zipWith: {
 
 /**
  * @dual
+ * @category combining
  * @since 1.0.0
  */
 export const ap: {
@@ -1055,7 +1097,7 @@ export const ap: {
  *
  * See also `getFailureMonoid` if you need a `Monoid` instead of a `Semigroup`.
  *
- * @category instances
+ * @category combining
  * @since 1.0.0
  */
 export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> = semiApplicative
@@ -1083,7 +1125,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
  *
  * See also `getFailureSemigroup` if you need a `Semigroup` instead of a `Monoid`.
  *
- * @category instances
+ * @category combining
  * @since 1.0.0
  */
 export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicative.getMonoid(
@@ -1119,7 +1161,7 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
 /**
  * Semigroup returning the first `Some` value encountered.
  *
- * @category instances
+ * @category combining
  * @since 1.0.0
  */
 export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduct
@@ -1161,11 +1203,52 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
   zero: none
 }
 
+// -------------------------------------------------------------------------------------
+// folding
+// -------------------------------------------------------------------------------------
+
+/**
+ * Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
+ *
+ * @param self - The Iterable of `Option<A>` to be reduced.
+ * @param b - The initial value of the accumulator.
+ * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`.
+ *
+ * @example
+ * import { some, none, reduceCompact } from '@fp-ts/core/Option'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * const iterable = [some(1), none(), some(2), none()]
+ * assert.deepStrictEqual(pipe(iterable, reduceCompact(0, (b, a) => b + a)), 3)
+ *
+ * @dual
+ * @category folding
+ * @since 1.0.0
+ */
+export const reduceCompact: {
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
+} = dual<
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B) => B,
+  <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B
+>(
+  3,
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B => {
+    let out: B = b
+    for (const oa of self) {
+      if (isSome(oa)) {
+        out = f(out, oa.value)
+      }
+    }
+    return out
+  }
+)
+
 const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
   (self: Option<A>): B => isNone(self) ? b : f(b, self.value)
 
 /**
- * @category instances
+ * @category folding
  * @since 1.0.0
  */
 export const Foldable: foldable.Foldable<OptionTypeLambda> = {
@@ -1185,9 +1268,14 @@ export const Foldable: foldable.Foldable<OptionTypeLambda> = {
  * assert.deepStrictEqual(toArray(some(1)), [1])
  * assert.deepStrictEqual(toArray(none()), [])
  *
+ * @category folding
  * @since 1.0.0
  */
 export const toArray: <A>(self: Option<A>) => Array<A> = foldable.toArray(Foldable)
+
+// -------------------------------------------------------------------------------------
+// filtering
+// -------------------------------------------------------------------------------------
 
 /**
  * @category instances
@@ -1203,10 +1291,6 @@ export const Compactable: compactable.Compactable<OptionTypeLambda> = {
  */
 export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>] = compactable
   .separate({ ...Covariant, ...Compactable })
-
-// -------------------------------------------------------------------------------------
-// filtering
-// -------------------------------------------------------------------------------------
 
 /**
  * Maps over the value of an `Option` and filters out `None`s.
@@ -1443,42 +1527,6 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
 ) => (...a: A): Option<B> => fromEither(f(...a))
 
 // -------------------------------------------------------------------------------------
-// sequencing
-// -------------------------------------------------------------------------------------
-
-/**
- * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
- *
- * @param self - The `Option` to apply the function to.
- * @param f - The function to be applied to the contents of the `Option`.
- *
- * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
- *
- * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
- * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
- *
- * @dual
- * @category sequencing
- * @since 1.0.0
- */
-export const flatMapEither: {
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
-  <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
-} = dual<
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>,
-  <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>
->(
-  2,
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> =>
-    pipe(self, flatMap(liftEither(f)))
-)
-
-// -------------------------------------------------------------------------------------
 // utils
 // -------------------------------------------------------------------------------------
 
@@ -1541,43 +1589,6 @@ export const exists: {
     isNone(self) ? false : predicate(self.value)
 )
 
-/**
- * Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
- *
- * @param self - The Iterable of `Option<A>` to be reduced.
- * @param b - The initial value of the accumulator.
- * @param f - The reducing function that takes the current accumulator value and the unwrapped value of an `Option<A>`.
- *
- * @example
- * import { some, none, reduceCompact } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * const iterable = [some(1), none(), some(2), none()]
- * assert.deepStrictEqual(pipe(iterable, reduceCompact(0, (b, a) => b + a)), 3)
- *
- * @dual
- * @category folding
- * @since 1.0.0
- */
-export const reduceCompact: {
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
-  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
-} = dual<
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B) => B,
-  <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B
->(
-  3,
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B => {
-    let out: B = b
-    for (const oa of self) {
-      if (isSome(oa)) {
-        out = f(out, oa.value)
-      }
-    }
-    return out
-  }
-)
-
 // -------------------------------------------------------------------------------------
 // algebraic operations
 // -------------------------------------------------------------------------------------
@@ -1621,36 +1632,6 @@ export const divide: {
   (self: Option<number>, that: Option<number>): Option<number>
   (that: Option<number>): (self: Option<number>) => Option<number>
 } = lift2(N.divide)
-
-/**
- * @dual
- * @category algebraic operations
- * @since 1.0.0
- */
-export const sumBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-} = lift2(BI.sum)
-
-/**
- * @dual
- * @category algebraic operations
- * @since 1.0.0
- */
-export const multiplyBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-} = lift2(BI.multiply)
-
-/**
- * @dual
- * @category algebraic operations
- * @since 1.0.0
- */
-export const subtractBigint: {
-  (self: Option<bigint>, that: Option<bigint>): Option<bigint>
-  (that: Option<bigint>): (self: Option<bigint>) => Option<bigint>
-} = lift2(BI.subtract)
 
 /**
  * Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.

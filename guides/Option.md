@@ -384,13 +384,16 @@ getOrElse(none(), () => 0); // 0
 
 **Cheat sheet** (error handling)
 
-| Name             | Given                                               | To               |
-| ---------------- | --------------------------------------------------- | ---------------- |
-| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`         |
-| `getOrThrow`     | `Option<A>`                                         | `A`              |
-| `getOrNull`      | `Option<A>`                                         | `A \| null`      |
-| `getOrUndefined` | `Option<A>`                                         | `A \| undefined` |
-| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`         |
+| Name             | Given                                               | To                     |
+| ---------------- | --------------------------------------------------- | ---------------------- |
+| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`               |
+| `getOrThrow`     | `Option<A>`                                         | `A`                    |
+| `getOrNull`      | `Option<A>`                                         | `A \| null`            |
+| `getOrUndefined` | `Option<A>`                                         | `A \| undefined`       |
+| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`               |
+| `orElse`         | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>`       |
+| `orElseEither`   | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<Either<A, B>>` |
+| `firstSomeOf`    | `Iterable<Option<A>>`                               | `Option<A>`            |
 
 # Interop
 
@@ -506,9 +509,28 @@ console.log(pipe(none(), getOrThrow); // throws new Error("getOrThrow called on 
 
 **Cheat sheet** (combining)
 
-| Name           | Given                                     | To                     |
-| -------------- | ----------------------------------------- | ---------------------- |
-| `orElse`       | `Option<A>`, `LazyArg<Option<B>>`         | `Option<A \| B>`       |
-| `orElseEither` | `Option<A>`, `LazyArg<Option<B>>`         | `Option<Either<A, B>>` |
-| `firstSomeOf`  | `Iterable<Option<A>>`                     | `Option<A>`            |
-| `reduceAll`    | `Iterable<Option<A>>`, `B`, `(B, A) => B` | `B`                    |
+| Name                    | Given                                   | To                     |
+| ----------------------- | --------------------------------------- | ---------------------- |
+| `zipWith`               | `Option<A>`, `Option<B>`, `(A, B) => C` | `C`                    |
+| `ap`                    | `Option<(a: A) => B>`, `Option<A>`      | `Option<C>`            |
+| `getFailureSemigroup`   | `Semigroup<A>`                          | `Semigroup<Option<A>>` |
+| `getFailureMonoid`      | `Monoid<A>`                             | `Monoid<Option<A>>`    |
+| `getFirstSomeSemigroup` |                                         | `Semigroup<Option<A>>` |
+
+**Cheat sheet** (folding)
+
+| Name            | Given                                     | To         |
+| --------------- | ----------------------------------------- | ---------- |
+| `reduceCompact` | `Iterable<Option<A>>`, `B`, `(B, A) => B` | `B`        |
+| `toArray`       | `Option<A>`                               | `Array<A>` |
+
+**Cheat sheet** (algebraic operations)
+
+| Name              | Given                              | To               |
+| ----------------- | ---------------------------------- | ---------------- |
+| `sum`             | `Option<number>`, `Option<number>` | `Option<number>` |
+| `multiply`        | `Option<number>`, `Option<number>` | `Option<number>` |
+| `subtract`        | `Option<number>`, `Option<number>` | `Option<number>` |
+| `divide`          | `Option<number>`, `Option<number>` | `Option<number>` |
+| `sumCompact`      | `Iterable<Option<number>>`         | `number`         |
+| `multiplyCompact` | `Iterable<Option<number>>`         | `number`         |
