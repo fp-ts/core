@@ -968,7 +968,10 @@ the provided default as a `Left`.
 **Signature**
 
 ```ts
-export declare const fromNullable: <E>(onNullable: LazyArg<E>) => <A>(a: A) => Either<E, NonNullable<A>>
+export declare const fromNullable: {
+  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>>
+  <A, E>(onNullable: (a: A) => E): (a: A) => Either<E, NonNullable<A>>
+}
 ```
 
 **Example**
