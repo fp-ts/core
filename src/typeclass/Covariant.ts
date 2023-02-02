@@ -58,10 +58,7 @@ export const flap = <F extends TypeLambda>(F: Covariant<F>): {
   <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>): (a: A) => Kind<F, R, O, E, B>
   <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>): Kind<F, R, O, E, B>
 } =>
-  dual<
-    <R, O, E, A, B>(self: Kind<F, R, O, E, (a: A) => B>) => (a: A) => Kind<F, R, O, E, B>,
-    <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>) => Kind<F, R, O, E, B>
-  >(
+  dual(
     2,
     <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>): Kind<F, R, O, E, B> =>
       pipe(self, F.map(f => f(a)))
@@ -75,10 +72,7 @@ export const as = <F extends TypeLambda>(F: Covariant<F>): {
   <B>(b: B): <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>
   <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B>
 } =>
-  dual<
-    <B>(b: B) => <R, O, E, _>(self: Kind<F, R, O, E, _>) => Kind<F, R, O, E, B>,
-    <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B) => Kind<F, R, O, E, B>
-  >(
+  dual(
     2,
     <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B> =>
       pipe(self, F.map(() => b))

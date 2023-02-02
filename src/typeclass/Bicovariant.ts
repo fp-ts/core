@@ -61,11 +61,11 @@ export const mapLeft = <F extends TypeLambda>(
   <E, G>(f: (e: E) => G): <R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>
   <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A>
 } =>
-  dual<
-    <E, G>(f: (e: E) => G) => <R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>,
-    <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G) => Kind<F, R, O, G, A>
-  >(2, <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A> =>
-    F.bimap(self, f, identity))
+  dual(
+    2,
+    <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A> =>
+      F.bimap(self, f, identity)
+  )
 
 /**
  * Returns a default `map` implementation.
