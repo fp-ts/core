@@ -84,7 +84,7 @@ Unary functions form a semigroup as long as you can provide a semigroup for the 
 **Signature**
 
 ```ts
-export declare const getSemigroup: <S>(Semigroup: Semigroup<S>) => <A>() => Semigroup<(a: A) => S>
+export declare const getSemigroup: <S>(S: Semigroup<S>) => <A>() => Semigroup<(a: A) => S>
 ```
 
 **Example**
@@ -288,10 +288,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const dual: <
-  DataLast extends (...args: Array<any>) => any,
-  DataFirst extends (...args: Array<any>) => any
->(
+export declare const dual: <DataLast extends (...args: any[]) => any, DataFirst extends (...args: any[]) => any>(
   dataFirstArity: Parameters<DataFirst>['length'],
   body: DataFirst
 ) => DataLast & DataFirst

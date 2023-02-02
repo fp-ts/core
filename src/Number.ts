@@ -34,10 +34,7 @@ export const isNumber = predicate.isNumber
 export const sum: {
   (that: number): (self: number) => number
   (self: number, that: number): number
-} = dual<
-  (that: number) => (self: number) => number,
-  (self: number, that: number) => number
->(2, semigroup.numberSum.combine)
+} = semigroup.numberSum.combine
 
 /**
  * @example
@@ -53,10 +50,7 @@ export const sum: {
 export const multiply: {
   (that: number): (self: number) => number
   (self: number, that: number): number
-} = dual<
-  (that: number) => (self: number) => number,
-  (self: number, that: number) => number
->(2, semigroup.numberMultiply.combine)
+} = semigroup.numberMultiply.combine
 
 /**
  * @example

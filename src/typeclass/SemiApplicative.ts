@@ -5,6 +5,7 @@ import { dual, identity, pipe, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
@@ -20,14 +21,15 @@ export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, C
  * @since 1.0.0
  */
 export const getSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
-  <A, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, R, O, E, A>> => ({
-    combine: (self, that) => pipe(F.product(self, that), F.map(([a1, a2]) => S.combine(a1, a2))),
-    combineMany: (self, collection) =>
-      pipe(
-        F.productMany(self, collection),
-        F.map(([head, ...tail]) => S.combineMany(head, tail))
-      )
-  })
+  <A, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, R, O, E, A>> =>
+    semigroup.make(
+      (self, that) => pipe(F.product(self, that), F.map(([a1, a2]) => S.combine(a1, a2))),
+      (self, collection) =>
+        pipe(
+          F.productMany(self, collection),
+          F.map(([head, ...tail]) => S.combineMany(head, tail))
+        )
+    )
 
 /**
  * Zips two `F` values together using a provided function, returning a new `F` of the result.

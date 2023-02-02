@@ -6,6 +6,7 @@
  * @since 1.0.0
  */
 import type { LazyArg } from "@fp-ts/core/Function"
+import { dual } from "@fp-ts/core/Function"
 import type { Refinement } from "@fp-ts/core/Predicate"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
@@ -40,8 +41,17 @@ export const isBoolean: Refinement<unknown, boolean> = predicate.isBoolean
  * @category pattern matching
  * @since 1.0.0
  */
-export const match = <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) =>
-  (value: boolean): A | B => value ? onTrue() : onFalse()
+export const match: {
+  <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>): (value: boolean) => A | B
+  <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>): A | B
+} = dual<
+  <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) => (value: boolean) => A | B,
+  <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>) => A | B
+>(
+  3,
+  <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>): A | B =>
+    value ? onTrue() : onFalse()
+)
 
 /**
  * @category instances
@@ -110,15 +120,19 @@ export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
  * @category combinators
  * @since 1.0.0
  */
-export const and = (that: boolean) =>
-  (self: boolean): boolean => semigroup.booleanAll.combine(self, that)
+export const and: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = semigroup.booleanAll.combine
 
 /**
  * @category combinators
  * @since 1.0.0
  */
-export const or = (that: boolean) =>
-  (self: boolean): boolean => semigroup.booleanAny.combine(self, that)
+export const or: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = semigroup.booleanAny.combine
 
 /**
  * @category combinators
@@ -129,9 +143,9 @@ export const not = (self: boolean): boolean => !self
 /**
  * @since 1.0.0
  */
-export const all = MonoidAll.combineAll
+export const all: (collection: Iterable<boolean>) => boolean = MonoidAll.combineAll
 
 /**
  * @since 1.0.0
  */
-export const any = MonoidAny.combineAll
+export const any: (collection: Iterable<boolean>) => boolean = MonoidAny.combineAll
