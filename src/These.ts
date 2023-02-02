@@ -5,7 +5,7 @@
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -1094,13 +1094,16 @@ export const struct: <R extends Record<string, Validated<any, any>>>(
   .struct(Product)
 
 /**
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMap = <A, E2, B>(
-  f: (a: A) => Validated<E2, B>
-) =>
-  <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => {
+export const flatMap: {
+  <A, E2, B>(f: (a: A) => Validated<E2, B>): <E1>(self: Validated<E1, A>) => Validated<E1 | E2, B>
+  <E1, A, E2, B>(self: Validated<E1, A>, f: (a: A) => Validated<E2, B>): Validated<E1 | E2, B>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: Validated<E1, A>, f: (a: A) => Validated<E2, B>): Validated<E1 | E2, B> => {
     if (isLeft(self)) {
       return self
     }
@@ -1116,6 +1119,7 @@ export const flatMap = <A, E2, B>(
     }
     return both(RA.appendAllNonEmpty(that.left)(self.left), that.right)
   }
+)
 
 /**
  * @category instances

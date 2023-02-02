@@ -1268,7 +1268,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMap: <A, E2, B>(f: (a: A) => Either<E2, B>) => <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+export declare const flatMap: {
+  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+  <E1, A, E2, B>(self: Either<E1, A>, f: (a: A) => Either<E2, B>): Either<E1 | E2, B>
+}
 ```
 
 Added in v1.0.0

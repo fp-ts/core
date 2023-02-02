@@ -1367,9 +1367,15 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMap: <A, E2, B>(
-  f: (a: A) => These<readonly [E2, ...E2[]], B>
-) => <E1>(self: These<readonly [E1, ...E1[]], A>) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+export declare const flatMap: {
+  <A, E2, B>(f: (a: A) => These<readonly [E2, ...E2[]], B>): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => These<readonly [E2, ...E2[]], B>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+}
 ```
 
 Added in v1.0.0

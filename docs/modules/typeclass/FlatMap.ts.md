@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [make](#make)
 - [type class](#type-class)
   - [FlatMap (interface)](#flatmap-interface)
 - [utils](#utils)
@@ -21,6 +23,23 @@ Added in v1.0.0
 
 ---
 
+# constructors
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <F extends TypeLambda>(
+  flatMap: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    f: (a: A) => Kind<F, R2, O2, E2, B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+) => FlatMap<F>
+```
+
+Added in v1.0.0
+
 # type class
 
 ## FlatMap (interface)
@@ -29,9 +48,18 @@ Added in v1.0.0
 
 ```ts
 export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
-  readonly flatMap: <A, R2, O2, E2, B>(
-    f: (a: A) => Kind<F, R2, O2, E2, B>
-  ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+  readonly flatMap: {
+    <A, R2, O2, E2, B>(f: (a: A) => Kind<F, R2, O2, E2, B>): <R1, O1, E1>(
+      self: Kind<F, R1, O1, E1, A>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+    <R1, O1, E1, A, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, A>, f: (a: A) => Kind<F, R2, O2, E2, B>): Kind<
+      F,
+      R1 & R2,
+      O1 | O2,
+      E1 | E2,
+      B
+    >
+  }
 }
 ```
 

@@ -7,7 +7,7 @@ import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import type * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
+import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
@@ -112,9 +112,10 @@ export const Pointed: pointed.Pointed<IdentityTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const FlatMap: flatMap_.FlatMap<IdentityTypeLambda> = {
-  flatMap: f => self => f(self)
-}
+export const FlatMap: flatMap_.FlatMap<IdentityTypeLambda> = flatMap_.make(<A, B>(
+  self: Identity<A>,
+  f: (a: A) => Identity<B>
+): Identity<B> => f(self))
 
 /**
  * @category instances
