@@ -3,7 +3,7 @@
  */
 import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
+// import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
 /**
  * @category type class
@@ -30,11 +30,11 @@ export const mapWithIndexComposition = <F extends TypeLambda, I, G extends TypeL
 ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>) =>
   (f) => F.mapWithIndex((ga, i) => pipe(ga, G.mapWithIndex((a, j) => f(a, [i, j]))))
 
-/**
- * Returns a default `map` implementation.
- *
- * @since 1.0.0
- */
-export const map = <F extends TypeLambda, I>(
-  F: CovariantWithIndex<F, I>
-): Covariant<F>["map"] => (f) => F.mapWithIndex(f)
+// /**
+//  * Returns a default `map` implementation.
+//  *
+//  * @since 1.0.0
+//  */
+// export const map = <F extends TypeLambda, I>(
+//   F: CovariantWithIndex<F, I>
+// ): Covariant<F>["map"] => (f) => F.mapWithIndex(f)

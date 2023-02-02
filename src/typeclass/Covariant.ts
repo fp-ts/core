@@ -10,17 +10,20 @@ import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
  * @since 1.0.0
  */
 export interface Covariant<F extends TypeLambda> extends Invariant<F> {
-  readonly map: <A, B>(
-    f: (a: A) => B
-  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  readonly map: {
+    <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
+  }
 }
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<F> => ({
-  map,
+export const make = <F extends TypeLambda>(
+  map: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B) => Kind<F, R, O, E, B>
+): Covariant<F> => ({
+  map: dual(2, map),
   imap: imap(map)
 })
 
@@ -43,8 +46,9 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const imap = <F extends TypeLambda>(map: Covariant<F>["map"]): Invariant<F>["imap"] =>
-  dual(3, (self, to, _) => pipe(self, map(to))) // TODO remove pipe
+export const imap = <F extends TypeLambda>(
+  map: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B) => Kind<F, R, O, E, B>
+): Invariant<F>["imap"] => dual(3, (self, to, _) => map(self, to))
 
 /**
  * @category mapping

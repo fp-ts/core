@@ -49,9 +49,7 @@ export interface IdentityTypeLambdaFix<A> extends TypeLambda {
  */
 export const Covariant: covariant.Covariant<IdentityTypeLambda> = covariant.make<
   IdentityTypeLambda
->(
-  f => self => f(self)
-)
+>((self, f) => f(self))
 
 /**
  * @category instances
