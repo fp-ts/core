@@ -274,6 +274,15 @@ export const mapLeft: {
 } = bicovariant.mapLeft(Bicovariant)
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Covariant: covariant.Covariant<EitherTypeLambda> = covariant.make(<E, A, B>(
+  self: Either<E, A>,
+  f: (a: A) => B
+): Either<E, B> => isRight(self) ? right(f(self.right)) : self)
+
+/**
  * Maps the `Right` side of an `Either` value to a new `Either` value.
  *
  * @param self - An `Either` to map
@@ -286,25 +295,9 @@ export const mapLeft: {
 export const map: {
   <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
   <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
-} = dual<
-  <A, B>(f: (a: A) => B) => <E>(self: Either<E, A>) => Either<E, B>,
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B) => Either<E, B>
->(
-  2,
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B> =>
-    isRight(self) ? right(f(self.right)) : self
-)
+} = Covariant.map
 
-const imap = covariant.imap<EitherTypeLambda>(map)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<EitherTypeLambda> = {
-  imap,
-  map
-}
+const imap = Covariant.imap
 
 /**
  * @category instances

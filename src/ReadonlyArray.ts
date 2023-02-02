@@ -5,7 +5,7 @@
  */
 import type { Either } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
-import { identity, pipe } from "@fp-ts/core/Function"
+import { dual, identity, pipe } from "@fp-ts/core/Function"
 import type { LazyArg } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
@@ -1214,19 +1214,23 @@ export const of = <A>(a: A): NonEmptyArray<A> => [a]
 export const empty: <A = never>() => Array<A> = () => []
 
 /**
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
-export const map = <A, B>(f: (a: A) => B): (self: ReadonlyArray<A>) => Array<B> =>
-  mapWithIndex((a) => f(a))
-
-/**
- * @category mapping
- * @since 1.0.0
- */
-export const mapNonEmpty = <A, B>(
-  f: (a: A) => B
-): (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<B> => mapNonEmptyWithIndex(f)
+export const mapNonEmpty: {
+  <A, B>(f: (a: A) => B): (self: readonly [A, ...Array<A>]) => [B, ...Array<B>]
+  <A, B>(self: readonly [A, ...Array<A>], f: (a: A) => B): [B, ...Array<B>]
+} = dual<
+  <A, B>(
+    f: (a: A) => B
+  ) => (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<B>,
+  <A, B>(self: NonEmptyReadonlyArray<A>, f: (a: A) => B) => NonEmptyArray<B>
+>(
+  2,
+  <A, B>(self: NonEmptyReadonlyArray<A>, f: (a: A) => B): NonEmptyArray<B> =>
+    pipe(self, mapNonEmptyWithIndex(f))
+)
 
 /**
  * @category mapping
@@ -1265,16 +1269,25 @@ export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
  */
 export const Do: ReadonlyArray<{}> = of_.Do(Of)
 
-const imap = covariant.imap<ReadonlyArrayTypeLambda>(map)
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = {
-  imap,
-  map
-}
+export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(<A, B>(
+  self: ReadonlyArray<A>,
+  f: (a: A) => B
+): ReadonlyArray<B> => self.map(a => f(a)))
+
+/**
+ * @category mapping
+ * @since 1.0.0
+ */
+export const map: {
+  <A, B>(f: (a: A) => B): (self: ReadonlyArray<A>) => Array<B>
+  <A, B>(self: ReadonlyArray<A>, f: (a: A) => B): Array<B>
+} = Covariant.map as any
+
+const imap = Covariant.imap
 
 /**
  * @category instances

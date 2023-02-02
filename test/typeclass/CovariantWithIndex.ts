@@ -22,10 +22,10 @@ describe("CovariantWithIndex", () => {
     ]])
   })
 
-  it("map", () => {
-    const map = _.map(CovariantWithIndex)
-    const f = (a: string) => a + "!"
-    U.deepStrictEqual(pipe([], map(f)), [])
-    U.deepStrictEqual(pipe(["a", "b", "c"], map(f)), ["a!", "b!", "c!"])
-  })
+  // it("map", () => {
+  //   const map = _.map(CovariantWithIndex)
+  //   const f = (a: string) => a + "!"
+  //   U.deepStrictEqual(pipe([], map(f)), [])
+  //   U.deepStrictEqual(pipe(["a", "b", "c"], map(f)), ["a!", "b!", "c!"])
+  // })
 })

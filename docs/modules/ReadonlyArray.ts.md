@@ -1455,7 +1455,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const map: <A, B>(f: (a: A) => B) => (self: readonly A[]) => B[]
+export declare const map: {
+  <A, B>(f: (a: A) => B): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A) => B): B[]
+}
 ```
 
 Added in v1.0.0
@@ -1465,7 +1468,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const mapNonEmpty: <A, B>(f: (a: A) => B) => (self: readonly [A, ...A[]]) => [B, ...B[]]
+export declare const mapNonEmpty: {
+  <A, B>(f: (a: A) => B): (self: readonly [A, ...A[]]) => [B, ...B[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A) => B): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0

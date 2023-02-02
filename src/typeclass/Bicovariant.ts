@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { dual, identity, pipe } from "@fp-ts/core/Function"
+import { dual, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 
@@ -50,9 +50,7 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
     self: Kind<F, FR, FO, FE, Kind<G, GR, GO, E1, A>>,
     f: (e: E1) => E2,
     g: (a: A) => B
-  ): Kind<F, FR, FO, FE, Kind<G, GR, GO, E2, B>> =>
-    // TODO
-    pipe(self, CovariantF.map(BicovariantG.bimap(f, g)))
+  ): Kind<F, FR, FO, FE, Kind<G, GR, GO, E2, B>> => CovariantF.map(self, BicovariantG.bimap(f, g))
 
 /**
  * @since 1.0.0
