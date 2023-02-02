@@ -17,7 +17,10 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Order<A> {
-  readonly compare: (self: A, that: A) => -1 | 0 | 1
+  readonly compare: {
+    (that: A): (self: A) => -1 | 0 | 1
+    (self: A, that: A): -1 | 0 | 1
+  }
 }
 
 /**
@@ -29,46 +32,38 @@ export interface OrderTypeLambda extends TypeLambda {
 }
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const string: Order<string> = {
-  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const number: Order<number> = {
-  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const boolean: Order<boolean> = {
-  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const bigint: Order<bigint> = {
-  compare: (self, that) => self < that ? -1 : self > that ? 1 : 0
-}
-
-/**
- * Main constructor.
- *
  * @category constructors
  * @since 1.0.0
  */
-export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
-  compare: (self, that) => self === that ? 0 : compare(self, that)
+export const make = <A>(
+  compare: (self: A, that: A) => -1 | 0 | 1
+): Order<A> => ({
+  compare: dual(2, (self, that) => self === that ? 0 : compare(self, that))
 })
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const string: Order<string> = make((self, that) => self < that ? -1 : 1)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const number: Order<number> = make((self, that) => self < that ? -1 : 1)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const boolean: Order<boolean> = make((self, that) => self < that ? -1 : 1)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const bigint: Order<bigint> = make((self, that) => self < that ? -1 : 1)
 
 /**
  * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
@@ -82,7 +77,7 @@ export const fromCompare = <A>(compare: Order<A>["compare"]): Order<A> => ({
 export const tuple = <A extends ReadonlyArray<any>>(
   ...orders: { readonly [K in keyof A]: Order<A[K]> }
 ): Order<Readonly<A>> =>
-  fromCompare((self, that) => {
+  make((self, that) => {
     let i = 0
     for (; i < orders.length - 1; i++) {
       const r = orders[i].compare(self[i], that[i])
@@ -103,7 +98,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * @since 1.0.0
  */
 export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
-  fromCompare((self, that) => {
+  make((self, that) => {
     const aLen = self.length
     const bLen = that.length
     const len = Math.min(aLen, bLen)
@@ -125,8 +120,8 @@ export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
  */
 export const struct = <A>(orders: { readonly [K in keyof A]: Order<A[K]> }): Order<
   { readonly [K in keyof A]: A[K] }
-> => ({
-  compare: (self, that) => {
+> =>
+  make((self, that) => {
     for (const key of Object.keys(orders)) {
       const o = orders[key].compare(self[key], that[key])
       if (o !== 0) {
@@ -134,31 +129,12 @@ export const struct = <A>(orders: { readonly [K in keyof A]: Order<A[K]> }): Ord
       }
     }
     return 0
-  }
-})
+  })
 
 /**
  * @since 1.0.0
  */
-export const reverse = <A>(O: Order<A>): Order<A> =>
-  fromCompare((self, that) => O.compare(that, self))
-
-/**
- * @dual
- * @category combinators
- * @since 1.0.0
- */
-export const contramap: {
-  <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
-  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
-} = dual<
-  <B, A>(f: (b: B) => A) => (self: Order<A>) => Order<B>,
-  <A, B>(self: Order<A>, f: (b: B) => A) => Order<B>
->(
-  2,
-  <A, B>(self: Order<A>, f: (b: B) => A): Order<B> =>
-    fromCompare((b1, b2) => self.compare(f(b1), f(b2)))
-)
+export const reverse = <A>(O: Order<A>): Order<A> => make((self, that) => O.compare(that, self))
 
 /**
  * @category instances
@@ -167,7 +143,7 @@ export const contramap: {
 export const getSemigroup = <A>(): Semigroup<Order<A>> =>
   semigroup.make(
     (O1, O2) =>
-      fromCompare((self, that) => {
+      make((self, that) => {
         const out = O1.compare(self, that)
         if (out !== 0) {
           return out
@@ -175,7 +151,7 @@ export const getSemigroup = <A>(): Semigroup<Order<A>> =>
         return O2.compare(self, that)
       }),
     (self, collection) =>
-      fromCompare((a1, a2) => {
+      make((a1, a2) => {
         let out = self.compare(a1, a2)
         if (out !== 0) {
           return out
@@ -190,7 +166,7 @@ export const getSemigroup = <A>(): Semigroup<Order<A>> =>
       })
   )
 
-const empty: Order<unknown> = fromCompare(() => 0)
+const empty: Order<unknown> = make(() => 0)
 
 /**
  * @category instances
@@ -198,16 +174,26 @@ const empty: Order<unknown> = fromCompare(() => 0)
  */
 export const getMonoid = <A>(): Monoid<Order<A>> => monoid.fromSemigroup(getSemigroup<A>(), empty)
 
-const imap = contravariant.imap<OrderTypeLambda>(contramap)
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = {
-  imap,
-  contramap
-}
+export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = contravariant.make(<
+  A,
+  B
+>(self: Order<A>, f: (b: B) => A): Order<B> => make((b1, b2) => self.compare(f(b1), f(b2))))
+
+/**
+ * @dual
+ * @category combinators
+ * @since 1.0.0
+ */
+export const contramap: {
+  <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
+} = Contravariant.contramap
+
+const imap = Contravariant.imap
 
 /**
  * @category instances

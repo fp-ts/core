@@ -6,6 +6,10 @@ import * as U from "../util"
 describe("Order", () => {
   it("exports", () => {
     expect(_.Contravariant).exist
+    expect(_.string).exist
+    expect(_.number).exist
+    expect(_.boolean).exist
+    expect(_.bigint).exist
   })
 
   it("bigint", () => {

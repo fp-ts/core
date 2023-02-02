@@ -18,7 +18,7 @@ Added in v1.0.0
   - [struct](#struct)
   - [tuple](#tuple)
 - [constructors](#constructors)
-  - [fromCompare](#fromcompare)
+  - [make](#make)
 - [instances](#instances)
   - [Contravariant](#contravariant)
   - [Invariant](#invariant)
@@ -111,14 +111,12 @@ Added in v1.0.0
 
 # constructors
 
-## fromCompare
-
-Main constructor.
+## make
 
 **Signature**
 
 ```ts
-export declare const fromCompare: <A>(compare: (self: A, that: A) => 0 | 1 | -1) => Order<A>
+export declare const make: <A>(compare: (self: A, that: A) => -1 | 0 | 1) => Order<A>
 ```
 
 Added in v1.0.0
@@ -233,7 +231,10 @@ Added in v1.0.0
 
 ```ts
 export interface Order<A> {
-  readonly compare: (self: A, that: A) => -1 | 0 | 1
+  readonly compare: {
+    (that: A): (self: A) => -1 | 0 | 1
+    (self: A, that: A): -1 | 0 | 1
+  }
 }
 ```
 
