@@ -38,7 +38,7 @@ export const make = <F extends TypeLambda>(
 })
 
 /**
- * Returns a default `bimap` composition.
+ * Returns a default ternary `bimap` composition.
  *
  * @since 1.0.0
  */

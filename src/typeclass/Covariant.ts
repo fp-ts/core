@@ -16,6 +16,15 @@ export interface Covariant<F extends TypeLambda> extends Invariant<F> {
 }
 
 /**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<F> => ({
+  map,
+  imap: imap(map)
+})
+
+/**
  * Returns a default `map` composition.
  *
  * @since 1.0.0
@@ -35,16 +44,7 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const imap = <F extends TypeLambda>(map: Covariant<F>["map"]): Invariant<F>["imap"] =>
-  dual(3, (self, to, _) => pipe(self, map(to)))
-
-/**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(map: Covariant<F>["map"]): Covariant<F> => ({
-  map,
-  imap: imap(map)
-})
+  dual(3, (self, to, _) => pipe(self, map(to))) // TODO remove pipe
 
 /**
  * @category mapping

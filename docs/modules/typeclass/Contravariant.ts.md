@@ -30,7 +30,7 @@ Added in v1.0.0
 
 ```ts
 export declare const make: <F extends TypeLambda>(
-  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  contramap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (b: B) => A) => Kind<F, R, O, E, B>
 ) => Contravariant<F>
 ```
 
@@ -44,7 +44,10 @@ Added in v1.0.0
 
 ```ts
 export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
-  readonly contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  readonly contramap: {
+    <B, A>(f: (b: B) => A): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (b: B) => A): Kind<F, R, O, E, B>
+  }
 }
 ```
 
@@ -56,7 +59,7 @@ Added in v1.0.0
 
 Composing two contravariant functors yields a Covariant functor.
 
-Returns a default `map` composition.
+Returns a default binary `map` composition.
 
 **Signature**
 
@@ -64,10 +67,9 @@ Returns a default `map` composition.
 export declare const contramapComposition: <F extends TypeLambda, G extends TypeLambda>(
   F: Contravariant<F>,
   G: Contravariant<G>
-) => <A, B>(
+) => <FR, FO, FE, GR, GO, GE, A, B>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
   f: (a: A) => B
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
 ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
 ```
 
@@ -81,7 +83,7 @@ Returns a default `imap` implementation.
 
 ```ts
 export declare const imap: <F extends TypeLambda>(
-  contramap: <B, A>(f: (b: B) => A) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  contramap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (b: B) => A) => Kind<F, R, O, E, B>
 ) => {
   <A, B>(to: (a: A) => B, from: (b: B) => A): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
   <R, O, E, A, B>(self: Kind<F, R, O, E, A>, to: (a: A) => B, from: (b: B) => A): Kind<F, R, O, E, B>

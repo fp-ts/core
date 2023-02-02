@@ -169,19 +169,20 @@ export const getMonoid = <A>(): Monoid<Equivalence<A>> =>
   monoid.fromSemigroup(getSemigroup<A>(), empty)
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda> = contravariant.make(
+  <A, B>(self: Equivalence<A>, f: (b: B) => A): Equivalence<B> => (x, y) => self(f(x), f(y))
+)
+
+/**
+ * @dual
  * @category combinators
  * @since 1.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
   (self: Equivalence<A>): Equivalence<B> => (x, y) => self(f(x), f(y))
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda> = contravariant.make(
-  contramap
-)
 
 /**
  * @category instances

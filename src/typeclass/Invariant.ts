@@ -37,7 +37,7 @@ export const make = <F extends TypeLambda>(
 })
 
 /**
- * Returns a default `imap` composition.
+ * Returns a default ternary `imap` composition.
  *
  * @since 1.0.0
  */
