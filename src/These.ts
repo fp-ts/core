@@ -5,7 +5,7 @@
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -549,22 +549,25 @@ export const inspectBoth = <E, A>(
   }
 
 /**
- * Returns an effect whose left and right channels have been mapped by
- * the specified pair of functions, `f` and `g`.
- *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
-export const bimap: <E, G, A, B>(
-  f: (e: E) => G,
-  g: (a: A) => B
-) => (self: These<E, A>) => These<G, B> = (f, g) =>
-  (fa) =>
-    isLeft(fa) ?
-      left(f(fa.left)) :
-      isRight(fa) ?
-      right(g(fa.right)) :
-      both(f(fa.left), g(fa.right))
+export const bimap: {
+  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: These<E, A>) => These<G, B>
+} = dual<
+  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B) => These<G, B>,
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: These<E, A>) => These<G, B>
+>(
+  3,
+  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B> =>
+    isLeft(self) ?
+      left(f(self.left)) :
+      isRight(self) ?
+      right(g(self.right)) :
+      both(f(self.left), g(self.right))
+)
 
 /**
  * @category instances
@@ -575,14 +578,19 @@ export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = {
 }
 
 /**
- * Returns an effect with its error channel mapped using the specified
- * function. This can be used to lift a "smaller" error into a "larger" error.
+ * Maps the `Left` side of an `These` value to a new `These` value.
  *
+ * @param self - The input `These` value to map.
+ * @param f - A transformation function to apply to the `Left` value of the input `These`.
+ *
+ * @dual
  * @category error handling
  * @since 1.0.0
  */
-export const mapLeft: <E, G>(f: (e: E) => G) => <A>(self: These<E, A>) => These<G, A> = bicovariant
-  .mapLeft(Bicovariant)
+export const mapLeft: {
+  <E, A, G>(self: These<E, A>, f: (e: E) => G): These<G, A>
+  <E, G>(f: (e: E) => G): <A>(self: These<E, A>) => These<G, A>
+} = bicovariant.mapLeft(Bicovariant)
 
 /**
  * @category conversions
@@ -591,14 +599,19 @@ export const mapLeft: <E, G>(f: (e: E) => G) => <A>(self: These<E, A>) => These<
 export const fromThese: <E, A>(self: These<E, A>) => Validated<E, A> = mapLeft((e) => [e])
 
 /**
- * Returns an effect whose right is mapped by the specified `f` function.
+ * Maps the `Right` side of an `These` value to a new `These` value.
  *
+ * @param self - An `These` to map
+ * @param f - The function to map over the value of the `These`
+ *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
-export const map: <A, B>(f: (a: A) => B) => <E>(self: These<E, A>) => These<E, B> = bicovariant.map(
-  Bicovariant
-)
+export const map: {
+  <E, A, B>(self: These<E, A>, f: (a: A) => B): These<E, B>
+  <A, B>(f: (a: A) => B): <E>(self: These<E, A>) => These<E, B>
+} = bicovariant.map(Bicovariant)
 
 const imap = covariant.imap<TheseTypeLambda>(map)
 

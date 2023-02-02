@@ -569,13 +569,15 @@ Added in v1.0.0
 
 ## mapLeft
 
-Returns an effect with its error channel mapped using the specified
-function. This can be used to lift a "smaller" error into a "larger" error.
+Maps the `Left` side of an `Either` value to a new `Either` value.
 
 **Signature**
 
 ```ts
-export declare const mapLeft: <E, G>(f: (e: E) => G) => <A>(self: Either<E, A>) => Either<G, A>
+export declare const mapLeft: {
+  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
+  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
+}
 ```
 
 Added in v1.0.0
@@ -1130,7 +1132,10 @@ the specified pair of functions, `f` and `g`.
 **Signature**
 
 ```ts
-export declare const bimap: <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Either<E, A>) => Either<G, B>
+export declare const bimap: {
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: Either<E, A>) => Either<G, B>
+}
 ```
 
 Added in v1.0.0
@@ -1150,12 +1155,15 @@ Added in v1.0.0
 
 ## map
 
-Returns an effect whose Right is mapped by the specified `f` function.
+Maps the `Right` side of an `Either` value to a new `Either` value.
 
 **Signature**
 
 ```ts
-export declare const map: <A, B>(f: (a: A) => B) => <E>(self: Either<E, A>) => Either<E, B>
+export declare const map: {
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
+  <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+}
 ```
 
 Added in v1.0.0

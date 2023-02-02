@@ -592,7 +592,7 @@ export const getOrThrow = <A>(self: Option<A>): A => {
 // -------------------------------------------------------------------------------------
 
 /**
- * Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
+ * Maps the `Some` side of an `Option` value to a new `Option` value.
  *
  * @param self - An `Option` to map
  * @param f - The function to map over the value of the `Option`
