@@ -373,12 +373,18 @@ export const Pointed: pointed.Pointed<EitherTypeLambda> = {
 }
 
 /**
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMap = <A, E2, B>(
-  f: (a: A) => Either<E2, B>
-) => <E1>(self: Either<E1, A>): Either<E1 | E2, B> => isLeft(self) ? self : f(self.right)
+export const flatMap: {
+  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(self: Either<E1, A>) => Either<E1 | E2, B>
+  <E1, A, E2, B>(self: Either<E1, A>, f: (a: A) => Either<E2, B>): Either<E1 | E2, B>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: Either<E1, A>, f: (a: A) => Either<E2, B>): Either<E1 | E2, B> =>
+    isLeft(self) ? self : f(self.right)
+)
 
 /**
  * @category instances

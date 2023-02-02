@@ -1377,12 +1377,18 @@ export const flatMapWithIndex = <A, B>(f: (a: A, i: number) => ReadonlyArray<B>)
   }
 
 /**
+ * @dual
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMap: <A, B>(
-  f: (a: A) => ReadonlyArray<B>
-) => (self: ReadonlyArray<A>) => Array<B> = (f) => flatMapWithIndex(f)
+export const flatMap: {
+  <A, B>(f: (a: A) => ReadonlyArray<B>): (self: ReadonlyArray<A>) => Array<B>
+  <A, B>(self: ReadonlyArray<A>, f: (a: A) => ReadonlyArray<B>): Array<B>
+} = dual(
+  2,
+  <A, B>(self: ReadonlyArray<A>, f: (a: A) => ReadonlyArray<B>): Array<B> =>
+    pipe(self, flatMapWithIndex(f))
+)
 
 /**
  * @category sequencing
@@ -1500,13 +1506,17 @@ export const separate = <A, B>(
 }
 
 /**
+ * @dual
  * @category filtering
  * @since 1.0.0
  */
 export const filterMap: {
   <A, B>(f: (a: A) => Option<B>): (self: Iterable<A>) => Array<B>
   <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): Array<B>
-} = dual(2, (self, f) => pipe(self, filterMapWithIndex(f)))
+} = dual(
+  2,
+  <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): Array<B> => pipe(self, filterMapWithIndex(f))
+)
 
 /**
  * @category instances

@@ -1618,7 +1618,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMap: <A, B>(f: (a: A) => readonly B[]) => (self: readonly A[]) => B[]
+export declare const flatMap: {
+  <A, B>(f: (a: A) => readonly B[]): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A) => readonly B[]): B[]
+}
 ```
 
 Added in v1.0.0
