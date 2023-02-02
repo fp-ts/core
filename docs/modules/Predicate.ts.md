@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [contramap](#contramap)
 - [constructors](#constructors)
   - [id](#id)
 - [do notation](#do-notation)
@@ -45,7 +47,6 @@ Added in v1.0.0
   - [any](#any)
   - [appendElement](#appendelement)
   - [compose](#compose)
-  - [contramap](#contramap)
   - [not](#not)
   - [of](#of)
   - [or](#or)
@@ -55,6 +56,21 @@ Added in v1.0.0
   - [unit](#unit)
 
 ---
+
+# combinators
+
+## contramap
+
+**Signature**
+
+```ts
+export declare const contramap: {
+  <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
+  <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
+}
+```
+
+Added in v1.0.0
 
 # constructors
 
@@ -344,16 +360,6 @@ Added in v1.0.0
 export declare const compose: <A, B extends A, C extends B>(
   bc: Refinement<B, C>
 ) => (ab: Refinement<A, B>) => Refinement<A, C>
-```
-
-Added in v1.0.0
-
-## contramap
-
-**Signature**
-
-```ts
-export declare const contramap: <B, A>(f: (b: B) => A) => (self: Predicate<A>) => Predicate<B>
 ```
 
 Added in v1.0.0

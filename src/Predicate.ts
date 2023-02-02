@@ -82,21 +82,28 @@ export const compose = <A, B extends A, C extends B>(bc: Refinement<B, C>) =>
   (ab: Refinement<A, B>): Refinement<A, C> => (i): i is C => ab(i) && bc(i)
 
 /**
- * @since 1.0.0
- */
-export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Predicate<A>): Predicate<B> => (b) => self(f(b))
-
-const imap = contravariant.imap<PredicateTypeLambda>(contramap)
-
-/**
  * @category instances
  * @since 1.0.0
  */
-export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = {
-  imap,
-  contramap
-}
+export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = contravariant.make(<
+  A,
+  B
+>(
+  self: Predicate<A>,
+  f: (b: B) => A
+): Predicate<B> => (b) => self(f(b)))
+
+/**
+ * @dual
+ * @category combinators
+ * @since 1.0.0
+ */
+export const contramap: {
+  <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
+  <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
+} = Contravariant.contramap
+
+const imap = Contravariant.imap
 
 /**
  * @category instances

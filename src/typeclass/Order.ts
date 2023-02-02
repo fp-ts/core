@@ -145,6 +145,7 @@ export const reverse = <A>(O: Order<A>): Order<A> =>
 
 /**
  * @dual
+ * @category combinators
  * @since 1.0.0
  */
 export const contramap: {

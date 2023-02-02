@@ -72,7 +72,7 @@ Added in v1.0.0
 
 ## imapComposition
 
-Returns a default `imap` composition.
+Returns a default ternary `imap` composition.
 
 **Signature**
 

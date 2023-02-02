@@ -58,7 +58,7 @@ Added in v1.0.0
 
 ## bimapComposition
 
-Returns a default `bimap` composition.
+Returns a default ternary `bimap` composition.
 
 **Signature**
 

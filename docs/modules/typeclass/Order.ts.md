@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [array](#array)
+  - [contramap](#contramap)
   - [struct](#struct)
   - [tuple](#tuple)
 - [constructors](#constructors)
@@ -36,7 +37,6 @@ Added in v1.0.0
 - [utils](#utils)
   - [between](#between)
   - [clamp](#clamp)
-  - [contramap](#contramap)
   - [greaterThan](#greaterthan)
   - [greaterThanOrEqualTo](#greaterthanorequalto)
   - [lessThan](#lessthan)
@@ -60,6 +60,19 @@ It is useful when you need to compare two arrays of the same type and you have a
 
 ```ts
 export declare const array: <A>(O: Order<A>) => Order<readonly A[]>
+```
+
+Added in v1.0.0
+
+## contramap
+
+**Signature**
+
+```ts
+export declare const contramap: {
+  <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
+}
 ```
 
 Added in v1.0.0
@@ -267,19 +280,6 @@ Clamp a value between a minimum and a maximum.
 export declare const clamp: <A>(O: Order<A>) => {
   (minimum: A, maximum: A): (a: A) => A
   (a: A, minimum: A, maximum: A): A
-}
-```
-
-Added in v1.0.0
-
-## contramap
-
-**Signature**
-
-```ts
-export declare const contramap: {
-  <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
-  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
 }
 ```
 
