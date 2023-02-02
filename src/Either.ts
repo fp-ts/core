@@ -866,12 +866,21 @@ export const match = <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C)
  * assert.deepStrictEqual(parse(1), E.right(1))
  * assert.deepStrictEqual(parse(null), E.left('nullable'))
  *
+ * @dual
  * @category interop
  * @since 1.0.0
  */
-export const fromNullable = <E>(onNullable: LazyArg<E>) =>
-  <A>(a: A): Either<E, NonNullable<A>> =>
-    a == null ? left(onNullable()) : right(a as NonNullable<A>)
+export const fromNullable: {
+  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>>
+  <A, E>(onNullable: (a: A) => E): (a: A) => Either<E, NonNullable<A>>
+} = dual<
+  <A, E>(a: A, onNullable: (a: A) => E) => Either<E, NonNullable<A>>,
+  <A, E>(onNullable: (a: A) => E) => (a: A) => Either<E, NonNullable<A>>
+>(
+  2,
+  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>> =>
+    a == null ? left(onNullable(a)) : right(a as NonNullable<A>)
+)
 
 /**
  * @category interop
@@ -880,7 +889,7 @@ export const fromNullable = <E>(onNullable: LazyArg<E>) =>
 export const liftNullable = <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => B | null | undefined,
   onNullable: (...a: A) => E
-) => (...a: A): Either<E, NonNullable<B>> => fromNullable(() => onNullable(...a))(f(...a))
+) => (...a: A): Either<E, NonNullable<B>> => fromNullable(f(...a), () => onNullable(...a))
 
 /**
  * @category sequencing
