@@ -1268,7 +1268,7 @@ export const Foldable: foldable.Foldable<OptionTypeLambda> = {
  * assert.deepStrictEqual(toArray(some(1)), [1])
  * assert.deepStrictEqual(toArray(none()), [])
  *
- * @category folding
+ * @category conversions
  * @since 1.0.0
  */
 export const toArray: <A>(self: Option<A>) => Array<A> = foldable.toArray(Foldable)

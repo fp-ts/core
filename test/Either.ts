@@ -511,4 +511,9 @@ describe.concurrent("Either", () => {
     Util.deepStrictEqual(isEquivalent(_.left("foo"), _.left("bar")), false)
     Util.deepStrictEqual(isEquivalent(_.left("foo"), _.right(1)), false)
   })
+
+  it("toArray", () => {
+    expect(_.toArray(_.right(1))).toEqual([1])
+    expect(_.toArray(_.left("error"))).toEqual([])
+  })
 })

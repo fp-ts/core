@@ -9,25 +9,41 @@ In this usage, `None` is replaced with a `Left` which can contain useful informa
 
 # Definition
 
-The `Either` data type is the union of two members: `Left` and `Right`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions):
+The `Either` data type is the union of two members: `Left` and `Right`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions).
 
 > A common technique for working with unions is to have a single field which uses literal types which you can use to let TypeScript narrow down the possible current type
+
+By convention in `@fp-ts/core`, this single field which uses literal types is named "\_tag" (but you can use any name when defining your unions).
+
+Furthermore, `Either` is a "polymorphic" data type, that is, it makes use of a feature of TypeScript named ["Generics"](https://www.typescriptlang.org/docs/handbook/2/generics.html), meaning that the `Either` data type is a container that can hold any type.
 
 Here's the complete definition of the `Either` type:
 
 ```ts
+// Holds the information for a failure case
 export type Left<E> = {
+  // Discriminating field used to identify the variant
   readonly _tag: "Left";
+  // The actual error
   readonly left: E;
 };
 
+// Holds the result of a successful computation
 export type Right<A> = {
+  // Discriminating field used to identify the variant
   readonly _tag: "Right";
+  // The actual value
   readonly right: A;
 };
 
 export type Either<E, A> = Left<E> | Right<A>;
 ```
+
+The `Either` data type is defined as a union of two other types, `Left` and `Right`, that represent the two possible outcomes of a computation: a failure or a success.
+
+The type parameters `E` and `A` are used to specify the type of the failure value and the success value that the `Either` holds respectively.
+
+The `_tag` field is used to distinguish between the two variants, `Left` and `Right`.
 
 # Using `Either`
 
@@ -39,6 +55,8 @@ import { left, right } from "@fp-ts/core/Either";
 const success: Either<string, number> = right(1);
 const failure: Either<string, number> = left("error message");
 ```
+
+Let's summarize the two cases in a table:
 
 **Cheat sheet** (constructors)
 
@@ -52,32 +70,32 @@ const failure: Either<string, number> = left("error message");
 You can also use the `fromOption` function to convert an `Option` to an `Either`.
 
 ```ts
-import { pipe } from "@fp-ts/core/Function";
 import { fromOption } from "@fp-ts/core/Either";
 import { none, some } from "@fp-ts/core/Option";
 
-const success: Either<string, number> = pipe(
+const success: Either<string, number> = fromOption(
   some(1),
-  fromOption("error message")
+  () => "error message"
 );
-const failure: Either<string, number> = pipe(
+const failure: Either<string, number> = fromOption(
   none(),
-  fromOption("error message")
+  () => "error message"
 );
 ```
 
-The `fromOption` function requires an argument because it needs to know what value to use for the `Left` variant of the `Either` type when given a `None`. In the example, the argument "error message" is used as the value for the `Left` variant when `None` is encountered. This allows `Either` to provide more information about why a failure occurred.
+The `fromOption` function requires a second argument because it needs to know what value to use for the `Left` variant of the `Either` type when given a `None`. In the example, the argument "error message" is used as the value for the `Left` variant when `None` is encountered. This allows `Either` to provide more information about why a failure occurred.
 
 **Cheat sheet** (conversions)
 
 | Name           | Given                                | To                 | Note                |
 | -------------- | ------------------------------------ | ------------------ | ------------------- |
-| `toRefinement` | `A => Either<E, B>`                  | `Refinement<A, B>` |                     |
-| `fromIterable` | `Iterable<A>`, `onEmpty: LazyArg<E>` | `Either<E, A>`     |                     |
 | `fromOption`   | `Option<A>`, `onNone: LazyArg<E>`    | `Either<E, A>`     |                     |
 | `toOption`     | `Either<E, A>`                       | `Option<A>`        |                     |
 | `getRight`     | `Either<E, A>`                       | `Option<A>`        | alias of `toOption` |
 | `getLeft`      | `Either<E, A>`                       | `Option<E>`        |                     |
+| `toRefinement` | `A => Either<E, B>`                  | `Refinement<A, B>` |                     |
+| `fromIterable` | `Iterable<A>`, `onEmpty: LazyArg<E>` | `Either<E, A>`     |                     |
+| `toArray`      | `Either<E, A>`                       | `Array<A>`         |                     |
 
 # Working with `Either`
 

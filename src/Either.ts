@@ -17,7 +17,7 @@ import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
-import type * as foldable from "@fp-ts/core/typeclass/Foldable"
+import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -207,11 +207,10 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
 /**
  * @example
  * import * as E from '@fp-ts/core/Either'
- * import { pipe } from '@fp-ts/core/Function'
  * import * as O from '@fp-ts/core/Option'
  *
- * assert.deepStrictEqual(pipe(O.some(1), E.fromOption(() => 'error')), E.right(1))
- * assert.deepStrictEqual(pipe(O.none(), E.fromOption(() => 'error')), E.left('error'))
+ * assert.deepStrictEqual(E.fromOption(O.some(1), () => 'error'), E.right(1))
+ * assert.deepStrictEqual(E.fromOption(O.none(), () => 'error'), E.left('error'))
  *
  * @category conversions
  * @since 1.0.0
@@ -774,6 +773,24 @@ const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
 export const Foldable: foldable.Foldable<EitherTypeLambda> = {
   reduce
 }
+
+/**
+ * Transforms an `Either` into an `Array`.
+ * If the input is `Left`, an empty array is returned.
+ * If the input is `Right`, the value is wrapped in an array.
+ *
+ * @param self - The `Either` to convert to an array.
+ *
+ * @example
+ * import { right, left, toArray } from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(toArray(right(1)), [1])
+ * assert.deepStrictEqual(toArray(left("error")), [])
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const toArray: <E, A>(self: Either<E, A>) => Array<A> = foldable.toArray(Foldable)
 
 /**
  * Takes two functions and an `Either` value, if the value is a `Left` the inner value is applied to the first function,

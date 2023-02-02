@@ -34,6 +34,7 @@ Added in v1.0.0
   - [fromIterable](#fromiterable)
   - [getLeft](#getleft)
   - [getRight](#getright)
+  - [toArray](#toarray)
   - [toEither](#toeither)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -59,7 +60,6 @@ Added in v1.0.0
 - [folding](#folding)
   - [Foldable](#foldable)
   - [reduceCompact](#reducecompact)
-  - [toArray](#toarray)
 - [guards](#guards)
   - [isNone](#isnone)
   - [isOption](#isoption)
@@ -442,6 +442,29 @@ assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
 
 Added in v1.0.0
 
+## toArray
+
+Transforms an `Option` into an `Array`.
+If the input is `None`, an empty array is returned.
+If the input is `Some`, the value is wrapped in an array.
+
+**Signature**
+
+```ts
+export declare const toArray: <A>(self: Option<A>) => A[]
+```
+
+**Example**
+
+```ts
+import { some, none, toArray } from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(toArray(some(1)), [1])
+assert.deepStrictEqual(toArray(none()), [])
+```
+
+Added in v1.0.0
+
 ## toEither
 
 Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
@@ -810,29 +833,6 @@ assert.deepStrictEqual(
   ),
   3
 )
-```
-
-Added in v1.0.0
-
-## toArray
-
-Transforms an `Option` into an `Array`.
-If the input is `None`, an empty array is returned.
-If the input is `Some`, the value is wrapped in an array.
-
-**Signature**
-
-```ts
-export declare const toArray: <A>(self: Option<A>) => A[]
-```
-
-**Example**
-
-```ts
-import { some, none, toArray } from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(toArray(some(1)), [1])
-assert.deepStrictEqual(toArray(none()), [])
 ```
 
 Added in v1.0.0
