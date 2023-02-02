@@ -19,7 +19,8 @@ export interface Monoid<A> extends Semigroup<A> {
  * @since 1.0.0
  */
 export const fromSemigroup = <A>(S: Semigroup<A>, empty: Monoid<A>["empty"]): Monoid<A> => ({
-  ...S,
+  combine: S.combine,
+  combineMany: S.combineMany,
   empty,
   combineAll: collection => S.combineMany(empty, collection)
 })
@@ -56,11 +57,7 @@ export const reverse = <A>(M: Monoid<A>): Monoid<A> => fromSemigroup(semigroup.r
  * @category instances
  * @since 1.0.0
  */
-export const string: Monoid<string> = {
-  ...semigroup.string,
-  combineAll: (collection) => semigroup.string.combineMany("", collection),
-  empty: ""
-}
+export const string: Monoid<string> = fromSemigroup(semigroup.string, "")
 
 /**
  * `number` monoid under addition.
@@ -70,11 +67,7 @@ export const string: Monoid<string> = {
  * @category instances
  * @since 1.0.0
  */
-export const numberSum: Monoid<number> = {
-  ...semigroup.numberSum,
-  combineAll: (collection) => semigroup.numberSum.combineMany(0, collection),
-  empty: 0
-}
+export const numberSum: Monoid<number> = fromSemigroup(semigroup.numberSum, 0)
 
 /**
  * `number` monoid under multiplication.
@@ -84,11 +77,7 @@ export const numberSum: Monoid<number> = {
  * @category instances
  * @since 1.0.0
  */
-export const numberMultiply: Monoid<number> = {
-  ...semigroup.numberMultiply,
-  combineAll: (collection) => semigroup.numberMultiply.combineMany(1, collection),
-  empty: 1
-}
+export const numberMultiply: Monoid<number> = fromSemigroup(semigroup.numberMultiply, 1)
 
 /**
  * `number` monoid under addition.
@@ -98,11 +87,7 @@ export const numberMultiply: Monoid<number> = {
  * @category instances
  * @since 1.0.0
  */
-export const bigintSum: Monoid<bigint> = {
-  ...semigroup.bigintSum,
-  combineAll: (collection) => semigroup.bigintSum.combineMany(0n, collection),
-  empty: 0n
-}
+export const bigintSum: Monoid<bigint> = fromSemigroup(semigroup.bigintSum, 0n)
 
 /**
  * `bigint` monoid under multiplication.
@@ -112,11 +97,7 @@ export const bigintSum: Monoid<bigint> = {
  * @category instances
  * @since 1.0.0
  */
-export const bigintMultiply: Monoid<bigint> = {
-  ...semigroup.bigintMultiply,
-  combineAll: (collection) => semigroup.bigintMultiply.combineMany(1n, collection),
-  empty: 1n
-}
+export const bigintMultiply: Monoid<bigint> = fromSemigroup(semigroup.bigintMultiply, 1n)
 
 /**
  * `boolean` monoid under conjunction.
@@ -126,11 +107,7 @@ export const bigintMultiply: Monoid<bigint> = {
  * @category instances
  * @since 1.0.0
  */
-export const booleanAll: Monoid<boolean> = {
-  ...semigroup.booleanAll,
-  combineAll: (collection) => semigroup.booleanAll.combineMany(true, collection),
-  empty: true
-}
+export const booleanAll: Monoid<boolean> = fromSemigroup(semigroup.booleanAll, true)
 
 /**
  * `boolean` monoid under disjunction.
@@ -140,11 +117,7 @@ export const booleanAll: Monoid<boolean> = {
  * @category instances
  * @since 1.0.0
  */
-export const booleanAny: Monoid<boolean> = {
-  ...semigroup.booleanAny,
-  combineAll: (collection) => semigroup.booleanAny.combineMany(false, collection),
-  empty: false
-}
+export const booleanAny: Monoid<boolean> = fromSemigroup(semigroup.booleanAny, false)
 
 /**
  * This function creates and returns a new `Monoid` for a tuple of values based on the given `Monoid`s for each element in the tuple.
@@ -171,15 +144,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * @category combinators
  * @since 1.0.0
  */
-export const array = <A>(): Monoid<Array<A>> => {
-  const S = semigroup.array<A>()
-  return ({
-    combine: S.combine,
-    combineMany: S.combineMany,
-    combineAll: (collection) => S.combineMany([], collection),
-    empty: []
-  })
-}
+export const array = <A>(): Monoid<Array<A>> => fromSemigroup(semigroup.array<A>(), [])
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
