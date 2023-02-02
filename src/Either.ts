@@ -16,6 +16,7 @@ import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -232,11 +233,12 @@ export const getEquivalence = <E, A>(
   EE: Equivalence<E>,
   EA: Equivalence<A>
 ): Equivalence<Either<E, A>> =>
-  (x, y) =>
+  equivalence.make((x, y) =>
     x === y ||
     (isLeft(x) ?
       isLeft(y) && EE(x.left, y.left) :
       isRight(y) && EA(x.right, y.right))
+  )
 
 /**
  * @category instances

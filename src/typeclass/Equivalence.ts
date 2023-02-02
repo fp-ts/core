@@ -5,6 +5,7 @@
  *
  * @since 1.0.0
  */
+import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import type { ReadonlyRecord } from "@fp-ts/core/ReadonlyRecord"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
@@ -21,7 +22,8 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Equivalence<A> {
-  (x: A, y: A): boolean
+  (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 }
 
 /**
@@ -33,12 +35,20 @@ export interface EquivalenceTypeLambda extends TypeLambda {
 }
 
 /**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const make = <A>(
+  equivalent: (self: A, that: A) => boolean
+): Equivalence<A> => dual(2, (self, that) => self === that || equivalent(self, that))
+
+/**
  * Return an `Equivalence` that uses strict equality (===) to compare values
  *
  * @since 1.0.0
  * @category constructors
  */
-export const strict: <A>() => Equivalence<A> = () => (x, y) => x === y
+export const strict: <A>() => Equivalence<A> = () => dual(2, (x, y) => x === y)
 
 /**
  * @category instances
@@ -80,7 +90,7 @@ export const symbol: Equivalence<symbol> = strict()
 export const tuple = <A extends ReadonlyArray<any>>(
   ...equivalences: { readonly [K in keyof A]: Equivalence<A[K]> }
 ): Equivalence<Readonly<A>> =>
-  (x, y) => equivalences.every((equivalence, i) => equivalence(x[i], y[i]))
+  make((x, y) => equivalences.every((equivalence, i) => equivalence(x[i], y[i])))
 
 /**
  * Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `ReadonlyArray<A>`.
@@ -93,7 +103,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
 export const array = <A>(
   equivalence: Equivalence<A>
 ): Equivalence<ReadonlyArray<A>> =>
-  (x, y) => x.length === y.length && x.every((a, i) => equivalence(a, y[i]))
+  make((x, y) => x.length === y.length && x.every((a, i) => equivalence(a, y[i])))
 
 /**
  * Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct
@@ -105,14 +115,14 @@ export const array = <A>(
 export const struct = <A>(
   equivalences: { [K in keyof A]: Equivalence<A[K]> }
 ): Equivalence<{ readonly [K in keyof A]: A[K] }> =>
-  (x, y) => {
+  make((x, y) => {
     for (const key in equivalences) {
       if (!equivalences[key](x[key], y[key])) {
         return false
       }
     }
     return true
-  }
+  })
 
 /**
  * Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `{ readonly [x: string]: A }`.
@@ -125,7 +135,7 @@ export const struct = <A>(
 export const record = <A>(
   equivalence: Equivalence<A>
 ): Equivalence<ReadonlyRecord<A>> =>
-  (x, y) => {
+  make((x, y) => {
     const keys = Object.keys(x)
     if (Object.keys(y).length !== keys.length) {
       return false
@@ -136,7 +146,7 @@ export const record = <A>(
       }
     }
     return true
-  }
+  })
 
 /**
  * @category instances
@@ -144,9 +154,9 @@ export const record = <A>(
  */
 export const getSemigroup = <A>(): Semigroup<Equivalence<A>> =>
   semigroup.make(
-    (self, that) => (x, y) => self(x, y) && that(x, y),
+    (self, that) => make((x, y) => self(x, y) && that(x, y)),
     (self, collection) =>
-      (x, y) => {
+      make((x, y) => {
         if (!self(x, y)) {
           return false
         }
@@ -156,10 +166,10 @@ export const getSemigroup = <A>(): Semigroup<Equivalence<A>> =>
           }
         }
         return true
-      }
+      })
   )
 
-const empty: Equivalence<unknown> = () => true
+const empty: Equivalence<unknown> = dual(2, (_x, _y) => true)
 
 /**
  * @category instances
@@ -173,7 +183,7 @@ export const getMonoid = <A>(): Monoid<Equivalence<A>> =>
  * @since 1.0.0
  */
 export const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda> = contravariant.make(
-  <A, B>(self: Equivalence<A>, f: (b: B) => A): Equivalence<B> => (x, y) => self(f(x), f(y))
+  <A, B>(self: Equivalence<A>, f: (b: B) => A): Equivalence<B> => make((x, y) => self(f(x), f(y)))
 )
 
 /**
@@ -182,7 +192,7 @@ export const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda> =
  * @since 1.0.0
  */
 export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Equivalence<A>): Equivalence<B> => (x, y) => self(f(x), f(y))
+  (self: Equivalence<A>): Equivalence<B> => make((x, y) => self(f(x), f(y)))
 
 /**
  * @category instances

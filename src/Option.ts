@@ -17,6 +17,7 @@ import * as compactable from "@fp-ts/core/typeclass/Compactable"
 import type * as coproduct_ from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
@@ -1420,7 +1421,9 @@ export const traverseTap: <F extends TypeLambda>(
  * @since 1.0.0
  */
 export const getEquivalence = <A>(E: Equivalence<A>): Equivalence<Option<A>> =>
-  (x, y) => x === y || (isNone(x) ? isNone(y) : isNone(y) ? false : E(x.value, y.value))
+  equivalence.make((x, y) =>
+    x === y || (isNone(x) ? isNone(y) : isNone(y) ? false : E(x.value, y.value))
+  )
 
 // -------------------------------------------------------------------------------------
 // sorting

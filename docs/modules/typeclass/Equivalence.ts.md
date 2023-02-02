@@ -23,6 +23,7 @@ Added in v1.0.0
   - [struct](#struct)
   - [tuple](#tuple)
 - [constructors](#constructors)
+  - [make](#make)
   - [strict](#strict)
 - [instances](#instances)
   - [Contravariant](#contravariant)
@@ -114,6 +115,16 @@ export declare const tuple: <A extends readonly any[]>(
 Added in v1.0.0
 
 # constructors
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <A>(equivalent: (self: A, that: A) => boolean) => Equivalence<A>
+```
+
+Added in v1.0.0
 
 ## strict
 
@@ -247,7 +258,8 @@ Added in v1.0.0
 
 ```ts
 export interface Equivalence<A> {
-  (x: A, y: A): boolean
+  (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 }
 ```
 
