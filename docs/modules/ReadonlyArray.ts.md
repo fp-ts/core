@@ -442,7 +442,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filterMap: <A, B>(f: (a: A) => Option<B>) => (self: Iterable<A>) => B[]
+export declare const filterMap: {
+  <A, B>(f: (a: A) => Option<B>): (self: Iterable<A>) => B[]
+  <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): B[]
+}
 ```
 
 Added in v1.0.0

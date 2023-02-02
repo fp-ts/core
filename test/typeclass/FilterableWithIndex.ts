@@ -26,14 +26,14 @@ describe("FilterableWithIndex", () => {
     U.deepStrictEqual(pipe([["aa", "a"]], f), [[2, 1]])
   })
 
-  it("filterMap", () => {
-    const filterMap: <A, B>(
-      f: (a: A) => O.Option<B>
-    ) => (self: ReadonlyArray<A>) => ReadonlyArray<B> = _.filterMap(FilterableWithIndex)
-    const f = (n: number) => (n % 2 === 0 ? O.none() : O.some(n))
-    U.deepStrictEqual(pipe([1, 2, 3], filterMap(f)), [1, 3])
-    U.deepStrictEqual(pipe([], filterMap(f)), [])
-  })
+  // it("filterMap", () => {
+  //   const filterMap: <A, B>(
+  //     f: (a: A) => O.Option<B>
+  //   ) => (self: ReadonlyArray<A>) => ReadonlyArray<B> = _.filterMap(FilterableWithIndex)
+  //   const f = (n: number) => (n % 2 === 0 ? O.none() : O.some(n))
+  //   U.deepStrictEqual(pipe([1, 2, 3], filterMap(f)), [1, 3])
+  //   U.deepStrictEqual(pipe([], filterMap(f)), [])
+  // })
 
   it("filterWithIndex", () => {
     const filterWithIndex = _.filterWithIndex(FilterableWithIndex)

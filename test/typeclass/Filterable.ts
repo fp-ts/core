@@ -8,11 +8,11 @@ import * as U from "../util"
 describe("Filterable", () => {
   it("filterMapComposition", () => {
     const filterMap = _.filterMapComposition(RA.Covariant, O.Filterable)
-    const f = filterMap((s: string) => s.length > 1 ? O.some(s.length) : O.none())
-    U.deepStrictEqual(pipe([], f), [])
-    U.deepStrictEqual(pipe([O.none()], f), [O.none()])
-    U.deepStrictEqual(pipe([O.some("a")], f), [O.none()])
-    U.deepStrictEqual(pipe([O.some("aa")], f), [O.some(2)])
+    const f = (s: string) => s.length > 1 ? O.some(s.length) : O.none()
+    U.deepStrictEqual(filterMap([], f), [])
+    U.deepStrictEqual(filterMap([O.none()], f), [O.none()])
+    U.deepStrictEqual(filterMap([O.some("a")], f), [O.none()])
+    U.deepStrictEqual(filterMap([O.some("aa")], f), [O.some(2)])
   })
 
   it("filter", () => {
