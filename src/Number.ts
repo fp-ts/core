@@ -35,8 +35,8 @@ export const sum: {
   (that: number): (self: number) => number
   (self: number, that: number): number
 } = dual<
-  (self: number, that: number) => number,
-  (that: number) => (self: number) => number
+  (that: number) => (self: number) => number,
+  (self: number, that: number) => number
 >(2, semigroup.numberSum.combine)
 
 /**
@@ -54,8 +54,8 @@ export const multiply: {
   (that: number): (self: number) => number
   (self: number, that: number): number
 } = dual<
-  (self: number, that: number) => number,
-  (that: number) => (self: number) => number
+  (that: number) => (self: number) => number,
+  (self: number, that: number) => number
 >(2, semigroup.numberMultiply.combine)
 
 /**
@@ -73,8 +73,8 @@ export const subtract: {
   (that: number): (self: number) => number
   (self: number, that: number): number
 } = dual<
-  (self: number, that: number) => number,
-  (that: number) => (self: number) => number
+  (that: number) => (self: number) => number,
+  (self: number, that: number) => number
 >(2, (self: number, that: number): number => self - that)
 
 /**
@@ -92,8 +92,8 @@ export const divide: {
   (that: number): (self: number) => number
   (self: number, that: number): number
 } = dual<
-  (self: number, that: number) => number,
-  (that: number) => (self: number) => number
+  (that: number) => (self: number) => number,
+  (self: number, that: number) => number
 >(2, (self: number, that: number): number => self / that)
 
 /**

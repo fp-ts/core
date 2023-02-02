@@ -48,6 +48,10 @@ Added in v1.0.0
 export declare const filter: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
+    self: Kind<F, R, O, E, C>
+  ) => Kind<F, R, O, E, B>
+  <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
   <R, O, E, C extends A, B extends A, A = C>(self: Kind<F, R, O, E, C>, refinement: (a: A) => a is B): Kind<
     F,
     R,
@@ -56,10 +60,6 @@ export declare const filter: <F extends TypeLambda>(
     B
   >
   <R, O, E, B extends A, A = B>(self: Kind<F, R, O, E, B>, predicate: (a: A) => boolean): Kind<F, R, O, E, B>
-  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
-    self: Kind<F, R, O, E, C>
-  ) => Kind<F, R, O, E, B>
-  <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
 }
 ```
 

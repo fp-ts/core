@@ -147,11 +147,11 @@ export const reverse = <A>(O: Order<A>): Order<A> =>
  * @since 1.0.0
  */
 export const contramap: {
-  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
   <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
 } = dual<
-  <A, B>(self: Order<A>, f: (b: B) => A) => Order<B>,
-  <B, A>(f: (b: B) => A) => (self: Order<A>) => Order<B>
+  <B, A>(f: (b: B) => A) => (self: Order<A>) => Order<B>,
+  <A, B>(self: Order<A>, f: (b: B) => A) => Order<B>
 >(
   2,
   <A, B>(self: Order<A>, f: (b: B) => A): Order<B> =>
@@ -252,12 +252,12 @@ export const Product: product.Product<OrderTypeLambda> = {
  * @since 1.0.0
  */
 export const lessThan = <A>(O: Order<A>): {
-  (self: A, that: A): boolean
   (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 } =>
   dual<
-    (self: A, that: A) => boolean,
-    (that: A) => (self: A) => boolean
+    (that: A) => (self: A) => boolean,
+    (self: A, that: A) => boolean
   >(2, (self: A, that: A) => O.compare(self, that) === -1)
 
 /**
@@ -266,12 +266,12 @@ export const lessThan = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const greaterThan = <A>(O: Order<A>): {
-  (self: A, that: A): boolean
   (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 } =>
   dual<
-    (self: A, that: A) => boolean,
-    (that: A) => (self: A) => boolean
+    (that: A) => (self: A) => boolean,
+    (self: A, that: A) => boolean
   >(2, (self: A, that: A) => O.compare(self, that) === 1)
 
 /**
@@ -280,12 +280,12 @@ export const greaterThan = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const lessThanOrEqualTo = <A>(O: Order<A>): {
-  (self: A, that: A): boolean
   (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 } =>
   dual<
-    (self: A, that: A) => boolean,
-    (that: A) => (self: A) => boolean
+    (that: A) => (self: A) => boolean,
+    (self: A, that: A) => boolean
   >(2, (self: A, that: A) => O.compare(self, that) !== 1)
 
 /**
@@ -294,12 +294,12 @@ export const lessThanOrEqualTo = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const greaterThanOrEqualTo = <A>(O: Order<A>): {
-  (self: A, that: A): boolean
   (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 } =>
   dual<
-    (self: A, that: A) => boolean,
-    (that: A) => (self: A) => boolean
+    (that: A) => (self: A) => boolean,
+    (self: A, that: A) => boolean
   >(2, (self: A, that: A) => O.compare(self, that) !== -1)
 
 /**
@@ -308,12 +308,12 @@ export const greaterThanOrEqualTo = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const min = <A>(O: Order<A>): {
-  (self: A, that: A): A
   (that: A): (self: A) => A
+  (self: A, that: A): A
 } =>
   dual<
-    (self: A, that: A) => A,
-    (that: A) => (self: A) => A
+    (that: A) => (self: A) => A,
+    (self: A, that: A) => A
   >(2, (self: A, that: A) => self === that || O.compare(self, that) < 1 ? self : that)
 
 /**
@@ -322,12 +322,12 @@ export const min = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const max = <A>(O: Order<A>): {
-  (self: A, that: A): A
   (that: A): (self: A) => A
+  (self: A, that: A): A
 } =>
   dual<
-    (self: A, that: A) => A,
-    (that: A) => (self: A) => A
+    (that: A) => (self: A) => A,
+    (self: A, that: A) => A
   >(2, (self: A, that: A) => self === that || O.compare(self, that) > -1 ? self : that)
 
 /**
@@ -336,12 +336,12 @@ export const max = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const clamp = <A>(O: Order<A>): {
-  (a: A, minimum: A, maximum: A): A
   (minimum: A, maximum: A): (a: A) => A
+  (a: A, minimum: A, maximum: A): A
 } =>
   dual<
-    (a: A, minimum: A, maximum: A) => A,
-    (minimum: A, maximum: A) => (a: A) => A
+    (minimum: A, maximum: A) => (a: A) => A,
+    (a: A, minimum: A, maximum: A) => A
   >(
     3,
     (a: A, minimum: A, maximum: A): A => min(O)(maximum, max(O)(minimum, a))
@@ -353,12 +353,12 @@ export const clamp = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const between = <A>(O: Order<A>): {
-  (a: A, minimum: A, maximum: A): boolean
   (minimum: A, maximum: A): (a: A) => boolean
+  (a: A, minimum: A, maximum: A): boolean
 } =>
   dual<
-    (a: A, minimum: A, maximum: A) => boolean,
-    (minimum: A, maximum: A) => (a: A) => boolean
+    (minimum: A, maximum: A) => (a: A) => boolean,
+    (a: A, minimum: A, maximum: A) => boolean
   >(
     3,
     (a: A, minimum: A, maximum: A): boolean =>

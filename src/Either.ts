@@ -249,11 +249,11 @@ export const getEquivalence = <E, A>(
  * @since 1.0.0
  */
 export const map: {
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
   <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
 } = dual<
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B) => Either<E, B>,
-  <A, B>(f: (a: A) => B) => <E>(self: Either<E, A>) => Either<E, B>
+  <A, B>(f: (a: A) => B) => <E>(self: Either<E, A>) => Either<E, B>,
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B) => Either<E, B>
 >(
   2,
   <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B> =>
@@ -328,11 +328,11 @@ export const asUnit: <E, _>(self: Either<E, _>) => Either<E, void> = covariant.a
  * @since 1.0.0
  */
 export const bimap: {
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
   <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: Either<E, A>) => Either<G, B>
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
 } = dual<
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B) => Either<G, B>,
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Either<E, A>) => Either<G, B>
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Either<E, A>) => Either<G, B>,
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B) => Either<G, B>
 >(
   3,
   <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B> =>
@@ -729,11 +729,11 @@ export const getFirstRightSemigroup: <E, A>() => Semigroup<Either<E, A>> = semiC
  * @since 1.0.0
  */
 export const getOrElse: {
-  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B
   <E, B>(onLeft: (e: E) => B): <A>(self: Either<E, A>) => B | A
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B
 } = dual<
-  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B) => A | B,
-  <E, B>(onLeft: (e: E) => B) => <A>(self: Either<E, A>) => A | B
+  <E, B>(onLeft: (e: E) => B) => <A>(self: Either<E, A>) => A | B,
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B) => A | B
 >(
   2,
   <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B =>
@@ -871,11 +871,11 @@ export const match = <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C)
  * @since 1.0.0
  */
 export const fromNullable: {
-  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>>
   <A, E>(onNullable: (a: A) => E): (a: A) => Either<E, NonNullable<A>>
+  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>>
 } = dual<
-  <A, E>(a: A, onNullable: (a: A) => E) => Either<E, NonNullable<A>>,
-  <A, E>(onNullable: (a: A) => E) => (a: A) => Either<E, NonNullable<A>>
+  <A, E>(onNullable: (a: A) => E) => (a: A) => Either<E, NonNullable<A>>,
+  <A, E>(a: A, onNullable: (a: A) => E) => Either<E, NonNullable<A>>
 >(
   2,
   <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>> =>

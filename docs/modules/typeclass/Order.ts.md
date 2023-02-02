@@ -250,8 +250,8 @@ Test whether a value is between a minimum and a maximum (inclusive).
 
 ```ts
 export declare const between: <A>(O: Order<A>) => {
-  (a: A, minimum: A, maximum: A): boolean
   (minimum: A, maximum: A): (a: A) => boolean
+  (a: A, minimum: A, maximum: A): boolean
 }
 ```
 
@@ -265,8 +265,8 @@ Clamp a value between a minimum and a maximum.
 
 ```ts
 export declare const clamp: <A>(O: Order<A>) => {
-  (a: A, minimum: A, maximum: A): A
   (minimum: A, maximum: A): (a: A) => A
+  (a: A, minimum: A, maximum: A): A
 }
 ```
 
@@ -278,8 +278,8 @@ Added in v1.0.0
 
 ```ts
 export declare const contramap: {
-  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
   <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
 }
 ```
 
@@ -292,7 +292,7 @@ Test whether one value is _strictly greater than_ another.
 **Signature**
 
 ```ts
-export declare const greaterThan: <A>(O: Order<A>) => { (self: A, that: A): boolean; (that: A): (self: A) => boolean }
+export declare const greaterThan: <A>(O: Order<A>) => { (that: A): (self: A) => boolean; (self: A, that: A): boolean }
 ```
 
 Added in v1.0.0
@@ -305,8 +305,8 @@ Test whether one value is _non-strictly greater than_ another.
 
 ```ts
 export declare const greaterThanOrEqualTo: <A>(O: Order<A>) => {
-  (self: A, that: A): boolean
   (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 }
 ```
 
@@ -319,7 +319,7 @@ Test whether one value is _strictly less than_ another.
 **Signature**
 
 ```ts
-export declare const lessThan: <A>(O: Order<A>) => { (self: A, that: A): boolean; (that: A): (self: A) => boolean }
+export declare const lessThan: <A>(O: Order<A>) => { (that: A): (self: A) => boolean; (self: A, that: A): boolean }
 ```
 
 Added in v1.0.0
@@ -332,8 +332,8 @@ Test whether one value is _non-strictly less than_ another.
 
 ```ts
 export declare const lessThanOrEqualTo: <A>(O: Order<A>) => {
-  (self: A, that: A): boolean
   (that: A): (self: A) => boolean
+  (self: A, that: A): boolean
 }
 ```
 
@@ -346,7 +346,7 @@ Take the maximum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const max: <A>(O: Order<A>) => { (self: A, that: A): A; (that: A): (self: A) => A }
+export declare const max: <A>(O: Order<A>) => { (that: A): (self: A) => A; (self: A, that: A): A }
 ```
 
 Added in v1.0.0
@@ -358,7 +358,7 @@ Take the minimum of two values. If they are considered equal, the first argument
 **Signature**
 
 ```ts
-export declare const min: <A>(O: Order<A>) => { (self: A, that: A): A; (that: A): (self: A) => A }
+export declare const min: <A>(O: Order<A>) => { (that: A): (self: A) => A; (self: A, that: A): A }
 ```
 
 Added in v1.0.0

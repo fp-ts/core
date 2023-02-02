@@ -691,8 +691,8 @@ Returns the wrapped value if it's a `Right` or a default value if is a `Left`.
 
 ```ts
 export declare const getOrElse: {
-  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B
   <E, B>(onLeft: (e: E) => B): <A>(self: Either<E, A>) => B | A
+  <E, A, B>(self: Either<E, A>, onLeft: (e: E) => B): A | B
 }
 ```
 
@@ -969,8 +969,8 @@ the provided default as a `Left`.
 
 ```ts
 export declare const fromNullable: {
-  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>>
   <A, E>(onNullable: (a: A) => E): (a: A) => Either<E, NonNullable<A>>
+  <A, E>(a: A, onNullable: (a: A) => E): Either<E, NonNullable<A>>
 }
 ```
 
@@ -1136,8 +1136,8 @@ the specified pair of functions, `f` and `g`.
 
 ```ts
 export declare const bimap: {
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
   <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: Either<E, A>) => Either<G, B>
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
 }
 ```
 
@@ -1164,8 +1164,8 @@ Maps the `Right` side of an `Either` value to a new `Either` value.
 
 ```ts
 export declare const map: {
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
   <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
 }
 ```
 

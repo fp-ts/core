@@ -199,11 +199,11 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
  * @since 1.0.0
  */
 export const match: {
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
   <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
 } = dual<
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C) => B | C,
-  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C
+  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C,
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C) => B | C
 >(
   3,
   <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C =>
@@ -342,11 +342,11 @@ export const toEither: {
  * @since 1.0.0
  */
 export const getOrElse: {
-  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
   <B>(onNone: LazyArg<B>): <A>(self: Option<A>) => B | A
+  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
 } = dual<
-  <A, B>(self: Option<A>, onNone: LazyArg<B>) => A | B,
-  <B>(onNone: LazyArg<B>) => <A>(self: Option<A>) => A | B
+  <B>(onNone: LazyArg<B>) => <A>(self: Option<A>) => A | B,
+  <A, B>(self: Option<A>, onNone: LazyArg<B>) => A | B
 >(
   2,
   <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B => isNone(self) ? onNone() : self.value
@@ -396,11 +396,11 @@ export const getOrElse: {
  * @since 1.0.0
  */
 export const orElse: {
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
   <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<B | A>
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
 } = dual<
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<A | B>,
-  <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<A | B>
+  <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<A | B>,
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<A | B>
 >(
   2,
   <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B> => isNone(self) ? that() : self
@@ -420,13 +420,11 @@ export const orElse: {
  * @since 1.0.0
  */
 export const orElseEither: {
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
   <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<Either<A, B>>
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
 } = dual<
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<Either<A, B>>,
-  <B>(
-    that: LazyArg<Option<B>>
-  ) => <A>(self: Option<A>) => Option<Either<A, B>>
+  <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<Either<A, B>>,
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<Either<A, B>>
 >(
   2,
   <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>> =>
@@ -602,11 +600,11 @@ export const getOrThrow = <A>(self: Option<A>): A => {
  * @since 1.0.0
  */
 export const map: {
-  <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
   <A, B>(f: (a: A) => B): (self: Option<A>) => Option<B>
+  <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
 } = dual<
-  <A, B>(self: Option<A>, f: (a: A) => B) => Option<B>,
-  <A, B>(f: (a: A) => B) => (self: Option<A>) => Option<B>
+  <A, B>(f: (a: A) => B) => (self: Option<A>) => Option<B>,
+  <A, B>(self: Option<A>, f: (a: A) => B) => Option<B>
 >(
   2,
   <A, B>(self: Option<A>, f: (a: A) => B): Option<B> => isNone(self) ? none() : some(f(self.value))
@@ -702,11 +700,11 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const flatMap: {
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
 } = dual<
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>,
-  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>
+  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>,
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>
 >(
   2,
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B> =>
@@ -734,11 +732,11 @@ export const flatMap: {
  * @since 1.0.0
  */
 export const flatMapEither: {
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
   <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
 } = dual<
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>,
-  <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>
+  <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>,
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>
 >(
   2,
   <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> =>
@@ -787,11 +785,11 @@ export const flatMapEither: {
  * @since 1.0.0
  */
 export const flatMapNullable: {
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
   <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
 } = dual<
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined) => Option<NonNullable<B>>,
-  <A, B>(f: (a: A) => B | null | undefined) => (self: Option<A>) => Option<NonNullable<B>>
+  <A, B>(f: (a: A) => B | null | undefined) => (self: Option<A>) => Option<NonNullable<B>>,
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined) => Option<NonNullable<B>>
 >(
   2,
   <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>> =>
@@ -893,13 +891,11 @@ export const tap: {
  * @since 1.0.0
  */
 export const inspectSome: {
-  <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
   <A>(onSome: (a: A) => void): (self: Option<A>) => Option<A>
+  <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
 } = dual<
-  <A>(self: Option<A>, onSome: (a: A) => void) => Option<A>,
-  <A>(
-    onSome: (a: A) => void
-  ) => (self: Option<A>) => Option<A>
+  <A>(onSome: (a: A) => void) => (self: Option<A>) => Option<A>,
+  <A>(self: Option<A>, onSome: (a: A) => void) => Option<A>
 >(2, <A>(self: Option<A>, onSome: (a: A) => void): Option<A> => {
   if (isSome(self)) {
     onSome(self.value)
@@ -918,11 +914,11 @@ export const inspectSome: {
  * @since 1.0.0
  */
 export const inspectNone: {
-  <A>(self: Option<A>, onNone: () => void): Option<A>
   (onNone: () => void): <A>(self: Option<A>) => Option<A>
+  <A>(self: Option<A>, onNone: () => void): Option<A>
 } = dual<
-  <A>(self: Option<A>, onNone: () => void) => Option<A>,
-  (onNone: () => void) => <A>(self: Option<A>) => Option<A>
+  (onNone: () => void) => <A>(self: Option<A>) => Option<A>,
+  <A>(self: Option<A>, onNone: () => void) => Option<A>
 >(2, <A>(self: Option<A>, onNone: () => void): Option<A> => {
   if (isNone(self)) {
     onNone()
@@ -1226,11 +1222,11 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
  * @since 1.0.0
  */
 export const reduceCompact: {
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
   <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
 } = dual<
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B) => B,
-  <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B
+  <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B,
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B) => B
 >(
   3,
   <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B => {
@@ -1305,11 +1301,11 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
  * @since 1.0.0
  */
 export const filterMap: {
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
 } = dual<
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>,
-  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>
+  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>,
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>
 >(
   2,
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B> =>
@@ -1354,19 +1350,19 @@ export const filter: {
 export const traverse = <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ): {
-  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
 } =>
   dual<
     <A, R, O, E, B>(
+      f: (a: A) => Kind<F, R, O, E, B>
+    ) => (self: Option<A>) => Kind<F, R, O, E, Option<B>>,
+    <A, R, O, E, B>(
       self: Option<A>,
       f: (a: A) => Kind<F, R, O, E, B>
-    ) => Kind<F, R, O, E, Option<B>>,
-    <A, R, O, E, B>(
-      f: (a: A) => Kind<F, R, O, E, B>
-    ) => (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+    ) => Kind<F, R, O, E, Option<B>>
   >(
     2,
     <A, R, O, E, B>(
@@ -1550,12 +1546,12 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
  * @since 1.0.0
  */
 export const contains = <A>(equivalence: Equivalence<A>): {
-  (self: Option<A>, a: A): boolean
   (a: A): (self: Option<A>) => boolean
+  (self: Option<A>, a: A): boolean
 } =>
   dual<
-    (self: Option<A>, a: A) => boolean,
-    (a: A) => (self: Option<A>) => boolean
+    (a: A) => (self: Option<A>) => boolean,
+    (self: Option<A>, a: A) => boolean
   >(2, (self: Option<A>, a: A): boolean => isNone(self) ? false : equivalence(self.value, a))
 
 /**
@@ -1578,11 +1574,11 @@ export const contains = <A>(equivalence: Equivalence<A>): {
  * @since 1.0.0
  */
 export const exists: {
-  <A>(self: Option<A>, predicate: Predicate<A>): boolean
   <A>(predicate: Predicate<A>): (self: Option<A>) => boolean
+  <A>(self: Option<A>, predicate: Predicate<A>): boolean
 } = dual<
-  <A>(self: Option<A>, predicate: Predicate<A>) => boolean,
-  <A>(predicate: Predicate<A>) => (self: Option<A>) => boolean
+  <A>(predicate: Predicate<A>) => (self: Option<A>) => boolean,
+  <A>(self: Option<A>, predicate: Predicate<A>) => boolean
 >(
   2,
   <A>(self: Option<A>, predicate: Predicate<A>): boolean =>

@@ -1230,8 +1230,8 @@ Added in v1.0.0
 
 ```ts
 export declare const bimap: {
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
   <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: These<E, A>) => These<G, B>
+  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
 }
 ```
 

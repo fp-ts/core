@@ -38,12 +38,12 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
 export const mapLeft = <F extends TypeLambda>(
   F: Bicovariant<F>
 ): {
-  <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A>
   <E, G>(f: (e: E) => G): <R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>
+  <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A>
 } =>
   dual<
-    <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G) => Kind<F, R, O, G, A>,
-    <E, G>(f: (e: E) => G) => <R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>
+    <E, G>(f: (e: E) => G) => <R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>,
+    <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G) => Kind<F, R, O, G, A>
   >(2, <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A> =>
     pipe(self, F.bimap(f, identity)))
 
@@ -55,11 +55,11 @@ export const mapLeft = <F extends TypeLambda>(
 export const map = <F extends TypeLambda>(
   F: Bicovariant<F>
 ): {
-  <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
   <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
 } =>
   dual<
-    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B) => Kind<F, R, O, E, B>,
-    <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+    <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>,
+    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B) => Kind<F, R, O, E, B>
   >(2, <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B> =>
     pipe(self, F.bimap(identity, f)))

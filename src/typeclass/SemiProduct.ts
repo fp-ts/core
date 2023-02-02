@@ -119,16 +119,26 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
  *
  * @since 1.0.0
  */
-export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>): {
+  <R2, O2, E2, B>(
+    that: Kind<F, R2, O2, E2, B>
+  ): <R1, O1, E1, A extends ReadonlyArray<any>>(
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [...A, B]>
+  <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>
+} =>
   dual<
-    <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
-      self: Kind<F, R1, O1, E1, A>,
-      that: Kind<F, R2, O2, E2, B>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>,
     <R2, O2, E2, B>(
       that: Kind<F, R2, O2, E2, B>
     ) => <R1, O1, E1, A extends ReadonlyArray<any>>(
       self: Kind<F, R1, O1, E1, A>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>,
+    <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, B>
     ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>
   >(2, <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
     self: Kind<F, R1, O1, E1, A>,
