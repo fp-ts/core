@@ -575,8 +575,8 @@ Maps the `Left` side of an `Either` value to a new `Either` value.
 
 ```ts
 export declare const mapLeft: {
-  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
   <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
+  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
 }
 ```
 
@@ -1129,15 +1129,12 @@ Added in v1.0.0
 
 ## bimap
 
-Returns an effect whose Left and Right channels have been mapped by
-the specified pair of functions, `f` and `g`.
-
 **Signature**
 
 ```ts
 export declare const bimap: {
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: Either<E, A>) => Either<G, B>
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
+  <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: Either<E1, A>) => Either<E2, B>
+  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B>
 }
 ```
 
