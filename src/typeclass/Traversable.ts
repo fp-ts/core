@@ -76,21 +76,21 @@ export const sequence = <T extends TypeLambda>(
  */
 export const traverseTap = <T extends TypeLambda>(T: Traversable<T>) =>
   <F extends TypeLambda>(F: Applicative<F>): {
+    <A, R, O, E, B>(
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
     <TR, TO, TE, A, R, O, E, B>(
       self: Kind<T, TR, TO, TE, A>,
       f: (a: A) => Kind<F, R, O, E, B>
     ): Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
-    <A, R, O, E, B>(
-      f: (a: A) => Kind<F, R, O, E, B>
-    ): <TR, TO, TE>(self: Kind<T, TR, TO, TE, A>) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
   } =>
     dual<
+      <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => <TR, TO, TE>(
+        self: Kind<T, TR, TO, TE, A>
+      ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>,
       <TR, TO, TE, A, R, O, E, B>(
         self: Kind<T, TR, TO, TE, A>,
         f: (a: A) => Kind<F, R, O, E, B>
-      ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>,
-      <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => <TR, TO, TE>(
-        self: Kind<T, TR, TO, TE, A>
       ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, A>>
     >(2, <TR, TO, TE, A, R, O, E, B>(
       self: Kind<T, TR, TO, TE, A>,

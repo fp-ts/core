@@ -42,6 +42,12 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
 export const filter: <F extends TypeLambda>(
   F: Filterable<F>
 ) => {
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
+    self: Kind<F, R, O, E, C>
+  ) => Kind<F, R, O, E, B>
+  <B extends A, A = B>(
+    predicate: (a: A) => boolean
+  ): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
   <R, O, E, C extends A, B extends A, A = C>(
     self: Kind<F, R, O, E, C>,
     refinement: (a: A) => a is B
@@ -50,18 +56,12 @@ export const filter: <F extends TypeLambda>(
     self: Kind<F, R, O, E, B>,
     predicate: (a: A) => boolean
   ): Kind<F, R, O, E, B>
-  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): <R, O, E>(
-    self: Kind<F, R, O, E, C>
-  ) => Kind<F, R, O, E, B>
-  <B extends A, A = B>(
-    predicate: (a: A) => boolean
-  ): <R, O, E>(self: Kind<F, R, O, E, B>) => Kind<F, R, O, E, B>
 } = <F extends TypeLambda>(Filterable: Filterable<F>) =>
   dual<
-    <R, O, E, A>(self: Kind<F, R, O, E, A>, predicate: (a: A) => boolean) => Kind<F, R, O, E, A>,
     <A>(
       predicate: (a: A) => boolean
-    ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, A>
+    ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, A>,
+    <R, O, E, A>(self: Kind<F, R, O, E, A>, predicate: (a: A) => boolean) => Kind<F, R, O, E, A>
   >(
     2,
     <R, O, E, A>(self: Kind<F, R, O, E, A>, predicate: (a: A) => boolean): Kind<F, R, O, E, A> =>

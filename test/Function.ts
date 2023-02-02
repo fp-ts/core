@@ -147,8 +147,8 @@ describe.concurrent("Function", () => {
 
   it("dual", () => {
     const f = _.dual<
-      (self: number, that: number) => number,
-      (that: number) => (self: number) => number
+      (that: number) => (self: number) => number,
+      (self: number, that: number) => number
     >(2, (a: number, b: number): number => a - b)
     deepStrictEqual(f(3, 2), 1)
     deepStrictEqual(_.pipe(3, f(2)), 1)

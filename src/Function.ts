@@ -657,15 +657,15 @@ export const SK = <A, B>(_: A, b: B): B => b
  * @since 1.0.0
  */
 export const dual = <
-  DF extends (...args: Array<any>) => any,
-  P extends (...args: Array<any>) => any
+  DataLast extends (...args: Array<any>) => any,
+  DataFirst extends (...args: Array<any>) => any
 >(
-  dfLen: Parameters<DF>["length"],
-  body: DF
-): DF & P => {
+  dataFirstArity: Parameters<DataFirst>["length"],
+  body: DataFirst
+): DataLast & DataFirst => {
   // @ts-expect-error
   return function() {
-    if (arguments.length === dfLen) {
+    if (arguments.length === dataFirstArity) {
       // @ts-expect-error
       return body.apply(this, arguments)
     }

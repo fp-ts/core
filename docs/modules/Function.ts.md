@@ -288,10 +288,13 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const dual: <DF extends (...args: Array<any>) => any, P extends (...args: Array<any>) => any>(
-  dfLen: Parameters<DF>['length'],
-  body: DF
-) => DF & P
+export declare const dual: <
+  DataLast extends (...args: Array<any>) => any,
+  DataFirst extends (...args: Array<any>) => any
+>(
+  dataFirstArity: Parameters<DataFirst>['length'],
+  body: DataFirst
+) => DataLast & DataFirst
 ```
 
 Added in v1.0.0

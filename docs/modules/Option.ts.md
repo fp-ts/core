@@ -515,8 +515,8 @@ Useful for debugging purposes, the `onNone` callback is is called if `self` is a
 
 ```ts
 export declare const inspectNone: {
-  <A>(self: Option<A>, onNone: () => void): Option<A>
   (onNone: () => void): <A>(self: Option<A>) => Option<A>
+  <A>(self: Option<A>, onNone: () => void): Option<A>
 }
 ```
 
@@ -530,8 +530,8 @@ Useful for debugging purposes, the `onSome` callback is called with the value of
 
 ```ts
 export declare const inspectSome: {
-  <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
   <A>(onSome: (a: A) => void): (self: Option<A>) => Option<A>
+  <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
 }
 ```
 
@@ -648,8 +648,8 @@ Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
 
 ```ts
 export declare const getOrElse: {
-  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
   <B>(onNone: LazyArg<B>): <A>(self: Option<A>) => B | A
+  <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
 }
 ```
 
@@ -685,8 +685,8 @@ Returns the provided `Option` `that` if `self` is `None`, otherwise returns `sel
 
 ```ts
 export declare const orElse: {
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
   <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<B | A>
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
 }
 ```
 
@@ -739,8 +739,8 @@ This is useful when it's important to know whether the value was retrieved from 
 
 ```ts
 export declare const orElseEither: {
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
   <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<Either<A, B>>
+  <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
 }
 ```
 
@@ -777,8 +777,8 @@ Useful when in addition to filtering you also want to change the type of the `Op
 
 ```ts
 export declare const filterMap: {
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
 }
 ```
 
@@ -814,8 +814,8 @@ Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements tha
 
 ```ts
 export declare const reduceCompact: {
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
   <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
+  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
 }
 ```
 
@@ -1339,8 +1339,8 @@ Maps the `Some` side of an `Option` value to a new `Option` value.
 
 ```ts
 export declare const map: {
-  <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
   <A, B>(f: (a: A) => B): (self: Option<A>) => Option<B>
+  <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
 }
 ```
 
@@ -1404,8 +1404,8 @@ function when passed the `Option`'s value.
 
 ```ts
 export declare const match: {
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
   <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
+  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
 }
 ```
 
@@ -1513,8 +1513,8 @@ Applies a function to the value of an `Option` and flattens the result, if the i
 
 ```ts
 export declare const flatMap: {
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
+  <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
 }
 ```
 
@@ -1528,8 +1528,8 @@ Applies a provided function that returns an `Either` to the contents of an `Opti
 
 ```ts
 export declare const flatMapEither: {
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
   <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
 }
 ```
 
@@ -1556,8 +1556,8 @@ This is `flatMap` + `fromNullable`, useful when working with optional values.
 
 ```ts
 export declare const flatMapNullable: {
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
   <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
+  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
 }
 ```
 
@@ -1683,8 +1683,8 @@ Added in v1.0.0
 export declare const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => {
-  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
   <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
 }
 ```
 
@@ -1764,8 +1764,8 @@ Returns a function that checks if an `Option` contains a given value using a pro
 
 ```ts
 export declare const contains: <A>(equivalence: Equivalence<A>) => {
-  (self: Option<A>, a: A): boolean
   (a: A): (self: Option<A>) => boolean
+  (self: Option<A>, a: A): boolean
 }
 ```
 
@@ -1791,8 +1791,8 @@ Check if a value in an `Option` type meets a certain predicate.
 
 ```ts
 export declare const exists: {
-  <A>(self: Option<A>, predicate: Predicate<A>): boolean
   <A>(predicate: Predicate<A>): (self: Option<A>) => boolean
+  <A>(self: Option<A>, predicate: Predicate<A>): boolean
 }
 ```
 

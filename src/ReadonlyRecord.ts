@@ -38,11 +38,11 @@ export interface ReadonlyRecord<A> {
  * @since 1.0.0
  */
 export const fromIterable: {
-  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]): Record<string, B>
   <A, B>(f: (a: A) => readonly [string, B]): (self: Iterable<A>) => Record<string, B>
+  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]): Record<string, B>
 } = dual<
-  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]) => Record<string, B>,
-  <A, B>(f: (a: A) => readonly [string, B]) => (self: Iterable<A>) => Record<string, B>
+  <A, B>(f: (a: A) => readonly [string, B]) => (self: Iterable<A>) => Record<string, B>,
+  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]) => Record<string, B>
 >(2, <A, B>(
   self: Iterable<A>,
   f: (a: A) => readonly [string, B]
@@ -75,11 +75,11 @@ export const fromIterable: {
  * @since 1.0.0
  */
 export const get: {
-  <A>(self: ReadonlyRecord<A>, key: string): Option<A>
   (key: string): <A>(self: ReadonlyRecord<A>) => Option<A>
+  <A>(self: ReadonlyRecord<A>, key: string): Option<A>
 } = dual<
-  <A>(self: ReadonlyRecord<A>, key: string) => Option<A>,
-  (key: string) => <A>(self: ReadonlyRecord<A>) => Option<A>
+  (key: string) => <A>(self: ReadonlyRecord<A>) => Option<A>,
+  <A>(self: ReadonlyRecord<A>, key: string) => Option<A>
 >(
   2,
   <A>(self: ReadonlyRecord<A>, key: string): Option<A> =>
@@ -113,11 +113,11 @@ export const get: {
  * @since 1.0.0
  */
 export const modifyOption: {
-  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>>
   <A, B>(key: string, f: (a: A) => B): (self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>>
 } = dual<
-  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B) => Option<Record<string, A | B>>,
-  <A, B>(key: string, f: (a: A) => B) => (self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+  <A, B>(key: string, f: (a: A) => B) => (self: ReadonlyRecord<A>) => Option<Record<string, A | B>>,
+  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B) => Option<Record<string, A | B>>
 >(
   3,
   <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>> => {
@@ -151,11 +151,11 @@ export const modifyOption: {
  * @since 1.0.0
  */
 export const replaceOption: {
-  <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>>
   <B>(key: string, b: B): <A>(self: ReadonlyRecord<A>) => Option<Record<string, B | A>>
+  <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>>
 } = dual<
-  <A, B>(self: ReadonlyRecord<A>, key: string, b: B) => Option<Record<string, A | B>>,
-  <B>(key: string, b: B) => <A>(self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+  <B>(key: string, b: B) => <A>(self: ReadonlyRecord<A>) => Option<Record<string, A | B>>,
+  <A, B>(self: ReadonlyRecord<A>, key: string, b: B) => Option<Record<string, A | B>>
 >(
   3,
   <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>> =>
@@ -180,11 +180,11 @@ export const replaceOption: {
  * @since 1.0.0
  */
 export const mapWithKey: {
-  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
   <A, B>(f: (k: string, a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
 } = dual<
-  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B) => Record<string, B>,
-  <A, B>(f: (k: string, a: A) => B) => (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(f: (k: string, a: A) => B) => (self: ReadonlyRecord<A>) => Record<string, B>,
+  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B) => Record<string, B>
 >(
   2,
   <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B> => {
@@ -216,11 +216,11 @@ export const mapWithKey: {
  * @since 1.0.0
  */
 export const map: {
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
   <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
 } = dual<
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B) => Record<string, B>,
-  <A, B>(f: (a: A) => B) => (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(f: (a: A) => B) => (self: ReadonlyRecord<A>) => Record<string, B>,
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B) => Record<string, B>
 >(
   2,
   <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B> =>

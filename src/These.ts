@@ -554,11 +554,11 @@ export const inspectBoth = <E, A>(
  * @since 1.0.0
  */
 export const bimap: {
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
   <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: These<E, A>) => These<G, B>
+  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
 } = dual<
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B) => These<G, B>,
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: These<E, A>) => These<G, B>
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: These<E, A>) => These<G, B>,
+  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B) => These<G, B>
 >(
   3,
   <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B> =>

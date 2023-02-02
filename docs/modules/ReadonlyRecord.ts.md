@@ -40,8 +40,8 @@ The projection function maps each value of the iterable to a tuple of a key and 
 
 ```ts
 export declare const fromIterable: {
-  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]): Record<string, B>
   <A, B>(f: (a: A) => readonly [string, B]): (self: Iterable<A>) => Record<string, B>
+  <A, B>(self: Iterable<A>, f: (a: A) => readonly [string, B]): Record<string, B>
 }
 ```
 
@@ -70,8 +70,8 @@ Retrieve a value at a particular key from a `ReadonlyRecord`, returning it wrapp
 
 ```ts
 export declare const get: {
-  <A>(self: ReadonlyRecord<A>, key: string): Option<A>
   (key: string): <A>(self: ReadonlyRecord<A>) => Option<A>
+  <A>(self: ReadonlyRecord<A>, key: string): Option<A>
 }
 ```
 
@@ -99,8 +99,8 @@ Maps a `ReadonlyRecord` into another `Record` by applying a transformation funct
 
 ```ts
 export declare const map: {
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
   <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
 }
 ```
 
@@ -124,8 +124,8 @@ Maps the values of a `ReadonlyRecord` to a new `Record` by applying a transforma
 
 ```ts
 export declare const mapWithKey: {
-  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
   <A, B>(f: (k: string, a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
 }
 ```
 
@@ -166,8 +166,8 @@ or return `None` if the key doesn't exist.
 
 ```ts
 export declare const modifyOption: {
-  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>>
   <A, B>(key: string, f: (a: A) => B): (self: ReadonlyRecord<A>) => Option<Record<string, A | B>>
+  <A, B>(self: ReadonlyRecord<A>, key: string, f: (a: A) => B): Option<Record<string, A | B>>
 }
 ```
 
@@ -193,8 +193,8 @@ Replaces a value in the record with the new value passed as parameter.
 
 ```ts
 export declare const replaceOption: {
-  <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>>
   <B>(key: string, b: B): <A>(self: ReadonlyRecord<A>) => Option<Record<string, B | A>>
+  <A, B>(self: ReadonlyRecord<A>, key: string, b: B): Option<Record<string, A | B>>
 }
 ```
 

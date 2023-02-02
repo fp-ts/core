@@ -28,8 +28,8 @@ export const sum: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
 } = dual<
-  (self: bigint, that: bigint) => bigint,
-  (that: bigint) => (self: bigint) => bigint
+  (that: bigint) => (self: bigint) => bigint,
+  (self: bigint, that: bigint) => bigint
 >(2, semigroup.bigintSum.combine)
 
 /**
@@ -41,8 +41,8 @@ export const multiply: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
 } = dual<
-  (self: bigint, that: bigint) => bigint,
-  (that: bigint) => (self: bigint) => bigint
+  (that: bigint) => (self: bigint) => bigint,
+  (self: bigint, that: bigint) => bigint
 >(2, semigroup.bigintMultiply.combine)
 
 /**
@@ -54,8 +54,8 @@ export const subtract: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
 } = dual<
-  (self: bigint, that: bigint) => bigint,
-  (that: bigint) => (self: bigint) => bigint
+  (that: bigint) => (self: bigint) => bigint,
+  (self: bigint, that: bigint) => bigint
 >(2, (self: bigint, that: bigint): bigint => self - that)
 
 /**
@@ -67,8 +67,8 @@ export const divide: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
 } = dual<
-  (self: bigint, that: bigint) => bigint,
-  (that: bigint) => (self: bigint) => bigint
+  (that: bigint) => (self: bigint) => bigint,
+  (self: bigint, that: bigint) => bigint
 >(2, (self: bigint, that: bigint): bigint => self / that)
 
 /**
