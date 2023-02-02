@@ -8,7 +8,7 @@ import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as O from "@fp-ts/core/Option"
 import type { Option } from "@fp-ts/core/Option"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
-import type { Filterable } from "@fp-ts/core/typeclass/Filterable"
+// import type { Filterable } from "@fp-ts/core/typeclass/Filterable"
 
 /**
  * @category models
@@ -35,14 +35,14 @@ export const filterMapWithIndexComposition = <F extends TypeLambda, G extends Ty
     self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
   ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>> => F.map(G.filterMapWithIndex(f))
 
-/**
- * Returns a default `filterMap` implementation.
- *
- * @since 1.0.0
- */
-export const filterMap = <F extends TypeLambda, I>(
-  F: FilterableWithIndex<F, I>
-): Filterable<F>["filterMap"] => (f) => F.filterMapWithIndex(f)
+// /**
+//  * Returns a default `filterMap` implementation.
+//  *
+//  * @since 1.0.0
+//  */
+// export const filterMap = <F extends TypeLambda, I>(
+//   F: FilterableWithIndex<F, I>
+// ): Filterable<F>["filterMap"] => (f) => F.filterMapWithIndex(f)
 
 /**
  * @since 1.0.0

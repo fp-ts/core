@@ -14,6 +14,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [make](#make)
 - [models](#models)
   - [Filterable (interface)](#filterable-interface)
 - [utils](#utils)
@@ -24,6 +26,20 @@ Added in v1.0.0
 
 ---
 
+# constructors
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <F extends TypeLambda>(
+  filterMap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => Option<B>) => Kind<F, R, O, E, B>
+) => Filterable<F>
+```
+
+Added in v1.0.0
+
 # models
 
 ## Filterable (interface)
@@ -32,7 +48,10 @@ Added in v1.0.0
 
 ```ts
 export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
-  readonly filterMap: <A, B>(f: (a: A) => Option<B>) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  readonly filterMap: {
+    <A, B>(f: (a: A) => Option<B>): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => Option<B>): Kind<F, R, O, E, B>
+  }
 }
 ```
 
@@ -67,7 +86,7 @@ Added in v1.0.0
 
 ## filterMapComposition
 
-Returns a default `filterMap` composition.
+Returns a default binary `filterMap` composition.
 
 **Signature**
 
@@ -75,10 +94,9 @@ Returns a default `filterMap` composition.
 export declare const filterMapComposition: <F extends TypeLambda, G extends TypeLambda>(
   F: Covariant<F>,
   G: Filterable<G>
-) => <A, B>(
+) => <FR, FO, FE, GR, GO, GE, A, B>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
   f: (a: A) => Option<B>
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
 ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
 ```
 
@@ -98,6 +116,14 @@ export declare const partition: <F extends TypeLambda>(
   <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(
     self: Kind<F, R, O, E, B>
   ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
+  <R, O, E, C extends A, B extends A, A = C>(self: Kind<F, R, O, E, C>, refinement: (a: A) => a is B): [
+    Kind<F, R, O, E, C>,
+    Kind<F, R, O, E, B>
+  ]
+  <R, O, E, B extends A, A = B>(self: Kind<F, R, O, E, B>, predicate: (a: A) => boolean): [
+    Kind<F, R, O, E, B>,
+    Kind<F, R, O, E, B>
+  ]
 }
 ```
 
@@ -110,9 +136,12 @@ Added in v1.0.0
 ```ts
 export declare const partitionMap: <F extends TypeLambda>(
   F: Filterable<F>
-) => <A, B, C>(
-  f: (a: A) => Either<B, C>
-) => <R, O, E>(self: Kind<F, R, O, E, A>) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+) => {
+  <A, B, C>(f: (a: A) => Either<B, C>): <R, O, E>(
+    self: Kind<F, R, O, E, A>
+  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+  <R, O, E, A, B, C>(self: Kind<F, R, O, E, A>, f: (a: A) => Either<B, C>): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+}
 ```
 
 Added in v1.0.0

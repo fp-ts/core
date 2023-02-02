@@ -1484,27 +1484,6 @@ export const filterMapWithIndex = <A, B>(f: (a: A, i: number) => Option<B>) =>
  * @category filtering
  * @since 1.0.0
  */
-export const filterMap: <A, B>(f: (a: A) => Option<B>) => (self: Iterable<A>) => Array<B> = (f) =>
-  filterMapWithIndex(f)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const compact: <A>(self: Iterable<Option<A>>) => Array<A> = filterMap(identity)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
-  compact
-}
-
-/**
- * @category filtering
- * @since 1.0.0
- */
 export const separate = <A, B>(
   self: ReadonlyArray<Either<A, B>>
 ): [Array<A>, Array<B>] => {
@@ -1521,13 +1500,35 @@ export const separate = <A, B>(
 }
 
 /**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const filterMap: {
+  <A, B>(f: (a: A) => Option<B>): (self: Iterable<A>) => Array<B>
+  <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): Array<B>
+} = dual(2, (self, f) => pipe(self, filterMapWithIndex(f)))
+
+/**
  * @category instances
  * @since 1.0.0
  */
-export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
-  filterMap
+export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = filterable.make(filterMap)
+
+/**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const compact: <A>(self: Iterable<Option<A>>) => Array<A> = filterMap(identity)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
+  compact
 }
 
+// TODO: input as interables
 /**
  * @dual
  * @category filtering
@@ -1561,6 +1562,7 @@ export const filterWithIndex: {
 ): ((self: ReadonlyArray<B>) => Array<B>) =>
   filterMapWithIndex((b, i) => (predicate(b, i) ? O.some(b) : O.none()))
 
+// TODO: input as iterables
 /**
  * @category filtering
  * @since 1.0.0
