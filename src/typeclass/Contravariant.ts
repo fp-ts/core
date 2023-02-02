@@ -1,6 +1,7 @@
 /**
  * @since 1.0.0
  */
+import { dual, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
@@ -37,7 +38,7 @@ export const contramapComposition = <F extends TypeLambda, G extends TypeLambda>
  */
 export const imap = <F extends TypeLambda>(
   contramap: Contravariant<F>["contramap"]
-): Invariant<F>["imap"] => (_, from) => contramap(from)
+): Invariant<F>["imap"] => dual(3, (self, _, from) => pipe(self, contramap(from))) // TODO remove pipe
 
 /**
  * @category constructors

@@ -350,7 +350,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(to: (a: A) => B, from: (b: B) => A) => (S: Semigroup<A>) => Semigroup<B>
+export declare const imap: {
+  <A, B>(to: (a: A) => B, from: (b: B) => A): (self: Semigroup<A>) => Semigroup<B>
+  <A, B>(self: Semigroup<A>, to: (a: A) => B, from: (b: B) => A): Semigroup<B>
+}
 ```
 
 Added in v1.0.0

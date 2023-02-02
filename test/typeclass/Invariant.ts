@@ -9,7 +9,7 @@ import * as U from "../util"
 describe("Invariant", () => {
   it("imapComposition", () => {
     const imap = _.imapComposition(semigroup.Invariant, O.Invariant)
-    const S = pipe(O.getOptionalMonoid(String.Semigroup), imap(s => [s], ([s]) => s))
+    const S = imap(O.getOptionalMonoid(String.Semigroup), s => [s], ([s]) => s)
     U.deepStrictEqual(S.combine(O.none(), O.none()), O.none())
     U.deepStrictEqual(S.combine(O.none(), O.some(["b"])), O.some(["b"]))
     U.deepStrictEqual(S.combine(O.some(["a"]), O.none()), O.some(["a"]))

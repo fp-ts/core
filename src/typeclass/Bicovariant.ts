@@ -51,6 +51,7 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
     f: (e: E1) => E2,
     g: (a: A) => B
   ): Kind<F, FR, FO, FE, Kind<G, GR, GO, E2, B>> =>
+    // TODO
     pipe(self, CovariantF.map(BicovariantG.bimap(f, g)))
 
 /**

@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [make](#make)
 - [type class](#type-class)
   - [Invariant (interface)](#invariant-interface)
 - [utils](#utils)
@@ -21,6 +23,20 @@ Added in v1.0.0
 
 ---
 
+# constructors
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <F extends TypeLambda>(
+  imap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, to: (a: A) => B, from: (b: B) => A) => Kind<F, R, O, E, B>
+) => Invariant<F>
+```
+
+Added in v1.0.0
+
 # type class
 
 ## Invariant (interface)
@@ -29,10 +45,10 @@ Added in v1.0.0
 
 ```ts
 export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
-  readonly imap: <A, B>(
-    to: (a: A) => B,
-    from: (b: B) => A
-  ) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+  readonly imap: {
+    <A, B>(to: (a: A) => B, from: (b: B) => A): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, to: (a: A) => B, from: (b: B) => A): Kind<F, R, O, E, B>
+  }
 }
 ```
 
@@ -64,11 +80,10 @@ Returns a default `imap` composition.
 export declare const imapComposition: <F extends TypeLambda, G extends TypeLambda>(
   F: Invariant<F>,
   G: Invariant<G>
-) => <A, B>(
+) => <FR, FO, FE, GR, GO, GE, A, B>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
   to: (a: A) => B,
   from: (b: B) => A
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
 ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
 ```
 
