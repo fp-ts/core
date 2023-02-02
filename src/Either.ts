@@ -239,13 +239,26 @@ export const getEquivalence = <E, A>(
       isRight(y) && EA(x.right, y.right))
 
 /**
- * Returns an effect whose Right is mapped by the specified `f` function.
+ * Maps the `Right` side of an `Either` value to a new `Either` value.
  *
+ * @param self - An `Either` to map
+ * @param f - The function to map over the value of the `Either`
+ *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
-export const map = <A, B>(f: (a: A) => B) =>
-  <E>(self: Either<E, A>): Either<E, B> => isRight(self) ? right(f(self.right)) : self
+export const map: {
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
+  <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+} = dual<
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B) => Either<E, B>,
+  <A, B>(f: (a: A) => B) => <E>(self: Either<E, A>) => Either<E, B>
+>(
+  2,
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B> =>
+    isRight(self) ? right(f(self.right)) : self
+)
 
 const imap = covariant.imap<EitherTypeLambda>(map)
 
@@ -310,13 +323,21 @@ export const asUnit: <E, _>(self: Either<E, _>) => Either<E, void> = covariant.a
  * Returns an effect whose Left and Right channels have been mapped by
  * the specified pair of functions, `f` and `g`.
  *
+ * @dual
  * @category mapping
  * @since 1.0.0
  */
-export const bimap = <E, G, A, B>(
-  f: (e: E) => G,
-  g: (a: A) => B
-) => (self: Either<E, A>): Either<G, B> => isLeft(self) ? left(f(self.left)) : right(g(self.right))
+export const bimap: {
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: Either<E, A>) => Either<G, B>
+} = dual<
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B) => Either<G, B>,
+  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Either<E, A>) => Either<G, B>
+>(
+  3,
+  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B> =>
+    isLeft(self) ? left(f(self.left)) : right(g(self.right))
+)
 
 /**
  * @category instances
@@ -327,15 +348,19 @@ export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = {
 }
 
 /**
- * Returns an effect with its error channel mapped using the specified
- * function. This can be used to lift a "smaller" error into a "larger" error.
+ * Maps the `Left` side of an `Either` value to a new `Either` value.
  *
+ * @param self - The input `Either` value to map.
+ * @param f - A transformation function to apply to the `Left` value of the input `Either`.
+ *
+ * @dual
  * @category error handling
  * @since 1.0.0
  */
-export const mapLeft: <E, G>(f: (e: E) => G) => <A>(self: Either<E, A>) => Either<G, A> =
-  bicovariant
-    .mapLeft(Bicovariant)
+export const mapLeft: {
+  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
+  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
+} = bicovariant.mapLeft(Bicovariant)
 
 /**
  * @category instances

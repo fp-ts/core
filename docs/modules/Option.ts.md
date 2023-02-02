@@ -1333,7 +1333,7 @@ Added in v1.0.0
 
 ## map
 
-Maps the given function to the value of the `Option` if it is a `Some`, otherwise it returns `None`.
+Maps the `Some` side of an `Option` value to a new `Option` value.
 
 **Signature**
 

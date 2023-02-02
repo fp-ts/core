@@ -69,7 +69,10 @@ Returns a default `map` implementation.
 ```ts
 export declare const map: <F extends TypeLambda>(
   F: Bicovariant<F>
-) => <A, B>(f: (a: A) => B) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+) => {
+  <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
+  <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+}
 ```
 
 Added in v1.0.0
@@ -81,7 +84,10 @@ Added in v1.0.0
 ```ts
 export declare const mapLeft: <F extends TypeLambda>(
   F: Bicovariant<F>
-) => <E1, E2>(f: (e: E1) => E2) => <R, O, A>(self: Kind<F, R, O, E1, A>) => Kind<F, R, O, E2, A>
+) => {
+  <R, O, E, A, G>(self: Kind<F, R, O, E, A>, f: (e: E) => G): Kind<F, R, O, G, A>
+  <E, G>(f: (e: E) => G): <R, O, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, G, A>
+}
 ```
 
 Added in v1.0.0
