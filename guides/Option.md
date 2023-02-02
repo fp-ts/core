@@ -17,34 +17,40 @@ In the second of these two interpretations, the `None` union member represents t
 
 # Definition
 
-The `Option` data type is the union of two members: `None` and `Some`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions):
+The `Option` data type is the union of two members: `None` and `Some`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions).
 
 > A common technique for working with unions is to have a single field which uses literal types which you can use to let TypeScript narrow down the possible current type
 
 By convention in `@fp-ts/core`, this single field which uses literal types is named "\_tag" (but you can use any name when defining your unions).
 
-Furthermore, the data type `Option` is a "polymorphic" data type, that is, it makes use of a feature of TypeScript named ["Generics"](https://www.typescriptlang.org/docs/handbook/2/generics.html), meaning that the `Option` data type is a container that can hold any type.
+Furthermore, `Option` is a "polymorphic" data type, that is, it makes use of a feature of TypeScript named ["Generics"](https://www.typescriptlang.org/docs/handbook/2/generics.html), meaning that the `Option` data type is a container that can hold any type.
 
 Here's the complete definition of the `Option` type:
 
 ```ts
+// Represents the absence of a value
 export type None = {
-  readonly _tag: "None"; // represents the absence of a value
+  // Discriminating field used to identify the variant
+  readonly _tag: "None";
 };
 
+// Represents the presence of a value
 export type Some<A> = {
-  readonly _tag: "Some"; // represents the presence of a value
-  readonly value: A; // the actual value
+  // Discriminating field used to identify the variant
+  readonly _tag: "Some";
+  // The actual value
+  readonly value: A;
 };
 
-export type Option<A> = None | Some<A>; // union type representing the option of having a value or not
+// Define the `Option` data type as the union of `None` and `Some`
+export type Option<A> = None | Some<A>;
 ```
 
-The `Option` type is defined as a union of two other types, `None` and `Some`, that represent the two possible states of the option: having a value or not.
+The `Option` type is defined as a union of two other types, `None` and `Some`, that represent the two possible states of the `Option`: having a value or not.
 
-The type parameter `A` is used to specify the type of the value that the option holds.
+The type parameter `A` is used to specify the type of the value that the `Option` holds.
 
-The `_tag` field is used to distinguish between the two options, "None" and "Some".
+The `_tag` field is used to distinguish between the two variants, `None` and `Some`.
 
 # Using `Option`
 
@@ -90,12 +96,13 @@ In this way you don't need to specify the type of the variables `optionNumber`, 
 
 | Name           | Given                             | To                 | Note                  |
 | -------------- | --------------------------------- | ------------------ | --------------------- |
-| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>` |                       |
-| `fromIterable` | `Iterable<A>`                     | `Option<A>`        |                       |
 | `fromEither`   | `Either<E, A>`                    | `Option<A>`        |                       |
+| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`     |                       |
 | `getRight`     | `Either<E, A>`                    | `Option<A>`        | alias of `fromEither` |
 | `getLeft`      | `Either<E, A>`                    | `Option<E>`        |                       |
-| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`     |                       |
+| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>` |                       |
+| `fromIterable` | `Iterable<A>`                     | `Option<A>`        |                       |
+| `toArray`      | `Option<A>`                       | `Array<A>`         |                       |
 
 # Modeling optional properties with `Option`
 

@@ -33,6 +33,7 @@ Added in v1.0.0
   - [fromOption](#fromoption)
   - [getLeft](#getleft)
   - [getRight](#getright)
+  - [toArray](#toarray)
   - [toOption](#tooption)
   - [toRefinement](#torefinement)
 - [debugging](#debugging)
@@ -339,21 +340,14 @@ export declare const fromOption: {
 
 ```ts
 import * as E from '@fp-ts/core/Either'
-import { pipe } from '@fp-ts/core/Function'
 import * as O from '@fp-ts/core/Option'
 
 assert.deepStrictEqual(
-  pipe(
-    O.some(1),
-    E.fromOption(() => 'error')
-  ),
+  E.fromOption(O.some(1), () => 'error'),
   E.right(1)
 )
 assert.deepStrictEqual(
-  pipe(
-    O.none(),
-    E.fromOption(() => 'error')
-  ),
+  E.fromOption(O.none(), () => 'error'),
   E.left('error')
 )
 ```
@@ -402,6 +396,29 @@ import * as E from '@fp-ts/core/Either'
 
 assert.deepStrictEqual(E.getRight(E.right('ok')), O.some('ok'))
 assert.deepStrictEqual(E.getRight(E.left('err')), O.none())
+```
+
+Added in v1.0.0
+
+## toArray
+
+Transforms an `Either` into an `Array`.
+If the input is `Left`, an empty array is returned.
+If the input is `Right`, the value is wrapped in an array.
+
+**Signature**
+
+```ts
+export declare const toArray: <E, A>(self: Either<E, A>) => A[]
+```
+
+**Example**
+
+```ts
+import { right, left, toArray } from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(toArray(right(1)), [1])
+assert.deepStrictEqual(toArray(left('error')), [])
 ```
 
 Added in v1.0.0
