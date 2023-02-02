@@ -239,6 +239,41 @@ export const getEquivalence = <E, A>(
       isRight(y) && EA(x.right, y.right))
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = bicovariant.make((
+  self,
+  f,
+  g
+) => isLeft(self) ? left(f(self.left)) : right(g(self.right)))
+
+/**
+ * @dual
+ * @category mapping
+ * @since 1.0.0
+ */
+export const bimap: {
+  <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: Either<E1, A>) => Either<E2, B>
+  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B>
+} = Bicovariant.bimap
+
+/**
+ * Maps the `Left` side of an `Either` value to a new `Either` value.
+ *
+ * @param self - The input `Either` value to map.
+ * @param f - A transformation function to apply to the `Left` value of the input `Either`.
+ *
+ * @dual
+ * @category error handling
+ * @since 1.0.0
+ */
+export const mapLeft: {
+  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
+  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
+} = bicovariant.mapLeft(Bicovariant)
+
+/**
  * Maps the `Right` side of an `Either` value to a new `Either` value.
  *
  * @param self - An `Either` to map
@@ -318,49 +353,6 @@ export const as: {
 export const asUnit: <E, _>(self: Either<E, _>) => Either<E, void> = covariant.asUnit(
   Covariant
 )
-
-/**
- * Returns an effect whose Left and Right channels have been mapped by
- * the specified pair of functions, `f` and `g`.
- *
- * @dual
- * @category mapping
- * @since 1.0.0
- */
-export const bimap: {
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: Either<E, A>) => Either<G, B>
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B>
-} = dual<
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: Either<E, A>) => Either<G, B>,
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B) => Either<G, B>
->(
-  3,
-  <E, A, G, B>(self: Either<E, A>, f: (e: E) => G, g: (a: A) => B): Either<G, B> =>
-    isLeft(self) ? left(f(self.left)) : right(g(self.right))
-)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = {
-  bimap
-}
-
-/**
- * Maps the `Left` side of an `Either` value to a new `Either` value.
- *
- * @param self - The input `Either` value to map.
- * @param f - A transformation function to apply to the `Left` value of the input `Either`.
- *
- * @dual
- * @category error handling
- * @since 1.0.0
- */
-export const mapLeft: {
-  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
-  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
-} = bicovariant.mapLeft(Bicovariant)
 
 /**
  * @category instances

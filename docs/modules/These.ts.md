@@ -40,9 +40,9 @@ Added in v1.0.0
   - [fromIterable](#fromiterable)
   - [fromNullable](#fromnullable)
   - [fromOption](#fromoption)
-  - [fromThese](#fromthese)
   - [fromTuple](#fromtuple)
   - [toEither](#toeither)
+  - [toValidated](#tovalidated)
 - [debugging](#debugging)
   - [inspectBoth](#inspectboth)
   - [inspectLeft](#inspectleft)
@@ -449,16 +449,6 @@ export declare const fromOption: <E>(onNone: LazyArg<E>) => <A>(self: O.Option<A
 
 Added in v1.0.0
 
-## fromThese
-
-**Signature**
-
-```ts
-export declare const fromThese: <E, A>(self: These<E, A>) => These<readonly [E, ...E[]], A>
-```
-
-Added in v1.0.0
-
 ## fromTuple
 
 **Signature**
@@ -475,6 +465,16 @@ Added in v1.0.0
 
 ```ts
 export declare const toEither: <E, A>(onBoth: (e: E, a: A) => Either<E, A>) => (self: These<E, A>) => Either<E, A>
+```
+
+Added in v1.0.0
+
+## toValidated
+
+**Signature**
+
+```ts
+export declare const toValidated: <E, A>(self: These<E, A>) => These<readonly [E, ...E[]], A>
 ```
 
 Added in v1.0.0
@@ -648,8 +648,8 @@ Maps the `Left` side of an `These` value to a new `These` value.
 
 ```ts
 export declare const mapLeft: {
-  <E, A, G>(self: These<E, A>, f: (e: E) => G): These<G, A>
   <E, G>(f: (e: E) => G): <A>(self: These<E, A>) => These<G, A>
+  <E, A, G>(self: These<E, A>, f: (e: E) => G): These<G, A>
 }
 ```
 
@@ -1230,8 +1230,8 @@ Added in v1.0.0
 
 ```ts
 export declare const bimap: {
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: These<E, A>) => These<G, B>
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
+  <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: These<E1, A>) => These<E2, B>
+  <E1, A, E2, B>(self: These<E1, A>, f: (e: E1) => E2, g: (a: A) => B): These<E2, B>
 }
 ```
 

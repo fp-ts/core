@@ -5,7 +5,7 @@
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -382,7 +382,7 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
  */
 export const liftThese = <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => These<E, B>
-) => (...a: A): Validated<E, B> => fromThese(f(...a))
+) => (...a: A): Validated<E, B> => toValidated(f(...a))
 
 /**
  * @category sequencing
@@ -549,33 +549,30 @@ export const inspectBoth = <E, A>(
   }
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = bicovariant.make((
+  self,
+  f,
+  g
+) =>
+  isLeft(self) ?
+    left(f(self.left)) :
+    isRight(self) ?
+    right(g(self.right)) :
+    both(f(self.left), g(self.right))
+)
+
+/**
  * @dual
  * @category mapping
  * @since 1.0.0
  */
 export const bimap: {
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B): (self: These<E, A>) => These<G, B>
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B>
-} = dual<
-  <E, G, A, B>(f: (e: E) => G, g: (a: A) => B) => (self: These<E, A>) => These<G, B>,
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B) => These<G, B>
->(
-  3,
-  <E, A, G, B>(self: These<E, A>, f: (e: E) => G, g: (a: A) => B): These<G, B> =>
-    isLeft(self) ?
-      left(f(self.left)) :
-      isRight(self) ?
-      right(g(self.right)) :
-      both(f(self.left), g(self.right))
-)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = {
-  bimap
-}
+  <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: These<E1, A>) => These<E2, B>
+  <E1, A, E2, B>(self: These<E1, A>, f: (e: E1) => E2, g: (a: A) => B): These<E2, B>
+} = Bicovariant.bimap
 
 /**
  * Maps the `Left` side of an `These` value to a new `These` value.
@@ -588,15 +585,15 @@ export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = {
  * @since 1.0.0
  */
 export const mapLeft: {
-  <E, A, G>(self: These<E, A>, f: (e: E) => G): These<G, A>
   <E, G>(f: (e: E) => G): <A>(self: These<E, A>) => These<G, A>
+  <E, A, G>(self: These<E, A>, f: (e: E) => G): These<G, A>
 } = bicovariant.mapLeft(Bicovariant)
 
 /**
  * @category conversions
  * @since 1.0.0
  */
-export const fromThese: <E, A>(self: These<E, A>) => Validated<E, A> = mapLeft((e) => [e])
+export const toValidated: <E, A>(self: These<E, A>) => Validated<E, A> = mapLeft((e) => [e])
 
 /**
  * Maps the `Right` side of an `These` value to a new `These` value.
@@ -1223,7 +1220,7 @@ export const bindThese = <N extends string, A extends object, E2, B>(
 ): <E1>(
   self: Validated<E1, A>
 ) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
-  bind(name, (a) => fromThese(f(a)))
+  bind(name, (a) => toValidated(f(a)))
 
 /**
  * Sequences the specified effect after this effect, but ignores the value

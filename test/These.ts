@@ -552,10 +552,10 @@ describe("These", () => {
     expect(_.fromEither(E.left("e"))).toEqual(_.left(["e"]))
   })
 
-  it("fromThese", () => {
-    Util.deepStrictEqual(_.fromThese(_.right(1)), _.right(1))
-    Util.deepStrictEqual(_.fromThese(_.left("e")), _.fail("e"))
-    Util.deepStrictEqual(_.fromThese(_.both("e", 1)), _.warn("e", 1))
+  it("toValidated", () => {
+    Util.deepStrictEqual(_.toValidated(_.right(1)), _.right(1))
+    Util.deepStrictEqual(_.toValidated(_.left("e")), _.fail("e"))
+    Util.deepStrictEqual(_.toValidated(_.both("e", 1)), _.warn("e", 1))
   })
 
   it("toEither", () => {
