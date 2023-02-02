@@ -35,7 +35,7 @@ export const mapComposition = <F extends TypeLambda, G extends TypeLambda>(
  * @since 1.0.0
  */
 export const imap = <F extends TypeLambda>(map: Covariant<F>["map"]): Invariant<F>["imap"] =>
-  (to, _) => map(to)
+  dual(3, (self, to, _) => pipe(self, map(to)))
 
 /**
  * @category constructors
