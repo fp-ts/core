@@ -1449,7 +1449,7 @@ export const getEquivalence = <A>(E: Equivalence<A>): Equivalence<Option<A>> =>
  * @since 1.0.0
  */
 export const getOrder = <A>(O: Order<A>): Order<Option<A>> =>
-  order.fromCompare((self, that) =>
+  order.make((self, that) =>
     isSome(self) ? (isSome(that) ? O.compare(self.value, that.value) : 1) : -1
   )
 
