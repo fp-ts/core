@@ -6,25 +6,6 @@ parent: Modules
 
 ## Semigroup overview
 
-`Semigroup<A>` describes a way of combining two values of type `A` that is associative.
-
-```ts
-export interface Semigroup<A> {
-  combine: (self: A, that: A) => A
-  combineMany: (self: A, collection: Iterable<A>) => A
-}
-```
-
-The combine operator must be associative, meaning that if we combine `a` with `b` and then combine the result
-with `c` we must get the same value as if we combine `b` with `c` and then combine `a` with the result.
-
-```
-(a <> b) <> c === a <> (b <> c)
-```
-
-The `Semigroup` abstraction allows us to combine values of a data type to build a new value of that data type
-with richer structure.
-
 Added in v1.0.0
 
 ---
@@ -39,6 +20,7 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [constant](#constant)
   - [fromCombine](#fromcombine)
+  - [make](#make)
   - [max](#max)
   - [min](#min)
 - [instances](#instances)
@@ -147,6 +129,19 @@ Useful when `combineMany` can't be optimised.
 
 ```ts
 export declare const fromCombine: <A>(combine: (self: A, that: A) => A) => Semigroup<A>
+```
+
+Added in v1.0.0
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <A>(
+  combine: (self: A, that: A) => A,
+  combineMany: (self: A, collection: Iterable<A>) => A
+) => Semigroup<A>
 ```
 
 Added in v1.0.0
@@ -321,8 +316,14 @@ Added in v1.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: (self: A, that: A) => A
-  readonly combineMany: (self: A, collection: Iterable<A>) => A
+  readonly combine: {
+    (that: A): (self: A) => A
+    (self: A, that: A): A
+  }
+  readonly combineMany: {
+    (collection: Iterable<A>): (self: A) => A
+    (self: A, collection: Iterable<A>): A
+  }
 }
 ```
 

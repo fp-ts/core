@@ -1,26 +1,8 @@
 /**
- * `Semigroup<A>` describes a way of combining two values of type `A` that is associative.
- *
- * ```ts
- * export interface Semigroup<A> {
- *    combine: (self: A, that: A) => A
- *    combineMany: (self: A, collection: Iterable<A>) => A
- * }
- * ```
- *
- * The combine operator must be associative, meaning that if we combine `a` with `b` and then combine the result
- * with `c` we must get the same value as if we combine `b` with `c` and then combine `a` with the result.
- *
- * ```
- * (a <> b) <> c === a <> (b <> c)
- * ```
- *
- * The `Semigroup` abstraction allows us to combine values of a data type to build a new value of that data type
- * with richer structure.
- *
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import { dual } from "@fp-ts/core/internal/Function"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
@@ -32,8 +14,14 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Semigroup<A> {
-  readonly combine: (self: A, that: A) => A
-  readonly combineMany: (self: A, collection: Iterable<A>) => A
+  readonly combine: {
+    (that: A): (self: A) => A
+    (self: A, that: A): A
+  }
+  readonly combineMany: {
+    (collection: Iterable<A>): (self: A) => A
+    (self: A, collection: Iterable<A>): A
+  }
 }
 
 /**
@@ -45,21 +33,31 @@ export interface SemigroupTypeLambda extends TypeLambda {
 }
 
 /**
+ * @category constructors
+ * @since 1.0.0
+ */
+export const make = <A>(
+  combine: (self: A, that: A) => A,
+  combineMany: (self: A, collection: Iterable<A>) => A
+): Semigroup<A> => ({
+  combine: dual(2, combine),
+  combineMany: dual(2, combineMany)
+})
+
+/**
  * Useful when `combineMany` can't be optimised.
  *
  * @category constructors
  * @since 1.0.0
  */
-export const fromCombine = <A>(combine: Semigroup<A>["combine"]): Semigroup<A> => ({
-  combine,
-  combineMany: (self, collection) => {
+export const fromCombine = <A>(combine: (self: A, that: A) => A): Semigroup<A> =>
+  make(combine, (self, collection) => {
     let out: A = self
     for (const a of collection) {
       out = combine(out, a)
     }
     return out
-  }
-})
+  })
 
 /**
  * @category instances
@@ -81,9 +79,9 @@ export const numberSum: Semigroup<number> = fromCombine((self, that) => self + t
  * @category instances
  * @since 1.0.0
  */
-export const numberMultiply: Semigroup<number> = {
-  combine: (self, that) => self * that,
-  combineMany: (self, collection) => {
+export const numberMultiply: Semigroup<number> = make(
+  (self, that) => self * that,
+  (self, collection) => {
     if (self === 0) {
       return 0
     }
@@ -96,7 +94,7 @@ export const numberMultiply: Semigroup<number> = {
     }
     return out
   }
-}
+)
 
 /**
  * `bigint` semigroup under addition.
@@ -112,9 +110,9 @@ export const bigintSum: Semigroup<bigint> = fromCombine((self, that) => self + t
  * @category instances
  * @since 1.0.0
  */
-export const bigintMultiply: Semigroup<bigint> = {
-  combine: (self, that) => self * that,
-  combineMany: (self, collection) => {
+export const bigintMultiply: Semigroup<bigint> = make(
+  (self, that) => self * that,
+  (self, collection) => {
     if (self === 0n) {
       return 0n
     }
@@ -127,7 +125,7 @@ export const bigintMultiply: Semigroup<bigint> = {
     }
     return out
   }
-}
+)
 
 /**
  * `boolean` semigroup under conjunction.
@@ -135,9 +133,9 @@ export const bigintMultiply: Semigroup<bigint> = {
  * @category instances
  * @since 1.0.0
  */
-export const booleanAll: Semigroup<boolean> = {
-  combine: (self, that) => self && that,
-  combineMany: (self, collection) => {
+export const booleanAll: Semigroup<boolean> = make(
+  (self, that) => self && that,
+  (self, collection) => {
     if (self === false) {
       return false
     }
@@ -148,7 +146,7 @@ export const booleanAll: Semigroup<boolean> = {
     }
     return true
   }
-}
+)
 
 /**
  * `boolean` semigroup under disjunction.
@@ -156,9 +154,9 @@ export const booleanAll: Semigroup<boolean> = {
  * @category instances
  * @since 1.0.0
  */
-export const booleanAny: Semigroup<boolean> = {
-  combine: (self, that) => self || that,
-  combineMany: (self, collection) => {
+export const booleanAny: Semigroup<boolean> = make(
+  (self, that) => self || that,
+  (self, collection) => {
     if (self === true) {
       return true
     }
@@ -169,7 +167,7 @@ export const booleanAny: Semigroup<boolean> = {
     }
     return false
   }
-}
+)
 
 /**
  * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
@@ -247,25 +245,23 @@ export const max = <A>(O: Order<A>): Semigroup<A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const constant = <A>(a: A): Semigroup<A> => ({
-  combine: () => a,
-  combineMany: () => a
-})
+export const constant = <A>(a: A): Semigroup<A> => make(() => a, () => a)
 
 /**
  * The dual of a `Semigroup`, obtained by flipping the arguments of `combine`.
  *
  * @since 1.0.0
  */
-export const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
-  combine: (self, that) => S.combine(that, self),
-  combineMany: (self, collection) => {
-    const reversed = Array.from(collection).reverse()
-    return reversed.length > 0 ?
-      S.combine(S.combineMany(reversed[0], reversed.slice(1)), self) :
-      self
-  }
-})
+export const reverse = <A>(S: Semigroup<A>): Semigroup<A> =>
+  make(
+    (self, that) => S.combine(that, self),
+    (self, collection) => {
+      const reversed = Array.from(collection).reverse()
+      return reversed.length > 0 ?
+        S.combine(S.combineMany(reversed[0], reversed.slice(1)), self) :
+        self
+    }
+  )
 
 /**
  * @since 1.0.0
@@ -280,10 +276,7 @@ export const intercalate = <A>(separator: A) =>
  * @category instances
  * @since 1.0.0
  */
-export const first = <A = never>(): Semigroup<A> => ({
-  combine: (a) => a,
-  combineMany: (a) => a
-})
+export const first = <A = never>(): Semigroup<A> => make((a) => a, (a) => a)
 
 /**
  * Always return the last argument.
@@ -291,15 +284,16 @@ export const first = <A = never>(): Semigroup<A> => ({
  * @category instances
  * @since 1.0.0
  */
-export const last = <A = never>(): Semigroup<A> => ({
-  combine: (_, second) => second,
-  combineMany: (self, collection) => {
-    let a: A = self
-    // eslint-disable-next-line no-empty
-    for (a of collection) {}
-    return a
-  }
-})
+export const last = <A = never>(): Semigroup<A> =>
+  make(
+    (_, second) => second,
+    (self, collection) => {
+      let a: A = self
+      // eslint-disable-next-line no-empty
+      for (a of collection) {}
+      return a
+    }
+  )
 
 /**
  * @since 1.0.0
@@ -308,11 +302,11 @@ export const imap = <A, B>(
   to: (a: A) => B,
   from: (b: B) => A
 ) =>
-  (S: Semigroup<A>): Semigroup<B> => ({
-    combine: (self, that) => to(S.combine(from(self), from(that))),
-    combineMany: (self, collection) =>
-      to(S.combineMany(from(self), (fromIterable(collection)).map(from)))
-  })
+  (S: Semigroup<A>): Semigroup<B> =>
+    make(
+      (self, that) => to(S.combine(from(self), from(that))),
+      (self, collection) => to(S.combineMany(from(self), (fromIterable(collection)).map(from)))
+    )
 
 /**
  * @category instances

@@ -13,6 +13,7 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
@@ -141,21 +142,22 @@ export const record = <A>(
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Equivalence<A>> => ({
-  combine: (self, that) => (x, y) => self(x, y) && that(x, y),
-  combineMany: (self, collection) =>
-    (x, y) => {
-      if (!self(x, y)) {
-        return false
-      }
-      for (const equivalence of collection) {
-        if (!equivalence(x, y)) {
+export const getSemigroup = <A>(): Semigroup<Equivalence<A>> =>
+  semigroup.make(
+    (self, that) => (x, y) => self(x, y) && that(x, y),
+    (self, collection) =>
+      (x, y) => {
+        if (!self(x, y)) {
           return false
         }
+        for (const equivalence of collection) {
+          if (!equivalence(x, y)) {
+            return false
+          }
+        }
+        return true
       }
-      return true
-    }
-})
+  )
 
 const empty: Equivalence<unknown> = () => true
 

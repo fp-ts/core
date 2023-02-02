@@ -44,7 +44,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const and: (that: boolean) => (self: boolean) => boolean
+export declare const and: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
 Added in v1.0.0
@@ -64,7 +64,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const or: (that: boolean) => (self: boolean) => boolean
+export declare const or: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
 Added in v1.0.0
@@ -187,7 +187,10 @@ If `value` is `false`, `onFalse()` is returned, otherwise `onTrue()`.
 **Signature**
 
 ```ts
-export declare const match: <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) => (value: boolean) => A | B
+export declare const match: {
+  <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>): (value: boolean) => A | B
+  <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>): A | B
+}
 ```
 
 **Example**

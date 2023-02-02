@@ -27,10 +27,7 @@ export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
 export const sum: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
-} = dual<
-  (that: bigint) => (self: bigint) => bigint,
-  (self: bigint, that: bigint) => bigint
->(2, semigroup.bigintSum.combine)
+} = semigroup.bigintSum.combine
 
 /**
  * @dual
@@ -40,10 +37,7 @@ export const sum: {
 export const multiply: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
-} = dual<
-  (that: bigint) => (self: bigint) => bigint,
-  (self: bigint, that: bigint) => bigint
->(2, semigroup.bigintMultiply.combine)
+} = semigroup.bigintMultiply.combine
 
 /**
  * @dual

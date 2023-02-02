@@ -3,7 +3,7 @@
  */
 import type { LazyArg } from "@fp-ts/core/Function"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as semigroup from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
  * @category model
@@ -30,9 +30,9 @@ export const match = <A, B, C = B>(
  * @category instances
  * @since 1.0.0
  */
-export const Semigroup: semigroup.Semigroup<Ordering> = {
-  combine: (self, that) => self !== 0 ? self : that,
-  combineMany: (self, collection) => {
+export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.make(
+  (self, that) => self !== 0 ? self : that,
+  (self, collection) => {
     let ordering = self
     if (ordering !== 0) {
       return ordering
@@ -44,7 +44,7 @@ export const Semigroup: semigroup.Semigroup<Ordering> = {
     }
     return ordering
   }
-}
+)
 
 /**
  * @category instances

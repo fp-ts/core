@@ -9,6 +9,7 @@ import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
+import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
@@ -162,30 +163,31 @@ export const contramap: {
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup = <A>(): Semigroup<Order<A>> => ({
-  combine: (O1, O2) =>
-    fromCompare((self, that) => {
-      const out = O1.compare(self, that)
-      if (out !== 0) {
-        return out
-      }
-      return O2.compare(self, that)
-    }),
-  combineMany: (self, collection) =>
-    fromCompare((a1, a2) => {
-      let out = self.compare(a1, a2)
-      if (out !== 0) {
-        return out
-      }
-      for (const O of collection) {
-        out = O.compare(a1, a2)
+export const getSemigroup = <A>(): Semigroup<Order<A>> =>
+  semigroup.make(
+    (O1, O2) =>
+      fromCompare((self, that) => {
+        const out = O1.compare(self, that)
         if (out !== 0) {
           return out
         }
-      }
-      return out
-    })
-})
+        return O2.compare(self, that)
+      }),
+    (self, collection) =>
+      fromCompare((a1, a2) => {
+        let out = self.compare(a1, a2)
+        if (out !== 0) {
+          return out
+        }
+        for (const O of collection) {
+          out = O.compare(a1, a2)
+          if (out !== 0) {
+            return out
+          }
+        }
+        return out
+      })
+  )
 
 const empty: Order<unknown> = fromCompare(() => 0)
 
