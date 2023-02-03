@@ -3,7 +3,7 @@
  */
 import type { Either } from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
@@ -724,8 +724,7 @@ export const flatMapEither: {
   <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>
 >(
   2,
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> =>
-    pipe(self, flatMap(liftEither(f)))
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> => flatMap(self, liftEither(f))
 )
 
 /**
@@ -1311,7 +1310,7 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = traversabl
   F extends TypeLambda
 >(F: applicative.Applicative<F>) =>
   <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>> =>
-    isNone(self) ? F.of<Option<B>>(none()) : pipe(f(self.value), F.map(some))
+    isNone(self) ? F.of<Option<B>>(none()) : F.map(f(self.value), some)
 )
 
 /**

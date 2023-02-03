@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { dual, pipe } from "@fp-ts/core/Function"
+import { dual } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
@@ -113,10 +113,7 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
     self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
     collection: Iterable<Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>>
   ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, [A, ...Array<A>]>> =>
-    pipe(
-      F.productMany(self, collection),
-      F.map(([ga, ...gas]) => G.productMany(ga, gas))
-    )
+    F.map(F.productMany(self, collection), ([ga, ...gas]) => G.productMany(ga, gas))
 
 /**
  * @category do notation
@@ -136,13 +133,9 @@ export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
       E1 | E2,
       { [K in keyof A | N]: K extends keyof A ? A[K] : B }
     > =>
-      pipe(
-        F.product(self, that),
-        F.imap(
-          ([a, b]) => Object.assign({}, a, { [name]: b }) as any,
-          ({ [name]: b, ...rest }) => [rest, b] as any
-        )
-      )
+      F.imap(F.product(self, that), ([a, b]) =>
+        Object.assign({}, a, { [name]: b }) as any, ({ [name]: b, ...rest }) =>
+        [rest, b] as any)
 
 /**
  * Appends an element to the end of a tuple.
@@ -164,10 +157,8 @@ export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>): {
     self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, B>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]> =>
-    pipe(
-      F.product(self, that),
-      F.imap(([a, b]) => [...a, b], ab => [ab.slice(0, -1), ab[ab.length - 1]] as any)
-    ))
+    F.imap(F.product(self, that), ([a, b]) => [...a, b], ab =>
+      [ab.slice(0, -1), ab[ab.length - 1]] as any))
 
 /**
  * @since 1.0.0
@@ -199,14 +190,15 @@ export const nonEmptyStruct = <F extends TypeLambda>(F: SemiProduct<F>) =>
     { [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => {
     const keys = Object.keys(fields)
-    return pipe(
+    return F.imap(
       F.productMany(fields[keys[0]], keys.slice(1).map(k => fields[k])),
-      F.imap(([value, ...values]) => {
+      ([value, ...values]) => {
         const out: any = { [keys[0]]: value }
         for (let i = 0; i < values.length; i++) {
           out[keys[i + 1]] = values[i]
         }
         return out
-      }, (r) => keys.map(k => r[k]) as any)
+      },
+      (r) => keys.map(k => r[k]) as any
     )
   }

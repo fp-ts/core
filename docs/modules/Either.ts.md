@@ -562,7 +562,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const firstRightOf: <E, A>(collection: Iterable<Either<E, A>>) => (self: Either<E, A>) => Either<E, A>
+export declare const firstRightOf: {
+  <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, A>
+  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A>
+}
 ```
 
 Added in v1.0.0

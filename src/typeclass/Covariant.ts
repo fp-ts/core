@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { dual, pipe } from "@fp-ts/core/Function"
+import { dual } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Invariant } from "@fp-ts/core/typeclass/Invariant"
 
@@ -61,7 +61,7 @@ export const flap = <F extends TypeLambda>(F: Covariant<F>): {
   dual(
     2,
     <A, R, O, E, B>(a: A, self: Kind<F, R, O, E, (a: A) => B>): Kind<F, R, O, E, B> =>
-      pipe(self, F.map(f => f(a)))
+      F.map(self, f => f(a))
   )
 
 /**
@@ -74,8 +74,7 @@ export const as = <F extends TypeLambda>(F: Covariant<F>): {
 } =>
   dual(
     2,
-    <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B> =>
-      pipe(self, F.map(() => b))
+    <R, O, E, _, B>(self: Kind<F, R, O, E, _>, b: B): Kind<F, R, O, E, B> => F.map(self, () => b)
   )
 
 /**

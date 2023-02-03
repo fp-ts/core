@@ -635,7 +635,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const firstRightOrBothOf: <E, A>(collection: Iterable<These<E, A>>) => (self: These<E, A>) => These<E, A>
+export declare const firstRightOrBothOf: {
+  <E, A>(collection: Iterable<These<E, A>>): (self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A>
+}
 ```
 
 Added in v1.0.0
