@@ -1887,7 +1887,7 @@ export const reduce: {
  * @category folding
  * @since 1.0.0
  */
-export const foldMapWithIndex = <M>(Monoid: Monoid<M>) =>
+export const combineMapWithIndex = <M>(Monoid: Monoid<M>) =>
   <A>(f: (a: A, i: number) => M) =>
     (self: ReadonlyArray<A>): M =>
       self.reduce((m, a, i) => Monoid.combine(m, f(a, i)), Monoid.empty)
@@ -1896,7 +1896,7 @@ export const foldMapWithIndex = <M>(Monoid: Monoid<M>) =>
  * @category folding
  * @since 1.0.0
  */
-export const foldMap = <M>(M: Monoid<M>) =>
+export const combineMap = <M>(M: Monoid<M>) =>
   <A>(f: (a: A) => M) =>
     (self: ReadonlyArray<A>): M => self.reduce((m, a) => M.combine(m, f(a)), M.empty)
 
@@ -1904,14 +1904,14 @@ export const foldMap = <M>(M: Monoid<M>) =>
  * @category folding
  * @since 1.0.0
  */
-export const foldMapNonEmpty = <S>(S: Semigroup<S>) =>
-  <A>(f: (a: A) => S): (self: NonEmptyReadonlyArray<A>) => S => foldMapNonEmptyWithIndex(S)(f)
+export const combineMapNonEmpty = <S>(S: Semigroup<S>) =>
+  <A>(f: (a: A) => S): (self: NonEmptyReadonlyArray<A>) => S => combineMapNonEmptyWithIndex(S)(f)
 
 /**
  * @category folding
  * @since 1.0.0
  */
-export const foldMapNonEmptyWithIndex = <S>(S: Semigroup<S>) =>
+export const combineMapNonEmptyWithIndex = <S>(S: Semigroup<S>) =>
   <A>(f: (a: A, i: number) => S) =>
     (self: NonEmptyReadonlyArray<A>): S =>
       tailNonEmpty(self).reduce((s, a, i) => S.combine(s, f(a, i + 1)), f(headNonEmpty(self), 0))
@@ -1929,7 +1929,7 @@ export const reduceKind: <F extends TypeLambda>(F: monad.Monad<F>) => <B, A, R, 
  * @category folding
  * @since 1.0.0
  */
-export const foldMapKind: <F extends TypeLambda>(F: Coproduct<F>) => <A, R, O, E, B>(
+export const coproductMapKind: <F extends TypeLambda>(F: Coproduct<F>) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, B>
 ) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.coproductMapKind(Foldable)
 

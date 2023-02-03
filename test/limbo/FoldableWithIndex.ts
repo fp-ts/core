@@ -93,7 +93,7 @@ export const toArrayWith = <F extends TypeLambda, I>(
 /**
  * @since 1.0.0
  */
-export const foldMapWithIndex = <F extends TypeLambda, I>(
+export const combineMapWithIndex = <F extends TypeLambda, I>(
   F: FoldableWithIndex<F, I>
 ) =>
   <M>(M: Monoid<M>) =>

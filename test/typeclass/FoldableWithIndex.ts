@@ -57,10 +57,10 @@ describe("FoldableWithIndex", () => {
     U.deepStrictEqual(pipe(O.some(2), toReadonlyArrayWith((a, i) => U.double(a) * i)), [0])
   })
 
-  it("foldMapWithIndex", () => {
-    const foldMapWithIndex = _.foldMapWithIndex(FoldableWithIndex)
+  it("combineMapWithIndex", () => {
+    const combineMapWithIndex = _.combineMapWithIndex(FoldableWithIndex)
     U.deepStrictEqual(
-      pipe([1, 2, 3], foldMapWithIndex(N.MonoidSum)((n, i) => (n * 2) + i)),
+      pipe([1, 2, 3], combineMapWithIndex(N.MonoidSum)((n, i) => (n * 2) + i)),
       15
     )
   })
