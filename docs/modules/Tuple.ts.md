@@ -117,7 +117,10 @@ Appends an element to the end of a tuple.
 **Signature**
 
 ```ts
-export declare const appendElement: <B>(that: B) => <A extends readonly unknown[]>(self: A) => [...A, B]
+export declare const appendElement: {
+  <B>(that: B): <A extends readonly unknown[]>(self: A) => [...A, B]
+  <A extends readonly unknown[], B>(self: A, that: B): [...A, B]
+}
 ```
 
 Added in v1.0.0

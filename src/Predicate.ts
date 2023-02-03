@@ -78,8 +78,14 @@ export const id = <A>(): Refinement<A, A> => (_): _ is A => true
 /**
  * @since 1.0.0
  */
-export const compose = <A, B extends A, C extends B>(bc: Refinement<B, C>) =>
-  (ab: Refinement<A, B>): Refinement<A, C> => (i): i is C => ab(i) && bc(i)
+export const compose: {
+  <A, B extends A, C extends B>(bc: Refinement<B, C>): (ab: Refinement<A, B>) => Refinement<A, C>
+  <A, B extends A, C extends B>(ab: Refinement<A, B>, bc: Refinement<B, C>): Refinement<A, C>
+} = dual(
+  2,
+  <A, B extends A, C extends B>(ab: Refinement<A, B>, bc: Refinement<B, C>): Refinement<A, C> =>
+    (a): a is C => ab(a) && bc(a)
+)
 
 /**
  * @category instances
@@ -115,20 +121,9 @@ export const Invariant: invariant.Invariant<PredicateTypeLambda> = {
 /**
  * @since 1.0.0
  */
-// @ts-expect-error
 export const tupled: <A>(self: Predicate<A>) => Predicate<readonly [A]> = invariant.tupled(
   Invariant
-)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Predicate<A>) => Predicate<{ readonly [K in N]: A }> = invariant.bindTo(
-  Invariant
-)
+) as any
 
 /**
  * @since 1.0.0
@@ -142,11 +137,6 @@ export const of = <A>(_: A): Predicate<A> => id()
 export const Of: of_.Of<PredicateTypeLambda> = {
   of
 }
-
-/**
- * @since 1.0.0
- */
-export const Do: Predicate<{}> = of_.Do(Of)
 
 /**
  * @since 1.0.0
@@ -205,19 +195,6 @@ export const Product: product_.Product<PredicateTypeLambda> = {
   productMany: SemiProduct.productMany,
   productAll
 }
-
-/**
- * @since 1.0.0
- */
-export const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Predicate<B>
-) => (
-  self: Predicate<A>
-) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(
-    SemiProduct
-  )
 
 /**
  * Appends an element to the end of a tuple.
@@ -338,3 +315,39 @@ export const all = <A>(collection: Iterable<Predicate<A>>): Predicate<A> =>
  */
 export const any = <A>(collection: Iterable<Predicate<A>>): Predicate<A> =>
   getMonoidAny<A>().combineAll(collection)
+
+// -------------------------------------------------------------------------------------
+// do notation
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: Predicate<A>) => Predicate<{ readonly [K in N]: A }> = invariant.bindTo(
+  Invariant
+)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const Do: Predicate<{}> = of_.Do(Of)
+
+/**
+ * A variant of `bind` that sequentially ignores the scope.
+ *
+ * @category do notation
+ * @since 1.0.0
+ */
+export const andThenBind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  that: Predicate<B>
+) => (
+  self: Predicate<A>
+) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
+  .andThenBind(
+    SemiProduct
+  )

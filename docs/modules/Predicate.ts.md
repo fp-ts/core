@@ -17,6 +17,8 @@ Added in v1.0.0
 - [constructors](#constructors)
   - [id](#id)
 - [do notation](#do-notation)
+  - [Do](#do)
+  - [andThenBind](#andthenbind)
   - [bindTo](#bindto)
 - [guards](#guards)
   - [isBigInt](#isbigint)
@@ -39,11 +41,9 @@ Added in v1.0.0
 - [type lambdas](#type-lambdas)
   - [PredicateTypeLambda (interface)](#predicatetypelambda-interface)
 - [utils](#utils)
-  - [Do](#do)
   - [Refinement (interface)](#refinement-interface)
   - [all](#all)
   - [and](#and)
-  - [andThenBind](#andthenbind)
   - [any](#any)
   - [appendElement](#appendelement)
   - [compose](#compose)
@@ -85,6 +85,31 @@ export declare const id: <A>() => Refinement<A, A>
 Added in v1.0.0
 
 # do notation
+
+## Do
+
+**Signature**
+
+```ts
+export declare const Do: Predicate<{}>
+```
+
+Added in v1.0.0
+
+## andThenBind
+
+A variant of `bind` that sequentially ignores the scope.
+
+**Signature**
+
+```ts
+export declare const andThenBind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  that: Predicate<B>
+) => (self: Predicate<A>) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+```
+
+Added in v1.0.0
 
 ## bindTo
 
@@ -272,16 +297,6 @@ Added in v1.0.0
 
 # utils
 
-## Do
-
-**Signature**
-
-```ts
-export declare const Do: Predicate<{}>
-```
-
-Added in v1.0.0
-
 ## Refinement (interface)
 
 **Signature**
@@ -317,19 +332,6 @@ export declare const and: {
 
 Added in v1.0.0
 
-## andThenBind
-
-**Signature**
-
-```ts
-export declare const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Predicate<B>
-) => (self: Predicate<A>) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
-```
-
-Added in v1.0.0
-
 ## any
 
 **Signature**
@@ -360,9 +362,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const compose: <A, B extends A, C extends B>(
-  bc: Refinement<B, C>
-) => (ab: Refinement<A, B>) => Refinement<A, C>
+export declare const compose: {
+  <A, B extends A, C extends B>(bc: Refinement<B, C>): (ab: Refinement<A, B>) => Refinement<A, C>
+  <A, B extends A, C extends B>(ab: Refinement<A, B>, bc: Refinement<B, C>): Refinement<A, C>
+}
 ```
 
 Added in v1.0.0

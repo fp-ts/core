@@ -6,6 +6,7 @@
  * @since 1.0.0
  */
 
+import { dual } from "@fp-ts/core/Function"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Refinement } from "@fp-ts/core/Predicate"
 import * as predicate from "@fp-ts/core/Predicate"
@@ -59,7 +60,10 @@ export const empty: "" = "" as const
 /**
  * @since 1.0.0
  */
-export const concat = (that: string) => (self: string): string => Semigroup.combine(self, that)
+export const concat: {
+  (that: string): (self: string) => string
+  (self: string, that: string): string
+} = Semigroup.combine
 
 /**
  * @example
@@ -92,8 +96,14 @@ export const toLowerCase = (s: string): string => s.toLowerCase()
  *
  * @since 1.0.0
  */
-export const replace = (searchValue: string | RegExp, replaceValue: string) =>
-  (s: string): string => s.replace(searchValue, replaceValue)
+export const replace: {
+  (searchValue: string | RegExp, replaceValue: string): (s: string) => string
+  (s: string, searchValue: string | RegExp, replaceValue: string): string
+} = dual(
+  3,
+  (s: string, searchValue: string | RegExp, replaceValue: string): string =>
+    s.replace(searchValue, replaceValue)
+)
 
 /**
  * @example
@@ -137,7 +147,10 @@ export const trimEnd = (s: string): string => s.trimEnd()
  *
  * @since 1.0.0
  */
-export const slice = (start: number, end: number) => (s: string): string => s.slice(start, end)
+export const slice: {
+  (start: number, end: number): (s: string) => string
+  (s: string, start: number, end: number): string
+} = dual(3, (s: string, start: number, end: number): string => s.slice(start, end))
 
 /**
  * Test whether a `string` is empty.
@@ -183,11 +196,13 @@ export const length = (s: string): number => s.length
  *
  * @since 1.0.0
  */
-export const split = (separator: string | RegExp) =>
-  (s: string): NonEmptyReadonlyArray<string> => {
-    const out = s.split(separator)
-    return readonlyArray.isNonEmpty(out) ? out : [s]
-  }
+export const split: {
+  (separator: string | RegExp): (s: string) => NonEmptyReadonlyArray<string>
+  (s: string, separator: string | RegExp): NonEmptyReadonlyArray<string>
+} = dual(2, (s: string, separator: string | RegExp): NonEmptyReadonlyArray<string> => {
+  const out = s.split(separator)
+  return readonlyArray.isNonEmpty(out) ? out : [s]
+})
 
 /**
  * @example
@@ -240,7 +255,10 @@ export const endsWith = (searchString: string, position?: number) =>
  *
  * @since 1.0.0
  */
-export const takeLeft = (n: number) => (self: string): string => self.slice(0, Math.max(n, 0))
+export const takeLeft: {
+  (n: number): (self: string) => string
+  (self: string, n: number): string
+} = dual(2, (self: string, n: number): string => self.slice(0, Math.max(n, 0)))
 
 /**
  * Keep the specified number of characters from the end of a string.
@@ -254,8 +272,13 @@ export const takeLeft = (n: number) => (self: string): string => self.slice(0, M
  *
  * @since 1.0.0
  */
-export const takeRight = (n: number) =>
-  (s: string): string => s.slice(Math.max(0, s.length - Math.floor(n)), Infinity)
+export const takeRight: {
+  (n: number): (s: string) => string
+  (s: string, n: number): string
+} = dual(
+  2,
+  (s: string, n: number): string => s.slice(Math.max(0, s.length - Math.floor(n)), Infinity)
+)
 
 /*
 

@@ -3,6 +3,7 @@
  *
  * @since 1.0.0
  */
+import { dual } from "@fp-ts/core/Function"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
@@ -21,7 +22,9 @@ export const tuple = <A extends ReadonlyArray<any>>(...elements: A): A => elemen
  * @category combinators
  * @since 1.0.0
  */
-export const getEquivalence = equivalence.tuple
+export const getEquivalence: <A extends ReadonlyArray<any>>(
+  ...equivalences: { readonly [K in keyof A]: equivalence.Equivalence<A[K]> }
+) => equivalence.Equivalence<Readonly<A>> = equivalence.tuple
 
 /**
  * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
@@ -32,7 +35,9 @@ export const getEquivalence = equivalence.tuple
  * @category combinators
  * @since 1.0.0
  */
-export const getOrder = order.tuple
+export const getOrder: <A extends ReadonlyArray<any>>(
+  ...orders: { readonly [K in keyof A]: order.Order<A[K]> }
+) => order.Order<Readonly<A>> = order.tuple
 
 /**
  * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
@@ -63,8 +68,10 @@ export const getMonoid = monoid.tuple
  *
  * @since 1.0.0
  */
-export const appendElement = <B>(that: B) =>
-  <A extends ReadonlyArray<unknown>>(self: A): [...A, B] => [...self, that]
+export const appendElement: {
+  <B>(that: B): <A extends ReadonlyArray<unknown>>(self: A) => [...A, B]
+  <A extends ReadonlyArray<unknown>, B>(self: A, that: B): [...A, B]
+} = dual(2, <A extends ReadonlyArray<unknown>, B>(self: A, that: B): [...A, B] => [...self, that])
 
 /*
 

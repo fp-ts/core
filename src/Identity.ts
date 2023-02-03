@@ -60,43 +60,12 @@ export const Invariant: invariant.Invariant<IdentityTypeLambda> = {
 }
 
 /**
- * @category do notation
- * @since 1.0.0
- */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Identity<A>) => Identity<{ [K in N]: A }> = invariant.bindTo(Invariant)
-
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (
-  self: Identity<A>
-) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
-  Covariant
-)
-
-export {
-  /**
-   * @category do notation
-   * @since 1.0.0
-   */
-  let_ as let
-}
-
-/**
  * @category instances
  * @since 1.0.0
  */
 export const Of: of_.Of<IdentityTypeLambda> = {
   of: identity
 }
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const Do: Identity<{}> = of_.Do(Of)
 
 /**
  * @category instances
@@ -126,19 +95,6 @@ export const Chainable: chainable.Chainable<IdentityTypeLambda> = {
   map: Covariant.map,
   flatMap: FlatMap.flatMap
 }
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Identity<B>
-) => (
-  self: Identity<A>
-) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(
-  Chainable
-)
 
 /**
  * @category instances
@@ -239,3 +195,63 @@ export const Traversable: traversable.Traversable<IdentityTypeLambda> = traversa
       f: (a: A) => Kind<F, R, O, E, B>
     ): Kind<F, R, O, E, Identity<B>> => f(self)
 )
+
+// -------------------------------------------------------------------------------------
+// do notation
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindTo: <N extends string>(
+  name: N
+) => <A>(self: Identity<A>) => Identity<{ [K in N]: A }> = invariant.bindTo(Invariant)
+
+const let_: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => B
+) => (
+  self: Identity<A>
+) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
+  Covariant
+)
+
+export {
+  /**
+   * @category do notation
+   * @since 1.0.0
+   */
+  let_ as let
+}
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const Do: Identity<{}> = of_.Do(Of)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => Identity<B>
+) => (
+  self: Identity<A>
+) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(
+  Chainable
+)
+
+/**
+ * A variant of `bind` that sequentially ignores the scope.
+ *
+ * @category do notation
+ * @since 1.0.0
+ */
+export const andThenBind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  that: Identity<B>
+) => (self: Identity<A>) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
+  semiProduct.andThenBind(SemiProduct)

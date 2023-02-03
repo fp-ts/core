@@ -65,11 +65,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const match: <A, B, C = B>(
-  onLessThan: LazyArg<A>,
-  onEqual: LazyArg<B>,
-  onGreaterThan: LazyArg<C>
-) => (o: Ordering) => A | B | C
+export declare const match: {
+  <A, B, C = B>(onLessThan: LazyArg<A>, onEqual: LazyArg<B>, onGreaterThan: LazyArg<C>): (o: Ordering) => A | B | C
+  <A, B, C = B>(o: Ordering, onLessThan: LazyArg<A>, onEqual: LazyArg<B>, onGreaterThan: LazyArg<C>): A | B | C
+}
 ```
 
 Added in v1.0.0
