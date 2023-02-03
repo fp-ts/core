@@ -13,7 +13,8 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [productMany](#productmany)
+  - [fromProduct](#fromproduct)
+  - [make](#make)
 - [do notation](#do-notation)
   - [andThenBind](#andthenbind)
 - [type class](#type-class)
@@ -29,20 +30,40 @@ Added in v1.0.0
 
 # constructors
 
-## productMany
+## fromProduct
 
-Returns a default `productMany` implementation (useful for tests).
+Useful when `productMany` can't be optimised.
 
 **Signature**
 
 ```ts
-export declare const productMany: <F extends TypeLambda>(
+export declare const fromProduct: <F extends TypeLambda>(
   Covariant: Covariant<F>,
   product: <R1, O1, E1, A, R2, O2, E2, B>(
     self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, B>
   ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, [A, ...A[]]>
+) => SemiProduct<F>
+```
+
+Added in v1.0.0
+
+## make
+
+**Signature**
+
+```ts
+export declare const make: <F extends TypeLambda>(
+  Invariant: Invariant<F>,
+  product: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>,
+  productMany: <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
+    collection: Iterable<Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, [A, ...A[]]>
+) => SemiProduct<F>
 ```
 
 Added in v1.0.0
@@ -74,15 +95,31 @@ Added in v1.0.0
 
 ```ts
 export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
-  readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+  readonly product: {
+    <R2, O2, E2, B>(that: Kind<F, R2, O2, E2, B>): <R1, O1, E1, A>(
+      self: Kind<F, R1, O1, E1, A>
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+    <R1, O1, E1, A, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>): Kind<
+      F,
+      R1 & R2,
+      O1 | O2,
+      E1 | E2,
+      [A, B]
+    >
+  }
 
-  readonly productMany: <R, O, E, A>(
-    self: Kind<F, R, O, E, A>,
-    collection: Iterable<Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, [A, ...Array<A>]>
+  readonly productMany: {
+    <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>): (
+      self: Kind<F, R, O, E, A>
+    ) => Kind<F, R, O, E, [A, ...Array<A>]>
+    <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>): Kind<
+      F,
+      R,
+      O,
+      E,
+      [A, ...Array<A>]
+    >
+  }
 }
 ```
 
@@ -154,7 +191,7 @@ Added in v1.0.0
 
 ## productComposition
 
-Returns a default `product` composition.
+Returns a default binary `product` composition.
 
 **Signature**
 
@@ -172,7 +209,7 @@ Added in v1.0.0
 
 ## productManyComposition
 
-Returns a default `productMany` composition.
+Returns a default binary `productMany` composition.
 
 **Signature**
 

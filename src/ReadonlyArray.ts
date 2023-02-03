@@ -1713,46 +1713,26 @@ export const sequenceNonEmpty = <F extends TypeLambda>(
   self: NonEmptyReadonlyArray<Kind<F, R, O, E, A>>
 ) => Kind<F, R, O, E, NonEmptyArray<A>>) => traverseNonEmpty(F)(identity)
 
-const product = <A, B>(
-  self: ReadonlyArray<A>,
-  that: ReadonlyArray<B>
-): Array<[A, B]> => {
-  if (isEmpty(self) || isEmpty(that)) {
-    return empty()
-  }
-  const out: Array<[A, B]> = []
-  for (let i = 0; i < self.length; i++) {
-    for (let j = 0; j < that.length; j++) {
-      out.push([self[i], that[j]])
-    }
-  }
-  return out
-}
-
-const productMany: <A>(
-  self: ReadonlyArray<A>,
-  collection: Iterable<ReadonlyArray<A>>
-) => Array<[A, ...Array<A>]> = semiProduct.productMany(
-  Covariant,
-  product
-) as any
-
-const productAll = <A>(
-  collection: Iterable<ReadonlyArray<A>>
-): Array<Array<A>> => {
-  const arrays = fromIterable(collection)
-  return isEmpty(arrays) ? empty() : productMany(arrays[0], arrays.slice(1))
-}
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = {
-  imap,
-  product,
-  productMany
-}
+export const SemiProduct: semiProduct.SemiProduct<ReadonlyArrayTypeLambda> = semiProduct
+  .fromProduct(Covariant, <A, B>(
+    self: ReadonlyArray<A>,
+    that: ReadonlyArray<B>
+  ): Array<[A, B]> => {
+    if (isEmpty(self) || isEmpty(that)) {
+      return empty()
+    }
+    const out: Array<[A, B]> = []
+    for (let i = 0; i < self.length; i++) {
+      for (let j = 0; j < that.length; j++) {
+        out.push([self[i], that[j]])
+      }
+    }
+    return out
+  })
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -1775,8 +1755,8 @@ export const andThenBind: <N extends string, A extends object, B>(
 export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeLambda> = {
   imap,
   map,
-  product,
-  productMany
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -1807,9 +1787,12 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
 export const Product: product_.Product<ReadonlyArrayTypeLambda> = {
   of,
   imap,
-  product,
-  productMany,
-  productAll
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll: (collection) => {
+    const arrays = fromIterable(collection)
+    return isEmpty(arrays) ? empty() : SemiProduct.productMany(arrays[0], arrays.slice(1))
+  }
 }
 
 /**
@@ -1820,9 +1803,9 @@ export const Applicative: applicative.Applicative<ReadonlyArrayTypeLambda> = {
   imap,
   of,
   map,
-  product,
-  productMany,
-  productAll
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll: Product.productAll
 }
 
 /**

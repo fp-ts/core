@@ -12,7 +12,7 @@ import * as _ from "@fp-ts/core/typeclass/SemiProduct"
 import * as U from "../util"
 
 describe("SemiProduct", () => {
-  it("productMany", () => {
+  it("productMany should be equivalent to `ap`", () => {
     const curry = (f: Function, n: number, acc: ReadonlyArray<unknown>) =>
       (x: unknown) => {
         const combined = Array(acc.length + 1)
@@ -47,38 +47,13 @@ describe("SemiProduct", () => {
             }
           const actual = SemiApplicative.productMany(self, collection)
           const expected = pipe(self, productManyFromAp(collection))
-          // console.log(expected)
           U.deepStrictEqual(actual, expected)
         }
 
-    const product = <A, B>(
-      self: ReadonlyArray<A>,
-      that: ReadonlyArray<B>
-    ): ReadonlyArray<[A, B]> => {
-      const out: Array<[A, B]> = []
-      for (const a of self) {
-        for (const b of that) {
-          out.push([a, b])
-        }
-      }
-      return out
-    }
-
-    const productMany = _.productMany(
-      RA.Covariant,
-      product
-    )
-
-    const SemiApplicative = {
-      ...RA.Covariant,
-      product,
-      productMany
-    }
-
-    assertSameResult(SemiApplicative)([])([])
-    assertSameResult(SemiApplicative)([])([1, 2, 3])
-    assertSameResult(SemiApplicative)([[4]])([1, 2, 3])
-    assertSameResult(SemiApplicative)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
+    assertSameResult(RA.SemiApplicative)([])([])
+    assertSameResult(RA.SemiApplicative)([])([1, 2, 3])
+    assertSameResult(RA.SemiApplicative)([[4]])([1, 2, 3])
+    assertSameResult(RA.SemiApplicative)([[4, 5, 6], [7, 8], [9, 10, 11]])([1, 2, 3])
   })
 
   describe("productComposition", () => {

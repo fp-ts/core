@@ -15,7 +15,7 @@ import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -190,8 +190,10 @@ export const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda> =
  * @category combinators
  * @since 1.0.0
  */
-export const contramap = <B, A>(f: (b: B) => A) =>
-  (self: Equivalence<A>): Equivalence<B> => make((x, y) => self(f(x), f(y)))
+export const contramap: {
+  <B, A>(f: (b: B) => A): (self: Equivalence<A>) => Equivalence<B>
+  <A, B>(self: Equivalence<A>, f: (b: B) => A): Equivalence<B>
+} = Contravariant.contramap
 
 /**
  * @category instances
@@ -205,12 +207,11 @@ export const Invariant: invariant.Invariant<EquivalenceTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = {
-  imap: Contravariant.imap,
-  product: tuple,
-  productMany: (self, collection) => tuple(self, ...collection)
-}
-
+export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = semiProduct.make(
+  Invariant,
+  tuple,
+  (self, collection) => tuple(self, ...collection)
+)
 /**
  * @category instances
  * @since 1.0.0

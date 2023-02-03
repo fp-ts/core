@@ -12,9 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [instances](#instances)
-  - [getMonoid](#getmonoid)
-  - [getSemigroup](#getsemigroup)
 - [type lambdas](#type-lambdas)
   - [FunctionTypeLambda (interface)](#functiontypelambda-interface)
 - [utils](#utils)
@@ -41,74 +38,6 @@ Added in v1.0.0
   - [untupled](#untupled)
 
 ---
-
-# instances
-
-## getMonoid
-
-Unary functions form a monoid as long as you can provide a monoid for the codomain.
-
-**Signature**
-
-```ts
-export declare const getMonoid: <M>(Monoid: Monoid<M>) => <A>() => Monoid<(a: A) => M>
-```
-
-**Example**
-
-```ts
-import { Predicate } from '@fp-ts/core/Predicate'
-import { getMonoid, pipe } from '@fp-ts/core/Function'
-import * as B from '@fp-ts/core/Boolean'
-
-const f: Predicate<number> = (n) => n <= 2
-const g: Predicate<number> = (n) => n >= 0
-
-const M1 = getMonoid(B.MonoidAll)<number>()
-
-assert.deepStrictEqual(M1.combine(f, g)(1), true)
-assert.deepStrictEqual(M1.combine(f, g)(3), false)
-
-const M2 = getMonoid(B.MonoidAny)<number>()
-
-assert.deepStrictEqual(M2.combine(f, g)(1), true)
-assert.deepStrictEqual(M2.combine(f, g)(3), true)
-```
-
-Added in v1.0.0
-
-## getSemigroup
-
-Unary functions form a semigroup as long as you can provide a semigroup for the codomain.
-
-**Signature**
-
-```ts
-export declare const getSemigroup: <S>(S: Semigroup<S>) => <A>() => Semigroup<(a: A) => S>
-```
-
-**Example**
-
-```ts
-import { Predicate } from '@fp-ts/core/Predicate'
-import { pipe, getSemigroup } from '@fp-ts/core/Function'
-import * as B from '@fp-ts/core/Boolean'
-
-const f: Predicate<number> = (n) => n <= 2
-const g: Predicate<number> = (n) => n >= 0
-
-const S1 = getSemigroup(B.SemigroupAll)<number>()
-
-assert.deepStrictEqual(S1.combine(f, g)(1), true)
-assert.deepStrictEqual(S1.combine(f, g)(3), false)
-
-const S2 = getSemigroup(B.SemigroupAny)<number>()
-
-assert.deepStrictEqual(S2.combine(f, g)(1), true)
-assert.deepStrictEqual(S2.combine(f, g)(3), true)
-```
-
-Added in v1.0.0
 
 # type lambdas
 
@@ -288,7 +217,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const dual: <DataLast extends (...args: any[]) => any, DataFirst extends (...args: any[]) => any>(
+export declare const dual: <
+  DataLast extends (...args: Array<any>) => any,
+  DataFirst extends (...args: Array<any>) => any
+>(
   dataFirstArity: Parameters<DataFirst>['length'],
   body: DataFirst
 ) => DataLast & DataFirst

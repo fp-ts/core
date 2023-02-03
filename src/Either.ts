@@ -448,38 +448,30 @@ export const Monad: monad.Monad<EitherTypeLambda> = {
   flatMap
 }
 
-const productMany = <E, A>(
-  self: Either<E, A>,
-  collection: Iterable<Either<E, A>>
-): Either<E, [A, ...Array<A>]> => {
-  if (isLeft(self)) {
-    return self
-  }
-  const out: [A, ...Array<A>] = [self.right]
-  for (const e of collection) {
-    if (isLeft(e)) {
-      return e
-    }
-    out.push(e.right)
-  }
-  return right(out)
-}
-
-const product = <E1, A, E2, B>(
-  self: Either<E1, A>,
-  that: Either<E2, B>
-): Either<E1 | E2, [A, B]> =>
-  isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
-  imap,
-  product,
-  productMany
-}
+export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = semiProduct.make(
+  Invariant,
+  (self, that) => isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self,
+  <E, A>(
+    self: Either<E, A>,
+    collection: Iterable<Either<E, A>>
+  ): Either<E, [A, ...Array<A>]> => {
+    if (isLeft(self)) {
+      return self
+    }
+    const out: [A, ...Array<A>] = [self.right]
+    for (const e of collection) {
+      if (isLeft(e)) {
+        return e
+      }
+      out.push(e.right)
+    }
+    return right(out)
+  }
+)
 
 /**
  * Appends an element to the end of a tuple.
@@ -516,8 +508,8 @@ const productAll = <E, A>(
 export const Product: product_.Product<EitherTypeLambda> = {
   of,
   imap,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 
@@ -550,8 +542,8 @@ export const struct: <R extends Record<string, Either<any, any>>>(
 export const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda> = {
   imap,
   map,
-  product,
-  productMany
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -617,8 +609,8 @@ export const Applicative: applicative.Applicative<EitherTypeLambda> = {
   imap,
   of,
   map,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 

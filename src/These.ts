@@ -926,6 +926,30 @@ const product = <E1, A, E2, B>(
   return both(RA.appendAllNonEmpty(that.left)(self.left), [self.right, that.right])
 }
 
+const productAll = <E, A>(
+  collection: Iterable<Validated<E, A>>
+): Validated<E, Array<A>> => {
+  const rights: Array<A> = []
+  const lefts: Array<E> = []
+  let isFatal = false
+  for (const t of collection) {
+    if (isLeft(t)) {
+      lefts.push(...t.left)
+      isFatal = true
+      break
+    } else if (isRight(t)) {
+      rights.push(t.right)
+    } else {
+      lefts.push(...t.left)
+      rights.push(t.right)
+    }
+  }
+  if (RA.isNonEmpty(lefts)) {
+    return isFatal ? left(lefts) : both(lefts, rights)
+  }
+  return right(rights)
+}
+
 const productMany = <E, A>(
   self: Validated<E, A>,
   collection: Iterable<Validated<E, A>>
@@ -936,11 +960,11 @@ const productMany = <E, A>(
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
-  imap,
+export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = semiProduct.make(
+  { imap },
   product,
   productMany
-}
+)
 
 /**
  * @category instances
@@ -949,8 +973,8 @@ export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
 export const SemiApplicative: semiApplicative.SemiApplicative<ValidatedTypeLambda> = {
   imap,
   map,
-  product,
-  productMany
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -1003,30 +1027,6 @@ export const getFirstLeftSemigroup: <A, E>(
 ) => Semigroup<Validated<E, A>> = semiApplicative
   .getSemigroup(SemiApplicative)
 
-const productAll = <E, A>(
-  collection: Iterable<Validated<E, A>>
-): Validated<E, Array<A>> => {
-  const rights: Array<A> = []
-  const lefts: Array<E> = []
-  let isFatal = false
-  for (const t of collection) {
-    if (isLeft(t)) {
-      lefts.push(...t.left)
-      isFatal = true
-      break
-    } else if (isRight(t)) {
-      rights.push(t.right)
-    } else {
-      lefts.push(...t.left)
-      rights.push(t.right)
-    }
-  }
-  if (RA.isNonEmpty(lefts)) {
-    return isFatal ? left(lefts) : both(lefts, rights)
-  }
-  return right(rights)
-}
-
 /**
  * Appends an element to the end of a tuple.
  *
@@ -1049,8 +1049,8 @@ export const appendElement: {
 export const Product: product_.Product<ValidatedTypeLambda> = {
   of,
   imap,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 
@@ -1108,8 +1108,8 @@ export const Applicative: applicative.Applicative<ValidatedTypeLambda> = {
   imap,
   of,
   map,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 

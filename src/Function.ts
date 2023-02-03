@@ -2,10 +2,6 @@
  * @since 1.0.0
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import * as internal from "@fp-ts/core/internal/Function"
-import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
-import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
-import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 // -------------------------------------------------------------------------------------
 // type lambdas
@@ -24,65 +20,6 @@ export interface FunctionTypeLambda extends TypeLambda {
  */
 export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C = (bc) =>
   (ab) => flow(ab, bc)
-
-/**
- * Unary functions form a semigroup as long as you can provide a semigroup for the codomain.
- *
- * @example
- * import { Predicate } from '@fp-ts/core/Predicate'
- * import { pipe, getSemigroup } from '@fp-ts/core/Function'
- * import * as B from '@fp-ts/core/Boolean'
- *
- * const f: Predicate<number> = (n) => n <= 2
- * const g: Predicate<number> = (n) => n >= 0
- *
- * const S1 = getSemigroup(B.SemigroupAll)<number>()
- *
- * assert.deepStrictEqual(S1.combine(f, g)(1), true)
- * assert.deepStrictEqual(S1.combine(f, g)(3), false)
- *
- * const S2 = getSemigroup(B.SemigroupAny)<number>()
- *
- * assert.deepStrictEqual(S2.combine(f, g)(1), true)
- * assert.deepStrictEqual(S2.combine(f, g)(3), true)
- *
- * @category instances
- * @since 1.0.0
- */
-export const getSemigroup = <S>(S: Semigroup<S>) =>
-  <A>(): Semigroup<(a: A) => S> =>
-    semigroup.fromCombine((self, that) => (a) => S.combine(self(a), that(a)))
-
-/**
- * Unary functions form a monoid as long as you can provide a monoid for the codomain.
- *
- * @example
- * import { Predicate } from '@fp-ts/core/Predicate'
- * import { getMonoid, pipe } from '@fp-ts/core/Function'
- * import * as B from '@fp-ts/core/Boolean'
- *
- * const f: Predicate<number> = (n) => n <= 2
- * const g: Predicate<number> = (n) => n >= 0
- *
- * const M1 = getMonoid(B.MonoidAll)<number>()
- *
- * assert.deepStrictEqual(M1.combine(f, g)(1), true)
- * assert.deepStrictEqual(M1.combine(f, g)(3), false)
- *
- * const M2 = getMonoid(B.MonoidAny)<number>()
- *
- * assert.deepStrictEqual(M2.combine(f, g)(1), true)
- * assert.deepStrictEqual(M2.combine(f, g)(3), true)
- *
- * @category instances
- * @since 1.0.0
- */
-export const getMonoid = <M>(Monoid: Monoid<M>) =>
-  <A>(): Monoid<(a: A) => M> => {
-    const S = getSemigroup(Monoid)<A>()
-    const empty = () => Monoid.empty
-    return ({ ...S, combineAll: (collection) => S.combineMany(empty, collection), empty })
-  }
 
 /**
  * Apply a function to a given value.
@@ -657,4 +594,19 @@ export const SK = <A, B>(_: A, b: B): B => b
 /**
  * @since 1.0.0
  */
-export const dual = internal.dual
+export const dual = <
+  DataLast extends (...args: Array<any>) => any,
+  DataFirst extends (...args: Array<any>) => any
+>(
+  dataFirstArity: Parameters<DataFirst>["length"],
+  body: DataFirst
+): DataLast & DataFirst => {
+  // @ts-expect-error
+  return function() {
+    if (arguments.length >= dataFirstArity) {
+      // @ts-expect-error
+      return body.apply(this, arguments)
+    }
+    return ((self: any) => body(self, ...arguments)) as any
+  }
+}
