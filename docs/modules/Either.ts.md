@@ -62,7 +62,6 @@ Added in v1.0.0
   - [getOrElse](#getorelse)
   - [getOrNull](#getornull)
   - [getOrUndefined](#getorundefined)
-  - [merge](#merge)
 - [guards](#guards)
   - [isEither](#iseither)
   - [isLeft](#isleft)
@@ -90,6 +89,7 @@ Added in v1.0.0
   - [getOrThrow](#getorthrow)
   - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
+  - [merge](#merge)
 - [lifting](#lifting)
   - [lift2](#lift2)
   - [liftOption](#liftoption)
@@ -320,7 +320,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const fromIterable: <E>(onEmpty: LazyArg<E>) => <A>(collection: Iterable<A>) => Either<E, A>
+export declare const fromIterable: {
+  <E>(onEmpty: LazyArg<E>): <A>(collection: Iterable<A>) => Either<E, A>
+  <A, E>(collection: Iterable<A>, onEmpty: LazyArg<E>): Either<E, A>
+}
 ```
 
 Added in v1.0.0
@@ -465,7 +468,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const inspectLeft: <E>(onLeft: (e: E) => void) => <A>(self: Either<E, A>) => Either<E, A>
+export declare const inspectLeft: {
+  <E>(onLeft: (e: E) => void): <A>(self: Either<E, A>) => Either<E, A>
+  <E, A>(self: Either<E, A>, onLeft: (e: E) => void): Either<E, A>
+}
 ```
 
 Added in v1.0.0
@@ -475,7 +481,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const inspectRight: <A>(onRight: (a: A) => void) => <E>(self: Either<E, A>) => Either<E, A>
+export declare const inspectRight: {
+  <A>(onRight: (a: A) => void): <E>(self: Either<E, A>) => Either<E, A>
+  <E, A>(self: Either<E, A>, onRight: (a: A) => void): Either<E, A>
+}
 ```
 
 Added in v1.0.0
@@ -593,9 +602,10 @@ executes the specified effect.
 **Signature**
 
 ```ts
-export declare const orElse: <E1, E2, B>(
-  that: (e1: E1) => Either<E2, B>
-) => <A>(self: Either<E1, A>) => Either<E2, B | A>
+export declare const orElse: {
+  <E1, E2, B>(that: (e1: E1) => Either<E2, B>): <A>(self: Either<E1, A>) => Either<E2, B | A>
+  <E1, A, E2, B>(self: Either<E1, A>, that: (e1: E1) => Either<E2, B>): Either<E2, A | B>
+}
 ```
 
 Added in v1.0.0
@@ -608,9 +618,10 @@ fails, in which case, it will produce the value of the specified effect.
 **Signature**
 
 ```ts
-export declare const orElseEither: <E1, E2, B>(
-  that: (e1: E1) => Either<E2, B>
-) => <A>(self: Either<E1, A>) => Either<E2, Either<A, B>>
+export declare const orElseEither: {
+  <E1, E2, B>(that: (e1: E1) => Either<E2, B>): <A>(self: Either<E1, A>) => Either<E2, Either<A, B>>
+  <E1, A, E2, B>(self: Either<E1, A>, that: (e1: E1) => Either<E2, B>): Either<E2, Either<A, B>>
+}
 ```
 
 Added in v1.0.0
@@ -623,7 +634,10 @@ fails with the specified error.
 **Signature**
 
 ```ts
-export declare const orElseFail: <E2>(onLeft: LazyArg<E2>) => <E1, A>(self: Either<E1, A>) => Either<E2, A>
+export declare const orElseFail: {
+  <E2>(onLeft: LazyArg<E2>): <E1, A>(self: Either<E1, A>) => Either<E2, A>
+  <E1, A, E2>(self: Either<E1, A>, onLeft: LazyArg<E2>): Either<E2, A>
+}
 ```
 
 Added in v1.0.0
@@ -635,9 +649,10 @@ Returns an effect that effectfully "peeks" at the failure of this effect.
 **Signature**
 
 ```ts
-export declare const tapError: <E1, E2, _>(
-  onLeft: (e: E1) => Either<E2, _>
-) => <A>(self: Either<E1, A>) => Either<E1 | E2, A>
+export declare const tapError: {
+  <E1, E2, _>(onLeft: (e: E1) => Either<E2, _>): <A>(self: Either<E1, A>) => Either<E1 | E2, A>
+  <E1, A, E2, _>(self: Either<E1, A>, onLeft: (e: E1) => Either<E2, _>): Either<E1 | E2, A>
+}
 ```
 
 Added in v1.0.0
@@ -649,7 +664,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const compact: <E2>(onNone: LazyArg<E2>) => <E1, A>(self: Either<E1, Option<A>>) => Either<E2 | E1, A>
+export declare const compact: {
+  <E2>(onNone: LazyArg<E2>): <E1, A>(self: Either<E1, Option<A>>) => Either<E2 | E1, A>
+  <E1, A, E2>(self: Either<E1, Option<A>>, onNone: LazyArg<E2>): Either<E1 | E2, A>
+}
 ```
 
 Added in v1.0.0
@@ -666,6 +684,12 @@ export declare const filter: {
   <B extends A, E2, A = B>(predicate: Predicate<A>, onFalse: LazyArg<E2>): <E1>(
     self: Either<E1, B>
   ) => Either<E2 | E1, B>
+  <E1, C extends A, B extends A, E2, A = C>(
+    self: Either<E1, C>,
+    refinement: Refinement<A, B>,
+    onFalse: LazyArg<E2>
+  ): Either<E1 | E2, B>
+  <E1, B extends A, E2, A = B>(self: Either<E1, B>, predicate: Predicate<A>, onFalse: LazyArg<E2>): Either<E1 | E2, B>
 }
 ```
 
@@ -676,10 +700,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filterMap: <A, B, E2>(
-  f: (a: A) => Option<B>,
-  onNone: LazyArg<E2>
-) => <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+export declare const filterMap: {
+  <A, B, E2>(f: (a: A) => Option<B>, onNone: LazyArg<E2>): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => Option<B>, onNone: LazyArg<E2>): Either<E1 | E2, B>
+}
 ```
 
 Added in v1.0.0
@@ -733,16 +757,6 @@ Added in v1.0.0
 
 ```ts
 export declare const getOrUndefined: <E, A>(self: Either<E, A>) => A | undefined
-```
-
-Added in v1.0.0
-
-## merge
-
-**Signature**
-
-```ts
-export declare const merge: <E, A>(self: Either<E, A>) => E | A
 ```
 
 Added in v1.0.0
@@ -1028,6 +1042,16 @@ export declare const liftThrowable: <A extends readonly unknown[], B, E>(
 
 Added in v1.0.0
 
+## merge
+
+**Signature**
+
+```ts
+export declare const merge: <E, A>(self: Either<E, A>) => E | A
+```
+
+Added in v1.0.0
+
 # lifting
 
 ## lift2
@@ -1229,7 +1253,10 @@ if the value is a `Right` the inner value is applied to the second function.
 **Signature**
 
 ```ts
-export declare const match: <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C) => (self: Either<E, A>) => B | C
+export declare const match: {
+  <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C): (self: Either<E, A>) => B | C
+  <E, A, B, C = B>(self: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => C): B | C
+}
 ```
 
 **Example**
@@ -1284,10 +1311,15 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMapNullable: <A, B, E2>(
-  f: (a: A) => B | null | undefined,
-  onNullable: (a: A) => E2
-) => <E1>(self: Either<E1, A>) => Either<E2 | E1, NonNullable<B>>
+export declare const flatMapNullable: {
+  <A, B, E2>(f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): <E1>(
+    self: Either<E1, A>
+  ) => Either<E2 | E1, NonNullable<B>>
+  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): Either<
+    E1 | E2,
+    NonNullable<B>
+  >
+}
 ```
 
 Added in v1.0.0
@@ -1297,10 +1329,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMapOption: <A, B, E2>(
-  f: (a: A) => Option<B>,
-  onNone: (a: A) => E2
-) => <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+export declare const flatMapOption: {
+  <A, B, E2>(f: (a: A) => Option<B>, onNone: (a: A) => E2): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => Option<B>, onNone: (a: A) => E2): Either<E1 | E2, B>
+}
 ```
 
 Added in v1.0.0
@@ -1426,7 +1458,10 @@ Returns a function that checks if an `Either` contains a given value using a pro
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => (a: A) => <E>(self: Either<E, A>) => boolean
+export declare const contains: <A>(equivalence: Equivalence<A>) => {
+  (a: A): <E>(self: Either<E, A>) => boolean
+  <E>(self: Either<E, A>, a: A): boolean
+}
 ```
 
 Added in v1.0.0
@@ -1438,7 +1473,10 @@ Returns `false` if `Left` or returns the Either of the application of the given 
 **Signature**
 
 ```ts
-export declare const exists: <A>(predicate: Predicate<A>) => <E>(self: Either<E, A>) => boolean
+export declare const exists: {
+  <A>(predicate: Predicate<A>): <E>(self: Either<E, A>) => boolean
+  <E, A>(self: Either<E, A>, predicate: Predicate<A>): boolean
+}
 ```
 
 **Example**

@@ -487,6 +487,7 @@ console.log(getOrUndefined(left("error message"))); // undefined
 | `flatMapNullable` | `Either<E1, A>`, `(...a: A) => B \| null \| undefined`, `A => E2` | `Either<E1 \| E2, NonNullable<B>>`      |
 | `getOrNull`       | `Either<E, A>`                                                    | `A \| null`                             |
 | `getOrUndefined`  | `Either<E, A>`                                                    | `A \| undefined`                        |
+| `merge`           | `Either<E, A>`                                                    | `E \| A`                                |
 
 Now let's see the other case, that is when we need to interoperate with code that throws exceptions.
 

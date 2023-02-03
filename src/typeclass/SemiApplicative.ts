@@ -48,17 +48,7 @@ export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>): {
     f: (a: A, b: B) => C
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
 } =>
-  dual<
-    <R2, O2, E2, B, A, C>(
-      that: Kind<F, R2, O2, E2, B>,
-      f: (a: A, b: B) => C
-    ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>,
-    <R1, O1, E1, A, R2, O2, E2, B, C>(
-      self: Kind<F, R1, O1, E1, A>,
-      that: Kind<F, R2, O2, E2, B>,
-      f: (a: A, b: B) => C
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
-  >(
+  dual(
     3,
     <R1, O1, E1, A, R2, O2, E2, B, C>(
       self: Kind<F, R1, O1, E1, A>,
@@ -81,17 +71,7 @@ export const ap = <F extends TypeLambda>(F: SemiApplicative<F>): {
     that: Kind<F, R2, O2, E2, A>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
 } =>
-  dual<
-    <R2, O2, E2, A>(
-      that: Kind<F, R2, O2, E2, A>
-    ) => <R1, O1, E1, B>(
-      self: Kind<F, R1, O1, E1, (a: A) => B>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>,
-    <R1, O1, E1, A, B, R2, O2, E2>(
-      self: Kind<F, R1, O1, E1, (a: A) => B>,
-      that: Kind<F, R2, O2, E2, A>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
-  >(2, <R1, O1, E1, A, B, R2, O2, E2>(
+  dual(2, <R1, O1, E1, A, B, R2, O2, E2>(
     self: Kind<F, R1, O1, E1, (a: A) => B>,
     that: Kind<F, R2, O2, E2, A>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, (f, a) => f(a)))
@@ -108,17 +88,7 @@ export const andThenDiscard = <F extends TypeLambda>(F: SemiApplicative<F>): {
     that: Kind<F, R2, O2, E2, _>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
 } =>
-  dual<
-    <R2, O2, E2, _>(
-      that: Kind<F, R2, O2, E2, _>
-    ) => <R1, O1, E1, A>(
-      self: Kind<F, R1, O1, E1, A>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>,
-    <R1, O1, E1, A, R2, O2, E2, _>(
-      self: Kind<F, R1, O1, E1, A>,
-      that: Kind<F, R2, O2, E2, _>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A>
-  >(2, <R1, O1, E1, A, R2, O2, E2, _>(
+  dual(2, <R1, O1, E1, A, R2, O2, E2, _>(
     self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, _>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => zipWith(F)(self, that, identity))
@@ -135,17 +105,7 @@ export const andThen = <F extends TypeLambda>(F: SemiApplicative<F>): {
     that: Kind<F, R2, O2, E2, B>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
 } =>
-  dual<
-    <R2, O2, E2, B>(
-      that: Kind<F, R2, O2, E2, B>
-    ) => <R1, O1, E1, _>(
-      self: Kind<F, R1, O1, E1, _>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>,
-    <R1, O1, E1, _, R2, O2, E2, B>(
-      self: Kind<F, R1, O1, E1, _>,
-      that: Kind<F, R2, O2, E2, B>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
-  >(2, <R1, O1, E1, _, R2, O2, E2, B>(
+  dual(2, <R1, O1, E1, _, R2, O2, E2, B>(
     self: Kind<F, R1, O1, E1, _>,
     that: Kind<F, R2, O2, E2, B>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK))
@@ -168,15 +128,7 @@ export const lift2 = <F extends TypeLambda>(F: SemiApplicative<F>) =>
       that: Kind<F, R2, O2, E2, B>
     ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
   } =>
-    dual<
-      <R2, O2, E2>(
-        that: Kind<F, R2, O2, E2, B>
-      ) => <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>,
-      <R1, O1, E1, R2, O2, E2>(
-        self: Kind<F, R1, O1, E1, A>,
-        that: Kind<F, R2, O2, E2, B>
-      ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
-    >(2, <R1, O1, E1, R2, O2, E2>(
+    dual(2, <R1, O1, E1, R2, O2, E2>(
       self: Kind<F, R1, O1, E1, A>,
       that: Kind<F, R2, O2, E2, B>
     ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => zipWith(F)(self, that, f))

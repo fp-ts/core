@@ -63,10 +63,7 @@ export const multiply: {
 export const subtract: {
   (that: number): (self: number) => number
   (self: number, that: number): number
-} = dual<
-  (that: number) => (self: number) => number,
-  (self: number, that: number) => number
->(2, (self: number, that: number): number => self - that)
+} = dual(2, (self: number, that: number): number => self - that)
 
 /**
  * @example
@@ -81,10 +78,7 @@ export const subtract: {
 export const divide: {
   (that: number): (self: number) => number
   (self: number, that: number): number
-} = dual<
-  (that: number) => (self: number) => number,
-  (self: number, that: number) => number
->(2, (self: number, that: number): number => self / that)
+} = dual(2, (self: number, that: number): number => self / that)
 
 /**
  * @example
