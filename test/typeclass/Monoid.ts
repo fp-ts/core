@@ -1,29 +1,29 @@
 import * as N from "@fp-ts/core/Number"
 import * as String from "@fp-ts/core/String"
-import * as monoid from "@fp-ts/core/typeclass/Monoid"
+import * as _ from "@fp-ts/core/typeclass/Monoid"
 import * as U from "../util"
 
 describe("Monoid", () => {
   it("exports", () => {
-    expect(monoid.array).exists
+    expect(_.array).exists
   })
 
   it("min", () => {
-    const M = monoid.min(N.Bounded)
+    const M = _.min(N.Bounded)
     U.deepStrictEqual(M.combineAll([]), +Infinity)
     U.deepStrictEqual(M.combineAll([1]), 1)
     U.deepStrictEqual(M.combineAll([1, -1]), -1)
   })
 
   it("max", () => {
-    const M = monoid.max(N.Bounded)
+    const M = _.max(N.Bounded)
     U.deepStrictEqual(M.combineAll([]), -Infinity)
     U.deepStrictEqual(M.combineAll([1]), 1)
     U.deepStrictEqual(M.combineAll([1, -1]), 1)
   })
 
   it("reverse", () => {
-    const M = monoid.reverse(String.Monoid)
+    const M = _.reverse(String.Monoid)
     U.deepStrictEqual(M.combine("a", "b"), "ba")
     U.deepStrictEqual(M.combine("a", M.empty), "a")
     U.deepStrictEqual(M.combine(M.empty, "a"), "a")
@@ -35,7 +35,7 @@ describe("Monoid", () => {
 
   describe("struct", () => {
     it("baseline", () => {
-      const M = monoid.struct({
+      const M = _.struct({
         name: String.Monoid,
         age: N.MonoidSum
       })
@@ -48,13 +48,13 @@ describe("Monoid", () => {
 
     it("should ignore non own properties", () => {
       const monoids = Object.create({ a: 1 })
-      const M = monoid.struct(monoids)
+      const M = _.struct(monoids)
       U.deepStrictEqual(M.empty, {})
     })
   })
 
   it("tuple", () => {
-    const M = monoid.tuple(
+    const M = _.tuple(
       String.Monoid,
       N.MonoidSum
     )

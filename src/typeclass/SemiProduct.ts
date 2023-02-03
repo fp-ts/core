@@ -12,19 +12,76 @@ import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
  * @since 1.0.0
  */
 export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
-  readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+  readonly product: {
+    <R2, O2, E2, B>(
+      that: Kind<F, R2, O2, E2, B>
+    ): <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+    <R1, O1, E1, A, R2, O2, E2, B>(
+      self: Kind<F, R1, O1, E1, A>,
+      that: Kind<F, R2, O2, E2, B>
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+  }
 
-  readonly productMany: <R, O, E, A>(
-    self: Kind<F, R, O, E, A>,
-    collection: Iterable<Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, [A, ...Array<A>]>
+  readonly productMany: {
+    <R, O, E, A>(
+      collection: Iterable<Kind<F, R, O, E, A>>
+    ): (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...Array<A>]>
+    <R, O, E, A>(
+      self: Kind<F, R, O, E, A>,
+      collection: Iterable<Kind<F, R, O, E, A>>
+    ): Kind<F, R, O, E, [A, ...Array<A>]>
+  }
 }
 
 /**
- * Returns a default `product` composition.
+ * @category constructors
+ * @since 1.0.0
+ */
+export const make = <F extends TypeLambda>(
+  Invariant: Invariant<F>,
+  product: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>,
+  productMany: <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
+    collection: Iterable<Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, [A, ...Array<A>]>
+): SemiProduct<F> => ({
+  imap: Invariant.imap,
+  product: dual(2, product),
+  productMany: dual(2, productMany)
+})
+
+/**
+ * Useful when `productMany` can't be optimised.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const fromProduct = <F extends TypeLambda>(
+  Covariant: Covariant<F>,
+  product: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+): SemiProduct<F> =>
+  make(Covariant, product, <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
+    collection: Iterable<Kind<F, R, O, E, A>>
+  ) => {
+    let out = Covariant.map(self, (a): [A, ...Array<A>] => [a])
+    for (const fa of collection) {
+      out = Covariant.map(
+        product(out, fa),
+        ([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a]
+      )
+    }
+    return out
+  })
+
+/**
+ * Returns a default binary `product` composition.
  *
  * @since 1.0.0
  */
@@ -41,10 +98,10 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
     FO1 | FO2,
     FE1 | FE2,
     Kind<G, GR1 & GR2, GO1 | GO2, GE1 | GE2, [A, B]>
-  > => pipe(F.product(self, that), F.map(([ga, gb]) => G.product(ga, gb)))
+  > => F.map(F.product(self, that), ([ga, gb]) => G.product(ga, gb))
 
 /**
- * Returns a default `productMany` composition.
+ * Returns a default binary `productMany` composition.
  *
  * @since 1.0.0
  */
@@ -60,33 +117,6 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
       F.productMany(self, collection),
       F.map(([ga, ...gas]) => G.productMany(ga, gas))
     )
-
-/**
- * Returns a default `productMany` implementation (useful for tests).
- *
- * @category constructors
- * @since 1.0.0
- */
-export const productMany = <F extends TypeLambda>(
-  Covariant: Covariant<F>,
-  product: SemiProduct<F>["product"]
-): SemiProduct<F>["productMany"] =>
-  <R, O, E, A>(
-    self: Kind<F, R, O, E, A>,
-    collection: Iterable<Kind<F, R, O, E, A>>
-  ) => {
-    let out = pipe(
-      self,
-      Covariant.map((a): [A, ...Array<A>] => [a])
-    )
-    for (const fa of collection) {
-      out = pipe(
-        product(out, fa),
-        Covariant.map(([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a])
-      )
-    }
-    return out
-  }
 
 /**
  * @category do notation
@@ -130,17 +160,7 @@ export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>): {
     that: Kind<F, R2, O2, E2, B>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>
 } =>
-  dual<
-    <R2, O2, E2, B>(
-      that: Kind<F, R2, O2, E2, B>
-    ) => <R1, O1, E1, A extends ReadonlyArray<any>>(
-      self: Kind<F, R1, O1, E1, A>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>,
-    <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
-      self: Kind<F, R1, O1, E1, A>,
-      that: Kind<F, R2, O2, E2, B>
-    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]>
-  >(2, <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
+  dual(2, <R1, O1, E1, A extends ReadonlyArray<any>, R2, O2, E2, B>(
     self: Kind<F, R1, O1, E1, A>,
     that: Kind<F, R2, O2, E2, B>
   ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [...A, B]> =>

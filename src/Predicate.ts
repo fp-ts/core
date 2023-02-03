@@ -153,38 +153,33 @@ export const Do: Predicate<{}> = of_.Do(Of)
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
-const product = <A, B>(
-  self: Predicate<A>,
-  that: Predicate<B>
-): Predicate<[A, B]> => ([a, b]) => self(a) && that(b)
-
-const productMany = <A>(
-  self: Predicate<A>,
-  collection: Iterable<Predicate<A>>
-): Predicate<readonly [A, ...Array<A>]> => {
-  return ([head, ...tail]) => {
-    if (self(head) === false) {
-      return false
-    }
-    const predicates = readonlyArray.fromIterable(collection)
-    for (let i = 0; i < predicates.length; i++) {
-      if (predicates[i](tail[i]) === false) {
-        return false
-      }
-    }
-    return true
-  }
-}
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
-  imap,
-  product,
-  productMany
-}
+export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = semiProduct.make(
+  Invariant,
+  <A, B>(
+    self: Predicate<A>,
+    that: Predicate<B>
+  ): Predicate<[A, B]> => ([a, b]) => self(a) && that(b),
+  <A>(
+    self: Predicate<A>,
+    collection: Iterable<Predicate<A>>
+  ): Predicate<readonly [A, ...Array<A>]> =>
+    ([head, ...tail]) => {
+      if (self(head) === false) {
+        return false
+      }
+      const predicates = readonlyArray.fromIterable(collection)
+      for (let i = 0; i < predicates.length; i++) {
+        if (predicates[i](tail[i]) === false) {
+          return false
+        }
+      }
+      return true
+    }
+)
 
 const productAll = <A>(
   collection: Iterable<Predicate<A>>
@@ -206,8 +201,8 @@ const productAll = <A>(
 export const Product: product_.Product<PredicateTypeLambda> = {
   of,
   imap,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 

@@ -1,5 +1,4 @@
 import * as _ from "@fp-ts/core/Function"
-import * as Number from "@fp-ts/core/Number"
 import * as String from "@fp-ts/core/String"
 import { deepStrictEqual, double } from "@fp-ts/core/test/util"
 import * as assert from "assert"
@@ -8,28 +7,6 @@ const f = (n: number): number => n + 1
 const g = double
 
 describe.concurrent("Function", () => {
-  it("getSemigroup", () => {
-    const S = _.getSemigroup(Number.SemigroupSum)<string>()
-    const f = (s: string) => s === "a" ? 0 : 1
-    const g = S.combine(String.length, f)
-    deepStrictEqual(g(""), 1)
-    deepStrictEqual(g("a"), 1)
-    deepStrictEqual(g("b"), 2)
-    deepStrictEqual(S.combineMany(String.length, [String.length, String.length])("a"), 3)
-  })
-
-  it("getMonoid", () => {
-    const M = _.getMonoid(Number.MonoidSum)<string>()
-    const f = (s: string) => s === "a" ? 0 : 1
-    const g = M.combine(String.length, f)
-    deepStrictEqual(g(""), 1)
-    deepStrictEqual(g("a"), 1)
-    deepStrictEqual(g("b"), 2)
-    deepStrictEqual(M.combine(String.length, M.empty)("a"), 1)
-    deepStrictEqual(M.combine(M.empty, String.length)("a"), 1)
-    deepStrictEqual(M.combineAll([String.length, String.length])("a"), 2)
-  })
-
   it("apply", () => {
     deepStrictEqual(_.pipe("a", _.apply(String.length)), 1)
   })

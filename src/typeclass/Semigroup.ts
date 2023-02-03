@@ -1,13 +1,13 @@
 /**
  * @since 1.0.0
  */
+import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { dual } from "@fp-ts/core/internal/Function"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product from "@fp-ts/core/typeclass/Product"
-import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -322,11 +322,11 @@ export const imap: {
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
-  imap: Invariant.imap,
-  product: tuple,
-  productMany: (self, collection) => tuple(self, ...collection)
-}
+export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = semiProduct.make(
+  Invariant,
+  tuple,
+  (self, collection) => tuple(self, ...collection)
+)
 
 /**
  * @category instances

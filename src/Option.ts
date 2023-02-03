@@ -915,35 +915,30 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
   flatMap
 }
 
-const product = <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]> =>
-  isSome(self) && isSome(that) ? some([self.value, that.value]) : none()
-
-const productMany = <A>(
-  self: Option<A>,
-  collection: Iterable<Option<A>>
-): Option<[A, ...Array<A>]> => {
-  if (isNone(self)) {
-    return none()
-  }
-  const out: [A, ...Array<A>] = [self.value]
-  for (const o of collection) {
-    if (isNone(o)) {
-      return none()
-    }
-    out.push(o.value)
-  }
-  return some(out)
-}
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
-  imap,
-  product,
-  productMany
-}
+export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = semiProduct.make(
+  Invariant,
+  (self, that) => isSome(self) && isSome(that) ? some([self.value, that.value]) : none(),
+  <A>(
+    self: Option<A>,
+    collection: Iterable<Option<A>>
+  ): Option<[A, ...Array<A>]> => {
+    if (isNone(self)) {
+      return none()
+    }
+    const out: [A, ...Array<A>] = [self.value]
+    for (const o of collection) {
+      if (isNone(o)) {
+        return none()
+      }
+      out.push(o.value)
+    }
+    return some(out)
+  }
+)
 
 /**
  * Appends an element to the end of a tuple.
@@ -973,8 +968,8 @@ const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
 export const Product: product_.Product<OptionTypeLambda> = {
   of,
   imap,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 
@@ -1002,8 +997,8 @@ export const struct: <R extends Record<string, Option<any>>>(
 export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> = {
   imap,
   map,
-  product,
-  productMany
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany
 }
 
 /**
@@ -1083,8 +1078,8 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   imap,
   of,
   map,
-  product,
-  productMany,
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
   productAll
 }
 

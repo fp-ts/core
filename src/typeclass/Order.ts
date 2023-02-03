@@ -10,7 +10,7 @@ import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -202,36 +202,26 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
   imap
 }
 
-const productMany = <A>(
-  self: Order<A>,
-  collection: Iterable<Order<A>>
-): Order<[A, ...Array<A>]> => tuple(self, ...collection)
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
-  imap,
-  product: tuple,
-  productMany
-}
-
-const productAll = <A>(collection: Iterable<Order<A>>): Order<Array<A>> =>
-  tuple<Array<A>>(...collection)
-
-const of: <A>(a: A) => Order<A> = () => empty
+export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = semiProduct.make(
+  Invariant,
+  tuple,
+  (self, collection) => tuple(self, ...collection)
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Product: product.Product<OrderTypeLambda> = {
-  of,
+  of: () => empty,
   imap,
-  product: tuple,
-  productMany,
-  productAll
+  product: SemiProduct.product,
+  productMany: SemiProduct.productMany,
+  productAll: <A>(collection: Iterable<Order<A>>): Order<Array<A>> => tuple<Array<A>>(...collection)
 }
 
 /**

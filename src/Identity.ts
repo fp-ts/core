@@ -18,7 +18,7 @@ import type * as semiAlternative from "@fp-ts/core/typeclass/SemiAlternative"
 import type * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
-import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import type * as traversable from "@fp-ts/core/typeclass/Traversable"
 
 /**
@@ -155,11 +155,11 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = {
-  imap: Invariant.imap,
-  product: (self, that) => [self, that],
-  productMany: (self, collection) => [self, ...collection]
-}
+export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = semiProduct.make(
+  Invariant,
+  (self, that) => [self, that],
+  (self, collection) => [self, ...collection]
+)
 
 /**
  * @category instances
