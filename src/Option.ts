@@ -1304,33 +1304,31 @@ export const filter: {
 // -------------------------------------------------------------------------------------
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<OptionTypeLambda> = traversable.make(<
+  F extends TypeLambda
+>(F: applicative.Applicative<F>) =>
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>> =>
+    isNone(self) ? F.of<Option<B>>(none()) : pipe(f(self.value), F.map(some))
+)
+
+/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse = <F extends TypeLambda>(
+export const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-): {
+) => {
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
-  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
-} =>
-  dual<
-    <A, R, O, E, B>(
-      f: (a: A) => Kind<F, R, O, E, B>
-    ) => (self: Option<A>) => Kind<F, R, O, E, Option<B>>,
-    <A, R, O, E, B>(
-      self: Option<A>,
-      f: (a: A) => Kind<F, R, O, E, B>
-    ) => Kind<F, R, O, E, Option<B>>
-  >(
-    2,
-    <A, R, O, E, B>(
-      self: Option<A>,
-      f: (a: A) => Kind<F, R, O, E, B>
-    ): Kind<F, R, O, E, Option<B>> =>
-      isNone(self) ? F.of<Option<B>>(none()) : pipe(f(self.value), F.map(some))
-  )
+  <A, R, O, E, B>(
+    self: Option<A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Option<B>>
+} = Traversable.traverse
 
 /**
  * @category traversing
@@ -1339,16 +1337,7 @@ export const traverse = <F extends TypeLambda>(
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <R, O, E, A>(self: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>> = traversable
-  .sequence<OptionTypeLambda>(traverse)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<OptionTypeLambda> = {
-  traverse,
-  sequence
-}
+  .sequence(Traversable)
 
 /**
  * @category traversing

@@ -82,9 +82,4 @@ describe.concurrent("Identity", () => {
     U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(O.some)), O.some(1))
     U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(() => O.none())), O.none())
   })
-
-  it("sequence", () => {
-    U.deepStrictEqual(_.Traversable.sequence(O.Applicative)(O.some(1)), O.some(1))
-    U.deepStrictEqual(_.Traversable.sequence(O.Applicative)(O.none()), O.none())
-  })
 })

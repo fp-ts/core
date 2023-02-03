@@ -688,24 +688,41 @@ export const Pointed: pointed.Pointed<TheseTypeLambda> = {
 }
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<TheseTypeLambda> = traversable.make(<
+  F extends TypeLambda
+>(F: applicative.Applicative<F>) =>
+  <E, A, FR, FO, FE, B>(
+    self: These<E, A>,
+    f: (a: A) => Kind<F, FR, FO, FE, B>
+  ): Kind<F, FR, FO, FE, These<E, B>> =>
+    isLeft(self)
+      ? F.of<These<E, B>>(self)
+      : isRight(self)
+      ? pipe(f(self.right), F.map<B, These<E, B>>(right))
+      : pipe(
+        f(self.right),
+        F.map((b) => both(self.left, b))
+      )
+)
+
+/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse = <F extends TypeLambda>(
+export const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) =>
-  <A, R, O, FE, B>(
-    f: (a: A) => Kind<F, R, O, FE, B>
-  ) =>
-    <E>(self: These<E, A>): Kind<F, R, O, FE, These<E, B>> =>
-      isLeft(self)
-        ? F.of<These<E, B>>(self)
-        : isRight(self)
-        ? pipe(f(self.right), F.map<B, These<E, B>>(right))
-        : pipe(
-          f(self.right),
-          F.map((b) => both(self.left, b))
-        )
+) => {
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): <TE>(self: These<TE, A>) => Kind<F, R, O, E, These<TE, B>>
+  <TE, A, R, O, E, B>(
+    self: These<TE, A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, These<TE, B>>
+} = Traversable.traverse
 
 /**
  * @category traversing
@@ -713,18 +730,9 @@ export const traverse = <F extends TypeLambda>(
  */
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <E, FR, FO, FE, A>(
-  self: These<E, Kind<F, FR, FO, FE, A>>
-) => Kind<F, FR, FO, FE, These<E, A>> = traversable.sequence<TheseTypeLambda>(traverse)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<TheseTypeLambda> = {
-  traverse,
-  sequence
-}
+) => <TE, R, O, E, A>(
+  self: These<TE, Kind<F, R, O, E, A>>
+) => Kind<F, R, O, E, These<TE, A>> = traversable.sequence(Traversable)
 
 /**
  * @category traversing

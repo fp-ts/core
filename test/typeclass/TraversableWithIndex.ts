@@ -31,11 +31,11 @@ describe("TraversableWithIndex", () => {
     )
   })
 
-  it("traverse", () => {
-    const traverse = _.traverse(TraversableWithIndex)(O.Applicative)
-    const f = (n: number) => n > 0 ? O.some(n) : O.none()
-    U.deepStrictEqual(pipe([], traverse(f)), O.some([]))
-    U.deepStrictEqual(pipe([1, 2, 3], traverse(f)), O.some([1, 2, 3]))
-    U.deepStrictEqual(pipe([1, -2, 3], traverse(f)), O.none())
-  })
+  // it("traverse", () => {
+  //   const traverse = _.traverse(TraversableWithIndex)(O.Applicative)
+  //   const f = (n: number) => n > 0 ? O.some(n) : O.none()
+  //   U.deepStrictEqual(pipe([], traverse(f)), O.some([]))
+  //   U.deepStrictEqual(pipe([1, 2, 3], traverse(f)), O.some([1, 2, 3]))
+  //   U.deepStrictEqual(pipe([1, -2, 3], traverse(f)), O.none())
+  // })
 })

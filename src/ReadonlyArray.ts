@@ -1626,15 +1626,6 @@ export const partitionMapWithIndex = <A, B, C>(f: (a: A, i: number) => Either<B,
  * @category traversing
  * @since 1.0.0
  */
-export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
-  <A, R, O, E, B>(
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): ((self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>>) => traverseWithIndex(F)(f)
-
-/**
- * @category traversing
- * @since 1.0.0
- */
 export const traverseWithIndex = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) =>
     (self: ReadonlyArray<A>): Kind<F, R, O, E, Array<B>> => F.productAll(self.map(f))
@@ -1665,6 +1656,35 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
     }
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = traversable.make(<
+  F extends TypeLambda
+>(F: applicative.Applicative<F>) =>
+  <A, R, O, E, B>(
+    self: ReadonlyArray<A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, ReadonlyArray<B>> => traverseWithIndex(F)(f)(self) as any
+)
+
+/**
+ * @category traversing
+ * @since 1.0.0
+ */
+export const traverse: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => {
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): (self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>>
+  <A, R, O, E, B>(
+    self: ReadonlyArray<A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Array<B>>
+} = Traversable.traverse as any
+
+/**
  * @category traversing
  * @since 1.0.0
  */
@@ -1672,20 +1692,7 @@ export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <R, O, E, A>(
   self: ReadonlyArray<Kind<F, R, O, E, A>>
-) => Kind<F, R, O, E, Array<A>> = traversable.sequence<ReadonlyArrayTypeLambda>(
-  traverse as any
-) as any
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = {
-  // @ts-expect-error
-  traverse,
-  // @ts-expect-error
-  sequence
-}
+) => Kind<F, R, O, E, Array<A>> = traversable.sequence(Traversable) as any
 
 /**
  * @category traversing

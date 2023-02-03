@@ -2,7 +2,7 @@
  * @since 1.0.0
  */
 import { identity } from "@fp-ts/core/Function"
-import type { TypeLambda } from "@fp-ts/core/HKT"
+import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
@@ -19,7 +19,7 @@ import type * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
-import type * as traversable from "@fp-ts/core/typeclass/Traversable"
+import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
 /**
  * @category models
@@ -232,7 +232,10 @@ export const Foldable: foldable.Foldable<IdentityTypeLambda> = foldable.make((se
  * @category instances
  * @since 1.0.0
  */
-export const Traversable: traversable.Traversable<IdentityTypeLambda> = {
-  traverse: () => f => self => f(self),
-  sequence: () => identity
-}
+export const Traversable: traversable.Traversable<IdentityTypeLambda> = traversable.make(
+  <F extends TypeLambda>(_: applicative.Applicative<F>) =>
+    <A, R, O, E, B>(
+      self: Identity<A>,
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): Kind<F, R, O, E, Identity<B>> => f(self)
+)
