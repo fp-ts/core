@@ -558,7 +558,7 @@ Added in v1.0.0
 ```ts
 export declare const traverseFilterMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, Option<B>>) => (ta: readonly A[]) => Kind<F, R, O, E, B[]>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, Option<B>>) => (self: readonly A[]) => Kind<F, R, O, E, B[]>
 ```
 
 Added in v1.0.0
@@ -2297,9 +2297,18 @@ Filter values inside a context.
 ```ts
 export declare const traverseFilter: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <B extends A, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (self: readonly B[]) => Kind<F, R, O, E, B[]>
+) => {
+  <B extends A, R, O, E, A = B>(predicate: (a: A) => Kind<F, R, O, E, boolean>): (
+    self: readonly B[]
+  ) => Kind<F, R, O, E, B[]>
+  <B extends A, R, O, E, A = B>(self: readonly B[], predicate: (a: A) => Kind<F, R, O, E, boolean>): Kind<
+    F,
+    R,
+    O,
+    E,
+    B[]
+  >
+}
 ```
 
 Added in v1.0.0
@@ -2311,9 +2320,18 @@ Added in v1.0.0
 ```ts
 export declare const traversePartition: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <B extends A, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (self: readonly B[]) => Kind<F, R, O, E, [B[], B[]]>
+) => {
+  <B extends A, R, O, E, A = B>(predicate: (a: A) => Kind<F, R, O, E, boolean>): (
+    self: readonly B[]
+  ) => Kind<F, R, O, E, [B[], B[]]>
+  <B extends A, R, O, E, A = B>(self: readonly B[], predicate: (a: A) => Kind<F, R, O, E, boolean>): Kind<
+    F,
+    R,
+    O,
+    E,
+    [B[], B[]]
+  >
+}
 ```
 
 Added in v1.0.0
