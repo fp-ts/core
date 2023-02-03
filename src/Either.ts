@@ -251,7 +251,6 @@ export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = bicovarian
 ) => isLeft(self) ? left(f(self.left)) : right(g(self.right)))
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -266,7 +265,6 @@ export const bimap: {
  * @param self - The input `Either` value to map.
  * @param f - A transformation function to apply to the `Left` value of the input `Either`.
  *
- * @dual
  * @category error handling
  * @since 1.0.0
  */
@@ -290,7 +288,6 @@ export const Covariant: covariant.Covariant<EitherTypeLambda> = covariant.make(<
  * @param self - An `Either` to map
  * @param f - The function to map over the value of the `Either`
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -318,7 +315,6 @@ export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tu
 )
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -330,7 +326,6 @@ export const flap: {
 /**
  * Maps the Right value of this effect to the specified constant value.
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -373,7 +368,6 @@ export const Pointed: pointed.Pointed<EitherTypeLambda> = {
 }
 
 /**
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -401,7 +395,6 @@ export const flatten: <E1, E2, A>(self: Either<E1, Either<E2, A>>) => Either<E1 
   .flatten(FlatMap)
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const andThen: {
@@ -410,7 +403,6 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -437,7 +429,6 @@ export const Chainable: chainable.Chainable<EitherTypeLambda> = {
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -595,7 +586,6 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
 } = semiApplicative.lift2(SemiApplicative)
 
 /**
- * @dual
  * @category combining
  * @since 1.0.0
  */
@@ -612,7 +602,6 @@ export const zipWith: {
 } = semiApplicative.zipWith(SemiApplicative)
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const ap: {
@@ -717,7 +706,6 @@ export const getFirstRightSemigroup: <E, A>() => Semigroup<Either<E, A>> = semiC
  *   0
  * )
  *
- * @dual
  * @category getters
  * @since 1.0.0
  */
@@ -856,7 +844,6 @@ export const match = <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C)
  * assert.deepStrictEqual(parse(1), E.right(1))
  * assert.deepStrictEqual(parse(null), E.left('nullable'))
  *
- * @dual
  * @category interop
  * @since 1.0.0
  */
@@ -1025,7 +1012,6 @@ export const traverseTap: <F extends TypeLambda>(
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
- * @dual
  * @category combinators
  * @since 1.0.0
  */
@@ -1188,7 +1174,6 @@ export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E,
 // -------------------------------------------------------------------------------------
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1198,7 +1183,6 @@ export const sum: {
 } = lift2(N.sum)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1208,7 +1192,6 @@ export const multiply: {
 } = lift2(N.multiply)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1218,7 +1201,6 @@ export const subtract: {
 } = lift2(N.subtract)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */

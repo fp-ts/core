@@ -27,7 +27,6 @@ export const isNumber = predicate.isNumber
  *
  * assert.deepStrictEqual(pipe(2, sum(3)), 5)
  *
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -43,7 +42,6 @@ export const sum: {
  *
  * assert.deepStrictEqual(pipe(2, multiply(3)), 6)
  *
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -59,7 +57,6 @@ export const multiply: {
  *
  * assert.deepStrictEqual(pipe(2, subtract(3)), -1)
  *
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -78,7 +75,6 @@ export const subtract: {
  *
  * assert.deepStrictEqual(pipe(6, divide(3)), 2)
  *
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */

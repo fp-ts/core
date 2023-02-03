@@ -187,7 +187,6 @@ export const Contravariant: contravariant.Contravariant<EquivalenceTypeLambda> =
 )
 
 /**
- * @dual
  * @category combinators
  * @since 1.0.0
  */

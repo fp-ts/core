@@ -1214,7 +1214,6 @@ export const of = <A>(a: A): NonEmptyArray<A> => [a]
 export const empty: <A = never>() => Array<A> = () => []
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -1329,7 +1328,6 @@ export {
 }
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -1341,7 +1339,6 @@ export const flap: {
 /**
  * Maps the success value of this effect to the specified constant value.
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -1377,7 +1374,6 @@ export const flatMapWithIndex = <A, B>(f: (a: A, i: number) => ReadonlyArray<B>)
   }
 
 /**
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -1435,7 +1431,6 @@ export const flattenNonEmpty: <A>(
 ) => NonEmptyArray<A> = flatMapNonEmpty(identity)
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -1506,7 +1501,6 @@ export const separate = <A, B>(
 }
 
 /**
- * @dual
  * @category filtering
  * @since 1.0.0
  */
@@ -1540,7 +1534,6 @@ export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
 
 // TODO: input as interables
 /**
- * @dual
  * @category filtering
  * @since 1.0.0
  */
@@ -1787,7 +1780,6 @@ export const SemiApplicative: semiApplicative.SemiApplicative<ReadonlyArrayTypeL
 }
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const ap: {

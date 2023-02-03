@@ -184,7 +184,6 @@ export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = contr
 >(self: Order<A>, f: (b: B) => A): Order<B> => make((b1, b2) => self.compare(f(b1), f(b2))))
 
 /**
- * @dual
  * @category combinators
  * @since 1.0.0
  */

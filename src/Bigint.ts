@@ -20,7 +20,6 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -30,7 +29,6 @@ export const sum: {
 } = semigroup.bigintSum.combine
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -40,7 +38,6 @@ export const multiply: {
 } = semigroup.bigintMultiply.combine
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -53,7 +50,6 @@ export const subtract: {
 >(2, (self: bigint, that: bigint): bigint => self - that)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
