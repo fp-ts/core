@@ -1235,16 +1235,13 @@ export const reduceCompact: {
   }
 )
 
-const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
-  (self: Option<A>): B => isNone(self) ? b : f(b, self.value)
-
 /**
  * @category folding
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<OptionTypeLambda> = {
-  reduce
-}
+export const Foldable: foldable.Foldable<OptionTypeLambda> = foldable.make((self, b, f) =>
+  isNone(self) ? b : f(b, self.value)
+)
 
 /**
  * Transforms an `Option` into an `Array`.

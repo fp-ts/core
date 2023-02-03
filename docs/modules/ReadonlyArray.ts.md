@@ -56,7 +56,6 @@ Added in v1.0.0
   - [reduce](#reduce)
   - [reduceKind](#reducekind)
   - [reduceRight](#reduceright)
-  - [reduceRightKind](#reducerightkind)
   - [reduceRightWithIndex](#reducerightwithindex)
   - [reduceWithIndex](#reducewithindex)
   - [scan](#scan)
@@ -641,7 +640,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduce: <B, A>(b: B, f: (b: B, a: A) => B) => (self: readonly A[]) => B
+export declare const reduce: {
+  <A, B>(b: B, f: (b: B, a: A) => B): (self: readonly A[]) => B
+  <A, B>(self: readonly A[], b: B, f: (b: B, a: A) => B): B
+}
 ```
 
 Added in v1.0.0
@@ -664,18 +666,6 @@ Added in v1.0.0
 
 ```ts
 export declare const reduceRight: <B, A>(b: B, f: (b: B, a: A) => B) => (self: readonly A[]) => B
-```
-
-Added in v1.0.0
-
-## reduceRightKind
-
-**Signature**
-
-```ts
-export declare const reduceRightKind: <F extends TypeLambda>(
-  F: monad.Monad<F>
-) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0

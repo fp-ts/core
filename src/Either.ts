@@ -781,16 +781,13 @@ export const SemiAlternative: semiAlternative.SemiAlternative<EitherTypeLambda> 
   coproductMany
 }
 
-const reduce = <A, B>(b: B, f: (b: B, a: A) => B) =>
-  <E>(self: Either<E, A>): B => isLeft(self) ? b : f(b, self.right)
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<EitherTypeLambda> = {
-  reduce
-}
+export const Foldable: foldable.Foldable<EitherTypeLambda> = foldable.make((self, b, f) =>
+  isLeft(self) ? b : f(b, self.right)
+)
 
 /**
  * Transforms an `Either` into an `Array`.

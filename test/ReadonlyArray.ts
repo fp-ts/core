@@ -55,7 +55,6 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.reduceRight).exist
     expect(RA.foldMap).exist
     expect(RA.reduceKind).exist
-    expect(RA.reduceRightKind).exist
     expect(RA.foldMapKind).exist
 
     expect(RA.Traversable).exist
