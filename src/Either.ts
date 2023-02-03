@@ -654,25 +654,15 @@ export const firstRightOf = <E, A>(collection: Iterable<Either<E, A>>) =>
     return out
   }
 
-const coproduct = <E1, A, E2, B>(
-  self: Either<E1, A>,
-  that: Either<E2, B>
-): Either<E1 | E2, A | B> => isRight(self) ? self : that
-
-const coproductMany = <E, A>(
-  self: Either<E, A>,
-  collection: Iterable<Either<E, A>>
-): Either<E, A> => pipe(self, firstRightOf(collection))
-
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
-  imap,
-  coproduct,
-  coproductMany
-}
+export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = semiCoproduct.make(
+  Invariant,
+  (self, that) => isRight(self) ? self : that,
+  (self, collection) => pipe(self, firstRightOf(collection))
+)
 
 /**
  * Semigroup returning the left-most `Right` value.
@@ -765,8 +755,8 @@ export const orElseFail = <E2>(
 export const SemiAlternative: semiAlternative.SemiAlternative<EitherTypeLambda> = {
   map,
   imap,
-  coproduct,
-  coproductMany
+  coproduct: SemiCoproduct.coproduct,
+  coproductMany: SemiCoproduct.coproductMany
 }
 
 /**
