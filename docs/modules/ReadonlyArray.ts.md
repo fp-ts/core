@@ -48,11 +48,11 @@ Added in v1.0.0
   - [traverseFilterMap](#traversefiltermap)
   - [traversePartitionMap](#traversepartitionmap)
 - [folding](#folding)
-  - [foldMap](#foldmap)
-  - [foldMapKind](#foldmapkind)
-  - [foldMapNonEmpty](#foldmapnonempty)
-  - [foldMapNonEmptyWithIndex](#foldmapnonemptywithindex)
-  - [foldMapWithIndex](#foldmapwithindex)
+  - [combineMap](#combinemap)
+  - [combineMapNonEmpty](#combinemapnonempty)
+  - [combineMapNonEmptyWithIndex](#combinemapnonemptywithindex)
+  - [combineMapWithIndex](#combinemapwithindex)
+  - [coproductMapKind](#coproductmapkind)
   - [reduce](#reduce)
   - [reduceKind](#reducekind)
   - [reduceRight](#reduceright)
@@ -579,58 +579,60 @@ Added in v1.0.0
 
 # folding
 
-## foldMap
+## combineMap
 
 **Signature**
 
 ```ts
-export declare const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: readonly A[]) => M
+export declare const combineMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: readonly A[]) => M
 ```
 
 Added in v1.0.0
 
-## foldMapKind
+## combineMapNonEmpty
 
 **Signature**
 
 ```ts
-export declare const foldMapKind: <F extends TypeLambda>(
-  F: Coproduct<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
+export declare const combineMapNonEmpty: <S>(
+  S: Semigroup<S>
+) => <A>(f: (a: A) => S) => (self: readonly [A, ...A[]]) => S
 ```
 
 Added in v1.0.0
 
-## foldMapNonEmpty
+## combineMapNonEmptyWithIndex
 
 **Signature**
 
 ```ts
-export declare const foldMapNonEmpty: <S>(S: Semigroup<S>) => <A>(f: (a: A) => S) => (self: readonly [A, ...A[]]) => S
-```
-
-Added in v1.0.0
-
-## foldMapNonEmptyWithIndex
-
-**Signature**
-
-```ts
-export declare const foldMapNonEmptyWithIndex: <S>(
+export declare const combineMapNonEmptyWithIndex: <S>(
   S: Semigroup<S>
 ) => <A>(f: (a: A, i: number) => S) => (self: readonly [A, ...A[]]) => S
 ```
 
 Added in v1.0.0
 
-## foldMapWithIndex
+## combineMapWithIndex
 
 **Signature**
 
 ```ts
-export declare const foldMapWithIndex: <M>(
+export declare const combineMapWithIndex: <M>(
   Monoid: Monoid<M>
 ) => <A>(f: (a: A, i: number) => M) => (self: readonly A[]) => M
+```
+
+Added in v1.0.0
+
+## coproductMapKind
+
+**Signature**
+
+```ts
+export declare const coproductMapKind: <F extends TypeLambda>(
+  F: Coproduct<F>
+) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
 ```
 
 Added in v1.0.0

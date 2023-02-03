@@ -53,9 +53,9 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.Foldable).exist
     expect(RA.reduce).exist
     expect(RA.reduceRight).exist
-    expect(RA.foldMap).exist
+    expect(RA.combineMap).exist
     expect(RA.reduceKind).exist
-    expect(RA.foldMapKind).exist
+    expect(RA.coproductMapKind).exist
 
     expect(RA.Traversable).exist
     expect(RA.traverse).exist
@@ -843,9 +843,9 @@ describe.concurrent("ReadonlyArray", () => {
     ])
   })
 
-  it("foldMap", () => {
-    deepStrictEqual(pipe(["a", "b", "c"], RA.foldMap(String.Monoid)(identity)), "abc")
-    deepStrictEqual(pipe([], RA.foldMap(String.Monoid)(identity)), "")
+  it("combineMap", () => {
+    deepStrictEqual(pipe(["a", "b", "c"], RA.combineMap(String.Monoid)(identity)), "abc")
+    deepStrictEqual(pipe([], RA.combineMap(String.Monoid)(identity)), "")
   })
 
   it("compact", () => {
@@ -898,11 +898,11 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(pipe([], RA.filterMap(f)), [])
   })
 
-  it("foldMapWithIndex", () => {
+  it("combineMapWithIndex", () => {
     deepStrictEqual(
       pipe(
         ["a", "b"],
-        RA.foldMapWithIndex(String.Monoid)((a, i) => i + a)
+        RA.combineMapWithIndex(String.Monoid)((a, i) => i + a)
       ),
       "0a1b"
     )
@@ -1554,21 +1554,21 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(pipe([1, 2, -3], RA.every(isPositive)), false)
   })
 
-  it("foldMapNonEmpty", () => {
+  it("combineMapNonEmpty", () => {
     deepStrictEqual(
       pipe(
         RA.make("a", "b", "c"),
-        RA.foldMapNonEmpty(String.Semigroup)(identity)
+        RA.combineMapNonEmpty(String.Semigroup)(identity)
       ),
       "abc"
     )
   })
 
-  it("foldMapNonEmptyWithIndex", () => {
+  it("combineMapNonEmptyWithIndex", () => {
     deepStrictEqual(
       pipe(
         RA.make("a", "b"),
-        RA.foldMapNonEmptyWithIndex(String.Semigroup)((a, i) => i + a)
+        RA.combineMapNonEmptyWithIndex(String.Semigroup)((a, i) => i + a)
       ),
       "0a1b"
     )
