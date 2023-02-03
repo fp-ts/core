@@ -1924,15 +1924,17 @@ export const coproductMapKind: <F extends TypeLambda>(F: Coproduct<F>) => <A, R,
 ) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.coproductMapKind(Foldable)
 
 /**
- * @category filtering
+ * @category instances
  * @since 1.0.0
  */
-export const traverseFilterMap: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A) => Kind<F, R, O, E, Option<B>>
-) => (ta: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>> = traversableFilterable
-  .traverseFilterMap({ ...Traversable, ...Compactable }) as any
+export const TraversableFilterable: traversableFilterable.TraversableFilterable<
+  ReadonlyArrayTypeLambda
+> = traversableFilterable.make(
+  traversableFilterable
+    .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable }),
+  traversableFilterable
+    .traverseFilterMap({ ...Traversable, ...Compactable })
+)
 
 /**
  * @category filtering
@@ -1942,21 +1944,19 @@ export const traversePartitionMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => <A, R, O, E, B, C>(
   f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, [Array<B>, Array<C>]> = traversableFilterable
-  .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable }) as any
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, [Array<B>, Array<C>]> = TraversableFilterable
+  .traversePartitionMap as any
 
 /**
- * @category instances
+ * @category filtering
  * @since 1.0.0
  */
-export const TraversableFilterable: traversableFilterable.TraversableFilterable<
-  ReadonlyArrayTypeLambda
-> = {
-  // @ts-expect-error
-  traverseFilterMap,
-  // @ts-expect-error
-  traversePartitionMap
-}
+export const traverseFilterMap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <A, R, O, E, B>(
+  f: (a: A) => Kind<F, R, O, E, Option<B>>
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>> = TraversableFilterable
+  .traverseFilterMap as any
 
 /**
  * Filter values inside a context.
@@ -1965,22 +1965,30 @@ export const TraversableFilterable: traversableFilterable.TraversableFilterable<
  */
 export const traverseFilter: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <B extends A, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (self: ReadonlyArray<B>) => Kind<F, R, O, E, Array<B>> = traversableFilterable
-  .traverseFilter(TraversableFilterable) as any
+) => {
+  <B extends A, R, O, E, A = B>(
+    predicate: (a: A) => Kind<F, R, O, E, boolean>
+  ): (self: ReadonlyArray<B>) => Kind<F, R, O, E, Array<B>>
+  <B extends A, R, O, E, A = B>(
+    self: ReadonlyArray<B>,
+    predicate: (a: A) => Kind<F, R, O, E, boolean>
+  ): Kind<F, R, O, E, Array<B>>
+} = traversableFilterable.traverseFilter(TraversableFilterable) as any
 
 /**
  * @since 1.0.0
  */
 export const traversePartition: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <B extends A, R, O, E, A = B>(
-  predicate: (a: A) => Kind<F, R, O, E, boolean>
-) => (
-  self: ReadonlyArray<B>
-) => Kind<F, R, O, E, [Array<B>, Array<B>]> = traversableFilterable
-  .traversePartition(TraversableFilterable) as any
+) => {
+  <B extends A, R, O, E, A = B>(
+    predicate: (a: A) => Kind<F, R, O, E, boolean>
+  ): (self: ReadonlyArray<B>) => Kind<F, R, O, E, [Array<B>, Array<B>]>
+  <B extends A, R, O, E, A = B>(
+    self: ReadonlyArray<B>,
+    predicate: (a: A) => Kind<F, R, O, E, boolean>
+  ): Kind<F, R, O, E, [Array<B>, Array<B>]>
+} = traversableFilterable.traversePartition(TraversableFilterable) as any
 
 /**
  * @category lifting
