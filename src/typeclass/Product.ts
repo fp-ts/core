@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { pipe } from "@fp-ts/core/Function"
+
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Of } from "@fp-ts/core/typeclass/Of"
 import type { SemiProduct } from "@fp-ts/core/typeclass/SemiProduct"
@@ -40,14 +40,11 @@ export const struct = <F extends TypeLambda>(F: Product<F>) =>
     { [K in keyof R]: [R[K]] extends [Kind<F, any, any, any, infer A>] ? A : never }
   > => {
     const keys = Object.keys(fields)
-    return pipe(
-      F.productAll(keys.map(k => fields[k])),
-      F.imap(values => {
-        const out: any = {}
-        for (let i = 0; i < values.length; i++) {
-          out[keys[i]] = values[i]
-        }
-        return out
-      }, (r) => keys.map(k => r[k]))
-    )
+    return F.imap(F.productAll(keys.map(k => fields[k])), values => {
+      const out: any = {}
+      for (let i = 0; i < values.length; i++) {
+        out[keys[i]] = values[i]
+      }
+      return out
+    }, (r) => keys.map(k => r[k]))
   }

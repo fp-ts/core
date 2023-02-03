@@ -4,7 +4,6 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/Either"
-import { pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import type { Option } from "@fp-ts/core/Option"
@@ -39,6 +38,6 @@ export const separate = <F extends TypeLambda>(
   <R, O, E, A, B>(
     self: Kind<F, R, O, E, Either<A, B>>
   ): [Kind<F, R, O, E, A>, Kind<F, R, O, E, B>] => [
-    pipe(self, F.map(either.getLeft), F.compact),
-    pipe(self, F.map(either.getRight), F.compact)
+    F.compact(F.map(self, either.getLeft)),
+    F.compact(F.map(self, either.getRight))
   ]

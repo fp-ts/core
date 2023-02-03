@@ -309,7 +309,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const and: <A>(that: Predicate<A>) => (self: Predicate<A>) => Predicate<A>
+export declare const and: {
+  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
+  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
+}
 ```
 
 Added in v1.0.0
@@ -389,7 +392,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const or: <A>(that: Predicate<A>) => (self: Predicate<A>) => Predicate<A>
+export declare const or: {
+  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
+  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
+}
 ```
 
 Added in v1.0.0

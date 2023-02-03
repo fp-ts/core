@@ -454,7 +454,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const filterMapWithIndex: <A, B>(f: (a: A, i: number) => Option<B>) => (self: Iterable<A>) => B[]
+export declare const filterMapWithIndex: {
+  <A, B>(f: (a: A, i: number) => Option<B>): (self: Iterable<A>) => B[]
+  <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): B[]
+}
 ```
 
 Added in v1.0.0
@@ -1476,9 +1479,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const mapNonEmptyWithIndex: <A, B>(
-  f: (a: A, i: number) => B
-) => (self: readonly [A, ...A[]]) => [B, ...B[]]
+export declare const mapNonEmptyWithIndex: {
+  <A, B>(f: (a: A, i: number) => B): (self: readonly [A, ...A[]]) => [B, ...B[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => B): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0
@@ -1659,7 +1663,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMapWithIndex: <A, B>(f: (a: A, i: number) => readonly B[]) => (self: readonly A[]) => B[]
+export declare const flatMapWithIndex: {
+  <A, B>(f: (a: A, i: number) => readonly B[]): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A, i: number) => readonly B[]): B[]
+}
 ```
 
 Added in v1.0.0
@@ -1881,7 +1888,10 @@ Append an element to the end of an `Iterable`, creating a new `NonEmptyArray`.
 **Signature**
 
 ```ts
-export declare const append: <B>(last: B) => <A>(self: Iterable<A>) => [B | A, ...(B | A)[]]
+export declare const append: {
+  <B>(last: B): <A>(self: Iterable<A>) => [B | A, ...(B | A)[]]
+  <A, B>(self: Iterable<A>, last: B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -1936,9 +1946,10 @@ value and the tail of the `NonEmptyReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const chopNonEmpty: <A, B>(
-  f: (as: readonly [A, ...A[]]) => readonly [B, readonly A[]]
-) => (self: readonly [A, ...A[]]) => [B, ...B[]]
+export declare const chopNonEmpty: {
+  <A, B>(f: (as: readonly [A, ...A[]]) => readonly [B, readonly A[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
+  <A, B>(self: readonly [A, ...A[]], f: (as: readonly [A, ...A[]]) => readonly [B, readonly A[]]): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0
@@ -2036,7 +2047,10 @@ The order and references of result values are determined by the first `Iterable`
 **Signature**
 
 ```ts
-export declare const intersection: <A>(equivalence: Equivalence<A>) => (that: Iterable<A>) => (self: Iterable<A>) => A[]
+export declare const intersection: <A>(equivalence: Equivalence<A>) => {
+  (that: Iterable<A>): (self: Iterable<A>) => A[]
+  (self: Iterable<A>, that: Iterable<A>): A[]
+}
 ```
 
 Added in v1.0.0
@@ -2140,7 +2154,10 @@ or return `None` if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const modifyOption: <A, B>(i: number, f: (a: A) => B) => (self: Iterable<A>) => Option<(A | B)[]>
+export declare const modifyOption: {
+  <A, B>(i: number, f: (a: A) => B): (self: Iterable<A>) => Option<(A | B)[]>
+  <A, B>(self: Iterable<A>, i: number, f: (a: A) => B): Option<(A | B)[]>
+}
 ```
 
 Added in v1.0.0
@@ -2152,7 +2169,10 @@ Prepend an element to the front of an `Iterable`, creating a new `NonEmptyArray`
 **Signature**
 
 ```ts
-export declare const prepend: <B>(head: B) => <A>(self: Iterable<A>) => [B | A, ...(B | A)[]]
+export declare const prepend: {
+  <B>(head: B): <A>(self: Iterable<A>) => [B | A, ...(B | A)[]]
+  <A, B>(self: Iterable<A>, head: B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2341,7 +2361,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const union: <A>(equivalence: Equivalence<A>) => (that: readonly A[]) => (self: readonly A[]) => A[]
+export declare const union: <A>(equivalence: Equivalence<A>) => {
+  (that: readonly A[]): (self: readonly A[]) => A[]
+  (self: readonly A[], that: readonly A[]): A[]
+}
 ```
 
 Added in v1.0.0
@@ -2436,10 +2459,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const zipNonEmptyWith: <B, A, C>(
-  that: readonly [B, ...B[]],
-  f: (a: A, b: B) => C
-) => (self: readonly [A, ...A[]]) => [C, ...C[]]
+export declare const zipNonEmptyWith: {
+  <B, A, C>(that: readonly [B, ...B[]], f: (a: A, b: B) => C): (self: readonly [A, ...A[]]) => [C, ...C[]]
+  <A, B, C>(self: readonly [A, ...A[]], that: readonly [B, ...B[]], f: (a: A, b: B) => C): [C, ...C[]]
+}
 ```
 
 Added in v1.0.0

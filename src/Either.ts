@@ -3,7 +3,7 @@
  */
 
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, dual, identity, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { structural } from "@fp-ts/core/internal/effect"
 import * as either from "@fp-ts/core/internal/Either"
@@ -632,19 +632,21 @@ export const getFirstLeftMonoid: <A, E>(M: Monoid<A>) => Monoid<Either<E, A>> = 
  * @category error handling
  * @since 1.0.0
  */
-export const firstRightOf = <E, A>(collection: Iterable<Either<E, A>>) =>
-  (self: Either<E, A>): Either<E, A> => {
-    let out = self
+export const firstRightOf: {
+  <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, A>
+  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A>
+} = dual(2, <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A> => {
+  let out = self
+  if (isRight(out)) {
+    return out
+  }
+  for (out of collection) {
     if (isRight(out)) {
       return out
     }
-    for (out of collection) {
-      if (isRight(out)) {
-        return out
-      }
-    }
-    return out
   }
+  return out
+})
 
 /**
  * @category instances
@@ -653,7 +655,7 @@ export const firstRightOf = <E, A>(collection: Iterable<Either<E, A>>) =>
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = semiCoproduct.make(
   Invariant,
   (self, that) => isRight(self) ? self : that,
-  (self, collection) => pipe(self, firstRightOf(collection))
+  firstRightOf
 )
 
 /**
@@ -726,8 +728,8 @@ export const orElseEither = <E1, E2, B>(
 ) =>
   <A>(self: Either<E1, A>): Either<E2, Either<A, B>> =>
     isLeft(self) ?
-      pipe(that(self.left), map(right)) :
-      pipe<Right<A>, Either<E2, Either<A, B>>>(self, map(left))
+      map(that(self.left), right) :
+      map(self, left)
 
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise
@@ -937,13 +939,10 @@ export const filterMap = <A, B, E2>(
   onNone: LazyArg<E2>
 ) =>
   <E1>(self: Either<E1, A>): Either<E1 | E2, B> =>
-    pipe(
-      self,
-      flatMap((a) => {
-        const ob = f(a)
-        return option.isNone(ob) ? left(onNone()) : right(ob.value)
-      })
-    )
+    flatMap(self, (a) => {
+      const ob = f(a)
+      return option.isNone(ob) ? left(onNone()) : right(ob.value)
+    })
 
 /**
  * @category instances
@@ -957,8 +956,8 @@ export const Traversable: traversable.Traversable<EitherTypeLambda> = traversabl
     f: (a: A) => Kind<F, FR, FO, FE, B>
   ): Kind<F, FR, FO, FE, Either<E, B>> =>
     isLeft(self) ?
-      F.of<Either<E, B>>(left(self.left)) :
-      pipe(f(self.right), F.map<B, Either<E, B>>(right))
+      F.of<Either<E, B>>(self) :
+      F.map<FR, FO, FE, B, Either<E, B>>(f(self.right), right)
 )
 
 /**
@@ -1123,7 +1122,7 @@ export const liftOption = <A extends ReadonlyArray<unknown>, B, E>(
 export const flatMapOption = <A, B, E2>(
   f: (a: A) => Option<B>,
   onNone: (a: A) => E2
-) => <E1>(self: Either<E1, A>): Either<E1 | E2, B> => pipe(self, flatMap(liftOption(f, onNone)))
+) => <E1>(self: Either<E1, A>): Either<E1 | E2, B> => flatMap(self, liftOption(f, onNone))
 
 /**
  * Returns a function that checks if an `Either` contains a given value using a provided `equivalence` function.

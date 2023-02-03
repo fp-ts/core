@@ -5,7 +5,7 @@
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, dual, pipe } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -395,7 +395,7 @@ export const flatMapOption = <A, B, E2>(
   onNone: (a: A) => E2
 ) =>
   <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> =>
-    pipe(self, flatMap(liftOption(f, (a) => [onNone(a)])))
+    flatMap(self, liftOption(f, (a) => [onNone(a)]))
 
 /**
  * @category sequencing
@@ -403,7 +403,7 @@ export const flatMapOption = <A, B, E2>(
  */
 export const flatMapEither = <A, E2, B>(
   f: (a: A) => Either<E2, B>
-) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => pipe(self, flatMap(liftEither(f)))
+) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => flatMap(self, liftEither(f))
 
 /**
  * @category sequencing
@@ -411,7 +411,7 @@ export const flatMapEither = <A, E2, B>(
  */
 export const flatMapThese = <A, E2, B>(
   f: (a: A) => These<E2, B>
-) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => pipe(self, flatMap(liftThese(f)))
+) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => flatMap(self, liftThese(f))
 
 /**
  * Converts a `These` to an `Option` discarding the error (`Both` included).
@@ -701,11 +701,8 @@ export const Traversable: traversable.Traversable<TheseTypeLambda> = traversable
     isLeft(self)
       ? F.of<These<E, B>>(self)
       : isRight(self)
-      ? pipe(f(self.right), F.map<B, These<E, B>>(right))
-      : pipe(
-        f(self.right),
-        F.map((b) => both(self.left, b))
-      )
+      ? F.map<FR, FO, FE, B, These<E, B>>(f(self.right), right)
+      : F.map(f(self.right), (b) => both(self.left, b))
 )
 
 /**
@@ -796,8 +793,8 @@ export const orElseEither = <E1, E2, B>(
 ) =>
   <A>(self: These<E1, A>): These<E1 | E2, Either<A, B>> =>
     isLeft(self) ?
-      pipe(that(self.left), map(E.right)) :
-      pipe(self, map(E.left))
+      map(that(self.left), E.right) :
+      map(self, E.left)
 
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise
@@ -814,19 +811,21 @@ export const orElseFail = <E2>(
  * @category error handling
  * @since 1.0.0
  */
-export const firstRightOrBothOf = <E, A>(collection: Iterable<These<E, A>>) =>
-  (self: These<E, A>): These<E, A> => {
-    let out = self
+export const firstRightOrBothOf: {
+  <E, A>(collection: Iterable<These<E, A>>): (self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A>
+} = dual(2, <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A> => {
+  let out = self
+  if (isRightOrBoth(out)) {
+    return out
+  }
+  for (out of collection) {
     if (isRightOrBoth(out)) {
       return out
     }
-    for (out of collection) {
-      if (isRightOrBoth(out)) {
-        return out
-      }
-    }
-    return out
   }
+  return out
+})
 
 /**
  * @category instances
@@ -835,7 +834,7 @@ export const firstRightOrBothOf = <E, A>(collection: Iterable<These<E, A>>) =>
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = semiCoproduct.make(
   Invariant,
   (self, that) => isRightOrBoth(self) ? self : that,
-  (self, collection) => pipe(self, firstRightOrBothOf(collection))
+  firstRightOrBothOf
 )
 
 /**
@@ -962,7 +961,7 @@ const productMany = <E, A>(
   self: Validated<E, A>,
   collection: Iterable<Validated<E, A>>
 ): Validated<E, [A, ...Array<A>]> =>
-  pipe(product(self, productAll(collection)), map(([a, as]) => [a, ...as]))
+  map(product(self, productAll(collection)), ([a, as]) => [a, ...as])
 
 /**
  * @category instances

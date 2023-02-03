@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { constFalse, constTrue, pipe } from "@fp-ts/core/Function"
+import { constFalse, constTrue, dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
@@ -258,22 +258,26 @@ export const not = <A>(self: Predicate<A>): Predicate<A> => (a) => !self(a)
 /**
  * @since 1.0.0
  */
-export const or = <A>(that: Predicate<A>) =>
-  (self: Predicate<A>): Predicate<A> => (a) => self(a) || that(a)
+export const or: {
+  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
+  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
+} = dual(2, <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A> => (a) => self(a) || that(a))
 
 /**
  * @since 1.0.0
  */
-export const and = <A>(that: Predicate<A>) =>
-  (self: Predicate<A>): Predicate<A> => (a) => self(a) && that(a)
+export const and: {
+  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
+  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
+} = dual(2, <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A> => (a) => self(a) && that(a))
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const getSemigroupAny = <A>(): Semigroup<Predicate<A>> =>
-  semigroup.make(
-    (self, that) => pipe(self, or(that)),
+  semigroup.make<Predicate<A>>(
+    or,
     (self, collection) =>
       a => {
         if (self(a)) {
@@ -300,8 +304,8 @@ export const getMonoidAny = <A>(): monoid.Monoid<Predicate<A>> =>
  * @since 1.0.0
  */
 export const getSemigroupAll = <A>(): Semigroup<Predicate<A>> =>
-  semigroup.make(
-    (self, that) => pipe(self, and(that)),
+  semigroup.make<Predicate<A>>(
+    and,
     (self, collection) =>
       a => {
         if (!self(a)) {

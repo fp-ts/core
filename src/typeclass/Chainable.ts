@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { dual, pipe } from "@fp-ts/core/Function"
+import { dual } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { FlatMap } from "@fp-ts/core/typeclass/FlatMap"
@@ -52,16 +52,7 @@ export const tap = <F extends TypeLambda>(F: Chainable<F>): {
     <R1, O1, E1, A, R2, O2, E2, _>(
       self: Kind<F, R1, O1, E1, A>,
       f: (a: A) => Kind<F, R2, O2, E2, _>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> =>
-      pipe(
-        self,
-        F.flatMap(a =>
-          pipe(
-            f(a),
-            F.map(() => a)
-          )
-        )
-      )
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, A> => F.flatMap(self, a => F.map(f(a), () => a))
   )
 
 /**
@@ -79,10 +70,4 @@ export const bind = <F extends TypeLambda>(F: Chainable<F>) =>
     O1 | O2,
     E1 | E2,
     { [K in keyof A | N]: K extends keyof A ? A[K] : B }
-  > =>
-    F.flatMap(a =>
-      pipe(
-        f(a),
-        F.map(b => Object.assign({}, a, { [name]: b }) as any)
-      )
-    )
+  > => F.flatMap(a => F.map(f(a), b => Object.assign({}, a, { [name]: b }) as any))

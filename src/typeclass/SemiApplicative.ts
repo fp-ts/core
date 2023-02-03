@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { dual, identity, pipe, SK } from "@fp-ts/core/Function"
+import { dual, identity, SK } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
@@ -23,12 +23,9 @@ export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, C
 export const getSemigroup = <F extends TypeLambda>(F: SemiApplicative<F>) =>
   <A, R, O, E>(S: Semigroup<A>): Semigroup<Kind<F, R, O, E, A>> =>
     semigroup.make(
-      (self, that) => pipe(F.product(self, that), F.map(([a1, a2]) => S.combine(a1, a2))),
+      (self, that) => F.map(F.product(self, that), ([a1, a2]) => S.combine(a1, a2)),
       (self, collection) =>
-        pipe(
-          F.productMany(self, collection),
-          F.map(([head, ...tail]) => S.combineMany(head, tail))
-        )
+        F.map(F.productMany(self, collection), ([head, ...tail]) => S.combineMany(head, tail))
     )
 
 /**
@@ -67,8 +64,7 @@ export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>): {
       self: Kind<F, R1, O1, E1, A>,
       that: Kind<F, R2, O2, E2, B>,
       f: (a: A, b: B) => C
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> =>
-      pipe(F.product(self, that), F.map(([a, b]) => f(a, b)))
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b))
   )
 
 /**
