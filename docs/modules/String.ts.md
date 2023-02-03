@@ -112,7 +112,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const concat: (that: string) => (self: string) => string
+export declare const concat: { (that: string): (self: string) => string; (self: string, that: string): string }
 ```
 
 Added in v1.0.0
@@ -227,7 +227,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const replace: (searchValue: string | RegExp, replaceValue: string) => (s: string) => string
+export declare const replace: {
+  (searchValue: string | RegExp, replaceValue: string): (s: string) => string
+  (s: string, searchValue: string | RegExp, replaceValue: string): string
+}
 ```
 
 **Example**
@@ -246,7 +249,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const slice: (start: number, end: number) => (s: string) => string
+export declare const slice: {
+  (start: number, end: number): (s: string) => string
+  (s: string, start: number, end: number): string
+}
 ```
 
 **Example**
@@ -265,7 +271,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const split: (separator: string | RegExp) => (s: string) => readonly [string, ...string[]]
+export declare const split: {
+  (separator: string | RegExp): (s: string) => readonly [string, ...string[]]
+  (s: string, separator: string | RegExp): readonly [string, ...string[]]
+}
 ```
 
 **Example**
@@ -314,7 +323,7 @@ If `n` is a float, it will be rounded down to the nearest integer.
 **Signature**
 
 ```ts
-export declare const takeLeft: (n: number) => (self: string) => string
+export declare const takeLeft: { (n: number): (self: string) => string; (self: string, n: number): string }
 ```
 
 Added in v1.0.0
@@ -333,7 +342,7 @@ If `n` is a float, it will be rounded down to the nearest integer.
 **Signature**
 
 ```ts
-export declare const takeRight: (n: number) => (s: string) => string
+export declare const takeRight: { (n: number): (s: string) => string; (s: string, n: number): string }
 ```
 
 Added in v1.0.0

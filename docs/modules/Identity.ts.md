@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [do notation](#do-notation)
   - [Do](#do)
+  - [andThenBind](#andthenbind)
   - [bind](#bind)
   - [bindTo](#bindto)
   - [let](#let)
@@ -49,6 +50,21 @@ Added in v1.0.0
 
 ```ts
 export declare const Do: {}
+```
+
+Added in v1.0.0
+
+## andThenBind
+
+A variant of `bind` that sequentially ignores the scope.
+
+**Signature**
+
+```ts
+export declare const andThenBind: <N extends string, A extends object, B>(
+  name: Exclude<N, keyof A>,
+  that: B
+) => (self: A) => { [K in N | keyof A]: K extends keyof A ? A[K] : B }
 ```
 
 Added in v1.0.0

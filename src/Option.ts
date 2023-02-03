@@ -770,8 +770,7 @@ export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
  * @category sequencing
  * @since 1.0.0
  */
-export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_
-  .flatten(FlatMap)
+export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_.flatten(FlatMap)
 
 /**
  * @category sequencing
@@ -959,8 +958,9 @@ export const tuple: <T extends ReadonlyArray<Option<any>>>(
  */
 export const struct: <R extends Record<string, Option<any>>>(
   r: R
-) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }> = product_
-  .struct(Product)
+) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }> = product_.struct(
+  Product
+)
 
 /**
  * @category instances

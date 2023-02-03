@@ -2,6 +2,7 @@
  * @since 1.0.0
  */
 import type { LazyArg } from "@fp-ts/core/Function"
+import { dual } from "@fp-ts/core/Function"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
@@ -20,11 +21,24 @@ export const reverse = (o: Ordering): Ordering => (o === -1 ? 1 : o === 1 ? -1 :
  * @category pattern matching
  * @since 1.0.0
  */
-export const match = <A, B, C = B>(
+export const match: {
+  <A, B, C = B>(
+    onLessThan: LazyArg<A>,
+    onEqual: LazyArg<B>,
+    onGreaterThan: LazyArg<C>
+  ): (o: Ordering) => A | B | C
+  <A, B, C = B>(
+    o: Ordering,
+    onLessThan: LazyArg<A>,
+    onEqual: LazyArg<B>,
+    onGreaterThan: LazyArg<C>
+  ): A | B | C
+} = dual(4, <A, B, C = B>(
+  o: Ordering,
   onLessThan: LazyArg<A>,
   onEqual: LazyArg<B>,
   onGreaterThan: LazyArg<C>
-) => (o: Ordering): A | B | C => o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan()
+): A | B | C => o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan())
 
 /**
  * @category instances

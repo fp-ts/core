@@ -3,6 +3,7 @@
  *
  * @since 1.0.0
  */
+
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
@@ -47,7 +48,9 @@ export const omit = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
  * @category combinators
  * @since 1.0.0
  */
-export const getEquivalence = equivalence.struct
+export const getEquivalence: <A>(
+  equivalences: { [K in keyof A]: equivalence.Equivalence<A[K]> }
+) => equivalence.Equivalence<{ readonly [K in keyof A]: A[K] }> = equivalence.struct
 
 /**
  * This function creates and returns a new `Order` for a struct of values based on the given `Order`s
@@ -56,7 +59,9 @@ export const getEquivalence = equivalence.struct
  * @category combinators
  * @since 1.0.0
  */
-export const getOrder = order.struct
+export const getOrder: <A>(
+  orders: { readonly [K in keyof A]: order.Order<A[K]> }
+) => order.Order<{ readonly [K in keyof A]: A[K] }> = order.struct
 
 /**
  * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
@@ -67,7 +72,9 @@ export const getOrder = order.struct
  * @category combinators
  * @since 1.0.0
  */
-export const getSemigroup = semigroup.struct
+export const getSemigroup: <A>(
+  semigroups: { readonly [K in keyof A]: semigroup.Semigroup<A[K]> }
+) => semigroup.Semigroup<{ readonly [K in keyof A]: A[K] }> = semigroup.struct
 
 /**
  * This function creates and returns a new `Monoid` for a struct of values based on the given `Monoid`s for each property in the struct.
@@ -80,7 +87,9 @@ export const getSemigroup = semigroup.struct
  * @category combinators
  * @since 1.0.0
  */
-export const getMonoid = monoid.struct
+export const getMonoid: <A>(
+  monoids: { readonly [K in keyof A]: monoid.Monoid<A[K]> }
+) => monoid.Monoid<{ readonly [K in keyof A]: A[K] }> = monoid.struct
 
 /*
 
