@@ -8,7 +8,7 @@ import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
-import type * as foldable from "@fp-ts/core/typeclass/Foldable"
+import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import * as of_ from "@fp-ts/core/typeclass/Of"
@@ -224,9 +224,9 @@ export const getSemiAlternative = <A>(
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<IdentityTypeLambda> = {
-  reduce: (b, f) => self => f(b, self)
-}
+export const Foldable: foldable.Foldable<IdentityTypeLambda> = foldable.make((self, b, f) =>
+  f(b, self)
+)
 
 /**
  * @category instances

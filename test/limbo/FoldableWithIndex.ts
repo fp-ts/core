@@ -4,7 +4,7 @@
 
 import { identity, pipe } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
-import type { Foldable } from "@fp-ts/core/typeclass/Foldable"
+// import type { Foldable } from "@fp-ts/core/typeclass/Foldable"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 
 /**
@@ -61,14 +61,14 @@ export const reduceRightWithIndexComposition = <F extends TypeLambda, I, G exten
           pipe(ga, G.reduceRightWithIndex(b, (b, a, j) => f(b, a, [i, j]))))
       )
 
-/**
- * Returns a default `reduce` implementation.
- *
- * @since 1.0.0
- */
-export const reduce = <F extends TypeLambda, I>(
-  F: FoldableWithIndex<F, I>
-): Foldable<F>["reduce"] => (b, f) => F.reduceWithIndex(b, f)
+// /**
+//  * Returns a default `reduce` implementation.
+//  *
+//  * @since 1.0.0
+//  */
+// export const reduce = <F extends TypeLambda, I>(
+//   F: FoldableWithIndex<F, I>
+// ): Foldable<F>["reduce"] => (b, f) => F.reduceWithIndex(b, f)
 
 /**
  * @since 1.0.0

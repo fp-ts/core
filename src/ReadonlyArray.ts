@@ -1857,13 +1857,6 @@ export const Monad: monad.Monad<ReadonlyArrayTypeLambda> = {
  * @category folding
  * @since 1.0.0
  */
-export const reduce = <B, A>(b: B, f: (b: B, a: A) => B) =>
-  (self: ReadonlyArray<A>): B => self.reduce((b, a) => f(b, a), b)
-
-/**
- * @category folding
- * @since 1.0.0
- */
 export const reduceWithIndex = <B, A>(b: B, f: (b: B, a: A, i: number) => B) =>
   (self: ReadonlyArray<A>): B => self.reduce((b, a, i) => f(b, a, i), b)
 
@@ -1885,16 +1878,18 @@ export const reduceRightWithIndex = <B, A>(b: B, f: (b: B, a: A, i: number) => B
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
-  reduce
-}
+export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = foldable.make((self, b, f) =>
+  self.reduce((b, a) => f(b, a), b)
+)
 
 /**
  * @category folding
  * @since 1.0.0
  */
-export const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: ReadonlyArray<A>) => M =
-  foldable.foldMap(Foldable)
+export const reduce: {
+  <A, B>(b: B, f: (b: B, a: A) => B): (self: ReadonlyArray<A>) => B
+  <A, B>(self: ReadonlyArray<A>, b: B, f: (b: B, a: A) => B): B
+} = Foldable.reduce
 
 /**
  * @category folding
@@ -1904,6 +1899,14 @@ export const foldMapWithIndex = <M>(Monoid: Monoid<M>) =>
   <A>(f: (a: A, i: number) => M) =>
     (self: ReadonlyArray<A>): M =>
       self.reduce((m, a, i) => Monoid.combine(m, f(a, i)), Monoid.empty)
+
+/**
+ * @category folding
+ * @since 1.0.0
+ */
+export const foldMap = <M>(M: Monoid<M>) =>
+  <A>(f: (a: A) => M) =>
+    (self: ReadonlyArray<A>): M => self.reduce((m, a) => M.combine(m, f(a)), M.empty)
 
 /**
  * @category folding
@@ -1934,19 +1937,9 @@ export const reduceKind: <F extends TypeLambda>(F: monad.Monad<F>) => <B, A, R, 
  * @category folding
  * @since 1.0.0
  */
-export const reduceRightKind: <F extends TypeLambda>(F: monad.Monad<F>) => <B, A, R, O, E>(
-  b: B,
-  f: (b: B, a: A) => Kind<F, R, O, E, B>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable
-  .reduceRightKind(Foldable)
-
-/**
- * @category folding
- * @since 1.0.0
- */
 export const foldMapKind: <F extends TypeLambda>(F: Coproduct<F>) => <A, R, O, E, B>(
   f: (a: A) => Kind<F, R, O, E, B>
-) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.foldMapKind(Foldable)
+) => (self: ReadonlyArray<A>) => Kind<F, R, O, E, B> = foldable.coproductMapKind(Foldable)
 
 /**
  * @category filtering
