@@ -195,7 +195,6 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
  *   'a none'
  * )
  *
- * @dual
  * @category pattern matching
  * @since 1.0.0
  */
@@ -312,7 +311,6 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
  * assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
  * assert.deepStrictEqual(pipe(O.none(), O.toEither(onNone)), E.left('error'))
  *
- * @dual
  * @category conversions
  * @since 1.0.0
  */
@@ -338,7 +336,6 @@ export const toEither: {
  * assert.deepStrictEqual(pipe(some(1), getOrElse(() => 0)), 1)
  * assert.deepStrictEqual(pipe(none(), getOrElse(() => 0)), 0)
  *
- * @dual
  * @category error handling
  * @since 1.0.0
  */
@@ -392,7 +389,6 @@ export const getOrElse: {
  *   O.some('a')
  * )
  *
- * @dual
  * @category error handling
  * @since 1.0.0
  */
@@ -416,7 +412,6 @@ export const orElse: {
  * @param self - The first `Option` to be checked.
  * @param that - The second `Option` to be considered if the first `Option` is `None`.
  *
- * @dual
  * @category error handling
  * @since 1.0.0
  */
@@ -605,7 +600,6 @@ export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(<
  * @param self - An `Option` to map
  * @param f - The function to map over the value of the `Option`
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -631,7 +625,6 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
 export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -643,7 +636,6 @@ export const flap: {
 /**
  * Maps the `Some` value of this `Option` to the specified constant value.
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -690,7 +682,6 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
 /**
  * Applies a function to the value of an `Option` and flattens the result, if the input is `Some`.
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -722,7 +713,6 @@ export const flatMap: {
  * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
  * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -775,7 +765,6 @@ export const flatMapEither: {
  *   none()
  * )
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -807,7 +796,6 @@ export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_
   .flatten(FlatMap)
 
 /**
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -817,7 +805,6 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -844,7 +831,6 @@ export const Chainable: chainable.Chainable<OptionTypeLambda> = {
  * @param that - The `Option` that will be ignored in the chain and discarded
  * @param self - The `Option` we care about
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -862,7 +848,6 @@ export const andThenDiscard: {
  * @param f - Function to apply to the value of the `Option` if it is `Some`
  * @param self - The `Option` to apply the function to
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -881,7 +866,6 @@ export const tap: {
  * @param self - the `Option` to inspect
  * @param onSome - callback function that is called with the value of `self` if it is a `Some`
  *
- * @dual
  * @category debugging
  * @since 1.0.0
  */
@@ -904,7 +888,6 @@ export const inspectSome: {
  * @param self - the `Option` to inspect
  * @param onNone - callback function that is is called if `self` is a `None`
  *
- * @dual
  * @category debugging
  * @since 1.0.0
  */
@@ -1062,7 +1045,6 @@ export const getOptionalMonoid = <A>(
  * @param that - The right-hand side of the zip operation
  * @param f - The function used to combine the values of the two `Option`s
  *
- * @dual
  * @category combining
  * @since 1.0.0
  */
@@ -1072,7 +1054,6 @@ export const zipWith: {
 } = semiApplicative.zipWith(SemiApplicative)
 
 /**
- * @dual
  * @category combining
  * @since 1.0.0
  */
@@ -1212,7 +1193,6 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
  * const iterable = [some(1), none(), some(2), none()]
  * assert.deepStrictEqual(pipe(iterable, reduceCompact(0, (b, a) => b + a)), 3)
  *
- * @dual
  * @category folding
  * @since 1.0.0
  */
@@ -1288,7 +1268,6 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
  * @param self - The `Option` to map over.
  * @param f - A function to apply to the value of the `Option`.
  *
- * @dual
  * @category filtering
  * @since 1.0.0
  */
@@ -1320,7 +1299,6 @@ export const Filterable: filterable.Filterable<OptionTypeLambda> = {
  * @param predicate - A predicate function to apply to the `Option` value.
  * @param fb - The `Option` to filter.
  *
- * @dual
  * @category filtering
  * @since 1.0.0
  */
@@ -1536,7 +1514,6 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
  * assert.deepStrictEqual(pipe(some(1), contains(Equivalence)(2)), false)
  * assert.deepStrictEqual(pipe(none(), contains(Equivalence)(2)), false)
  *
- * @dual
  * @since 1.0.0
  */
 export const contains = <A>(equivalence: Equivalence<A>): {
@@ -1564,7 +1541,6 @@ export const contains = <A>(equivalence: Equivalence<A>): {
  * assert.deepStrictEqual(pipe(some(1), exists(isEven)), false)
  * assert.deepStrictEqual(pipe(none(), exists(isEven)), false)
  *
- * @dual
  * @since 1.0.0
  */
 export const exists: {
@@ -1584,7 +1560,6 @@ export const exists: {
 // -------------------------------------------------------------------------------------
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1594,7 +1569,6 @@ export const sum: {
 } = lift2(N.sum)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1604,7 +1578,6 @@ export const multiply: {
 } = lift2(N.multiply)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */
@@ -1614,7 +1587,6 @@ export const subtract: {
 } = lift2(N.subtract)
 
 /**
- * @dual
  * @category algebraic operations
  * @since 1.0.0
  */

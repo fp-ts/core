@@ -33,7 +33,6 @@ export interface ReadonlyRecord<A> {
  *   { '1': 2, '2': 4, '3': 6, '4': 8 }
  * )
  *
- * @dual
  * @category constructors
  * @since 1.0.0
  */
@@ -70,7 +69,6 @@ export const fromIterable: {
  * assert.deepStrictEqual(get(person, "name"), some("John Doe"))
  * assert.deepStrictEqual(get(person, "email"), none())
  *
- * @dual
  * @category getters
  * @since 1.0.0
  */
@@ -109,7 +107,6 @@ export const get: {
  *  none()
  * )
  *
- * @dual
  * @since 1.0.0
  */
 export const modifyOption: {
@@ -147,7 +144,6 @@ export const modifyOption: {
  * )
  * assert.deepStrictEqual(replaceOption({}, 'a', 10), none())
  *
- * @dual
  * @since 1.0.0
  */
 export const replaceOption: {
@@ -175,7 +171,6 @@ export const replaceOption: {
  *
  * assert.deepStrictEqual(mapWithKey({ a: 3, b: 5 }, f), { a: "A-3", b: "B-5" })
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -211,7 +206,6 @@ export const mapWithKey: {
  *
  * assert.deepStrictEqual(map({ a: 3, b: 5 }, f), { a: "-3-", b: "-5-" })
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */

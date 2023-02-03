@@ -567,7 +567,6 @@ export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = bicovariant
 )
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -582,7 +581,6 @@ export const bimap: {
  * @param self - The input `These` value to map.
  * @param f - A transformation function to apply to the `Left` value of the input `These`.
  *
- * @dual
  * @category error handling
  * @since 1.0.0
  */
@@ -603,7 +601,6 @@ export const toValidated: <E, A>(self: These<E, A>) => Validated<E, A> = mapLeft
  * @param self - An `These` to map
  * @param f - The function to map over the value of the `These`
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -640,7 +637,6 @@ export const tupled: <E, A>(self: These<E, A>) => These<E, [A]> = invariant.tupl
 )
 
 /**
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -652,7 +648,6 @@ export const flap: {
 /**
  * Maps the right value of this effect to the specified constant value.
  *
- * @dual
  * @category mapping
  * @since 1.0.0
  */
@@ -982,7 +977,6 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
 } = semiApplicative.lift2(SemiApplicative)
 
 /**
- * @dual
  * @category combining
  * @since 1.0.0
  */
@@ -1001,7 +995,6 @@ export const zipWith: {
 )
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const ap: {
@@ -1091,7 +1084,6 @@ export const struct: <R extends Record<string, Validated<any, any>>>(
   .struct(Product)
 
 /**
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -1157,7 +1149,6 @@ export const flatten: <E2, E1, A>(
   .flatten(FlatMap)
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const andThen: {
@@ -1166,7 +1157,6 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
- * @dual
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -1229,7 +1219,6 @@ export const bindThese = <N extends string, A extends object, E2, B>(
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
- * @dual
  * @category sequencing
  * @since 1.0.0
  */
@@ -1241,7 +1230,6 @@ export const andThenDiscard: {
 /**
  * Returns an effect that effectfully "peeks" at the success of this effect.
  *
- * @dual
  * @category combinators
  * @since 1.0.0
  */

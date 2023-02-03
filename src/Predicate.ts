@@ -94,7 +94,6 @@ export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = c
 ): Predicate<B> => (b) => self(f(b)))
 
 /**
- * @dual
  * @category combinators
  * @since 1.0.0
  */
