@@ -946,15 +946,36 @@ export const filterMap = <A, B, E2>(
     )
 
 /**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<EitherTypeLambda> = traversable.make(<
+  F extends TypeLambda
+>(F: applicative.Applicative<F>) =>
+  <E, A, FR, FO, FE, B>(
+    self: Either<E, A>,
+    f: (a: A) => Kind<F, FR, FO, FE, B>
+  ): Kind<F, FR, FO, FE, Either<E, B>> =>
+    isLeft(self) ?
+      F.of<Either<E, B>>(left(self.left)) :
+      pipe(f(self.right), F.map<B, Either<E, B>>(right))
+)
+
+/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
-  <A, FR, FO, FE, B>(f: (a: A) => Kind<F, FR, FO, FE, B>) =>
-    <E>(self: Either<E, A>): Kind<F, FR, FO, FE, Either<E, B>> =>
-      isLeft(self) ?
-        F.of<Either<E, B>>(left(self.left)) :
-        pipe(f(self.right), F.map<B, Either<E, B>>(right))
+export const traverse: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => {
+  <A, R, O, E, B>(
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, B>>
+  <TE, A, R, O, E, B>(
+    self: Either<TE, A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Either<TE, B>>
+} = Traversable.traverse
 
 /**
  * @category traversing
@@ -962,18 +983,9 @@ export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>) =>
  */
 export const sequence: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <E, FR, FO, FE, A>(
-  self: Either<E, Kind<F, FR, FO, FE, A>>
-) => Kind<F, FR, FO, FE, Either<E, A>> = traversable.sequence<EitherTypeLambda>(traverse)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<EitherTypeLambda> = {
-  traverse,
-  sequence
-}
+) => <TE, R, O, E, A>(
+  self: Either<TE, Kind<F, R, O, E, A>>
+) => Kind<F, R, O, E, Either<TE, A>> = traversable.sequence(Traversable)
 
 /**
  * @category traversing

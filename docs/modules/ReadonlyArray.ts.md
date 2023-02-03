@@ -1770,7 +1770,10 @@ Added in v1.0.0
 ```ts
 export declare const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B[]>
+) => {
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: readonly A[]) => Kind<F, R, O, E, B[]>
+  <A, R, O, E, B>(self: readonly A[], f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B[]>
+}
 ```
 
 Added in v1.0.0

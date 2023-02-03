@@ -8,30 +8,13 @@ describe("Traversable", () => {
   it("traverseComposition", () => {
     const traverse = _.traverseComposition(RA.Traversable, RA.Traversable)(O.Applicative)
     U.deepStrictEqual(
-      pipe([[1, 2], [3]], traverse((a) => (a > 0 ? O.some(a) : O.none()))),
+      traverse([[1, 2], [3]], (a) => (a > 0 ? O.some(a) : O.none())),
       O.some([[1, 2], [3]])
     )
     U.deepStrictEqual(
-      pipe([[1, -2], [3]], traverse((a) => (a > 0 ? O.some(a) : O.none()))),
+      traverse([[1, -2], [3]], (a) => (a > 0 ? O.some(a) : O.none())),
       O.none()
     )
-  })
-
-  it("sequenceComposition", () => {
-    const sequence = _.sequenceComposition({ ...RA.Traversable, ...RA.Covariant }, RA.Traversable)(
-      O.Applicative
-    )
-    U.deepStrictEqual(
-      pipe([[O.some(1), O.some(2)], [O.some(3)]], sequence),
-      O.some([[1, 2], [3]])
-    )
-    U.deepStrictEqual(pipe([[O.some(1), O.none()], [O.some(3)]], sequence), O.none())
-  })
-
-  it("sequence", () => {
-    const sequence = _.sequence<RA.ReadonlyArrayTypeLambda>(RA.Traversable.traverse)(O.Applicative)
-    U.deepStrictEqual(pipe([O.none(), O.some(2)], sequence), O.none())
-    U.deepStrictEqual(pipe([O.some(1), O.some(2)], sequence), O.some([1, 2]))
   })
 
   it("traverseTap", () => {

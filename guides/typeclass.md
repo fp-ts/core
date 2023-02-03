@@ -434,9 +434,8 @@ Traversal over a structure with an effect.
 | Name                | Given                                    | To           |
 | ------------------- | ---------------------------------------- | ------------ |
 | **traverse**        | `Applicative<F>`, `T<A>`, `A => F<B>`    | `F<T<B>>`    |
-| **sequence**        | `Applicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
 | traverseComposition | `Applicative<F>`, `T<G<A>>`, `A => F<B>` | `F<T<G<B>>>` |
-| sequenceComposition | `Applicative<F>`, `T<G<F<A>>>`           | `F<T<G<A>>>` |
+| sequence            | `Applicative<F>`, `T<F<A>>`              | `F<T<A>>`    |
 | traverseTap         | `Applicative<F>`, `T<A>`, `A => F<B>`    | `F<T<A>>`    |
 
 ### TraversableFilterable
