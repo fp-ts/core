@@ -201,10 +201,7 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
 export const match: {
   <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C): (self: Option<A>) => B | C
   <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C
-} = dual<
-  <B, A, C = B>(onNone: LazyArg<B>, onSome: (a: A) => C) => (self: Option<A>) => B | C,
-  <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C) => B | C
->(
+} = dual(
   3,
   <A, B, C = B>(self: Option<A>, onNone: LazyArg<B>, onSome: (a: A) => C): B | C =>
     isNone(self) ? onNone() : onSome(self.value)
@@ -342,10 +339,7 @@ export const toEither: {
 export const getOrElse: {
   <B>(onNone: LazyArg<B>): <A>(self: Option<A>) => B | A
   <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B
-} = dual<
-  <B>(onNone: LazyArg<B>) => <A>(self: Option<A>) => A | B,
-  <A, B>(self: Option<A>, onNone: LazyArg<B>) => A | B
->(
+} = dual(
   2,
   <A, B>(self: Option<A>, onNone: LazyArg<B>): A | B => isNone(self) ? onNone() : self.value
 )
@@ -395,10 +389,7 @@ export const getOrElse: {
 export const orElse: {
   <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<B | A>
   <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B>
-} = dual<
-  <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<A | B>,
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<A | B>
->(
+} = dual(
   2,
   <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<A | B> => isNone(self) ? that() : self
 )
@@ -418,10 +409,7 @@ export const orElse: {
 export const orElseEither: {
   <B>(that: LazyArg<Option<B>>): <A>(self: Option<A>) => Option<Either<A, B>>
   <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>>
-} = dual<
-  <B>(that: LazyArg<Option<B>>) => <A>(self: Option<A>) => Option<Either<A, B>>,
-  <A, B>(self: Option<A>, that: LazyArg<Option<B>>) => Option<Either<A, B>>
->(
+} = dual(
   2,
   <A, B>(self: Option<A>, that: LazyArg<Option<B>>): Option<Either<A, B>> =>
     isNone(self) ? map(that(), either.right) : map(self, either.left)
@@ -688,10 +676,7 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
 export const flatMap: {
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
-} = dual<
-  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>,
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>
->(
+} = dual(
   2,
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B> =>
     isNone(self) ? none() : f(self.value)
@@ -719,10 +704,7 @@ export const flatMap: {
 export const flatMapEither: {
   <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
   <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
-} = dual<
-  <A, E, B>(f: (a: A) => Either<E, B>) => (self: Option<A>) => Option<B>,
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>) => Option<B>
->(
+} = dual(
   2,
   <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> => flatMap(self, liftEither(f))
 )
@@ -770,10 +752,7 @@ export const flatMapEither: {
 export const flatMapNullable: {
   <A, B>(f: (a: A) => B | null | undefined): (self: Option<A>) => Option<NonNullable<B>>
   <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>>
-} = dual<
-  <A, B>(f: (a: A) => B | null | undefined) => (self: Option<A>) => Option<NonNullable<B>>,
-  <A, B>(self: Option<A>, f: (a: A) => B | null | undefined) => Option<NonNullable<B>>
->(
+} = dual(
   2,
   <A, B>(self: Option<A>, f: (a: A) => B | null | undefined): Option<NonNullable<B>> =>
     isNone(self) ? none() : fromNullable(f(self.value))
@@ -871,10 +850,7 @@ export const tap: {
 export const inspectSome: {
   <A>(onSome: (a: A) => void): (self: Option<A>) => Option<A>
   <A>(self: Option<A>, onSome: (a: A) => void): Option<A>
-} = dual<
-  <A>(onSome: (a: A) => void) => (self: Option<A>) => Option<A>,
-  <A>(self: Option<A>, onSome: (a: A) => void) => Option<A>
->(2, <A>(self: Option<A>, onSome: (a: A) => void): Option<A> => {
+} = dual(2, <A>(self: Option<A>, onSome: (a: A) => void): Option<A> => {
   if (isSome(self)) {
     onSome(self.value)
   }
@@ -893,10 +869,7 @@ export const inspectSome: {
 export const inspectNone: {
   (onNone: () => void): <A>(self: Option<A>) => Option<A>
   <A>(self: Option<A>, onNone: () => void): Option<A>
-} = dual<
-  (onNone: () => void) => <A>(self: Option<A>) => Option<A>,
-  <A>(self: Option<A>, onNone: () => void) => Option<A>
->(2, <A>(self: Option<A>, onNone: () => void): Option<A> => {
+} = dual(2, <A>(self: Option<A>, onNone: () => void): Option<A> => {
   if (isNone(self)) {
     onNone()
   }
@@ -1188,10 +1161,7 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
 export const reduceCompact: {
   <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<Option<A>>) => B
   <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B
-} = dual<
-  <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<Option<A>>) => B,
-  <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B) => B
->(
+} = dual(
   3,
   <A, B>(self: Iterable<Option<A>>, b: B, f: (b: B, a: A) => B): B => {
     let out: B = b
@@ -1263,10 +1233,7 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
 export const filterMap: {
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
-} = dual<
-  <A, B>(f: (a: A) => Option<B>) => (self: Option<A>) => Option<B>,
-  <A, B>(self: Option<A>, f: (a: A) => Option<B>) => Option<B>
->(
+} = dual(
   2,
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B> =>
     isNone(self) ? none() : f(self.value)
@@ -1497,11 +1464,7 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
 export const contains = <A>(equivalence: Equivalence<A>): {
   (a: A): (self: Option<A>) => boolean
   (self: Option<A>, a: A): boolean
-} =>
-  dual<
-    (a: A) => (self: Option<A>) => boolean,
-    (self: Option<A>, a: A) => boolean
-  >(2, (self: Option<A>, a: A): boolean => isNone(self) ? false : equivalence(self.value, a))
+} => dual(2, (self: Option<A>, a: A): boolean => isNone(self) ? false : equivalence(self.value, a))
 
 /**
  * Check if a value in an `Option` type meets a certain predicate.
@@ -1524,10 +1487,7 @@ export const contains = <A>(equivalence: Equivalence<A>): {
 export const exists: {
   <A>(predicate: Predicate<A>): (self: Option<A>) => boolean
   <A>(self: Option<A>, predicate: Predicate<A>): boolean
-} = dual<
-  <A>(predicate: Predicate<A>) => (self: Option<A>) => boolean,
-  <A>(self: Option<A>, predicate: Predicate<A>) => boolean
->(
+} = dual(
   2,
   <A>(self: Option<A>, predicate: Predicate<A>): boolean =>
     isNone(self) ? false : predicate(self.value)

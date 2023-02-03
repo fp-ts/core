@@ -232,11 +232,7 @@ export const Product: product.Product<OrderTypeLambda> = {
 export const lessThan = <A>(O: Order<A>): {
   (that: A): (self: A) => boolean
   (self: A, that: A): boolean
-} =>
-  dual<
-    (that: A) => (self: A) => boolean,
-    (self: A, that: A) => boolean
-  >(2, (self: A, that: A) => O.compare(self, that) === -1)
+} => dual(2, (self: A, that: A) => O.compare(self, that) === -1)
 
 /**
  * Test whether one value is _strictly greater than_ another.
@@ -246,11 +242,7 @@ export const lessThan = <A>(O: Order<A>): {
 export const greaterThan = <A>(O: Order<A>): {
   (that: A): (self: A) => boolean
   (self: A, that: A): boolean
-} =>
-  dual<
-    (that: A) => (self: A) => boolean,
-    (self: A, that: A) => boolean
-  >(2, (self: A, that: A) => O.compare(self, that) === 1)
+} => dual(2, (self: A, that: A) => O.compare(self, that) === 1)
 
 /**
  * Test whether one value is _non-strictly less than_ another.
@@ -260,11 +252,7 @@ export const greaterThan = <A>(O: Order<A>): {
 export const lessThanOrEqualTo = <A>(O: Order<A>): {
   (that: A): (self: A) => boolean
   (self: A, that: A): boolean
-} =>
-  dual<
-    (that: A) => (self: A) => boolean,
-    (self: A, that: A) => boolean
-  >(2, (self: A, that: A) => O.compare(self, that) !== 1)
+} => dual(2, (self: A, that: A) => O.compare(self, that) !== 1)
 
 /**
  * Test whether one value is _non-strictly greater than_ another.
@@ -274,11 +262,7 @@ export const lessThanOrEqualTo = <A>(O: Order<A>): {
 export const greaterThanOrEqualTo = <A>(O: Order<A>): {
   (that: A): (self: A) => boolean
   (self: A, that: A): boolean
-} =>
-  dual<
-    (that: A) => (self: A) => boolean,
-    (self: A, that: A) => boolean
-  >(2, (self: A, that: A) => O.compare(self, that) !== -1)
+} => dual(2, (self: A, that: A) => O.compare(self, that) !== -1)
 
 /**
  * Take the minimum of two values. If they are considered equal, the first argument is chosen.
@@ -288,11 +272,7 @@ export const greaterThanOrEqualTo = <A>(O: Order<A>): {
 export const min = <A>(O: Order<A>): {
   (that: A): (self: A) => A
   (self: A, that: A): A
-} =>
-  dual<
-    (that: A) => (self: A) => A,
-    (self: A, that: A) => A
-  >(2, (self: A, that: A) => self === that || O.compare(self, that) < 1 ? self : that)
+} => dual(2, (self: A, that: A) => self === that || O.compare(self, that) < 1 ? self : that)
 
 /**
  * Take the maximum of two values. If they are considered equal, the first argument is chosen.
@@ -302,11 +282,7 @@ export const min = <A>(O: Order<A>): {
 export const max = <A>(O: Order<A>): {
   (that: A): (self: A) => A
   (self: A, that: A): A
-} =>
-  dual<
-    (that: A) => (self: A) => A,
-    (self: A, that: A) => A
-  >(2, (self: A, that: A) => self === that || O.compare(self, that) > -1 ? self : that)
+} => dual(2, (self: A, that: A) => self === that || O.compare(self, that) > -1 ? self : that)
 
 /**
  * Clamp a value between a minimum and a maximum.
@@ -317,10 +293,7 @@ export const clamp = <A>(O: Order<A>): {
   (minimum: A, maximum: A): (a: A) => A
   (a: A, minimum: A, maximum: A): A
 } =>
-  dual<
-    (minimum: A, maximum: A) => (a: A) => A,
-    (a: A, minimum: A, maximum: A) => A
-  >(
+  dual(
     3,
     (a: A, minimum: A, maximum: A): A => min(O)(maximum, max(O)(minimum, a))
   )
@@ -334,10 +307,7 @@ export const between = <A>(O: Order<A>): {
   (minimum: A, maximum: A): (a: A) => boolean
   (a: A, minimum: A, maximum: A): boolean
 } =>
-  dual<
-    (minimum: A, maximum: A) => (a: A) => boolean,
-    (a: A, minimum: A, maximum: A) => boolean
-  >(
+  dual(
     3,
     (a: A, minimum: A, maximum: A): boolean =>
       !lessThan(O)(a, minimum) && !greaterThan(O)(a, maximum)

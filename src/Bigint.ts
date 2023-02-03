@@ -44,10 +44,7 @@ export const multiply: {
 export const subtract: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
-} = dual<
-  (that: bigint) => (self: bigint) => bigint,
-  (self: bigint, that: bigint) => bigint
->(2, (self: bigint, that: bigint): bigint => self - that)
+} = dual(2, (self: bigint, that: bigint): bigint => self - that)
 
 /**
  * @category algebraic operations
@@ -56,10 +53,7 @@ export const subtract: {
 export const divide: {
   (that: bigint): (self: bigint) => bigint
   (self: bigint, that: bigint): bigint
-} = dual<
-  (that: bigint) => (self: bigint) => bigint,
-  (self: bigint, that: bigint) => bigint
->(2, (self: bigint, that: bigint): bigint => self / that)
+} = dual(2, (self: bigint, that: bigint): bigint => self / that)
 
 /**
  * @since 1.0.0

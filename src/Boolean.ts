@@ -44,10 +44,7 @@ export const isBoolean: Refinement<unknown, boolean> = predicate.isBoolean
 export const match: {
   <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>): (value: boolean) => A | B
   <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>): A | B
-} = dual<
-  <A, B = A>(onFalse: LazyArg<A>, onTrue: LazyArg<B>) => (value: boolean) => A | B,
-  <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>) => A | B
->(
+} = dual(
   3,
   <A, B>(value: boolean, onFalse: LazyArg<A>, onTrue: LazyArg<B>): A | B =>
     value ? onTrue() : onFalse()
