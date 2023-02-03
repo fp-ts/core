@@ -104,15 +104,27 @@ export const both = <E, A>(left: E, right: A): These<E, A> =>
  * @category constructors
  * @since 1.0.0
  */
-export const leftOrBoth = <E>(onSome: LazyArg<E>) =>
-  <A>(self: Option<A>): These<E, A> => O.isNone(self) ? left(onSome()) : both(onSome(), self.value)
+export const leftOrBoth: {
+  <E>(onSome: LazyArg<E>): <A>(self: Option<A>) => These<E, A>
+  <A, E>(self: Option<A>, onSome: LazyArg<E>): These<E, A>
+} = dual(
+  2,
+  <A, E>(self: Option<A>, onSome: LazyArg<E>): These<E, A> =>
+    O.isNone(self) ? left(onSome()) : both(onSome(), self.value)
+)
 
 /**
  * @category constructors
  * @since 1.0.0
  */
-export const rightOrBoth = <A>(onNone: LazyArg<A>) =>
-  <E>(self: Option<E>): These<E, A> => O.isNone(self) ? right(onNone()) : both(self.value, onNone())
+export const rightOrBoth: {
+  <A>(onNone: LazyArg<A>): <E>(self: Option<E>) => These<E, A>
+  <E, A>(self: Option<E>, onNone: LazyArg<A>): These<E, A>
+} = dual(
+  2,
+  <E, A>(self: Option<E>, onNone: LazyArg<A>): These<E, A> =>
+    O.isNone(self) ? right(onNone()) : both(self.value, onNone())
+)
 
 /**
  * @category constructors
@@ -150,21 +162,33 @@ export const getEquivalence = <E, A>(
  * @category pattern matching
  * @since 1.0.0
  */
-export const match = <E, B, A, C = B, D = B>(
+export const match: {
+  <E, B, A, C = B, D = B>(
+    onLeft: (e: E) => B,
+    onRight: (a: A) => C,
+    onBoth: (e: E, a: A) => D
+  ): (self: These<E, A>) => B | C | D
+  <E, B, A, C = B, D = B>(
+    self: These<E, A>,
+    onLeft: (e: E) => B,
+    onRight: (a: A) => C,
+    onBoth: (e: E, a: A) => D
+  ): B | C | D
+} = dual(4, <E, B, A, C = B, D = B>(
+  self: These<E, A>,
   onLeft: (e: E) => B,
   onRight: (a: A) => C,
   onBoth: (e: E, a: A) => D
-) =>
-  (self: These<E, A>): B | C | D => {
-    switch (self._tag) {
-      case "Left":
-        return onLeft(self.left)
-      case "Right":
-        return onRight(self.right)
-      case "Both":
-        return onBoth(self.left, self.right)
-    }
+): B | C | D => {
+  switch (self._tag) {
+    case "Left":
+      return onLeft(self.left)
+    case "Right":
+      return onRight(self.right)
+    case "Both":
+      return onBoth(self.left, self.right)
   }
+})
 
 /**
  * @since 1.0.0
@@ -268,8 +292,14 @@ export const getRightOnlyOrThrow = <E, A>(self: These<E, A>): A => {
  * @category conversions
  * @since 1.0.0
  */
-export const fromNullable = <E>(onNullable: LazyArg<E>) =>
-  <A>(a: A): These<E, NonNullable<A>> => a == null ? left(onNullable()) : right(a as NonNullable<A>)
+export const fromNullable: {
+  <E>(onNullable: LazyArg<E>): <A>(a: A) => These<E, NonNullable<A>>
+  <A, E>(a: A, onNullable: LazyArg<E>): These<E, NonNullable<A>>
+} = dual(
+  2,
+  <A, E>(a: A, onNullable: LazyArg<E>): These<E, NonNullable<A>> =>
+    a == null ? left(onNullable()) : right(a as NonNullable<A>)
+)
 
 /**
  * @category conversions
@@ -282,9 +312,14 @@ export const fromEither = <E, A>(self: Either<E, A>): Validated<E, A> =>
  * @category conversions
  * @since 1.0.0
  */
-export const toEither = <E, A>(
-  onBoth: (e: E, a: A) => Either<E, A>
-) => (self: These<E, A>): Either<E, A> => isBoth(self) ? onBoth(self.left, self.right) : self
+export const toEither: {
+  <E, A>(onBoth: (e: E, a: A) => Either<E, A>): (self: These<E, A>) => Either<E, A>
+  <E, A>(self: These<E, A>, onBoth: (e: E, a: A) => Either<E, A>): Either<E, A>
+} = dual(
+  2,
+  <E, A>(self: These<E, A>, onBoth: (e: E, a: A) => Either<E, A>): Either<E, A> =>
+    isBoth(self) ? onBoth(self.left, self.right) : self
+)
 
 /**
  * @category conversions
@@ -317,11 +352,21 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B, E>(
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapNullable = <A, B, E2>(
+export const flatMapNullable: {
+  <A, B, E2>(
+    f: (a: A) => B | null | undefined,
+    onNullable: (a: A) => E2
+  ): <E1>(self: Validated<E1, A>) => Validated<E1 | E2, NonNullable<B>>
+  <E1, A, B, E2>(
+    self: Validated<E1, A>,
+    f: (a: A) => B | null | undefined,
+    onNullable: (a: A) => E2
+  ): Validated<E1 | E2, NonNullable<B>>
+} = dual(3, <E1, A, B, E2>(
+  self: Validated<E1, A>,
   f: (a: A) => B | null | undefined,
   onNullable: (a: A) => E2
-): (<E1>(self: Validated<E1, A>) => Validated<E1 | E2, NonNullable<B>>) =>
-  flatMap(liftNullable(f, (a) => [onNullable(a)]))
+): Validated<E1 | E2, NonNullable<B>> => flatMap(self, liftNullable(f, (a) => [onNullable(a)])))
 
 /**
  * @category lifting
@@ -340,20 +385,28 @@ export const liftPredicate: {
  * @category conversions
  * @since 1.0.0
  */
-export const fromIterable = <E>(onEmpty: LazyArg<E>) =>
-  <A>(collection: Iterable<A>): These<E, A> => {
-    for (const a of collection) {
-      return right(a)
-    }
-    return left(onEmpty())
+export const fromIterable: {
+  <E>(onEmpty: LazyArg<E>): <A>(collection: Iterable<A>) => These<E, A>
+  <A, E>(collection: Iterable<A>, onEmpty: LazyArg<E>): These<E, A>
+} = dual(2, <A, E>(collection: Iterable<A>, onEmpty: LazyArg<E>): These<E, A> => {
+  for (const a of collection) {
+    return right(a)
   }
+  return left(onEmpty())
+})
 
 /**
  * @category conversions
  * @since 1.0.0
  */
-export const fromOption = <E>(onNone: LazyArg<E>) =>
-  <A>(self: Option<A>): These<E, A> => O.isNone(self) ? left(onNone()) : right(self.value)
+export const fromOption: {
+  <E>(onNone: LazyArg<E>): <A>(self: Option<A>) => These<E, A>
+  <A, E>(self: Option<A>, onNone: LazyArg<E>): These<E, A>
+} = dual(
+  2,
+  <A, E>(self: Option<A>, onNone: LazyArg<E>): These<E, A> =>
+    O.isNone(self) ? left(onNone()) : right(self.value)
+)
 
 /**
  * @category conversions
@@ -390,28 +443,47 @@ export const liftThese = <A extends ReadonlyArray<unknown>, E, B>(
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapOption = <A, B, E2>(
+export const flatMapOption: {
+  <A, B, E2>(
+    f: (a: A) => Option<B>,
+    onNone: (a: A) => E2
+  ): <E1>(self: Validated<E1, A>) => Validated<E1 | E2, B>
+  <E1, A, B, E2>(
+    self: Validated<E1, A>,
+    f: (a: A) => Option<B>,
+    onNone: (a: A) => E2
+  ): Validated<E1 | E2, B>
+} = dual(3, <E1, A, B, E2>(
+  self: Validated<E1, A>,
   f: (a: A) => Option<B>,
   onNone: (a: A) => E2
-) =>
-  <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> =>
-    flatMap(self, liftOption(f, (a) => [onNone(a)]))
+): Validated<E1 | E2, B> => flatMap(self, liftOption(f, (a) => [onNone(a)])))
 
 /**
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapEither = <A, E2, B>(
-  f: (a: A) => Either<E2, B>
-) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => flatMap(self, liftEither(f))
+export const flatMapEither: {
+  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(self: Validated<E1, A>) => Validated<E1 | E2, B>
+  <E1, A, E2, B>(self: Validated<E1, A>, f: (a: A) => Either<E2, B>): Validated<E1 | E2, B>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: Validated<E1, A>, f: (a: A) => Either<E2, B>): Validated<E1 | E2, B> =>
+    flatMap(self, liftEither(f))
+)
 
 /**
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapThese = <A, E2, B>(
-  f: (a: A) => These<E2, B>
-) => <E1>(self: Validated<E1, A>): Validated<E1 | E2, B> => flatMap(self, liftThese(f))
+export const flatMapThese: {
+  <A, E2, B>(f: (a: A) => These<E2, B>): <E1>(self: Validated<E1, A>) => Validated<E1 | E2, B>
+  <E1, A, E2, B>(self: Validated<E1, A>, f: (a: A) => These<E2, B>): Validated<E1 | E2, B>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: Validated<E1, A>, f: (a: A) => These<E2, B>): Validated<E1 | E2, B> =>
+    flatMap(self, liftThese(f))
+)
 
 /**
  * Converts a `These` to an `Option` discarding the error (`Both` included).
@@ -465,22 +537,27 @@ export const getBoth = <E, A>(
  * @category getters
  * @since 1.0.0
  */
-export const getBothOrElse = <E, A>(e: LazyArg<E>, a: LazyArg<A>) =>
-  (
-    self: These<E, A>
-  ): readonly [E, A] =>
-    isLeft(self) ?
-      [self.left, a()] :
-      isRight(self) ?
-      [e(), self.right] :
-      [self.left, self.right]
+export const getBothOrElse: {
+  <E, A>(e: LazyArg<E>, a: LazyArg<A>): (self: These<E, A>) => [E, A]
+  <E, A>(self: These<E, A>, e: LazyArg<E>, a: LazyArg<A>): [E, A]
+} = dual(3, <E, A>(self: These<E, A>, e: LazyArg<E>, a: LazyArg<A>): [E, A] =>
+  isLeft(self) ?
+    [self.left, a()] :
+    isRight(self) ?
+    [e(), self.right] :
+    [self.left, self.right])
 
 /**
  * @category getters
  * @since 1.0.0
  */
-export const getOrElse = <B>(onLeft: LazyArg<B>) =>
-  <E, A>(self: These<E, A>): A | B => isLeft(self) ? onLeft() : self.right
+export const getOrElse: {
+  <B>(onLeft: LazyArg<B>): <E, A>(self: These<E, A>) => A | B
+  <E, A, B>(self: These<E, A>, onLeft: LazyArg<B>): A | B
+} = dual(
+  2,
+  <E, A, B>(self: These<E, A>, onLeft: LazyArg<B>): A | B => isLeft(self) ? onLeft() : self.right
+)
 
 /**
  * @category getters
@@ -498,57 +575,57 @@ export const getOrUndefined: <E, A>(self: These<E, A>) => A | undefined = getOrE
  * @category debugging
  * @since 1.0.0
  */
-export const inspectRight = <A>(
-  onRight: (a: A) => void
-) =>
-  <E>(self: These<E, A>): These<E, A> => {
-    if (isRight(self)) {
-      onRight(self.right)
-    }
-    return self
+export const inspectRight: {
+  <A>(onRight: (a: A) => void): <E>(self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, onRight: (a: A) => void): These<E, A>
+} = dual(2, <E, A>(self: These<E, A>, onRight: (a: A) => void): These<E, A> => {
+  if (isRight(self)) {
+    onRight(self.right)
   }
+  return self
+})
 
 /**
  * @category debugging
  * @since 1.0.0
  */
-export const inspectRightOrBoth = <A>(
-  onRightOrBoth: (a: A) => void
-) =>
-  <E>(self: These<E, A>): These<E, A> => {
-    if (isRightOrBoth(self)) {
-      onRightOrBoth(self.right)
-    }
-    return self
+export const inspectRightOrBoth: {
+  <A>(onRightOrBoth: (a: A) => void): <E>(self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, onRightOrBoth: (a: A) => void): These<E, A>
+} = dual(2, <E, A>(self: These<E, A>, onRightOrBoth: (a: A) => void): These<E, A> => {
+  if (isRightOrBoth(self)) {
+    onRightOrBoth(self.right)
   }
+  return self
+})
 
 /**
  * @category debugging
  * @since 1.0.0
  */
-export const inspectLeft = <E>(
-  onLeft: (e: E) => void
-) =>
-  <A>(self: These<E, A>): These<E, A> => {
-    if (isLeft(self)) {
-      onLeft(self.left)
-    }
-    return self
+export const inspectLeft: {
+  <E>(onLeft: (e: E) => void): <A>(self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, onLeft: (e: E) => void): These<E, A>
+} = dual(2, <E, A>(self: These<E, A>, onLeft: (e: E) => void): These<E, A> => {
+  if (isLeft(self)) {
+    onLeft(self.left)
   }
+  return self
+})
 
 /**
  * @category debugging
  * @since 1.0.0
  */
-export const inspectBoth = <E, A>(
-  onBoth: (e: E, a: A) => void
-) =>
-  (self: These<E, A>): These<E, A> => {
-    if (isBoth(self)) {
-      onBoth(self.left, self.right)
-    }
-    return self
+export const inspectBoth: {
+  <E, A>(onBoth: (e: E, a: A) => void): (self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, onBoth: (e: E, a: A) => void): These<E, A>
+} = dual(2, <E, A>(self: These<E, A>, onBoth: (e: E, a: A) => void): These<E, A> => {
+  if (isBoth(self)) {
+    onBoth(self.left, self.right)
   }
+  return self
+})
 
 /**
  * @category instances
@@ -752,15 +829,27 @@ export const traverseTap: <F extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const contains = <A>(equivalence: Equivalence<A>) =>
-  (a: A) => <E>(self: These<E, A>): boolean => isLeft(self) ? false : equivalence(self.right, a)
+export const contains = <A>(equivalence: Equivalence<A>): {
+  (a: A): <E>(self: These<E, A>) => boolean
+  <E>(self: These<E, A>, a: A): boolean
+} =>
+  dual(
+    2,
+    <E>(self: These<E, A>, a: A): boolean => isLeft(self) ? false : equivalence(self.right, a)
+  )
 
 /**
  * @category predicates
  * @since 1.0.0
  */
-export const exists = <A>(predicate: Predicate<A>) =>
-  <E>(self: These<E, A>): boolean => isLeft(self) ? false : predicate(self.right)
+export const exists: {
+  <A>(predicate: Predicate<A>): <E>(self: These<E, A>) => boolean
+  <E, A>(self: These<E, A>, predicate: Predicate<A>): boolean
+} = dual(
+  2,
+  <E, A>(self: These<E, A>, predicate: Predicate<A>): boolean =>
+    isLeft(self) ? false : predicate(self.right)
+)
 
 /**
  * @category instances
@@ -777,9 +866,14 @@ export const Foldable: foldable.Foldable<TheseTypeLambda> = foldable.make((self,
  * @category error handling
  * @since 1.0.0
  */
-export const orElse = <E1, E2, B>(
-  that: (e1: E1) => These<E2, B>
-) => <A>(self: These<E1, A>): These<E1 | E2, A | B> => isLeft(self) ? that(self.left) : self
+export const orElse: {
+  <E1, E2, B>(that: (e1: E1) => These<E2, B>): <A>(self: These<E1, A>) => These<E1 | E2, A | B>
+  <E1, A, E2, B>(self: These<E1, A>, that: (e1: E1) => These<E2, B>): These<E1 | E2, A | B>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: These<E1, A>, that: (e1: E1) => These<E2, B>): These<E1 | E2, A | B> =>
+    isLeft(self) ? that(self.left) : self
+)
 
 /**
  * Returns an effect that will produce the value of this effect, unless it
@@ -788,13 +882,21 @@ export const orElse = <E1, E2, B>(
  * @category error handling
  * @since 1.0.0
  */
-export const orElseEither = <E1, E2, B>(
+export const orElseEither: {
+  <E1, E2, B>(
+    that: (e1: E1) => These<E2, B>
+  ): <A>(self: These<E1, A>) => These<E1 | E2, Either<A, B>>
+  <E1, A, E2, B>(
+    self: These<E1, A>,
+    that: (e1: E1) => These<E2, B>
+  ): These<E1 | E2, Either<A, B>>
+} = dual(2, <E1, A, E2, B>(
+  self: These<E1, A>,
   that: (e1: E1) => These<E2, B>
-) =>
-  <A>(self: These<E1, A>): These<E1 | E2, Either<A, B>> =>
-    isLeft(self) ?
-      map(that(self.left), E.right) :
-      map(self, E.left)
+): These<E1 | E2, Either<A, B>> =>
+  isLeft(self) ?
+    map(that(self.left), E.right) :
+    map(self, E.left))
 
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise
@@ -803,9 +905,14 @@ export const orElseEither = <E1, E2, B>(
  * @category error handling
  * @since 1.0.0
  */
-export const orElseFail = <E2>(
-  onLeft: LazyArg<E2>
-): <E1, A>(self: These<E1, A>) => These<E1 | E2, A> => orElse(() => left(onLeft()))
+export const orElseFail: {
+  <E2>(onLeft: LazyArg<E2>): <E1, A>(self: These<E1, A>) => These<E1 | E2, A>
+  <E1, A, E2>(self: These<E1, A>, onLeft: LazyArg<E2>): These<E1 | E2, A>
+} = dual(
+  2,
+  <E1, A, E2>(self: These<E1, A>, onLeft: LazyArg<E2>): These<E1 | E2, A> =>
+    orElse(self, () => left(onLeft()))
+)
 
 /**
  * @category error handling
@@ -859,15 +966,17 @@ export const SemiAlternative: semiAlternative.SemiAlternative<TheseTypeLambda> =
  * @category filtering
  * @since 1.0.0
  */
-export const compact = <E>(onNone: LazyArg<E>) =>
-  <A>(self: These<E, Option<A>>): These<E, A> =>
-    isLeft(self) ?
-      self :
-      O.isNone(self.right) ?
-      left(onNone()) :
-      isBoth(self) ?
-      both(self.left, self.right.value) :
-      right(self.right.value)
+export const compact: {
+  <E>(onNone: LazyArg<E>): <A>(self: These<E, Option<A>>) => These<E, A>
+  <E, A>(self: These<E, Option<A>>, onNone: LazyArg<E>): These<E, A>
+} = dual(2, <E, A>(self: These<E, Option<A>>, onNone: LazyArg<E>): These<E, A> =>
+  isLeft(self) ?
+    self :
+    O.isNone(self.right) ?
+    left(onNone()) :
+    isBoth(self) ?
+    both(self.left, self.right.value) :
+    right(self.right.value))
 
 /**
  * @category filtering
@@ -881,32 +990,51 @@ export const filter: {
     predicate: Predicate<A>,
     onFalse: LazyArg<E2>
   ): <E1>(self: These<E1, B>) => These<E1 | E2, B>
-} = <A, E>(
+  <E1, C extends A, B extends A, E2, A = C>(
+    self: These<E1, C>,
+    refinement: Refinement<A, B>,
+    onFalse: LazyArg<E2>
+  ): These<E1 | E2, B>
+  <E1, B extends A, E2, A = B>(
+    self: These<E1, B>,
+    predicate: Predicate<A>,
+    onFalse: LazyArg<E2>
+  ): These<E1 | E2, B>
+} = dual(3, <E1, B extends A, E2, A = B>(
+  self: These<E1, B>,
   predicate: Predicate<A>,
-  onFalse: LazyArg<E>
-) =>
-  (self: These<E, A>): These<E, A> =>
-    isLeft(self) ? self : predicate(self.right) ? self : left(onFalse())
+  onFalse: LazyArg<E2>
+): These<E1 | E2, B> => isLeft(self) ? self : predicate(self.right) ? self : left(onFalse()))
 
 /**
  * @category filtering
  * @since 1.0.0
  */
-export const filterMap = <A, B, E2>(
+export const filterMap: {
+  <A, B, E2>(
+    f: (a: A) => Option<B>,
+    onNone: LazyArg<E2>
+  ): <E1>(self: These<E1, A>) => These<E1 | E2, B>
+  <E1, A, B, E2>(
+    self: These<E1, A>,
+    f: (a: A) => Option<B>,
+    onNone: LazyArg<E2>
+  ): These<E1 | E2, B>
+} = dual(3, <E1, A, B, E2>(
+  self: These<E1, A>,
   f: (a: A) => Option<B>,
   onNone: LazyArg<E2>
-) =>
-  <E1>(self: These<E1, A>): These<E1 | E2, B> => {
-    if (isLeft(self)) {
-      return self
-    }
-    if (isRight(self)) {
-      const ob = f(self.right)
-      return O.isNone(ob) ? left(onNone()) : right(ob.value)
-    }
-    const ob = f(self.right)
-    return O.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
+): These<E1 | E2, B> => {
+  if (isLeft(self)) {
+    return self
   }
+  if (isRight(self)) {
+    const ob = f(self.right)
+    return O.isNone(ob) ? left(onNone()) : right(ob.value)
+  }
+  const ob = f(self.right)
+  return O.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
+})
 
 const product = <E1, A, E2, B>(
   self: Validated<E1, A>,
@@ -1011,9 +1139,7 @@ export const zipWith: {
     that: Validated<E2, B>,
     f: (a: A, b: B) => C
   ): <E1>(self: Validated<E1, A>) => Validated<E2 | E1, C>
-} = semiApplicative.zipWith(
-  SemiApplicative
-)
+} = semiApplicative.zipWith(SemiApplicative)
 
 /**
  * @since 1.0.0
@@ -1029,10 +1155,8 @@ export const ap: {
  * @category combining
  * @since 1.0.0
  */
-export const getFirstLeftSemigroup: <A, E>(
-  S: Semigroup<A>
-) => Semigroup<Validated<E, A>> = semiApplicative
-  .getSemigroup(SemiApplicative)
+export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Validated<E, A>> =
+  semiApplicative.getSemigroup(SemiApplicative)
 
 /**
  * Appends an element to the end of a tuple.
@@ -1142,8 +1266,7 @@ export const FlatMap: flatMap_.FlatMap<ValidatedTypeLambda> = {
  */
 export const flatten: <E2, E1, A>(
   self: Validated<E2, Validated<E1, A>>
-) => Validated<E2 | E1, A> = flatMap_
-  .flatten(FlatMap)
+) => Validated<E2 | E1, A> = flatMap_.flatten(FlatMap)
 
 /**
  * @since 1.0.0
@@ -1175,42 +1298,6 @@ export const Chainable: chainable.Chainable<ValidatedTypeLambda> = {
   map,
   flatMap
 }
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Validated<E2, B>
-) => <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
-  .bind(Chainable)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bindEither = <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Either<E2, B>
-): <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
-  bind(name, (a) => fromEither(f(a)))
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bindThese = <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => These<E2, B>
-): <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
-  bind(name, (a) => toValidated(f(a)))
 
 /**
  * Sequences the specified effect after this effect, but ignores the value
@@ -1332,3 +1419,39 @@ export const andThenBind: <N extends string, A extends object, E2, B>(
   self: Validated<E1, A>
 ) => Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
   .andThenBind(SemiProduct)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bind: <N extends string, A extends object, E2, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => Validated<E2, B>
+) => <E1>(
+  self: Validated<E1, A>
+) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
+  .bind(Chainable)
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindEither = <N extends string, A extends object, E2, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => Either<E2, B>
+): <E1>(
+  self: Validated<E1, A>
+) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+  bind(name, (a) => fromEither(f(a)))
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const bindThese = <N extends string, A extends object, E2, B>(
+  name: Exclude<N, keyof A>,
+  f: (a: A) => These<E2, B>
+): <E1>(
+  self: Validated<E1, A>
+) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+  bind(name, (a) => toValidated(f(a)))
