@@ -144,38 +144,6 @@ export const replaceOption: {
 )
 
 /**
- * Maps the values of a `ReadonlyRecord` to a new `Record` by applying a transformation function to each of its keys and values.
- *
- * @param self - The `ReadonlyRecord` to be mapped.
- * @param f - A transformation function that will be applied to each of the key/values in the `ReadonlyRecord`.
- *
- * @example
- * import { mapWithKey } from "@fp-ts/core/ReadonlyRecord"
- *
- * const f = (k: string, n: number) => `${k.toUpperCase()}-${n}`
- *
- * assert.deepStrictEqual(mapWithKey({ a: 3, b: 5 }, f), { a: "A-3", b: "B-5" })
- *
- * @category mapping
- * @since 1.0.0
- */
-export const mapWithKey: {
-  <A, B>(f: (k: string, a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
-  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
-} = dual(
-  2,
-  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B> => {
-    const out: Record<string, B> = {}
-    for (const k in self) {
-      if (Object.prototype.hasOwnProperty.call(self, k)) {
-        out[k] = f(k, self[k])
-      }
-    }
-    return out
-  }
-)
-
-/**
  * Maps a `ReadonlyRecord` into another `Record` by applying a transformation function to each of its values.
  *
  * @param self - The `ReadonlyRecord` to be mapped.
@@ -184,20 +152,31 @@ export const mapWithKey: {
  * @example
  * import { map } from "@fp-ts/core/ReadonlyRecord"
  *
- * const f = (n: number) => `-${n}-`
+ * const f = (n: number) => `-${n}`
  *
- * assert.deepStrictEqual(map({ a: 3, b: 5 }, f), { a: "-3-", b: "-5-" })
+ * assert.deepStrictEqual(map({ a: 3, b: 5 }, f), { a: "-3", b: "-5" })
+ *
+ * const g = (n: number, key: string) => `${key.toUpperCase()}-${n}`
+ *
+ * assert.deepStrictEqual(map({ a: 3, b: 5 }, g), { a: "A-3", b: "B-5" })
  *
  * @category mapping
  * @since 1.0.0
  */
 export const map: {
-  <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
+  <A, B>(f: (a: A, key: string) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A, key: string) => B): Record<string, B>
 } = dual(
   2,
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B> =>
-    mapWithKey(self, (_, a) => f(a))
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A, key: string) => B): Record<string, B> => {
+    const out: Record<string, B> = {}
+    for (const key in self) {
+      if (Object.prototype.hasOwnProperty.call(self, key)) {
+        out[key] = f(self[key], key)
+      }
+    }
+    return out
+  }
 )
 
 /*
