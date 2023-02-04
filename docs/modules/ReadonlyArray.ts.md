@@ -46,8 +46,6 @@ Added in v1.0.0
 - [folding](#folding)
   - [combineMap](#combinemap)
   - [combineMapNonEmpty](#combinemapnonempty)
-  - [combineMapNonEmptyWithIndex](#combinemapnonemptywithindex)
-  - [combineMapWithIndex](#combinemapwithindex)
   - [coproductMapKind](#coproductmapkind)
   - [reduce](#reduce)
   - [reduceKind](#reducekind)
@@ -576,9 +574,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const combineMap: <M>(M: Monoid<M>) => {
-  <A>(f: (a: A) => M): (self: Iterable<A>) => M
-  <A>(self: Iterable<A>, f: (a: A) => M): M
+export declare const combineMap: <M>(Monoid: Monoid<M>) => {
+  <A>(f: (a: A, i: number) => M): (self: Iterable<A>) => M
+  <A>(self: Iterable<A>, f: (a: A, i: number) => M): M
 }
 ```
 
@@ -590,34 +588,8 @@ Added in v1.0.0
 
 ```ts
 export declare const combineMapNonEmpty: <S>(S: Semigroup<S>) => {
-  <A>(f: (a: A) => S): (self: readonly [A, ...A[]]) => S
-  <A>(self: readonly [A, ...A[]], f: (a: A) => S): S
-}
-```
-
-Added in v1.0.0
-
-## combineMapNonEmptyWithIndex
-
-**Signature**
-
-```ts
-export declare const combineMapNonEmptyWithIndex: <S>(S: Semigroup<S>) => {
   <A>(f: (a: A, i: number) => S): (self: readonly [A, ...A[]]) => S
   <A>(self: readonly [A, ...A[]], f: (a: A, i: number) => S): S
-}
-```
-
-Added in v1.0.0
-
-## combineMapWithIndex
-
-**Signature**
-
-```ts
-export declare const combineMapWithIndex: <M>(Monoid: Monoid<M>) => {
-  <A>(f: (a: A, i: number) => M): (self: Iterable<A>) => M
-  <A>(self: Iterable<A>, f: (a: A, i: number) => M): M
 }
 ```
 

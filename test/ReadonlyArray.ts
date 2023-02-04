@@ -53,7 +53,6 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.Foldable).exist
     expect(RA.reduce).exist
     expect(RA.reduceRight).exist
-    expect(RA.combineMap).exist
     expect(RA.reduceKind).exist
     expect(RA.coproductMapKind).exist
 
@@ -885,11 +884,11 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(pipe([], RA.filterMap(g)), [])
   })
 
-  it("combineMapWithIndex", () => {
+  it("combineMap", () => {
     deepStrictEqual(
       pipe(
         ["a", "b"],
-        RA.combineMapWithIndex(String.Monoid)((a, i) => i + a)
+        RA.combineMap(String.Monoid)((a, i) => i + a)
       ),
       "0a1b"
     )
@@ -1511,13 +1510,10 @@ describe.concurrent("ReadonlyArray", () => {
       ),
       "abc"
     )
-  })
-
-  it("combineMapNonEmptyWithIndex", () => {
     deepStrictEqual(
       pipe(
         RA.make("a", "b"),
-        RA.combineMapNonEmptyWithIndex(String.Semigroup)((a, i) => i + a)
+        RA.combineMapNonEmpty(String.Semigroup)((a, i) => i + a)
       ),
       "0a1b"
     )
