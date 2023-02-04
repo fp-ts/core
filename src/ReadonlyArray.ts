@@ -1600,7 +1600,7 @@ export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
  * @category filtering
  * @since 1.0.0
  */
-export const filterWithIndex: {
+export const filter: {
   <C extends A, B extends A, A = C>(
     refinement: (a: A, i: number) => a is B
   ): (self: Iterable<C>) => Array<B>
@@ -1614,25 +1614,6 @@ export const filterWithIndex: {
   2,
   <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): Array<B> =>
     filterMap(self, (b, i) => (predicate(b, i) ? O.some(b) : O.none()))
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const filter: {
-  <C extends A, B extends A, A = C>(
-    refinement: (a: A) => a is B
-  ): (self: Iterable<C>) => Array<B>
-  <B extends A, A = B>(predicate: (a: A) => boolean): (self: Iterable<B>) => Array<B>
-  <C extends A, B extends A, A = C>(
-    self: Iterable<C>,
-    refinement: (a: A) => a is B
-  ): Array<B>
-} = dual(
-  2,
-  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A) => boolean): Array<B> =>
-    filterWithIndex(self, predicate)
 )
 
 /**

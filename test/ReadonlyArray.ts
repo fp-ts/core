@@ -871,11 +871,9 @@ describe.concurrent("ReadonlyArray", () => {
       RA.filter(O.isSome)
     )
     assert.deepStrictEqual(y, [O.some(3), O.some(1)])
-  })
 
-  it("filterWithIndex", () => {
     const f = (n: number) => n % 2 === 0
-    deepStrictEqual(pipe(["a", "b", "c"], RA.filterWithIndex((_, i) => f(i))), [
+    deepStrictEqual(pipe(["a", "b", "c"], RA.filter((_, i) => f(i))), [
       "a",
       "c"
     ])
