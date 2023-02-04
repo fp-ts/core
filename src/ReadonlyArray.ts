@@ -1373,34 +1373,6 @@ export const of = <A>(a: A): NonEmptyArray<A> => [a]
 export const empty: <A = never>() => Array<A> = () => []
 
 /**
- * @category mapping
- * @since 1.0.0
- */
-export const mapNonEmpty: {
-  <A, B>(f: (a: A) => B): (self: readonly [A, ...Array<A>]) => [B, ...Array<B>]
-  <A, B>(self: readonly [A, ...Array<A>], f: (a: A) => B): [B, ...Array<B>]
-} = dual(
-  2,
-  <A, B>(self: NonEmptyReadonlyArray<A>, f: (a: A) => B): NonEmptyArray<B> =>
-    mapNonEmptyWithIndex(self, f)
-)
-
-/**
- * @category mapping
- * @since 1.0.0
- */
-export const mapNonEmptyWithIndex: {
-  <A, B>(f: (a: A, i: number) => B): (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<B>
-  <A, B>(self: NonEmptyReadonlyArray<A>, f: (a: A, i: number) => B): NonEmptyArray<B>
-} = dual(2, <A, B>(self: NonEmptyReadonlyArray<A>, f: (a: A, i: number) => B): NonEmptyArray<B> => {
-  const out: NonEmptyArray<B> = [f(headNonEmpty(self), 0)]
-  for (let i = 1; i < self.length; i++) {
-    out.push(f(self[i], i))
-  }
-  return out
-})
-
-/**
  * @category instances
  * @since 1.0.0
  */
@@ -1416,6 +1388,15 @@ export const map: {
   <A, B>(f: (a: A, i: number) => B): (self: ReadonlyArray<A>) => Array<B>
   <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => B): Array<B>
 } = dual(2, <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => B): Array<B> => self.map(f))
+
+/**
+ * @category mapping
+ * @since 1.0.0
+ */
+export const mapNonEmpty: {
+  <A, B>(f: (a: A, i: number) => B): (self: readonly [A, ...Array<A>]) => [B, ...Array<B>]
+  <A, B>(self: readonly [A, ...Array<A>], f: (a: A, i: number) => B): [B, ...Array<B>]
+} = map as any
 
 const imap = covariant.imap<ReadonlyArrayTypeLambda>(map)
 
@@ -1841,7 +1822,7 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
     self: NonEmptyReadonlyArray<A>,
     f: (a: A, i: number) => Kind<F, R, O, E, B>
   ): Kind<F, R, O, E, NonEmptyArray<B>> => {
-    const [head, ...tail] = mapNonEmptyWithIndex(self, f)
+    const [head, ...tail] = mapNonEmpty(self, f)
     return F.productMany(head, tail)
   })
 

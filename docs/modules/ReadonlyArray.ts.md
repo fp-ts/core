@@ -131,7 +131,6 @@ Added in v1.0.0
   - [flap](#flap)
   - [map](#map)
   - [mapNonEmpty](#mapnonempty)
-  - [mapNonEmptyWithIndex](#mapnonemptywithindex)
   - [tupled](#tupled)
 - [models](#models)
   - [NonEmptyArray (type alias)](#nonemptyarray-type-alias)
@@ -1614,19 +1613,6 @@ Added in v1.0.0
 
 ```ts
 export declare const mapNonEmpty: {
-  <A, B>(f: (a: A) => B): (self: readonly [A, ...A[]]) => [B, ...B[]]
-  <A, B>(self: readonly [A, ...A[]], f: (a: A) => B): [B, ...B[]]
-}
-```
-
-Added in v1.0.0
-
-## mapNonEmptyWithIndex
-
-**Signature**
-
-```ts
-export declare const mapNonEmptyWithIndex: {
   <A, B>(f: (a: A, i: number) => B): (self: readonly [A, ...A[]]) => [B, ...B[]]
   <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => B): [B, ...B[]]
 }

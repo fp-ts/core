@@ -1164,6 +1164,10 @@ describe.concurrent("ReadonlyArray", () => {
       ),
       [1, 2, 3, 4]
     )
+    deepStrictEqual(
+      pipe(RA.make("a", "b"), RA.mapNonEmpty((s: string, i: number) => s + i)),
+      ["a0", "b1"]
+    )
   })
 
   it("sequenceNonEmpty", () => {
@@ -1182,14 +1186,6 @@ describe.concurrent("ReadonlyArray", () => {
         RA.mapNonEmpty((n) => n * 2)
       ),
       [2, 4]
-    )
-  })
-
-  it("mapNonEmptyWithIndex", () => {
-    const add = (s: string, i: number) => s + i
-    deepStrictEqual(
-      pipe(RA.make("a", "b"), RA.mapNonEmptyWithIndex(add)),
-      ["a0", "b1"]
     )
   })
 
