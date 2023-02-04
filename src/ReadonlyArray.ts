@@ -1539,25 +1539,6 @@ export const Chainable: chainable.Chainable<ReadonlyArrayTypeLambda> = {
  * @category filtering
  * @since 1.0.0
  */
-export const filterMapWithIndex: {
-  <A, B>(f: (a: A, i: number) => Option<B>): (self: Iterable<A>) => Array<B>
-  <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): Array<B>
-} = dual(2, <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): Array<B> => {
-  const as = fromIterable(self)
-  const out: Array<B> = []
-  for (let i = 0; i < as.length; i++) {
-    const o = f(as[i], i)
-    if (O.isSome(o)) {
-      out.push(o.value)
-    }
-  }
-  return out
-})
-
-/**
- * @category filtering
- * @since 1.0.0
- */
 export const separate = <A, B>(
   self: ReadonlyArray<Either<A, B>>
 ): [Array<A>, Array<B>] => {
@@ -1578,11 +1559,21 @@ export const separate = <A, B>(
  * @since 1.0.0
  */
 export const filterMap: {
-  <A, B>(f: (a: A) => Option<B>): (self: Iterable<A>) => Array<B>
-  <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): Array<B>
+  <A, B>(f: (a: A, i: number) => Option<B>): (self: Iterable<A>) => Array<B>
+  <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): Array<B>
 } = dual(
   2,
-  <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): Array<B> => filterMapWithIndex(self, f)
+  <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): Array<B> => {
+    const as = fromIterable(self)
+    const out: Array<B> = []
+    for (let i = 0; i < as.length; i++) {
+      const o = f(as[i], i)
+      if (O.isSome(o)) {
+        out.push(o.value)
+      }
+    }
+    return out
+  }
 )
 
 /**
@@ -1622,7 +1613,7 @@ export const filterWithIndex: {
 } = dual(
   2,
   <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): Array<B> =>
-    filterMapWithIndex(self, (b, i) => (predicate(b, i) ? O.some(b) : O.none()))
+    filterMap(self, (b, i) => (predicate(b, i) ? O.some(b) : O.none()))
 )
 
 /**

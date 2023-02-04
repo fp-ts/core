@@ -37,7 +37,6 @@ Added in v1.0.0
   - [compact](#compact)
   - [filter](#filter)
   - [filterMap](#filtermap)
-  - [filterMapWithIndex](#filtermapwithindex)
   - [filterWithIndex](#filterwithindex)
   - [partition](#partition)
   - [partitionMap](#partitionmap)
@@ -481,19 +480,6 @@ Added in v1.0.0
 
 ```ts
 export declare const filterMap: {
-  <A, B>(f: (a: A) => Option<B>): (self: Iterable<A>) => B[]
-  <A, B>(self: Iterable<A>, f: (a: A) => Option<B>): B[]
-}
-```
-
-Added in v1.0.0
-
-## filterMapWithIndex
-
-**Signature**
-
-```ts
-export declare const filterMapWithIndex: {
   <A, B>(f: (a: A, i: number) => Option<B>): (self: Iterable<A>) => B[]
   <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): B[]
 }
