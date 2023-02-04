@@ -74,7 +74,7 @@ export const concat: {
  *
  * @since 1.0.0
  */
-export const toUpperCase = (s: string): string => s.toUpperCase()
+export const toUpperCase = (self: string): string => self.toUpperCase()
 
 /**
  * @example
@@ -85,7 +85,7 @@ export const toUpperCase = (s: string): string => s.toUpperCase()
  *
  * @since 1.0.0
  */
-export const toLowerCase = (s: string): string => s.toLowerCase()
+export const toLowerCase = (self: string): string => self.toLowerCase()
 
 /**
  * @example
@@ -97,12 +97,12 @@ export const toLowerCase = (s: string): string => s.toLowerCase()
  * @since 1.0.0
  */
 export const replace: {
-  (searchValue: string | RegExp, replaceValue: string): (s: string) => string
-  (s: string, searchValue: string | RegExp, replaceValue: string): string
+  (searchValue: string | RegExp, replaceValue: string): (self: string) => string
+  (self: string, searchValue: string | RegExp, replaceValue: string): string
 } = dual(
   3,
-  (s: string, searchValue: string | RegExp, replaceValue: string): string =>
-    s.replace(searchValue, replaceValue)
+  (self: string, searchValue: string | RegExp, replaceValue: string): string =>
+    self.replace(searchValue, replaceValue)
 )
 
 /**
@@ -113,7 +113,7 @@ export const replace: {
  *
  * @since 1.0.0
  */
-export const trim = (s: string): string => s.trim()
+export const trim = (self: string): string => self.trim()
 
 /**
  * @example
@@ -123,7 +123,7 @@ export const trim = (s: string): string => s.trim()
  *
  * @since 1.0.0
  */
-export const trimStart = (s: string): string => s.trimStart()
+export const trimStart = (self: string): string => self.trimStart()
 
 /**
  * @example
@@ -133,7 +133,7 @@ export const trimStart = (s: string): string => s.trimStart()
  *
  * @since 1.0.0
  */
-export const trimEnd = (s: string): string => s.trimEnd()
+export const trimEnd = (self: string): string => self.trimEnd()
 
 /**
  * @example
@@ -145,9 +145,9 @@ export const trimEnd = (s: string): string => s.trimEnd()
  * @since 1.0.0
  */
 export const slice: {
-  (start: number, end: number): (s: string) => string
-  (s: string, start: number, end: number): string
-} = dual(3, (s: string, start: number, end: number): string => s.slice(start, end))
+  (start: number, end: number): (self: string) => string
+  (self: string, start: number, end: number): string
+} = dual(3, (self: string, start: number, end: number): string => self.slice(start, end))
 
 /**
  * Test whether a `string` is empty.
@@ -160,14 +160,14 @@ export const slice: {
  *
  * @since 1.0.0
  */
-export const isEmpty = (s: string): s is "" => s.length === 0
+export const isEmpty = (self: string): self is "" => self.length === 0
 
 /**
  * Test whether a `string` is non empty.
  *
  * @since 1.0.0
  */
-export const isNonEmpty = (s: string): boolean => s.length > 0
+export const isNonEmpty = (self: string): boolean => self.length > 0
 
 /**
  * Calculate the number of characters in a `string`.
@@ -179,7 +179,7 @@ export const isNonEmpty = (s: string): boolean => s.length > 0
  *
  * @since 1.0.0
  */
-export const length = (s: string): number => s.length
+export const length = (self: string): number => self.length
 
 /**
  * @example
@@ -192,51 +192,121 @@ export const length = (s: string): number => s.length
  * @since 1.0.0
  */
 export const split: {
-  (separator: string | RegExp): (s: string) => NonEmptyReadonlyArray<string>
-  (s: string, separator: string | RegExp): NonEmptyReadonlyArray<string>
-} = dual(2, (s: string, separator: string | RegExp): NonEmptyReadonlyArray<string> => {
-  const out = s.split(separator)
-  return readonlyArray.isNonEmpty(out) ? out : [s]
+  (separator: string | RegExp): (self: string) => NonEmptyReadonlyArray<string>
+  (self: string, separator: string | RegExp): NonEmptyReadonlyArray<string>
+} = dual(2, (self: string, separator: string | RegExp): NonEmptyReadonlyArray<string> => {
+  const out = self.split(separator)
+  return readonlyArray.isNonEmpty(out) ? out : [self]
 })
 
 /**
+ * Returns `true` if `searchString` appears as a substring of `self`, at one or more positions that are
+ * greater than or equal to `0`; otherwise, returns `false`.
+ *
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe('abc', S.includes('b')), true)
- * assert.deepStrictEqual(pipe('abc', S.includes('d')), false)
+ * assert.deepStrictEqual(S.includes("abc", "b"), true)
+ * assert.deepStrictEqual(S.includes("abc", "d"), false)
  *
  * @since 1.0.0
  */
-export const includes = (searchString: string, position?: number) =>
-  (s: string): boolean => s.includes(searchString, position)
+export const includes: {
+  (searchString: string): (self: string) => boolean
+  (self: string, searchString: string): boolean
+} = dual(2, (self: string, searchString: string): boolean => self.includes(searchString))
+
+/**
+ * Returns `true` if `searchString` appears as a substring of `self`, at one or more positions that are
+ * greater than or equal to `position`; otherwise, returns `false`.
+ *
+ * @example
+ * import * as S from '@fp-ts/core/String'
+ *
+ * assert.deepStrictEqual(S.includesWithPosition("abc", "b", 1), true)
+ * assert.deepStrictEqual(S.includesWithPosition("abc", "a", 1), false)
+ *
+ * @since 1.0.0
+ */
+export const includesWithPosition: {
+  (searchString: string, position: number): (self: string) => boolean
+  (self: string, searchString: string, position: number): boolean
+} = dual(
+  3,
+  (self: string, searchString: string, position: number): boolean =>
+    self.includes(searchString, position)
+)
+
+/**
+ * Returns `true` if the sequence of elements of `searchString` is the
+ * same as the corresponding elements of `s` starting at
+ * position. Otherwise returns false.
+ *
+ * @example
+ * import * as S from '@fp-ts/core/String'
+ *
+ * assert.deepStrictEqual(S.startsWith("abc", "a"), true)
+ * assert.deepStrictEqual(S.startsWith("bc", "a"), false)
+ *
+ * @since 1.0.0
+ */
+export const startsWith: {
+  (searchString: string): (self: string) => boolean
+  (self: string, searchString: string): boolean
+} = dual(
+  2,
+  (self: string, searchString: string): boolean => self.startsWith(searchString)
+)
 
 /**
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe('abc', S.startsWith('a')), true)
- * assert.deepStrictEqual(pipe('bc', S.startsWith('a')), false)
+ * assert.deepStrictEqual(S.startsWithPosition("abc", "b", 1), true)
+ * assert.deepStrictEqual(S.startsWithPosition("bc", "a", 1), false)
  *
  * @since 1.0.0
  */
-export const startsWith = (searchString: string, position?: number) =>
-  (s: string): boolean => s.startsWith(searchString, position)
+export const startsWithPosition: {
+  (searchString: string, position: number): (self: string) => boolean
+  (self: string, searchString: string, position: number): boolean
+} = dual(
+  3,
+  (self: string, searchString: string, position: number): boolean =>
+    self.startsWith(searchString, position)
+)
 
 /**
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe('abc', S.endsWith('c')), true)
- * assert.deepStrictEqual(pipe('ab', S.endsWith('c')), false)
+ * assert.deepStrictEqual(S.endsWith("abc", "c"), true)
+ * assert.deepStrictEqual(S.endsWith("ab", "c"), false)
  *
  * @since 1.0.0
  */
-export const endsWith = (searchString: string, position?: number) =>
-  (s: string): boolean => s.endsWith(searchString, position)
+export const endsWith: {
+  (searchString: string): (self: string) => boolean
+  (self: string, searchString: string): boolean
+} = dual(2, (self: string, searchString: string): boolean => self.endsWith(searchString))
+
+/**
+ * @example
+ * import * as S from '@fp-ts/core/String'
+ *
+ * assert.deepStrictEqual(S.endsWithPosition("abc", "b", 2), true)
+ * assert.deepStrictEqual(S.endsWithPosition("abc", "c", 2), false)
+ *
+ * @since 1.0.0
+ */
+export const endsWithPosition: {
+  (searchString: string, position: number): (self: string) => boolean
+  (self: string, searchString: string, position: number): boolean
+} = dual(
+  3,
+  (self: string, searchString: string, position: number): boolean =>
+    self.endsWith(searchString, position)
+)
 
 /**
  * Keep the specified number of characters from the start of a string.
@@ -278,11 +348,12 @@ export const takeLeft: {
  * @since 1.0.0
  */
 export const takeRight: {
-  (n: number): (s: string) => string
-  (s: string, n: number): string
+  (n: number): (self: string) => string
+  (self: string, n: number): string
 } = dual(
   2,
-  (s: string, n: number): string => s.slice(Math.max(0, s.length - Math.floor(n)), Infinity)
+  (self: string, n: number): string =>
+    self.slice(Math.max(0, self.length - Math.floor(n)), Infinity)
 )
 
 /*

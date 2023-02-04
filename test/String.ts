@@ -1,37 +1,37 @@
 import { pipe } from "@fp-ts/core/Function"
-import * as String from "@fp-ts/core/String"
+import * as S from "@fp-ts/core/String"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 import * as Order from "@fp-ts/core/typeclass/Order"
 
 describe.concurrent("String", () => {
   it("isString", () => {
-    expect(String.isString("a")).toEqual(true)
-    expect(String.isString(1)).toEqual(false)
-    expect(String.isString(true)).toEqual(false)
+    expect(S.isString("a")).toEqual(true)
+    expect(S.isString(1)).toEqual(false)
+    expect(S.isString(true)).toEqual(false)
   })
 
   it("empty", () => {
-    expect(String.empty).toEqual("")
+    expect(S.empty).toEqual("")
   })
 
   it("Semigroup", () => {
-    expect(String.Semigroup.combine("a", "b")).toEqual("ab")
-    expect(String.Semigroup.combineMany("a", ["b", "c"])).toEqual("abc")
-    expect(String.Semigroup.combineMany("a", [])).toEqual("a")
+    expect(S.Semigroup.combine("a", "b")).toEqual("ab")
+    expect(S.Semigroup.combineMany("a", ["b", "c"])).toEqual("abc")
+    expect(S.Semigroup.combineMany("a", [])).toEqual("a")
   })
 
   it("Monoid", () => {
-    expect(String.Monoid.combineAll([])).toEqual("")
+    expect(S.Monoid.combineAll([])).toEqual("")
   })
 
   it("Equivalence", () => {
-    expect(String.Equivalence("a", "a")).toBe(true)
-    expect(String.Equivalence("a", "b")).toBe(false)
+    expect(S.Equivalence("a", "a")).toBe(true)
+    expect(S.Equivalence("a", "b")).toBe(false)
   })
 
   it("Order", () => {
-    const lessThan = Order.lessThan(String.Order)
-    const lessThanOrEqualTo = Order.lessThanOrEqualTo(String.Order)
+    const lessThan = Order.lessThan(S.Order)
+    const lessThanOrEqualTo = Order.lessThanOrEqualTo(S.Order)
     expect(pipe("a", lessThan("b"))).toEqual(true)
     expect(pipe("a", lessThan("a"))).toEqual(false)
     expect(pipe("a", lessThanOrEqualTo("a"))).toEqual(true)
@@ -40,76 +40,93 @@ describe.concurrent("String", () => {
   })
 
   it("concat", () => {
-    deepStrictEqual(pipe("a", String.concat("b")), "ab")
+    deepStrictEqual(pipe("a", S.concat("b")), "ab")
   })
 
   it("isEmpty", () => {
-    deepStrictEqual(String.isEmpty(""), true)
-    deepStrictEqual(String.isEmpty("a"), false)
+    deepStrictEqual(S.isEmpty(""), true)
+    deepStrictEqual(S.isEmpty("a"), false)
   })
 
   it("isNonEmpty", () => {
-    deepStrictEqual(String.isNonEmpty(""), false)
-    deepStrictEqual(String.isNonEmpty("a"), true)
+    deepStrictEqual(S.isNonEmpty(""), false)
+    deepStrictEqual(S.isNonEmpty("a"), true)
   })
 
   it("length", () => {
-    deepStrictEqual(String.length(""), 0)
-    deepStrictEqual(String.length("a"), 1)
-    deepStrictEqual(String.length("aaa"), 3)
+    deepStrictEqual(S.length(""), 0)
+    deepStrictEqual(S.length("a"), 1)
+    deepStrictEqual(S.length("aaa"), 3)
   })
 
   it("toUpperCase", () => {
-    deepStrictEqual(String.toUpperCase("a"), "A")
+    deepStrictEqual(S.toUpperCase("a"), "A")
   })
 
   it("toLowerCase", () => {
-    deepStrictEqual(String.toLowerCase("A"), "a")
+    deepStrictEqual(S.toLowerCase("A"), "a")
   })
 
   it("replace", () => {
-    deepStrictEqual(pipe("abc", String.replace("b", "d")), "adc")
+    deepStrictEqual(pipe("abc", S.replace("b", "d")), "adc")
   })
 
   it("split", () => {
-    deepStrictEqual(pipe("abc", String.split("")), ["a", "b", "c"])
-    deepStrictEqual(pipe("", String.split("")), [""])
+    deepStrictEqual(pipe("abc", S.split("")), ["a", "b", "c"])
+    deepStrictEqual(pipe("", S.split("")), [""])
   })
 
   it("trim", () => {
-    deepStrictEqual(pipe(" a ", String.trim), "a")
+    deepStrictEqual(pipe(" a ", S.trim), "a")
   })
 
   it("trimStart", () => {
-    deepStrictEqual(pipe(" a ", String.trimStart), "a ")
+    deepStrictEqual(pipe(" a ", S.trimStart), "a ")
   })
 
   it("trimEnd", () => {
-    deepStrictEqual(pipe(" a ", String.trimEnd), " a")
+    deepStrictEqual(pipe(" a ", S.trimEnd), " a")
   })
 
   it("includes", () => {
-    deepStrictEqual(pipe("abc", String.includes("b")), true)
-    deepStrictEqual(pipe("abc", String.includes("b", 2)), false)
+    assert.deepStrictEqual(S.includes("abc", "b"), true)
+    assert.deepStrictEqual(S.includes("abc", "d"), false)
+  })
+
+  it("includesWithPosition", () => {
+    assert.deepStrictEqual(S.includesWithPosition("abc", "b", 1), true)
+    assert.deepStrictEqual(S.includesWithPosition("abc", "a", 1), false)
   })
 
   it("startsWith", () => {
-    deepStrictEqual(pipe("abc", String.startsWith("a")), true)
+    assert.deepStrictEqual(S.startsWith("abc", "a"), true)
+    assert.deepStrictEqual(S.startsWith("bc", "a"), false)
+  })
+
+  it("startsWithPosition", () => {
+    assert.deepStrictEqual(S.startsWithPosition("abc", "b", 1), true)
+    assert.deepStrictEqual(S.startsWithPosition("bc", "a", 1), false)
   })
 
   it("endsWith", () => {
-    deepStrictEqual(pipe("abc", String.endsWith("c")), true)
+    assert.deepStrictEqual(S.endsWith("abc", "c"), true)
+    assert.deepStrictEqual(S.endsWith("ab", "c"), false)
+  })
+
+  it("endsWithPosition", () => {
+    assert.deepStrictEqual(S.endsWithPosition("abc", "b", 2), true)
+    assert.deepStrictEqual(S.endsWithPosition("abc", "c", 2), false)
   })
 
   it("slice", () => {
-    deepStrictEqual(pipe("abcd", String.slice(1, 3)), "bc")
+    deepStrictEqual(pipe("abcd", S.slice(1, 3)), "bc")
   })
 
   describe.concurrent("takeLeft", () => {
     it("should take the specified number of characters from the left side of a string", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeLeft(7))
+      const result = pipe(string, S.takeLeft(7))
 
       assert.strictEqual(result, "Hello, ")
     })
@@ -117,7 +134,7 @@ describe.concurrent("String", () => {
     it("should return the string for `n` larger than the string length", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeLeft(100))
+      const result = pipe(string, S.takeLeft(100))
 
       assert.strictEqual(result, string)
     })
@@ -125,7 +142,7 @@ describe.concurrent("String", () => {
     it("should return the empty string for a negative `n`", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeLeft(-1))
+      const result = pipe(string, S.takeLeft(-1))
 
       assert.strictEqual(result, "")
     })
@@ -133,7 +150,7 @@ describe.concurrent("String", () => {
     it("should round down if `n` is a float", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeLeft(5.5))
+      const result = pipe(string, S.takeLeft(5.5))
 
       assert.strictEqual(result, "Hello")
     })
@@ -143,7 +160,7 @@ describe.concurrent("String", () => {
     it("should take the specified number of characters from the right side of a string", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeRight(7))
+      const result = pipe(string, S.takeRight(7))
 
       assert.strictEqual(result, " World!")
     })
@@ -151,7 +168,7 @@ describe.concurrent("String", () => {
     it("should return the string for `n` larger than the string length", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeRight(100))
+      const result = pipe(string, S.takeRight(100))
 
       assert.strictEqual(result, string)
     })
@@ -159,7 +176,7 @@ describe.concurrent("String", () => {
     it("should return the empty string for a negative `n`", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeRight(-1))
+      const result = pipe(string, S.takeRight(-1))
 
       assert.strictEqual(result, "")
     })
@@ -167,7 +184,7 @@ describe.concurrent("String", () => {
     it("should round down if `n` is a float", () => {
       const string = "Hello, World!"
 
-      const result = pipe(string, String.takeRight(6.5))
+      const result = pipe(string, S.takeRight(6.5))
 
       assert.strictEqual(result, "World!")
     })
