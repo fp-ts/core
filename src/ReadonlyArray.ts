@@ -1859,7 +1859,7 @@ export const Monad: monad.Monad<ReadonlyArrayTypeLambda> = {
  * @category folding
  * @since 1.0.0
  */
-export const reduceWithIndex: {
+export const reduce: {
   <B, A>(b: B, f: (b: B, a: A, i: number) => B): (self: Iterable<A>) => B
   <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A, i: number) => B): B
 } = dual(
@@ -1897,16 +1897,7 @@ export const reduceRightWithIndex: {
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = foldable.make(reduceWithIndex)
-
-/**
- * @category folding
- * @since 1.0.0
- */
-export const reduce: {
-  <A, B>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => B
-  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B
-} = dual(3, <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B => reduceWithIndex(self, b, f))
+export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = foldable.make(reduce)
 
 /**
  * @category folding
