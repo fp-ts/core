@@ -1621,34 +1621,12 @@ export const filter: {
  * @since 1.0.0
  */
 export const partition: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (
-    self: Iterable<C>
-  ) => [Array<C>, Array<B>]
-  <B extends A, A = B>(
-    predicate: Predicate<A>
-  ): (self: Iterable<B>) => [Array<B>, Array<B>]
-  <C extends A, B extends A, A = C>(
-    self: Iterable<C>,
-    refinement: Refinement<A, B>
-  ): [Array<C>, Array<B>]
-  <B extends A, A = B>(self: Iterable<B>, predicate: Predicate<A>): [Array<B>, Array<B>]
-} = dual(
-  2,
-  <B extends A, A = B>(self: Iterable<B>, predicate: Predicate<A>): [Array<B>, Array<B>] =>
-    partitionWithIndex(self, predicate)
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const partitionWithIndex: {
   <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (
     self: Iterable<C>
   ) => [Array<C>, Array<B>]
-  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (
-    self: Iterable<B>
-  ) => [Array<B>, Array<B>]
+  <B extends A, A = B>(
+    predicate: (a: A, i: number) => boolean
+  ): (self: Iterable<B>) => [Array<B>, Array<B>]
   <C extends A, B extends A, A = C>(
     self: Iterable<C>,
     refinement: (a: A, i: number) => a is B
@@ -1657,10 +1635,14 @@ export const partitionWithIndex: {
     self: Iterable<B>,
     predicate: (a: A, i: number) => boolean
   ): [Array<B>, Array<B>]
-} = dual(2, <B extends A, A = B>(
-  self: Iterable<B>,
-  predicate: (a: A, i: number) => boolean
-): [Array<B>, Array<B>] => partitionMap(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b))))
+} = dual(
+  2,
+  <B extends A, A = B>(
+    self: Iterable<B>,
+    predicate: (a: A, i: number) => boolean
+  ): [Array<B>, Array<B>] =>
+    partitionMap(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b)))
+)
 
 /**
  * @category filtering
