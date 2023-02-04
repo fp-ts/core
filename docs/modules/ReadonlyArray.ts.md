@@ -156,7 +156,6 @@ Added in v1.0.0
   - [traverseNonEmpty](#traversenonempty)
   - [traverseNonEmptyWithIndex](#traversenonemptywithindex)
   - [traverseTap](#traversetap)
-  - [traverseWithIndex](#traversewithindex)
 - [type lambdas](#type-lambdas)
   - [ReadonlyArrayTypeLambda (interface)](#readonlyarraytypelambda-interface)
 - [unsafe](#unsafe)
@@ -1809,8 +1808,8 @@ Added in v1.0.0
 export declare const traverse: <F extends TypeLambda>(
   F: applicative.Applicative<F>
 ) => {
-  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: readonly A[]) => Kind<F, R, O, E, B[]>
-  <A, R, O, E, B>(self: readonly A[], f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B[]>
+  <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>): (self: Iterable<A>) => Kind<F, R, O, E, B[]>
+  <A, R, O, E, B>(self: Iterable<A>, f: (a: A, i: number) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B[]>
 }
 ```
 
@@ -1864,21 +1863,6 @@ export declare const traverseTap: <F extends TypeLambda>(
 ) => {
   <A, R, O, E, B>(self: readonly A[], f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, A[]>
   <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: readonly A[]) => Kind<F, R, O, E, A[]>
-}
-```
-
-Added in v1.0.0
-
-## traverseWithIndex
-
-**Signature**
-
-```ts
-export declare const traverseWithIndex: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => {
-  <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>): (self: Iterable<A>) => Kind<F, R, O, E, B[]>
-  <A, R, O, E, B>(self: Iterable<A>, f: (a: A, i: number) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B[]>
 }
 ```
 

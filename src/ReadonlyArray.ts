@@ -1673,24 +1673,6 @@ export const partitionMap: {
  * @category traversing
  * @since 1.0.0
  */
-export const traverseWithIndex = <F extends TypeLambda>(F: applicative.Applicative<F>): {
-  <A, R, O, E, B>(
-    f: (a: A, i: number) => Kind<F, R, O, E, B>
-  ): (self: Iterable<A>) => Kind<F, R, O, E, Array<B>>
-  <A, R, O, E, B>(
-    self: Iterable<A>,
-    f: (a: A, i: number) => Kind<F, R, O, E, B>
-  ): Kind<F, R, O, E, Array<B>>
-} =>
-  dual(2, <A, R, O, E, B>(
-    self: Iterable<A>,
-    f: (a: A, i: number) => Kind<F, R, O, E, B>
-  ): Kind<F, R, O, E, Array<B>> => F.productAll(fromIterable(self).map(f)))
-
-/**
- * @category traversing
- * @since 1.0.0
- */
 export const traverseNonEmpty = <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
 ): {
@@ -1731,33 +1713,30 @@ export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
   })
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = traversable.make(<
-  F extends TypeLambda
->(F: applicative.Applicative<F>) =>
-  <A, R, O, E, B>(
-    self: ReadonlyArray<A>,
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): Kind<F, R, O, E, ReadonlyArray<B>> => traverseWithIndex(F)(f)(self) as any
-)
-
-/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => {
+export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>): {
   <A, R, O, E, B>(
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): (self: ReadonlyArray<A>) => Kind<F, R, O, E, Array<B>>
+    f: (a: A, i: number) => Kind<F, R, O, E, B>
+  ): (self: Iterable<A>) => Kind<F, R, O, E, Array<B>>
   <A, R, O, E, B>(
-    self: ReadonlyArray<A>,
-    f: (a: A) => Kind<F, R, O, E, B>
+    self: Iterable<A>,
+    f: (a: A, i: number) => Kind<F, R, O, E, B>
   ): Kind<F, R, O, E, Array<B>>
-} = Traversable.traverse as any
+} =>
+  dual(2, <A, R, O, E, B>(
+    self: Iterable<A>,
+    f: (a: A, i: number) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Array<B>> => F.productAll(fromIterable(self).map(f)))
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = {
+  traverse: traverse as any
+}
 
 /**
  * @category traversing
