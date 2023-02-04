@@ -20,7 +20,6 @@ Added in v1.0.0
   - [get](#get)
 - [mapping](#mapping)
   - [map](#map)
-  - [mapWithKey](#mapwithkey)
 - [models](#models)
   - [ReadonlyRecord (interface)](#readonlyrecord-interface)
 - [utils](#utils)
@@ -99,8 +98,8 @@ Maps a `ReadonlyRecord` into another `Record` by applying a transformation funct
 
 ```ts
 export declare const map: {
-  <A, B>(f: (a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A) => B): Record<string, B>
+  <A, B>(f: (a: A, key: string) => B): (self: ReadonlyRecord<A>) => Record<string, B>
+  <A, B>(self: ReadonlyRecord<A>, f: (a: A, key: string) => B): Record<string, B>
 }
 ```
 
@@ -109,34 +108,13 @@ export declare const map: {
 ```ts
 import { map } from '@fp-ts/core/ReadonlyRecord'
 
-const f = (n: number) => `-${n}-`
+const f = (n: number) => `-${n}`
 
-assert.deepStrictEqual(map({ a: 3, b: 5 }, f), { a: '-3-', b: '-5-' })
-```
+assert.deepStrictEqual(map({ a: 3, b: 5 }, f), { a: '-3', b: '-5' })
 
-Added in v1.0.0
+const g = (n: number, key: string) => `${key.toUpperCase()}-${n}`
 
-## mapWithKey
-
-Maps the values of a `ReadonlyRecord` to a new `Record` by applying a transformation function to each of its keys and values.
-
-**Signature**
-
-```ts
-export declare const mapWithKey: {
-  <A, B>(f: (k: string, a: A) => B): (self: ReadonlyRecord<A>) => Record<string, B>
-  <A, B>(self: ReadonlyRecord<A>, f: (k: string, a: A) => B): Record<string, B>
-}
-```
-
-**Example**
-
-```ts
-import { mapWithKey } from '@fp-ts/core/ReadonlyRecord'
-
-const f = (k: string, n: number) => `${k.toUpperCase()}-${n}`
-
-assert.deepStrictEqual(mapWithKey({ a: 3, b: 5 }, f), { a: 'A-3', b: 'B-5' })
+assert.deepStrictEqual(map({ a: 3, b: 5 }, g), { a: 'A-3', b: 'B-5' })
 ```
 
 Added in v1.0.0
