@@ -145,7 +145,6 @@ Added in v1.0.0
 - [sequencing](#sequencing)
   - [flatMap](#flatmap)
   - [flatMapNonEmpty](#flatmapnonempty)
-  - [flatMapNonEmptyWithIndex](#flatmapnonemptywithindex)
   - [flatMapNullable](#flatmapnullable)
   - [flatten](#flatten)
   - [flattenNonEmpty](#flattennonempty)
@@ -1742,19 +1741,6 @@ Added in v1.0.0
 
 ```ts
 export declare const flatMapNonEmpty: {
-  <A, B>(f: (a: A) => readonly [B, ...B[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
-  <A, B>(self: readonly [A, ...A[]], f: (a: A) => readonly [B, ...B[]]): [B, ...B[]]
-}
-```
-
-Added in v1.0.0
-
-## flatMapNonEmptyWithIndex
-
-**Signature**
-
-```ts
-export declare const flatMapNonEmptyWithIndex: {
   <A, B>(f: (a: A, i: number) => readonly [B, ...B[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
   <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => readonly [B, ...B[]]): [B, ...B[]]
 }

@@ -1113,11 +1113,8 @@ describe.concurrent("ReadonlyArray", () => {
   it("flatMapNonEmpty", () => {
     const f = (a: number): RA.NonEmptyReadonlyArray<number> => [a, 4]
     deepStrictEqual(pipe(RA.make(1, 2), RA.flatMapNonEmpty(f)), [1, 4, 2, 4])
-  })
-
-  it("flatMapNonEmptyWithIndex", () => {
-    const f = (a: number, i: number): RA.NonEmptyReadonlyArray<number> => [a + i, 4]
-    deepStrictEqual(pipe(RA.make(1, 2), RA.flatMapNonEmptyWithIndex(f)), [1, 4, 3, 4])
+    const g = (a: number, i: number): RA.NonEmptyReadonlyArray<number> => [a + i, 4]
+    deepStrictEqual(pipe(RA.make(1, 2), RA.flatMapNonEmpty(g)), [1, 4, 3, 4])
   })
 
   it("chunksOfNonEmpty", () => {
