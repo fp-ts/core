@@ -108,9 +108,8 @@ export const replace: {
 /**
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(' a ', S.trim), 'a')
+ * assert.deepStrictEqual(S.trim(' a '), 'a')
  *
  * @since 1.0.0
  */
@@ -119,9 +118,8 @@ export const trim = (s: string): string => s.trim()
 /**
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(' a ', S.trimStart), 'a ')
+ * assert.deepStrictEqual(S.trimStart(' a '), 'a ')
  *
  * @since 1.0.0
  */
@@ -130,9 +128,8 @@ export const trimStart = (s: string): string => s.trimStart()
 /**
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe(' a ', S.trimEnd), ' a')
+ * assert.deepStrictEqual(S.trimEnd(' a '), ' a')
  *
  * @since 1.0.0
  */
@@ -157,10 +154,9 @@ export const slice: {
  *
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe('', S.isEmpty), true)
- * assert.deepStrictEqual(pipe('a', S.isEmpty), false)
+ * assert.deepStrictEqual(S.isEmpty(''), true)
+ * assert.deepStrictEqual(S.isEmpty('a'), false)
  *
  * @since 1.0.0
  */
@@ -178,9 +174,8 @@ export const isNonEmpty = (s: string): boolean => s.length > 0
  *
  * @example
  * import * as S from '@fp-ts/core/String'
- * import { pipe } from '@fp-ts/core/Function'
  *
- * assert.deepStrictEqual(pipe('abc', S.length), 3)
+ * assert.deepStrictEqual(S.length('abc'), 3)
  *
  * @since 1.0.0
  */
@@ -253,6 +248,11 @@ export const endsWith = (searchString: string, position?: number) =>
  *
  * If `n` is a float, it will be rounded down to the nearest integer.
  *
+ * @example
+ * import * as S from '@fp-ts/core/String'
+ *
+ * assert.deepStrictEqual(S.takeLeft("Hello World", 5), "Hello")
+ *
  * @since 1.0.0
  */
 export const takeLeft: {
@@ -269,6 +269,11 @@ export const takeLeft: {
  * If `n` is not a positive number, an empty string will be returned.
  *
  * If `n` is a float, it will be rounded down to the nearest integer.
+ *
+ * @example
+ * import * as S from '@fp-ts/core/String'
+ *
+ * assert.deepStrictEqual(S.takeRight("Hello World", 5), "World")
  *
  * @since 1.0.0
  */

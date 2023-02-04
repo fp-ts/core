@@ -108,7 +108,6 @@ export const partition = <F extends TypeLambda>(
   <B extends A, A = B>(predicate: (a: A) => boolean): <R, O, E>(
     self: Kind<F, R, O, E, B>
   ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>]
-
   <R, O, E, C extends A, B extends A, A = C>(
     self: Kind<F, R, O, E, C>,
     refinement: (a: A) => a is B

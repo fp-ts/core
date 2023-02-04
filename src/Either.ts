@@ -1273,6 +1273,42 @@ export const divide: {
 } = lift2(N.divide)
 
 // -------------------------------------------------------------------------------------
+// utils
+// -------------------------------------------------------------------------------------
+
+/**
+ * Return all the `Right` elements from an `Interable` of `Either`s.
+ *
+ * @category getters
+ * @since 1.0.0
+ */
+export const rights = <E, A>(self: Iterable<Either<E, A>>): Array<A> => {
+  const out: Array<A> = []
+  for (const a of self) {
+    if (isRight(a)) {
+      out.push(a.right)
+    }
+  }
+  return out
+}
+
+/**
+ * Return all the `Left` elements from an `Interable` of `Either`s.
+ *
+ * @category getters
+ * @since 1.0.0
+ */
+export const lefts = <E, A>(self: Iterable<Either<E, A>>): Array<E> => {
+  const out: Array<E> = []
+  for (const a of self) {
+    if (isLeft(a)) {
+      out.push(a.left)
+    }
+  }
+  return out
+}
+
+// -------------------------------------------------------------------------------------
 // do notation
 // -------------------------------------------------------------------------------------
 

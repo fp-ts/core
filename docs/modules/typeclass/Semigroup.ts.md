@@ -363,7 +363,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const intercalate: <A>(separator: A) => (S: Semigroup<A>) => Semigroup<A>
+export declare const intercalate: {
+  <A>(separator: A): (S: Semigroup<A>) => Semigroup<A>
+  <A>(S: Semigroup<A>, separator: A): Semigroup<A>
+}
 ```
 
 Added in v1.0.0

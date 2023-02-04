@@ -62,6 +62,8 @@ Added in v1.0.0
   - [getOrElse](#getorelse)
   - [getOrNull](#getornull)
   - [getOrUndefined](#getorundefined)
+  - [lefts](#lefts)
+  - [rights](#rights)
 - [guards](#guards)
   - [isEither](#iseither)
   - [isLeft](#isleft)
@@ -757,6 +759,30 @@ Added in v1.0.0
 
 ```ts
 export declare const getOrUndefined: <E, A>(self: Either<E, A>) => A | undefined
+```
+
+Added in v1.0.0
+
+## lefts
+
+Return all the `Left` elements from an `Interable` of `Either`s.
+
+**Signature**
+
+```ts
+export declare const lefts: <E, A>(self: Iterable<Either<E, A>>) => E[]
+```
+
+Added in v1.0.0
+
+## rights
+
+Return all the `Right` elements from an `Interable` of `Either`s.
+
+**Signature**
+
+```ts
+export declare const rights: <E, A>(self: Iterable<Either<E, A>>) => A[]
 ```
 
 Added in v1.0.0

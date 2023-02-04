@@ -266,9 +266,14 @@ export const reverse = <A>(S: Semigroup<A>): Semigroup<A> =>
 /**
  * @since 1.0.0
  */
-export const intercalate = <A>(separator: A) =>
-  (S: Semigroup<A>): Semigroup<A> =>
+export const intercalate: {
+  <A>(separator: A): (S: Semigroup<A>) => Semigroup<A>
+  <A>(S: Semigroup<A>, separator: A): Semigroup<A>
+} = dual(
+  2,
+  <A>(S: Semigroup<A>, separator: A): Semigroup<A> =>
     fromCombine((self, that) => S.combineMany(self, [separator, that]))
+)
 
 /**
  * Always return the first argument.
