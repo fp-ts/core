@@ -817,14 +817,9 @@ describe.concurrent("ReadonlyArray", () => {
       ),
       [1, 2, 2, 3, 3, 4]
     )
-  })
-
-  it("flatMapWithIndex", () => {
-    const f = RA.flatMapWithIndex((n: number, i) => [n + i])
+    const f = RA.flatMap((n: number, i) => [n + i])
+    deepStrictEqual(pipe([], f), [])
     deepStrictEqual(pipe([1, 2, 3], f), [1, 3, 5])
-    deepStrictEqual(pipe(RA.empty(), f), RA.empty())
-    const empty: ReadonlyArray<number> = []
-    deepStrictEqual(pipe(empty, f), RA.empty())
   })
 
   it("extend", () => {
