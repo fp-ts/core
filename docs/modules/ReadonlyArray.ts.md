@@ -39,7 +39,6 @@ Added in v1.0.0
   - [filterMap](#filtermap)
   - [partition](#partition)
   - [partitionMap](#partitionmap)
-  - [partitionMapWithIndex](#partitionmapwithindex)
   - [partitionWithIndex](#partitionwithindex)
   - [separate](#separate)
   - [span](#span)
@@ -508,19 +507,6 @@ Added in v1.0.0
 
 ```ts
 export declare const partitionMap: {
-  <A, B, C>(f: (a: A) => Either<B, C>): (self: Iterable<A>) => [B[], C[]]
-  <A, B, C>(self: Iterable<A>, f: (a: A) => Either<B, C>): [B[], C[]]
-}
-```
-
-Added in v1.0.0
-
-## partitionMapWithIndex
-
-**Signature**
-
-```ts
-export declare const partitionMapWithIndex: {
   <A, B, C>(f: (a: A, i: number) => Either<B, C>): (self: Iterable<A>) => [B[], C[]]
   <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [B[], C[]]
 }

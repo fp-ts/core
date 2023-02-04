@@ -1660,27 +1660,13 @@ export const partitionWithIndex: {
 } = dual(2, <B extends A, A = B>(
   self: Iterable<B>,
   predicate: (a: A, i: number) => boolean
-): [Array<B>, Array<B>] =>
-  partitionMapWithIndex(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b))))
+): [Array<B>, Array<B>] => partitionMap(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b))))
 
 /**
  * @category filtering
  * @since 1.0.0
  */
 export const partitionMap: {
-  <A, B, C>(f: (a: A) => Either<B, C>): (self: Iterable<A>) => [Array<B>, Array<C>]
-  <A, B, C>(self: Iterable<A>, f: (a: A) => Either<B, C>): [Array<B>, Array<C>]
-} = dual(
-  2,
-  <A, B, C>(self: Iterable<A>, f: (a: A) => Either<B, C>): [Array<B>, Array<C>] =>
-    partitionMapWithIndex(self, f)
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const partitionMapWithIndex: {
   <A, B, C>(f: (a: A, i: number) => Either<B, C>): (self: Iterable<A>) => [Array<B>, Array<C>]
   <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [Array<B>, Array<C>]
 } = dual(
