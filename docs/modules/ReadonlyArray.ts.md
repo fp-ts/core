@@ -92,6 +92,9 @@ Added in v1.0.0
 - [grouping](#grouping)
   - [group](#group)
   - [groupBy](#groupby)
+- [guards](#guards)
+  - [isEmpty](#isempty)
+  - [isNonEmpty](#isnonempty)
 - [instances](#instances)
   - [Applicative](#applicative)
   - [Chainable](#chainable)
@@ -136,11 +139,10 @@ Added in v1.0.0
   - [NonEmptyReadonlyArray (type alias)](#nonemptyreadonlyarray-type-alias)
 - [pattern matching](#pattern-matching)
   - [match](#match)
+  - [matchLeft](#matchleft)
   - [matchRight](#matchright)
 - [predicates](#predicates)
   - [contains](#contains)
-  - [isEmpty](#isempty)
-  - [isNonEmpty](#isnonempty)
   - [some](#some)
 - [sequencing](#sequencing)
   - [flatMap](#flatmap)
@@ -253,7 +255,18 @@ Return a `NonEmptyArray` of length `n` with element `i` initialized with `f(i)`.
 **Signature**
 
 ```ts
-export declare const makeBy: <A>(f: (i: number) => A) => (n: number) => [A, ...A[]]
+export declare const makeBy: <A>(n: number, f: (i: number) => A) => [A, ...A[]]
+```
+
+**Example**
+
+```ts
+import { makeBy } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(
+  makeBy(5, (n) => n * 2),
+  [0, 2, 4, 6, 8]
+)
 ```
 
 Added in v1.0.0
@@ -278,6 +291,14 @@ Return a `NonEmptyArray` containing a range of integers, including both endpoint
 export declare const range: (start: number, end: number) => [number, ...number[]]
 ```
 
+**Example**
+
+```ts
+import { range } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(range(1, 3), [1, 2, 3])
+```
+
 Added in v1.0.0
 
 ## replicate
@@ -289,7 +310,15 @@ Return a `NonEmptyArray` containing a value repeated the specified number of tim
 **Signature**
 
 ```ts
-export declare const replicate: <A>(a: A) => (n: number) => [A, ...A[]]
+export declare const replicate: { (n: number): <A>(a: A) => [A, ...A[]]; <A>(a: A, n: number): [A, ...A[]] }
+```
+
+**Example**
+
+```ts
+import { replicate } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(replicate('a', 3), ['a', 'a', 'a'])
 ```
 
 Added in v1.0.0
@@ -427,10 +456,9 @@ Added in v1.0.0
 
 ```ts
 export declare const filter: {
-  <C extends A, B extends A, A = C>(self: readonly C[], refinement: (a: A) => a is B): B[]
-  <B extends A, A = B>(self: readonly B[], predicate: (a: A) => boolean): B[]
-  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (self: readonly C[]) => B[]
-  <B extends A, A = B>(predicate: (a: A) => boolean): (self: readonly B[]) => B[]
+  <C extends A, B extends A, A = C>(refinement: (a: A) => a is B): (self: Iterable<C>) => B[]
+  <B extends A, A = B>(predicate: (a: A) => boolean): (self: Iterable<B>) => B[]
+  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: (a: A) => a is B): B[]
 }
 ```
 
@@ -468,8 +496,10 @@ Added in v1.0.0
 
 ```ts
 export declare const filterWithIndex: {
-  <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (self: readonly C[]) => B[]
-  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (self: readonly B[]) => B[]
+  <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (self: Iterable<C>) => B[]
+  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (self: Iterable<B>) => B[]
+  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: (a: A, i: number) => a is B): B[]
+  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): B[]
 }
 ```
 
@@ -481,8 +511,10 @@ Added in v1.0.0
 
 ```ts
 export declare const partition: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (self: readonly C[]) => [C[], B[]]
-  <B extends A, A = B>(predicate: Predicate<A>): (self: readonly B[]) => [B[], B[]]
+  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (self: Iterable<C>) => [C[], B[]]
+  <B extends A, A = B>(predicate: Predicate<A>): (self: Iterable<B>) => [B[], B[]]
+  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: Refinement<A, B>): [C[], B[]]
+  <B extends A, A = B>(self: Iterable<B>, predicate: Predicate<A>): [B[], B[]]
 }
 ```
 
@@ -493,7 +525,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const partitionMap: <A, B, C>(f: (a: A) => Either<B, C>) => (self: readonly A[]) => [B[], C[]]
+export declare const partitionMap: {
+  <A, B, C>(f: (a: A) => Either<B, C>): (self: Iterable<A>) => [B[], C[]]
+  <A, B, C>(self: Iterable<A>, f: (a: A) => Either<B, C>): [B[], C[]]
+}
 ```
 
 Added in v1.0.0
@@ -503,9 +538,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const partitionMapWithIndex: <A, B, C>(
-  f: (a: A, i: number) => Either<B, C>
-) => (self: readonly A[]) => [B[], C[]]
+export declare const partitionMapWithIndex: {
+  <A, B, C>(f: (a: A, i: number) => Either<B, C>): (self: Iterable<A>) => [B[], C[]]
+  <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [B[], C[]]
+}
 ```
 
 Added in v1.0.0
@@ -516,8 +552,10 @@ Added in v1.0.0
 
 ```ts
 export declare const partitionWithIndex: {
-  <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (self: readonly C[]) => [C[], B[]]
-  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (self: readonly B[]) => [B[], B[]]
+  <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (self: Iterable<C>) => [C[], B[]]
+  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (self: Iterable<B>) => [B[], B[]]
+  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: (a: A, i: number) => a is B): [C[], B[]]
+  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): [B[], B[]]
 }
 ```
 
@@ -543,13 +581,12 @@ Split an `Iterable` into two parts:
 **Signature**
 
 ```ts
-export declare function span<A, B extends A>(
-  refinement: Refinement<A, B>
-): (self: Iterable<A>) => [init: Array<B>, rest: Array<A>]
-export declare function span<A>(
-  predicate: Predicate<A>
-): <B extends A>(self: Iterable<B>) => [init: Array<B>, rest: Array<B>]
-export declare function span<A>(predicate: Predicate<A>): (self: Iterable<A>) => [init: Array<A>, rest: Array<A>]
+export declare const span: {
+  <A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => [init: B[], rest: A[]]
+  <A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => [init: B[], rest: B[]]
+  <A, B extends A>(self: Iterable<A>, refinement: Refinement<A, B>): [init: B[], rest: A[]]
+  <B extends A, A>(self: Iterable<B>, predicate: Predicate<A>): [init: B[], rest: B[]]
+}
 ```
 
 Added in v1.0.0
@@ -561,7 +598,10 @@ Added in v1.0.0
 ```ts
 export declare const traverseFilterMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, Option<B>>) => (self: readonly A[]) => Kind<F, R, O, E, B[]>
+) => {
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, Option<B>>): (self: readonly A[]) => Kind<F, R, O, E, B[]>
+  <A, R, O, E, B>(self: readonly A[], f: (a: A) => Kind<F, R, O, E, Option<B>>): Kind<F, R, O, E, B[]>
+}
 ```
 
 Added in v1.0.0
@@ -573,9 +613,10 @@ Added in v1.0.0
 ```ts
 export declare const traversePartitionMap: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B, C>(
-  f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-) => (self: readonly A[]) => Kind<F, R, O, E, [B[], C[]]>
+) => {
+  <A, R, O, E, B, C>(f: (a: A) => Kind<F, R, O, E, Either<B, C>>): (self: readonly A[]) => Kind<F, R, O, E, [B[], C[]]>
+  <A, R, O, E, B, C>(self: readonly A[], f: (a: A) => Kind<F, R, O, E, Either<B, C>>): Kind<F, R, O, E, [B[], C[]]>
+}
 ```
 
 Added in v1.0.0
@@ -587,7 +628,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const combineMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => (self: readonly A[]) => M
+export declare const combineMap: <M>(M: Monoid<M>) => {
+  <A>(f: (a: A) => M): (self: Iterable<A>) => M
+  <A>(self: Iterable<A>, f: (a: A) => M): M
+}
 ```
 
 Added in v1.0.0
@@ -597,9 +641,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const combineMapNonEmpty: <S>(
-  S: Semigroup<S>
-) => <A>(f: (a: A) => S) => (self: readonly [A, ...A[]]) => S
+export declare const combineMapNonEmpty: <S>(S: Semigroup<S>) => {
+  <A>(f: (a: A) => S): (self: readonly [A, ...A[]]) => S
+  <A>(self: readonly [A, ...A[]], f: (a: A) => S): S
+}
 ```
 
 Added in v1.0.0
@@ -609,9 +654,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const combineMapNonEmptyWithIndex: <S>(
-  S: Semigroup<S>
-) => <A>(f: (a: A, i: number) => S) => (self: readonly [A, ...A[]]) => S
+export declare const combineMapNonEmptyWithIndex: <S>(S: Semigroup<S>) => {
+  <A>(f: (a: A, i: number) => S): (self: readonly [A, ...A[]]) => S
+  <A>(self: readonly [A, ...A[]], f: (a: A, i: number) => S): S
+}
 ```
 
 Added in v1.0.0
@@ -621,9 +667,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const combineMapWithIndex: <M>(
-  Monoid: Monoid<M>
-) => <A>(f: (a: A, i: number) => M) => (self: readonly A[]) => M
+export declare const combineMapWithIndex: <M>(Monoid: Monoid<M>) => {
+  <A>(f: (a: A, i: number) => M): (self: Iterable<A>) => M
+  <A>(self: Iterable<A>, f: (a: A, i: number) => M): M
+}
 ```
 
 Added in v1.0.0
@@ -633,9 +680,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const coproductMapKind: <F extends TypeLambda>(
-  F: Coproduct<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
+export declare const coproductMapKind: <G extends TypeLambda>(
+  G: Coproduct<G>
+) => {
+  <A, R, O, E, B>(f: (a: A) => Kind<G, R, O, E, B>): (self: readonly A[]) => Kind<G, R, O, E, B>
+  <A, R, O, E, B>(self: readonly A[], f: (a: A) => Kind<G, R, O, E, B>): Kind<G, R, O, E, B>
+}
 ```
 
 Added in v1.0.0
@@ -646,8 +696,8 @@ Added in v1.0.0
 
 ```ts
 export declare const reduce: {
-  <A, B>(b: B, f: (b: B, a: A) => B): (self: readonly A[]) => B
-  <A, B>(self: readonly A[], b: B, f: (b: B, a: A) => B): B
+  <A, B>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => B
+  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B
 }
 ```
 
@@ -658,9 +708,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceKind: <F extends TypeLambda>(
-  F: monad.Monad<F>
-) => <B, A, R, O, E>(b: B, f: (b: B, a: A) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B>
+export declare const reduceKind: <G extends TypeLambda>(
+  G: monad.Monad<G>
+) => {
+  <B, A, R, O, E>(b: B, f: (b: B, a: A) => Kind<G, R, O, E, B>): (self: readonly A[]) => Kind<G, R, O, E, B>
+  <A, B, R, O, E>(self: readonly A[], b: B, f: (b: B, a: A) => Kind<G, R, O, E, B>): Kind<G, R, O, E, B>
+}
 ```
 
 Added in v1.0.0
@@ -670,7 +723,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceRight: <B, A>(b: B, f: (b: B, a: A) => B) => (self: readonly A[]) => B
+export declare const reduceRight: {
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => B
+  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B
+}
 ```
 
 Added in v1.0.0
@@ -680,7 +736,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceRightWithIndex: <B, A>(b: B, f: (b: B, a: A, i: number) => B) => (self: readonly A[]) => B
+export declare const reduceRightWithIndex: {
+  <B, A>(b: B, f: (b: B, a: A, i: number) => B): (self: Iterable<A>) => B
+  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A, i: number) => B): B
+}
 ```
 
 Added in v1.0.0
@@ -690,31 +749,40 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const reduceWithIndex: <B, A>(b: B, f: (b: B, a: A, i: number) => B) => (self: readonly A[]) => B
+export declare const reduceWithIndex: {
+  <B, A>(b: B, f: (b: B, a: A, i: number) => B): (self: Iterable<A>) => B
+  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A, i: number) => B): B
+}
 ```
 
 Added in v1.0.0
 
 ## scan
 
-Fold an `Iterable` from the left, keeping all intermediate results instead of only the final result.
+Reduce an `Iterable` from the left, keeping all intermediate results instead of only the final result.
 
 **Signature**
 
 ```ts
-export declare const scan: <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<A>) => [B, ...B[]]
+export declare const scan: {
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => [B, ...B[]]
+  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0
 
 ## scanRight
 
-Fold an `Iterable` from the right, keeping all intermediate results instead of only the final result.
+Reduce an `Iterable` from the right, keeping all intermediate results instead of only the final result.
 
 **Signature**
 
 ```ts
-export declare const scanRight: <B, A>(b: B, f: (b: B, a: A) => B) => (self: Iterable<A>) => [B, ...B[]]
+export declare const scanRight: {
+  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => [B, ...B[]]
+  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0
@@ -736,7 +804,10 @@ whenever `n` evenly divides the length of `self`.
 **Signature**
 
 ```ts
-export declare const chunksOf: (n: number) => <A>(self: Iterable<A>) => [A, ...A[]][]
+export declare const chunksOf: {
+  (n: number): <A>(self: Iterable<A>) => [A, ...A[]][]
+  <A>(self: Iterable<A>, n: number): [A, ...A[]][]
+}
 ```
 
 Added in v1.0.0
@@ -749,7 +820,10 @@ the `NonEmptyReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const chunksOfNonEmpty: (n: number) => <A>(self: readonly [A, ...A[]]) => [[A, ...A[]], ...[A, ...A[]][]]
+export declare const chunksOfNonEmpty: {
+  (n: number): <A>(self: readonly [A, ...A[]]) => [[A, ...A[]], ...[A, ...A[]][]]
+  <A>(self: readonly [A, ...A[]], n: number): [[A, ...A[]], ...[A, ...A[]][]]
+}
 ```
 
 Added in v1.0.0
@@ -763,7 +837,7 @@ Drop a max number of elements from the start of an `Iterable`, creating a new `A
 **Signature**
 
 ```ts
-export declare const drop: (n: number) => <A>(self: Iterable<A>) => A[]
+export declare const drop: { (n: number): <A>(self: Iterable<A>) => A[]; <A>(self: Iterable<A>, n: number): A[] }
 ```
 
 Added in v1.0.0
@@ -777,7 +851,7 @@ Drop a max number of elements from the end of an `Iterable`, creating a new `Arr
 **Signature**
 
 ```ts
-export declare const dropRight: (n: number) => <A>(self: Iterable<A>) => A[]
+export declare const dropRight: { (n: number): <A>(self: Iterable<A>) => A[]; <A>(self: Iterable<A>, n: number): A[] }
 ```
 
 Added in v1.0.0
@@ -789,9 +863,12 @@ Remove the longest initial subarray for which all element satisfy the specified 
 **Signature**
 
 ```ts
-export declare function dropWhile<A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => Array<B>
-export declare function dropWhile<A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => Array<B>
-export declare function dropWhile<A>(predicate: Predicate<A>): (self: Iterable<A>) => Array<A>
+export declare const dropWhile: {
+  <A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => B[]
+  <A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => B[]
+  <A, B extends A>(self: Iterable<A>, refinement: Refinement<A, B>): B[]
+  <B extends A, A>(self: Iterable<B>, predicate: Predicate<A>): B[]
+}
 ```
 
 Added in v1.0.0
@@ -803,9 +880,12 @@ Find the first element for which a predicate holds.
 **Signature**
 
 ```ts
-export declare function findFirst<A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => Option<B>
-export declare function findFirst<A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => Option<B>
-export declare function findFirst<A>(predicate: Predicate<A>): (self: Iterable<A>) => Option<A>
+export declare const findFirst: {
+  <A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => Option<B>
+  <A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => Option<B>
+  <A, B extends A>(self: Iterable<A>, refinement: Refinement<A, B>): Option<B>
+  <B extends A, A>(self: Iterable<B>, predicate: Predicate<A>): Option<B>
+}
 ```
 
 Added in v1.0.0
@@ -817,7 +897,10 @@ Return the first index for which a predicate holds.
 **Signature**
 
 ```ts
-export declare const findFirstIndex: <A>(predicate: Predicate<A>) => (self: Iterable<A>) => Option<number>
+export declare const findFirstIndex: {
+  <A>(predicate: Predicate<A>): (self: Iterable<A>) => Option<number>
+  <A>(self: Iterable<A>, predicate: Predicate<A>): Option<number>
+}
 ```
 
 Added in v1.0.0
@@ -829,9 +912,12 @@ Find the last element for which a predicate holds.
 **Signature**
 
 ```ts
-export declare function findLast<A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => Option<B>
-export declare function findLast<A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => Option<B>
-export declare function findLast<A>(predicate: Predicate<A>): (self: Iterable<A>) => Option<A>
+export declare const findLast: {
+  <A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => Option<B>
+  <A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => Option<B>
+  <A, B extends A>(self: Iterable<A>, refinement: Refinement<A, B>): Option<B>
+  <B extends A, A>(self: Iterable<B>, predicate: Predicate<A>): Option<B>
+}
 ```
 
 Added in v1.0.0
@@ -843,7 +929,10 @@ Return the last index for which a predicate holds.
 **Signature**
 
 ```ts
-export declare const findLastIndex: <A>(predicate: Predicate<A>) => (self: Iterable<A>) => Option<number>
+export declare const findLastIndex: {
+  <A>(predicate: Predicate<A>): (self: Iterable<A>) => Option<number>
+  <A>(self: Iterable<A>, predicate: Predicate<A>): Option<number>
+}
 ```
 
 Added in v1.0.0
@@ -855,7 +944,10 @@ This function provides a safe way to read a value at a particular index from a `
 **Signature**
 
 ```ts
-export declare const get: (index: number) => <A>(self: readonly A[]) => Option<A>
+export declare const get: {
+  (index: number): <A>(self: readonly A[]) => Option<A>
+  <A>(self: readonly A[], index: number): Option<A>
+}
 ```
 
 Added in v1.0.0
@@ -923,7 +1015,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const lastNonEmpty: <A>(as: readonly [A, ...A[]]) => A
+export declare const lastNonEmpty: <A>(self: readonly [A, ...A[]]) => A
 ```
 
 Added in v1.0.0
@@ -971,7 +1063,10 @@ Splits an `Iterable` into two pieces, the first piece has max `n` elements.
 **Signature**
 
 ```ts
-export declare const splitAt: (n: number) => <A>(self: Iterable<A>) => [A[], A[]]
+export declare const splitAt: {
+  (n: number): <A>(self: Iterable<A>) => [A[], A[]]
+  <A>(self: Iterable<A>, n: number): [A[], A[]]
+}
 ```
 
 Added in v1.0.0
@@ -983,7 +1078,10 @@ Splits a `NonEmptyReadonlyArray` into two pieces, the first piece has max `n` el
 **Signature**
 
 ```ts
-export declare const splitNonEmptyAt: (n: number) => <A>(self: readonly [A, ...A[]]) => [[A, ...A[]], A[]]
+export declare const splitNonEmptyAt: {
+  (n: number): <A>(self: readonly [A, ...A[]]) => [[A, ...A[]], A[]]
+  <A>(self: readonly [A, ...A[]], n: number): [[A, ...A[]], A[]]
+}
 ```
 
 Added in v1.0.0
@@ -1019,7 +1117,7 @@ Keep only a max number of elements from the start of an `Iterable`, creating a n
 **Signature**
 
 ```ts
-export declare const take: (n: number) => <A>(self: Iterable<A>) => A[]
+export declare const take: { (n: number): <A>(self: Iterable<A>) => A[]; <A>(self: Iterable<A>, n: number): A[] }
 ```
 
 Added in v1.0.0
@@ -1033,7 +1131,7 @@ Keep only a max number of elements from the end of an `Iterable`, creating a new
 **Signature**
 
 ```ts
-export declare const takeRight: (n: number) => <A>(self: Iterable<A>) => A[]
+export declare const takeRight: { (n: number): <A>(self: Iterable<A>) => A[]; <A>(self: Iterable<A>, n: number): A[] }
 ```
 
 Added in v1.0.0
@@ -1045,8 +1143,12 @@ Calculate the longest initial subarray for which all element satisfy the specifi
 **Signature**
 
 ```ts
-export declare function takeWhile<A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => Array<B>
-export declare function takeWhile<A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => Array<B>
+export declare const takeWhile: {
+  <A, B extends A>(refinement: Refinement<A, B>): (self: Iterable<A>) => B[]
+  <A>(predicate: Predicate<A>): <B extends A>(self: Iterable<B>) => B[]
+  <A, B extends A>(self: Iterable<A>, refinement: Refinement<A, B>): B[]
+  <B extends A, A>(self: Iterable<B>, predicate: Predicate<A>): B[]
+}
 ```
 
 Added in v1.0.0
@@ -1099,7 +1201,36 @@ function on each element, and grouping the results according to values returned
 **Signature**
 
 ```ts
-export declare const groupBy: <A>(f: (a: A) => string) => (self: Iterable<A>) => Record<string, [A, ...A[]]>
+export declare const groupBy: {
+  <A>(f: (a: A) => string): (self: Iterable<A>) => Record<string, [A, ...A[]]>
+  <A>(self: Iterable<A>, f: (a: A) => string): Record<string, [A, ...A[]]>
+}
+```
+
+Added in v1.0.0
+
+# guards
+
+## isEmpty
+
+Test whether a `ReadonlyArray` is empty narrowing down the type to `[]`.
+
+**Signature**
+
+```ts
+export declare const isEmpty: <A>(self: readonly A[]) => self is readonly []
+```
+
+Added in v1.0.0
+
+## isNonEmpty
+
+Test whether a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyReadonlyArray<A>`.
+
+**Signature**
+
+```ts
+export declare const isNonEmpty: <A>(self: readonly A[]) => self is readonly [A, ...A[]]
 ```
 
 Added in v1.0.0
@@ -1492,7 +1623,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const mapWithIndex: <A, B>(f: (a: A, i: number) => B) => (self: readonly A[]) => B[]
+export declare const mapWithIndex: {
+  <A, B>(f: (a: A, i: number) => B): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A, i: number) => B): B[]
+}
 ```
 
 Added in v1.0.0
@@ -1536,10 +1670,23 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const match: <B, A, C = B>(
-  onEmpty: LazyArg<B>,
-  onNonEmpty: (head: A, tail: A[]) => C
-) => (self: readonly A[]) => B | C
+export declare const match: {
+  <B, A, C = B>(onEmpty: LazyArg<B>, onNonEmpty: (self: readonly [A, ...A[]]) => C): (self: readonly A[]) => B | C
+  <A, B, C = B>(self: readonly A[], onEmpty: LazyArg<B>, onNonEmpty: (self: readonly [A, ...A[]]) => C): B | C
+}
+```
+
+Added in v1.0.0
+
+## matchLeft
+
+**Signature**
+
+```ts
+export declare const matchLeft: {
+  <B, A, C = B>(onEmpty: LazyArg<B>, onNonEmpty: (head: A, tail: A[]) => C): (self: readonly A[]) => B | C
+  <A, B, C = B>(self: readonly A[], onEmpty: LazyArg<B>, onNonEmpty: (head: A, tail: A[]) => C): B | C
+}
 ```
 
 Added in v1.0.0
@@ -1549,10 +1696,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const matchRight: <B, A, C = B>(
-  onEmpty: LazyArg<B>,
-  onNonEmpty: (init: A[], last: A) => C
-) => (self: readonly A[]) => B | C
+export declare const matchRight: {
+  <B, A, C = B>(onEmpty: LazyArg<B>, onNonEmpty: (init: A[], last: A) => C): (self: readonly A[]) => B | C
+  <A, B, C = B>(self: readonly A[], onEmpty: LazyArg<B>, onNonEmpty: (init: A[], last: A) => C): B | C
+}
 ```
 
 Added in v1.0.0
@@ -1566,31 +1713,10 @@ Returns a function that checks if a `ReadonlyArray` contains a given value using
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => (a: A) => (self: Iterable<A>) => boolean
-```
-
-Added in v1.0.0
-
-## isEmpty
-
-Test whether a `ReadonlyArray` is empty narrowing down the type to `[]`.
-
-**Signature**
-
-```ts
-export declare const isEmpty: <A>(self: readonly A[]) => self is readonly []
-```
-
-Added in v1.0.0
-
-## isNonEmpty
-
-Test whether a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyReadonlyArray<A>`.
-
-**Signature**
-
-```ts
-export declare const isNonEmpty: <A>(self: readonly A[]) => self is readonly [A, ...A[]]
+export declare const contains: <A>(equivalence: Equivalence<A>) => {
+  (a: A): (self: Iterable<A>) => boolean
+  (self: Iterable<A>, a: A): boolean
+}
 ```
 
 Added in v1.0.0
@@ -1627,9 +1753,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMapNonEmpty: <A, B>(
-  f: (a: A) => readonly [B, ...B[]]
-) => (self: readonly [A, ...A[]]) => [B, ...B[]]
+export declare const flatMapNonEmpty: {
+  <A, B>(f: (a: A) => readonly [B, ...B[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A) => readonly [B, ...B[]]): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0
@@ -1639,9 +1766,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMapNonEmptyWithIndex: <A, B>(
-  f: (a: A, i: number) => readonly [B, ...B[]]
-) => (self: readonly [A, ...A[]]) => [B, ...B[]]
+export declare const flatMapNonEmptyWithIndex: {
+  <A, B>(f: (a: A, i: number) => readonly [B, ...B[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => readonly [B, ...B[]]): [B, ...B[]]
+}
 ```
 
 Added in v1.0.0
@@ -1651,9 +1779,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const flatMapNullable: <A, B>(
-  f: (a: A) => B | null | undefined
-) => (self: readonly A[]) => NonNullable<B>[]
+export declare const flatMapNullable: {
+  <A, B>(f: (a: A) => B | null | undefined): (self: readonly A[]) => NonNullable<B>[]
+  <A, B>(self: readonly A[], f: (a: A) => B | null | undefined): NonNullable<B>[]
+}
 ```
 
 Added in v1.0.0
@@ -1792,7 +1921,10 @@ Added in v1.0.0
 ```ts
 export declare const traverseNonEmpty: <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
-) => <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>) => (self: readonly [A, ...A[]]) => Kind<F, R, O, E, [B, ...B[]]>
+) => {
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: readonly [A, ...A[]]) => Kind<F, R, O, E, [B, ...B[]]>
+  <A, R, O, E, B>(self: readonly [A, ...A[]], f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, [B, ...B[]]>
+}
 ```
 
 Added in v1.0.0
@@ -1804,9 +1936,18 @@ Added in v1.0.0
 ```ts
 export declare const traverseNonEmptyWithIndex: <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
-) => <A, R, O, E, B>(
-  f: (a: A, i: number) => Kind<F, R, O, E, B>
-) => (self: readonly [A, ...A[]]) => Kind<F, R, O, E, [B, ...B[]]>
+) => {
+  <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>): (
+    self: readonly [A, ...A[]]
+  ) => Kind<F, R, O, E, [B, ...B[]]>
+  <A, R, O, E, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => Kind<F, R, O, E, B>): Kind<
+    F,
+    R,
+    O,
+    E,
+    [B, ...B[]]
+  >
+}
 ```
 
 Added in v1.0.0
@@ -1833,7 +1974,10 @@ Added in v1.0.0
 ```ts
 export declare const traverseWithIndex: <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>) => (self: readonly A[]) => Kind<F, R, O, E, B[]>
+) => {
+  <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>): (self: Iterable<A>) => Kind<F, R, O, E, B[]>
+  <A, R, O, E, B>(self: Iterable<A>, f: (a: A, i: number) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B[]>
+}
 ```
 
 Added in v1.0.0
@@ -1861,7 +2005,10 @@ Gets an element unsafely, will throw on out of bounds.
 **Signature**
 
 ```ts
-export declare const unsafeGet: (index: number) => <A>(self: readonly A[]) => A
+export declare const unsafeGet: {
+  (index: number): <A>(self: readonly A[]) => A
+  <A>(self: readonly A[], index: number): A
+}
 ```
 
 Added in v1.0.0
@@ -1901,7 +2048,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const appendAll: <B>(that: Iterable<B>) => <A>(self: Iterable<A>) => (B | A)[]
+export declare const appendAll: {
+  <B>(that: Iterable<B>): <A>(self: Iterable<A>) => (B | A)[]
+  <A, B>(self: Iterable<A>, that: Iterable<B>): (A | B)[]
+}
 ```
 
 Added in v1.0.0
@@ -1911,12 +2061,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function appendAllNonEmpty<B>(
-  that: NonEmptyReadonlyArray<B>
-): <A>(self: Iterable<A>) => NonEmptyArray<A | B>
-export declare function appendAllNonEmpty<B>(
-  that: Iterable<B>
-): <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyArray<A | B>
+export declare const appendAllNonEmpty: {
+  <B>(that: readonly [B, ...B[]]): <A>(self: Iterable<A>) => [B | A, ...(B | A)[]]
+  <B>(that: Iterable<B>): <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+  <A, B>(self: Iterable<A>, that: readonly [B, ...B[]]): [A | B, ...(A | B)[]]
+  <A, B>(self: readonly [A, ...A[]], that: Iterable<B>): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -1930,9 +2080,10 @@ value and the rest of the `Array`.
 **Signature**
 
 ```ts
-export declare const chop: <A, B>(
-  f: (as: readonly [A, ...A[]]) => readonly [B, readonly A[]]
-) => (self: Iterable<A>) => B[]
+export declare const chop: {
+  <A, B>(f: (as: readonly [A, ...A[]]) => readonly [B, readonly A[]]): (self: Iterable<A>) => B[]
+  <A, B>(self: Iterable<A>, f: (as: readonly [A, ...A[]]) => readonly [B, readonly A[]]): B[]
+}
 ```
 
 Added in v1.0.0
@@ -1972,8 +2123,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function copy<A>(self: NonEmptyReadonlyArray<A>): NonEmptyArray<A>
-export declare function copy<A>(self: ReadonlyArray<A>): Array<A>
+export declare const copy: { <A>(self: readonly [A, ...A[]]): [A, ...A[]]; <A>(self: readonly A[]): A[] }
 ```
 
 Added in v1.0.0
@@ -1986,7 +2136,10 @@ The order and references of result values are determined by the first `Iterable`
 **Signature**
 
 ```ts
-export declare const difference: <A>(equivalence: Equivalence<A>) => (that: Iterable<A>) => (self: Iterable<A>) => A[]
+export declare const difference: <A>(equivalence: Equivalence<A>) => {
+  (that: Iterable<A>): (self: Iterable<A>) => A[]
+  (self: Iterable<A>, that: Iterable<A>): A[]
+}
 ```
 
 Added in v1.0.0
@@ -1996,7 +2149,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const extend: <A, B>(f: (as: readonly A[]) => B) => (self: readonly A[]) => B[]
+export declare const extend: {
+  <A, B>(f: (as: readonly A[]) => B): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (as: readonly A[]) => B): B[]
+}
 ```
 
 Added in v1.0.0
@@ -2009,20 +2165,26 @@ or return `None` if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const insertAt: <B>(i: number, b: B) => <A>(self: Iterable<A>) => Option<[B | A, ...(B | A)[]]>
+export declare const insertAt: {
+  <B>(i: number, b: B): <A>(self: Iterable<A>) => Option<[B | A, ...(B | A)[]]>
+  <A, B>(self: Iterable<A>, i: number, b: B): Option<[A | B, ...(A | B)[]]>
+}
 ```
 
 Added in v1.0.0
 
 ## intercalate
 
-Fold a data structure, accumulating values in some `Monoid`, combining adjacent elements
+Fold an `Iterable`, accumulating values in some `Monoid`, combining adjacent elements
 using the specified separator.
 
 **Signature**
 
 ```ts
-export declare const intercalate: <A>(M: Monoid<A>) => (middle: A) => (self: readonly A[]) => A
+export declare const intercalate: <A>(M: Monoid<A>) => {
+  (middle: A): (self: Iterable<A>) => A
+  (self: Iterable<A>, middle: A): A
+}
 ```
 
 Added in v1.0.0
@@ -2034,7 +2196,10 @@ Places an element in between members of a `NonEmptyReadonlyArray`, then folds th
 **Signature**
 
 ```ts
-export declare const intercalateNonEmpty: <A>(S: Semigroup<A>) => (middle: A) => (self: readonly [A, ...A[]]) => A
+export declare const intercalateNonEmpty: <A>(S: Semigroup<A>) => {
+  (middle: A): (self: readonly [A, ...A[]]) => A
+  (self: readonly [A, ...A[]], middle: A): A
+}
 ```
 
 Added in v1.0.0
@@ -2062,7 +2227,10 @@ Places an element in between members of an `Iterable`
 **Signature**
 
 ```ts
-export declare const intersperse: <B>(middle: B) => <A>(self: Iterable<A>) => (B | A)[]
+export declare const intersperse: {
+  <B>(middle: B): <A>(self: Iterable<A>) => (B | A)[]
+  <A, B>(self: Iterable<A>, middle: B): (A | B)[]
+}
 ```
 
 Added in v1.0.0
@@ -2074,7 +2242,10 @@ Places an element in between members of a `NonEmptyReadonlyArray`
 **Signature**
 
 ```ts
-export declare const intersperseNonEmpty: <B>(middle: B) => <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+export declare const intersperseNonEmpty: {
+  <B>(middle: B): <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+  <A, B>(self: readonly [A, ...A[]], middle: B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2084,7 +2255,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const join: (sep: string) => (self: ReadonlyArray<string>) => string
+export declare const join: {
+  (middle: string): (self: ReadonlyArray<string>) => string
+  (self: ReadonlyArray<string>, middle: string): string
+}
 ```
 
 Added in v1.0.0
@@ -2117,7 +2291,10 @@ or return a copy of the input if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const modify: <A, B>(i: number, f: (a: A) => B) => (self: Iterable<A>) => (A | B)[]
+export declare const modify: {
+  <A, B>(i: number, f: (a: A) => B): (self: Iterable<A>) => (A | B)[]
+  <A, B>(self: Iterable<A>, i: number, f: (a: A) => B): (A | B)[]
+}
 ```
 
 Added in v1.0.0
@@ -2129,7 +2306,10 @@ Apply a function to the head, creating a new `NonEmptyReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const modifyNonEmptyHead: <A, B>(f: (a: A) => B) => (self: readonly [A, ...A[]]) => [A | B, ...(A | B)[]]
+export declare const modifyNonEmptyHead: {
+  <A, B>(f: (a: A) => B): (self: readonly [A, ...A[]]) => [A | B, ...(A | B)[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A) => B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2141,7 +2321,10 @@ Apply a function to the last element, creating a new `NonEmptyReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const modifyNonEmptyLast: <A, B>(f: (a: A) => B) => (self: readonly [A, ...A[]]) => [A | B, ...(A | B)[]]
+export declare const modifyNonEmptyLast: {
+  <A, B>(f: (a: A) => B): (self: readonly [A, ...A[]]) => [A | B, ...(A | B)[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A) => B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2182,7 +2365,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const prependAll: <B>(that: Iterable<B>) => <A>(self: Iterable<A>) => (B | A)[]
+export declare const prependAll: {
+  <B>(that: Iterable<B>): <A>(self: Iterable<A>) => (B | A)[]
+  <A, B>(self: Iterable<A>, that: Iterable<B>): (A | B)[]
+}
 ```
 
 Added in v1.0.0
@@ -2192,12 +2378,12 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare function prependAllNonEmpty<B>(
-  that: NonEmptyReadonlyArray<B>
-): <A>(self: Iterable<A>) => NonEmptyArray<A | B>
-export declare function prependAllNonEmpty<B>(
-  that: Iterable<B>
-): <A>(self: NonEmptyReadonlyArray<A>) => NonEmptyArray<A | B>
+export declare const prependAllNonEmpty: {
+  <B>(that: readonly [B, ...B[]]): <A>(self: Iterable<A>) => [B | A, ...(B | A)[]]
+  <B>(that: Iterable<B>): <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+  <A, B>(self: Iterable<A>, that: readonly [B, ...B[]]): [A | B, ...(A | B)[]]
+  <A, B>(self: readonly [A, ...A[]], that: Iterable<B>): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2210,7 +2396,7 @@ or return a copy of the input if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const remove: (i: number) => <A>(self: Iterable<A>) => A[]
+export declare const remove: { (i: number): <A>(self: Iterable<A>) => A[]; <A>(self: Iterable<A>, i: number): A[] }
 ```
 
 Added in v1.0.0
@@ -2223,7 +2409,10 @@ or return a copy of the input if the index is out of bounds.
 **Signature**
 
 ```ts
-export declare const replace: <B>(i: number, b: B) => <A>(self: Iterable<A>) => (B | A)[]
+export declare const replace: {
+  <B>(i: number, b: B): <A>(self: Iterable<A>) => (B | A)[]
+  <A, B>(self: Iterable<A>, i: number, b: B): (A | B)[]
+}
 ```
 
 Added in v1.0.0
@@ -2233,7 +2422,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const replaceOption: <B>(i: number, b: B) => <A>(self: Iterable<A>) => Option<(B | A)[]>
+export declare const replaceOption: {
+  <B>(i: number, b: B): <A>(self: Iterable<A>) => Option<(B | A)[]>
+  <A, B>(self: Iterable<A>, i: number, b: B): Option<(A | B)[]>
+}
 ```
 
 Added in v1.0.0
@@ -2267,7 +2459,7 @@ Rotate an `Iterable` by `n` steps.
 **Signature**
 
 ```ts
-export declare const rotate: (n: number) => <A>(self: Iterable<A>) => A[]
+export declare const rotate: { (n: number): <A>(self: Iterable<A>) => A[]; <A>(self: Iterable<A>, n: number): A[] }
 ```
 
 Added in v1.0.0
@@ -2279,7 +2471,10 @@ Rotate a `NonEmptyReadonlyArray` by `n` steps.
 **Signature**
 
 ```ts
-export declare const rotateNonEmpty: (n: number) => <A>(self: readonly [A, ...A[]]) => [A, ...A[]]
+export declare const rotateNonEmpty: {
+  (n: number): <A>(self: readonly [A, ...A[]]) => [A, ...A[]]
+  <A>(self: readonly [A, ...A[]], n: number): [A, ...A[]]
+}
 ```
 
 Added in v1.0.0
@@ -2291,7 +2486,10 @@ Change the head, creating a new `NonEmptyReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const setNonEmptyHead: <B>(b: B) => <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+export declare const setNonEmptyHead: {
+  <B>(b: B): <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+  <A, B>(self: readonly [A, ...A[]], b: B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2303,7 +2501,10 @@ Change the last element, creating a new `NonEmptyReadonlyArray`.
 **Signature**
 
 ```ts
-export declare const setNonEmptyLast: <B>(b: B) => <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+export declare const setNonEmptyLast: {
+  <B>(b: B): <A>(self: readonly [A, ...A[]]) => [B | A, ...(B | A)[]]
+  <A, B>(self: readonly [A, ...A[]], b: B): [A | B, ...(A | B)[]]
+}
 ```
 
 Added in v1.0.0
@@ -2377,6 +2578,8 @@ Added in v1.0.0
 export declare const unionNonEmpty: <A>(equivalence: Equivalence<A>) => {
   (that: readonly [A, ...A[]]): (self: readonly A[]) => [A, ...A[]]
   (that: readonly A[]): (self: readonly [A, ...A[]]) => [A, ...A[]]
+  (self: readonly A[], that: readonly [A, ...A[]]): [A, ...A[]]
+  (self: readonly [A, ...A[]], that: readonly A[]): [A, ...A[]]
 }
 ```
 
@@ -2437,7 +2640,10 @@ longer `Iterable` are discarded.
 **Signature**
 
 ```ts
-export declare const zip: <B>(that: Iterable<B>) => <A>(self: Iterable<A>) => [A, B][]
+export declare const zip: {
+  <B>(that: Iterable<B>): <A>(self: Iterable<A>) => [A, B][]
+  <A, B>(self: Iterable<A>, that: Iterable<B>): [A, B][]
+}
 ```
 
 Added in v1.0.0
@@ -2447,9 +2653,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const zipNonEmpty: <B>(
-  that: readonly [B, ...B[]]
-) => <A>(self: readonly [A, ...A[]]) => [[A, B], ...[A, B][]]
+export declare const zipNonEmpty: {
+  <B>(that: readonly [B, ...B[]]): <A>(self: readonly [A, ...A[]]) => [[A, B], ...[A, B][]]
+  <A, B>(self: readonly [A, ...A[]], that: readonly [B, ...B[]]): [[A, B], ...[A, B][]]
+}
 ```
 
 Added in v1.0.0
@@ -2475,7 +2682,10 @@ input `Iterable` is short, excess elements of the longer `Iterable` are discarde
 **Signature**
 
 ```ts
-export declare const zipWith: <B, A, C>(that: Iterable<B>, f: (a: A, b: B) => C) => (self: Iterable<A>) => C[]
+export declare const zipWith: {
+  <B, A, C>(that: Iterable<B>, f: (a: A, b: B) => C): (self: Iterable<A>) => C[]
+  <B, A, C>(self: Iterable<A>, that: Iterable<B>, f: (a: A, b: B) => C): C[]
+}
 ```
 
 Added in v1.0.0

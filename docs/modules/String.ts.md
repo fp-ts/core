@@ -181,10 +181,9 @@ export declare const isEmpty: (s: string) => s is ''
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe('', S.isEmpty), true)
-assert.deepStrictEqual(pipe('a', S.isEmpty), false)
+assert.deepStrictEqual(S.isEmpty(''), true)
+assert.deepStrictEqual(S.isEmpty('a'), false)
 ```
 
 Added in v1.0.0
@@ -215,9 +214,8 @@ export declare const length: (s: string) => number
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe('abc', S.length), 3)
+assert.deepStrictEqual(S.length('abc'), 3)
 ```
 
 Added in v1.0.0
@@ -326,6 +324,14 @@ If `n` is a float, it will be rounded down to the nearest integer.
 export declare const takeLeft: { (n: number): (self: string) => string; (self: string, n: number): string }
 ```
 
+**Example**
+
+```ts
+import * as S from '@fp-ts/core/String'
+
+assert.deepStrictEqual(S.takeLeft('Hello World', 5), 'Hello')
+```
+
 Added in v1.0.0
 
 ## takeRight
@@ -343,6 +349,14 @@ If `n` is a float, it will be rounded down to the nearest integer.
 
 ```ts
 export declare const takeRight: { (n: number): (s: string) => string; (s: string, n: number): string }
+```
+
+**Example**
+
+```ts
+import * as S from '@fp-ts/core/String'
+
+assert.deepStrictEqual(S.takeRight('Hello World', 5), 'World')
 ```
 
 Added in v1.0.0
@@ -397,9 +411,8 @@ export declare const trim: (s: string) => string
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe(' a ', S.trim), 'a')
+assert.deepStrictEqual(S.trim(' a '), 'a')
 ```
 
 Added in v1.0.0
@@ -416,9 +429,8 @@ export declare const trimEnd: (s: string) => string
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe(' a ', S.trimEnd), ' a')
+assert.deepStrictEqual(S.trimEnd(' a '), ' a')
 ```
 
 Added in v1.0.0
@@ -435,9 +447,8 @@ export declare const trimStart: (s: string) => string
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe(' a ', S.trimStart), 'a ')
+assert.deepStrictEqual(S.trimStart(' a '), 'a ')
 ```
 
 Added in v1.0.0

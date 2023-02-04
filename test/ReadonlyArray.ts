@@ -831,15 +831,12 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   it("extend", () => {
-    const sum = (as: ReadonlyArray<number>) => Number.MonoidSum.combineAll(as)
-    deepStrictEqual(pipe([1, 2, 3, 4], RA.extend(sum)), [10, 9, 7, 4])
+    deepStrictEqual(pipe([1, 2, 3, 4], RA.extend(Number.sumAll)), [10, 9, 7, 4])
     deepStrictEqual(pipe([1, 2, 3, 4], RA.extend(identity)), [
       [1, 2, 3, 4],
       [2, 3, 4],
       [3, 4],
-      [
-        4
-      ]
+      [4]
     ])
   })
 
@@ -1251,6 +1248,14 @@ describe.concurrent("ReadonlyArray", () => {
   it("match", () => {
     const len: <A>(as: ReadonlyArray<A>) => number = RA.match(
       () => 0,
+      (as) => 1 + len(as.slice(1))
+    )
+    deepStrictEqual(len([1, 2, 3]), 3)
+  })
+
+  it("matchLeft", () => {
+    const len: <A>(as: ReadonlyArray<A>) => number = RA.matchLeft(
+      () => 0,
       (_, tail) => 1 + len(tail)
     )
     deepStrictEqual(len([1, 2, 3]), 3)
@@ -1409,15 +1414,15 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   it("makeBy", () => {
-    deepStrictEqual(RA.makeBy(double)(5), [0, 2, 4, 6, 8])
-    deepStrictEqual(RA.makeBy(double)(2.2), [0, 2])
+    deepStrictEqual(RA.makeBy(5, n => n * 2), [0, 2, 4, 6, 8])
+    deepStrictEqual(RA.makeBy(2.2, n => n * 2), [0, 2])
   })
 
   it("replicate", () => {
-    deepStrictEqual(RA.replicate("a")(0), ["a"])
-    deepStrictEqual(RA.replicate("a")(-1), ["a"])
-    deepStrictEqual(RA.replicate("a")(3), ["a", "a", "a"])
-    deepStrictEqual(RA.replicate("a")(2.2), ["a", "a"])
+    deepStrictEqual(RA.replicate("a", 0), ["a"])
+    deepStrictEqual(RA.replicate("a", -1), ["a"])
+    deepStrictEqual(RA.replicate("a", 3), ["a", "a", "a"])
+    deepStrictEqual(RA.replicate("a", 2.2), ["a", "a"])
   })
 
   it("range", () => {
