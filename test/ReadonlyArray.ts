@@ -947,13 +947,10 @@ describe.concurrent("ReadonlyArray", () => {
     const f = (b: string, a: string) => b + a
     deepStrictEqual(pipe(["a", "b", "c"], RA.reduceRight("", f)), "cba")
     deepStrictEqual(pipe([], RA.reduceRight("", f)), "")
-  })
-
-  it("reduceRightWithIndex", () => {
     deepStrictEqual(
       pipe(
         ["a", "b"],
-        RA.reduceRightWithIndex("", (b, a, i) => b + i + a)
+        RA.reduceRight("", (b, a, i) => b + i + a)
       ),
       "1b0a"
     )
