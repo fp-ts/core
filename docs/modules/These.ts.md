@@ -1692,7 +1692,7 @@ Returns a function that checks if a `These` contains a given value using a provi
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => {
+export declare const contains: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (a: A): <E>(self: These<E, A>) => boolean
   <E>(self: These<E, A>, a: A): boolean
 }

@@ -1187,13 +1187,13 @@ export const flatMapOption: {
  *
  * @since 1.0.0
  */
-export const contains = <A>(equivalence: Equivalence<A>): {
+export const contains = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (a: A): <E>(self: Either<E, A>) => boolean
   <E>(self: Either<E, A>, a: A): boolean
 } =>
   dual(
     2,
-    <E>(self: Either<E, A>, a: A): boolean => isLeft(self) ? false : equivalence(self.right, a)
+    <E>(self: Either<E, A>, a: A): boolean => isLeft(self) ? false : isEquivalent(self.right, a)
   )
 
 /**

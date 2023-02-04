@@ -1504,7 +1504,7 @@ Returns a function that checks if an `Either` contains a given value using a pro
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => {
+export declare const contains: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (a: A): <E>(self: Either<E, A>) => boolean
   <E>(self: Either<E, A>, a: A): boolean
 }

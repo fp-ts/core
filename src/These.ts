@@ -829,13 +829,13 @@ export const traverseTap: <F extends TypeLambda>(
  *
  * @since 1.0.0
  */
-export const contains = <A>(equivalence: Equivalence<A>): {
+export const contains = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (a: A): <E>(self: These<E, A>) => boolean
   <E>(self: These<E, A>, a: A): boolean
 } =>
   dual(
     2,
-    <E>(self: These<E, A>, a: A): boolean => isLeft(self) ? false : equivalence(self.right, a)
+    <E>(self: These<E, A>, a: A): boolean => isLeft(self) ? false : isEquivalent(self.right, a)
   )
 
 /**

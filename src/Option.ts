@@ -1446,7 +1446,7 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
 /**
  * Returns a function that checks if an `Option` contains a given value using a provided `Equivalence` instance.
  *
- * @param equivalence - An `Equivalence` instance to compare values of the `Option`.
+ * @param equivalent - An `Equivalence` instance to compare values of the `Option`.
  * @param self - The `Option` to apply the comparison to.
  * @param a - The value to compare against the `Option`.
  *
@@ -1461,10 +1461,10 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
  *
  * @since 1.0.0
  */
-export const contains = <A>(equivalence: Equivalence<A>): {
+export const contains = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (a: A): (self: Option<A>) => boolean
   (self: Option<A>, a: A): boolean
-} => dual(2, (self: Option<A>, a: A): boolean => isNone(self) ? false : equivalence(self.value, a))
+} => dual(2, (self: Option<A>, a: A): boolean => isNone(self) ? false : isEquivalent(self.value, a))
 
 /**
  * Check if a value in an `Option` type meets a certain predicate.
