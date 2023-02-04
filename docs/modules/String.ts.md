@@ -27,7 +27,9 @@ Added in v1.0.0
   - [concat](#concat)
   - [empty](#empty)
   - [endsWith](#endswith)
+  - [endsWithPosition](#endswithposition)
   - [includes](#includes)
+  - [includesWithPosition](#includeswithposition)
   - [isEmpty](#isempty)
   - [isNonEmpty](#isnonempty)
   - [length](#length)
@@ -35,6 +37,7 @@ Added in v1.0.0
   - [slice](#slice)
   - [split](#split)
   - [startsWith](#startswith)
+  - [startsWithPosition](#startswithposition)
   - [takeLeft](#takeleft)
   - [takeRight](#takeright)
   - [toLowerCase](#tolowercase)
@@ -132,37 +135,91 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const endsWith: (searchString: string, position?: number | undefined) => (s: string) => boolean
+export declare const endsWith: {
+  (searchString: string): (self: string) => boolean
+  (self: string, searchString: string): boolean
+}
 ```
 
 **Example**
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe('abc', S.endsWith('c')), true)
-assert.deepStrictEqual(pipe('ab', S.endsWith('c')), false)
+assert.deepStrictEqual(S.endsWith('abc', 'c'), true)
+assert.deepStrictEqual(S.endsWith('ab', 'c'), false)
+```
+
+Added in v1.0.0
+
+## endsWithPosition
+
+**Signature**
+
+```ts
+export declare const endsWithPosition: {
+  (searchString: string, position: number): (self: string) => boolean
+  (self: string, searchString: string, position: number): boolean
+}
+```
+
+**Example**
+
+```ts
+import * as S from '@fp-ts/core/String'
+
+assert.deepStrictEqual(S.endsWithPosition('abc', 'b', 2), true)
+assert.deepStrictEqual(S.endsWithPosition('abc', 'c', 2), false)
 ```
 
 Added in v1.0.0
 
 ## includes
 
+Returns `true` if `searchString` appears as a substring of `self`, at one or more positions that are
+greater than or equal to `0`; otherwise, returns `false`.
+
 **Signature**
 
 ```ts
-export declare const includes: (searchString: string, position?: number | undefined) => (s: string) => boolean
+export declare const includes: {
+  (searchString: string): (self: string) => boolean
+  (self: string, searchString: string): boolean
+}
 ```
 
 **Example**
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe('abc', S.includes('b')), true)
-assert.deepStrictEqual(pipe('abc', S.includes('d')), false)
+assert.deepStrictEqual(S.includes('abc', 'b'), true)
+assert.deepStrictEqual(S.includes('abc', 'd'), false)
+```
+
+Added in v1.0.0
+
+## includesWithPosition
+
+Returns `true` if `searchString` appears as a substring of `self`, at one or more positions that are
+greater than or equal to `position`; otherwise, returns `false`.
+
+**Signature**
+
+```ts
+export declare const includesWithPosition: {
+  (searchString: string, position: number): (self: string) => boolean
+  (self: string, searchString: string, position: number): boolean
+}
+```
+
+**Example**
+
+```ts
+import * as S from '@fp-ts/core/String'
+
+assert.deepStrictEqual(S.includesWithPosition('abc', 'b', 1), true)
+assert.deepStrictEqual(S.includesWithPosition('abc', 'a', 1), false)
 ```
 
 Added in v1.0.0
@@ -174,7 +231,7 @@ Test whether a `string` is empty.
 **Signature**
 
 ```ts
-export declare const isEmpty: (s: string) => s is ''
+export declare const isEmpty: (self: string) => self is ''
 ```
 
 **Example**
@@ -195,7 +252,7 @@ Test whether a `string` is non empty.
 **Signature**
 
 ```ts
-export declare const isNonEmpty: (s: string) => boolean
+export declare const isNonEmpty: (self: string) => boolean
 ```
 
 Added in v1.0.0
@@ -207,7 +264,7 @@ Calculate the number of characters in a `string`.
 **Signature**
 
 ```ts
-export declare const length: (s: string) => number
+export declare const length: (self: string) => number
 ```
 
 **Example**
@@ -226,8 +283,8 @@ Added in v1.0.0
 
 ```ts
 export declare const replace: {
-  (searchValue: string | RegExp, replaceValue: string): (s: string) => string
-  (s: string, searchValue: string | RegExp, replaceValue: string): string
+  (searchValue: string | RegExp, replaceValue: string): (self: string) => string
+  (self: string, searchValue: string | RegExp, replaceValue: string): string
 }
 ```
 
@@ -248,8 +305,8 @@ Added in v1.0.0
 
 ```ts
 export declare const slice: {
-  (start: number, end: number): (s: string) => string
-  (s: string, start: number, end: number): string
+  (start: number, end: number): (self: string) => string
+  (self: string, start: number, end: number): string
 }
 ```
 
@@ -270,8 +327,8 @@ Added in v1.0.0
 
 ```ts
 export declare const split: {
-  (separator: string | RegExp): (s: string) => readonly [string, ...string[]]
-  (s: string, separator: string | RegExp): readonly [string, ...string[]]
+  (separator: string | RegExp): (self: string) => readonly [string, ...string[]]
+  (self: string, separator: string | RegExp): readonly [string, ...string[]]
 }
 ```
 
@@ -289,20 +346,48 @@ Added in v1.0.0
 
 ## startsWith
 
+Returns `true` if the sequence of elements of `searchString` is the
+same as the corresponding elements of `s` starting at
+position. Otherwise returns false.
+
 **Signature**
 
 ```ts
-export declare const startsWith: (searchString: string, position?: number | undefined) => (s: string) => boolean
+export declare const startsWith: {
+  (searchString: string): (self: string) => boolean
+  (self: string, searchString: string): boolean
+}
 ```
 
 **Example**
 
 ```ts
 import * as S from '@fp-ts/core/String'
-import { pipe } from '@fp-ts/core/Function'
 
-assert.deepStrictEqual(pipe('abc', S.startsWith('a')), true)
-assert.deepStrictEqual(pipe('bc', S.startsWith('a')), false)
+assert.deepStrictEqual(S.startsWith('abc', 'a'), true)
+assert.deepStrictEqual(S.startsWith('bc', 'a'), false)
+```
+
+Added in v1.0.0
+
+## startsWithPosition
+
+**Signature**
+
+```ts
+export declare const startsWithPosition: {
+  (searchString: string, position: number): (self: string) => boolean
+  (self: string, searchString: string, position: number): boolean
+}
+```
+
+**Example**
+
+```ts
+import * as S from '@fp-ts/core/String'
+
+assert.deepStrictEqual(S.startsWithPosition('abc', 'b', 1), true)
+assert.deepStrictEqual(S.startsWithPosition('bc', 'a', 1), false)
 ```
 
 Added in v1.0.0
@@ -348,7 +433,7 @@ If `n` is a float, it will be rounded down to the nearest integer.
 **Signature**
 
 ```ts
-export declare const takeRight: { (n: number): (s: string) => string; (s: string, n: number): string }
+export declare const takeRight: { (n: number): (self: string) => string; (self: string, n: number): string }
 ```
 
 **Example**
@@ -366,7 +451,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toLowerCase: (s: string) => string
+export declare const toLowerCase: (self: string) => string
 ```
 
 **Example**
@@ -385,7 +470,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const toUpperCase: (s: string) => string
+export declare const toUpperCase: (self: string) => string
 ```
 
 **Example**
@@ -404,7 +489,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const trim: (s: string) => string
+export declare const trim: (self: string) => string
 ```
 
 **Example**
@@ -422,7 +507,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const trimEnd: (s: string) => string
+export declare const trimEnd: (self: string) => string
 ```
 
 **Example**
@@ -440,7 +525,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const trimStart: (s: string) => string
+export declare const trimStart: (self: string) => string
 ```
 
 **Example**
