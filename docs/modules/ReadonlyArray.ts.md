@@ -147,7 +147,6 @@ Added in v1.0.0
   - [flatMapNonEmpty](#flatmapnonempty)
   - [flatMapNonEmptyWithIndex](#flatmapnonemptywithindex)
   - [flatMapNullable](#flatmapnullable)
-  - [flatMapWithIndex](#flatmapwithindex)
   - [flatten](#flatten)
   - [flattenNonEmpty](#flattennonempty)
 - [sorting](#sorting)
@@ -1730,8 +1729,8 @@ Added in v1.0.0
 
 ```ts
 export declare const flatMap: {
-  <A, B>(f: (a: A) => readonly B[]): (self: readonly A[]) => B[]
-  <A, B>(self: readonly A[], f: (a: A) => readonly B[]): B[]
+  <A, B>(f: (a: A, i: number) => readonly B[]): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A, i: number) => readonly B[]): B[]
 }
 ```
 
@@ -1771,19 +1770,6 @@ Added in v1.0.0
 export declare const flatMapNullable: {
   <A, B>(f: (a: A) => B | null | undefined): (self: readonly A[]) => NonNullable<B>[]
   <A, B>(self: readonly A[], f: (a: A) => B | null | undefined): NonNullable<B>[]
-}
-```
-
-Added in v1.0.0
-
-## flatMapWithIndex
-
-**Signature**
-
-```ts
-export declare const flatMapWithIndex: {
-  <A, B>(f: (a: A, i: number) => readonly B[]): (self: readonly A[]) => B[]
-  <A, B>(self: readonly A[], f: (a: A, i: number) => readonly B[]): B[]
 }
 ```
 

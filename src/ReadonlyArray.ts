@@ -1458,31 +1458,21 @@ export const Pointed: pointed.Pointed<ReadonlyArrayTypeLambda> = {
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapWithIndex: {
+export const flatMap: {
   <A, B>(f: (a: A, i: number) => ReadonlyArray<B>): (self: ReadonlyArray<A>) => Array<B>
   <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => ReadonlyArray<B>): Array<B>
-} = dual(2, <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => ReadonlyArray<B>): Array<B> => {
-  if (isEmpty(self)) {
-    return []
-  }
-  const out: Array<B> = []
-  for (let i = 0; i < self.length; i++) {
-    out.push(...f(self[i], i))
-  }
-  return out
-})
-
-/**
- * @category sequencing
- * @since 1.0.0
- */
-export const flatMap: {
-  <A, B>(f: (a: A) => ReadonlyArray<B>): (self: ReadonlyArray<A>) => Array<B>
-  <A, B>(self: ReadonlyArray<A>, f: (a: A) => ReadonlyArray<B>): Array<B>
 } = dual(
   2,
-  <A, B>(self: ReadonlyArray<A>, f: (a: A) => ReadonlyArray<B>): Array<B> =>
-    flatMapWithIndex(self, f)
+  <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => ReadonlyArray<B>): Array<B> => {
+    if (isEmpty(self)) {
+      return []
+    }
+    const out: Array<B> = []
+    for (let i = 0; i < self.length; i++) {
+      out.push(...f(self[i], i))
+    }
+    return out
+  }
 )
 
 /**
@@ -1520,10 +1510,7 @@ export const flatMapNonEmpty: {
     self: NonEmptyReadonlyArray<A>,
     f: (a: A) => NonEmptyReadonlyArray<B>
   ): NonEmptyArray<B>
-} = dual(2, <A, B>(
-  self: NonEmptyReadonlyArray<A>,
-  f: (a: A) => NonEmptyReadonlyArray<B>
-): NonEmptyArray<B> => flatMapNonEmptyWithIndex(self, f))
+} = flatMap as any
 
 /**
  * @category instances
