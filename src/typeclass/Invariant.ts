@@ -52,15 +52,23 @@ export const imapComposition = <F extends TypeLambda, G extends TypeLambda>(
   ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>> => F.imap(self, G.imap(to, from), G.imap(from, to))
 
 /**
+ * @category do notation
  * @since 1.0.0
  */
-export const bindTo = <F extends TypeLambda>(F: Invariant<F>) =>
+export const bindTo = <F extends TypeLambda>(F: Invariant<F>): {
   <N extends string>(
     name: N
-  ): (<R, O, E, A>(
-    self: Kind<F, R, O, E, A>
-  ) => Kind<F, R, O, E, { readonly [K in N]: A }>) =>
-    F.imap(a => ({ [name]: a } as any), ({ [name]: a }) => a)
+  ): <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N]: A }>
+  <R, O, E, A, N extends string>(
+    self: Kind<F, R, O, E, A>,
+    name: N
+  ): Kind<F, R, O, E, { [K in N]: A }>
+} =>
+  dual(2, <R, O, E, A, N extends string>(
+    self: Kind<F, R, O, E, A>,
+    name: N
+  ): Kind<F, R, O, E, { [K in N]: A }> =>
+    F.imap(self, a => ({ [name]: a } as any), ({ [name]: a }) => a))
 
 /**
  * @since 1.0.0

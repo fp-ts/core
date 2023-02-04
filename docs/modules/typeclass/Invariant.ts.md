@@ -14,10 +14,11 @@ Added in v1.0.0
 
 - [constructors](#constructors)
   - [make](#make)
+- [do notation](#do-notation)
+  - [bindTo](#bindto)
 - [type class](#type-class)
   - [Invariant (interface)](#invariant-interface)
 - [utils](#utils)
-  - [bindTo](#bindto)
   - [imapComposition](#imapcomposition)
   - [tupled](#tupled)
 
@@ -33,6 +34,23 @@ Added in v1.0.0
 export declare const make: <F extends TypeLambda>(
   imap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, to: (a: A) => B, from: (b: B) => A) => Kind<F, R, O, E, B>
 ) => Invariant<F>
+```
+
+Added in v1.0.0
+
+# do notation
+
+## bindTo
+
+**Signature**
+
+```ts
+export declare const bindTo: <F extends TypeLambda>(
+  F: Invariant<F>
+) => {
+  <N extends string>(name: N): <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N]: A }>
+  <R, O, E, A, N extends string>(self: Kind<F, R, O, E, A>, name: N): Kind<F, R, O, E, { [K in N]: A }>
+}
 ```
 
 Added in v1.0.0
@@ -55,20 +73,6 @@ export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
 Added in v1.0.0
 
 # utils
-
-## bindTo
-
-**Signature**
-
-```ts
-export declare const bindTo: <F extends TypeLambda>(
-  F: Invariant<F>
-) => <N extends string>(
-  name: N
-) => <R, O, E, A>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { readonly [K in N]: A }>
-```
-
-Added in v1.0.0
 
 ## imapComposition
 

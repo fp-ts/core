@@ -51,10 +51,16 @@ Added in v1.0.0
 ```ts
 export declare const let: <F extends TypeLambda>(
   F: Covariant<F>
-) => <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+) => {
+  <N extends string, A extends object, B>(name: Exclude<N, keyof A>, f: (a: A) => B): <R, O, E>(
+    self: Kind<F, R, O, E, A>
+  ) => Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <R, O, E, A extends object, N extends string, B>(
+    self: Kind<F, R, O, E, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Kind<F, R, O, E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+}
 ```
 
 Added in v1.0.0

@@ -1381,18 +1381,22 @@ export const divide: {
  * @category do notation
  * @since 1.0.0
  */
-export const bindTo: <N extends string>(
-  name: N
-) => <E, A>(self: These<E, A>) => These<E, { [K in N]: A }> = invariant.bindTo(Invariant)
+export const bindTo: {
+  <N extends string>(name: N): <E, A>(self: These<E, A>) => These<E, { [K in N]: A }>
+  <E, A, N extends string>(self: These<E, A>, name: N): These<E, { [K in N]: A }>
+} = invariant.bindTo(Invariant)
 
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <E>(
-  self: These<E, A>
-) => These<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
-  Covariant
-)
+const let_: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): <E>(self: These<E, A>) => These<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <E, A extends object, N extends string, B>(
+    self: These<E, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): These<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = covariant.let(Covariant)
 
 export {
   /**
@@ -1412,46 +1416,80 @@ export const Do: These<never, {}> = of_.Do(Of)
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Validated<E2, B>
-) => <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
+export const bind: {
+  <N extends string, A extends object, E2, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Validated<E2, B>
+  ): <E1>(
+    self: Validated<E1, A>
+  ) => Validated<E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <E1, A extends object, N extends string, E2, B>(
+    self: Validated<E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Validated<E2, B>
+  ): Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = chainable.bind(Chainable)
 
 /**
  * @category do notation
  * @since 1.0.0
  */
-export const bind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Validated<E2, B>
-) => <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
-  .bind(Chainable)
-
-/**
- * @category do notation
- * @since 1.0.0
- */
-export const bindEither = <N extends string, A extends object, E2, B>(
+export const bindEither: {
+  <N extends string, A extends object, E2, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Either<E2, B>
+  ): <E1>(
+    self: Validated<E1, A>
+  ) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+  <E1, A extends object, N extends string, E2, B>(
+    self: Validated<E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Either<E2, B>
+  ): Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+} = dual(3, <E1, A extends object, N extends string, E2, B>(
+  self: Validated<E1, A>,
   name: Exclude<N, keyof A>,
   f: (a: A) => Either<E2, B>
-): <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
-  bind(name, (a) => fromEither(f(a)))
+): Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+  bind(self, name, (a) => fromEither(f(a))))
 
 /**
  * @category do notation
  * @since 1.0.0
  */
-export const bindThese = <N extends string, A extends object, E2, B>(
+export const bindThese: {
+  <N extends string, A extends object, E2, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => These<E2, B>
+  ): <E1>(
+    self: Validated<E1, A>
+  ) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+  <E1, A extends object, N extends string, E2, B>(
+    self: Validated<E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => These<E2, B>
+  ): Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+} = dual(3, <E1, A extends object, N extends string, E2, B>(
+  self: Validated<E1, A>,
   name: Exclude<N, keyof A>,
   f: (a: A) => These<E2, B>
-): <E1>(
-  self: Validated<E1, A>
-) => Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
-  bind(name, (a) => toValidated(f(a)))
+): Validated<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+  bind(self, name, (a) => toValidated(f(a))))
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const andThenBind: {
+  <N extends string, A extends object, E2, B>(
+    name: Exclude<N, keyof A>,
+    that: Validated<E2, B>
+  ): <E1>(
+    self: Validated<E1, A>
+  ) => Validated<E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <E1, A extends object, N extends string, E2, B>(
+    self: Validated<E1, A>,
+    name: Exclude<N, keyof A>,
+    that: Validated<E2, B>
+  ): Validated<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = semiProduct.andThenBind(SemiProduct)

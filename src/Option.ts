@@ -1593,15 +1593,22 @@ export const multiplyCompact = (self: Iterable<Option<number>>): number => {
  * @category do notation
  * @since 1.0.0
  */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Option<A>) => Option<{ [K in N]: A }> = invariant.bindTo(Invariant)
+export const bindTo: {
+  <N extends string>(name: N): <A>(self: Option<A>) => Option<{ [K in N]: A }>
+  <A, N extends string>(self: Option<A>, name: N): Option<{ [K in N]: A }>
+} = invariant.bindTo(Invariant)
 
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant
-  .let(Covariant)
+const let_: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Option<A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = covariant.let(Covariant)
 
 export {
   /**
@@ -1615,11 +1622,17 @@ export {
  * @category do notation
  * @since 1.0.0
  */
-export const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Option<B>
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable
-  .bind(Chainable)
+export const bind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Option<B>
+  ): (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Option<A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Option<B>
+  ): Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = chainable.bind(Chainable)
 
 /**
  * @category do notation
@@ -1633,8 +1646,14 @@ export const Do: Option<{}> = of_.Do(Of)
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Option<B>
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
+export const andThenBind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    that: Option<B>
+  ): (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Option<A>,
+    name: Exclude<N, keyof A>,
+    that: Option<B>
+  ): Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = semiProduct.andThenBind(SemiProduct)

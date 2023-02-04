@@ -119,23 +119,29 @@ export const productManyComposition = <F extends TypeLambda, G extends TypeLambd
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>) =>
+export const andThenBind = <F extends TypeLambda>(F: SemiProduct<F>): {
   <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     that: Kind<F, R2, O2, E2, B>
-  ) =>
-    <R1, O1, E1>(
-      self: Kind<F, R1, O1, E1, A>
-    ): Kind<
-      F,
-      R1 & R2,
-      O1 | O2,
-      E1 | E2,
-      { [K in keyof A | N]: K extends keyof A ? A[K] : B }
-    > =>
-      F.imap(F.product(self, that), ([a, b]) =>
-        Object.assign({}, a, { [name]: b }) as any, ({ [name]: b, ...rest }) =>
-        [rest, b] as any)
+  ): <R1, O1, E1>(
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+  <R1, O1, E1, A extends object, N extends string, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    name: Exclude<N, keyof A>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+} =>
+  dual(3, <R1, O1, E1, A extends object, N extends string, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    name: Exclude<N, keyof A>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+    F.imap(
+      F.product(self, that),
+      ([a, b]) => Object.assign({}, a, { [name]: b }) as any,
+      ({ [name]: b, ...rest }) => [rest, b] as any
+    ))
 
 /**
  * Appends an element to the end of a tuple.

@@ -12,14 +12,27 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [do notation](#do-notation)
+  - [Do](#do)
 - [type class](#type-class)
   - [Of (interface)](#of-interface)
 - [utils](#utils)
-  - [Do](#do)
   - [ofComposition](#ofcomposition)
   - [unit](#unit)
 
 ---
+
+# do notation
+
+## Do
+
+**Signature**
+
+```ts
+export declare const Do: <F extends TypeLambda>(F: Of<F>) => Kind<F, unknown, never, never, {}>
+```
+
+Added in v1.0.0
 
 # type class
 
@@ -36,16 +49,6 @@ export interface Of<F extends TypeLambda> extends TypeClass<F> {
 Added in v1.0.0
 
 # utils
-
-## Do
-
-**Signature**
-
-```ts
-export declare const Do: <F extends TypeLambda>(F: Of<F>) => Kind<F, unknown, never, never, {}>
-```
-
-Added in v1.0.0
 
 ## ofComposition
 

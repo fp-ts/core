@@ -87,13 +87,25 @@ export const asUnit = <F extends TypeLambda>(
 
 const let_ = <F extends TypeLambda>(
   F: Covariant<F>
-): (<N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <R, O, E>(
-  self: Kind<F, R, O, E, A>
-) => Kind<F, R, O, E, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>) =>
-  (name, f) => F.map(a => Object.assign({}, a, { [name]: f(a) }) as any)
+): {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): <R, O, E>(
+    self: Kind<F, R, O, E, A>
+  ) => Kind<F, R, O, E, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+  <R, O, E, A extends object, N extends string, B>(
+    self: Kind<F, R, O, E, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Kind<F, R, O, E, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+} =>
+  dual(3, <R, O, E, A extends object, N extends string, B>(
+    self: Kind<F, R, O, E, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Kind<F, R, O, E, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+    F.map(self, a => Object.assign({}, a, { [name]: f(a) }) as any))
 
 export {
   /**
