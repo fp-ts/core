@@ -1873,18 +1873,6 @@ export const reduce: {
  * @since 1.0.0
  */
 export const reduceRight: {
-  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => B
-  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B
-} = dual(
-  3,
-  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B => reduceRightWithIndex(self, b, f)
-)
-
-/**
- * @category folding
- * @since 1.0.0
- */
-export const reduceRightWithIndex: {
   <B, A>(b: B, f: (b: B, a: A, i: number) => B): (self: Iterable<A>) => B
   <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A, i: number) => B): B
 } = dual(

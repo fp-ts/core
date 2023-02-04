@@ -52,7 +52,6 @@ Added in v1.0.0
   - [reduce](#reduce)
   - [reduceKind](#reducekind)
   - [reduceRight](#reduceright)
-  - [reduceRightWithIndex](#reducerightwithindex)
   - [scan](#scan)
   - [scanRight](#scanright)
 - [getters](#getters)
@@ -673,19 +672,6 @@ Added in v1.0.0
 
 ```ts
 export declare const reduceRight: {
-  <B, A>(b: B, f: (b: B, a: A) => B): (self: Iterable<A>) => B
-  <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A) => B): B
-}
-```
-
-Added in v1.0.0
-
-## reduceRightWithIndex
-
-**Signature**
-
-```ts
-export declare const reduceRightWithIndex: {
   <B, A>(b: B, f: (b: B, a: A, i: number) => B): (self: Iterable<A>) => B
   <A, B>(self: Iterable<A>, b: B, f: (b: B, a: A, i: number) => B): B
 }
