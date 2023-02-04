@@ -1479,36 +1479,13 @@ export const flatMap: {
  * @category sequencing
  * @since 1.0.0
  */
-export const flatMapNonEmptyWithIndex: {
-  <A, B>(
-    f: (a: A, i: number) => NonEmptyReadonlyArray<B>
-  ): (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<B>
-  <A, B>(
-    self: NonEmptyReadonlyArray<A>,
-    f: (a: A, i: number) => NonEmptyReadonlyArray<B>
-  ): NonEmptyArray<B>
-} = dual(2, <A, B>(
-  self: NonEmptyReadonlyArray<A>,
-  f: (a: A, i: number) => NonEmptyReadonlyArray<B>
-): NonEmptyArray<B> => {
-  const out: NonEmptyArray<B> = copy(f(headNonEmpty(self), 0))
-  for (let i = 1; i < self.length; i++) {
-    out.push(...f(self[i], i))
-  }
-  return out
-})
-
-/**
- * @category sequencing
- * @since 1.0.0
- */
 export const flatMapNonEmpty: {
   <A, B>(
-    f: (a: A) => NonEmptyReadonlyArray<B>
+    f: (a: A, i: number) => NonEmptyReadonlyArray<B>
   ): (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<B>
   <A, B>(
     self: NonEmptyReadonlyArray<A>,
-    f: (a: A) => NonEmptyReadonlyArray<B>
+    f: (a: A, i: number) => NonEmptyReadonlyArray<B>
   ): NonEmptyArray<B>
 } = flatMap as any
 
