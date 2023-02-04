@@ -925,15 +925,12 @@ describe.concurrent("ReadonlyArray", () => {
       pipe([1, 3], RA.partition((n) => n > 2)),
       [[1], [3]]
     )
-  })
-
-  it("partitionWithIndex", () => {
     deepStrictEqual(
-      pipe([], RA.partitionWithIndex((i, n) => i + n > 2)),
+      pipe([], RA.partition((i, n) => i + n > 2)),
       [[], []]
     )
     deepStrictEqual(
-      pipe([1, 2], RA.partitionWithIndex((i, n) => i + n > 2)),
+      pipe([1, 2], RA.partition((i, n) => i + n > 2)),
       [[1], [2]]
     )
   })

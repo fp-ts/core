@@ -39,7 +39,6 @@ Added in v1.0.0
   - [filterMap](#filtermap)
   - [partition](#partition)
   - [partitionMap](#partitionmap)
-  - [partitionWithIndex](#partitionwithindex)
   - [separate](#separate)
   - [span](#span)
   - [traverseFilterMap](#traversefiltermap)
@@ -492,10 +491,10 @@ Added in v1.0.0
 
 ```ts
 export declare const partition: {
-  <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (self: Iterable<C>) => [C[], B[]]
-  <B extends A, A = B>(predicate: Predicate<A>): (self: Iterable<B>) => [B[], B[]]
-  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: Refinement<A, B>): [C[], B[]]
-  <B extends A, A = B>(self: Iterable<B>, predicate: Predicate<A>): [B[], B[]]
+  <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (self: Iterable<C>) => [C[], B[]]
+  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (self: Iterable<B>) => [B[], B[]]
+  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: (a: A, i: number) => a is B): [C[], B[]]
+  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): [B[], B[]]
 }
 ```
 
@@ -509,21 +508,6 @@ Added in v1.0.0
 export declare const partitionMap: {
   <A, B, C>(f: (a: A, i: number) => Either<B, C>): (self: Iterable<A>) => [B[], C[]]
   <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [B[], C[]]
-}
-```
-
-Added in v1.0.0
-
-## partitionWithIndex
-
-**Signature**
-
-```ts
-export declare const partitionWithIndex: {
-  <C extends A, B extends A, A = C>(refinement: (a: A, i: number) => a is B): (self: Iterable<C>) => [C[], B[]]
-  <B extends A, A = B>(predicate: (a: A, i: number) => boolean): (self: Iterable<B>) => [B[], B[]]
-  <C extends A, B extends A, A = C>(self: Iterable<C>, refinement: (a: A, i: number) => a is B): [C[], B[]]
-  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): [B[], B[]]
 }
 ```
 
