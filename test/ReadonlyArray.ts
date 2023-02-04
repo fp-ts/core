@@ -885,6 +885,9 @@ describe.concurrent("ReadonlyArray", () => {
     const f = (n: number) => (n % 2 === 0 ? O.none() : O.some(n))
     deepStrictEqual(pipe([1, 2, 3], RA.filterMap(f)), [1, 3])
     deepStrictEqual(pipe([], RA.filterMap(f)), [])
+    const g = (n: number, i: number) => ((i + n) % 2 === 0 ? O.none() : O.some(n))
+    deepStrictEqual(pipe([1, 2, 4], RA.filterMap(g)), [1, 2])
+    deepStrictEqual(pipe([], RA.filterMap(g)), [])
   })
 
   it("combineMapWithIndex", () => {
@@ -895,12 +898,6 @@ describe.concurrent("ReadonlyArray", () => {
       ),
       "0a1b"
     )
-  })
-
-  it("filterMapWithIndex", () => {
-    const f = (n: number, i: number) => ((i + n) % 2 === 0 ? O.none() : O.some(n))
-    deepStrictEqual(pipe([1, 2, 4], RA.filterMapWithIndex(f)), [1, 2])
-    deepStrictEqual(pipe([], RA.filterMapWithIndex(f)), [])
   })
 
   it("partitionMap", () => {
