@@ -124,7 +124,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <A>(equivalent: (self: A, that: A) => boolean) => Equivalence<A>
+export declare const make: <A>(isEquivalent: (self: A, that: A) => boolean) => Equivalence<A>
 ```
 
 Added in v1.0.0

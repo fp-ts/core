@@ -18,7 +18,6 @@ import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import type { Coproduct } from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
 import * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
@@ -1073,13 +1072,13 @@ export const rotateNonEmpty: {
  * @category predicates
  * @since 1.0.0
  */
-export const contains = <A>(equivalence: Equivalence<A>): {
+export const contains = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (a: A): (self: Iterable<A>) => boolean
   (self: Iterable<A>, a: A): boolean
 } =>
   dual(2, (self: Iterable<A>, a: A): boolean => {
     for (const i of self) {
-      if (equivalence(a, i)) {
+      if (isEquivalent(a, i)) {
         return true
       }
     }
@@ -1091,10 +1090,10 @@ export const contains = <A>(equivalence: Equivalence<A>): {
  *
  * @since 1.0.0
  */
-export const uniq = <A>(equivalence: Equivalence<A>) =>
+export const uniq = <A>(isEquivalent: (self: A, that: A) => boolean) =>
   (self: Iterable<A>): Array<A> => {
     const input = fromIterable(self)
-    return isNonEmpty(input) ? uniqNonEmpty(equivalence)(input) : []
+    return isNonEmpty(input) ? uniqNonEmpty(isEquivalent)(input) : []
   }
 
 /**
@@ -1102,12 +1101,12 @@ export const uniq = <A>(equivalence: Equivalence<A>) =>
  *
  * @since 1.0.0
  */
-export const uniqNonEmpty = <A>(equivalence: Equivalence<A>) =>
+export const uniqNonEmpty = <A>(isEquivalent: (self: A, that: A) => boolean) =>
   (self: NonEmptyReadonlyArray<A>): NonEmptyArray<A> => {
     const out: NonEmptyArray<A> = [headNonEmpty(self)]
     const rest = tailNonEmpty(self)
     for (const a of rest) {
-      if (out.every((o) => !equivalence(a, o))) {
+      if (out.every((o) => !isEquivalent(a, o))) {
         out.push(a)
       }
     }
@@ -1253,7 +1252,7 @@ export const chunksOfNonEmpty: {
  * @category grouping
  * @since 1.0.0
  */
-export const group = <A>(equivalence: Equivalence<A>) =>
+export const group = <A>(isEquivalent: (self: A, that: A) => boolean) =>
   (self: NonEmptyReadonlyArray<A>): NonEmptyArray<NonEmptyArray<A>> =>
     chopNonEmpty(self, (as) => {
       const h = headNonEmpty(as)
@@ -1261,7 +1260,7 @@ export const group = <A>(equivalence: Equivalence<A>) =>
       let i = 1
       for (; i < as.length; i++) {
         const a = as[i]
-        if (equivalence(a, h)) {
+        if (isEquivalent(a, h)) {
           out.push(a)
         } else {
           break
@@ -1296,7 +1295,7 @@ export const groupBy: {
 /**
  * @since 1.0.0
  */
-export const union = <A>(equivalence: Equivalence<A>): {
+export const union = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (that: ReadonlyArray<A>): (self: ReadonlyArray<A>) => Array<A>
   (self: ReadonlyArray<A>, that: ReadonlyArray<A>): Array<A>
 } =>
@@ -1304,7 +1303,7 @@ export const union = <A>(equivalence: Equivalence<A>): {
     const a = Array.from(self)
     const b = Array.from(that)
     return isNonEmpty(a) && isNonEmpty(b) ?
-      unionNonEmpty(equivalence)(b)(a) :
+      unionNonEmpty(isEquivalent)(a, b) :
       isNonEmpty(a) ?
       a :
       b
@@ -1313,7 +1312,7 @@ export const union = <A>(equivalence: Equivalence<A>): {
 /**
  * @since 1.0.0
  */
-export const unionNonEmpty = <A>(equivalence: Equivalence<A>): {
+export const unionNonEmpty = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (that: NonEmptyReadonlyArray<A>): (self: ReadonlyArray<A>) => NonEmptyArray<A>
   (that: ReadonlyArray<A>): (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<A>
   (self: ReadonlyArray<A>, that: NonEmptyReadonlyArray<A>): NonEmptyArray<A>
@@ -1322,7 +1321,7 @@ export const unionNonEmpty = <A>(equivalence: Equivalence<A>): {
   dual(
     2,
     (self: NonEmptyReadonlyArray<A>, that: ReadonlyArray<A>): NonEmptyArray<A> =>
-      uniqNonEmpty(equivalence)(appendAllNonEmpty(self, that))
+      uniqNonEmpty(isEquivalent)(appendAllNonEmpty(self, that))
   )
 
 /**
@@ -1331,11 +1330,11 @@ export const unionNonEmpty = <A>(equivalence: Equivalence<A>): {
  *
  * @since 1.0.0
  */
-export const intersection = <A>(equivalence: Equivalence<A>): {
+export const intersection = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (that: Iterable<A>): (self: Iterable<A>) => Array<A>
   (self: Iterable<A>, that: Iterable<A>): Array<A>
 } => {
-  const has = contains(equivalence)
+  const has = contains(isEquivalent)
   return dual(
     2,
     (self: Iterable<A>, that: Iterable<A>): Array<A> =>
@@ -1349,11 +1348,11 @@ export const intersection = <A>(equivalence: Equivalence<A>): {
  *
  * @since 1.0.0
  */
-export const difference = <A>(equivalence: Equivalence<A>): {
+export const difference = <A>(isEquivalent: (self: A, that: A) => boolean): {
   (that: Iterable<A>): (self: Iterable<A>) => Array<A>
   (self: Iterable<A>, that: Iterable<A>): Array<A>
 } => {
-  const has = contains(equivalence)
+  const has = contains(isEquivalent)
   return dual(
     2,
     (self: Iterable<A>, that: Iterable<A>): Array<A> =>
@@ -2403,16 +2402,20 @@ export const unfold = <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>): Array<
  * @category instances
  * @since 1.0.0
  */
-export const getUnionSemigroup = <A>(equivalence: Equivalence<A>): Semigroup<ReadonlyArray<A>> =>
+export const getUnionSemigroup = <A>(
+  isEquivalent: (self: A, that: A) => boolean
+): Semigroup<ReadonlyArray<A>> =>
   // @ts-expect-error
-  fromCombine(union(equivalence))
+  fromCombine(union(isEquivalent))
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const getUnionMonoid = <A>(equivalence: Equivalence<A>): Monoid<ReadonlyArray<A>> => {
-  const S = getUnionSemigroup<A>(equivalence)
+export const getUnionMonoid = <A>(
+  isEquivalent: (self: A, that: A) => boolean
+): Monoid<ReadonlyArray<A>> => {
+  const S = getUnionSemigroup<A>(isEquivalent)
   return ({
     combine: S.combine,
     combineMany: S.combineMany,
@@ -2426,10 +2429,10 @@ export const getUnionMonoid = <A>(equivalence: Equivalence<A>): Monoid<ReadonlyA
  * @since 1.0.0
  */
 export const getIntersectionSemigroup = <A>(
-  equivalence: Equivalence<A>
+  isEquivalent: (self: A, that: A) => boolean
 ): Semigroup<ReadonlyArray<A>> =>
   // @ts-expect-error
-  fromCombine(intersection(equivalence))
+  fromCombine(intersection(isEquivalent))
 
 /**
  * Returns a `Semigroup` for `ReadonlyArray<A>`.

@@ -38,9 +38,8 @@ export interface EquivalenceTypeLambda extends TypeLambda {
  * @category constructors
  * @since 1.0.0
  */
-export const make = <A>(
-  equivalent: (self: A, that: A) => boolean
-): Equivalence<A> => dual(2, (self, that) => self === that || equivalent(self, that))
+export const make = <A>(isEquivalent: (self: A, that: A) => boolean): Equivalence<A> =>
+  dual(2, (self: A, that: A): boolean => self === that || isEquivalent(self, that))
 
 /**
  * Return an `Equivalence` that uses strict equality (===) to compare values

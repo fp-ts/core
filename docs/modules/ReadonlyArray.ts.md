@@ -132,7 +132,6 @@ Added in v1.0.0
   - [map](#map)
   - [mapNonEmpty](#mapnonempty)
   - [mapNonEmptyWithIndex](#mapnonemptywithindex)
-  - [mapWithIndex](#mapwithindex)
   - [tupled](#tupled)
 - [models](#models)
   - [NonEmptyArray (type alias)](#nonemptyarray-type-alias)
@@ -1202,7 +1201,7 @@ Group equal, consecutive elements of a `NonEmptyReadonlyArray` into `NonEmptyArr
 
 ```ts
 export declare const group: <A>(
-  equivalence: Equivalence<A>
+  isEquivalent: (self: A, that: A) => boolean
 ) => (self: readonly [A, ...A[]]) => [[A, ...A[]], ...[A, ...A[]][]]
 ```
 
@@ -1417,7 +1416,9 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getIntersectionSemigroup: <A>(equivalence: Equivalence<A>) => Semigroup<readonly A[]>
+export declare const getIntersectionSemigroup: <A>(
+  isEquivalent: (self: A, that: A) => boolean
+) => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1451,7 +1452,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getUnionMonoid: <A>(equivalence: Equivalence<A>) => Monoid<readonly A[]>
+export declare const getUnionMonoid: <A>(isEquivalent: (self: A, that: A) => boolean) => Monoid<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1461,7 +1462,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const getUnionSemigroup: <A>(equivalence: Equivalence<A>) => Semigroup<readonly A[]>
+export declare const getUnionSemigroup: <A>(isEquivalent: (self: A, that: A) => boolean) => Semigroup<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -1600,8 +1601,8 @@ Added in v1.0.0
 
 ```ts
 export declare const map: {
-  <A, B>(f: (a: A) => B): (self: readonly A[]) => B[]
-  <A, B>(self: readonly A[], f: (a: A) => B): B[]
+  <A, B>(f: (a: A, i: number) => B): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A, i: number) => B): B[]
 }
 ```
 
@@ -1628,19 +1629,6 @@ Added in v1.0.0
 export declare const mapNonEmptyWithIndex: {
   <A, B>(f: (a: A, i: number) => B): (self: readonly [A, ...A[]]) => [B, ...B[]]
   <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => B): [B, ...B[]]
-}
-```
-
-Added in v1.0.0
-
-## mapWithIndex
-
-**Signature**
-
-```ts
-export declare const mapWithIndex: {
-  <A, B>(f: (a: A, i: number) => B): (self: readonly A[]) => B[]
-  <A, B>(self: readonly A[], f: (a: A, i: number) => B): B[]
 }
 ```
 
@@ -1728,7 +1716,7 @@ Returns a function that checks if a `ReadonlyArray` contains a given value using
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => {
+export declare const contains: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (a: A): (self: Iterable<A>) => boolean
   (self: Iterable<A>, a: A): boolean
 }
@@ -2151,7 +2139,7 @@ The order and references of result values are determined by the first `Iterable`
 **Signature**
 
 ```ts
-export declare const difference: <A>(equivalence: Equivalence<A>) => {
+export declare const difference: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (that: Iterable<A>): (self: Iterable<A>) => A[]
   (self: Iterable<A>, that: Iterable<A>): A[]
 }
@@ -2227,7 +2215,7 @@ The order and references of result values are determined by the first `Iterable`
 **Signature**
 
 ```ts
-export declare const intersection: <A>(equivalence: Equivalence<A>) => {
+export declare const intersection: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (that: Iterable<A>): (self: Iterable<A>) => A[]
   (self: Iterable<A>, that: Iterable<A>): A[]
 }
@@ -2577,7 +2565,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const union: <A>(equivalence: Equivalence<A>) => {
+export declare const union: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (that: readonly A[]): (self: readonly A[]) => A[]
   (self: readonly A[], that: readonly A[]): A[]
 }
@@ -2590,7 +2578,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const unionNonEmpty: <A>(equivalence: Equivalence<A>) => {
+export declare const unionNonEmpty: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (that: readonly [A, ...A[]]): (self: readonly A[]) => [A, ...A[]]
   (that: readonly A[]): (self: readonly [A, ...A[]]) => [A, ...A[]]
   (self: readonly A[], that: readonly [A, ...A[]]): [A, ...A[]]
@@ -2607,7 +2595,7 @@ Remove duplicates from am `Iterable`, keeping the first occurrence of an element
 **Signature**
 
 ```ts
-export declare const uniq: <A>(equivalence: Equivalence<A>) => (self: Iterable<A>) => A[]
+export declare const uniq: <A>(isEquivalent: (self: A, that: A) => boolean) => (self: Iterable<A>) => A[]
 ```
 
 Added in v1.0.0
@@ -2619,7 +2607,9 @@ Remove duplicates from a `NonEmptyReadonlyArray`, keeping the first occurrence o
 **Signature**
 
 ```ts
-export declare const uniqNonEmpty: <A>(equivalence: Equivalence<A>) => (self: readonly [A, ...A[]]) => [A, ...A[]]
+export declare const uniqNonEmpty: <A>(
+  isEquivalent: (self: A, that: A) => boolean
+) => (self: readonly [A, ...A[]]) => [A, ...A[]]
 ```
 
 Added in v1.0.0

@@ -1778,7 +1778,7 @@ Returns a function that checks if an `Option` contains a given value using a pro
 **Signature**
 
 ```ts
-export declare const contains: <A>(equivalence: Equivalence<A>) => {
+export declare const contains: <A>(isEquivalent: (self: A, that: A) => boolean) => {
   (a: A): (self: Option<A>) => boolean
   (self: Option<A>, a: A): boolean
 }
