@@ -154,7 +154,6 @@ Added in v1.0.0
   - [sequenceNonEmpty](#sequencenonempty)
   - [traverse](#traverse)
   - [traverseNonEmpty](#traversenonempty)
-  - [traverseNonEmptyWithIndex](#traversenonemptywithindex)
   - [traverseTap](#traversetap)
 - [type lambdas](#type-lambdas)
   - [ReadonlyArrayTypeLambda (interface)](#readonlyarraytypelambda-interface)
@@ -1821,21 +1820,6 @@ Added in v1.0.0
 
 ```ts
 export declare const traverseNonEmpty: <F extends TypeLambda>(
-  F: semiApplicative.SemiApplicative<F>
-) => {
-  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: readonly [A, ...A[]]) => Kind<F, R, O, E, [B, ...B[]]>
-  <A, R, O, E, B>(self: readonly [A, ...A[]], f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, [B, ...B[]]>
-}
-```
-
-Added in v1.0.0
-
-## traverseNonEmptyWithIndex
-
-**Signature**
-
-```ts
-export declare const traverseNonEmptyWithIndex: <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
 ) => {
   <A, R, O, E, B>(f: (a: A, i: number) => Kind<F, R, O, E, B>): (

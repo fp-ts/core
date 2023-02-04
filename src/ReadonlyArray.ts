@@ -1677,26 +1677,6 @@ export const traverseNonEmpty = <F extends TypeLambda>(
   F: semiApplicative.SemiApplicative<F>
 ): {
   <A, R, O, E, B>(
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): (self: NonEmptyReadonlyArray<A>) => Kind<F, R, O, E, NonEmptyArray<B>>
-  <A, R, O, E, B>(
-    self: NonEmptyReadonlyArray<A>,
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): Kind<F, R, O, E, NonEmptyArray<B>>
-} =>
-  dual(2, <A, R, O, E, B>(
-    self: NonEmptyReadonlyArray<A>,
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): Kind<F, R, O, E, NonEmptyArray<B>> => traverseNonEmptyWithIndex(F)(self, f))
-
-/**
- * @category traversing
- * @since 1.0.0
- */
-export const traverseNonEmptyWithIndex = <F extends TypeLambda>(
-  F: semiApplicative.SemiApplicative<F>
-): {
-  <A, R, O, E, B>(
     f: (a: A, i: number) => Kind<F, R, O, E, B>
   ): (self: NonEmptyReadonlyArray<A>) => Kind<F, R, O, E, NonEmptyArray<B>>
   <A, R, O, E, B>(

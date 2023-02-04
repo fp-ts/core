@@ -978,26 +978,17 @@ describe.concurrent("ReadonlyArray", () => {
       ),
       O.none()
     )
-  })
-
-  it("traverseNonEmptyWithIndex", () => {
     deepStrictEqual(
       pipe(
         RA.make("a", "bb"),
-        RA.traverseNonEmptyWithIndex(O.Applicative)((
-          s,
-          i
-        ) => (s.length >= 1 ? O.some(s + i) : O.none()))
+        RA.traverseNonEmpty(O.Applicative)((s, i) => (s.length >= 1 ? O.some(s + i) : O.none()))
       ),
       O.some(RA.make("a0", "bb1"))
     )
     deepStrictEqual(
       pipe(
         RA.make("a", "bb"),
-        RA.traverseNonEmptyWithIndex(O.Applicative)((
-          s,
-          i
-        ) => (s.length > 1 ? O.some(s + i) : O.none()))
+        RA.traverseNonEmpty(O.Applicative)((s, i) => (s.length > 1 ? O.some(s + i) : O.none()))
       ),
       O.none()
     )
