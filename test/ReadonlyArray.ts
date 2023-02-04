@@ -934,22 +934,19 @@ describe.concurrent("ReadonlyArray", () => {
 
   it("reduce", () => {
     deepStrictEqual(pipe(["a", "b", "c"], RA.reduce("", (b, a) => b + a)), "abc")
+    deepStrictEqual(
+      pipe(
+        ["a", "b"],
+        RA.reduce("", (b, a, i) => b + i + a)
+      ),
+      "0a1b"
+    )
   })
 
   it("reduceRight", () => {
     const f = (b: string, a: string) => b + a
     deepStrictEqual(pipe(["a", "b", "c"], RA.reduceRight("", f)), "cba")
     deepStrictEqual(pipe([], RA.reduceRight("", f)), "")
-  })
-
-  it("reduceWithIndex", () => {
-    deepStrictEqual(
-      pipe(
-        ["a", "b"],
-        RA.reduceWithIndex("", (b, a, i) => b + i + a)
-      ),
-      "0a1b"
-    )
   })
 
   it("reduceRightWithIndex", () => {
