@@ -1390,18 +1390,6 @@ export const mapNonEmpty: {
  * @category mapping
  * @since 1.0.0
  */
-export const mapWithIndex: {
-  <A, B>(f: (a: A, i: number) => B): (self: ReadonlyArray<A>) => Array<B>
-  <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => B): Array<B>
-} = dual(
-  2,
-  <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => B): Array<B> => self.map((a, i) => f(a, i))
-)
-
-/**
- * @category mapping
- * @since 1.0.0
- */
 export const mapNonEmptyWithIndex: {
   <A, B>(f: (a: A, i: number) => B): (self: NonEmptyReadonlyArray<A>) => NonEmptyArray<B>
   <A, B>(self: NonEmptyReadonlyArray<A>, f: (a: A, i: number) => B): NonEmptyArray<B>
@@ -1422,24 +1410,24 @@ export const Of: of_.Of<ReadonlyArrayTypeLambda> = {
 }
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = covariant.make(<A, B>(
-  self: ReadonlyArray<A>,
-  f: (a: A) => B
-): ReadonlyArray<B> => self.map(a => f(a)))
-
-/**
  * @category mapping
  * @since 1.0.0
  */
 export const map: {
-  <A, B>(f: (a: A) => B): (self: ReadonlyArray<A>) => Array<B>
-  <A, B>(self: ReadonlyArray<A>, f: (a: A) => B): Array<B>
-} = Covariant.map as any
+  <A, B>(f: (a: A, i: number) => B): (self: ReadonlyArray<A>) => Array<B>
+  <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => B): Array<B>
+} = dual(2, <A, B>(self: ReadonlyArray<A>, f: (a: A, i: number) => B): Array<B> => self.map(f))
 
-const imap = Covariant.imap
+const imap = covariant.imap<ReadonlyArrayTypeLambda>(map)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Covariant: covariant.Covariant<ReadonlyArrayTypeLambda> = {
+  imap,
+  map
+}
 
 /**
  * @category instances

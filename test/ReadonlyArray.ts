@@ -786,13 +786,10 @@ describe.concurrent("ReadonlyArray", () => {
       ),
       [2, 4, 6]
     )
-  })
-
-  it("mapWithIndex", () => {
     deepStrictEqual(
       pipe(
         ["a", "b"],
-        RA.mapWithIndex((s, i) => s + i)
+        RA.map((s, i) => s + i)
       ),
       ["a0", "b1"]
     )
@@ -1495,14 +1492,6 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(S.combine([3, 4], [1, 2]), [])
     deepStrictEqual(S.combine([2, 3], [1, 2]), [2])
     deepStrictEqual(S.combine([1, 2], [1, 2]), [1, 2])
-  })
-
-  it("should be safe when calling map with a binary function", () => {
-    interface Foo {
-      readonly bar: () => number
-    }
-    const f = (a: number, x?: Foo) => (x !== undefined ? `${a}${x.bar()}` : `${a}`)
-    deepStrictEqual(pipe([1, 2], RA.map(f)), ["1", "2"])
   })
 
   it("empty", () => {
