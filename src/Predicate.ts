@@ -324,11 +324,10 @@ export const any = <A>(collection: Iterable<Predicate<A>>): Predicate<A> =>
  * @category do notation
  * @since 1.0.0
  */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Predicate<A>) => Predicate<{ readonly [K in N]: A }> = invariant.bindTo(
-  Invariant
-)
+export const bindTo: {
+  <N extends string>(name: N): <A>(self: Predicate<A>) => Predicate<{ readonly [K in N]: A }>
+  <A, N extends string>(self: Predicate<A>, name: N): Predicate<{ readonly [K in N]: A }>
+} = invariant.bindTo(Invariant)
 
 /**
  * @category do notation
@@ -342,12 +341,16 @@ export const Do: Predicate<{}> = of_.Do(Of)
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Predicate<B>
-) => (
-  self: Predicate<A>
-) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(
-    SemiProduct
-  )
+export const andThenBind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    that: Predicate<B>
+  ): (
+    self: Predicate<A>
+  ) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Predicate<A>,
+    name: Exclude<N, keyof A>,
+    that: Predicate<B>
+  ): Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = semiProduct.andThenBind(SemiProduct)

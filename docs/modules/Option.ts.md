@@ -556,10 +556,14 @@ A variant of `bind` that sequentially ignores the scope.
 **Signature**
 
 ```ts
-export declare const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Option<B>
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+export declare const andThenBind: {
+  <N extends string, A extends object, B>(name: Exclude<N, keyof A>, that: Option<B>): (
+    self: Option<A>
+  ) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(self: Option<A>, name: Exclude<N, keyof A>, that: Option<B>): Option<{
+    [K in N | keyof A]: K extends keyof A ? A[K] : B
+  }>
+}
 ```
 
 Added in v1.0.0
@@ -569,10 +573,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Option<B>
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+export declare const bind: {
+  <N extends string, A extends object, B>(name: Exclude<N, keyof A>, f: (a: A) => Option<B>): (
+    self: Option<A>
+  ) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(self: Option<A>, name: Exclude<N, keyof A>, f: (a: A) => Option<B>): Option<{
+    [K in N | keyof A]: K extends keyof A ? A[K] : B
+  }>
+}
 ```
 
 Added in v1.0.0
@@ -582,7 +590,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bindTo: <N extends string>(name: N) => <A>(self: Option<A>) => Option<{ [K in N]: A }>
+export declare const bindTo: {
+  <N extends string>(name: N): <A>(self: Option<A>) => Option<{ [K in N]: A }>
+  <A, N extends string>(self: Option<A>, name: N): Option<{ [K in N]: A }>
+}
 ```
 
 Added in v1.0.0
@@ -592,10 +603,14 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const let: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (self: Option<A>) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+export declare const let: {
+  <N extends string, A extends object, B>(name: Exclude<N, keyof A>, f: (a: A) => B): (
+    self: Option<A>
+  ) => Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(self: Option<A>, name: Exclude<N, keyof A>, f: (a: A) => B): Option<{
+    [K in N | keyof A]: K extends keyof A ? A[K] : B
+  }>
+}
 ```
 
 Added in v1.0.0

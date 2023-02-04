@@ -204,18 +204,22 @@ export const Traversable: traversable.Traversable<IdentityTypeLambda> = traversa
  * @category do notation
  * @since 1.0.0
  */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Identity<A>) => Identity<{ [K in N]: A }> = invariant.bindTo(Invariant)
+export const bindTo: {
+  <N extends string>(name: N): <A>(self: Identity<A>) => Identity<{ [K in N]: A }>
+  <A, N extends string>(self: Identity<A>, name: N): Identity<{ [K in N]: A }>
+} = invariant.bindTo(Invariant)
 
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (
-  self: Identity<A>
-) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
-  Covariant
-)
+const let_: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): (self: Identity<A>) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Identity<A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = covariant.let(Covariant)
 
 export {
   /**
@@ -235,14 +239,17 @@ export const Do: Identity<{}> = of_.Do(Of)
  * @category do notation
  * @since 1.0.0
  */
-export const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Identity<B>
-) => (
-  self: Identity<A>
-) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(
-  Chainable
-)
+export const bind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Identity<B>
+  ): (self: Identity<A>) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Identity<A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Identity<B>
+  ): Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = chainable.bind(Chainable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -250,8 +257,14 @@ export const bind: <N extends string, A extends object, B>(
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Identity<B>
-) => (self: Identity<A>) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> =
-  semiProduct.andThenBind(SemiProduct)
+export const andThenBind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    that: Identity<B>
+  ): (self: Identity<A>) => Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Identity<A>,
+    name: Exclude<N, keyof A>,
+    that: Identity<B>
+  ): Identity<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = semiProduct.andThenBind(SemiProduct)

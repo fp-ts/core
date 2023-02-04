@@ -1316,18 +1316,26 @@ export const lefts = <E, A>(self: Iterable<Either<E, A>>): Array<E> => {
  * @category do notation
  * @since 1.0.0
  */
-export const bindTo: <N extends string>(
-  name: N
-) => <E, A>(self: Either<E, A>) => Either<E, { [K in N]: A }> = invariant.bindTo(Invariant)
+export const bindTo: {
+  <N extends string>(
+    name: N
+  ): <E, A>(self: Either<E, A>) => Either<E, { [K in N]: A }>
+  <E, A, N extends string>(self: Either<E, A>, name: N): Either<E, { [K in N]: A }>
+} = invariant.bindTo(Invariant)
 
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => <E>(
-  self: Either<E, A>
-) => Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(
-  Covariant
-)
+const let_: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): <E>(
+    self: Either<E, A>
+  ) => Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <E, A extends object, N extends string, B>(
+    self: Either<E, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Either<E, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = covariant.let(Covariant)
 
 export {
   /**
@@ -1346,13 +1354,19 @@ export const Do: Either<never, {}> = of_.Do(Of)
  * @category do notation
  * @since 1.0.0
  */
-export const bind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Either<E2, B>
-) => <E1>(
-  self: Either<E1, A>
-) => Either<E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> = chainable
-  .bind(Chainable)
+export const bind: {
+  <N extends string, A extends object, E2, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Either<E2, B>
+  ): <E1>(
+    self: Either<E1, A>
+  ) => Either<E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <E1, A extends object, N extends string, E2, B>(
+    self: Either<E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Either<E2, B>
+  ): Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = chainable.bind(Chainable)
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -1360,10 +1374,16 @@ export const bind: <N extends string, A extends object, E2, B>(
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind: <N extends string, A extends object, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Either<E2, B>
-) => <E1>(
-  self: Either<E1, A>
-) => Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct
-  .andThenBind(SemiProduct)
+export const andThenBind: {
+  <N extends string, A extends object, E2, B>(
+    name: Exclude<N, keyof A>,
+    that: Either<E2, B>
+  ): <E1>(
+    self: Either<E1, A>
+  ) => Either<E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <E1, A extends object, N extends string, E2, B>(
+    self: Either<E1, A>,
+    name: Exclude<N, keyof A>,
+    that: Either<E2, B>
+  ): Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = semiProduct.andThenBind(SemiProduct)

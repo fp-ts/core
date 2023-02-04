@@ -103,10 +103,16 @@ A variant of `bind` that sequentially ignores the scope.
 **Signature**
 
 ```ts
-export declare const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: Predicate<B>
-) => (self: Predicate<A>) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+export declare const andThenBind: {
+  <N extends string, A extends object, B>(name: Exclude<N, keyof A>, that: Predicate<B>): (
+    self: Predicate<A>
+  ) => Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: Predicate<A>,
+    name: Exclude<N, keyof A>,
+    that: Predicate<B>
+  ): Predicate<{ readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+}
 ```
 
 Added in v1.0.0
@@ -116,9 +122,10 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const bindTo: <N extends string>(
-  name: N
-) => <A>(self: Predicate<A>) => Predicate<{ readonly [K in N]: A }>
+export declare const bindTo: {
+  <N extends string>(name: N): <A>(self: Predicate<A>) => Predicate<{ readonly [K in N]: A }>
+  <A, N extends string>(self: Predicate<A>, name: N): Predicate<{ readonly [K in N]: A }>
+}
 ```
 
 Added in v1.0.0

@@ -56,18 +56,25 @@ export const tap = <F extends TypeLambda>(F: Chainable<F>): {
   )
 
 /**
+ * @category do notation
  * @since 1.0.0
  */
-export const bind = <F extends TypeLambda>(F: Chainable<F>) =>
+export const bind = <F extends TypeLambda>(F: Chainable<F>): {
   <N extends string, A extends object, R2, O2, E2, B>(
     name: Exclude<N, keyof A>,
     f: (a: A) => Kind<F, R2, O2, E2, B>
   ): <R1, O1, E1>(
     self: Kind<F, R1, O1, E1, A>
-  ) => Kind<
-    F,
-    R1 & R2,
-    O1 | O2,
-    E1 | E2,
-    { [K in keyof A | N]: K extends keyof A ? A[K] : B }
-  > => F.flatMap(a => F.map(f(a), b => Object.assign({}, a, { [name]: b }) as any))
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+  <R1, O1, E1, A extends object, N extends string, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }>
+} =>
+  dual(3, <R1, O1, E1, A, N extends string, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in keyof A | N]: K extends keyof A ? A[K] : B }> =>
+    F.flatMap(self, a => F.map(f(a), b => Object.assign({}, a, { [name]: b }) as any)))

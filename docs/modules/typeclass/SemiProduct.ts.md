@@ -77,12 +77,20 @@ Added in v1.0.0
 ```ts
 export declare const andThenBind: <F extends TypeLambda>(
   F: SemiProduct<F>
-) => <N extends string, A extends object, R2, O2, E2, B>(
-  name: Exclude<N, keyof A>,
-  that: Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1>(
-  self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+) => {
+  <N extends string, A extends object, R2, O2, E2, B>(name: Exclude<N, keyof A>, that: Kind<F, R2, O2, E2, B>): <
+    R1,
+    O1,
+    E1
+  >(
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <R1, O1, E1, A extends object, N extends string, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    name: Exclude<N, keyof A>,
+    that: Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+}
 ```
 
 Added in v1.0.0

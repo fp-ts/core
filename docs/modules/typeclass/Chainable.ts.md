@@ -12,15 +12,43 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [do notation](#do-notation)
+  - [bind](#bind)
 - [sequencing](#sequencing)
   - [andThenDiscard](#andthendiscard)
 - [type class](#type-class)
   - [Chainable (interface)](#chainable-interface)
 - [utils](#utils)
-  - [bind](#bind)
   - [tap](#tap)
 
 ---
+
+# do notation
+
+## bind
+
+**Signature**
+
+```ts
+export declare const bind: <F extends TypeLambda>(
+  F: Chainable<F>
+) => {
+  <N extends string, A extends object, R2, O2, E2, B>(name: Exclude<N, keyof A>, f: (a: A) => Kind<F, R2, O2, E2, B>): <
+    R1,
+    O1,
+    E1
+  >(
+    self: Kind<F, R1, O1, E1, A>
+  ) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <R1, O1, E1, A extends object, N extends string, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => Kind<F, R2, O2, E2, B>
+  ): Kind<F, R1 & R2, O1 | O2, E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+}
+```
+
+Added in v1.0.0
 
 # sequencing
 
@@ -63,23 +91,6 @@ export interface Chainable<F extends TypeLambda> extends FlatMap<F>, Covariant<F
 Added in v1.0.0
 
 # utils
-
-## bind
-
-**Signature**
-
-```ts
-export declare const bind: <F extends TypeLambda>(
-  F: Chainable<F>
-) => <N extends string, A extends object, R2, O2, E2, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => Kind<F, R2, O2, E2, B>
-) => <R1, O1, E1>(
-  self: Kind<F, R1, O1, E1, A>
-) => Kind<F, R1 & R2, O2 | O1, E2 | E1, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
-```
-
-Added in v1.0.0
 
 ## tap
 

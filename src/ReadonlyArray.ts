@@ -2478,17 +2478,22 @@ export const getOrder: <A>(O: Order<A>) => Order<ReadonlyArray<A>> = order.array
  * @category do notation
  * @since 1.0.0
  */
-export const bindTo: <N extends string>(
-  name: N
-) => <A>(self: ReadonlyArray<A>) => Array<{ [K in N]: A }> = invariant
-  .bindTo(Invariant) as any
+export const bindTo: {
+  <N extends string>(name: N): <A>(self: ReadonlyArray<A>) => Array<{ [K in N]: A }>
+  <A, N extends string>(self: ReadonlyArray<A>, name: N): Array<{ [K in N]: A }>
+} = invariant.bindTo(Invariant) as any
 
-const let_: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => B
-) => (
-  self: ReadonlyArray<A>
-) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = covariant.let(Covariant) as any
+const let_: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): (self: ReadonlyArray<A>) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: ReadonlyArray<A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => B
+  ): Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = covariant.let(Covariant) as any
 
 export {
   /**
@@ -2508,12 +2513,17 @@ export const Do: ReadonlyArray<{}> = of_.Do(Of)
  * @category do notation
  * @since 1.0.0
  */
-export const bind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  f: (a: A) => ReadonlyArray<B>
-) => (
-  self: ReadonlyArray<A>
-) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = chainable.bind(Chainable) as any
+export const bind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    f: (a: A) => ReadonlyArray<B>
+  ): (self: ReadonlyArray<A>) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: ReadonlyArray<A>,
+    name: Exclude<N, keyof A>,
+    f: (a: A) => ReadonlyArray<B>
+  ): Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = chainable.bind(Chainable) as any
 
 /**
  * A variant of `bind` that sequentially ignores the scope.
@@ -2521,11 +2531,14 @@ export const bind: <N extends string, A extends object, B>(
  * @category do notation
  * @since 1.0.0
  */
-export const andThenBind: <N extends string, A extends object, B>(
-  name: Exclude<N, keyof A>,
-  that: ReadonlyArray<B>
-) => (
-  self: ReadonlyArray<A>
-) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }> = semiProduct.andThenBind(
-  SemiProduct
-) as any
+export const andThenBind: {
+  <N extends string, A extends object, B>(
+    name: Exclude<N, keyof A>,
+    that: ReadonlyArray<B>
+  ): (self: ReadonlyArray<A>) => Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+  <A extends object, N extends string, B>(
+    self: ReadonlyArray<A>,
+    name: Exclude<N, keyof A>,
+    that: ReadonlyArray<B>
+  ): Array<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
+} = semiProduct.andThenBind(SemiProduct) as any
