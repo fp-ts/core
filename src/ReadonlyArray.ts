@@ -1891,7 +1891,7 @@ export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = foldable.mak
  * @category folding
  * @since 1.0.0
  */
-export const combineMapWithIndex = <M>(Monoid: Monoid<M>): {
+export const combineMap = <M>(Monoid: Monoid<M>): {
   <A>(f: (a: A, i: number) => M): (self: Iterable<A>) => M
   <A>(self: Iterable<A>, f: (a: A, i: number) => M): M
 } =>
@@ -1905,35 +1905,7 @@ export const combineMapWithIndex = <M>(Monoid: Monoid<M>): {
  * @category folding
  * @since 1.0.0
  */
-export const combineMap = <M>(M: Monoid<M>): {
-  <A>(f: (a: A) => M): (self: Iterable<A>) => M
-  <A>(self: Iterable<A>, f: (a: A) => M): M
-} =>
-  dual(
-    2,
-    <A>(self: Iterable<A>, f: (a: A) => M): M =>
-      fromIterable(self).reduce((m, a) => M.combine(m, f(a)), M.empty)
-  )
-
-/**
- * @category folding
- * @since 1.0.0
- */
 export const combineMapNonEmpty = <S>(S: Semigroup<S>): {
-  <A>(f: (a: A) => S): (self: NonEmptyReadonlyArray<A>) => S
-  <A>(self: NonEmptyReadonlyArray<A>, f: (a: A) => S): S
-} =>
-  dual(
-    2,
-    <A>(self: NonEmptyReadonlyArray<A>, f: (a: A) => S): S =>
-      combineMapNonEmptyWithIndex(S)(self, f)
-  )
-
-/**
- * @category folding
- * @since 1.0.0
- */
-export const combineMapNonEmptyWithIndex = <S>(S: Semigroup<S>): {
   <A>(f: (a: A, i: number) => S): (self: NonEmptyReadonlyArray<A>) => S
   <A>(self: NonEmptyReadonlyArray<A>, f: (a: A, i: number) => S): S
 } =>
