@@ -325,7 +325,7 @@ Added in v1.0.0
 
 ## of
 
-Alias of `some`.
+Alias of {@link some}.
 
 **Signature**
 
@@ -422,7 +422,7 @@ Added in v1.0.0
 
 Converts a `Either` to an `Option` discarding the error.
 
-Alias of `fromEither`.
+Alias of {@link fromEither}.
 
 **Signature**
 

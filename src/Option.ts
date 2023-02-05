@@ -101,7 +101,7 @@ export const none = <A = never>(): Option<A> => option.none
 export const some: <A>(value: A) => Option<A> = option.some
 
 /**
- * Alias of `some`.
+ * Alias of {@link some}.
  *
  * @category constructors
  * @since 1.0.0
@@ -264,7 +264,7 @@ export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRig
 /**
  * Converts a `Either` to an `Option` discarding the error.
  *
- * Alias of `fromEither`.
+ * Alias of {@link fromEither}.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'

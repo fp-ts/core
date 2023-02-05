@@ -21,7 +21,7 @@ Added in v1.0.0
   - [andThenBind](#andthenbind)
   - [bindTo](#bindto)
 - [guards](#guards)
-  - [isBigInt](#isbigint)
+  - [isBigint](#isbigint)
   - [isBoolean](#isboolean)
   - [isNumber](#isnumber)
   - [isString](#isstring)
@@ -132,12 +132,12 @@ Added in v1.0.0
 
 # guards
 
-## isBigInt
+## isBigint
 
 **Signature**
 
 ```ts
-export declare const isBigInt: (u: unknown) => u is bigint
+export declare const isBigint: (u: unknown) => u is bigint
 ```
 
 Added in v1.0.0

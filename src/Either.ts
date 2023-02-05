@@ -92,7 +92,7 @@ export const right: <A>(a: A) => Either<never, A> = either.right
 export const left: <E>(e: E) => Either<E, never> = either.left
 
 /**
- * Alias of `right`.
+ * Alias of {@link right}.
  *
  * @category constructors
  * @since 1.0.0
@@ -178,7 +178,7 @@ export const toOption: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
 /**
  * Converts a `Either` to an `Option` discarding the error.
  *
- * Alias of `toOption`.
+ * Alias of {@link toOption}.
  *
  * @example
  * import * as O from '@fp-ts/core/Option'

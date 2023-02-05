@@ -17,7 +17,7 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
  * @category guards
  * @since 1.0.0
  */
-export const isBigint: (u: unknown) => u is bigint = predicate.isBigInt
+export const isBigint: (u: unknown) => u is bigint = predicate.isBigint
 
 /**
  * @category algebraic operations
