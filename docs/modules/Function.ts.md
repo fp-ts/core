@@ -20,7 +20,6 @@ Added in v1.0.0
   - [SK](#sk)
   - [absurd](#absurd)
   - [apply](#apply)
-  - [compose](#compose)
   - [constFalse](#constfalse)
   - [constNull](#constnull)
   - [constTrue](#consttrue)
@@ -91,7 +90,10 @@ Added in v1.0.0
 
 ## SK
 
-`SK` function (SKI combinator calculus).
+The SK combinator, also known as the "S-K combinator" or "S-combinator", is a fundamental combinator in the
+lambda calculus and the SKI combinator calculus.
+
+This function is useful for discarding the first argument passed to it and returning the second argument.
 
 **Signature**
 
@@ -99,9 +101,23 @@ Added in v1.0.0
 export declare const SK: <A, B>(_: A, b: B) => B
 ```
 
+**Example**
+
+```ts
+import { SK } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(SK(0, 'hello'), 'hello')
+```
+
 Added in v1.0.0
 
 ## absurd
+
+The `absurd` function is a stub for cases where a value of type `never` is encountered in your code,
+meaning that it should be impossible for this code to be executed.
+
+This function is particularly useful in functional programming, where it's often necessary to specify that certain cases are impossible.
+By calling `absurd`, you can ensure that the type system correctly reflects that a certain value should never occur.
 
 **Signature**
 
@@ -128,16 +144,6 @@ import { pipe, apply } from '@fp-ts/core/Function'
 import { increment } from '@fp-ts/core/Number'
 
 assert.deepStrictEqual(pipe(2, apply(increment)), 3)
-```
-
-Added in v1.0.0
-
-## compose
-
-**Signature**
-
-```ts
-export declare const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C
 ```
 
 Added in v1.0.0
@@ -204,15 +210,22 @@ Added in v1.0.0
 
 ## constant
 
+Creates a constant value that never changes.
+
+This is useful when you want to pass a value to a higher-order function (a function that takes another function as its argument)
+and want that inner function to always use the same value, no matter how many times it is called.
+
 **Signature**
 
 ```ts
-export declare const constant: <A>(a: A) => LazyArg<A>
+export declare const constant: <A>(value: A) => LazyArg<A>
 ```
 
 Added in v1.0.0
 
 ## dual
+
+Creates a function that is both data-last and data-first.
 
 **Signature**
 
@@ -230,7 +243,7 @@ Added in v1.0.0
 
 ## flip
 
-Flips the arguments of a curried function.
+Reverses the order of arguments for a curried function.
 
 **Signature**
 
@@ -606,10 +619,6 @@ import { pipe } from '@fp-ts/core/Function'
 const len = (s: string): number => s.length
 const double = (n: number): number => n * 2
 
-// without pipe
-assert.deepStrictEqual(double(len('aaa')), 6)
-
-// with pipe
 assert.deepStrictEqual(pipe('aaa', len, double), 6)
 ```
 
