@@ -23,20 +23,6 @@ export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  imap: <R, O, E, A, B>(
-    self: Kind<F, R, O, E, A>,
-    to: (a: A) => B,
-    from: (b: B) => A
-  ) => Kind<F, R, O, E, B>
-): Invariant<F> => ({
-  imap: dual(3, imap)
-})
-
-/**
  * Returns a default ternary `imap` composition.
  *
  * @since 1.0.0

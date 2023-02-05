@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [do notation](#do-notation)
   - [bindTo](#bindto)
 - [type class](#type-class)
@@ -23,20 +21,6 @@ Added in v1.0.0
   - [tupled](#tupled)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  imap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, to: (a: A) => B, from: (b: B) => A) => Kind<F, R, O, E, B>
-) => Invariant<F>
-```
-
-Added in v1.0.0
 
 # do notation
 

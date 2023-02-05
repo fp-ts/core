@@ -4,7 +4,7 @@
 import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
-import * as invariant from "@fp-ts/core/typeclass/Invariant"
+import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product from "@fp-ts/core/typeclass/Product"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
@@ -301,27 +301,24 @@ export const last = <A = never>(): Semigroup<A> =>
   )
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Invariant: invariant.Invariant<SemigroupTypeLambda> = invariant.make(<A, B>(
-  S: Semigroup<A>,
-  to: (a: A) => B,
-  from: (b: B) => A
-): Semigroup<B> =>
-  make(
-    (self, that) => to(S.combine(from(self), from(that))),
-    (self, collection) => to(S.combineMany(from(self), (fromIterable(collection)).map(from)))
-  )
-)
-
-/**
  * @since 1.0.0
  */
 export const imap: {
   <A, B>(to: (a: A) => B, from: (b: B) => A): (self: Semigroup<A>) => Semigroup<B>
   <A, B>(self: Semigroup<A>, to: (a: A) => B, from: (b: B) => A): Semigroup<B>
-} = Invariant.imap
+} = dual(3, <A, B>(S: Semigroup<A>, to: (a: A) => B, from: (b: B) => A): Semigroup<B> =>
+  make(
+    (self, that) => to(S.combine(from(self), from(that))),
+    (self, collection) => to(S.combineMany(from(self), (fromIterable(collection)).map(from)))
+  ))
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
+  imap
+}
 
 /**
  * @category instances
