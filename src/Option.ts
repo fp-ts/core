@@ -1220,6 +1220,24 @@ export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<
   .separate({ ...Covariant, ...Compactable })
 
 /**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const partitionMap: {
+  <A, B, C>(f: (a: A) => Either<B, C>): (self: Option<A>) => [Option<B>, Option<C>]
+  <A, B, C>(self: Option<A>, f: (a: A) => Either<B, C>): [Option<B>, Option<C>]
+} = dual(2, <A, B, C>(
+  self: Option<A>,
+  f: (a: A) => Either<B, C>
+): [Option<B>, Option<C>] => {
+  if (isNone(self)) {
+    return [none(), none()]
+  }
+  const e = f(self.value)
+  return either.isLeft(e) ? [some(e.left), none()] : [none(), some(e.right)]
+})
+
+/**
  * Maps over the value of an `Option` and filters out `None`s.
  *
  * Useful when in addition to filtering you also want to change the type of the `Option`.
@@ -1243,28 +1261,10 @@ export const filterMap: {
  * @category instances
  * @since 1.0.0
  */
-export const Filterable: filterable.Filterable<OptionTypeLambda> = filterable.make(
-  <A, B, C>(
-    self: Option<A>,
-    f: (a: A) => Either<B, C>
-  ): [Option<B>, Option<C>] => {
-    if (isNone(self)) {
-      return [none(), none()]
-    }
-    const e = f(self.value)
-    return either.isLeft(e) ? [some(e.left), none()] : [none(), some(e.right)]
-  },
+export const Filterable: filterable.Filterable<OptionTypeLambda> = {
+  partitionMap,
   filterMap
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const partitionMap: {
-  <A, B, C>(f: (a: A) => Either<B, C>): (self: Option<A>) => [Option<B>, Option<C>]
-  <A, B, C>(self: Option<A>, f: (a: A) => Either<B, C>): [Option<B>, Option<C>]
-} = Filterable.partitionMap
+}
 
 /**
  * Filters an `Option` using a predicate. If the predicate is not satisfied or the `Option` is `None` returns `None`.

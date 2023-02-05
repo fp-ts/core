@@ -19,7 +19,7 @@ import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import type { Coproduct } from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as filterable from "@fp-ts/core/typeclass/Filterable"
+import type * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -1587,10 +1587,10 @@ export const partitionMap: {
  * @category instances
  * @since 1.0.0
  */
-export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = filterable.make(
+export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
   partitionMap,
   filterMap
-)
+}
 
 /**
  * @category filtering
@@ -1622,8 +1622,16 @@ export const filter: {
   <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): Array<B>
 } = dual(
   2,
-  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): Array<B> =>
-    filterMap(self, (b, i) => (predicate(b, i) ? O.some(b) : O.none()))
+  <B extends A, A = B>(self: Iterable<B>, predicate: (a: A, i: number) => boolean): Array<B> => {
+    const as = fromIterable(self)
+    const out: Array<B> = []
+    for (let i = 0; i < as.length; i++) {
+      if (predicate(as[i], i)) {
+        out.push(as[i])
+      }
+    }
+    return out
+  }
 )
 
 /**
@@ -1650,8 +1658,19 @@ export const partition: {
   <B extends A, A = B>(
     self: Iterable<B>,
     predicate: (a: A, i: number) => boolean
-  ): [Array<B>, Array<B>] =>
-    partitionMap(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b)))
+  ): [Array<B>, Array<B>] => {
+    const left: Array<B> = []
+    const right: Array<B> = []
+    const as = fromIterable(self)
+    for (let i = 0; i < as.length; i++) {
+      if (predicate(as[i], i)) {
+        right.push(as[i])
+      } else {
+        left.push(as[i])
+      }
+    }
+    return [left, right]
+  }
 )
 
 /**
