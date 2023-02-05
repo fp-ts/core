@@ -7,7 +7,7 @@ import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
+import type * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
 import * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
@@ -81,27 +81,31 @@ export const Of: of_.Of<IdentityTypeLambda> = {
  */
 export const Pointed: pointed.Pointed<IdentityTypeLambda> = {
   of: Of.of,
-  imap: Invariant.imap,
-  map: Covariant.map
+  imap,
+  map
+}
+
+const flatMap: {
+  <A, B>(f: (a: A) => B): (self: Identity<A>) => Identity<B>
+  <A, B>(self: Identity<A>, f: (a: A) => B): Identity<B>
+} = dual(2, <A, B>(self: Identity<A>, f: (a: A) => B): Identity<B> => f(self))
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const FlatMap: flatMap_.FlatMap<IdentityTypeLambda> = {
+  flatMap
 }
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const FlatMap: flatMap_.FlatMap<IdentityTypeLambda> = flatMap_.make(<A, B>(
-  self: Identity<A>,
-  f: (a: A) => Identity<B>
-): Identity<B> => f(self))
-
-/**
- * @category instances
- * @since 1.0.0
- */
 export const Chainable: chainable.Chainable<IdentityTypeLambda> = {
-  imap: Invariant.imap,
-  map: Covariant.map,
-  flatMap: FlatMap.flatMap
+  imap,
+  map,
+  flatMap
 }
 
 /**
@@ -109,10 +113,10 @@ export const Chainable: chainable.Chainable<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const Monad: monad.Monad<IdentityTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of: Of.of,
-  map: Covariant.map,
-  flatMap: FlatMap.flatMap
+  map,
+  flatMap
 }
 
 /**
@@ -131,7 +135,7 @@ export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = semiProd
  */
 export const Product: product_.Product<IdentityTypeLambda> = {
   of: Of.of,
-  imap: Invariant.imap,
+  imap,
   product: SemiProduct.product,
   productMany: SemiProduct.productMany,
   productAll: readonlyArray.fromIterable
@@ -142,8 +146,8 @@ export const Product: product_.Product<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda> = {
-  imap: Invariant.imap,
-  map: Covariant.map,
+  imap,
+  map,
   product: SemiProduct.product,
   productMany: SemiProduct.productMany
 }
@@ -153,9 +157,9 @@ export const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<IdentityTypeLambda> = {
-  imap: Invariant.imap,
+  imap,
   of: Of.of,
-  map: Covariant.map,
+  map,
   product: SemiProduct.product,
   productMany: SemiProduct.productMany,
   productAll: Product.productAll
@@ -168,7 +172,7 @@ export const Applicative: applicative.Applicative<IdentityTypeLambda> = {
 export const getSemiCoproduct = <A>(
   S: Semigroup<A>
 ): semiCoproduct.SemiCoproduct<IdentityTypeLambdaFix<A>> => ({
-  imap: Invariant.imap,
+  imap,
   coproduct: S.combine,
   coproductMany: S.combineMany
 })
@@ -181,7 +185,7 @@ export const getSemiAlternative = <A>(
   S: Semigroup<A>
 ): semiAlternative.SemiAlternative<IdentityTypeLambdaFix<A>> => ({
   ...getSemiCoproduct(S),
-  map: Covariant.map
+  map
 })
 
 /**
