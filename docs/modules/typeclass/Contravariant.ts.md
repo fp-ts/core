@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [type class](#type-class)
   - [Contravariant (interface)](#contravariant-interface)
 - [utils](#utils)
@@ -21,20 +19,6 @@ Added in v1.0.0
   - [imap](#imap)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  contramap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (b: B) => A) => Kind<F, R, O, E, B>
-) => Contravariant<F>
-```
-
-Added in v1.0.0
 
 # type class
 

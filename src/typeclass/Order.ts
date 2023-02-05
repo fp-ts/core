@@ -175,24 +175,27 @@ const empty: Order<unknown> = make(() => 0)
 export const getMonoid = <A>(): Monoid<Order<A>> => monoid.fromSemigroup(getSemigroup<A>(), empty)
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = contravariant.make(<
-  A,
-  B
->(self: Order<A>, f: (b: B) => A): Order<B> => make((b1, b2) => self.compare(f(b1), f(b2))))
-
-/**
  * @category combinators
  * @since 1.0.0
  */
 export const contramap: {
   <B, A>(f: (b: B) => A): (self: Order<A>) => Order<B>
   <A, B>(self: Order<A>, f: (b: B) => A): Order<B>
-} = Contravariant.contramap
+} = dual(
+  2,
+  <A, B>(self: Order<A>, f: (b: B) => A): Order<B> => make((b1, b2) => self.compare(f(b1), f(b2)))
+)
 
-const imap = Contravariant.imap
+const imap = contravariant.imap<OrderTypeLambda>(contramap)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Contravariant: contravariant.Contravariant<OrderTypeLambda> = {
+  imap,
+  contramap
+}
 
 /**
  * @category instances

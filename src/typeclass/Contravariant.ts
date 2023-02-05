@@ -17,20 +17,6 @@ export interface Contravariant<F extends TypeLambda> extends Invariant<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  contramap: <R, O, E, A, B>(
-    self: Kind<F, R, O, E, A>,
-    f: (b: B) => A
-  ) => Kind<F, R, O, E, B>
-): Contravariant<F> => ({
-  contramap: dual(2, contramap),
-  imap: imap(contramap)
-})
-
-/**
  * Composing two contravariant functors yields a Covariant functor.
  *
  * Returns a default binary `map` composition.
