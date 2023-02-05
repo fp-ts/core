@@ -88,27 +88,24 @@ export const compose: {
 )
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = contravariant.make(<
-  A,
-  B
->(
-  self: Predicate<A>,
-  f: (b: B) => A
-): Predicate<B> => (b) => self(f(b)))
-
-/**
  * @category combinators
  * @since 1.0.0
  */
 export const contramap: {
   <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
   <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
-} = Contravariant.contramap
+} = dual(2, <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B> => (b) => self(f(b)))
 
-const imap = Contravariant.imap
+const imap = contravariant.imap<PredicateTypeLambda>(contramap)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Contravariant: contravariant.Contravariant<PredicateTypeLambda> = {
+  imap,
+  contramap
+}
 
 /**
  * @category instances
