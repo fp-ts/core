@@ -574,15 +574,6 @@ export const getOrThrow = <A>(self: Option<A>): A => {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category mapping
- * @since 1.0.0
- */
-export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(<A, B>(
-  self: Option<A>,
-  f: (a: A) => B
-): Option<B> => isNone(self) ? none() : some(f(self.value)))
-
-/**
  * Maps the `Some` side of an `Option` value to a new `Option` value.
  *
  * @param self - An `Option` to map
@@ -594,9 +585,21 @@ export const Covariant: covariant.Covariant<OptionTypeLambda> = covariant.make(<
 export const map: {
   <A, B>(f: (a: A) => B): (self: Option<A>) => Option<B>
   <A, B>(self: Option<A>, f: (a: A) => B): Option<B>
-} = Covariant.map
+} = dual(
+  2,
+  <A, B>(self: Option<A>, f: (a: A) => B): Option<B> => isNone(self) ? none() : some(f(self.value))
+)
 
-const imap = Covariant.imap
+const imap = covariant.imap<OptionTypeLambda>(map)
+
+/**
+ * @category mapping
+ * @since 1.0.0
+ */
+export const Covariant: covariant.Covariant<OptionTypeLambda> = {
+  imap,
+  map
+}
 
 /**
  * @category mapping

@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [do notation](#do-notation)
   - [let](#let)
 - [mapping](#mapping)
@@ -27,20 +25,6 @@ Added in v1.0.0
   - [mapComposition](#mapcomposition)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  map: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B) => Kind<F, R, O, E, B>
-) => Covariant<F>
-```
-
-Added in v1.0.0
 
 # do notation
 
