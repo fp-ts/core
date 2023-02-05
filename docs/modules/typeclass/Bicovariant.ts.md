@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [type class](#type-class)
   - [Bicovariant (interface)](#bicovariant-interface)
 - [utils](#utils)
@@ -22,20 +20,6 @@ Added in v1.0.0
   - [mapLeft](#mapleft)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  bimap: <R, O, E1, A, E2, B>(self: Kind<F, R, O, E1, A>, f: (e: E1) => E2, g: (a: A) => B) => Kind<F, R, O, E2, B>
-) => Bicovariant<F>
-```
-
-Added in v1.0.0
 
 # type class
 

@@ -24,20 +24,6 @@ export interface Bicovariant<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  bimap: <R, O, E1, A, E2, B>(
-    self: Kind<F, R, O, E1, A>,
-    f: (e: E1) => E2,
-    g: (a: A) => B
-  ) => Kind<F, R, O, E2, B>
-): Bicovariant<F> => ({
-  bimap: dual(3, bimap)
-})
-
-/**
  * Returns a default ternary `bimap` composition.
  *
  * @since 1.0.0

@@ -628,29 +628,29 @@ export const inspectBoth: {
 })
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = bicovariant.make((
-  self,
-  f,
-  g
-) =>
-  isLeft(self) ?
-    left(f(self.left)) :
-    isRight(self) ?
-    right(g(self.right)) :
-    both(f(self.left), g(self.right))
-)
-
-/**
  * @category mapping
  * @since 1.0.0
  */
 export const bimap: {
   <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: These<E1, A>) => These<E2, B>
   <E1, A, E2, B>(self: These<E1, A>, f: (e: E1) => E2, g: (a: A) => B): These<E2, B>
-} = Bicovariant.bimap
+} = dual(
+  3,
+  <E1, A, E2, B>(self: These<E1, A>, f: (e: E1) => E2, g: (a: A) => B): These<E2, B> =>
+    isLeft(self) ?
+      left(f(self.left)) :
+      isRight(self) ?
+      right(g(self.right)) :
+      both(f(self.left), g(self.right))
+)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Bicovariant: bicovariant.Bicovariant<TheseTypeLambda> = {
+  bimap
+}
 
 /**
  * Maps the `Left` side of an `These` value to a new `These` value.
