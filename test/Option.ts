@@ -293,6 +293,13 @@ describe.concurrent("Option", () => {
     assertAlt(_.none(), _.none(), _.none())
   })
 
+  it("partitionMap", () => {
+    const f = (n: number) => (p(n) ? E.right(n + 1) : E.left(n - 1))
+    assert.deepStrictEqual(pipe(_.none(), _.partitionMap(f)), [_.none(), _.none()])
+    assert.deepStrictEqual(pipe(_.some(1), _.partitionMap(f)), [_.some(0), _.none()])
+    assert.deepStrictEqual(pipe(_.some(3), _.partitionMap(f)), [_.none(), _.some(4)])
+  })
+
   it("filterMap", () => {
     const f = (n: number) => (p(n) ? _.some(n + 1) : _.none())
     Util.deepStrictEqual(pipe(_.none(), _.filterMap(f)), _.none())

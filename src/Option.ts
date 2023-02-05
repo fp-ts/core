@@ -1243,9 +1243,28 @@ export const filterMap: {
  * @category instances
  * @since 1.0.0
  */
-export const Filterable: filterable.Filterable<OptionTypeLambda> = {
+export const Filterable: filterable.Filterable<OptionTypeLambda> = filterable.make(
+  <A, B, C>(
+    self: Option<A>,
+    f: (a: A) => Either<B, C>
+  ): [Option<B>, Option<C>] => {
+    if (isNone(self)) {
+      return [none(), none()]
+    }
+    const e = f(self.value)
+    return either.isLeft(e) ? [some(e.left), none()] : [none(), some(e.right)]
+  },
   filterMap
-}
+)
+
+/**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const partitionMap: {
+  <A, B, C>(f: (a: A) => Either<B, C>): (self: Option<A>) => [Option<B>, Option<C>]
+  <A, B, C>(self: Option<A>, f: (a: A) => Either<B, C>): [Option<B>, Option<C>]
+} = Filterable.partitionMap
 
 /**
  * Filters an `Option` using a predicate. If the predicate is not satisfied or the `Option` is `None` returns `None`.

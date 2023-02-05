@@ -1559,10 +1559,38 @@ export const filterMap: {
 )
 
 /**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const partitionMap: {
+  <A, B, C>(f: (a: A, i: number) => Either<B, C>): (self: Iterable<A>) => [Array<B>, Array<C>]
+  <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [Array<B>, Array<C>]
+} = dual(
+  2,
+  <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [Array<B>, Array<C>] => {
+    const left: Array<B> = []
+    const right: Array<C> = []
+    const as = fromIterable(self)
+    for (let i = 0; i < as.length; i++) {
+      const e = f(as[i], i)
+      if (E.isLeft(e)) {
+        left.push(e.left)
+      } else {
+        right.push(e.right)
+      }
+    }
+    return [left, right]
+  }
+)
+
+/**
  * @category instances
  * @since 1.0.0
  */
-export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = filterable.make(filterMap)
+export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = filterable.make(
+  partitionMap,
+  filterMap
+)
 
 /**
  * @category filtering
@@ -1624,31 +1652,6 @@ export const partition: {
     predicate: (a: A, i: number) => boolean
   ): [Array<B>, Array<B>] =>
     partitionMap(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b)))
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const partitionMap: {
-  <A, B, C>(f: (a: A, i: number) => Either<B, C>): (self: Iterable<A>) => [Array<B>, Array<C>]
-  <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [Array<B>, Array<C>]
-} = dual(
-  2,
-  <A, B, C>(self: Iterable<A>, f: (a: A, i: number) => Either<B, C>): [Array<B>, Array<C>] => {
-    const left: Array<B> = []
-    const right: Array<C> = []
-    const as = fromIterable(self)
-    for (let i = 0; i < as.length; i++) {
-      const e = f(as[i], i)
-      if (E.isLeft(e)) {
-        left.push(e.left)
-      } else {
-        right.push(e.right)
-      }
-    }
-    return [left, right]
-  }
 )
 
 /**

@@ -269,13 +269,14 @@ Extends:
 
 `Filterable<F>` allows you to `map` and filter out elements simultaneously.
 
-| Name                 | Given                       | To             |
-| -------------------- | --------------------------- | -------------- |
-| **filterMap**        | `F<A>`, `A => Option<B>`    | `F<B>`         |
-| filterMapComposition | `F<G<A>>`, `A => Option<B>` | `F<G<B>>`      |
-| filter               | `F<A>`, `A => boolean`      | `F<A>`         |
-| partitionMap         | `F<A>`, `A => Either<B, C>` | `[F<B>, F<C>]` |
-| partition            | `F<A>`, `A => boolean`      | `[F<A>, F<A>]` |
+| Name                    | Given                          | To                   |
+| ----------------------- | ------------------------------ | -------------------- |
+| **partitionMap**        | `F<A>`, `A => Either<B, C>`    | `[F<B>, F<C>]`       |
+| **filterMap**           | `F<A>`, `A => Option<B>`       | `F<B>`               |
+| filter                  | `F<A>`, `A => boolean`         | `F<A>`               |
+| partition               | `F<A>`, `A => boolean`         | `[F<A>, F<A>]`       |
+| partitionMapComposition | `F<G<A>>`, `A => Either<B, C>` | `[F<G<B>>, F<G<C>>]` |
+| filterMapComposition    | `F<G<A>>`, `A => Option<B>`    | `F<G<B>>`            |
 
 ### FlatMap
 
