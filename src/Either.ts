@@ -547,23 +547,6 @@ export const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda> 
 }
 
 /**
- * Semigroup returning the left-most `Left` value. If both operands are `Right`s then the inner values
- * are concatenated using the provided `Semigroup`.
- *
- * | x        | y        | x |> combine(y)        |
- * | ---------| ---------| -----------------------|
- * | left(a)  | left(b)  | left(a)                |
- * | left(a)  | right(2) | left(a)                |
- * | right(1) | left(b)  | left(b)                |
- * | right(1) | right(2) | right(1 |> combine(2)) |
- *
- * @category combining
- * @since 1.0.0
- */
-export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<E, A>> =
-  semiApplicative.getSemigroup(SemiApplicative)
-
-/**
  * Lifts a binary function into `Either`.
  *
  * @param f - The function to lift.
@@ -614,10 +597,30 @@ export const Applicative: applicative.Applicative<EitherTypeLambda> = {
 }
 
 /**
- * Monoid returning the left-most `Left` value. If both operands are `Right`s then the inner values
- * are concatenated using the provided `Monoid`.
+ * `Semigroup` returning the left-most `Left` value. If both operands are `Right`s then the inner values
+ * are combined using the provided `Semigroup`.
  *
- * The `empty` value is `right(M.empty)`.
+ * ```
+ * | self       | that       | combine(self, that)     |
+ * | ---------- | ---------- | ----------------------- |
+ * | left(e1)   | left(e2)   | left(e1)                |
+ * | left(e1)   | right(a2)  | left(e1)                |
+ * | right(a1)  | left(e2)   | left(e2)                |
+ * | right(a1)  | right(a2)  | right(combine(a1, a2))  |
+ * ```
+ *
+ * @category combining
+ * @since 1.0.0
+ */
+export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<E, A>> =
+  semiApplicative.getSemigroup(SemiApplicative)
+
+/**
+ * `Monoid` returning the left-most `Left` value. If both operands are `Right`s then the inner values
+ * are combined using the provided `Monoid`.
+ *
+ * - `combine` is provided by {@link getFirstLeftSemigroup}.
+ * - `empty` is `right(M.empty)`
  *
  * @category combining
  * @since 1.0.0
@@ -658,12 +661,14 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = semi
 /**
  * Semigroup returning the left-most `Right` value.
  *
- * | x        | y        | x |> combine(y) |
- * | ---------| ---------| ----------------|
- * | left(a)  | left(b)  | left(b)         |
- * | left(a)  | right(2) | right(2)        |
- * | right(1) | left(b)  | right(1)        |
- * | right(1) | right(2) | right(1)        |
+ * ```
+ * | self       | that       | combine(self, that) |
+ * | ---------- | ---------- | ------------------- |
+ * | left(e1)   | left(e2)   | left(e2)            |
+ * | left(e1)   | right(a2)  | right(a2)           |
+ * | right(a1)  | left(e2)   | right(a1)           |
+ * | right(a1)  | right(a2)  | right(a1)           |
+ * ```
  *
  * @category combining
  * @since 1.0.0

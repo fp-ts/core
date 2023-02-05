@@ -53,6 +53,8 @@ export const bimapComposition = <F extends TypeLambda, G extends TypeLambda>(
   ): Kind<F, FR, FO, FE, Kind<G, GR, GO, E2, B>> => CovariantF.map(self, BicovariantG.bimap(f, g))
 
 /**
+ * Returns a default `mapLeft` implementation.
+ *
  * @since 1.0.0
  */
 export const mapLeft = <F extends TypeLambda>(

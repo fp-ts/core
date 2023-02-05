@@ -3,6 +3,7 @@
  *
  * @since 1.0.0
  */
+
 import type { Either } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import { dual, identity } from "@fp-ts/core/Function"
@@ -1539,25 +1540,6 @@ export const Chainable: chainable.Chainable<ReadonlyArrayTypeLambda> = {
  * @category filtering
  * @since 1.0.0
  */
-export const separate = <A, B>(
-  self: ReadonlyArray<Either<A, B>>
-): [Array<A>, Array<B>] => {
-  const left: Array<A> = []
-  const right: Array<B> = []
-  for (const e of self) {
-    if (E.isLeft(e)) {
-      left.push(e.left)
-    } else {
-      right.push(e.right)
-    }
-  }
-  return [left, right]
-}
-
-/**
- * @category filtering
- * @since 1.0.0
- */
 export const filterMap: {
   <A, B>(f: (a: A, i: number) => Option<B>): (self: Iterable<A>) => Array<B>
   <A, B>(self: Iterable<A>, f: (a: A, i: number) => Option<B>): Array<B>
@@ -1670,6 +1652,14 @@ export const partitionMap: {
 )
 
 /**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const separate: <A, B>(self: Iterable<Either<A, B>>) => [Array<A>, Array<B>] = partitionMap(
+  identity
+)
+
+/**
  * @category traversing
  * @since 1.0.0
  */
@@ -1711,22 +1701,22 @@ export const traverse = <F extends TypeLambda>(F: applicative.Applicative<F>): {
   ): Kind<F, R, O, E, Array<B>> => F.productAll(fromIterable(self).map(f)))
 
 /**
+ * @category traversing
+ * @since 1.0.0
+ */
+export const sequence = <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+): <R, O, E, A>(
+  self: ReadonlyArray<Kind<F, R, O, E, A>>
+) => Kind<F, R, O, E, Array<A>> => traverse(F)(identity)
+
+/**
  * @category instances
  * @since 1.0.0
  */
 export const Traversable: traversable.Traversable<ReadonlyArrayTypeLambda> = {
   traverse: traverse as any
 }
-
-/**
- * @category traversing
- * @since 1.0.0
- */
-export const sequence: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => <R, O, E, A>(
-  self: ReadonlyArray<Kind<F, R, O, E, A>>
-) => Kind<F, R, O, E, Array<A>> = traversable.sequence(Traversable) as any
 
 /**
  * @category traversing
@@ -1956,10 +1946,8 @@ export const coproductMapKind: <G extends TypeLambda>(
 export const TraversableFilterable: traversableFilterable.TraversableFilterable<
   ReadonlyArrayTypeLambda
 > = traversableFilterable.make(
-  traversableFilterable
-    .traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable }),
-  traversableFilterable
-    .traverseFilterMap({ ...Traversable, ...Compactable })
+  traversableFilterable.traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable }),
+  traversableFilterable.traverseFilterMap({ ...Traversable, ...Compactable })
 )
 
 /**

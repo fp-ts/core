@@ -210,10 +210,11 @@ Added in v1.0.0
 
 ## getFirstLeftMonoid
 
-Monoid returning the left-most `Left` value. If both operands are `Right`s then the inner values
-are concatenated using the provided `Monoid`.
+`Monoid` returning the left-most `Left` value. If both operands are `Right`s then the inner values
+are combined using the provided `Monoid`.
 
-The `empty` value is `right(M.empty)`.
+- `combine` is provided by {@link getFirstLeftSemigroup}.
+- `empty` is `right(M.empty)`
 
 **Signature**
 
@@ -225,15 +226,17 @@ Added in v1.0.0
 
 ## getFirstLeftSemigroup
 
-Semigroup returning the left-most `Left` value. If both operands are `Right`s then the inner values
-are concatenated using the provided `Semigroup`.
+`Semigroup` returning the left-most `Left` value. If both operands are `Right`s then the inner values
+are combined using the provided `Semigroup`.
 
-| x        | y        | x       | > combine(y)  |
-| -------- | -------- | ------- | ------------- |
-| left(a)  | left(b)  | left(a) |
-| left(a)  | right(2) | left(a) |
-| right(1) | left(b)  | left(b) |
-| right(1) | right(2) | right(1 | > combine(2)) |
+```
+| self       | that       | combine(self, that)     |
+| ---------- | ---------- | ----------------------- |
+| left(e1)   | left(e2)   | left(e1)                |
+| left(e1)   | right(a2)  | left(e1)                |
+| right(a1)  | left(e2)   | left(e2)                |
+| right(a1)  | right(a2)  | right(combine(a1, a2))  |
+```
 
 **Signature**
 
@@ -247,12 +250,14 @@ Added in v1.0.0
 
 Semigroup returning the left-most `Right` value.
 
-| x        | y        | x        | > combine(y) |
-| -------- | -------- | -------- | ------------ |
-| left(a)  | left(b)  | left(b)  |
-| left(a)  | right(2) | right(2) |
-| right(1) | left(b)  | right(1) |
-| right(1) | right(2) | right(1) |
+```
+| self       | that       | combine(self, that) |
+| ---------- | ---------- | ------------------- |
+| left(e1)   | left(e2)   | left(e2)            |
+| left(e1)   | right(a2)  | right(a2)           |
+| right(a1)  | left(e2)   | right(a1)           |
+| right(a1)  | right(a2)  | right(a1)           |
+```
 
 **Signature**
 
