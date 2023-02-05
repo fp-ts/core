@@ -33,24 +33,6 @@ export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  partitionMap: <R, O, E, A, B, C>(
-    self: Kind<F, R, O, E, A>,
-    f: (a: A) => Either<B, C>
-  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>],
-  filterMap: <R, O, E, A, B>(
-    self: Kind<F, R, O, E, A>,
-    f: (a: A) => Option<B>
-  ) => Kind<F, R, O, E, B>
-): Filterable<F> => ({
-  partitionMap: dual(2, partitionMap),
-  filterMap: dual(2, filterMap)
-})
-
-/**
  * Returns a default binary `partitionMap` composition.
  *
  * @since 1.0.0

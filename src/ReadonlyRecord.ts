@@ -13,7 +13,7 @@ import * as O from "@fp-ts/core/Option"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
-import * as filterable from "@fp-ts/core/typeclass/Filterable"
+import type * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -447,7 +447,15 @@ export const filter: {
   <B extends A, A = B>(
     self: ReadonlyRecord<B>,
     predicate: (a: A, key: string) => boolean
-  ): Record<string, B> => filterMap(self, (b, key) => (predicate(b, key) ? O.some(b) : O.none()))
+  ): Record<string, B> => {
+    const out: Record<string, B> = {}
+    for (const key of Object.keys(self)) {
+      if (predicate(self[key], key)) {
+        out[key] = self[key]
+      }
+    }
+    return out
+  }
 )
 
 /**
@@ -575,8 +583,18 @@ export const partition: {
   <B extends A, A = B>(
     self: ReadonlyRecord<B>,
     predicate: (a: A, key: string) => boolean
-  ): [Record<string, B>, Record<string, B>] =>
-    partitionMap(self, (b, i) => (predicate(b, i) ? E.right(b) : E.left(b)))
+  ): [Record<string, B>, Record<string, B>] => {
+    const left: Record<string, B> = {}
+    const right: Record<string, B> = {}
+    for (const key of Object.keys(self)) {
+      if (predicate(self[key], key)) {
+        right[key] = self[key]
+      } else {
+        left[key] = self[key]
+      }
+    }
+    return [left, right]
+  }
 )
 
 /**
@@ -697,10 +715,10 @@ export const as: {
  * @category instances
  * @since 1.0.0
  */
-export const Filterable: filterable.Filterable<ReadonlyRecordTypeLambda> = filterable.make(
+export const Filterable: filterable.Filterable<ReadonlyRecordTypeLambda> = {
   partitionMap,
   filterMap
-)
+}
 
 /**
  * @category instances

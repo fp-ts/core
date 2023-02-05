@@ -14,8 +14,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [models](#models)
   - [Filterable (interface)](#filterable-interface)
 - [utils](#utils)
@@ -25,24 +23,6 @@ Added in v1.0.0
   - [partitionMapComposition](#partitionmapcomposition)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  partitionMap: <R, O, E, A, B, C>(
-    self: Kind<F, R, O, E, A>,
-    f: (a: A) => Either<B, C>
-  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>],
-  filterMap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => Option<B>) => Kind<F, R, O, E, B>
-) => Filterable<F>
-```
-
-Added in v1.0.0
 
 # models
 
