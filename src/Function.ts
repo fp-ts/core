@@ -16,10 +16,26 @@ export interface FunctionTypeLambda extends TypeLambda {
 }
 
 /**
+ * Creates a function that is both data-last and data-first.
+ *
  * @since 1.0.0
  */
-export const compose: <B, C>(bc: (b: B) => C) => <A>(ab: (a: A) => B) => (a: A) => C = (bc) =>
-  (ab) => flow(ab, bc)
+export const dual = <
+  DataLast extends (...args: Array<any>) => any,
+  DataFirst extends (...args: Array<any>) => any
+>(
+  dataFirstArity: Parameters<DataFirst>["length"],
+  body: DataFirst
+): DataLast & DataFirst => {
+  // @ts-expect-error
+  return function() {
+    if (arguments.length >= dataFirstArity) {
+      // @ts-expect-error
+      return body.apply(this, arguments)
+    }
+    return ((self: any) => body(self, ...arguments)) as any
+  }
+}
 
 /**
  * Apply a function to a given value.
@@ -66,9 +82,16 @@ export const identity = <A>(a: A): A => a
 export const unsafeCoerce: <A, B>(a: A) => B = identity as any
 
 /**
+ * Creates a constant value that never changes.
+ *
+ * This is useful when you want to pass a value to a higher-order function (a function that takes another function as its argument)
+ * and want that inner function to always use the same value, no matter how many times it is called.
+ *
+ * @param value - The constant value to be returned
+ *
  * @since 1.0.0
  */
-export const constant = <A>(a: A): LazyArg<A> => () => a
+export const constant = <A>(value: A): LazyArg<A> => () => value
 
 /**
  * A thunk that returns always `true`.
@@ -106,7 +129,9 @@ export const constUndefined: LazyArg<undefined> = constant(undefined)
 export const constVoid: LazyArg<void> = constUndefined
 
 /**
- * Flips the arguments of a curried function.
+ * Reverses the order of arguments for a curried function.
+ *
+ * @param f -A curried function that takes multiple arguments.
  *
  * @example
  * import { flip } from '@fp-ts/core/Function'
@@ -249,6 +274,12 @@ export function flow(
 }
 
 /**
+ * The `absurd` function is a stub for cases where a value of type `never` is encountered in your code,
+ * meaning that it should be impossible for this code to be executed.
+ *
+ * This function is particularly useful in functional programming, where it's often necessary to specify that certain cases are impossible.
+ * By calling `absurd`, you can ensure that the type system correctly reflects that a certain value should never occur.
+ *
  * @since 1.0.0
  */
 export const absurd = <A>(_: never): A => {
@@ -287,10 +318,6 @@ export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (
  * const len = (s: string): number => s.length
  * const double = (n: number): number => n * 2
  *
- * // without pipe
- * assert.deepStrictEqual(double(len('aaa')), 6)
- *
- * // with pipe
  * assert.deepStrictEqual(pipe('aaa', len, double), 6)
  *
  * @see {@link flow}
@@ -585,28 +612,19 @@ export function pipe(
 export const hole: <T>() => T = absurd as any
 
 /**
- * `SK` function (SKI combinator calculus).
+ * The SK combinator, also known as the "S-K combinator" or "S-combinator", is a fundamental combinator in the
+ * lambda calculus and the SKI combinator calculus.
+ *
+ * This function is useful for discarding the first argument passed to it and returning the second argument.
+ *
+ * @param _ - The first argument to be discarded.
+ * @param b - The second argument to be returned.
+ *
+ * @example
+ * import { SK } from '@fp-ts/core/Function';
+ *
+ * assert.deepStrictEqual(SK(0, 'hello'), 'hello')
  *
  * @since 1.0.0
  */
 export const SK = <A, B>(_: A, b: B): B => b
-
-/**
- * @since 1.0.0
- */
-export const dual = <
-  DataLast extends (...args: Array<any>) => any,
-  DataFirst extends (...args: Array<any>) => any
->(
-  dataFirstArity: Parameters<DataFirst>["length"],
-  body: DataFirst
-): DataLast & DataFirst => {
-  // @ts-expect-error
-  return function() {
-    if (arguments.length >= dataFirstArity) {
-      // @ts-expect-error
-      return body.apply(this, arguments)
-    }
-    return ((self: any) => body(self, ...arguments)) as any
-  }
-}

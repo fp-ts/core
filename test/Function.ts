@@ -19,10 +19,6 @@ describe.concurrent("Function", () => {
     deepStrictEqual(_.flip(g)(2)(2, 1), 5)
   })
 
-  it("compose", () => {
-    deepStrictEqual(_.pipe(String.length, _.compose(double))("aaa"), 6)
-  })
-
   it("unsafeCoerce", () => {
     deepStrictEqual(_.unsafeCoerce, _.identity)
   })
