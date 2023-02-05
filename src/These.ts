@@ -86,7 +86,7 @@ export const left: <E>(left: E) => These<E, never> = E.left
 export const right: <A>(right: A) => These<never, A> = E.right
 
 /**
- * Alias of `right`.
+ * Alias of {@link right}.
  *
  * @category constructors
  * @since 1.0.0

@@ -350,7 +350,7 @@ Added in v1.0.0
 
 ## of
 
-Alias of `right`.
+Alias of {@link right}.
 
 **Signature**
 

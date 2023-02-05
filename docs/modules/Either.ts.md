@@ -292,7 +292,7 @@ Added in v1.0.0
 
 ## of
 
-Alias of `right`.
+Alias of {@link right}.
 
 **Signature**
 
@@ -385,7 +385,7 @@ Added in v1.0.0
 
 Converts a `Either` to an `Option` discarding the error.
 
-Alias of `toOption`.
+Alias of {@link toOption}.
 
 **Signature**
 

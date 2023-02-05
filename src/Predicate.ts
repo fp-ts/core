@@ -61,7 +61,7 @@ export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolea
  * @category guards
  * @since 1.0.0
  */
-export const isBigInt = (u: unknown): u is bigint => typeof u === "bigint"
+export const isBigint = (u: unknown): u is bigint => typeof u === "bigint"
 
 /**
  * @category guards
