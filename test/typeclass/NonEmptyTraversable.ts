@@ -21,12 +21,16 @@ export interface NonEmptyReadonlyArrayTypeLambda extends TypeLambda {
   readonly type: RA.NonEmptyReadonlyArray<this["Target"]>
 }
 
+const imap = covariant.imap<NonEmptyReadonlyArrayTypeLambda>(RA.mapNonEmpty)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const NonEmptyCovariant: covariant.Covariant<NonEmptyReadonlyArrayTypeLambda> = covariant
-  .make(RA.mapNonEmpty)
+export const NonEmptyCovariant: covariant.Covariant<NonEmptyReadonlyArrayTypeLambda> = {
+  imap,
+  map: RA.mapNonEmpty
+}
 
 describe("NonEmptyTraversable", () => {
   it("traverseNonEmptyComposition", () => {

@@ -17,17 +17,6 @@ export interface Covariant<F extends TypeLambda> extends Invariant<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  map: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B) => Kind<F, R, O, E, B>
-): Covariant<F> => ({
-  map: dual(2, map),
-  imap: imap(map)
-})
-
-/**
  * Returns a default `map` composition.
  *
  * @since 1.0.0

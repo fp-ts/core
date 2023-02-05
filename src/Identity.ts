@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { identity } from "@fp-ts/core/Function"
+import { dual, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
@@ -43,20 +43,28 @@ export interface IdentityTypeLambdaFix<A> extends TypeLambda {
   readonly type: Identity<A>
 }
 
+const map: {
+  <A, B>(f: (a: A) => B): (self: Identity<A>) => Identity<B>
+  <A, B>(self: Identity<A>, f: (a: A) => B): Identity<B>
+} = dual(2, <A, B>(self: Identity<A>, f: (a: A) => B): Identity<B> => f(self))
+
+const imap = covariant.imap<IdentityTypeLambda>(map)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Covariant: covariant.Covariant<IdentityTypeLambda> = covariant.make<
-  IdentityTypeLambda
->((self, f) => f(self))
+export const Covariant: covariant.Covariant<IdentityTypeLambda> = {
+  imap,
+  map
+}
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<IdentityTypeLambda> = {
-  imap: Covariant.imap
+  imap
 }
 
 /**
