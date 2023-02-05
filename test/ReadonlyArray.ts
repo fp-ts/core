@@ -11,7 +11,7 @@ import * as assert from "assert"
 import * as fc from "fast-check"
 
 describe.concurrent("ReadonlyArray", () => {
-  it("instances and derived exports", () => {
+  it("exports", () => {
     expect(RA.Invariant).exist
     expect(RA.tupled).exist
     expect(RA.bindTo).exist

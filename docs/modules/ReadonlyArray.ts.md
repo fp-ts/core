@@ -512,7 +512,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const separate: <A, B>(self: readonly Either<A, B>[]) => [A[], B[]]
+export declare const separate: <A, B>(self: Iterable<Either<A, B>>) => [A[], B[]]
 ```
 
 Added in v1.0.0

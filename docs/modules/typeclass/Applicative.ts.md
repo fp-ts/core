@@ -35,7 +35,10 @@ Added in v1.0.0
 
 ## getMonoid
 
-Lift a monoid into 'F', the inner values are combined using the provided `Monoid`.
+Lift a `Monoid` into `F`, combining the inner values using the provided `Monoid`:
+
+- `combine` is provided by {@link semiApplicative.getSemigroup}.
+- `empty` is `F.of(M.empty)`
 
 **Signature**
 
