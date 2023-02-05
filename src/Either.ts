@@ -243,23 +243,25 @@ export const getEquivalence = <E, A>(
   )
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = bicovariant.make((
-  self,
-  f,
-  g
-) => isLeft(self) ? left(f(self.left)) : right(g(self.right)))
-
-/**
  * @category mapping
  * @since 1.0.0
  */
 export const bimap: {
   <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: Either<E1, A>) => Either<E2, B>
   <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B>
-} = Bicovariant.bimap
+} = dual(
+  3,
+  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B> =>
+    isLeft(self) ? left(f(self.left)) : right(g(self.right))
+)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = {
+  bimap
+}
 
 /**
  * Maps the `Left` side of an `Either` value to a new `Either` value.
