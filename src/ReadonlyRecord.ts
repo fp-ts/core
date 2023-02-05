@@ -698,6 +698,7 @@ export const as: {
  * @since 1.0.0
  */
 export const Filterable: filterable.Filterable<ReadonlyRecordTypeLambda> = filterable.make(
+  partitionMap,
   filterMap
 )
 

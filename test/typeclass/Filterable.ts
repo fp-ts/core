@@ -15,6 +15,15 @@ describe("Filterable", () => {
     U.deepStrictEqual(filterMap([O.some("aa")], f), [O.some(2)])
   })
 
+  it("partitionMapComposition", () => {
+    const partitionMap = _.partitionMapComposition(RA.Covariant, O.Filterable)
+    const f = (s: string) => s.length > 1 ? E.right(s.length) : E.left(s + "!")
+    U.deepStrictEqual(partitionMap([], f), [[], []])
+    U.deepStrictEqual(partitionMap([O.none()], f), [[O.none()], [O.none()]])
+    U.deepStrictEqual(partitionMap([O.some("a")], f), [[O.some("a!")], [O.none()]])
+    U.deepStrictEqual(partitionMap([O.some("aa")], f), [[O.none()], [O.some(2)]])
+  })
+
   it("filter", () => {
     const filter = _.filter(RA.Filterable)
     const f = filter((n: number) => n > 0)
@@ -22,15 +31,6 @@ describe("Filterable", () => {
     U.deepStrictEqual(pipe([1], f), [1])
     U.deepStrictEqual(pipe([-1], f), [])
     U.deepStrictEqual(pipe([1, -1], f), [1])
-  })
-
-  it("partitionMap", () => {
-    const partitionMap = _.partitionMap(RA.Filterable)
-    const f = partitionMap((s: string) => s.length > 1 ? E.right(s.length) : E.left(s))
-    U.deepStrictEqual(pipe([], f), [[], []])
-    U.deepStrictEqual(pipe(["a"], f), [["a"], []])
-    U.deepStrictEqual(pipe(["aa"], f), [[], [2]])
-    U.deepStrictEqual(pipe(["aa", "a"], f), [["a"], [2]])
   })
 
   it("partition", () => {

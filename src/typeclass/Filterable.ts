@@ -16,6 +16,16 @@ import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
  * @since 1.0.0
  */
 export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
+  readonly partitionMap: {
+    <A, B, C>(
+      f: (a: A) => Either<B, C>
+    ): <R, O, E>(self: Kind<F, R, O, E, A>) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+    <R, O, E, A, B, C>(
+      self: Kind<F, R, O, E, A>,
+      f: (a: A) => Either<B, C>
+    ): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+  }
+
   readonly filterMap: {
     <A, B>(f: (a: A) => Option<B>): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
     <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => Option<B>): Kind<F, R, O, E, B>
@@ -27,13 +37,35 @@ export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
  * @since 1.0.0
  */
 export const make = <F extends TypeLambda>(
+  partitionMap: <R, O, E, A, B, C>(
+    self: Kind<F, R, O, E, A>,
+    f: (a: A) => Either<B, C>
+  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>],
   filterMap: <R, O, E, A, B>(
     self: Kind<F, R, O, E, A>,
     f: (a: A) => Option<B>
   ) => Kind<F, R, O, E, B>
 ): Filterable<F> => ({
+  partitionMap: dual(2, partitionMap),
   filterMap: dual(2, filterMap)
 })
+
+/**
+ * Returns a default binary `partitionMap` composition.
+ *
+ * @since 1.0.0
+ */
+export const partitionMapComposition = <F extends TypeLambda, G extends TypeLambda>(
+  F: Covariant<F>,
+  G: Filterable<G>
+) =>
+  <FR, FO, FE, GR, GO, GE, A, B, C>(
+    self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
+    f: (a: A) => Either<B, C>
+  ): [Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, C>>] => {
+    const filterMap = filterMapComposition(F, G)
+    return [filterMap(self, a => either.getLeft(f(a))), filterMap(self, a => either.getRight(f(a)))]
+  }
 
 /**
  * Returns a default binary `filterMap` composition.
@@ -79,26 +111,6 @@ export const filter: <F extends TypeLambda>(
 /**
  * @since 1.0.0
  */
-export const partitionMap = <F extends TypeLambda>(F: Filterable<F>): {
-  <A, B, C>(
-    f: (a: A) => Either<B, C>
-  ): <R, O, E>(self: Kind<F, R, O, E, A>) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
-  <R, O, E, A, B, C>(
-    self: Kind<F, R, O, E, A>,
-    f: (a: A) => Either<B, C>
-  ): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
-} =>
-  dual(2, <R, O, E, A, B, C>(
-    self: Kind<F, R, O, E, A>,
-    f: (a: A) => Either<B, C>
-  ): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>] => [
-    F.filterMap(self, (a) => either.getLeft(f(a))),
-    F.filterMap(self, (a) => either.getRight(f(a)))
-  ])
-
-/**
- * @since 1.0.0
- */
 export const partition = <F extends TypeLambda>(
   F: Filterable<F>
 ): {
@@ -123,5 +135,5 @@ export const partition = <F extends TypeLambda>(
       self: Kind<F, R, O, E, B>,
       predicate: (a: A) => boolean
     ): [Kind<F, R, O, E, B>, Kind<F, R, O, E, B>] =>
-      partitionMap(F)(self, (b) => (predicate(b) ? either.right(b) : either.left(b)))
+      F.partitionMap(self, (b) => (predicate(b) ? either.right(b) : either.left(b)))
   )

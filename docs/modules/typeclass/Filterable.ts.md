@@ -22,7 +22,7 @@ Added in v1.0.0
   - [filter](#filter)
   - [filterMapComposition](#filtermapcomposition)
   - [partition](#partition)
-  - [partitionMap](#partitionmap)
+  - [partitionMapComposition](#partitionmapcomposition)
 
 ---
 
@@ -34,6 +34,10 @@ Added in v1.0.0
 
 ```ts
 export declare const make: <F extends TypeLambda>(
+  partitionMap: <R, O, E, A, B, C>(
+    self: Kind<F, R, O, E, A>,
+    f: (a: A) => Either<B, C>
+  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>],
   filterMap: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => Option<B>) => Kind<F, R, O, E, B>
 ) => Filterable<F>
 ```
@@ -48,6 +52,13 @@ Added in v1.0.0
 
 ```ts
 export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
+  readonly partitionMap: {
+    <A, B, C>(f: (a: A) => Either<B, C>): <R, O, E>(
+      self: Kind<F, R, O, E, A>
+    ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+    <R, O, E, A, B, C>(self: Kind<F, R, O, E, A>, f: (a: A) => Either<B, C>): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
+  }
+
   readonly filterMap: {
     <A, B>(f: (a: A) => Option<B>): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
     <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => Option<B>): Kind<F, R, O, E, B>
@@ -129,19 +140,20 @@ export declare const partition: <F extends TypeLambda>(
 
 Added in v1.0.0
 
-## partitionMap
+## partitionMapComposition
+
+Returns a default binary `partitionMap` composition.
 
 **Signature**
 
 ```ts
-export declare const partitionMap: <F extends TypeLambda>(
-  F: Filterable<F>
-) => {
-  <A, B, C>(f: (a: A) => Either<B, C>): <R, O, E>(
-    self: Kind<F, R, O, E, A>
-  ) => [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
-  <R, O, E, A, B, C>(self: Kind<F, R, O, E, A>, f: (a: A) => Either<B, C>): [Kind<F, R, O, E, B>, Kind<F, R, O, E, C>]
-}
+export declare const partitionMapComposition: <F extends TypeLambda, G extends TypeLambda>(
+  F: Covariant<F>,
+  G: Filterable<G>
+) => <FR, FO, FE, GR, GO, GE, A, B, C>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
+  f: (a: A) => Either<B, C>
+) => [Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, C>>]
 ```
 
 Added in v1.0.0

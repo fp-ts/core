@@ -56,6 +56,7 @@ Added in v1.0.0
 - [filtering](#filtering)
   - [filter](#filter)
   - [filterMap](#filtermap)
+  - [partitionMap](#partitionmap)
   - [separate](#separate)
 - [folding](#folding)
   - [Foldable](#foldable)
@@ -794,6 +795,19 @@ Useful when in addition to filtering you also want to change the type of the `Op
 export declare const filterMap: {
   <A, B>(f: (a: A) => Option<B>): (self: Option<A>) => Option<B>
   <A, B>(self: Option<A>, f: (a: A) => Option<B>): Option<B>
+}
+```
+
+Added in v1.0.0
+
+## partitionMap
+
+**Signature**
+
+```ts
+export declare const partitionMap: {
+  <A, B, C>(f: (a: A) => Either<B, C>): (self: Option<A>) => [Option<B>, Option<C>]
+  <A, B, C>(self: Option<A>, f: (a: A) => Either<B, C>): [Option<B>, Option<C>]
 }
 ```
 
