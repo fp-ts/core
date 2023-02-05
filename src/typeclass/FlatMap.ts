@@ -21,19 +21,6 @@ export interface FlatMap<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  flatMap: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    f: (a: A) => Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
-): FlatMap<F> => ({
-  flatMap: dual(2, flatMap)
-})
-
-/**
  * @since 1.0.0
  */
 export const flatten = <F extends TypeLambda>(F: FlatMap<F>) =>
