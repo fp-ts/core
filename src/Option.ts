@@ -1074,26 +1074,36 @@ export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicat
   Applicative
 )
 
+const coproduct: {
+  <B>(that: Option<B>): <A>(self: Option<A>) => Option<B | A>
+  <A, B>(self: Option<A>, that: Option<B>): Option<A | B>
+} = dual(2, <A, B>(self: Option<A>, that: Option<B>): Option<A | B> => isSome(self) ? self : that)
+
+const coproductMany: {
+  <A>(collection: Iterable<Option<A>>): (self: Option<A>) => Option<A>
+  <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A>
+} = dual(2, <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> => {
+  let out = self
+  if (isSome(out)) {
+    return out
+  }
+  for (out of collection) {
+    if (isSome(out)) {
+      return out
+    }
+  }
+  return out
+})
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = semiCoproduct.make(
-  Invariant,
-  (self, that) => isSome(self) ? self : that,
-  (self, collection) => {
-    let out = self
-    if (isSome(out)) {
-      return out
-    }
-    for (out of collection) {
-      if (isSome(out)) {
-        return out
-      }
-    }
-    return out
-  }
-)
+export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
+  imap,
+  coproduct,
+  coproductMany
+}
 
 /**
  * Semigroup returning the first `Some` value encountered.
@@ -1110,8 +1120,8 @@ export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduc
  */
 export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
   imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany,
+  coproduct,
+  coproductMany,
   zero: none,
   coproductAll: firstSomeOf
 }
@@ -1123,8 +1133,8 @@ export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
 export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> = {
   map,
   imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany
+  coproduct,
+  coproductMany
 }
 
 /**
@@ -1134,8 +1144,8 @@ export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> 
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
   map,
   imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany,
+  coproduct,
+  coproductMany,
   coproductAll: firstSomeOf,
   zero: none
 }

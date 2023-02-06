@@ -938,15 +938,24 @@ export const firstRightOrBothOf: {
   return out
 })
 
+const coproduct: {
+  <E2, B>(that: These<E2, B>): <E1, A>(self: These<E1, A>) => These<E2 | E1, B | A>
+  <E1, A, E2, B>(self: These<E1, A>, that: These<E2, B>): These<E1 | E2, A | B>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: These<E1, A>, that: These<E2, B>): These<E1 | E2, A | B> =>
+    isRightOrBoth(self) ? self : that
+)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = semiCoproduct.make(
-  Invariant,
-  (self, that) => isRightOrBoth(self) ? self : that,
-  firstRightOrBothOf
-)
+export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = {
+  imap,
+  coproduct,
+  coproductMany: firstRightOrBothOf
+}
 
 /**
  * @category combining
@@ -962,8 +971,8 @@ export const getFirstRightOrBothSemigroup: <E, A>() => Semigroup<These<E, A>> = 
 export const SemiAlternative: semiAlternative.SemiAlternative<TheseTypeLambda> = {
   map,
   imap,
-  coproduct: SemiCoproduct.coproduct,
-  coproductMany: SemiCoproduct.coproductMany
+  coproduct,
+  coproductMany: firstRightOrBothOf
 }
 
 /**

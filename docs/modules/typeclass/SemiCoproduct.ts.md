@@ -12,36 +12,12 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [type class](#type-class)
   - [SemiCoproduct (interface)](#semicoproduct-interface)
 - [utils](#utils)
   - [getSemigroup](#getsemigroup)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  Invariant: Invariant<F>,
-  coproduct: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, A | B>,
-  coproductMany: <R, O, E, A>(
-    self: Kind<F, R, O, E, A>,
-    collection: Iterable<Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, A>
-) => SemiCoproduct<F>
-```
-
-Added in v1.0.0
 
 # type class
 
