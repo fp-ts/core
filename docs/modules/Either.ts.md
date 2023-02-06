@@ -24,7 +24,9 @@ Added in v1.0.0
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
   - [getFirstRightSemigroup](#getfirstrightsemigroup)
   - [zipWith](#zipwith)
+  - [zipWithValidated](#zipwithvalidated)
 - [constructors](#constructors)
+  - [fail](#fail)
   - [left](#left)
   - [of](#of)
   - [right](#right)
@@ -36,6 +38,7 @@ Added in v1.0.0
   - [toArray](#toarray)
   - [toOption](#tooption)
   - [toRefinement](#torefinement)
+  - [toValidated](#tovalidated)
 - [debugging](#debugging)
   - [inspectLeft](#inspectleft)
   - [inspectRight](#inspectright)
@@ -70,6 +73,7 @@ Added in v1.0.0
   - [isRight](#isright)
 - [instances](#instances)
   - [Applicative](#applicative)
+  - [ApplicativeValidated](#applicativevalidated)
   - [Bicovariant](#bicovariant)
   - [Chainable](#chainable)
   - [Covariant](#covariant)
@@ -80,10 +84,13 @@ Added in v1.0.0
   - [Of](#of)
   - [Pointed](#pointed)
   - [Product](#product)
+  - [ProductValidated](#productvalidated)
   - [SemiAlternative](#semialternative)
   - [SemiApplicative](#semiapplicative)
+  - [SemiApplicativeValidated](#semiapplicativevalidated)
   - [SemiCoproduct](#semicoproduct)
   - [SemiProduct](#semiproduct)
+  - [SemiProductValidated](#semiproductvalidated)
   - [Traversable](#traversable)
   - [getOptionalSemigroup](#getoptionalsemigroup)
 - [interop](#interop)
@@ -94,6 +101,8 @@ Added in v1.0.0
   - [merge](#merge)
 - [lifting](#lifting)
   - [lift2](#lift2)
+  - [lift2Validated](#lift2validated)
+  - [liftEither](#lifteither)
   - [liftOption](#liftoption)
   - [liftPredicate](#liftpredicate)
 - [mapping](#mapping)
@@ -103,6 +112,8 @@ Added in v1.0.0
   - [flap](#flap)
   - [map](#map)
   - [tupled](#tupled)
+- [model](#model)
+  - [Validated (type alias)](#validated-type-alias)
 - [models](#models)
   - [Either (type alias)](#either-type-alias)
   - [Left (interface)](#left-interface)
@@ -120,6 +131,7 @@ Added in v1.0.0
   - [traverseTap](#traversetap)
 - [type lambdas](#type-lambdas)
   - [EitherTypeLambda (interface)](#eithertypelambda-interface)
+  - [ValidatedTypeLambda (interface)](#validatedtypelambda-interface)
 - [utils](#utils)
   - [andThen](#andthen)
   - [ap](#ap)
@@ -130,7 +142,9 @@ Added in v1.0.0
   - [flatten](#flatten)
   - [reverse](#reverse)
   - [struct](#struct)
+  - [structValidated](#structvalidated)
   - [tuple](#tuple)
+  - [tupleValidated](#tuplevalidated)
   - [unit](#unit)
 
 ---
@@ -280,7 +294,63 @@ export declare const zipWith: {
 
 Added in v1.0.0
 
+## zipWithValidated
+
+Composes two `Validated` values, using the binary function `f`, in case both `self` and `that` values are right.
+
+Errors are accumulated.
+
+**Signature**
+
+```ts
+export declare const zipWithValidated: {
+  <E2, B, A, C>(that: Either<readonly [E2, ...E2[]], B>, f: (a: A, b: B) => C): <E1>(
+    self: Either<readonly [E1, ...E1[]], A>
+  ) => Either<readonly [E2 | E1, ...(E2 | E1)[]], C>
+  <E1, A, E2, B, C>(
+    self: Either<readonly [E1, ...E1[]], A>,
+    that: Either<readonly [E2, ...E2[]], B>,
+    f: (a: A, b: B) => C
+  ): Either<readonly [E1 | E2, ...(E1 | E2)[]], C>
+}
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+import * as N from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(E.zipWithValidated(E.right(1), E.right(2), N.sum), E.right(3))
+
+assert.deepStrictEqual(E.zipWithValidated(E.fail('error1'), E.fail('error2'), N.sum), E.left(['error1', 'error2']))
+```
+
+Added in v1.0.0
+
 # constructors
+
+## fail
+
+Constructs a `Validated` with a `Left` value.
+
+This is useful when you need to represent an error that occurred during validation.
+
+**Signature**
+
+```ts
+export declare const fail: <E>(e: E) => Either<readonly [E, ...E[]], never>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.fail('error'), E.left(['error']))
+```
+
+Added in v1.0.0
 
 ## left
 
@@ -468,6 +538,30 @@ export declare const toRefinement: <A, E, B extends A>(f: (a: A) => Either<E, B>
 
 Added in v1.0.0
 
+## toValidated
+
+Transforms an `Either` value into a `Validated` value.
+
+This function is useful for transforming an `Either` with an error value into a `Validated` value that is more suited
+for sequential composition and error accumulation.
+
+**Signature**
+
+```ts
+export declare const toValidated: <E, A>(self: Either<E, A>) => Either<readonly [E, ...E[]], A>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.toValidated(E.right(1)), E.right(1))
+assert.deepStrictEqual(E.toValidated(E.left('error')), E.left(['error']))
+```
+
+Added in v1.0.0
+
 # debugging
 
 ## inspectLeft
@@ -510,7 +604,9 @@ Added in v1.0.0
 
 ## andThenBind
 
-A variant of `bind` that sequentially ignores the scope.
+Extends the `Either` value with the value of another `Either` type.
+
+If both `Either` instances are `Left`, then the result will be the first `Left`.
 
 **Signature**
 
@@ -525,6 +621,21 @@ export declare const andThenBind: {
     that: Either<E2, B>
   ): Either<E1 | E2, { [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 }
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+import { pipe } from '@fp-ts/core/Function'
+
+const result = pipe(
+  E.Do,
+  E.bind('a', () => E.left('e1')),
+  E.andThenBind('b', E.left('e2'))
+)
+
+assert.deepStrictEqual(result, E.left('e1'))
 ```
 
 Added in v1.0.0
@@ -863,6 +974,16 @@ export declare const Applicative: applicative.Applicative<EitherTypeLambda>
 
 Added in v1.0.0
 
+## ApplicativeValidated
+
+**Signature**
+
+```ts
+export declare const ApplicativeValidated: applicative.Applicative<ValidatedTypeLambda>
+```
+
+Added in v1.0.0
+
 ## Bicovariant
 
 **Signature**
@@ -963,6 +1084,16 @@ export declare const Product: product_.Product<EitherTypeLambda>
 
 Added in v1.0.0
 
+## ProductValidated
+
+**Signature**
+
+```ts
+export declare const ProductValidated: product_.Product<ValidatedTypeLambda>
+```
+
+Added in v1.0.0
+
 ## SemiAlternative
 
 **Signature**
@@ -983,6 +1114,16 @@ export declare const SemiApplicative: semiApplicative.SemiApplicative<EitherType
 
 Added in v1.0.0
 
+## SemiApplicativeValidated
+
+**Signature**
+
+```ts
+export declare const SemiApplicativeValidated: semiApplicative.SemiApplicative<ValidatedTypeLambda>
+```
+
+Added in v1.0.0
+
 ## SemiCoproduct
 
 **Signature**
@@ -999,6 +1140,16 @@ Added in v1.0.0
 
 ```ts
 export declare const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda>
+```
+
+Added in v1.0.0
+
+## SemiProductValidated
+
+**Signature**
+
+```ts
+export declare const SemiProductValidated: semiProduct.SemiProduct<ValidatedTypeLambda>
 ```
 
 Added in v1.0.0
@@ -1118,6 +1269,66 @@ export declare const lift2: <A, B, C>(
   <E1, E2>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, C>
   <E2>(that: Either<E2, B>): <E1>(self: Either<E1, A>) => Either<E2 | E1, C>
 }
+```
+
+Added in v1.0.0
+
+## lift2Validated
+
+Lifts a binary function into `Validated`.
+
+**Signature**
+
+```ts
+export declare const lift2Validated: <A, B, C>(
+  f: (a: A, b: B) => C
+) => {
+  <E2>(that: Either<readonly [E2, ...E2[]], B>): <E1>(
+    self: Either<readonly [E1, ...E1[]], A>
+  ) => Either<readonly [E2 | E1, ...(E2 | E1)[]], C>
+  <E1, E2>(self: Either<readonly [E1, ...E1[]], A>, that: Either<readonly [E2, ...E2[]], B>): Either<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    C
+  >
+}
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+import * as N from '@fp-ts/core/Number'
+
+const sum = E.lift2Validated(N.sum)
+
+assert.deepStrictEqual(sum(E.right(1), E.right(2)), E.right(3))
+assert.deepStrictEqual(sum(E.fail('error1'), E.fail('error2')), E.left(['error1', 'error2']))
+```
+
+Added in v1.0.0
+
+## liftEither
+
+Lifts an `Either`-returning function into a function that returns a `Validated`.
+
+**Signature**
+
+```ts
+export declare const liftEither: <A extends readonly unknown[], E, B>(
+  f: (...a: A) => Either<E, B>
+) => (...a: A) => Either<readonly [E, ...E[]], B>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+const f = (n: number) => (n >= 0 ? E.right(n) : E.left('negative number'))
+const g = E.liftEither(f)
+
+assert.deepStrictEqual(g(1), E.right(1))
+assert.deepStrictEqual(g(-1), E.left(['negative number']))
 ```
 
 Added in v1.0.0
@@ -1252,6 +1463,18 @@ Added in v1.0.0
 
 ```ts
 export declare const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]>
+```
+
+Added in v1.0.0
+
+# model
+
+## Validated (type alias)
+
+**Signature**
+
+```ts
+export type Validated<E, A> = Either<NonEmptyReadonlyArray<E>, A>
 ```
 
 Added in v1.0.0
@@ -1446,6 +1669,18 @@ export interface EitherTypeLambda extends TypeLambda {
 
 Added in v1.0.0
 
+## ValidatedTypeLambda (interface)
+
+**Signature**
+
+```ts
+export interface ValidatedTypeLambda extends TypeLambda {
+  readonly type: Validated<this['Out1'], this['Target']>
+}
+```
+
+Added in v3.0.0
+
 # utils
 
 ## andThen
@@ -1579,6 +1814,50 @@ export declare const struct: <R extends Record<string, Either<any, any>>>(
 
 Added in v1.0.0
 
+## structValidated
+
+Creates a `Validated` structure by using an object where each property is a `Validated`.
+
+Errors are accumulated.
+
+**Signature**
+
+```ts
+export declare const structValidated: <R extends { readonly [x: string]: Either<readonly [any, ...any[]], any> }>(
+  fields: R
+) => Either<
+  readonly [
+    [R[keyof R]] extends [Either<readonly [infer E, ...(infer E)[]], any>] ? E : never,
+    ...([R[keyof R]] extends [Either<readonly [infer E, ...(infer E)[]], any>] ? E : never)[]
+  ],
+  { [K in keyof R]: [R[K]] extends [Either<readonly [any, ...any[]], infer A>] ? A : never }
+>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(
+  E.structValidated({
+    x: E.right(1),
+    y: E.right('hello'),
+  }),
+  E.right({ x: 1, y: 'hello' })
+)
+
+assert.deepStrictEqual(
+  E.structValidated({
+    x: E.fail('error1'),
+    y: E.fail('error2'),
+  }),
+  E.left(['error1', 'error2'])
+)
+```
+
+Added in v1.0.0
+
 ## tuple
 
 **Signature**
@@ -1590,6 +1869,38 @@ export declare const tuple: <T extends readonly Either<any, any>[]>(
   [T[number]] extends [Either<infer E, any>] ? E : never,
   { [I in keyof T]: [T[I]] extends [Either<any, infer A>] ? A : never }
 >
+```
+
+Added in v1.0.0
+
+## tupleValidated
+
+Creates a `Validated` structure by using a tuple where each element is a `Validated`.
+
+Errors are accumulated.
+
+**Signature**
+
+```ts
+export declare const tupleValidated: <T extends readonly Either<readonly [any, ...any[]], any>[]>(
+  ...elements: T
+) => Either<
+  readonly [
+    [T[number]] extends [Either<readonly [infer E, ...(infer E)[]], any>] ? E : never,
+    ...([T[number]] extends [Either<readonly [infer E, ...(infer E)[]], any>] ? E : never)[]
+  ],
+  { [I in keyof T]: [T[I]] extends [Either<readonly [any, ...any[]], infer A>] ? A : never }
+>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.tupleValidated(E.right(1), E.right('hello')), E.right([1, 'hello']))
+
+assert.deepStrictEqual(E.tupleValidated(E.fail('error1'), E.fail('error2')), E.left(['error1', 'error2']))
 ```
 
 Added in v1.0.0

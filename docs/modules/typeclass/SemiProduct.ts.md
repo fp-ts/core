@@ -178,7 +178,7 @@ Added in v1.0.0
 export declare const nonEmptyTuple: <F extends TypeLambda>(
   F: SemiProduct<F>
 ) => <T extends readonly [Kind<F, any, any, any, any>, ...Kind<F, any, any, any, any>[]]>(
-  ...components: T
+  ...elements: T
 ) => Kind<
   F,
   [T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never,
