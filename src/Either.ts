@@ -456,17 +456,21 @@ export const Monad: monad.Monad<EitherTypeLambda> = {
   flatMap
 }
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = semiProduct.make(
-  Invariant,
-  (self, that) => isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self,
-  <E, A>(
-    self: Either<E, A>,
-    collection: Iterable<Either<E, A>>
-  ): Either<E, [A, ...Array<A>]> => {
+const product: {
+  <E2, B>(that: Either<E2, B>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, [A, B]>
+  <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [A, B]>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [A, B]> =>
+    isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
+)
+
+const productMany: {
+  <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, [A, ...Array<A>]>
+  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, [A, ...Array<A>]>
+} = dual(
+  2,
+  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, [A, ...Array<A>]> => {
     if (isLeft(self)) {
       return self
     }
@@ -480,6 +484,16 @@ export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = semiProduc
     return right(out)
   }
 )
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
 
 /**
  * Appends an element to the end of a tuple.
@@ -516,8 +530,8 @@ const productAll = <E, A>(
 export const Product: product_.Product<EitherTypeLambda> = {
   of,
   imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -548,8 +562,8 @@ export const struct: <R extends Record<string, Either<any, any>>>(
 export const SemiApplicative: semiApplicative.SemiApplicative<EitherTypeLambda> = {
   imap,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  product,
+  productMany
 }
 
 /**
@@ -597,8 +611,8 @@ export const Applicative: applicative.Applicative<EitherTypeLambda> = {
   imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 

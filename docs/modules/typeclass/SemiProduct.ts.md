@@ -13,8 +13,7 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [fromProduct](#fromproduct)
-  - [make](#make)
+  - [productMany](#productmany)
 - [do notation](#do-notation)
   - [andThenBind](#andthenbind)
 - [type class](#type-class)
@@ -30,40 +29,34 @@ Added in v1.0.0
 
 # constructors
 
-## fromProduct
+## productMany
 
 Useful when `productMany` can't be optimised.
 
 **Signature**
 
 ```ts
-export declare const fromProduct: <F extends TypeLambda>(
-  Covariant: Covariant<F>,
-  product: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
-) => SemiProduct<F>
-```
-
-Added in v1.0.0
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  Invariant: Invariant<F>,
-  product: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>,
-  productMany: <R, O, E, A>(
-    self: Kind<F, R, O, E, A>,
-    collection: Iterable<Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, [A, ...A[]]>
-) => SemiProduct<F>
+export declare const productMany: <F extends TypeLambda>(
+  map: {
+    <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+    <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
+  },
+  product: {
+    <R2, O2, E2, B>(that: Kind<F, R2, O2, E2, B>): <R1, O1, E1, A>(
+      self: Kind<F, R1, O1, E1, A>
+    ) => Kind<F, R1 & R2, O2 | O1, E2 | E1, [A, B]>
+    <R1, O1, E1, A, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>): Kind<
+      F,
+      R1 & R2,
+      O1 | O2,
+      E1 | E2,
+      [A, B]
+    >
+  }
+) => {
+  <R, O, E, A>(collection: Iterable<Kind<F, R, O, E, A>>): (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...A[]]>
+  <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>): Kind<F, R, O, E, [A, ...A[]]>
+}
 ```
 
 Added in v1.0.0
