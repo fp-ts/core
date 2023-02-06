@@ -57,7 +57,6 @@ Added in v1.0.0
   - [filter](#filter)
   - [filterMap](#filtermap)
   - [partitionMap](#partitionmap)
-  - [separate](#separate)
 - [folding](#folding)
   - [Foldable](#foldable)
   - [reduceCompact](#reducecompact)
@@ -809,16 +808,6 @@ export declare const partitionMap: {
   <A, B, C>(f: (a: A) => Either<B, C>): (self: Option<A>) => [Option<B>, Option<C>]
   <A, B, C>(self: Option<A>, f: (a: A) => Either<B, C>): [Option<B>, Option<C>]
 }
-```
-
-Added in v1.0.0
-
-## separate
-
-**Signature**
-
-```ts
-export declare const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>]
 ```
 
 Added in v1.0.0
