@@ -11,6 +11,11 @@ describe.concurrent("Function", () => {
     deepStrictEqual(_.pipe("a", _.apply(String.length)), 1)
   })
 
+  it("compose", () => {
+    deepStrictEqual(_.pipe(String.length, _.compose(double))("aaa"), 6)
+    deepStrictEqual(_.compose(String.length, double)("aaa"), 6)
+  })
+
   it("flip", () => {
     const f = (a: number) => (b: string) => a - b.length
     const g = (a: number, i = 0) => (b: number) => a ** b + i

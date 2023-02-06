@@ -274,6 +274,28 @@ export function flow(
 }
 
 /**
+ * Composes two functions, `ab` and `bc` into a single function that takes in an argument `a` of type `A` and returns a result of type `C`.
+ * The result is obtained by first applying the `ab` function to `a` and then applying the `bc` function to the result of `ab`.
+ *
+ * @param ab - A function that maps from `A` to `B`.
+ * @param bc - A function that maps from `B` to `C`.
+ *
+ * @example
+ * import { compose } from '@fp-ts/core/Function'
+ *
+ * const inc = (n: number) => n + 1;
+ * const square = (n: number) => n * n;
+ *
+ * assert.strictEqual(compose(inc, square)(2), 9);
+ *
+ * @since 1.0.0
+ */
+export const compose: {
+  <B, C>(bc: (b: B) => C): <A>(self: (a: A) => B) => (a: A) => C
+  <A, B, C>(self: (a: A) => B, bc: (b: B) => C): (a: A) => C
+} = dual(2, <A, B, C>(ab: (a: A) => B, bc: (b: B) => C): (a: A) => C => flow(ab, bc))
+
+/**
  * The `absurd` function is a stub for cases where a value of type `never` is encountered in your code,
  * meaning that it should be impossible for this code to be executed.
  *
