@@ -752,24 +752,19 @@ export const traverseTap: <F extends TypeLambda>(
   ): Kind<F, R, O, E, Record<string, A>>
 } = traversable.traverseTap(Traversable)
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const TraversableFilterable: traversableFilterable.TraversableFilterable<
-  ReadonlyRecordTypeLambda
-> = traversableFilterable.make(
-  traversableFilterable.traversePartitionMap({ ...Traversable, ...Covariant, ...Compactable }),
-  traversableFilterable.traverseFilterMap({ ...Traversable, ...Compactable })
-)
+const _traversePartitionMap = traversableFilterable.traversePartitionMap({
+  ...Traversable,
+  ...Covariant,
+  ...Compactable
+})
 
 /**
  * @category filtering
  * @since 1.0.0
  */
-export const traversePartitionMap: <F extends TypeLambda>(
+export const traversePartitionMap = <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => {
+): {
   <A, R, O, E, B, C>(
     f: (a: A) => Kind<F, R, O, E, Either<B, C>>
   ): (
@@ -779,15 +774,20 @@ export const traversePartitionMap: <F extends TypeLambda>(
     self: ReadonlyRecord<A>,
     f: (a: A) => Kind<F, R, O, E, Either<B, C>>
   ): Kind<F, R, O, E, [Record<string, B>, Record<string, C>]>
-} = TraversableFilterable.traversePartitionMap
+} => dual(2, _traversePartitionMap(F))
+
+const _traverseFilterMap = traversableFilterable.traverseFilterMap({
+  ...Traversable,
+  ...Compactable
+})
 
 /**
  * @category filtering
  * @since 1.0.0
  */
-export const traverseFilterMap: <F extends TypeLambda>(
+export const traverseFilterMap = <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => {
+): {
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, Option<B>>
   ): (self: ReadonlyRecord<A>) => Kind<F, R, O, E, Record<string, B>>
@@ -795,7 +795,18 @@ export const traverseFilterMap: <F extends TypeLambda>(
     self: ReadonlyRecord<A>,
     f: (a: A) => Kind<F, R, O, E, Option<B>>
   ): Kind<F, R, O, E, Record<string, B>>
-} = TraversableFilterable.traverseFilterMap
+} => dual(2, _traverseFilterMap(F))
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const TraversableFilterable: traversableFilterable.TraversableFilterable<
+  ReadonlyRecordTypeLambda
+> = {
+  traversePartitionMap,
+  traverseFilterMap
+}
 
 /**
  * Filter values inside a context.
