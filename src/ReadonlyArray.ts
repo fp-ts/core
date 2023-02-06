@@ -16,7 +16,6 @@ import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import * as string from "@fp-ts/core/String"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
-import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import type { Coproduct } from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as filterable from "@fp-ts/core/typeclass/Filterable"
@@ -1597,14 +1596,6 @@ export const Filterable: filterable.Filterable<ReadonlyArrayTypeLambda> = {
  * @since 1.0.0
  */
 export const compact: <A>(self: Iterable<Option<A>>) => Array<A> = filterMap(identity)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda> = {
-  compact
-}
 
 /**
  * @category filtering

@@ -61,9 +61,7 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.sequence).exist
     expect(RA.traverseTap).exist
 
-    expect(RA.Compactable).exist
     expect(RA.compact).exist
-    expect(RA.separate).exist
 
     expect(RA.Filterable).exist
     expect(RA.filterMap).exist
@@ -832,24 +830,24 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   it("compact", () => {
-    deepStrictEqual(RA.compact([]), [])
-    deepStrictEqual(RA.compact([O.some(1), O.some(2), O.some(3)]), [
+    assert.deepStrictEqual(RA.compact([]), [])
+    assert.deepStrictEqual(RA.compact([O.some(1), O.some(2), O.some(3)]), [
       1,
       2,
       3
     ])
-    deepStrictEqual(RA.compact([O.some(1), O.none(), O.some(3)]), [
+    assert.deepStrictEqual(RA.compact([O.some(1), O.none(), O.some(3)]), [
       1,
       3
     ])
   })
 
   it("separate", () => {
-    deepStrictEqual(RA.separate([]), [[], []])
-    deepStrictEqual(
-      RA.separate([E.left(123), E.right("123")]),
-      [[123], ["123"]]
-    )
+    assert.deepStrictEqual(RA.separate([]), [[], []])
+    assert.deepStrictEqual(pipe([E.right(1), E.left("e"), E.right(2)], RA.separate), [
+      ["e"],
+      [1, 2]
+    ])
   })
 
   it("filter", () => {

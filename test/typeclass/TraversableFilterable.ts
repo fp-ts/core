@@ -12,7 +12,7 @@ describe("TraversableFilterable", () => {
     ) => O.Option<[ReadonlyArray<B>, ReadonlyArray<C>]> = _.traversePartitionMap({
       ...RA.Traversable,
       ...RA.Covariant,
-      ...RA.Compactable
+      ...RA.Filterable
     })(O.Applicative)
     const f = (s: string) =>
       s.length > 1 ? O.some(E.right(s)) : s.length > 0 ? O.some(E.left(s)) : O.none()
@@ -33,7 +33,7 @@ describe("TraversableFilterable", () => {
       f: (a: A) => O.Option<O.Option<B>>
     ) => O.Option<ReadonlyArray<B>> = _.traverseFilterMap({
       ...RA.Traversable,
-      ...RA.Compactable
+      ...RA.Filterable
     })(O.Applicative)
     const f = (s: string) =>
       s.length > 1 ? O.some(O.some(s)) : s.length > 0 ? O.some(O.none()) : O.none()

@@ -11,9 +11,9 @@ import type { Option } from "@fp-ts/core/Option"
 import * as O from "@fp-ts/core/Option"
 import type { TraversableFilterable } from "@fp-ts/core/ReadonlyArray"
 import type { Applicative } from "@fp-ts/core/typeclass/Applicative"
-import * as compactable from "@fp-ts/core/typeclass/Compactable"
-import type { Compactable } from "@fp-ts/core/typeclass/Compactable"
 import type { Covariant } from "@fp-ts/core/typeclass/Covariant"
+import * as filterable from "@fp-ts/core/typeclass/Filterable"
+import type { Filterable } from "@fp-ts/core/typeclass/Filterable"
 import type { Traversable } from "@fp-ts/core/typeclass/Traversable"
 
 /**
@@ -54,14 +54,14 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
  * @since 1.0.0
  */
 export const traversePartitionMap = <T extends TypeLambda>(
-  T: Traversable<T> & Covariant<T> & Compactable<T>
+  T: Traversable<T> & Covariant<T> & Filterable<T>
 ): <F extends TypeLambda>(
   F: Applicative<F>
 ) => <TR, TO, TE, A, R, O, E, B, C>(
   self: Kind<T, TR, TO, TE, A>,
   f: (a: A) => Kind<F, R, O, E, Either<B, C>>
 ) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]> =>
-  (F) => (self, f) => F.map(T.traverse(F)(self, f), compactable.separate(T))
+  (F) => (self, f) => F.map(T.traverse(F)(self, f), filterable.separate(T))
 
 /**
  * Returns a default binary `traverseFilterMap` implementation.
@@ -69,14 +69,14 @@ export const traversePartitionMap = <T extends TypeLambda>(
  * @since 1.0.0
  */
 export const traverseFilterMap = <T extends TypeLambda>(
-  T: Traversable<T> & Compactable<T>
+  T: Traversable<T> & Filterable<T>
 ): <F extends TypeLambda>(
   F: Applicative<F>
 ) => <TR, TO, TE, A, R, O, E, B>(
   self: Kind<T, TR, TO, TE, A>,
   f: (a: A) => Kind<F, R, O, E, Option<B>>
 ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>> =>
-  (F) => (self, f) => F.map(T.traverse(F)(self, f), T.compact)
+  (F) => (self, f) => F.map(T.traverse(F)(self, f), filterable.compact(T))
 
 /**
  * @since 1.0.0

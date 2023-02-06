@@ -67,7 +67,6 @@ Added in v1.0.0
 - [instances](#instances)
   - [Alternative](#alternative)
   - [Applicative](#applicative)
-  - [Compactable](#compactable)
   - [Coproduct](#coproduct)
   - [Filterable](#filterable)
   - [Monad](#monad)
@@ -939,16 +938,6 @@ Added in v1.0.0
 
 ```ts
 export declare const Applicative: applicative.Applicative<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## Compactable
-
-**Signature**
-
-```ts
-export declare const Compactable: compactable.Compactable<OptionTypeLambda>
 ```
 
 Added in v1.0.0

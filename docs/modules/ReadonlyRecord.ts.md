@@ -31,7 +31,6 @@ Added in v1.0.0
 - [guards](#guards)
   - [isEmpty](#isempty)
 - [instances](#instances)
-  - [Compactable](#compactable)
   - [Covariant](#covariant)
   - [Filterable](#filterable)
   - [Invariant](#invariant)
@@ -378,16 +377,6 @@ assert.deepStrictEqual(isEmpty({ a: 3 }), false)
 Added in v1.0.0
 
 # instances
-
-## Compactable
-
-**Signature**
-
-```ts
-export declare const Compactable: compactable.Compactable<ReadonlyRecordTypeLambda>
-```
-
-Added in v1.0.0
 
 ## Covariant
 
