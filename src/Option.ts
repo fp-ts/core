@@ -13,7 +13,7 @@ import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
 import type * as alternative from "@fp-ts/core/typeclass/Alternative"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
-import * as compactable from "@fp-ts/core/typeclass/Compactable"
+import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import type * as coproduct_ from "@fp-ts/core/typeclass/Coproduct"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
@@ -1238,13 +1238,6 @@ export const toArray: <A>(self: Option<A>) => Array<A> = foldable.toArray(Foldab
 export const Compactable: compactable.Compactable<OptionTypeLambda> = {
   compact: flatten
 }
-
-/**
- * @category filtering
- * @since 1.0.0
- */
-export const separate: <A, B>(self: Option<Either<A, B>>) => [Option<A>, Option<B>] = compactable
-  .separate({ ...Covariant, ...Compactable })
 
 /**
  * @category filtering

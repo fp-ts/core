@@ -81,7 +81,6 @@ describe.concurrent("Option", () => {
     expect(_.traverseTap).exist
 
     expect(_.Compactable).exist
-    expect(_.separate).exist
 
     expect(_.Filterable).exist
     expect(_.filterMap).exist
