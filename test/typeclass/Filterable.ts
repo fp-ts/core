@@ -41,4 +41,27 @@ describe("Filterable", () => {
     U.deepStrictEqual(pipe([-1], f), [[-1], []])
     U.deepStrictEqual(pipe([1, -1], f), [[-1], [1]])
   })
+
+  it("compact", () => {
+    const compact = _.compact(RA.Filterable)
+    assert.deepStrictEqual(compact([]), [])
+    assert.deepStrictEqual(compact([O.some(1), O.some(2), O.some(3)]), [
+      1,
+      2,
+      3
+    ])
+    assert.deepStrictEqual(compact([O.some(1), O.none(), O.some(3)]), [
+      1,
+      3
+    ])
+  })
+
+  it("separate", () => {
+    const separate = _.separate(RA.Filterable)
+    U.deepStrictEqual(pipe([], separate), [[], []])
+    U.deepStrictEqual(pipe([E.right(1), E.left("e"), E.right(2)], separate), [
+      ["e"],
+      [1, 2]
+    ])
+  })
 })

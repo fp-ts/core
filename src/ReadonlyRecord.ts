@@ -11,7 +11,6 @@ import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import type { Option } from "@fp-ts/core/Option"
 import * as O from "@fp-ts/core/Option"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
-import type * as compactable from "@fp-ts/core/typeclass/Compactable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as filterable from "@fp-ts/core/typeclass/Filterable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
@@ -718,14 +717,6 @@ export const as: {
 export const Filterable: filterable.Filterable<ReadonlyRecordTypeLambda> = {
   partitionMap,
   filterMap
-}
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Compactable: compactable.Compactable<ReadonlyRecordTypeLambda> = {
-  compact
 }
 
 /**

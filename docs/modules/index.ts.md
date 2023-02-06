@@ -18,7 +18,6 @@ Added in v1.0.0
   - [bicovariant](#bicovariant)
   - [bounded](#bounded)
   - [chainable](#chainable)
-  - [compactable](#compactable)
   - [contravariant](#contravariant)
   - [coproduct](#coproduct)
   - [covariant](#covariant)
@@ -109,16 +108,6 @@ Added in v1.0.0
 
 ```ts
 export declare const chainable: typeof chainable
-```
-
-Added in v1.0.0
-
-## compactable
-
-**Signature**
-
-```ts
-export declare const compactable: typeof compactable
 ```
 
 Added in v1.0.0

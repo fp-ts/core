@@ -10,7 +10,6 @@ describe.concurrent("ReadonlyRecord", () => {
     expect(RR.Covariant).exist
     expect(RR.flap).exist
     expect(RR.as).exist
-    expect(RR.Compactable).exist
     expect(RR.Filterable).exist
     expect(RR.Traversable).exist
     expect(RR.traverseTap).exist

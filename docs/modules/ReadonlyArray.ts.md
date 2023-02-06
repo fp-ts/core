@@ -90,7 +90,6 @@ Added in v1.0.0
 - [instances](#instances)
   - [Applicative](#applicative)
   - [Chainable](#chainable)
-  - [Compactable](#compactable)
   - [Covariant](#covariant)
   - [Filterable](#filterable)
   - [FlatMap](#flatmap)
@@ -1147,16 +1146,6 @@ Added in v1.0.0
 
 ```ts
 export declare const Chainable: chainable.Chainable<ReadonlyArrayTypeLambda>
-```
-
-Added in v1.0.0
-
-## Compactable
-
-**Signature**
-
-```ts
-export declare const Compactable: compactable.Compactable<ReadonlyArrayTypeLambda>
 ```
 
 Added in v1.0.0

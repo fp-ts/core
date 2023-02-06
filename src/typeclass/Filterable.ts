@@ -4,7 +4,7 @@
  * @since 1.0.0
  */
 import type { Either } from "@fp-ts/core/Either"
-import { dual } from "@fp-ts/core/Function"
+import { dual, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeClass, TypeLambda } from "@fp-ts/core/HKT"
 import * as either from "@fp-ts/core/internal/Either"
 import * as option from "@fp-ts/core/internal/Option"
@@ -62,6 +62,22 @@ export const filterMapComposition = <F extends TypeLambda, G extends TypeLambda>
     self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
     f: (a: A) => Option<B>
   ): Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>> => F.map(self, G.filterMap(f))
+
+/**
+ * @since 1.0.0
+ */
+export const compact = <F extends TypeLambda>(
+  F: Filterable<F>
+): <R, O, E, A>(self: Kind<F, R, O, E, Option<A>>) => Kind<F, R, O, E, A> => F.filterMap(identity)
+
+/**
+ * @since 1.0.0
+ */
+export const separate = <F extends TypeLambda>(
+  F: Filterable<F>
+): <R, O, E, A, B>(
+  self: Kind<F, R, O, E, Either<A, B>>
+) => [Kind<F, R, O, E, A>, Kind<F, R, O, E, B>] => F.partitionMap(identity)
 
 /**
  * @since 1.0.0

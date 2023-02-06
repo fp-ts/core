@@ -194,15 +194,6 @@ Extends:
 | andThenDiscard | `F<A>`, `F<B>`                      | `F<A>`                 |
 | bind           | `F<A>`, `name: string`, `A => F<B>` | `F<A & { [name]: B }>` |
 
-### Compactable
-
-`Compactable` represents data structures which can be compacted / separated.
-
-| Name        | Given             | To             |
-| ----------- | ----------------- | -------------- |
-| **compact** | `F<Option<A>>`    | `F<A>`         |
-| separate    | `F<Either<A, B>>` | `[F<A>, F<B>]` |
-
 ### Contravariant
 
 Contravariant functors.
@@ -273,6 +264,8 @@ Extends:
 | ----------------------- | ------------------------------ | -------------------- |
 | **partitionMap**        | `F<A>`, `A => Either<B, C>`    | `[F<B>, F<C>]`       |
 | **filterMap**           | `F<A>`, `A => Option<B>`       | `F<B>`               |
+| compact                 | `F<Option<A>>`                 | `F<A>`               |
+| separate                | `F<Either<A, B>>`              | `[F<A>, F<B>]`       |
 | filter                  | `F<A>`, `A => boolean`         | `F<A>`               |
 | partition               | `F<A>`, `A => boolean`         | `[F<A>, F<A>]`       |
 | partitionMapComposition | `F<G<A>>`, `A => Either<B, C>` | `[F<G<B>>, F<G<C>>]` |

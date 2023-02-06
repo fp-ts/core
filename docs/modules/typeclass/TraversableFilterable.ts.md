@@ -1,6 +1,6 @@
 ---
 title: typeclass/TraversableFilterable.ts
-nav_order: 45
+nav_order: 44
 parent: Modules
 ---
 
@@ -98,7 +98,7 @@ Returns a default binary `traverseFilterMap` implementation.
 
 ```ts
 export declare const traverseFilterMap: <T extends TypeLambda>(
-  T: Traversable<T> & compactable.Compactable<T>
+  T: Traversable<T> & filterable.Filterable<T>
 ) => <F extends TypeLambda>(
   F: Applicative<F>
 ) => <TR, TO, TE, A, R, O, E, B>(
@@ -139,7 +139,7 @@ Returns a default binary `traversePartitionMap` implementation.
 
 ```ts
 export declare const traversePartitionMap: <T extends TypeLambda>(
-  T: Traversable<T> & Covariant<T> & compactable.Compactable<T>
+  T: Traversable<T> & Covariant<T> & filterable.Filterable<T>
 ) => <F extends TypeLambda>(
   F: Applicative<F>
 ) => <TR, TO, TE, A, R, O, E, B, C>(

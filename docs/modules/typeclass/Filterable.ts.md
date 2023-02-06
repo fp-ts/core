@@ -1,6 +1,6 @@
 ---
 title: typeclass/Filterable.ts
-nav_order: 29
+nav_order: 28
 parent: Modules
 ---
 
@@ -17,10 +17,12 @@ Added in v1.0.0
 - [models](#models)
   - [Filterable (interface)](#filterable-interface)
 - [utils](#utils)
+  - [compact](#compact)
   - [filter](#filter)
   - [filterMapComposition](#filtermapcomposition)
   - [partition](#partition)
   - [partitionMapComposition](#partitionmapcomposition)
+  - [separate](#separate)
 
 ---
 
@@ -49,6 +51,18 @@ export interface Filterable<F extends TypeLambda> extends TypeClass<F> {
 Added in v1.0.0
 
 # utils
+
+## compact
+
+**Signature**
+
+```ts
+export declare const compact: <F extends TypeLambda>(
+  F: Filterable<F>
+) => <R, O, E, A>(self: Kind<F, R, O, E, Option<A>>) => Kind<F, R, O, E, A>
+```
+
+Added in v1.0.0
 
 ## filter
 
@@ -134,6 +148,18 @@ export declare const partitionMapComposition: <F extends TypeLambda, G extends T
   self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
   f: (a: A) => Either<B, C>
 ) => [Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>, Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, C>>]
+```
+
+Added in v1.0.0
+
+## separate
+
+**Signature**
+
+```ts
+export declare const separate: <F extends TypeLambda>(
+  F: Filterable<F>
+) => <R, O, E, A, B>(self: Kind<F, R, O, E, Either<A, B>>) => [Kind<F, R, O, E, A>, Kind<F, R, O, E, B>]
 ```
 
 Added in v1.0.0
