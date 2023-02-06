@@ -21,7 +21,7 @@ import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type { Equivalence } from "@fp-ts/core/typeclass/Equivalence"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
-import * as foldable from "@fp-ts/core/typeclass/Foldable"
+import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
@@ -855,9 +855,13 @@ export const exists: {
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<TheseTypeLambda> = foldable.make((self, b, f) =>
-  isLeft(self) ? b : f(b, self.right)
-)
+export const Foldable: foldable.Foldable<TheseTypeLambda> = {
+  reduce: dual(
+    3,
+    <E, A, B>(self: These<E, A>, b: B, f: (b: B, a: A) => B): B =>
+      isLeft(self) ? b : f(b, self.right)
+  )
+}
 
 /**
  * Executes this effect and returns its value, if it succeeds, but otherwise

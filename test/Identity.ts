@@ -7,37 +7,26 @@ import * as U from "./util"
 describe.concurrent("Identity", () => {
   it("instances and derived exports", () => {
     expect(_.Invariant).exist
-    expect(_.bindTo).exist
-
     expect(_.Covariant).exist
-    expect(_.let).exist
-
     expect(_.Of).exist
-    expect(_.Do).exist
-
     expect(_.Pointed).exist
-
     expect(_.FlatMap).exist
-
     expect(_.Chainable).exist
-    expect(_.bind).exist
-
     expect(_.Monad).exist
-
     expect(_.SemiProduct).exist
-
     expect(_.Product).exist
-
     expect(_.SemiApplicative).exist
-
     expect(_.Applicative).exist
-
     expect(_.Foldable).exist
-
     expect(_.Traversable).exist
+
+    expect(_.bindTo).exist
+    expect(_.let).exist
+    expect(_.Do).exist
+    expect(_.bind).exist
   })
 
-  it("of", () => {
+  it("Of", () => {
     U.deepStrictEqual(_.Of.of("a"), "a")
   })
 
@@ -50,14 +39,18 @@ describe.concurrent("Identity", () => {
     U.deepStrictEqual(_.Product.productAll(["a", "b", "c"]), ["a", "b", "c"])
   })
 
-  it("flatMap", () => {
+  it("Covariant", () => {
+    assert.deepStrictEqual(_.Covariant.map(1, n => n * 2), 2)
+  })
+
+  it("FlatMap", () => {
     U.deepStrictEqual(
-      pipe("a", _.Chainable.flatMap((a) => a + "b")),
+      pipe("a", _.FlatMap.flatMap((a) => a + "b")),
       "ab"
     )
   })
 
-  it("product", () => {
+  it("SemiProduct", () => {
     const product = _.SemiProduct.product
     U.deepStrictEqual(product("a", "b"), ["a", "b"])
   })
@@ -74,11 +67,11 @@ describe.concurrent("Identity", () => {
     U.deepStrictEqual(F.coproductMany("a", ["b", "c"]), "abc")
   })
 
-  it("reduce", () => {
+  it("Foldable", () => {
     U.deepStrictEqual(pipe("b", _.Foldable.reduce("a", (b, a) => b + a)), "ab")
   })
 
-  it("traverse", () => {
+  it("Traversable", () => {
     U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(O.some)), O.some(1))
     U.deepStrictEqual(pipe(1, _.Traversable.traverse(O.Applicative)(() => O.none())), O.none())
   })

@@ -1897,7 +1897,9 @@ export const reduceRight: {
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = foldable.make(reduce)
+export const Foldable: foldable.Foldable<ReadonlyArrayTypeLambda> = {
+  reduce
+}
 
 /**
  * @category folding
