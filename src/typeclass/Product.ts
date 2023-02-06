@@ -20,13 +20,13 @@ export interface Product<F extends TypeLambda> extends SemiProduct<F>, Of<F> {
  * @since 1.0.0
  */
 export const tuple = <F extends TypeLambda>(F: Product<F>) =>
-  <T extends ReadonlyArray<Kind<F, any, any, any, any>>>(...components: T): Kind<
+  <T extends ReadonlyArray<Kind<F, any, any, any, any>>>(...elements: T): Kind<
     F,
     ([T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
-  > => F.productAll(components) as any
+  > => F.productAll(elements) as any
 
 /**
  * @since 1.0.0

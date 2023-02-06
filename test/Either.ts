@@ -1,4 +1,4 @@
-import * as _ from "@fp-ts/core/Either"
+import * as E from "@fp-ts/core/Either"
 import { flow, identity, pipe } from "@fp-ts/core/Function"
 import { structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -8,512 +8,608 @@ import * as Util from "@fp-ts/core/test/util"
 
 describe.concurrent("Either", () => {
   it("exports", () => {
-    expect(_.toOption).exist
-    expect(_.getRight).exist
-    expect(_.getLeft).exist
+    expect(E.toOption).exist
+    expect(E.getRight).exist
+    expect(E.getLeft).exist
 
-    expect(_.Invariant).exist
-    expect(_.tupled).exist
-    expect(_.bindTo).exist
+    expect(E.Invariant).exist
+    expect(E.tupled).exist
+    expect(E.bindTo).exist
 
-    expect(_.Covariant).exist
-    expect(_.map).exist
-    expect(_.let).exist
-    expect(_.flap).exist
-    expect(_.as).exist
-    expect(_.asUnit).exist
+    expect(E.Covariant).exist
+    expect(E.map).exist
+    expect(E.let).exist
+    expect(E.flap).exist
+    expect(E.as).exist
+    expect(E.asUnit).exist
 
-    expect(_.Bicovariant).exist
-    expect(_.bimap).exist
-    expect(_.mapLeft).exist
+    expect(E.Bicovariant).exist
+    expect(E.bimap).exist
+    expect(E.mapLeft).exist
 
-    expect(_.Of).exist
-    expect(_.of).exist
-    expect(_.unit).exist
-    expect(_.Do).exist
+    expect(E.Of).exist
+    expect(E.of).exist
+    expect(E.unit).exist
+    expect(E.Do).exist
 
-    expect(_.Pointed).exist
+    expect(E.Pointed).exist
 
-    expect(_.FlatMap).exist
-    expect(_.flatMap).exist
-    expect(_.flatten).exist
-    expect(_.andThen).exist
-    expect(_.composeKleisliArrow).exist
+    expect(E.FlatMap).exist
+    expect(E.flatMap).exist
+    expect(E.flatten).exist
+    expect(E.andThen).exist
+    expect(E.composeKleisliArrow).exist
 
-    expect(_.Chainable).exist
-    expect(_.bind).exist
-    expect(_.tap).exist
-    expect(_.andThenDiscard).exist
+    expect(E.Chainable).exist
+    expect(E.bind).exist
+    expect(E.tap).exist
+    expect(E.andThenDiscard).exist
 
-    expect(_.Monad).exist
+    expect(E.Monad).exist
 
-    expect(_.SemiProduct).exist
+    expect(E.SemiProduct).exist
 
-    expect(_.Product).exist
-    expect(_.tuple).exist
-    expect(_.struct).exist
+    expect(E.Product).exist
+    expect(E.tuple).exist
+    expect(E.struct).exist
 
-    expect(_.SemiApplicative).exist
-    expect(_.getFirstLeftSemigroup).exist // liftSemigroup
-    expect(_.lift2).exist
-    expect(_.ap).exist
-    expect(_.andThenDiscard).exist
-    expect(_.andThen).exist
+    expect(E.SemiApplicative).exist
+    expect(E.getFirstLeftSemigroup).exist // liftSemigroup
+    expect(E.lift2).exist
+    expect(E.ap).exist
+    expect(E.andThenDiscard).exist
+    expect(E.andThen).exist
 
-    expect(_.Applicative).exist
-    expect(_.getFirstLeftMonoid).exist // liftMonoid
+    expect(E.Applicative).exist
+    expect(E.getFirstLeftMonoid).exist // liftMonoid
 
-    expect(_.SemiCoproduct).exist
-    expect(_.getFirstRightSemigroup).exist // getSemigroup
+    expect(E.SemiCoproduct).exist
+    expect(E.getFirstRightSemigroup).exist // getSemigroup
 
-    expect(_.SemiAlternative).exist
+    expect(E.SemiAlternative).exist
 
-    expect(_.Foldable).exist
+    expect(E.Foldable).exist
 
-    expect(_.Traversable).exist
-    expect(_.traverse).exist
-    expect(_.sequence).exist
-    expect(_.traverseTap).exist
+    expect(E.Traversable).exist
+    expect(E.traverse).exist
+    expect(E.sequence).exist
+    expect(E.traverseTap).exist
+
+    expect(E.SemiProductValidated).exist
+    expect(E.ProductValidated).exist
+    expect(E.SemiApplicativeValidated).exist
+    expect(E.ApplicativeValidated).exist
   })
 
   it("structural tracking", () => {
-    expect(Util.ownKeys(_.left("a"))).toEqual(["_tag", "left"])
-    expect(Util.ownKeys(_.right(1))).toEqual(["_tag", "right"])
+    expect(Util.ownKeys(E.left("a"))).toEqual(["_tag", "left"])
+    expect(Util.ownKeys(E.right(1))).toEqual(["_tag", "right"])
 
-    expect(Object.prototype.hasOwnProperty.call(_.left("a"), structural)).toEqual(false)
-    expect(Object.prototype.hasOwnProperty.call(_.right(1), structural)).toEqual(false)
+    expect(Object.prototype.hasOwnProperty.call(E.left("a"), structural)).toEqual(false)
+    expect(Object.prototype.hasOwnProperty.call(E.right(1), structural)).toEqual(false)
 
-    expect(Util.isStructural(_.left("a"))).toEqual(true)
-    expect(Util.isStructural(_.right(1))).toEqual(true)
+    expect(Util.isStructural(E.left("a"))).toEqual(true)
+    expect(Util.isStructural(E.right(1))).toEqual(true)
   })
 
   it("toRefinement", () => {
-    const f = (s: string | number): _.Either<string, string> =>
-      typeof s === "string" ? _.right(s) : _.left("not a string")
-    const isString = _.toRefinement(f)
+    const f = (s: string | number): E.Either<string, string> =>
+      typeof s === "string" ? E.right(s) : E.left("not a string")
+    const isString = E.toRefinement(f)
     Util.deepStrictEqual(isString("s"), true)
     Util.deepStrictEqual(isString(1), false)
     type A = { readonly type: "A" }
     type B = { readonly type: "B" }
     type C = A | B
-    const isA = _.toRefinement((
+    const isA = E.toRefinement((
       c: C
-    ) => (c.type === "A" ? _.right(c) : _.left("not as A")))
+    ) => (c.type === "A" ? E.right(c) : E.left("not as A")))
     Util.deepStrictEqual(isA({ type: "A" }), true)
     Util.deepStrictEqual(isA({ type: "B" }), false)
   })
 
   it("isEither", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.isEither), true)
-    Util.deepStrictEqual(pipe(_.left("e"), _.isEither), true)
-    Util.deepStrictEqual(pipe(O.some(1), _.isEither), false)
+    Util.deepStrictEqual(pipe(E.right(1), E.isEither), true)
+    Util.deepStrictEqual(pipe(E.left("e"), E.isEither), true)
+    Util.deepStrictEqual(pipe(O.some(1), E.isEither), false)
   })
 
   it("orElseFail", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.orElseFail(() => "e2")), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("e1"), _.orElseFail(() => "e2")), _.left("e2"))
+    Util.deepStrictEqual(pipe(E.right(1), E.orElseFail(() => "e2")), E.right(1))
+    Util.deepStrictEqual(pipe(E.left("e1"), E.orElseFail(() => "e2")), E.left("e2"))
   })
 
   it("reduce", () => {
-    Util.deepStrictEqual(pipe(_.right("bar"), _.Foldable.reduce("foo", (b, a) => b + a)), "foobar")
-    Util.deepStrictEqual(pipe(_.left("bar"), _.Foldable.reduce("foo", (b, a) => b + a)), "foo")
+    Util.deepStrictEqual(pipe(E.right("bar"), E.Foldable.reduce("foo", (b, a) => b + a)), "foobar")
+    Util.deepStrictEqual(pipe(E.left("bar"), E.Foldable.reduce("foo", (b, a) => b + a)), "foo")
   })
 
   it("getRight", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.getRight), O.some(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.getRight), O.none())
+    Util.deepStrictEqual(pipe(E.right(1), E.getRight), O.some(1))
+    Util.deepStrictEqual(pipe(E.left("a"), E.getRight), O.none())
   })
 
   it("getLeft", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.getLeft), O.none())
-    Util.deepStrictEqual(pipe(_.left("e"), _.getLeft), O.some("e"))
+    Util.deepStrictEqual(pipe(E.right(1), E.getLeft), O.none())
+    Util.deepStrictEqual(pipe(E.left("e"), E.getLeft), O.some("e"))
   })
 
   it("getOrNull", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.getOrNull), 1)
-    Util.deepStrictEqual(pipe(_.left("a"), _.getOrNull), null)
+    Util.deepStrictEqual(pipe(E.right(1), E.getOrNull), 1)
+    Util.deepStrictEqual(pipe(E.left("a"), E.getOrNull), null)
   })
 
   it("getOrUndefined", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.getOrUndefined), 1)
-    Util.deepStrictEqual(pipe(_.left("a"), _.getOrUndefined), undefined)
+    Util.deepStrictEqual(pipe(E.right(1), E.getOrUndefined), 1)
+    Util.deepStrictEqual(pipe(E.left("a"), E.getOrUndefined), undefined)
   })
 
   it("compact", () => {
-    Util.deepStrictEqual(pipe(_.right(O.some(1)), _.compact(() => "e2")), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(O.none()), _.compact(() => "e2")), _.left("e2"))
-    Util.deepStrictEqual(pipe(_.left("e1"), _.compact(() => "e2")), _.left("e1"))
+    Util.deepStrictEqual(pipe(E.right(O.some(1)), E.compact(() => "e2")), E.right(1))
+    Util.deepStrictEqual(pipe(E.right(O.none()), E.compact(() => "e2")), E.left("e2"))
+    Util.deepStrictEqual(pipe(E.left("e1"), E.compact(() => "e2")), E.left("e1"))
   })
 
   it("inspectRight", () => {
     const log: Array<number> = []
-    pipe(_.right(1), _.inspectRight((e) => log.push(e)))
-    pipe(_.left("e"), _.inspectRight((e) => log.push(e)))
+    pipe(E.right(1), E.inspectRight((e) => log.push(e)))
+    pipe(E.left("e"), E.inspectRight((e) => log.push(e)))
     Util.deepStrictEqual(log, [1])
   })
 
   it("tapError", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.tapError(() => _.right(2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.tapError(() => _.right(2))), _.left("a"))
-    Util.deepStrictEqual(pipe(_.left("a"), _.tapError(() => _.left("b"))), _.left("b"))
+    Util.deepStrictEqual(pipe(E.right(1), E.tapError(() => E.right(2))), E.right(1))
+    Util.deepStrictEqual(pipe(E.left("a"), E.tapError(() => E.right(2))), E.left("a"))
+    Util.deepStrictEqual(pipe(E.left("a"), E.tapError(() => E.left("b"))), E.left("b"))
   })
 
   it("inspectLeft", () => {
     const log: Array<string> = []
-    pipe(_.right(1), _.inspectLeft((e) => log.push(e)))
-    pipe(_.left("e"), _.inspectLeft((e) => log.push(e)))
+    pipe(E.right(1), E.inspectLeft((e) => log.push(e)))
+    pipe(E.left("e"), E.inspectLeft((e) => log.push(e)))
     Util.deepStrictEqual(log, ["e"])
   })
 
   it("getOrThrow", () => {
-    expect(pipe(_.right(1), _.getOrThrow)).toEqual(1)
-    expect(() => pipe(_.left("e"), _.getOrThrow)).toThrowError(
+    expect(pipe(E.right(1), E.getOrThrow)).toEqual(1)
+    expect(() => pipe(E.left("e"), E.getOrThrow)).toThrowError(
       new Error("getOrThrow called on a Left")
     )
   })
 
   it("andThenDiscard", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.andThenDiscard(_.right("a"))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.andThenDiscard(_.left(true))), _.left(true))
-    Util.deepStrictEqual(pipe(_.left(1), _.andThenDiscard(_.right("a"))), _.left(1))
-    Util.deepStrictEqual(pipe(_.left(1), _.andThenDiscard(_.left(true))), _.left(1))
+    Util.deepStrictEqual(pipe(E.right(1), E.andThenDiscard(E.right("a"))), E.right(1))
+    Util.deepStrictEqual(pipe(E.right(1), E.andThenDiscard(E.left(true))), E.left(true))
+    Util.deepStrictEqual(pipe(E.left(1), E.andThenDiscard(E.right("a"))), E.left(1))
+    Util.deepStrictEqual(pipe(E.left(1), E.andThenDiscard(E.left(true))), E.left(1))
   })
 
   it("andThen", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.andThen(_.right("a"))), _.right("a"))
-    Util.deepStrictEqual(pipe(_.right(1), _.andThen(_.left(true))), _.left(true))
-    Util.deepStrictEqual(pipe(_.left(1), _.andThen(_.right("a"))), _.left(1))
-    Util.deepStrictEqual(pipe(_.left(1), _.andThen(_.left(true))), _.left(1))
+    Util.deepStrictEqual(pipe(E.right(1), E.andThen(E.right("a"))), E.right("a"))
+    Util.deepStrictEqual(pipe(E.right(1), E.andThen(E.left(true))), E.left(true))
+    Util.deepStrictEqual(pipe(E.left(1), E.andThen(E.right("a"))), E.left(1))
+    Util.deepStrictEqual(pipe(E.left(1), E.andThen(E.left(true))), E.left(1))
   })
 
   it("orElse", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.right(2))), _.right(1))
-    Util.deepStrictEqual(pipe(_.right(1), _.orElse(() => _.left("b"))), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.right(2))), _.right(2))
-    Util.deepStrictEqual(pipe(_.left("a"), _.orElse(() => _.left("b"))), _.left("b"))
+    Util.deepStrictEqual(pipe(E.right(1), E.orElse(() => E.right(2))), E.right(1))
+    Util.deepStrictEqual(pipe(E.right(1), E.orElse(() => E.left("b"))), E.right(1))
+    Util.deepStrictEqual(pipe(E.left("a"), E.orElse(() => E.right(2))), E.right(2))
+    Util.deepStrictEqual(pipe(E.left("a"), E.orElse(() => E.left("b"))), E.left("b"))
   })
 
   it("orElseEither", () => {
-    expect(pipe(_.right(1), _.orElseEither(() => _.right(2)))).toEqual(_.right(_.left(1)))
-    expect(pipe(_.right(1), _.orElseEither(() => _.left("b")))).toEqual(_.right(_.left(1)))
-    expect(pipe(_.left("a"), _.orElseEither(() => _.right(2)))).toEqual(_.right(_.right(2)))
-    expect(pipe(_.left("a"), _.orElseEither(() => _.left("b")))).toEqual(_.left("b"))
+    expect(pipe(E.right(1), E.orElseEither(() => E.right(2)))).toEqual(E.right(E.left(1)))
+    expect(pipe(E.right(1), E.orElseEither(() => E.left("b")))).toEqual(E.right(E.left(1)))
+    expect(pipe(E.left("a"), E.orElseEither(() => E.right(2)))).toEqual(E.right(E.right(2)))
+    expect(pipe(E.left("a"), E.orElseEither(() => E.left("b")))).toEqual(E.left("b"))
   })
 
   it("map", () => {
-    const f = _.map(S.length)
-    Util.deepStrictEqual(pipe(_.right("abc"), f), _.right(3))
-    Util.deepStrictEqual(pipe(_.left("s"), f), _.left("s"))
+    const f = E.map(S.length)
+    Util.deepStrictEqual(pipe(E.right("abc"), f), E.right(3))
+    Util.deepStrictEqual(pipe(E.left("s"), f), E.left("s"))
   })
 
   it("flatMap", () => {
-    const f = _.flatMap<string, string, number>(flow(S.length, _.right))
-    Util.deepStrictEqual(pipe(_.right("abc"), f), _.right(3))
-    Util.deepStrictEqual(pipe(_.left("maError"), f), _.left("maError"))
+    const f = E.flatMap<string, string, number>(flow(S.length, E.right))
+    Util.deepStrictEqual(pipe(E.right("abc"), f), E.right(3))
+    Util.deepStrictEqual(pipe(E.left("maError"), f), E.left("maError"))
   })
 
   it("bimap", () => {
-    const f = _.bimap(S.length, (n: number) => n > 2)
-    Util.deepStrictEqual(pipe(_.right(1), f), _.right(false))
+    const f = E.bimap(S.length, (n: number) => n > 2)
+    Util.deepStrictEqual(pipe(E.right(1), f), E.right(false))
   })
 
   it("mapLeft", () => {
-    const f = _.mapLeft(Util.double)
-    Util.deepStrictEqual(pipe(_.right("a"), f), _.right("a"))
-    Util.deepStrictEqual(pipe(_.left(1), f), _.left(2))
+    const f = E.mapLeft(Util.double)
+    Util.deepStrictEqual(pipe(E.right("a"), f), E.right("a"))
+    Util.deepStrictEqual(pipe(E.left(1), f), E.left(2))
   })
 
   it("traverse", () => {
-    const traverse = _.traverse(O.Applicative)((
+    const traverse = E.traverse(O.Applicative)((
       n: number
     ) => (n >= 2 ? O.some(n) : O.none()))
-    Util.deepStrictEqual(pipe(_.left("a"), traverse), O.some(_.left("a")))
-    Util.deepStrictEqual(pipe(_.right(1), traverse), O.none())
-    Util.deepStrictEqual(pipe(_.right(3), traverse), O.some(_.right(3)))
+    Util.deepStrictEqual(pipe(E.left("a"), traverse), O.some(E.left("a")))
+    Util.deepStrictEqual(pipe(E.right(1), traverse), O.none())
+    Util.deepStrictEqual(pipe(E.right(3), traverse), O.some(E.right(3)))
   })
 
   it("sequence", () => {
-    const sequence = _.sequence(O.Applicative)
-    Util.deepStrictEqual(sequence(_.right(O.some(1))), O.some(_.right(1)))
-    Util.deepStrictEqual(sequence(_.left("a")), O.some(_.left("a")))
-    Util.deepStrictEqual(sequence(_.right(O.none())), O.none())
+    const sequence = E.sequence(O.Applicative)
+    Util.deepStrictEqual(sequence(E.right(O.some(1))), O.some(E.right(1)))
+    Util.deepStrictEqual(sequence(E.left("a")), O.some(E.left("a")))
+    Util.deepStrictEqual(sequence(E.right(O.none())), O.none())
   })
 
   it("match", () => {
     const f = (s: string) => `left${s.length}`
     const g = (s: string) => `right${s.length}`
-    const match = _.match(f, g)
-    Util.deepStrictEqual(match(_.left("abc")), "left3")
-    Util.deepStrictEqual(match(_.right("abc")), "right3")
+    const match = E.match(f, g)
+    Util.deepStrictEqual(match(E.left("abc")), "left3")
+    Util.deepStrictEqual(match(E.right("abc")), "right3")
   })
 
   it("getOrElse", () => {
-    Util.deepStrictEqual(pipe(_.right(12), _.getOrElse(() => 17)), 12)
-    Util.deepStrictEqual(pipe(_.left("a"), _.getOrElse(() => 17)), 17)
+    Util.deepStrictEqual(pipe(E.right(12), E.getOrElse(() => 17)), 12)
+    Util.deepStrictEqual(pipe(E.left("a"), E.getOrElse(() => 17)), 17)
   })
 
   it("contains", () => {
-    const contains = _.contains(N.Equivalence)
-    Util.deepStrictEqual(pipe(_.left("a"), contains(2)), false)
-    Util.deepStrictEqual(pipe(_.right(2), contains(2)), true)
-    Util.deepStrictEqual(pipe(_.right(2), contains(1)), false)
+    const contains = E.contains(N.Equivalence)
+    Util.deepStrictEqual(pipe(E.left("a"), contains(2)), false)
+    Util.deepStrictEqual(pipe(E.right(2), contains(2)), true)
+    Util.deepStrictEqual(pipe(E.right(2), contains(1)), false)
   })
 
   it("filter", () => {
     const predicate = (n: number) => n > 10
-    Util.deepStrictEqual(pipe(_.right(12), _.filter(predicate, () => -1)), _.right(12))
-    Util.deepStrictEqual(pipe(_.right(7), _.filter(predicate, () => -1)), _.left(-1))
-    Util.deepStrictEqual(pipe(_.left(12), _.filter(predicate, () => -1)), _.left(12))
+    Util.deepStrictEqual(pipe(E.right(12), E.filter(predicate, () => -1)), E.right(12))
+    Util.deepStrictEqual(pipe(E.right(7), E.filter(predicate, () => -1)), E.left(-1))
+    Util.deepStrictEqual(pipe(E.left(12), E.filter(predicate, () => -1)), E.left(12))
   })
 
   it("isLeft", () => {
-    Util.deepStrictEqual(_.isLeft(_.right(1)), false)
-    Util.deepStrictEqual(_.isLeft(_.left(1)), true)
+    Util.deepStrictEqual(E.isLeft(E.right(1)), false)
+    Util.deepStrictEqual(E.isLeft(E.left(1)), true)
   })
 
   it("isRight", () => {
-    Util.deepStrictEqual(_.isRight(_.right(1)), true)
-    Util.deepStrictEqual(_.isRight(_.left(1)), false)
+    Util.deepStrictEqual(E.isRight(E.right(1)), true)
+    Util.deepStrictEqual(E.isRight(E.left(1)), false)
   })
 
   it("swap", () => {
-    Util.deepStrictEqual(_.reverse(_.right("a")), _.left("a"))
-    Util.deepStrictEqual(_.reverse(_.left("b")), _.right("b"))
+    Util.deepStrictEqual(E.reverse(E.right("a")), E.left("a"))
+    Util.deepStrictEqual(E.reverse(E.left("b")), E.right("b"))
   })
 
   it("liftPredicate", () => {
-    const f = _.liftPredicate((n: number) => n >= 2, () => "e")
-    Util.deepStrictEqual(f(3), _.right(3))
-    Util.deepStrictEqual(f(1), _.left("e"))
+    const f = E.liftPredicate((n: number) => n >= 2, () => "e")
+    Util.deepStrictEqual(f(3), E.right(3))
+    Util.deepStrictEqual(f(1), E.left("e"))
   })
 
   it("fromNullable", () => {
-    Util.deepStrictEqual(_.fromNullable(() => "default")(null), _.left("default"))
-    Util.deepStrictEqual(_.fromNullable(() => "default")(undefined), _.left("default"))
-    Util.deepStrictEqual(_.fromNullable(() => "default")(1), _.right(1))
+    Util.deepStrictEqual(E.fromNullable(() => "default")(null), E.left("default"))
+    Util.deepStrictEqual(E.fromNullable(() => "default")(undefined), E.left("default"))
+    Util.deepStrictEqual(E.fromNullable(() => "default")(1), E.right(1))
   })
 
   it("filterMap", () => {
     const p = (n: number) => n > 2
     const f = (n: number) => (p(n) ? O.some(n + 1) : O.none())
-    Util.deepStrictEqual(pipe(_.left("123"), _.filterMap(f, () => "")), _.left("123"))
-    Util.deepStrictEqual(pipe(_.right(1), _.filterMap(f, () => "")), _.left(S.Monoid.empty))
-    Util.deepStrictEqual(pipe(_.right(3), _.filterMap(f, () => "")), _.right(4))
+    Util.deepStrictEqual(pipe(E.left("123"), E.filterMap(f, () => "")), E.left("123"))
+    Util.deepStrictEqual(pipe(E.right(1), E.filterMap(f, () => "")), E.left(S.Monoid.empty))
+    Util.deepStrictEqual(pipe(E.right(3), E.filterMap(f, () => "")), E.right(4))
   })
 
   it("fromIterable", () => {
-    Util.deepStrictEqual(_.fromIterable(() => "e")([]), _.left("e"))
-    Util.deepStrictEqual(_.fromIterable(() => "e")(["a"]), _.right("a"))
+    Util.deepStrictEqual(E.fromIterable(() => "e")([]), E.left("e"))
+    Util.deepStrictEqual(E.fromIterable(() => "e")(["a"]), E.right("a"))
   })
 
   it("firstRightOf", () => {
-    Util.deepStrictEqual(pipe(_.right(1), _.firstRightOf([])), _.right(1))
-    Util.deepStrictEqual(pipe(_.left("e"), _.firstRightOf([])), _.left("e"))
+    Util.deepStrictEqual(pipe(E.right(1), E.firstRightOf([])), E.right(1))
+    Util.deepStrictEqual(pipe(E.left("e"), E.firstRightOf([])), E.left("e"))
     Util.deepStrictEqual(
-      pipe(_.left("e1"), _.firstRightOf([_.left("e2"), _.left("e3"), _.left("e4"), _.right(1)])),
-      _.right(1)
+      pipe(E.left("e1"), E.firstRightOf([E.left("e2"), E.left("e3"), E.left("e4"), E.right(1)])),
+      E.right(1)
     )
     Util.deepStrictEqual(
-      pipe(_.left("e1"), _.firstRightOf([_.left("e2"), _.left("e3"), _.left("e4")])),
-      _.left("e4")
+      pipe(E.left("e1"), E.firstRightOf([E.left("e2"), E.left("e3"), E.left("e4")])),
+      E.left("e4")
     )
   })
 
   it("fromOption", () => {
-    Util.deepStrictEqual(_.fromOption(() => "none")(O.none()), _.left("none"))
-    Util.deepStrictEqual(_.fromOption(() => "none")(O.some(1)), _.right(1))
+    Util.deepStrictEqual(E.fromOption(() => "none")(O.none()), E.left("none"))
+    Util.deepStrictEqual(E.fromOption(() => "none")(O.some(1)), E.right(1))
   })
 
   it("liftOption", () => {
-    const f = _.liftOption((n: number) => (n > 0 ? O.some(n) : O.none()), () => "a")
-    Util.deepStrictEqual(f(1), _.right(1))
-    Util.deepStrictEqual(f(-1), _.left("a"))
+    const f = E.liftOption((n: number) => (n > 0 ? O.some(n) : O.none()), () => "a")
+    Util.deepStrictEqual(f(1), E.right(1))
+    Util.deepStrictEqual(f(-1), E.left("a"))
   })
 
   it("flatMapOption", () => {
-    const f = _.flatMapOption((n: number) => (n > 0 ? O.some(n) : O.none()), () => "a")
-    Util.deepStrictEqual(f(_.right(1)), _.right(1))
-    Util.deepStrictEqual(f(_.right(-1)), _.left("a"))
-    Util.deepStrictEqual(f(_.left("b")), _.left("b"))
+    const f = E.flatMapOption((n: number) => (n > 0 ? O.some(n) : O.none()), () => "a")
+    Util.deepStrictEqual(f(E.right(1)), E.right(1))
+    Util.deepStrictEqual(f(E.right(-1)), E.left("a"))
+    Util.deepStrictEqual(f(E.left("b")), E.left("b"))
   })
 
   it("exists", () => {
-    const gt2 = _.exists((n: number) => n > 2)
-    Util.deepStrictEqual(gt2(_.left("a")), false)
-    Util.deepStrictEqual(gt2(_.right(1)), false)
-    Util.deepStrictEqual(gt2(_.right(3)), true)
+    const gt2 = E.exists((n: number) => n > 2)
+    Util.deepStrictEqual(gt2(E.left("a")), false)
+    Util.deepStrictEqual(gt2(E.right(1)), false)
+    Util.deepStrictEqual(gt2(E.right(3)), true)
   })
 
   it("do notation", () => {
     Util.deepStrictEqual(
       pipe(
-        _.right(1),
-        _.bindTo("a"),
-        _.bind("b", () => _.right("b")),
-        _.let("c", ({ a, b }) => [a, b])
+        E.right(1),
+        E.bindTo("a"),
+        E.bind("b", () => E.right("b")),
+        E.let("c", ({ a, b }) => [a, b])
       ),
-      _.right({ a: 1, b: "b", c: [1, "b"] })
+      E.right({ a: 1, b: "b", c: [1, "b"] })
     )
   })
 
   it("andThenBind", () => {
     Util.deepStrictEqual(
-      pipe(_.right(1), _.bindTo("a"), _.andThenBind("b", _.right("b"))),
-      _.right({ a: 1, b: "b" })
+      pipe(E.right(1), E.bindTo("a"), E.andThenBind("b", E.right("b"))),
+      E.right({ a: 1, b: "b" })
     )
   })
 
   it("product", () => {
-    const product = _.SemiProduct.product
-    Util.deepStrictEqual(product(_.right(1), _.right("a")), _.right([1, "a"]))
-    Util.deepStrictEqual(product(_.right(1), _.left("e2")), _.left("e2"))
-    Util.deepStrictEqual(product(_.left("e1"), _.right("a")), _.left("e1"))
-    Util.deepStrictEqual(product(_.left("e1"), _.left("2")), _.left("e1"))
+    const product = E.SemiProduct.product
+    Util.deepStrictEqual(product(E.right(1), E.right("a")), E.right([1, "a"]))
+    Util.deepStrictEqual(product(E.right(1), E.left("e2")), E.left("e2"))
+    Util.deepStrictEqual(product(E.left("e1"), E.right("a")), E.left("e1"))
+    Util.deepStrictEqual(product(E.left("e1"), E.left("2")), E.left("e1"))
   })
 
   it("productMany", () => {
     const productMany: <E, A>(
-      self: _.Either<E, A>,
-      collection: Iterable<_.Either<E, A>>
-    ) => _.Either<E, [A, ...Array<A>]> = _.SemiProduct.productMany
+      self: E.Either<E, A>,
+      collection: Iterable<E.Either<E, A>>
+    ) => E.Either<E, [A, ...Array<A>]> = E.SemiProduct.productMany
 
-    Util.deepStrictEqual(productMany(_.right(1), []), _.right([1]))
+    Util.deepStrictEqual(productMany(E.right(1), []), E.right([1]))
     Util.deepStrictEqual(
-      productMany(_.right(1), [_.right(2), _.right(3)]),
-      _.right([1, 2, 3])
+      productMany(E.right(1), [E.right(2), E.right(3)]),
+      E.right([1, 2, 3])
     )
     Util.deepStrictEqual(
-      productMany(_.right(1), [_.left("e"), _.right(3)]),
-      _.left("e")
+      productMany(E.right(1), [E.left("e"), E.right(3)]),
+      E.left("e")
     )
     expect(
-      productMany(_.left("e"), [_.right(2), _.right(3)])
-    ).toEqual(_.left("e"))
+      productMany(E.left("e"), [E.right(2), E.right(3)])
+    ).toEqual(E.left("e"))
   })
 
   it("productAll", () => {
-    const productAll = _.Product.productAll
-    Util.deepStrictEqual(productAll([]), _.right([]))
+    const productAll = E.Product.productAll
+    Util.deepStrictEqual(productAll([]), E.right([]))
     Util.deepStrictEqual(
-      productAll([_.right(1), _.right(2), _.right(3)]),
-      _.right([1, 2, 3])
+      productAll([E.right(1), E.right(2), E.right(3)]),
+      E.right([1, 2, 3])
     )
     Util.deepStrictEqual(
-      productAll([_.left("e"), _.right(2), _.right(3)]),
-      _.left("e")
+      productAll([E.left("e"), E.right(2), E.right(3)]),
+      E.left("e")
     )
   })
 
   it("coproduct", () => {
-    const coproduct = _.SemiCoproduct.coproduct
-    Util.deepStrictEqual(coproduct(_.right(1), _.right(2)), _.right(1))
-    Util.deepStrictEqual(coproduct(_.right(1), _.left("e2")), _.right(1))
-    Util.deepStrictEqual(coproduct(_.left("e1"), _.right(2)), _.right(2))
-    Util.deepStrictEqual(coproduct(_.left("e1"), _.left("e2")), _.left("e2"))
+    const coproduct = E.SemiCoproduct.coproduct
+    Util.deepStrictEqual(coproduct(E.right(1), E.right(2)), E.right(1))
+    Util.deepStrictEqual(coproduct(E.right(1), E.left("e2")), E.right(1))
+    Util.deepStrictEqual(coproduct(E.left("e1"), E.right(2)), E.right(2))
+    Util.deepStrictEqual(coproduct(E.left("e1"), E.left("e2")), E.left("e2"))
   })
 
   it("coproductMany", () => {
-    const coproductMany = _.SemiCoproduct.coproductMany
-    Util.deepStrictEqual(coproductMany(_.right(1), [_.right(2)]), _.right(1))
+    const coproductMany = E.SemiCoproduct.coproductMany
+    Util.deepStrictEqual(coproductMany(E.right(1), [E.right(2)]), E.right(1))
     Util.deepStrictEqual(
-      coproductMany(_.right(1), [_.left("e2")]),
-      _.right(1)
+      coproductMany(E.right(1), [E.left("e2")]),
+      E.right(1)
     )
-    Util.deepStrictEqual(coproductMany(_.left("e1"), [_.right(2)]), _.right(2))
-    Util.deepStrictEqual(coproductMany(_.left("e1"), [_.left("e2")]), _.left("e2"))
+    Util.deepStrictEqual(coproductMany(E.left("e1"), [E.right(2)]), E.right(2))
+    Util.deepStrictEqual(coproductMany(E.left("e1"), [E.left("e2")]), E.left("e2"))
   })
 
   it("element", () => {
-    expect(pipe(_.right(1), _.tupled, _.appendElement(_.right("b")))).toEqual(
-      _.right([1, "b"])
+    expect(pipe(E.right(1), E.tupled, E.appendElement(E.right("b")))).toEqual(
+      E.right([1, "b"])
     )
   })
 
   it("liftNullable", () => {
-    const f = _.liftNullable((n: number) => (n > 0 ? n : null), () => "error")
-    Util.deepStrictEqual(f(1), _.right(1))
-    Util.deepStrictEqual(f(-1), _.left("error"))
+    const f = E.liftNullable((n: number) => (n > 0 ? n : null), () => "error")
+    Util.deepStrictEqual(f(1), E.right(1))
+    Util.deepStrictEqual(f(-1), E.left("error"))
   })
 
   it("flatMapNullable", () => {
-    const f = _.flatMapNullable((n: number) => (n > 0 ? n : null), () => "error")
-    Util.deepStrictEqual(f(_.right(1)), _.right(1))
-    Util.deepStrictEqual(f(_.right(-1)), _.left("error"))
-    Util.deepStrictEqual(f(_.left("a")), _.left("a"))
+    const f = E.flatMapNullable((n: number) => (n > 0 ? n : null), () => "error")
+    Util.deepStrictEqual(f(E.right(1)), E.right(1))
+    Util.deepStrictEqual(f(E.right(-1)), E.left("error"))
+    Util.deepStrictEqual(f(E.left("a")), E.left("a"))
   })
 
   it("merge", () => {
-    Util.deepStrictEqual(_.merge(_.right(1)), 1)
-    Util.deepStrictEqual(_.merge(_.left("a")), "a")
+    Util.deepStrictEqual(E.merge(E.right(1)), 1)
+    Util.deepStrictEqual(E.merge(E.left("a")), "a")
   })
 
   it("liftThrowable", () => {
-    const f = _.liftThrowable((s: string) => {
+    const f = E.liftThrowable((s: string) => {
       const len = s.length
       if (len > 0) {
         return len
       }
       throw new Error("empty string")
     }, identity)
-    Util.deepStrictEqual(f("a"), _.right(1))
-    Util.deepStrictEqual(f(""), _.left(new Error("empty string")))
+    Util.deepStrictEqual(f("a"), E.right(1))
+    Util.deepStrictEqual(f(""), E.left(new Error("empty string")))
   })
 
   it("zipWith", () => {
-    expect(pipe(_.left("a"), _.zipWith(_.right(2), (a, b) => a + b))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.zipWith(_.left("a"), (a, b) => a + b))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.zipWith(_.right(2), (a, b) => a + b))).toEqual(_.right(3))
+    expect(pipe(E.left("a"), E.zipWith(E.right(2), (a, b) => a + b))).toEqual(E.left("a"))
+    expect(pipe(E.right(1), E.zipWith(E.left("a"), (a, b) => a + b))).toEqual(E.left("a"))
+    expect(pipe(E.right(1), E.zipWith(E.right(2), (a, b) => a + b))).toEqual(E.right(3))
   })
 
   it("sum", () => {
-    expect(pipe(_.left("a"), _.sum(_.right(2)))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.sum(_.left("a")))).toEqual(_.left("a"))
-    expect(pipe(_.right(2), _.sum(_.right(3)))).toEqual(_.right(5))
+    expect(pipe(E.left("a"), E.sum(E.right(2)))).toEqual(E.left("a"))
+    expect(pipe(E.right(1), E.sum(E.left("a")))).toEqual(E.left("a"))
+    expect(pipe(E.right(2), E.sum(E.right(3)))).toEqual(E.right(5))
   })
 
   it("multiply", () => {
-    expect(pipe(_.left("a"), _.multiply(_.right(2)))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.multiply(_.left("a")))).toEqual(_.left("a"))
-    expect(pipe(_.right(2), _.multiply(_.right(3)))).toEqual(_.right(6))
+    expect(pipe(E.left("a"), E.multiply(E.right(2)))).toEqual(E.left("a"))
+    expect(pipe(E.right(1), E.multiply(E.left("a")))).toEqual(E.left("a"))
+    expect(pipe(E.right(2), E.multiply(E.right(3)))).toEqual(E.right(6))
   })
 
   it("subtract", () => {
-    expect(pipe(_.left("a"), _.subtract(_.right(2)))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.subtract(_.left("a")))).toEqual(_.left("a"))
-    expect(pipe(_.right(2), _.subtract(_.right(3)))).toEqual(_.right(-1))
+    expect(pipe(E.left("a"), E.subtract(E.right(2)))).toEqual(E.left("a"))
+    expect(pipe(E.right(1), E.subtract(E.left("a")))).toEqual(E.left("a"))
+    expect(pipe(E.right(2), E.subtract(E.right(3)))).toEqual(E.right(-1))
   })
 
   it("divide", () => {
-    expect(pipe(_.left("a"), _.divide(_.right(2)))).toEqual(_.left("a"))
-    expect(pipe(_.right(1), _.divide(_.left("a")))).toEqual(_.left("a"))
-    expect(pipe(_.right(6), _.divide(_.right(3)))).toEqual(_.right(2))
+    expect(pipe(E.left("a"), E.divide(E.right(2)))).toEqual(E.left("a"))
+    expect(pipe(E.right(1), E.divide(E.left("a")))).toEqual(E.left("a"))
+    expect(pipe(E.right(6), E.divide(E.right(3)))).toEqual(E.right(2))
   })
 
   it("getOptionalSemigroup", () => {
-    const OS = _.getOptionalSemigroup(S.Semigroup)
-    Util.deepStrictEqual(OS.combine(_.left("e"), _.left("e")), _.left("e"))
-    Util.deepStrictEqual(OS.combine(_.left("e"), _.right("a")), _.right("a"))
-    Util.deepStrictEqual(OS.combine(_.right("a"), _.left("e")), _.right("a"))
-    Util.deepStrictEqual(OS.combine(_.right("b"), _.right("a")), _.right("ba"))
-    Util.deepStrictEqual(OS.combine(_.right("a"), _.right("b")), _.right("ab"))
+    const OS = E.getOptionalSemigroup(S.Semigroup)
+    Util.deepStrictEqual(OS.combine(E.left("e"), E.left("e")), E.left("e"))
+    Util.deepStrictEqual(OS.combine(E.left("e"), E.right("a")), E.right("a"))
+    Util.deepStrictEqual(OS.combine(E.right("a"), E.left("e")), E.right("a"))
+    Util.deepStrictEqual(OS.combine(E.right("b"), E.right("a")), E.right("ba"))
+    Util.deepStrictEqual(OS.combine(E.right("a"), E.right("b")), E.right("ab"))
 
-    Util.deepStrictEqual(OS.combineMany(_.right("a"), [_.right("b")]), _.right("ab"))
-    Util.deepStrictEqual(OS.combineMany(_.left("e"), [_.right("b")]), _.right("b"))
-    Util.deepStrictEqual(OS.combineMany(_.right("a"), [_.left("e")]), _.right("a"))
+    Util.deepStrictEqual(OS.combineMany(E.right("a"), [E.right("b")]), E.right("ab"))
+    Util.deepStrictEqual(OS.combineMany(E.left("e"), [E.right("b")]), E.right("b"))
+    Util.deepStrictEqual(OS.combineMany(E.right("a"), [E.left("e")]), E.right("a"))
   })
 
   it("getEquivalence", () => {
-    const isEquivalent = _.getEquivalence(S.Equivalence, N.Equivalence)
-    Util.deepStrictEqual(isEquivalent(_.right(1), _.right(1)), true)
-    Util.deepStrictEqual(isEquivalent(_.right(1), _.right(2)), false)
-    Util.deepStrictEqual(isEquivalent(_.right(1), _.left("foo")), false)
-    Util.deepStrictEqual(isEquivalent(_.left("foo"), _.left("foo")), true)
-    Util.deepStrictEqual(isEquivalent(_.left("foo"), _.left("bar")), false)
-    Util.deepStrictEqual(isEquivalent(_.left("foo"), _.right(1)), false)
+    const isEquivalent = E.getEquivalence(S.Equivalence, N.Equivalence)
+    Util.deepStrictEqual(isEquivalent(E.right(1), E.right(1)), true)
+    Util.deepStrictEqual(isEquivalent(E.right(1), E.right(2)), false)
+    Util.deepStrictEqual(isEquivalent(E.right(1), E.left("foo")), false)
+    Util.deepStrictEqual(isEquivalent(E.left("foo"), E.left("foo")), true)
+    Util.deepStrictEqual(isEquivalent(E.left("foo"), E.left("bar")), false)
+    Util.deepStrictEqual(isEquivalent(E.left("foo"), E.right(1)), false)
   })
 
   it("toArray", () => {
-    expect(_.toArray(_.right(1))).toEqual([1])
-    expect(_.toArray(_.left("error"))).toEqual([])
+    expect(E.toArray(E.right(1))).toEqual([1])
+    expect(E.toArray(E.left("error"))).toEqual([])
+  })
+
+  it("toValidated", () => {
+    assert.deepStrictEqual(E.toValidated(E.right(1)), E.right(1))
+    assert.deepStrictEqual(E.toValidated(E.left("e")), E.left(["e"]))
+  })
+
+  it("liftEither", () => {
+    const f = (n: number) => n >= 0 ? E.right(n) : E.left("negative number")
+    const g = E.liftEither(f)
+    assert.deepStrictEqual(g(1), E.right(1))
+    assert.deepStrictEqual(g(-1), E.left(["negative number"]))
+  })
+
+  it("tupleValidated", () => {
+    assert.deepStrictEqual(
+      E.tupleValidated(
+        E.right(1),
+        E.right("hello")
+      ),
+      E.right([1, "hello"])
+    )
+    assert.deepStrictEqual(
+      E.tupleValidated(
+        E.fail("error1"),
+        E.fail("error2")
+      ),
+      E.left(["error1", "error2"])
+    )
+  })
+
+  it("structValidated", () => {
+    assert.deepStrictEqual(
+      E.structValidated({
+        x: E.right(1),
+        y: E.right("hello")
+      }),
+      E.right({ x: 1, y: "hello" })
+    )
+
+    assert.deepStrictEqual(
+      E.structValidated({
+        x: E.fail("error1"),
+        y: E.fail("error2")
+      }),
+      E.left(["error1", "error2"])
+    )
+  })
+
+  it("zipWithValidated", () => {
+    assert.deepStrictEqual(
+      E.zipWithValidated(
+        E.right(1),
+        E.right(2),
+        N.sum
+      ),
+      E.right(3)
+    )
+
+    assert.deepStrictEqual(
+      E.zipWithValidated(
+        E.fail("error1"),
+        E.right(2),
+        N.sum
+      ),
+      E.fail("error1")
+    )
+
+    assert.deepStrictEqual(
+      E.zipWithValidated(
+        E.right(1),
+        E.fail("error2"),
+        N.sum
+      ),
+      E.fail("error2")
+    )
+
+    assert.deepStrictEqual(
+      E.zipWithValidated(
+        E.fail("error1"),
+        E.fail("error2"),
+        N.sum
+      ),
+      E.left(["error1", "error2"])
+    )
+  })
+
+  it("lift2Validated", () => {
+    const sum = E.lift2Validated(N.sum)
+    assert.deepStrictEqual(sum(E.right(1), E.right(2)), E.right(3))
+    assert.deepStrictEqual(sum(E.fail("error1"), E.fail("error2")), E.left(["error1", "error2"]))
   })
 })

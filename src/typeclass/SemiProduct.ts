@@ -148,14 +148,14 @@ export const appendElement = <F extends TypeLambda>(F: SemiProduct<F>): {
  */
 export const nonEmptyTuple = <F extends TypeLambda>(F: SemiProduct<F>) =>
   <T extends readonly [Kind<F, any, any, any, any>, ...Array<Kind<F, any, any, any, any>>]>(
-    ...components: T
+    ...elements: T
   ): Kind<
     F,
     ([T[number]] extends [Kind<F, infer R, any, any, any>] ? R : never),
     ([T[number]] extends [Kind<F, any, infer O, any, any>] ? O : never),
     ([T[number]] extends [Kind<F, any, any, infer E, any>] ? E : never),
     { [I in keyof T]: [T[I]] extends [Kind<F, any, any, any, infer A>] ? A : never }
-  > => F.productMany(components[0], components.slice(1)) as any
+  > => F.productMany(elements[0], elements.slice(1)) as any
 
 type EnforceNonEmptyRecord<R> = keyof R extends never ? never : R
 
