@@ -5,7 +5,7 @@
 import type { Either, Left, Right } from "@fp-ts/core/Either"
 import * as E from "@fp-ts/core/Either"
 import type { LazyArg } from "@fp-ts/core/Function"
-import { constNull, constUndefined, dual } from "@fp-ts/core/Function"
+import { constNull, constUndefined, dual, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
 import { proto, structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
@@ -978,22 +978,6 @@ export const SemiAlternative: semiAlternative.SemiAlternative<TheseTypeLambda> =
  * @category filtering
  * @since 1.0.0
  */
-export const compact: {
-  <E>(onNone: LazyArg<E>): <A>(self: These<E, Option<A>>) => These<E, A>
-  <E, A>(self: These<E, Option<A>>, onNone: LazyArg<E>): These<E, A>
-} = dual(2, <E, A>(self: These<E, Option<A>>, onNone: LazyArg<E>): These<E, A> =>
-  isLeft(self) ?
-    self :
-    O.isNone(self.right) ?
-    left(onNone()) :
-    isBoth(self) ?
-    both(self.left, self.right.value) :
-    right(self.right.value))
-
-/**
- * @category filtering
- * @since 1.0.0
- */
 export const filter: {
   <C extends A, B extends A, E2, A = C>(refinement: Refinement<A, B>, onFalse: LazyArg<E2>): <E1>(
     self: These<E1, C>
@@ -1047,6 +1031,19 @@ export const filterMap: {
   const ob = f(self.right)
   return O.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
 })
+
+/**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const compact: {
+  <E>(onNone: LazyArg<E>): <A>(self: These<E, Option<A>>) => These<E, A>
+  <E, A>(self: These<E, Option<A>>, onNone: LazyArg<E>): These<E, A>
+} = dual(
+  2,
+  <E, A>(self: These<E, Option<A>>, onNone: LazyArg<E>): These<E, A> =>
+    filterMap(self, identity, onNone)
+)
 
 const product: {
   <E2, B>(that: Validated<E2, B>): <E1, A>(self: Validated<E1, A>) => Validated<E2 | E1, [A, B]>
