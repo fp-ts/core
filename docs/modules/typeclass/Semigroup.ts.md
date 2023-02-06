@@ -187,7 +187,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: product.Product<SemigroupTypeLambda>
+export declare const Product: product_.Product<SemigroupTypeLambda>
 ```
 
 Added in v1.0.0

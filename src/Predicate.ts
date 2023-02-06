@@ -140,20 +140,21 @@ export const Of: of_.Of<PredicateTypeLambda> = {
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = semiProduct.make(
-  Invariant,
-  <A, B>(
-    self: Predicate<A>,
-    that: Predicate<B>
-  ): Predicate<[A, B]> => ([a, b]) => self(a) && that(b),
-  <A>(
-    self: Predicate<A>,
-    collection: Iterable<Predicate<A>>
-  ): Predicate<readonly [A, ...Array<A>]> =>
+const product: {
+  <B>(that: Predicate<B>): <A>(self: Predicate<A>) => Predicate<[A, B]>
+  <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<[A, B]>
+} = dual(
+  2,
+  <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<[A, B]> =>
+    ([a, b]) => self(a) && that(b)
+)
+
+const productMany: {
+  <A>(collection: Iterable<Predicate<A>>): (self: Predicate<A>) => Predicate<[A, ...Array<A>]>
+  <A>(self: Predicate<A>, collection: Iterable<Predicate<A>>): Predicate<[A, ...Array<A>]>
+} = dual(
+  2,
+  <A>(self: Predicate<A>, collection: Iterable<Predicate<A>>): Predicate<[A, ...Array<A>]> =>
     ([head, ...tail]) => {
       if (self(head) === false) {
         return false
@@ -167,6 +168,16 @@ export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = semiPro
       return true
     }
 )
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
 
 const productAll = <A>(
   collection: Iterable<Predicate<A>>
@@ -188,8 +199,8 @@ const productAll = <A>(
 export const Product: product_.Product<PredicateTypeLambda> = {
   of,
   imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 

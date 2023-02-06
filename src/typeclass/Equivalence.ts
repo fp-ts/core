@@ -12,10 +12,10 @@ import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as product from "@fp-ts/core/typeclass/Product"
+import type * as product_ from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -208,23 +208,46 @@ export const Invariant: invariant.Invariant<EquivalenceTypeLambda> = {
   imap
 }
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = semiProduct.make(
-  Invariant,
-  tuple,
-  (self, collection) => tuple(self, ...collection)
+const product: {
+  <B>(that: Equivalence<B>): <A>(self: Equivalence<A>) => Equivalence<[A, B]>
+  <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]>
+} = dual(
+  2,
+  <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]> => tuple(self, that)
 )
+
+const productMany: {
+  <A>(collection: Iterable<Equivalence<A>>): (self: Equivalence<A>) => Equivalence<[A, ...Array<A>]>
+  <A>(self: Equivalence<A>, collection: Iterable<Equivalence<A>>): Equivalence<[A, ...Array<A>]>
+} = dual(
+  2,
+  <A>(self: Equivalence<A>, collection: Iterable<Equivalence<A>>): Equivalence<[A, ...Array<A>]> =>
+    tuple(self, ...collection)
+)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Product: product.Product<EquivalenceTypeLambda> = {
-  of: () => empty,
+export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
+
+const of: <A>(a: A) => Equivalence<A> = () => empty
+
+const productAll = <A>(collection: Iterable<Equivalence<A>>): Equivalence<Array<A>> =>
+  tuple<Array<A>>(...collection)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Product: product_.Product<EquivalenceTypeLambda> = {
+  of,
   imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
-  productAll: <A>(collection: Iterable<Equivalence<A>>) => tuple<Array<A>>(...collection)
+  product,
+  productMany,
+  productAll
 }

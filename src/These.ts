@@ -1049,30 +1049,33 @@ export const filterMap: {
   return O.isNone(ob) ? left(onNone()) : both(self.left, ob.value)
 })
 
-const product = <E1, A, E2, B>(
-  self: Validated<E1, A>,
-  that: Validated<E2, B>
-): Validated<E1 | E2, [A, B]> => {
-  if (isLeft(self)) {
-    return self
-  }
-  if (isRight(self)) {
+const product: {
+  <E2, B>(that: Validated<E2, B>): <E1, A>(self: Validated<E1, A>) => Validated<E2 | E1, [A, B]>
+  <E1, A, E2, B>(self: Validated<E1, A>, that: Validated<E2, B>): Validated<E1 | E2, [A, B]>
+} = dual(
+  2,
+  <E1, A, E2, B>(self: Validated<E1, A>, that: Validated<E2, B>): Validated<E1 | E2, [A, B]> => {
+    if (isLeft(self)) {
+      return self
+    }
+    if (isRight(self)) {
+      if (isLeft(that)) {
+        return that
+      }
+      if (isRight(that)) {
+        return right([self.right, that.right])
+      }
+      return both(that.left, [self.right, that.right])
+    }
     if (isLeft(that)) {
-      return that
+      return left(RA.appendAllNonEmpty(that.left)(self.left))
     }
     if (isRight(that)) {
-      return right([self.right, that.right])
+      return both(self.left, [self.right, that.right])
     }
-    return both(that.left, [self.right, that.right])
+    return both(RA.appendAllNonEmpty(that.left)(self.left), [self.right, that.right])
   }
-  if (isLeft(that)) {
-    return left(RA.appendAllNonEmpty(that.left)(self.left))
-  }
-  if (isRight(that)) {
-    return both(self.left, [self.right, that.right])
-  }
-  return both(RA.appendAllNonEmpty(that.left)(self.left), [self.right, that.right])
-}
+)
 
 const productAll = <E, A>(
   collection: Iterable<Validated<E, A>>
@@ -1098,21 +1101,32 @@ const productAll = <E, A>(
   return right(rights)
 }
 
-const productMany = <E, A>(
-  self: Validated<E, A>,
-  collection: Iterable<Validated<E, A>>
-): Validated<E, [A, ...Array<A>]> =>
-  map(product(self, productAll(collection)), ([a, as]) => [a, ...as])
+const productMany: {
+  <E, A>(
+    collection: Iterable<Validated<E, A>>
+  ): (self: Validated<E, A>) => Validated<E, [A, ...Array<A>]>
+  <E, A>(
+    self: Validated<E, A>,
+    collection: Iterable<Validated<E, A>>
+  ): Validated<E, [A, ...Array<A>]>
+} = dual(
+  2,
+  <E, A>(
+    self: Validated<E, A>,
+    collection: Iterable<Validated<E, A>>
+  ): Validated<E, [A, ...Array<A>]> =>
+    map(product(self, productAll(collection)), ([a, as]) => [a, ...as])
+)
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = semiProduct.make(
-  { imap },
+export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = {
+  imap,
   product,
   productMany
-)
+}
 
 /**
  * @category instances
@@ -1121,8 +1135,8 @@ export const SemiProduct: semiProduct.SemiProduct<ValidatedTypeLambda> = semiPro
 export const SemiApplicative: semiApplicative.SemiApplicative<ValidatedTypeLambda> = {
   imap,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  product,
+  productMany
 }
 
 /**
@@ -1193,8 +1207,8 @@ export const appendElement: {
 export const Product: product_.Product<ValidatedTypeLambda> = {
   of,
   imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -1252,8 +1266,8 @@ export const Applicative: applicative.Applicative<ValidatedTypeLambda> = {
   imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 

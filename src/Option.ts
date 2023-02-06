@@ -889,30 +889,41 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
   flatMap
 }
 
+const product: {
+  <B>(that: Option<B>): <A>(self: Option<A>) => Option<[A, B]>
+  <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]>
+} = dual(
+  2,
+  <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]> =>
+    isSome(self) && isSome(that) ? some([self.value, that.value]) : none()
+)
+
+const productMany: {
+  <A>(collection: Iterable<Option<A>>): (self: Option<A>) => Option<[A, ...Array<A>]>
+  <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<[A, ...Array<A>]>
+} = dual(2, <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<[A, ...Array<A>]> => {
+  if (isNone(self)) {
+    return none()
+  }
+  const out: [A, ...Array<A>] = [self.value]
+  for (const o of collection) {
+    if (isNone(o)) {
+      return none()
+    }
+    out.push(o.value)
+  }
+  return some(out)
+})
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = semiProduct.make(
-  Invariant,
-  (self, that) => isSome(self) && isSome(that) ? some([self.value, that.value]) : none(),
-  <A>(
-    self: Option<A>,
-    collection: Iterable<Option<A>>
-  ): Option<[A, ...Array<A>]> => {
-    if (isNone(self)) {
-      return none()
-    }
-    const out: [A, ...Array<A>] = [self.value]
-    for (const o of collection) {
-      if (isNone(o)) {
-        return none()
-      }
-      out.push(o.value)
-    }
-    return some(out)
-  }
-)
+export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
 
 /**
  * Appends an element to the end of a tuple.
@@ -942,8 +953,8 @@ const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
 export const Product: product_.Product<OptionTypeLambda> = {
   of,
   imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 
@@ -972,8 +983,8 @@ export const struct: <R extends Record<string, Option<any>>>(
 export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> = {
   imap,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  product,
+  productMany
 }
 
 /**
@@ -1053,8 +1064,8 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll
 }
 

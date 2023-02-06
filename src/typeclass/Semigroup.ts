@@ -6,8 +6,8 @@ import type { TypeLambda } from "@fp-ts/core/HKT"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
-import type * as product from "@fp-ts/core/typeclass/Product"
-import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import type * as product_ from "@fp-ts/core/typeclass/Product"
+import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -320,24 +320,46 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
   imap
 }
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = semiProduct.make(
-  Invariant,
-  tuple,
-  (self, collection) => tuple(self, ...collection)
+const product: {
+  <B>(that: Semigroup<B>): <A>(self: Semigroup<A>) => Semigroup<[A, B]>
+  <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]>
+} = dual(
+  2,
+  <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]> => tuple(self, that)
+)
+
+const productMany: {
+  <A>(collection: Iterable<Semigroup<A>>): (self: Semigroup<A>) => Semigroup<[A, ...Array<A>]>
+  <A>(self: Semigroup<A>, collection: Iterable<Semigroup<A>>): Semigroup<[A, ...Array<A>]>
+} = dual(
+  2,
+  <A>(self: Semigroup<A>, collection: Iterable<Semigroup<A>>): Semigroup<[A, ...Array<A>]> =>
+    tuple(self, ...collection)
 )
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Product: product.Product<SemigroupTypeLambda> = {
-  of: constant,
+export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
+
+const of: <A>(a: A) => Semigroup<A> = constant
+
+const productAll = <A>(collection: Iterable<Semigroup<A>>): Semigroup<Array<A>> =>
+  tuple<Array<A>>(...collection)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Product: product_.Product<SemigroupTypeLambda> = {
+  of,
   imap: Invariant.imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
-  productAll: <A>(collection: Iterable<Semigroup<A>>) => tuple<Array<A>>(...collection)
+  product,
+  productMany,
+  productAll
 }

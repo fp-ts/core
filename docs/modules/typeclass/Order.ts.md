@@ -148,7 +148,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: product.Product<OrderTypeLambda>
+export declare const Product: product_.Product<OrderTypeLambda>
 ```
 
 Added in v1.0.0

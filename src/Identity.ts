@@ -121,15 +121,28 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
   flatMap
 }
 
+const product: {
+  <B>(that: Identity<B>): <A>(self: Identity<A>) => Identity<[A, B]>
+  <A, B>(self: Identity<A>, that: Identity<B>): Identity<[A, B]>
+} = dual(2, <A, B>(self: Identity<A>, that: Identity<B>): Identity<[A, B]> => [self, that])
+
+const productMany: {
+  <A>(collection: Iterable<A>): (self: Identity<A>) => [A, ...Array<A>]
+  <A>(self: Identity<A>, collection: Iterable<A>): [A, ...Array<A>]
+} = dual(
+  2,
+  <A>(self: Identity<A>, collection: Iterable<A>): [A, ...Array<A>] => [self, ...collection]
+)
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = semiProduct.make(
-  Invariant,
-  (self, that) => [self, that],
-  (self, collection) => [self, ...collection]
-)
+export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
 
 /**
  * @category instances
@@ -138,8 +151,8 @@ export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = semiProd
 export const Product: product_.Product<IdentityTypeLambda> = {
   of,
   imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
+  product,
+  productMany,
   productAll: readonlyArray.fromIterable
 }
 
@@ -150,8 +163,8 @@ export const Product: product_.Product<IdentityTypeLambda> = {
 export const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda> = {
   imap,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany
+  product,
+  productMany
 }
 
 /**
@@ -162,9 +175,9 @@ export const Applicative: applicative.Applicative<IdentityTypeLambda> = {
   imap,
   of,
   map,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
-  productAll: Product.productAll
+  product,
+  productMany,
+  productAll: readonlyArray.fromIterable
 }
 
 /**

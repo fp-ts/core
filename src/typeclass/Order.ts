@@ -7,10 +7,10 @@ import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as product from "@fp-ts/core/typeclass/Product"
+import type * as product_ from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
+import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
  * @category type class
@@ -205,26 +205,48 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
   imap
 }
 
-/**
- * @category instances
- * @since 1.0.0
- */
-export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = semiProduct.make(
-  Invariant,
-  tuple,
-  (self, collection) => tuple(self, ...collection)
+const product: {
+  <B>(that: Order<B>): <A>(self: Order<A>) => Order<[A, B]>
+  <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]>
+} = dual(
+  2,
+  <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]> => tuple(self, that)
+)
+
+const productMany: {
+  <A>(collection: Iterable<Order<A>>): (self: Order<A>) => Order<[A, ...Array<A>]>
+  <A>(self: Order<A>, collection: Iterable<Order<A>>): Order<[A, ...Array<A>]>
+} = dual(
+  2,
+  <A>(self: Order<A>, collection: Iterable<Order<A>>): Order<[A, ...Array<A>]> =>
+    tuple(self, ...collection)
 )
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Product: product.Product<OrderTypeLambda> = {
-  of: () => empty,
+export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
+
+const of: <A>(a: A) => Order<A> = () => empty
+
+const productAll = <A>(collection: Iterable<Order<A>>): Order<Array<A>> =>
+  tuple<Array<A>>(...collection)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Product: product_.Product<OrderTypeLambda> = {
+  of,
   imap,
   product: SemiProduct.product,
   productMany: SemiProduct.productMany,
-  productAll: <A>(collection: Iterable<Order<A>>): Order<Array<A>> => tuple<Array<A>>(...collection)
+  productAll
 }
 
 /**

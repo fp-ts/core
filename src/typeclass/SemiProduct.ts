@@ -34,45 +34,22 @@ export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  Invariant: Invariant<F>,
-  product: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>,
-  productMany: <R, O, E, A>(
-    self: Kind<F, R, O, E, A>,
-    collection: Iterable<Kind<F, R, O, E, A>>
-  ) => Kind<F, R, O, E, [A, ...Array<A>]>
-): SemiProduct<F> => ({
-  imap: Invariant.imap,
-  product: dual(2, product),
-  productMany: dual(2, productMany)
-})
-
-/**
  * Useful when `productMany` can't be optimised.
  *
  * @category constructors
  * @since 1.0.0
  */
-export const fromProduct = <F extends TypeLambda>(
-  Covariant: Covariant<F>,
-  product: <R1, O1, E1, A, R2, O2, E2, B>(
-    self: Kind<F, R1, O1, E1, A>,
-    that: Kind<F, R2, O2, E2, B>
-  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
-): SemiProduct<F> =>
-  make(Covariant, product, <R, O, E, A>(
+export const productMany = <F extends TypeLambda>(
+  map: Covariant<F>["map"],
+  product: SemiProduct<F>["product"]
+): SemiProduct<F>["productMany"] =>
+  dual(2, <R, O, E, A>(
     self: Kind<F, R, O, E, A>,
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => {
-    let out = Covariant.map(self, (a): [A, ...Array<A>] => [a])
+    let out = map(self, (a): [A, ...Array<A>] => [a])
     for (const fa of collection) {
-      out = Covariant.map(
+      out = map(
         product(out, fa),
         ([[head, ...tail], a]): [A, ...Array<A>] => [head, ...tail, a]
       )

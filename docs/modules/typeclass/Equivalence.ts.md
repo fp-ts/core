@@ -168,7 +168,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const Product: product.Product<EquivalenceTypeLambda>
+export declare const Product: product_.Product<EquivalenceTypeLambda>
 ```
 
 Added in v1.0.0
