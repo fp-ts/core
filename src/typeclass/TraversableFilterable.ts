@@ -49,28 +49,6 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
 }
 
 /**
- * @constructors
- * @since 1.0.0
- */
-export const make = <T extends TypeLambda>(
-  traversePartitionMap: <F extends TypeLambda>(
-    F: Applicative<F>
-  ) => <TR, TO, TE, A, R, O, E, B, C>(
-    self: Kind<T, TR, TO, TE, A>,
-    f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-  ) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>,
-  traverseFilterMap: <F extends TypeLambda>(
-    F: Applicative<F>
-  ) => <TR, TO, TE, A, R, O, E, B>(
-    self: Kind<T, TR, TO, TE, A>,
-    f: (a: A) => Kind<F, R, O, E, Option<B>>
-  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
-): TraversableFilterable<T> => ({
-  traversePartitionMap: (F) => dual(2, traversePartitionMap(F)),
-  traverseFilterMap: (F) => dual(2, traverseFilterMap(F))
-})
-
-/**
  * Returns a default binary `traversePartitionMap` implementation.
  *
  * @since 1.0.0

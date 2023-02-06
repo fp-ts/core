@@ -17,7 +17,6 @@ Added in v1.0.0
 - [models](#models)
   - [TraversableFilterable (interface)](#traversablefilterable-interface)
 - [utils](#utils)
-  - [make](#make)
   - [traverseFilter](#traversefilter)
   - [traverseFilterMap](#traversefiltermap)
   - [traversePartition](#traversepartition)
@@ -68,29 +67,6 @@ export interface TraversableFilterable<T extends TypeLambda> extends TypeClass<T
 Added in v1.0.0
 
 # utils
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <T extends TypeLambda>(
-  traversePartitionMap: <F extends TypeLambda>(
-    F: Applicative<F>
-  ) => <TR, TO, TE, A, R, O, E, B, C>(
-    self: Kind<T, TR, TO, TE, A>,
-    f: (a: A) => Kind<F, R, O, E, Either<B, C>>
-  ) => Kind<F, R, O, E, [Kind<T, TR, TO, TE, B>, Kind<T, TR, TO, TE, C>]>,
-  traverseFilterMap: <F extends TypeLambda>(
-    F: Applicative<F>
-  ) => <TR, TO, TE, A, R, O, E, B>(
-    self: Kind<T, TR, TO, TE, A>,
-    f: (a: A) => Kind<F, R, O, E, Option<B>>
-  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
-) => TraversableFilterable<T>
-```
-
-Added in v1.0.0
 
 ## traverseFilter
 
