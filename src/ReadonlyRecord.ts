@@ -752,12 +752,6 @@ export const traverseTap: <F extends TypeLambda>(
   ): Kind<F, R, O, E, Record<string, A>>
 } = traversable.traverseTap(Traversable)
 
-const _traversePartitionMap = traversableFilterable.traversePartitionMap({
-  ...Traversable,
-  ...Covariant,
-  ...Compactable
-})
-
 /**
  * @category filtering
  * @since 1.0.0
@@ -774,12 +768,13 @@ export const traversePartitionMap = <F extends TypeLambda>(
     self: ReadonlyRecord<A>,
     f: (a: A) => Kind<F, R, O, E, Either<B, C>>
   ): Kind<F, R, O, E, [Record<string, B>, Record<string, C>]>
-} => dual(2, _traversePartitionMap(F))
-
-const _traverseFilterMap = traversableFilterable.traverseFilterMap({
-  ...Traversable,
-  ...Compactable
-})
+} =>
+  dual(2, <A, R, O, E, B, C>(
+    self: ReadonlyRecord<A>,
+    f: (a: A) => Kind<F, R, O, E, Either<B, C>>
+  ): Kind<F, R, O, E, [Record<string, B>, Record<string, C>]> => {
+    return F.map(traverse(F)(self, f), separate)
+  })
 
 /**
  * @category filtering
@@ -795,7 +790,13 @@ export const traverseFilterMap = <F extends TypeLambda>(
     self: ReadonlyRecord<A>,
     f: (a: A) => Kind<F, R, O, E, Option<B>>
   ): Kind<F, R, O, E, Record<string, B>>
-} => dual(2, _traverseFilterMap(F))
+} =>
+  dual(2, <A, R, O, E, B>(
+    self: ReadonlyRecord<A>,
+    f: (a: A) => Kind<F, R, O, E, Option<B>>
+  ): Kind<F, R, O, E, Record<string, B>> => {
+    return F.map(traverse(F)(self, f), compact)
+  })
 
 /**
  * @category instances
