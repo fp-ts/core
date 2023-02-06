@@ -965,19 +965,6 @@ export const reverse = <E, A>(self: Either<E, A>): Either<A, E> =>
  * @category filtering
  * @since 1.0.0
  */
-export const compact: {
-  <E2>(onNone: LazyArg<E2>): <E1, A>(self: Either<E1, Option<A>>) => Either<E1 | E2, A>
-  <E1, A, E2>(self: Either<E1, Option<A>>, onNone: LazyArg<E2>): Either<E1 | E2, A>
-} = dual(
-  2,
-  <E1, A, E2>(self: Either<E1, Option<A>>, onNone: LazyArg<E2>): Either<E1 | E2, A> =>
-    isLeft(self) ? self : option.isNone(self.right) ? left(onNone()) : right(self.right.value)
-)
-
-/**
- * @category filtering
- * @since 1.0.0
- */
 export const filter: {
   <C extends A, B extends A, E2, A = C>(refinement: Refinement<A, B>, onFalse: LazyArg<E2>): <E1>(
     self: Either<E1, C>
@@ -1025,6 +1012,19 @@ export const filterMap: {
     const ob = f(a)
     return option.isNone(ob) ? left(onNone()) : right(ob.value)
   }))
+
+/**
+ * @category filtering
+ * @since 1.0.0
+ */
+export const compact: {
+  <E2>(onNone: LazyArg<E2>): <E1, A>(self: Either<E1, Option<A>>) => Either<E1 | E2, A>
+  <E1, A, E2>(self: Either<E1, Option<A>>, onNone: LazyArg<E2>): Either<E1 | E2, A>
+} = dual(
+  2,
+  <E1, A, E2>(self: Either<E1, Option<A>>, onNone: LazyArg<E2>): Either<E1 | E2, A> =>
+    filterMap(self, identity, onNone)
+)
 
 /**
  * @category traversing
