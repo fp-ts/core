@@ -15,8 +15,6 @@ describe.concurrent("ReadonlyRecord", () => {
     expect(RR.Traversable).exist
     expect(RR.traverseTap).exist
     expect(RR.TraversableFilterable).exist
-    expect(RR.traversePartitionMap).exist
-    expect(RR.traverseFilterMap).exist
     expect(RR.traverseFilter).exist
     expect(RR.traversePartition).exist
   })
@@ -170,5 +168,35 @@ describe.concurrent("ReadonlyRecord", () => {
   it("has", () => {
     assert.deepStrictEqual(RR.has({ a: 1, b: 2 }, "a"), true)
     assert.deepStrictEqual(RR.has({ a: 1, b: 2 }, "c"), false)
+  })
+
+  it("traversePartitionMap", () => {
+    const traversePartitionMap = RR.traversePartitionMap(O.Applicative)
+    const f = (s: string) =>
+      s.length > 1 ? O.some(E.right(s)) : s.length > 0 ? O.some(E.left(s)) : O.none()
+    assert.deepStrictEqual(traversePartitionMap({}, f), O.some([{}, {}]))
+    assert.deepStrictEqual(traversePartitionMap({ "": "" }, f), O.none())
+    assert.deepStrictEqual(traversePartitionMap({ a: "a" }, f), O.some([{ a: "a" }, {}]))
+    assert.deepStrictEqual(traversePartitionMap({ aa: "aa" }, f), O.some([{}, { aa: "aa" }]))
+    assert.deepStrictEqual(traversePartitionMap({ aa: "aa", a: "a", "": "" }, f), O.none())
+    assert.deepStrictEqual(
+      traversePartitionMap({ aa: "aa", a: "a", aaa: "aaa" }, f),
+      O.some([{ a: "a" }, { aa: "aa", aaa: "aaa" }])
+    )
+  })
+
+  it("traverseFilterMap", () => {
+    const traverseFilterMap = RR.traverseFilterMap(O.Applicative)
+    const f = (s: string) =>
+      s.length > 1 ? O.some(O.some(s)) : s.length > 0 ? O.some(O.none()) : O.none()
+    assert.deepStrictEqual(traverseFilterMap({}, f), O.some({}))
+    assert.deepStrictEqual(traverseFilterMap({ "": "" }, f), O.none())
+    assert.deepStrictEqual(traverseFilterMap({ a: "a" }, f), O.some({}))
+    assert.deepStrictEqual(traverseFilterMap({ aa: "aa" }, f), O.some({ aa: "aa" }))
+    assert.deepStrictEqual(traverseFilterMap({ aa: "aa", a: "a", "": "" }, f), O.none())
+    assert.deepStrictEqual(
+      traverseFilterMap({ aa: "aa", a: "a", aaa: "aaa" }, f),
+      O.some({ aa: "aa", aaa: "aaa" })
+    )
   })
 })
