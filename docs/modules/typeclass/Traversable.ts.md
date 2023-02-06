@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [type class](#type-class)
   - [Traversable (interface)](#traversable-interface)
 - [utils](#utils)
@@ -22,25 +20,6 @@ Added in v1.0.0
   - [traverseTap](#traversetap)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <T extends TypeLambda>(
-  traverse: <F extends TypeLambda>(
-    F: Applicative<F>
-  ) => <TR, TO, TE, A, R, O, E, B>(
-    self: Kind<T, TR, TO, TE, A>,
-    f: (a: A) => Kind<F, R, O, E, B>
-  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
-) => Traversable<T>
-```
-
-Added in v1.0.0
 
 # type class
 

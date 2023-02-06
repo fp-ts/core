@@ -765,30 +765,12 @@ export const Pointed: pointed.Pointed<TheseTypeLambda> = {
 }
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<TheseTypeLambda> = traversable.make(<
-  F extends TypeLambda
->(F: applicative.Applicative<F>) =>
-  <E, A, FR, FO, FE, B>(
-    self: These<E, A>,
-    f: (a: A) => Kind<F, FR, FO, FE, B>
-  ): Kind<F, FR, FO, FE, These<E, B>> =>
-    isLeft(self)
-      ? F.of<These<E, B>>(self)
-      : isRight(self)
-      ? F.map<FR, FO, FE, B, These<E, B>>(f(self.right), right)
-      : F.map(f(self.right), (b) => both(self.left, b))
-)
-
-/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse: <F extends TypeLambda>(
+export const traverse = <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => {
+): {
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): <TE>(self: These<TE, A>) => Kind<F, R, O, E, These<TE, B>>
@@ -796,7 +778,24 @@ export const traverse: <F extends TypeLambda>(
     self: These<TE, A>,
     f: (a: A) => Kind<F, R, O, E, B>
   ): Kind<F, R, O, E, These<TE, B>>
-} = Traversable.traverse
+} =>
+  dual(2, <TE, A, R, O, E, B>(
+    self: These<TE, A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, These<TE, B>> =>
+    isLeft(self)
+      ? F.of<These<TE, B>>(self)
+      : isRight(self)
+      ? F.map<R, O, E, B, These<TE, B>>(f(self.right), right)
+      : F.map(f(self.right), (b) => both(self.left, b)))
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<TheseTypeLambda> = {
+  traverse
+}
 
 /**
  * @category traversing

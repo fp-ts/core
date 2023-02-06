@@ -1316,31 +1316,32 @@ export const filter: {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<OptionTypeLambda> = traversable.make(<
-  F extends TypeLambda
->(F: applicative.Applicative<F>) =>
-  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>> =>
-    isNone(self) ? F.of<Option<B>>(none()) : F.map(f(self.value), some)
-)
-
-/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse: <F extends TypeLambda>(
+export const traverse = <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => {
+): {
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
-  <A, R, O, E, B>(
-    self: Option<A>,
-    f: (a: A) => Kind<F, R, O, E, B>
-  ): Kind<F, R, O, E, Option<B>>
-} = Traversable.traverse
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
+} =>
+  dual(
+    2,
+    <A, R, O, E, B>(
+      self: Option<A>,
+      f: (a: A) => Kind<F, R, O, E, B>
+    ): Kind<F, R, O, E, Option<B>> => isNone(self) ? F.of(none()) : F.map(f(self.value), some)
+  )
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<OptionTypeLambda> = {
+  traverse
+}
 
 /**
  * @category traversing
