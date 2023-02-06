@@ -24,21 +24,6 @@ export interface Traversable<T extends TypeLambda> extends TypeClass<T> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <T extends TypeLambda>(
-  traverse: <F extends TypeLambda>(
-    F: Applicative<F>
-  ) => <TR, TO, TE, A, R, O, E, B>(
-    self: Kind<T, TR, TO, TE, A>,
-    f: (a: A) => Kind<F, R, O, E, B>
-  ) => Kind<F, R, O, E, Kind<T, TR, TO, TE, B>>
-): Traversable<T> => ({
-  traverse: F => dual(2, traverse(F))
-})
-
-/**
  * Returns a default binary `traverse` composition.
  *
  * @since 1.0.0

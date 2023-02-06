@@ -1027,28 +1027,12 @@ export const filterMap: {
   }))
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const Traversable: traversable.Traversable<EitherTypeLambda> = traversable.make(<
-  F extends TypeLambda
->(F: applicative.Applicative<F>) =>
-  <E, A, FR, FO, FE, B>(
-    self: Either<E, A>,
-    f: (a: A) => Kind<F, FR, FO, FE, B>
-  ): Kind<F, FR, FO, FE, Either<E, B>> =>
-    isLeft(self) ?
-      F.of<Either<E, B>>(self) :
-      F.map<FR, FO, FE, B, Either<E, B>>(f(self.right), right)
-)
-
-/**
  * @category traversing
  * @since 1.0.0
  */
-export const traverse: <F extends TypeLambda>(
+export const traverse = <F extends TypeLambda>(
   F: applicative.Applicative<F>
-) => {
+): {
   <A, R, O, E, B>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): <TE>(self: Either<TE, A>) => Kind<F, R, O, E, Either<TE, B>>
@@ -1056,7 +1040,22 @@ export const traverse: <F extends TypeLambda>(
     self: Either<TE, A>,
     f: (a: A) => Kind<F, R, O, E, B>
   ): Kind<F, R, O, E, Either<TE, B>>
-} = Traversable.traverse
+} =>
+  dual(2, <TE, A, R, O, E, B>(
+    self: Either<TE, A>,
+    f: (a: A) => Kind<F, R, O, E, B>
+  ): Kind<F, R, O, E, Either<TE, B>> =>
+    isLeft(self) ?
+      F.of<Either<TE, B>>(self) :
+      F.map<R, O, E, B, Either<TE, B>>(f(self.right), right))
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Traversable: traversable.Traversable<EitherTypeLambda> = {
+  traverse
+}
 
 /**
  * @category traversing

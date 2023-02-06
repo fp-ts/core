@@ -19,7 +19,7 @@ import type * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type * as semiCoproduct from "@fp-ts/core/typeclass/SemiCoproduct"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
-import * as traversable from "@fp-ts/core/typeclass/Traversable"
+import type * as traversable from "@fp-ts/core/typeclass/Traversable"
 
 /**
  * @category models
@@ -211,17 +211,25 @@ export const Foldable: foldable.Foldable<IdentityTypeLambda> = {
   reduce: dual(3, <A, B>(self: Identity<A>, b: B, f: (b: B, a: A) => B): B => f(b, self))
 }
 
+const traverse = <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+): {
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Identity<A>) => Kind<F, R, O, E, B>
+  <A, R, O, E, B>(self: Identity<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B>
+} =>
+  dual(
+    2,
+    <A, R, O, E, B>(self: Identity<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, B> =>
+      f(self)
+  )
+
 /**
  * @category instances
  * @since 1.0.0
  */
-export const Traversable: traversable.Traversable<IdentityTypeLambda> = traversable.make(
-  <F extends TypeLambda>(_: applicative.Applicative<F>) =>
-    <A, R, O, E, B>(
-      self: Identity<A>,
-      f: (a: A) => Kind<F, R, O, E, B>
-    ): Kind<F, R, O, E, Identity<B>> => f(self)
-)
+export const Traversable: traversable.Traversable<IdentityTypeLambda> = {
+  traverse
+}
 
 // -------------------------------------------------------------------------------------
 // do notation
