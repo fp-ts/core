@@ -20,6 +20,7 @@ Added in v1.0.0
   - [SK](#sk)
   - [absurd](#absurd)
   - [apply](#apply)
+  - [compose](#compose)
   - [constFalse](#constfalse)
   - [constNull](#constnull)
   - [constTrue](#consttrue)
@@ -144,6 +145,33 @@ import { pipe, apply } from '@fp-ts/core/Function'
 import { increment } from '@fp-ts/core/Number'
 
 assert.deepStrictEqual(pipe(2, apply(increment)), 3)
+```
+
+Added in v1.0.0
+
+## compose
+
+Composes two functions, `ab` and `bc` into a single function that takes in an argument `a` of type `A` and returns a result of type `C`.
+The result is obtained by first applying the `ab` function to `a` and then applying the `bc` function to the result of `ab`.
+
+**Signature**
+
+```ts
+export declare const compose: {
+  <B, C>(bc: (b: B) => C): <A>(self: (a: A) => B) => (a: A) => C
+  <A, B, C>(self: (a: A) => B, bc: (b: B) => C): (a: A) => C
+}
+```
+
+**Example**
+
+```ts
+import { compose } from '@fp-ts/core/Function'
+
+const inc = (n: number) => n + 1
+const square = (n: number) => n * n
+
+assert.strictEqual(compose(inc, square)(2), 9)
 ```
 
 Added in v1.0.0
