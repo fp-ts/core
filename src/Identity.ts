@@ -8,7 +8,7 @@ import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as flatMap_ from "@fp-ts/core/typeclass/FlatMap"
-import * as foldable from "@fp-ts/core/typeclass/Foldable"
+import type * as foldable from "@fp-ts/core/typeclass/Foldable"
 import * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type * as monad from "@fp-ts/core/typeclass/Monad"
 import * as of_ from "@fp-ts/core/typeclass/Of"
@@ -67,12 +67,14 @@ export const Invariant: invariant.Invariant<IdentityTypeLambda> = {
   imap
 }
 
+const of: <A>(a: A) => Identity<A> = identity
+
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Of: of_.Of<IdentityTypeLambda> = {
-  of: identity
+  of
 }
 
 /**
@@ -80,7 +82,7 @@ export const Of: of_.Of<IdentityTypeLambda> = {
  * @since 1.0.0
  */
 export const Pointed: pointed.Pointed<IdentityTypeLambda> = {
-  of: Of.of,
+  of,
   imap,
   map
 }
@@ -114,7 +116,7 @@ export const Chainable: chainable.Chainable<IdentityTypeLambda> = {
  */
 export const Monad: monad.Monad<IdentityTypeLambda> = {
   imap,
-  of: Of.of,
+  of,
   map,
   flatMap
 }
@@ -134,7 +136,7 @@ export const SemiProduct: semiProduct.SemiProduct<IdentityTypeLambda> = semiProd
  * @since 1.0.0
  */
 export const Product: product_.Product<IdentityTypeLambda> = {
-  of: Of.of,
+  of,
   imap,
   product: SemiProduct.product,
   productMany: SemiProduct.productMany,
@@ -158,7 +160,7 @@ export const SemiApplicative: semiApplicative.SemiApplicative<IdentityTypeLambda
  */
 export const Applicative: applicative.Applicative<IdentityTypeLambda> = {
   imap,
-  of: Of.of,
+  of,
   map,
   product: SemiProduct.product,
   productMany: SemiProduct.productMany,
@@ -192,9 +194,9 @@ export const getSemiAlternative = <A>(
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<IdentityTypeLambda> = foldable.make((self, b, f) =>
-  f(b, self)
-)
+export const Foldable: foldable.Foldable<IdentityTypeLambda> = {
+  reduce: dual(3, <A, B>(self: Identity<A>, b: B, f: (b: B, a: A) => B): B => f(b, self))
+}
 
 /**
  * @category instances

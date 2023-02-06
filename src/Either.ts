@@ -775,9 +775,13 @@ export const SemiAlternative: semiAlternative.SemiAlternative<EitherTypeLambda> 
  * @category instances
  * @since 1.0.0
  */
-export const Foldable: foldable.Foldable<EitherTypeLambda> = foldable.make((self, b, f) =>
-  isLeft(self) ? b : f(b, self.right)
-)
+export const Foldable: foldable.Foldable<EitherTypeLambda> = {
+  reduce: dual(
+    3,
+    <E, A, B>(self: Either<E, A>, b: B, f: (b: B, a: A) => B): B =>
+      isLeft(self) ? b : f(b, self.right)
+  )
+}
 
 /**
  * Transforms an `Either` into an `Array`.

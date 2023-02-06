@@ -12,8 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [make](#make)
 - [type class](#type-class)
   - [Foldable (interface)](#foldable-interface)
 - [utils](#utils)
@@ -25,20 +23,6 @@ Added in v1.0.0
   - [toArrayMap](#toarraymap)
 
 ---
-
-# constructors
-
-## make
-
-**Signature**
-
-```ts
-export declare const make: <F extends TypeLambda>(
-  reduce: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, b: B, f: (b: B, a: A) => B) => B
-) => Foldable<F>
-```
-
-Added in v1.0.0
 
 # type class
 
@@ -93,7 +77,7 @@ Added in v1.0.0
 
 ## reduceComposition
 
-Returns a default binary `reduce` composition.
+Returns a default ternary `reduce` composition.
 
 **Signature**
 

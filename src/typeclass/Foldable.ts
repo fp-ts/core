@@ -20,17 +20,7 @@ export interface Foldable<F extends TypeLambda> extends TypeClass<F> {
 }
 
 /**
- * @category constructors
- * @since 1.0.0
- */
-export const make = <F extends TypeLambda>(
-  reduce: <R, O, E, A, B>(self: Kind<F, R, O, E, A>, b: B, f: (b: B, a: A) => B) => B
-): Foldable<F> => ({
-  reduce: dual(3, reduce)
-})
-
-/**
- * Returns a default binary `reduce` composition.
+ * Returns a default ternary `reduce` composition.
  *
  * @since 1.0.0
  */
