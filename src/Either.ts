@@ -1466,6 +1466,9 @@ export const andThenBind: {
 // -------------------------------------------------------------------------------------
 
 /**
+ * Represents a computation that may fail with one or more errors of type `E`
+ * or succeed with a value of type `A`.
+ *
  * @category model
  * @since 1.0.0
  */

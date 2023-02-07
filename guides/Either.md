@@ -609,3 +609,113 @@ console.log(sumOfRightAndLeft); // left("not a number")
 | `multiply` | `Either<E1, number>`, `Either<E2, number>` | `Either<E1 \| E2, number>` |
 | `subtract` | `Either<E1, number>`, `Either<E2, number>` | `Either<E1 \| E2, number>` |
 | `divide`   | `Either<E1, number>`, `Either<E2, number>` | `Either<E1 \| E2, number>` |
+
+# Validations
+
+Say you must implement a web form to signup for an account. The form contains two field: `username` and `password` and the following validation rules must hold:
+
+- `username` must not be empty
+- `username` can't have dashes in it
+- `password` needs to have at least 6 characters
+- `password` needs to have at least one capital letter
+- `password` needs to have at least one number
+
+The `Either<E, A>` type represents a computation that might fail with an error of type `E` or succeed with a value of type `A`, so is a good candidate for implementing our validation rules.
+
+For example let's encode each `password` rule:
+
+```ts
+import * as E from "@fp-ts/core/Either";
+
+const minLength = (s: string): E.Either<string, string> =>
+  s.length >= 6 ? E.right(s) : E.left("at least 6 characters");
+
+const oneCapital = (s: string): E.Either<string, string> =>
+  /[A-Z]/g.test(s) ? E.right(s) : E.left("at least one capital letter");
+
+const oneNumber = (s: string): E.Either<string, string> =>
+  /[0-9]/g.test(s) ? E.right(s) : E.left("at least one number");
+```
+
+We can chain all the rules using `flatMap`:
+
+```ts
+import { pipe } from "@fp-ts/core/Function";
+
+const validatePassword = (s: string): E.Either<string, string> =>
+  pipe(minLength(s), E.flatMap(oneCapital), E.flatMap(oneNumber));
+```
+
+Because we are using `Either` the checks are **fail-fast**. That is, any failed check shortcircuits subsequent checks so we will only ever get one error.
+
+```ts
+assert.deepStrictEqual(validatePassword("ab"), E.left("at least 6 characters"));
+
+assert.deepStrictEqual(
+  validatePassword("abcdef"),
+  E.left("at least one capital letter")
+);
+
+assert.deepStrictEqual(
+  validatePassword("Abcdef"),
+  E.left("at least one number")
+);
+```
+
+However this could lead to a bad UX, it would be nice to have all of these errors be reported simultaneously.
+
+The `Validated` abstraction may help here.
+
+## Validated
+
+Validations are similar to `Either<E, A>`, where they represent a computation that may fail with an error of type `E` or succeed with a value of type `A`. Unlike typical computations involving `Either`, however, validations are capable of **accumulating multiple failures**.
+
+For this to be possible, the `Validated` data type must have the ability to combine two or more values of type `E` and the simplest way is to wrap them in a (non-empty) `ReadonlyArray`.
+
+This is the definition of the `Validated` data type:
+
+```ts
+/**
+ * Represents a computation that may fail with one or more errors of type `E`
+ * or succeed with a value of type `A`.
+ */
+export type Validated<E, A> = Either<NonEmptyReadonlyArray<E>, A>;
+```
+
+To proceed, we must first modify all the rules so that they return a `Validated<string, string>` value.
+
+Instead of having to rewrite all previous functions, which can be cumbersome, we can use the `liftEither` helper. This helper converts a check that outputs an `Either<E, A>` into a check that outputs a `Validate<E, A>`.
+
+```ts
+const minLengthValidated = E.liftEither(minLength);
+//    ^? const minLengthValidated: (s: string) => E.Validated<string, string>
+const oneCapitalValidated = E.liftEither(oneCapital);
+//    ^? const oneCapitalValidated: (s: string) => E.Validated<string, string>
+const oneNumberValidated = E.liftEither(oneNumber);
+//    ^? const oneNumberValidated: (s: string) => E.Validated<string, string>
+```
+
+Let's bring it all together. The `validatePassword` function takes a string `s` as input, and uses the `tupleValidated` helper to perform all three validation checks, returning a `Validated` value that collects all the validation error messages. If all the checks pass, the function returns the original string s as a successful `Validated` value:
+
+```ts
+const validatePassword = (s: string): E.Validated<string, string> =>
+  pipe(
+    E.tupleValidated(
+      minLengthValidated(s),
+      oneCapitalValidated(s),
+      oneNumberValidated(s)
+    ),
+    E.map(() => s)
+  );
+
+assert.deepStrictEqual(
+  validatePassword("ab"),
+  E.left([
+    "at least 6 characters",
+    "at least one capital letter",
+    "at least one number",
+  ])
+);
+
+assert.deepStrictEqual(validatePassword("Abcde6"), E.right("Abcde6"));
+```
