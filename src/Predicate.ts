@@ -37,37 +37,84 @@ export interface Refinement<A, B extends A> {
 }
 
 /**
+ * Tests if a value is a `string`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isString } from '@fp-ts/core/Predicate'
+ *
+ * assert.deepStrictEqual(isString("a"), true)
+ * assert.deepStrictEqual(isString(1), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isString: Refinement<unknown, string> = (u: unknown): u is string =>
-  typeof u === "string"
+export const isString = (input: unknown): input is string => typeof input === "string"
 
 /**
+ * Tests if a value is a `number`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNumber } from '@fp-ts/core/Predicate'
+ *
+ * assert.deepStrictEqual(isNumber(2), true)
+ * assert.deepStrictEqual(isNumber("2"), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isNumber: Refinement<unknown, number> = (u: unknown): u is number =>
-  typeof u === "number"
+export const isNumber = (input: unknown): input is number => typeof input === "number"
 
 /**
+ * Tests if a value is a `boolean`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isBoolean } from '@fp-ts/core/Predicate'
+ *
+ * assert.deepStrictEqual(isBoolean(true), true)
+ * assert.deepStrictEqual(isBoolean("true"), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isBoolean: Refinement<unknown, boolean> = (u: unknown): u is boolean =>
-  typeof u === "boolean"
+export const isBoolean = (input: unknown): input is boolean => typeof input === "boolean"
 
 /**
+ * Tests if a value is a `bigint`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isBigint } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isBigint(1n), true)
+ * assert.deepStrictEqual(isBigint(1), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isBigint = (u: unknown): u is bigint => typeof u === "bigint"
+export const isBigint = (input: unknown): input is bigint => typeof input === "bigint"
 
 /**
+ * Tests if a value is a `symbol`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isSymbol } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isSymbol(Symbol.for("a")), true)
+ * assert.deepStrictEqual(isSymbol("a"), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isSymbol = (u: unknown): u is symbol => typeof u === "symbol"
+export const isSymbol = (input: unknown): input is symbol => typeof input === "symbol"
 
 /**
  * @category constructors

@@ -927,20 +927,29 @@ Added in v1.0.0
 
 ## isEither
 
-Returns `true` if the specified value is an instance of `Either`, `false`
-otherwise.
+Tests if a value is a `Either`.
 
 **Signature**
 
 ```ts
-export declare const isEither: (u: unknown) => u is Either<unknown, unknown>
+export declare const isEither: (input: unknown) => input is Either<unknown, unknown>
+```
+
+**Example**
+
+```ts
+import { isEither, left, right } from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(isEither(right(1)), true)
+assert.deepStrictEqual(isEither(left('error')), true)
+assert.deepStrictEqual(isEither({ right: 1 }), false)
 ```
 
 Added in v1.0.0
 
 ## isLeft
 
-Returns `true` if the either is an instance of `Left`, `false` otherwise.
+Determine if a `Either` is a `Left`.
 
 **Signature**
 
@@ -948,16 +957,34 @@ Returns `true` if the either is an instance of `Left`, `false` otherwise.
 export declare const isLeft: <E, A>(self: Either<E, A>) => self is Left<E>
 ```
 
+**Example**
+
+```ts
+import { isLeft, left, right } from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(isLeft(right(1)), false)
+assert.deepStrictEqual(isLeft(left('error')), true)
+```
+
 Added in v1.0.0
 
 ## isRight
 
-Returns `true` if the either is an instance of `Right`, `false` otherwise.
+Determine if a `Either` is a `Right`.
 
 **Signature**
 
 ```ts
 export declare const isRight: <E, A>(self: Either<E, A>) => self is Right<A>
+```
+
+**Example**
+
+```ts
+import { isRight, left, right } from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(isRight(right(1)), true)
+assert.deepStrictEqual(isRight(left('error')), false)
 ```
 
 Added in v1.0.0

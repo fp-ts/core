@@ -1106,7 +1106,7 @@ Added in v1.0.0
 
 ## isEmpty
 
-Test whether a `ReadonlyArray` is empty narrowing down the type to `[]`.
+Determine if a `ReadonlyArray` is empty narrowing down the type to `[]`.
 
 **Signature**
 
@@ -1114,16 +1114,36 @@ Test whether a `ReadonlyArray` is empty narrowing down the type to `[]`.
 export declare const isEmpty: <A>(self: readonly A[]) => self is readonly []
 ```
 
+**Example**
+
+```ts
+import { isEmpty } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(isEmpty([]), true)
+assert.deepStrictEqual(isEmpty([1, 2, 3]), false)
+```
+
 Added in v1.0.0
 
 ## isNonEmpty
 
-Test whether a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyReadonlyArray<A>`.
+Determine if a `ReadonlyArray` is empty narrowing down the type to `NonEmptyReadonlyArray`.
+
+A `ReadonlyArray` is considered to be a `NonEmptyReadonlyArray` if it contains at least one element.
 
 **Signature**
 
 ```ts
 export declare const isNonEmpty: <A>(self: readonly A[]) => self is readonly [A, ...A[]]
+```
+
+**Example**
+
+```ts
+import { isNonEmpty } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(isNonEmpty([]), false)
+assert.deepStrictEqual(isNonEmpty([1, 2, 3]), true)
 ```
 
 Added in v1.0.0

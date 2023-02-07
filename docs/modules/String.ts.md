@@ -52,10 +52,21 @@ Added in v1.0.0
 
 ## isString
 
+Tests if a value is a `string`.
+
 **Signature**
 
 ```ts
 export declare const isString: Refinement<unknown, string>
+```
+
+**Example**
+
+```ts
+import { isString } from '@fp-ts/core/String'
+
+assert.deepStrictEqual(isString('a'), true)
+assert.deepStrictEqual(isString(1), false)
 ```
 
 Added in v1.0.0

@@ -8,7 +8,6 @@
 import { dual } from "@fp-ts/core/Function"
 import type { Ordering } from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
-import type { Refinement } from "@fp-ts/core/Predicate"
 import * as bounded from "@fp-ts/core/typeclass/Bounded"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -16,10 +15,20 @@ import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
+ * Tests if a value is a `number`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNumber } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(isNumber(2), true)
+ * assert.deepStrictEqual(isNumber("2"), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isNumber: Refinement<unknown, number> = predicate.isNumber
+export const isNumber: (input: unknown) => input is number = predicate.isNumber
 
 /**
  * @example

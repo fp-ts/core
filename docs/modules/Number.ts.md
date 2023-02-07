@@ -146,10 +146,21 @@ Added in v1.0.0
 
 ## isNumber
 
+Tests if a value is a `number`.
+
 **Signature**
 
 ```ts
-export declare const isNumber: predicate.Refinement<unknown, number>
+export declare const isNumber: (input: unknown) => input is number
+```
+
+**Example**
+
+```ts
+import { isNumber } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(isNumber(2), true)
+assert.deepStrictEqual(isNumber('2'), false)
 ```
 
 Added in v1.0.0

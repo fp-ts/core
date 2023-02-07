@@ -199,8 +199,33 @@ export const reverse: <E, A>(self: These<E, A>) => These<A, E> = match(
   (e, a) => both(a, e)
 )
 
+// -------------------------------------------------------------------------------------
+// guards
+// -------------------------------------------------------------------------------------
+
 /**
- * Returns `true` if the these is an instance of `Left`, `false` otherwise
+ * Tests if a value is a `These`.
+ *
+ * @param input - The value to check.
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isThese = (input: unknown): input is These<unknown, unknown> =>
+  typeof input === "object" && input != null && structural in input && "_tag" in input &&
+  (input["_tag"] === "Left" || input["_tag"] === "Right" || input["_tag"] === "Both")
+
+/**
+ * Determine if a `These` is a `Left`.
+ *
+ * @param self - The `These` to check.
+ *
+ * @example
+ * import { isLeft, left, right, both } from '@fp-ts/core/These'
+ *
+ * assert.deepStrictEqual(isLeft(right(1)), false)
+ * assert.deepStrictEqual(isLeft(left("error")), true)
+ * assert.deepStrictEqual(isLeft(both("error", 1)), false)
  *
  * @category guards
  * @since 1.0.0
@@ -208,6 +233,17 @@ export const reverse: <E, A>(self: These<E, A>) => These<A, E> = match(
 export const isLeft = <E, A>(self: These<E, A>): self is Left<E> => self._tag === "Left"
 
 /**
+ * Determine if a `These` is a `Left` or a `Both`.
+ *
+ * @param self - The `These` to check.
+ *
+ * @example
+ * import { isLeftOrBoth, left, right, both } from '@fp-ts/core/These'
+ *
+ * assert.deepStrictEqual(isLeftOrBoth(right(1)), false)
+ * assert.deepStrictEqual(isLeftOrBoth(left("error")), true)
+ * assert.deepStrictEqual(isLeftOrBoth(both("error", 1)), true)
+ *
  * @category guards
  * @since 1.0.0
  */
@@ -215,7 +251,16 @@ export const isLeftOrBoth = <E, A>(self: These<E, A>): self is Left<E> | Both<E,
   self._tag !== "Right"
 
 /**
- * Returns `true` if the these is an instance of `Right`, `false` otherwise
+ * Determine if a `These` is a `Right`.
+ *
+ * @param self - The `These` to check.
+ *
+ * @example
+ * import { isRight, left, right, both } from '@fp-ts/core/These'
+ *
+ * assert.deepStrictEqual(isRight(right(1)), true)
+ * assert.deepStrictEqual(isRight(left("error")), false)
+ * assert.deepStrictEqual(isRight(both("error", 1)), false)
  *
  * @category guards
  * @since 1.0.0
@@ -223,6 +268,17 @@ export const isLeftOrBoth = <E, A>(self: These<E, A>): self is Left<E> | Both<E,
 export const isRight = <E, A>(self: These<E, A>): self is Right<A> => self._tag === "Right"
 
 /**
+ * Determine if a `These` is a `Right` or a `Both`.
+ *
+ * @param self - The `These` to check.
+ *
+ * @example
+ * import { isRightOrBoth, left, right, both } from '@fp-ts/core/These'
+ *
+ * assert.deepStrictEqual(isRightOrBoth(right(1)), true)
+ * assert.deepStrictEqual(isRightOrBoth(left("error")), false)
+ * assert.deepStrictEqual(isRightOrBoth(both("error", 1)), true)
+ *
  * @category guards
  * @since 1.0.0
  */
@@ -230,23 +286,21 @@ export const isRightOrBoth = <E, A>(self: These<E, A>): self is Right<A> | Both<
   self._tag !== "Left"
 
 /**
- * Returns `true` if the these is an instance of `Both`, `false` otherwise
+ * Determine if a `These` is a `Both`.
+ *
+ * @param self - The `These` to check.
+ *
+ * @example
+ * import { isBoth, left, right, both } from '@fp-ts/core/These'
+ *
+ * assert.deepStrictEqual(isBoth(right(1)), false)
+ * assert.deepStrictEqual(isBoth(left("error")), false)
+ * assert.deepStrictEqual(isBoth(both("error", 1)), true)
  *
  * @category guards
  * @since 1.0.0
  */
 export const isBoth = <E, A>(self: These<E, A>): self is Both<E, A> => self._tag === "Both"
-
-/**
- * Returns `true` if the specified value is an instance of `These`, `false`
- * otherwise.
- *
- * @category guards
- * @since 1.0.0
- */
-export const isThese = (u: unknown): u is These<unknown, unknown> =>
-  typeof u === "object" && u != null && structural in u && "_tag" in u &&
-  (u["_tag"] === "Left" || u["_tag"] === "Right" || u["_tag"] === "Both")
 
 /**
  * Lifts a function that may throw to one returning a `These`.

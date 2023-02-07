@@ -17,6 +17,16 @@ import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
+ * Tests if a value is a `string`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isString } from '@fp-ts/core/String'
+ *
+ * assert.deepStrictEqual(isString("a"), true)
+ * assert.deepStrictEqual(isString(1), false)
+ *
  * @category guards
  * @since 1.0.0
  */

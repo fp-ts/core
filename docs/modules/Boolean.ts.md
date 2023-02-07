@@ -73,10 +73,21 @@ Added in v1.0.0
 
 ## isBoolean
 
+Tests if a value is a `boolean`.
+
 **Signature**
 
 ```ts
-export declare const isBoolean: Refinement<unknown, boolean>
+export declare const isBoolean: (input: unknown) => input is boolean
+```
+
+**Example**
+
+```ts
+import { isBoolean } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(isBoolean(true), true)
+assert.deepStrictEqual(isBoolean('true'), false)
 ```
 
 Added in v1.0.0
