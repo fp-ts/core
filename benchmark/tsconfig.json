@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "paths": {
+      "@fp-ts/core": ["../src/index.ts"],
+      "@fp-ts/core/test/*": ["../test/*"],
+      "@fp-ts/core/examples/*": ["../examples/*"],
+      "@fp-ts/core/*": ["../src/*"]
+    }
+  }
+}

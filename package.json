@@ -81,6 +81,7 @@
     "@typescript-eslint/parser": "^5.44.0",
     "@vitest/coverage-c8": "^0.27.1",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
+    "benchmark": "^2.1.4",
     "c8": "^7.11.3",
     "concurrently": "^7.6.0",
     "cpx": "^1.5.0",
