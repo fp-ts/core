@@ -121,18 +121,12 @@ export const Monad: monad.Monad<IdentityTypeLambda> = {
   flatMap
 }
 
-const product: {
-  <B>(that: Identity<B>): <A>(self: Identity<A>) => Identity<[A, B]>
-  <A, B>(self: Identity<A>, that: Identity<B>): Identity<[A, B]>
-} = dual(2, <A, B>(self: Identity<A>, that: Identity<B>): Identity<[A, B]> => [self, that])
+const product = <A, B>(self: Identity<A>, that: Identity<B>): Identity<[A, B]> => [self, that]
 
-const productMany: {
-  <A>(collection: Iterable<A>): (self: Identity<A>) => [A, ...Array<A>]
-  <A>(self: Identity<A>, collection: Iterable<A>): [A, ...Array<A>]
-} = dual(
-  2,
-  <A>(self: Identity<A>, collection: Iterable<A>): [A, ...Array<A>] => [self, ...collection]
-)
+const productMany = <A>(
+  self: Identity<A>,
+  collection: Iterable<A>
+): [A, ...Array<A>] => [self, ...collection]
 
 /**
  * @category instances

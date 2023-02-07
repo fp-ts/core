@@ -33,7 +33,7 @@ export interface OrderTypeLambda extends TypeLambda {
  * @since 1.0.0
  */
 export const make = <A>(
-  compare: (self: A, that: A) => -1 | 0 | 1
+  compare: Order<A>["compare"]
 ): Order<A> => ({
   compare: (self, that) => self === that ? 0 : compare(self, that)
 })
@@ -202,22 +202,10 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
   imap
 }
 
-const product: {
-  <B>(that: Order<B>): <A>(self: Order<A>) => Order<[A, B]>
-  <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]>
-} = dual(
-  2,
-  <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]> => tuple(self, that)
-)
+const product = <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]> => tuple(self, that)
 
-const productMany: {
-  <A>(collection: Iterable<Order<A>>): (self: Order<A>) => Order<[A, ...Array<A>]>
-  <A>(self: Order<A>, collection: Iterable<Order<A>>): Order<[A, ...Array<A>]>
-} = dual(
-  2,
-  <A>(self: Order<A>, collection: Iterable<Order<A>>): Order<[A, ...Array<A>]> =>
-    tuple(self, ...collection)
-)
+const productMany = <A>(self: Order<A>, collection: Iterable<Order<A>>): Order<[A, ...Array<A>]> =>
+  tuple(self, ...collection)
 
 /**
  * @category instances

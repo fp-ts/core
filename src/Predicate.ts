@@ -140,34 +140,25 @@ export const Of: of_.Of<PredicateTypeLambda> = {
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
-const product: {
-  <B>(that: Predicate<B>): <A>(self: Predicate<A>) => Predicate<[A, B]>
-  <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<[A, B]>
-} = dual(
-  2,
-  <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<[A, B]> =>
-    ([a, b]) => self(a) && that(b)
-)
+const product = <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<[A, B]> =>
+  ([a, b]) => self(a) && that(b)
 
-const productMany: {
-  <A>(collection: Iterable<Predicate<A>>): (self: Predicate<A>) => Predicate<[A, ...Array<A>]>
-  <A>(self: Predicate<A>, collection: Iterable<Predicate<A>>): Predicate<[A, ...Array<A>]>
-} = dual(
-  2,
-  <A>(self: Predicate<A>, collection: Iterable<Predicate<A>>): Predicate<[A, ...Array<A>]> =>
-    ([head, ...tail]) => {
-      if (self(head) === false) {
+const productMany = <A>(
+  self: Predicate<A>,
+  collection: Iterable<Predicate<A>>
+): Predicate<[A, ...Array<A>]> =>
+  ([head, ...tail]) => {
+    if (self(head) === false) {
+      return false
+    }
+    const predicates = readonlyArray.fromIterable(collection)
+    for (let i = 0; i < predicates.length; i++) {
+      if (predicates[i](tail[i]) === false) {
         return false
       }
-      const predicates = readonlyArray.fromIterable(collection)
-      for (let i = 0; i < predicates.length; i++) {
-        if (predicates[i](tail[i]) === false) {
-          return false
-        }
-      }
-      return true
     }
-)
+    return true
+  }
 
 /**
  * @category instances

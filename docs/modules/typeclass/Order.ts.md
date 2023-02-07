@@ -116,7 +116,7 @@ Added in v1.0.0
 **Signature**
 
 ```ts
-export declare const make: <A>(compare: (self: A, that: A) => -1 | 0 | 1) => Order<A>
+export declare const make: <A>(compare: (self: A, that: A) => 0 | 1 | -1) => Order<A>
 ```
 
 Added in v1.0.0

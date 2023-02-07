@@ -33,8 +33,8 @@ export interface SemigroupTypeLambda extends TypeLambda {
  * @since 1.0.0
  */
 export const make = <A>(
-  combine: (self: A, that: A) => A,
-  combineMany: (self: A, collection: Iterable<A>) => A = (self, collection) =>
+  combine: Semigroup<A>["combine"],
+  combineMany: Semigroup<A>["combineMany"] = (self, collection) =>
     fromIterable(collection).reduce(combine, self)
 ): Semigroup<A> => ({
   combine,
@@ -302,22 +302,13 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
   imap
 }
 
-const product: {
-  <B>(that: Semigroup<B>): <A>(self: Semigroup<A>) => Semigroup<[A, B]>
-  <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]>
-} = dual(
-  2,
-  <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]> => tuple(self, that)
-)
+const product = <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]> =>
+  tuple(self, that)
 
-const productMany: {
-  <A>(collection: Iterable<Semigroup<A>>): (self: Semigroup<A>) => Semigroup<[A, ...Array<A>]>
-  <A>(self: Semigroup<A>, collection: Iterable<Semigroup<A>>): Semigroup<[A, ...Array<A>]>
-} = dual(
-  2,
-  <A>(self: Semigroup<A>, collection: Iterable<Semigroup<A>>): Semigroup<[A, ...Array<A>]> =>
-    tuple(self, ...collection)
-)
+const productMany = <A>(
+  self: Semigroup<A>,
+  collection: Iterable<Semigroup<A>>
+): Semigroup<[A, ...Array<A>]> => tuple(self, ...collection)
 
 /**
  * @category instances
