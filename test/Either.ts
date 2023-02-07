@@ -74,11 +74,6 @@ describe.concurrent("Either", () => {
     expect(E.traverse).exist
     expect(E.sequence).exist
     expect(E.traverseTap).exist
-
-    expect(E.SemiProductValidated).exist
-    expect(E.ProductValidated).exist
-    expect(E.SemiApplicativeValidated).exist
-    expect(E.ApplicativeValidated).exist
   })
 
   it("structural tracking", () => {
@@ -520,96 +515,5 @@ describe.concurrent("Either", () => {
   it("toArray", () => {
     expect(E.toArray(E.right(1))).toEqual([1])
     expect(E.toArray(E.left("error"))).toEqual([])
-  })
-
-  it("toValidated", () => {
-    assert.deepStrictEqual(E.toValidated(E.right(1)), E.right(1))
-    assert.deepStrictEqual(E.toValidated(E.left("e")), E.left(["e"]))
-  })
-
-  it("liftEither", () => {
-    const f = (n: number) => n >= 0 ? E.right(n) : E.left("negative number")
-    const g = E.liftEither(f)
-    assert.deepStrictEqual(g(1), E.right(1))
-    assert.deepStrictEqual(g(-1), E.left(["negative number"]))
-  })
-
-  it("tupleValidated", () => {
-    assert.deepStrictEqual(
-      E.tupleValidated(
-        E.right(1),
-        E.right("hello")
-      ),
-      E.right([1, "hello"])
-    )
-    assert.deepStrictEqual(
-      E.tupleValidated(
-        E.fail("error1"),
-        E.fail("error2")
-      ),
-      E.left(["error1", "error2"])
-    )
-  })
-
-  it("structValidated", () => {
-    assert.deepStrictEqual(
-      E.structValidated({
-        x: E.right(1),
-        y: E.right("hello")
-      }),
-      E.right({ x: 1, y: "hello" })
-    )
-
-    assert.deepStrictEqual(
-      E.structValidated({
-        x: E.fail("error1"),
-        y: E.fail("error2")
-      }),
-      E.left(["error1", "error2"])
-    )
-  })
-
-  it("zipWithValidated", () => {
-    assert.deepStrictEqual(
-      E.zipWithValidated(
-        E.right(1),
-        E.right(2),
-        N.sum
-      ),
-      E.right(3)
-    )
-
-    assert.deepStrictEqual(
-      E.zipWithValidated(
-        E.fail("error1"),
-        E.right(2),
-        N.sum
-      ),
-      E.fail("error1")
-    )
-
-    assert.deepStrictEqual(
-      E.zipWithValidated(
-        E.right(1),
-        E.fail("error2"),
-        N.sum
-      ),
-      E.fail("error2")
-    )
-
-    assert.deepStrictEqual(
-      E.zipWithValidated(
-        E.fail("error1"),
-        E.fail("error2"),
-        N.sum
-      ),
-      E.left(["error1", "error2"])
-    )
-  })
-
-  it("lift2Validated", () => {
-    const sum = E.lift2Validated(N.sum)
-    assert.deepStrictEqual(sum(E.right(1), E.right(2)), E.right(3))
-    assert.deepStrictEqual(sum(E.fail("error1"), E.fail("error2")), E.left(["error1", "error2"]))
   })
 })
