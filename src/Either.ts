@@ -641,14 +641,15 @@ export const getFirstLeftSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Either<
 export const getFirstLeftMonoid: <A, E>(M: Monoid<A>) => Monoid<Either<E, A>> = applicative
   .getMonoid(Applicative)
 
-/**
- * @category error handling
- * @since 1.0.0
- */
-export const firstRightOf: {
-  <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, A>
-  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A>
-} = dual(2, <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A> => {
+const coproduct = <E1, A, E2, B>(
+  self: Either<E1, A>,
+  that: Either<E2, B>
+): Either<E1 | E2, A | B> => isRight(self) ? self : that
+
+const coproductMany = <E, A>(
+  self: Either<E, A>,
+  collection: Iterable<Either<E, A>>
+): Either<E, A> => {
   let out = self
   if (isRight(out)) {
     return out
@@ -659,16 +660,7 @@ export const firstRightOf: {
     }
   }
   return out
-})
-
-const coproduct: {
-  <E2, B>(that: Either<E2, B>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, B | A>
-  <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, A | B>
-} = dual(
-  2,
-  <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, A | B> =>
-    isRight(self) ? self : that
-)
+}
 
 /**
  * @category instances
@@ -677,8 +669,17 @@ const coproduct: {
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<EitherTypeLambda> = {
   imap,
   coproduct,
-  coproductMany: firstRightOf
+  coproductMany
 }
+
+/**
+ * @category error handling
+ * @since 1.0.0
+ */
+export const firstRightOf: {
+  <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, A>
+  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A>
+} = dual(2, coproductMany)
 
 /**
  * Semigroup returning the left-most `Right` value.

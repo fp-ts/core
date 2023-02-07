@@ -1078,15 +1078,10 @@ export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicat
   Applicative
 )
 
-const coproduct: {
-  <B>(that: Option<B>): <A>(self: Option<A>) => Option<B | A>
-  <A, B>(self: Option<A>, that: Option<B>): Option<A | B>
-} = dual(2, <A, B>(self: Option<A>, that: Option<B>): Option<A | B> => isSome(self) ? self : that)
+const coproduct = <A, B>(self: Option<A>, that: Option<B>): Option<A | B> =>
+  isSome(self) ? self : that
 
-const coproductMany: {
-  <A>(collection: Iterable<Option<A>>): (self: Option<A>) => Option<A>
-  <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A>
-} = dual(2, <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> => {
+const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> => {
   let out = self
   if (isSome(out)) {
     return out
@@ -1097,7 +1092,7 @@ const coproductMany: {
     }
   }
   return out
-})
+}
 
 /**
  * @category instances

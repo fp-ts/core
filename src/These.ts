@@ -917,14 +917,10 @@ export const orElseFail: {
     orElse(self, () => left(onLeft()))
 )
 
-/**
- * @category error handling
- * @since 1.0.0
- */
-export const firstRightOrBothOf: {
-  <E, A>(collection: Iterable<These<E, A>>): (self: These<E, A>) => These<E, A>
-  <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A>
-} = dual(2, <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A> => {
+const coproduct = <E1, A, E2, B>(self: These<E1, A>, that: These<E2, B>): These<E1 | E2, A | B> =>
+  isRightOrBoth(self) ? self : that
+
+const coproductMany = <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A> => {
   let out = self
   if (isRightOrBoth(out)) {
     return out
@@ -935,16 +931,16 @@ export const firstRightOrBothOf: {
     }
   }
   return out
-})
+}
 
-const coproduct: {
-  <E2, B>(that: These<E2, B>): <E1, A>(self: These<E1, A>) => These<E2 | E1, B | A>
-  <E1, A, E2, B>(self: These<E1, A>, that: These<E2, B>): These<E1 | E2, A | B>
-} = dual(
-  2,
-  <E1, A, E2, B>(self: These<E1, A>, that: These<E2, B>): These<E1 | E2, A | B> =>
-    isRightOrBoth(self) ? self : that
-)
+/**
+ * @category error handling
+ * @since 1.0.0
+ */
+export const firstRightOrBothOf: {
+  <E, A>(collection: Iterable<These<E, A>>): (self: These<E, A>) => These<E, A>
+  <E, A>(self: These<E, A>, collection: Iterable<These<E, A>>): These<E, A>
+} = dual(2, coproductMany)
 
 /**
  * @category instances
@@ -953,7 +949,7 @@ const coproduct: {
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<TheseTypeLambda> = {
   imap,
   coproduct,
-  coproductMany: firstRightOrBothOf
+  coproductMany
 }
 
 /**
@@ -1062,12 +1058,12 @@ const product = <E1, A, E2, B>(
     return both(that.left, [self.right, that.right])
   }
   if (isLeft(that)) {
-    return left(RA.appendAllNonEmpty(that.left)(self.left))
+    return left(RA.appendAllNonEmpty(self.left, that.left))
   }
   if (isRight(that)) {
     return both(self.left, [self.right, that.right])
   }
-  return both(RA.appendAllNonEmpty(that.left)(self.left), [self.right, that.right])
+  return both(RA.appendAllNonEmpty(self.left, that.left), [self.right, that.right])
 }
 
 const productAll = <E, A>(
