@@ -1348,7 +1348,7 @@ export const traverseTap: <F extends TypeLambda>(
 /**
  * @example
  * import { none, some, getEquivalence } from '@fp-ts/core/Option'
- * import * as N from '@fp-ts/core/number'
+ * import * as N from '@fp-ts/core/Number'
  *
  * const isEquivalent = getEquivalence(N.Equivalence)
  * assert.deepStrictEqual(isEquivalent(none(), none()), true)
