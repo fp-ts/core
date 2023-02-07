@@ -1008,7 +1008,7 @@ export const getOptionalMonoid = <A>(
   Semigroup: Semigroup<A>
 ): Monoid<Option<A>> =>
   monoid.fromSemigroup(
-    semigroup.fromCombine((self, that) =>
+    semigroup.make((self, that) =>
       isNone(self) ? that : isNone(that) ? self : some(Semigroup.combine(self.value, that.value))
     ),
     none()

@@ -120,7 +120,7 @@ export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
 export const and: {
   (that: boolean): (self: boolean) => boolean
   (self: boolean, that: boolean): boolean
-} = semigroup.booleanAll.combine
+} = dual(2, semigroup.booleanAll.combine)
 
 /**
  * @category combinators
@@ -129,7 +129,7 @@ export const and: {
 export const or: {
   (that: boolean): (self: boolean) => boolean
   (self: boolean, that: boolean): boolean
-} = semigroup.booleanAny.combine
+} = dual(2, semigroup.booleanAny.combine)
 
 /**
  * @category combinators

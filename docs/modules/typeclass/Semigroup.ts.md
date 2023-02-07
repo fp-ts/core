@@ -14,12 +14,11 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [array](#array)
-  - [readonlyArray](#readonlyarray)
+  - [mutableArray](#mutablearray)
   - [struct](#struct)
   - [tuple](#tuple)
 - [constructors](#constructors)
   - [constant](#constant)
-  - [fromCombine](#fromcombine)
   - [make](#make)
   - [max](#max)
   - [min](#min)
@@ -51,26 +50,26 @@ Added in v1.0.0
 
 ## array
 
-Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
-The returned `Semigroup` combines two arrays by concatenating them.
-
-**Signature**
-
-```ts
-export declare const array: <A>() => Semigroup<A[]>
-```
-
-Added in v1.0.0
-
-## readonlyArray
-
 Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
 The returned `Semigroup` combines two arrays by concatenating them.
 
 **Signature**
 
 ```ts
-export declare const readonlyArray: <A>() => Semigroup<readonly A[]>
+export declare const array: <A>() => Semigroup<readonly A[]>
+```
+
+Added in v1.0.0
+
+## mutableArray
+
+Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
+The returned `Semigroup` combines two arrays by concatenating them.
+
+**Signature**
+
+```ts
+export declare const mutableArray: <A>() => Semigroup<A[]>
 ```
 
 Added in v1.0.0
@@ -121,18 +120,6 @@ export declare const constant: <A>(a: A) => Semigroup<A>
 
 Added in v1.0.0
 
-## fromCombine
-
-Useful when `combineMany` can't be optimised.
-
-**Signature**
-
-```ts
-export declare const fromCombine: <A>(combine: (self: A, that: A) => A) => Semigroup<A>
-```
-
-Added in v1.0.0
-
 ## make
 
 **Signature**
@@ -140,7 +127,7 @@ Added in v1.0.0
 ```ts
 export declare const make: <A>(
   combine: (self: A, that: A) => A,
-  combineMany: (self: A, collection: Iterable<A>) => A
+  combineMany?: (self: A, collection: Iterable<A>) => A
 ) => Semigroup<A>
 ```
 
@@ -316,14 +303,8 @@ Added in v1.0.0
 
 ```ts
 export interface Semigroup<A> {
-  readonly combine: {
-    (that: A): (self: A) => A
-    (self: A, that: A): A
-  }
-  readonly combineMany: {
-    (collection: Iterable<A>): (self: A) => A
-    (self: A, collection: Iterable<A>): A
-  }
+  readonly combine: (self: A, that: A) => A
+  readonly combineMany: (self: A, collection: Iterable<A>) => A
 }
 ```
 

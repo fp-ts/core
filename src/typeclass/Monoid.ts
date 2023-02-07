@@ -144,7 +144,8 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * @category combinators
  * @since 1.0.0
  */
-export const array = <A>(): Monoid<Array<A>> => fromSemigroup(semigroup.array<A>(), [])
+export const mutableArray = <A>(): Monoid<Array<A>> =>
+  fromSemigroup(semigroup.mutableArray<A>(), [])
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
@@ -153,7 +154,7 @@ export const array = <A>(): Monoid<Array<A>> => fromSemigroup(semigroup.array<A>
  * @category combinators
  * @since 1.0.0
  */
-export const readonlyArray: <A>() => Monoid<ReadonlyArray<A>> = array as any
+export const array: <A>() => Monoid<ReadonlyArray<A>> = mutableArray as any
 
 /**
  * This function creates and returns a new `Monoid` for a struct of values based on the given `Monoid`s for each property in the struct.

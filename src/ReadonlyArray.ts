@@ -33,7 +33,6 @@ import type * as product_ from "@fp-ts/core/typeclass/Product"
 import * as semiApplicative from "@fp-ts/core/typeclass/SemiApplicative"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
-import { fromCombine } from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 import * as traversableFilterable from "@fp-ts/core/typeclass/TraversableFilterable"
@@ -2221,9 +2220,7 @@ export const unfold = <B, A>(b: B, f: (b: B) => Option<readonly [A, B]>): Array<
  */
 export const getUnionSemigroup = <A>(
   isEquivalent: (self: A, that: A) => boolean
-): Semigroup<ReadonlyArray<A>> =>
-  // @ts-expect-error
-  fromCombine(union(isEquivalent))
+): Semigroup<ReadonlyArray<A>> => semigroup.make(union(isEquivalent)) as any
 
 /**
  * @category instances
@@ -2247,9 +2244,7 @@ export const getUnionMonoid = <A>(
  */
 export const getIntersectionSemigroup = <A>(
   isEquivalent: (self: A, that: A) => boolean
-): Semigroup<ReadonlyArray<A>> =>
-  // @ts-expect-error
-  fromCombine(intersection(isEquivalent))
+): Semigroup<ReadonlyArray<A>> => semigroup.make(intersection(isEquivalent)) as any
 
 /**
  * Returns a `Semigroup` for `ReadonlyArray<A>`.
@@ -2257,7 +2252,7 @@ export const getIntersectionSemigroup = <A>(
  * @category instances
  * @since 1.0.0
  */
-export const getSemigroup: <A>() => Semigroup<ReadonlyArray<A>> = semigroup.readonlyArray
+export const getSemigroup: <A>() => Semigroup<ReadonlyArray<A>> = semigroup.array
 
 /**
  * Returns a `Monoid` for `ReadonlyArray<A>`.
@@ -2265,7 +2260,7 @@ export const getSemigroup: <A>() => Semigroup<ReadonlyArray<A>> = semigroup.read
  * @category instances
  * @since 1.0.0
  */
-export const getMonoid: <A>() => Monoid<ReadonlyArray<A>> = monoid.readonlyArray
+export const getMonoid: <A>() => Monoid<ReadonlyArray<A>> = monoid.array
 
 /**
  * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
