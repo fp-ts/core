@@ -17,10 +17,7 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Order<A> {
-  readonly compare: {
-    (that: A): (self: A) => -1 | 0 | 1
-    (self: A, that: A): -1 | 0 | 1
-  }
+  readonly compare: (self: A, that: A) => -1 | 0 | 1
 }
 
 /**
@@ -38,7 +35,7 @@ export interface OrderTypeLambda extends TypeLambda {
 export const make = <A>(
   compare: (self: A, that: A) => -1 | 0 | 1
 ): Order<A> => ({
-  compare: dual(2, (self, that) => self === that ? 0 : compare(self, that))
+  compare: (self, that) => self === that ? 0 : compare(self, that)
 })
 
 /**
