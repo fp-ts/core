@@ -131,7 +131,7 @@ Added in v1.0.0
 
 ## strict
 
-Return an `Equivalence` that uses strict equality (===) to compare values
+Return an `Equivalence` that uses strict equality (===) to compare values.
 
 **Signature**
 
@@ -261,7 +261,6 @@ Added in v1.0.0
 
 ```ts
 export interface Equivalence<A> {
-  (that: A): (self: A) => boolean
   (self: A, that: A): boolean
 }
 ```
