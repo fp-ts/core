@@ -231,10 +231,7 @@ Added in v1.0.0
 
 ```ts
 export interface Order<A> {
-  readonly compare: {
-    (that: A): (self: A) => -1 | 0 | 1
-    (self: A, that: A): -1 | 0 | 1
-  }
+  readonly compare: (self: A, that: A) => -1 | 0 | 1
 }
 ```
 
