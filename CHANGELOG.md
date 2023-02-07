@@ -1,5 +1,49 @@
 # @fp-ts/core
 
+## 0.2.0
+
+### Minor Changes
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`b3e7ff34`](https://github.com/fp-ts/core/commit/b3e7ff34596b9cf90cc94c7349cf340fb0df82ef) Thanks [@gcanti](https://github.com/gcanti)! - Identity: remove exports except do notation ones
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`a99a23a1`](https://github.com/fp-ts/core/commit/a99a23a15ccd1c9d1f623f39d4727cb3ff0be3f7) Thanks [@gcanti](https://github.com/gcanti)! - Either: make orElse, orElseEither lazy and remove catchAll
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`31b5fffc`](https://github.com/fp-ts/core/commit/31b5fffc175f4740c8f31f05afba48b6b8cb9cd6) Thanks [@gcanti](https://github.com/gcanti)! - Option: remove fromThrowable
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`14de6de2`](https://github.com/fp-ts/core/commit/14de6de207c63d460ecabcb6b13f5d9abb697f05) Thanks [@gcanti](https://github.com/gcanti)! - Option: remove coproductEither
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`f3cc9d2c`](https://github.com/fp-ts/core/commit/f3cc9d2cf2440586f2681f447ae9056d94a631d7) Thanks [@gcanti](https://github.com/gcanti)! - rename `element` to `appendElement`
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`2bb91d1e`](https://github.com/fp-ts/core/commit/2bb91d1e15ec62bfa762bb17aec6c97305b94692) Thanks [@gcanti](https://github.com/gcanti)! - Function: flip apply
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`9569811e`](https://github.com/fp-ts/core/commit/9569811ea5506fb4206c1b9dbde7dbdbe7e9a8bc) Thanks [@gcanti](https://github.com/gcanti)! - Covariant: flip flap
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`ae3338c0`](https://github.com/fp-ts/core/commit/ae3338c091284e0af7b24e1be818a96d59a77f09) Thanks [@gcanti](https://github.com/gcanti)! - Either: rename `firstSuccessOf` to `firstRightOf`
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`a4a6ebbc`](https://github.com/fp-ts/core/commit/a4a6ebbcf73b453e526fbc42a76424732b8fdb23) Thanks [@gcanti](https://github.com/gcanti)! - remove `orElseSucceed`
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`99088b21`](https://github.com/fp-ts/core/commit/99088b21a5945cb744a380947ee79378f19766f3) Thanks [@gcanti](https://github.com/gcanti)! - remove `imap` from exports
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`d4fcf63e`](https://github.com/fp-ts/core/commit/d4fcf63e16f15ac86a96e89b0b47c7d2647a6fe6) Thanks [@gcanti](https://github.com/gcanti)! - Option: make orElse, orElseEither lazy and remove catchAll
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`bfb22498`](https://github.com/fp-ts/core/commit/bfb22498cb9287d40e231b4992937e3313fae1fe) Thanks [@gcanti](https://github.com/gcanti)! - Option: remove `compact`
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`4463f4f1`](https://github.com/fp-ts/core/commit/4463f4f1649ca2f984d715d0aa22055a3a8d6519) Thanks [@gcanti](https://github.com/gcanti)! - Option: change `firstSomeOf` signature
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`18f70fcb`](https://github.com/fp-ts/core/commit/18f70fcb18c5e8f26980fd88c1192808df241631) Thanks [@gcanti](https://github.com/gcanti)! - Either: remove `fromThrowable`
+
+### Patch Changes
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`ce345a8d`](https://github.com/fp-ts/core/commit/ce345a8dd5bae7694cdbdd1bf5056b337175810d) Thanks [@gcanti](https://github.com/gcanti)! - add default handler to `getOrThrow`
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`615d492e`](https://github.com/fp-ts/core/commit/615d492ea79b47472da256b4dea6f33835f24d23) Thanks [@gcanti](https://github.com/gcanti)! - algebraic operations: add support for bigint
+
+- [#55](https://github.com/fp-ts/core/pull/55) [`14f87fb3`](https://github.com/fp-ts/core/commit/14f87fb33061ef1e36a5695c0f28578c9f860cf1) Thanks [@gcanti](https://github.com/gcanti)! - Option: add `reduceAll`
+
+- [#51](https://github.com/fp-ts/core/pull/51) [`175d6b9e`](https://github.com/fp-ts/core/commit/175d6b9e93dbf6bfbea80b34a06f26ceb3d725aa) Thanks [@gcanti](https://github.com/gcanti)! - Option, Either, These: switch to interfaces
+
+- [#51](https://github.com/fp-ts/core/pull/51) [`3efb6d8a`](https://github.com/fp-ts/core/commit/3efb6d8a9a343ca177ec7bcc3e360974aec307cf) Thanks [@gcanti](https://github.com/gcanti)! - Function: add dual utility
+
 ## 0.1.1
 
 ### Patch Changes
