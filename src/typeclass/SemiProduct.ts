@@ -12,29 +12,19 @@ import type { SemiApplicative } from "@fp-ts/core/typeclass/SemiApplicative"
  * @since 1.0.0
  */
 export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
-  readonly product: {
-    <R2, O2, E2, B>(
-      that: Kind<F, R2, O2, E2, B>
-    ): <R1, O1, E1, A>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
-    <R1, O1, E1, A, R2, O2, E2, B>(
-      self: Kind<F, R1, O1, E1, A>,
-      that: Kind<F, R2, O2, E2, B>
-    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
-  }
+  readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
+    self: Kind<F, R1, O1, E1, A>,
+    that: Kind<F, R2, O2, E2, B>
+  ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
 
-  readonly productMany: {
-    <R, O, E, A>(
-      collection: Iterable<Kind<F, R, O, E, A>>
-    ): (self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, [A, ...Array<A>]>
-    <R, O, E, A>(
-      self: Kind<F, R, O, E, A>,
-      collection: Iterable<Kind<F, R, O, E, A>>
-    ): Kind<F, R, O, E, [A, ...Array<A>]>
-  }
+  readonly productMany: <R, O, E, A>(
+    self: Kind<F, R, O, E, A>,
+    collection: Iterable<Kind<F, R, O, E, A>>
+  ) => Kind<F, R, O, E, [A, ...Array<A>]>
 }
 
 /**
- * Useful when `productMany` can't be optimised.
+ * Returns a default `productMany` implementation.
  *
  * @category constructors
  * @since 1.0.0
@@ -43,7 +33,7 @@ export const productMany = <F extends TypeLambda>(
   map: Covariant<F>["map"],
   product: SemiProduct<F>["product"]
 ): SemiProduct<F>["productMany"] =>
-  dual(2, <R, O, E, A>(
+  <R, O, E, A>(
     self: Kind<F, R, O, E, A>,
     collection: Iterable<Kind<F, R, O, E, A>>
   ) => {
@@ -55,10 +45,10 @@ export const productMany = <F extends TypeLambda>(
       )
     }
     return out
-  })
+  }
 
 /**
- * Returns a default binary `product` composition.
+ * Returns a default `product` composition.
  *
  * @since 1.0.0
  */
@@ -78,7 +68,7 @@ export const productComposition = <F extends TypeLambda, G extends TypeLambda>(
   > => F.map(F.product(self, that), ([ga, gb]) => G.product(ga, gb))
 
 /**
- * Returns a default binary `productMany` composition.
+ * Returns a default `productMany` composition.
  *
  * @since 1.0.0
  */

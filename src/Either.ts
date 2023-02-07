@@ -458,34 +458,25 @@ export const Monad: monad.Monad<EitherTypeLambda> = {
   flatMap
 }
 
-const product: {
-  <E2, B>(that: Either<E2, B>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, [A, B]>
-  <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [A, B]>
-} = dual(
-  2,
-  <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [A, B]> =>
-    isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
-)
+const product = <E1, A, E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [A, B]> =>
+  isRight(self) ? (isRight(that) ? right([self.right, that.right]) : that) : self
 
-const productMany: {
-  <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, [A, ...Array<A>]>
-  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, [A, ...Array<A>]>
-} = dual(
-  2,
-  <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, [A, ...Array<A>]> => {
-    if (isLeft(self)) {
-      return self
-    }
-    const out: [A, ...Array<A>] = [self.right]
-    for (const e of collection) {
-      if (isLeft(e)) {
-        return e
-      }
-      out.push(e.right)
-    }
-    return right(out)
+const productMany = <E, A>(
+  self: Either<E, A>,
+  collection: Iterable<Either<E, A>>
+): Either<E, [A, ...Array<A>]> => {
+  if (isLeft(self)) {
+    return self
   }
-)
+  const out: [A, ...Array<A>] = [self.right]
+  for (const e of collection) {
+    if (isLeft(e)) {
+      return e
+    }
+    out.push(e.right)
+  }
+  return right(out)
+}
 
 /**
  * @category instances
@@ -1520,10 +1511,7 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Either<E, B>
 ) => (...a: A): Validated<E, B> => toValidated(f(...a))
 
-const productValidated: {
-  <E2, B>(that: Validated<E2, B>): <E1, A>(self: Validated<E1, A>) => Validated<E2 | E1, [A, B]>
-  <E1, A, E2, B>(self: Validated<E1, A>, that: Validated<E2, B>): Validated<E1 | E2, [A, B]>
-} = dual(2, <E1, A, E2, B>(
+const productValidated = <E1, A, E2, B>(
   self: Validated<E1, A>,
   that: Validated<E2, B>
 ): Validated<E1 | E2, [A, B]> =>
@@ -1533,7 +1521,7 @@ const productValidated: {
       : self
     : isLeft(that)
     ? that
-    : right([self.right, that.right]))
+    : right([self.right, that.right])
 
 const productManyValidated = semiProduct.productMany<ValidatedTypeLambda>(map, productValidated)
 

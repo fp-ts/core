@@ -888,19 +888,13 @@ export const Monad: monad.Monad<OptionTypeLambda> = {
   flatMap
 }
 
-const product: {
-  <B>(that: Option<B>): <A>(self: Option<A>) => Option<[A, B]>
-  <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]>
-} = dual(
-  2,
-  <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]> =>
-    isSome(self) && isSome(that) ? some([self.value, that.value]) : none()
-)
+const product = <A, B>(self: Option<A>, that: Option<B>): Option<[A, B]> =>
+  isSome(self) && isSome(that) ? some([self.value, that.value]) : none()
 
-const productMany: {
-  <A>(collection: Iterable<Option<A>>): (self: Option<A>) => Option<[A, ...Array<A>]>
-  <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<[A, ...Array<A>]>
-} = dual(2, <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<[A, ...Array<A>]> => {
+const productMany = <A>(
+  self: Option<A>,
+  collection: Iterable<Option<A>>
+): Option<[A, ...Array<A>]> => {
   if (isNone(self)) {
     return none()
   }
@@ -912,7 +906,7 @@ const productMany: {
     out.push(o.value)
   }
   return some(out)
-})
+}
 
 /**
  * @category instances

@@ -209,22 +209,13 @@ export const Invariant: invariant.Invariant<EquivalenceTypeLambda> = {
   imap
 }
 
-const product: {
-  <B>(that: Equivalence<B>): <A>(self: Equivalence<A>) => Equivalence<[A, B]>
-  <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]>
-} = dual(
-  2,
-  <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]> => tuple(self, that)
-)
+const product = <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]> =>
+  tuple(self, that)
 
-const productMany: {
-  <A>(collection: Iterable<Equivalence<A>>): (self: Equivalence<A>) => Equivalence<[A, ...Array<A>]>
-  <A>(self: Equivalence<A>, collection: Iterable<Equivalence<A>>): Equivalence<[A, ...Array<A>]>
-} = dual(
-  2,
-  <A>(self: Equivalence<A>, collection: Iterable<Equivalence<A>>): Equivalence<[A, ...Array<A>]> =>
-    tuple(self, ...collection)
-)
+const productMany = <A>(
+  self: Equivalence<A>,
+  collection: Iterable<Equivalence<A>>
+): Equivalence<[A, ...Array<A>]> => tuple(self, ...collection)
 
 /**
  * @category instances

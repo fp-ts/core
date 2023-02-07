@@ -1756,10 +1756,7 @@ export const sequenceNonEmpty = <F extends TypeLambda>(
   self: NonEmptyReadonlyArray<Kind<F, R, O, E, A>>
 ) => Kind<F, R, O, E, NonEmptyArray<A>>) => traverseNonEmpty(F)(identity)
 
-const product: {
-  <B>(that: ReadonlyArray<B>): <A>(self: ReadonlyArray<A>) => ReadonlyArray<[A, B]>
-  <A, B>(self: ReadonlyArray<A>, that: ReadonlyArray<B>): ReadonlyArray<[A, B]>
-} = dual(2, <A, B>(self: ReadonlyArray<A>, that: ReadonlyArray<B>): ReadonlyArray<[A, B]> => {
+const product = <A, B>(self: ReadonlyArray<A>, that: ReadonlyArray<B>): ReadonlyArray<[A, B]> => {
   if (isEmpty(self) || isEmpty(that)) {
     return empty()
   }
@@ -1770,7 +1767,7 @@ const product: {
     }
   }
   return out
-})
+}
 
 const productMany = semiProduct.productMany<ReadonlyArrayTypeLambda>(map, product)
 
