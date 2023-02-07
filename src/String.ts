@@ -63,7 +63,7 @@ export const empty: "" = "" as const
 export const concat: {
   (that: string): (self: string) => string
   (self: string, that: string): string
-} = Semigroup.combine
+} = dual(2, Semigroup.combine)
 
 /**
  * @example

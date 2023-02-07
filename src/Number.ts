@@ -34,7 +34,7 @@ export const isNumber: Refinement<unknown, number> = predicate.isNumber
 export const sum: {
   (that: number): (self: number) => number
   (self: number, that: number): number
-} = semigroup.numberSum.combine
+} = dual(2, semigroup.numberSum.combine)
 
 /**
  * @example
@@ -49,7 +49,7 @@ export const sum: {
 export const multiply: {
   (that: number): (self: number) => number
   (self: number, that: number): number
-} = semigroup.numberMultiply.combine
+} = dual(2, semigroup.numberMultiply.combine)
 
 /**
  * @example

@@ -14,14 +14,8 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Semigroup<A> {
-  readonly combine: {
-    (that: A): (self: A) => A
-    (self: A, that: A): A
-  }
-  readonly combineMany: {
-    (collection: Iterable<A>): (self: A) => A
-    (self: A, collection: Iterable<A>): A
-  }
+  readonly combine: (self: A, that: A) => A
+  readonly combineMany: (self: A, collection: Iterable<A>) => A
 }
 
 /**
@@ -33,37 +27,25 @@ export interface SemigroupTypeLambda extends TypeLambda {
 }
 
 /**
+ * @param combineMany - Useful when `combineMany` can be optimised
+ *
  * @category constructors
  * @since 1.0.0
  */
 export const make = <A>(
   combine: (self: A, that: A) => A,
-  combineMany: (self: A, collection: Iterable<A>) => A
+  combineMany: (self: A, collection: Iterable<A>) => A = (self, collection) =>
+    fromIterable(collection).reduce(combine, self)
 ): Semigroup<A> => ({
-  combine: dual(2, combine),
-  combineMany: dual(2, combineMany)
+  combine,
+  combineMany
 })
-
-/**
- * Useful when `combineMany` can't be optimised.
- *
- * @category constructors
- * @since 1.0.0
- */
-export const fromCombine = <A>(combine: (self: A, that: A) => A): Semigroup<A> =>
-  make(combine, (self, collection) => {
-    let out: A = self
-    for (const a of collection) {
-      out = combine(out, a)
-    }
-    return out
-  })
 
 /**
  * @category instances
  * @since 1.0.0
  */
-export const string: Semigroup<string> = fromCombine((self, that) => self + that)
+export const string: Semigroup<string> = make((self, that) => self + that)
 
 /**
  * `number` semigroup under addition.
@@ -71,7 +53,7 @@ export const string: Semigroup<string> = fromCombine((self, that) => self + that
  * @category instances
  * @since 1.0.0
  */
-export const numberSum: Semigroup<number> = fromCombine((self, that) => self + that)
+export const numberSum: Semigroup<number> = make((self, that) => self + that)
 
 /**
  * `number` semigroup under multiplication.
@@ -102,7 +84,7 @@ export const numberMultiply: Semigroup<number> = make(
  * @category instances
  * @since 1.0.0
  */
-export const bigintSum: Semigroup<bigint> = fromCombine((self, that) => self + that)
+export const bigintSum: Semigroup<bigint> = make((self, that) => self + that)
 
 /**
  * `bigint` semigroup under multiplication.
@@ -181,7 +163,7 @@ export const booleanAny: Semigroup<boolean> = make(
 export const tuple = <A extends ReadonlyArray<any>>(
   ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
 ): Semigroup<A> =>
-  fromCombine((self, that) => semigroups.map((S, i) => S.combine(self[i], that[i])) as any)
+  make((self, that) => semigroups.map((S, i) => S.combine(self[i], that[i])) as any)
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
@@ -190,7 +172,7 @@ export const tuple = <A extends ReadonlyArray<any>>(
  * @category combinators
  * @since 1.0.0
  */
-export const array = <A>(): Semigroup<Array<A>> => fromCombine((self, that) => self.concat(that))
+export const mutableArray = <A>(): Semigroup<Array<A>> => make((self, that) => self.concat(that))
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
@@ -199,7 +181,7 @@ export const array = <A>(): Semigroup<Array<A>> => fromCombine((self, that) => s
  * @category combinators
  * @since 1.0.0
  */
-export const readonlyArray: <A>() => Semigroup<ReadonlyArray<A>> = array as any
+export const array: <A>() => Semigroup<ReadonlyArray<A>> = mutableArray as any
 
 /**
  * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
@@ -213,7 +195,7 @@ export const readonlyArray: <A>() => Semigroup<ReadonlyArray<A>> = array as any
 export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
   { readonly [K in keyof A]: A[K] }
 > =>
-  fromCombine((self, that) => {
+  make((self, that) => {
     const r = {} as any
     for (const k in semigroups) {
       if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
@@ -230,7 +212,7 @@ export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]>
  * @since 1.0.0
  */
 export const min = <A>(O: Order<A>): Semigroup<A> =>
-  fromCombine((self, that) => O.compare(self, that) === -1 ? self : that)
+  make((self, that) => O.compare(self, that) === -1 ? self : that)
 
 /**
  * `Semigroup` that returns last maximum of elements.
@@ -239,7 +221,7 @@ export const min = <A>(O: Order<A>): Semigroup<A> =>
  * @since 1.0.0
  */
 export const max = <A>(O: Order<A>): Semigroup<A> =>
-  fromCombine((self, that) => O.compare(self, that) === 1 ? self : that)
+  make((self, that) => O.compare(self, that) === 1 ? self : that)
 
 /**
  * @category constructors
@@ -272,7 +254,7 @@ export const intercalate: {
 } = dual(
   2,
   <A>(S: Semigroup<A>, separator: A): Semigroup<A> =>
-    fromCombine((self, that) => S.combineMany(self, [separator, that]))
+    make((self, that) => S.combineMany(self, [separator, that]))
 )
 
 /**

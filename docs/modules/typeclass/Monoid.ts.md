@@ -14,7 +14,7 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [array](#array)
-  - [readonlyArray](#readonlyarray)
+  - [mutableArray](#mutablearray)
   - [reverse](#reverse)
   - [struct](#struct)
   - [tuple](#tuple)
@@ -39,26 +39,26 @@ Added in v1.0.0
 
 ## array
 
-Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
-The returned `Monoid`'s `empty` value is the empty array.
-
-**Signature**
-
-```ts
-export declare const array: <A>() => Monoid<A[]>
-```
-
-Added in v1.0.0
-
-## readonlyArray
-
 Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
 The returned `Monoid`'s empty value is the empty array.
 
 **Signature**
 
 ```ts
-export declare const readonlyArray: <A>() => Monoid<readonly A[]>
+export declare const array: <A>() => Monoid<readonly A[]>
+```
+
+Added in v1.0.0
+
+## mutableArray
+
+Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
+The returned `Monoid`'s `empty` value is the empty array.
+
+**Signature**
+
+```ts
+export declare const mutableArray: <A>() => Monoid<A[]>
 ```
 
 Added in v1.0.0

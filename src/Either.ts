@@ -1266,7 +1266,7 @@ export const exists: {
  * @since 1.0.0
  */
 export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E, A>> =>
-  semigroup.fromCombine((
+  semigroup.make((
     x,
     y
   ) => (isLeft(y) ? x : isLeft(x) ? y : right(S.combine(x.right, y.right))))

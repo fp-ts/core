@@ -5,7 +5,7 @@ import * as U from "../util"
 
 describe("Monoid", () => {
   it("exports", () => {
-    expect(_.array).exists
+    expect(_.mutableArray).exists
   })
 
   it("min", () => {
