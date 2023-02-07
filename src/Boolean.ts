@@ -7,7 +7,6 @@
  */
 import type { LazyArg } from "@fp-ts/core/Function"
 import { dual } from "@fp-ts/core/Function"
-import type { Refinement } from "@fp-ts/core/Predicate"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -15,10 +14,20 @@ import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
+ * Tests if a value is a `boolean`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isBoolean } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(isBoolean(true), true)
+ * assert.deepStrictEqual(isBoolean("true"), false)
+ *
  * @category guards
  * @since 1.0.0
  */
-export const isBoolean: Refinement<unknown, boolean> = predicate.isBoolean
+export const isBoolean: (input: unknown) => input is boolean = predicate.isBoolean
 
 /**
  * Defines the match over a boolean value.

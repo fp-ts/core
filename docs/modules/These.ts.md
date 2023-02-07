@@ -922,7 +922,7 @@ Added in v1.0.0
 
 ## isBoth
 
-Returns `true` if the these is an instance of `Both`, `false` otherwise
+Determine if a `These` is a `Both`.
 
 **Signature**
 
@@ -930,11 +930,21 @@ Returns `true` if the these is an instance of `Both`, `false` otherwise
 export declare const isBoth: <E, A>(self: These<E, A>) => self is Both<E, A>
 ```
 
+**Example**
+
+```ts
+import { isBoth, left, right, both } from '@fp-ts/core/These'
+
+assert.deepStrictEqual(isBoth(right(1)), false)
+assert.deepStrictEqual(isBoth(left('error')), false)
+assert.deepStrictEqual(isBoth(both('error', 1)), true)
+```
+
 Added in v1.0.0
 
 ## isLeft
 
-Returns `true` if the these is an instance of `Left`, `false` otherwise
+Determine if a `These` is a `Left`.
 
 **Signature**
 
@@ -942,9 +952,21 @@ Returns `true` if the these is an instance of `Left`, `false` otherwise
 export declare const isLeft: <E, A>(self: These<E, A>) => self is Left<E>
 ```
 
+**Example**
+
+```ts
+import { isLeft, left, right, both } from '@fp-ts/core/These'
+
+assert.deepStrictEqual(isLeft(right(1)), false)
+assert.deepStrictEqual(isLeft(left('error')), true)
+assert.deepStrictEqual(isLeft(both('error', 1)), false)
+```
+
 Added in v1.0.0
 
 ## isLeftOrBoth
+
+Determine if a `These` is a `Left` or a `Both`.
 
 **Signature**
 
@@ -952,11 +974,21 @@ Added in v1.0.0
 export declare const isLeftOrBoth: <E, A>(self: These<E, A>) => self is Left<E> | Both<E, A>
 ```
 
+**Example**
+
+```ts
+import { isLeftOrBoth, left, right, both } from '@fp-ts/core/These'
+
+assert.deepStrictEqual(isLeftOrBoth(right(1)), false)
+assert.deepStrictEqual(isLeftOrBoth(left('error')), true)
+assert.deepStrictEqual(isLeftOrBoth(both('error', 1)), true)
+```
+
 Added in v1.0.0
 
 ## isRight
 
-Returns `true` if the these is an instance of `Right`, `false` otherwise
+Determine if a `These` is a `Right`.
 
 **Signature**
 
@@ -964,9 +996,21 @@ Returns `true` if the these is an instance of `Right`, `false` otherwise
 export declare const isRight: <E, A>(self: These<E, A>) => self is Right<A>
 ```
 
+**Example**
+
+```ts
+import { isRight, left, right, both } from '@fp-ts/core/These'
+
+assert.deepStrictEqual(isRight(right(1)), true)
+assert.deepStrictEqual(isRight(left('error')), false)
+assert.deepStrictEqual(isRight(both('error', 1)), false)
+```
+
 Added in v1.0.0
 
 ## isRightOrBoth
+
+Determine if a `These` is a `Right` or a `Both`.
 
 **Signature**
 
@@ -974,17 +1018,26 @@ Added in v1.0.0
 export declare const isRightOrBoth: <E, A>(self: These<E, A>) => self is Right<A> | Both<E, A>
 ```
 
+**Example**
+
+```ts
+import { isRightOrBoth, left, right, both } from '@fp-ts/core/These'
+
+assert.deepStrictEqual(isRightOrBoth(right(1)), true)
+assert.deepStrictEqual(isRightOrBoth(left('error')), false)
+assert.deepStrictEqual(isRightOrBoth(both('error', 1)), true)
+```
+
 Added in v1.0.0
 
 ## isThese
 
-Returns `true` if the specified value is an instance of `These`, `false`
-otherwise.
+Tests if a value is a `These`.
 
 **Signature**
 
 ```ts
-export declare const isThese: (u: unknown) => u is These<unknown, unknown>
+export declare const isThese: (input: unknown) => input is These<unknown, unknown>
 ```
 
 Added in v1.0.0

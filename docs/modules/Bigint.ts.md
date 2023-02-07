@@ -82,10 +82,21 @@ Added in v1.0.0
 
 ## isBigint
 
+Tests if a value is a `bigint`.
+
 **Signature**
 
 ```ts
 export declare const isBigint: (u: unknown) => u is bigint
+```
+
+**Example**
+
+```ts
+import { isBigint } from '@fp-ts/core/Bigint'
+
+assert.deepStrictEqual(isBigint(1n), true)
+assert.deepStrictEqual(isBigint(1), false)
 ```
 
 Added in v1.0.0

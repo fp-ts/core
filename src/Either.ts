@@ -106,18 +106,34 @@ export const of: <A>(a: A) => Either<never, A> = right
 // -------------------------------------------------------------------------------------
 
 /**
- * Returns `true` if the specified value is an instance of `Either`, `false`
- * otherwise.
+ * Tests if a value is a `Either`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isEither, left, right } from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(isEither(right(1)), true)
+ * assert.deepStrictEqual(isEither(left("error")), true)
+ * assert.deepStrictEqual(isEither({ right: 1 }), false)
  *
  * @category guards
  * @since 1.0.0
  */
-export const isEither = (u: unknown): u is Either<unknown, unknown> =>
-  typeof u === "object" && u != null && structural in u && "_tag" in u &&
-  (u["_tag"] === "Left" || u["_tag"] === "Right")
+export const isEither = (input: unknown): input is Either<unknown, unknown> =>
+  typeof input === "object" && input != null && structural in input && "_tag" in input &&
+  (input["_tag"] === "Left" || input["_tag"] === "Right")
 
 /**
- * Returns `true` if the either is an instance of `Left`, `false` otherwise.
+ * Determine if a `Either` is a `Left`.
+ *
+ * @param self - The `Either` to check.
+ *
+ * @example
+ * import { isLeft, left, right } from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(isLeft(right(1)), false)
+ * assert.deepStrictEqual(isLeft(left("error")), true)
  *
  * @category guards
  * @since 1.0.0
@@ -125,7 +141,15 @@ export const isEither = (u: unknown): u is Either<unknown, unknown> =>
 export const isLeft: <E, A>(self: Either<E, A>) => self is Left<E> = either.isLeft
 
 /**
- * Returns `true` if the either is an instance of `Right`, `false` otherwise.
+ * Determine if a `Either` is a `Right`.
+ *
+ * @param self - The `Either` to check.
+ *
+ * @example
+ * import { isRight, left, right } from '@fp-ts/core/Either'
+ *
+ * assert.deepStrictEqual(isRight(right(1)), true)
+ * assert.deepStrictEqual(isRight(left("error")), false)
  *
  * @category guards
  * @since 1.0.0

@@ -14,6 +14,16 @@ import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
+ * Tests if a value is a `bigint`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isBigint } from "@fp-ts/core/Bigint"
+ *
+ * assert.deepStrictEqual(isBigint(1n), true)
+ * assert.deepStrictEqual(isBigint(1), false)
+ *
  * @category guards
  * @since 1.0.0
  */

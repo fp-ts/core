@@ -21,10 +21,21 @@ Added in v1.0.0
 
 ## isSymbol
 
+Tests if a value is a `symbol`.
+
 **Signature**
 
 ```ts
 export declare const isSymbol: (u: unknown) => u is symbol
+```
+
+**Example**
+
+```ts
+import { isSymbol } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isSymbol(Symbol.for('a')), true)
+assert.deepStrictEqual(isSymbol('a'), false)
 ```
 
 Added in v1.0.0

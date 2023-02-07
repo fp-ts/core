@@ -311,7 +311,15 @@ export const scanRight: {
 })
 
 /**
- * Test whether a `ReadonlyArray` is empty narrowing down the type to `[]`.
+ * Determine if a `ReadonlyArray` is empty narrowing down the type to `[]`.
+ *
+ * @param self - The `ReadonlyArray` to check.
+ *
+ * @example
+ * import { isEmpty } from "@fp-ts/core/ReadonlyArray"
+ *
+ * assert.deepStrictEqual(isEmpty([]), true);
+ * assert.deepStrictEqual(isEmpty([1, 2, 3]), false);
  *
  * @category guards
  * @since 1.0.0
@@ -319,7 +327,17 @@ export const scanRight: {
 export const isEmpty = <A>(self: ReadonlyArray<A>): self is readonly [] => self.length === 0
 
 /**
- * Test whether a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyReadonlyArray<A>`.
+ * Determine if a `ReadonlyArray` is empty narrowing down the type to `NonEmptyReadonlyArray`.
+ *
+ * A `ReadonlyArray` is considered to be a `NonEmptyReadonlyArray` if it contains at least one element.
+ *
+ * @param self - The `ReadonlyArray` to check.
+ *
+ * @example
+ * import { isNonEmpty } from "@fp-ts/core/ReadonlyArray"
+ *
+ * assert.deepStrictEqual(isNonEmpty([]), false);
+ * assert.deepStrictEqual(isNonEmpty([1, 2, 3]), true);
  *
  * @category guards
  * @since 1.0.0

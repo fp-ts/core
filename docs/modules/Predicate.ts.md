@@ -134,50 +134,105 @@ Added in v1.0.0
 
 ## isBigint
 
+Tests if a value is a `bigint`.
+
 **Signature**
 
 ```ts
-export declare const isBigint: (u: unknown) => u is bigint
+export declare const isBigint: (input: unknown) => input is bigint
+```
+
+**Example**
+
+```ts
+import { isBigint } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isBigint(1n), true)
+assert.deepStrictEqual(isBigint(1), false)
 ```
 
 Added in v1.0.0
 
 ## isBoolean
 
+Tests if a value is a `boolean`.
+
 **Signature**
 
 ```ts
-export declare const isBoolean: Refinement<unknown, boolean>
+export declare const isBoolean: (input: unknown) => input is boolean
+```
+
+**Example**
+
+```ts
+import { isBoolean } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isBoolean(true), true)
+assert.deepStrictEqual(isBoolean('true'), false)
 ```
 
 Added in v1.0.0
 
 ## isNumber
 
+Tests if a value is a `number`.
+
 **Signature**
 
 ```ts
-export declare const isNumber: Refinement<unknown, number>
+export declare const isNumber: (input: unknown) => input is number
+```
+
+**Example**
+
+```ts
+import { isNumber } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isNumber(2), true)
+assert.deepStrictEqual(isNumber('2'), false)
 ```
 
 Added in v1.0.0
 
 ## isString
 
+Tests if a value is a `string`.
+
 **Signature**
 
 ```ts
-export declare const isString: Refinement<unknown, string>
+export declare const isString: (input: unknown) => input is string
+```
+
+**Example**
+
+```ts
+import { isString } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isString('a'), true)
+assert.deepStrictEqual(isString(1), false)
 ```
 
 Added in v1.0.0
 
 ## isSymbol
 
+Tests if a value is a `symbol`.
+
 **Signature**
 
 ```ts
-export declare const isSymbol: (u: unknown) => u is symbol
+export declare const isSymbol: (input: unknown) => input is symbol
+```
+
+**Example**
+
+```ts
+import { isSymbol } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isSymbol(Symbol.for('a')), true)
+assert.deepStrictEqual(isSymbol('a'), false)
 ```
 
 Added in v1.0.0

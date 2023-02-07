@@ -858,7 +858,7 @@ Added in v1.0.0
 
 ## isNone
 
-Returns `true` if the `Option` is `None`, `false` otherwise.
+Determine if a `Option` is a `None`.
 
 **Signature**
 
@@ -879,12 +879,12 @@ Added in v1.0.0
 
 ## isOption
 
-Checks if the specified value is an instance of `Option`, returns `true` if it is, `false` otherwise.
+Tests if a value is a `Option`.
 
 **Signature**
 
 ```ts
-export declare const isOption: (u: unknown) => u is Option<unknown>
+export declare const isOption: (input: unknown) => input is Option<unknown>
 ```
 
 **Example**
@@ -901,7 +901,7 @@ Added in v1.0.0
 
 ## isSome
 
-Returns `true` if the `Option` is an instance of `Some`, `false` otherwise.
+Determine if a `Option` is a `Some`.
 
 **Signature**
 

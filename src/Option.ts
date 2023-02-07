@@ -112,7 +112,7 @@ export const of: <A>(value: A) => Option<A> = some
 // -------------------------------------------------------------------------------------
 
 /**
- * Checks if the specified value is an instance of `Option`, returns `true` if it is, `false` otherwise.
+ * Tests if a value is a `Option`.
  *
  * @param input - The value to check.
  *
@@ -126,12 +126,12 @@ export const of: <A>(value: A) => Option<A> = some
  * @category guards
  * @since 1.0.0
  */
-export const isOption = (u: unknown): u is Option<unknown> =>
-  typeof u === "object" && u != null && structural in u && "_tag" in u &&
-  (u["_tag"] === "None" || u["_tag"] === "Some")
+export const isOption = (input: unknown): input is Option<unknown> =>
+  typeof input === "object" && input != null && structural in input && "_tag" in input &&
+  (input["_tag"] === "None" || input["_tag"] === "Some")
 
 /**
- * Returns `true` if the `Option` is `None`, `false` otherwise.
+ * Determine if a `Option` is a `None`.
  *
  * @param self - The `Option` to check.
  *
@@ -147,7 +147,7 @@ export const isOption = (u: unknown): u is Option<unknown> =>
 export const isNone: <A>(self: Option<A>) => self is None = option.isNone
 
 /**
- * Returns `true` if the `Option` is an instance of `Some`, `false` otherwise.
+ * Determine if a `Option` is a `Some`.
  *
  * @param self - The `Option` to check.
  *
