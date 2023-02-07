@@ -22,7 +22,6 @@ import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
  * @since 1.0.0
  */
 export interface Equivalence<A> {
-  (that: A): (self: A) => boolean
   (self: A, that: A): boolean
 }
 
@@ -39,15 +38,17 @@ export interface EquivalenceTypeLambda extends TypeLambda {
  * @since 1.0.0
  */
 export const make = <A>(isEquivalent: (self: A, that: A) => boolean): Equivalence<A> =>
-  dual(2, (self: A, that: A): boolean => self === that || isEquivalent(self, that))
+  (self: A, that: A): boolean => self === that || isEquivalent(self, that)
+
+const isStrictEquivalent = (x: unknown, y: unknown) => x === y
 
 /**
- * Return an `Equivalence` that uses strict equality (===) to compare values
+ * Return an `Equivalence` that uses strict equality (===) to compare values.
  *
  * @since 1.0.0
  * @category constructors
  */
-export const strict: <A>() => Equivalence<A> = () => dual(2, (x, y) => x === y)
+export const strict: <A>() => Equivalence<A> = () => isStrictEquivalent
 
 /**
  * @category instances
@@ -168,14 +169,14 @@ export const getSemigroup = <A>(): Semigroup<Equivalence<A>> =>
       })
   )
 
-const empty: Equivalence<unknown> = dual(2, (_x, _y) => true)
+const isAlwaysEquivalent: Equivalence<unknown> = (_x, _y) => true
 
 /**
  * @category instances
  * @since 1.0.0
  */
 export const getMonoid = <A>(): Monoid<Equivalence<A>> =>
-  monoid.fromSemigroup(getSemigroup<A>(), empty)
+  monoid.fromSemigroup(getSemigroup<A>(), isAlwaysEquivalent)
 
 /**
  * @category combinators
@@ -235,7 +236,7 @@ export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = {
   productMany
 }
 
-const of: <A>(a: A) => Equivalence<A> = () => empty
+const of: <A>(a: A) => Equivalence<A> = () => isAlwaysEquivalent
 
 const productAll = <A>(collection: Iterable<Equivalence<A>>): Equivalence<Array<A>> =>
   tuple<Array<A>>(...collection)
