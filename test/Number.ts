@@ -89,6 +89,7 @@ describe.concurrent("Number", () => {
     assert.deepStrictEqual(Number.remainder(2, 2), 0)
     assert.deepStrictEqual(Number.remainder(3, 2), 1)
     assert.deepStrictEqual(Number.remainder(4, 2), 0)
+    assert.deepStrictEqual(Number.remainder(2.5, 2), 0.5)
     assert.deepStrictEqual(Number.remainder(-2, 2), -0)
     assert.deepStrictEqual(Number.remainder(-3, 2), -1)
     assert.deepStrictEqual(Number.remainder(-4, 2), -0)

@@ -39,11 +39,6 @@ describe.concurrent("Predicate", () => {
     expect(_.struct).exist
   })
 
-  it("id", () => {
-    const refinement = _.id<string>()
-    deepStrictEqual(refinement("a"), true)
-  })
-
   it("compose", () => {
     const refinement = pipe(isString, _.compose(NonEmptyString))
     deepStrictEqual(refinement("a"), true)
@@ -164,5 +159,101 @@ describe.concurrent("Predicate", () => {
     deepStrictEqual(predicate(0), false)
     deepStrictEqual(predicate(-2), false)
     deepStrictEqual(predicate(1), true)
+  })
+
+  it("isFunction", () => {
+    assert.deepStrictEqual(_.isFunction(_.isFunction), true)
+    assert.deepStrictEqual(_.isFunction("function"), false)
+  })
+
+  it("isUndefined", () => {
+    assert.deepStrictEqual(_.isUndefined(undefined), true)
+    assert.deepStrictEqual(_.isUndefined(null), false)
+    assert.deepStrictEqual(_.isUndefined("undefined"), false)
+  })
+
+  it("isNotUndefined", () => {
+    assert.deepStrictEqual(_.isNotUndefined(undefined), false)
+    assert.deepStrictEqual(_.isNotUndefined(null), true)
+    assert.deepStrictEqual(_.isNotUndefined("undefined"), true)
+  })
+
+  it("isNull", () => {
+    assert.deepStrictEqual(_.isNull(null), true)
+    assert.deepStrictEqual(_.isNull(undefined), false)
+    assert.deepStrictEqual(_.isNull("null"), false)
+  })
+
+  it("isNotNull", () => {
+    assert.deepStrictEqual(_.isNotNull(null), false)
+    assert.deepStrictEqual(_.isNotNull(undefined), true)
+    assert.deepStrictEqual(_.isNotNull("null"), true)
+  })
+
+  it("isNever", () => {
+    assert.deepStrictEqual(_.isNever(null), false)
+    assert.deepStrictEqual(_.isNever(undefined), false)
+    assert.deepStrictEqual(_.isNever({}), false)
+    assert.deepStrictEqual(_.isNever([]), false)
+  })
+
+  it("isUnknown", () => {
+    assert.deepStrictEqual(_.isUnknown(null), true)
+    assert.deepStrictEqual(_.isUnknown(undefined), true)
+    assert.deepStrictEqual(_.isUnknown({}), true)
+    assert.deepStrictEqual(_.isUnknown([]), true)
+  })
+
+  it("isObject", () => {
+    assert.deepStrictEqual(_.isObject({}), true)
+    assert.deepStrictEqual(_.isObject([]), true)
+    assert.deepStrictEqual(_.isObject(null), false)
+    assert.deepStrictEqual(_.isObject(undefined), false)
+  })
+
+  it("isNullable", () => {
+    assert.deepStrictEqual(_.isNullable(null), true)
+    assert.deepStrictEqual(_.isNullable(undefined), true)
+    assert.deepStrictEqual(_.isNullable({}), false)
+    assert.deepStrictEqual(_.isNullable([]), false)
+  })
+
+  it("isNotNullable", () => {
+    assert.deepStrictEqual(_.isNotNullable({}), true)
+    assert.deepStrictEqual(_.isNotNullable([]), true)
+    assert.deepStrictEqual(_.isNotNullable(null), false)
+    assert.deepStrictEqual(_.isNotNullable(undefined), false)
+  })
+
+  it("isError", () => {
+    assert.deepStrictEqual(_.isError(new Error()), true)
+    assert.deepStrictEqual(_.isError(null), false)
+    assert.deepStrictEqual(_.isError({}), false)
+  })
+
+  it("isDate", () => {
+    assert.deepStrictEqual(_.isDate(new Date()), true)
+    assert.deepStrictEqual(_.isDate(null), false)
+    assert.deepStrictEqual(_.isDate({}), false)
+  })
+
+  it("isRecord", () => {
+    assert.deepStrictEqual(_.isRecord({}), true)
+    assert.deepStrictEqual(_.isRecord({ a: 1 }), true)
+
+    assert.deepStrictEqual(_.isRecord([]), false)
+    assert.deepStrictEqual(_.isRecord([1, 2, 3]), false)
+    assert.deepStrictEqual(_.isRecord(null), false)
+    assert.deepStrictEqual(_.isRecord(undefined), false)
+  })
+
+  it("isReadonlyRecord", () => {
+    assert.deepStrictEqual(_.isReadonlyRecord({}), true)
+    assert.deepStrictEqual(_.isReadonlyRecord({ a: 1 }), true)
+
+    assert.deepStrictEqual(_.isReadonlyRecord([]), false)
+    assert.deepStrictEqual(_.isReadonlyRecord([1, 2, 3]), false)
+    assert.deepStrictEqual(_.isReadonlyRecord(null), false)
+    assert.deepStrictEqual(_.isReadonlyRecord(undefined), false)
   })
 })

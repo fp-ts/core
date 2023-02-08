@@ -16,6 +16,22 @@ export interface FunctionTypeLambda extends TypeLambda {
 }
 
 /**
+ * Tests if a value is a `function`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isFunction } from '@fp-ts/core/Predicate'
+ *
+ * assert.deepStrictEqual(isFunction(isFunction), true)
+ * assert.deepStrictEqual(isFunction("function"), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isFunction = (input: unknown): input is Function => typeof input === "function"
+
+/**
  * Creates a function that is both data-last and data-first.
  *
  * @since 1.0.0

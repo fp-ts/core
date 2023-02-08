@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { constFalse, constTrue, dual } from "@fp-ts/core/Function"
+import { constFalse, constTrue, dual, isFunction as isFunction_ } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
@@ -30,6 +30,7 @@ export interface PredicateTypeLambda extends TypeLambda {
 }
 
 /**
+ * @category models
  * @since 1.0.0
  */
 export interface Refinement<A, B extends A> {
@@ -45,6 +46,7 @@ export interface Refinement<A, B extends A> {
  * import { isString } from '@fp-ts/core/Predicate'
  *
  * assert.deepStrictEqual(isString("a"), true)
+ *
  * assert.deepStrictEqual(isString(1), false)
  *
  * @category guards
@@ -61,6 +63,7 @@ export const isString = (input: unknown): input is string => typeof input === "s
  * import { isNumber } from '@fp-ts/core/Predicate'
  *
  * assert.deepStrictEqual(isNumber(2), true)
+ *
  * assert.deepStrictEqual(isNumber("2"), false)
  *
  * @category guards
@@ -77,6 +80,7 @@ export const isNumber = (input: unknown): input is number => typeof input === "n
  * import { isBoolean } from '@fp-ts/core/Predicate'
  *
  * assert.deepStrictEqual(isBoolean(true), true)
+ *
  * assert.deepStrictEqual(isBoolean("true"), false)
  *
  * @category guards
@@ -93,6 +97,7 @@ export const isBoolean = (input: unknown): input is boolean => typeof input === 
  * import { isBigint } from "@fp-ts/core/Predicate"
  *
  * assert.deepStrictEqual(isBigint(1n), true)
+ *
  * assert.deepStrictEqual(isBigint(1), false)
  *
  * @category guards
@@ -109,6 +114,7 @@ export const isBigint = (input: unknown): input is bigint => typeof input === "b
  * import { isSymbol } from "@fp-ts/core/Predicate"
  *
  * assert.deepStrictEqual(isSymbol(Symbol.for("a")), true)
+ *
  * assert.deepStrictEqual(isSymbol("a"), false)
  *
  * @category guards
@@ -117,10 +123,271 @@ export const isBigint = (input: unknown): input is bigint => typeof input === "b
 export const isSymbol = (input: unknown): input is symbol => typeof input === "symbol"
 
 /**
- * @category constructors
+ * Tests if a value is a `function`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isFunction } from '@fp-ts/core/Predicate'
+ *
+ * assert.deepStrictEqual(isFunction(isFunction), true)
+ *
+ * assert.deepStrictEqual(isFunction("function"), false)
+ *
+ * @category guards
  * @since 1.0.0
  */
-export const id = <A>(): Refinement<A, A> => (_): _ is A => true
+export const isFunction: (input: unknown) => input is Function = isFunction_
+
+/**
+ * Tests if a value is `undefined`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isUndefined } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isUndefined(undefined), true)
+ *
+ * assert.deepStrictEqual(isUndefined(null), false)
+ * assert.deepStrictEqual(isUndefined("undefined"), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isUndefined = (input: unknown): input is undefined => input === undefined
+
+/**
+ * Tests if a value is not `undefined`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNotUndefined } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isNotUndefined(null), true)
+ * assert.deepStrictEqual(isNotUndefined("undefined"), true)
+ *
+ * assert.deepStrictEqual(isNotUndefined(undefined), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNotUndefined = <A>(input: A): input is Exclude<A, undefined> => input !== undefined
+
+/**
+ * Tests if a value is `undefined`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNull } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isNull(null), true)
+ *
+ * assert.deepStrictEqual(isNull(undefined), false)
+ * assert.deepStrictEqual(isNull("null"), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNull = (input: unknown): input is null => input === null
+
+/**
+ * Tests if a value is not `undefined`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNotNull } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isNotNull(undefined), true)
+ * assert.deepStrictEqual(isNotNull("null"), true)
+ *
+ * assert.deepStrictEqual(isNotNull(null), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNotNull = <A>(input: A): input is Exclude<A, null> => input !== null
+
+/**
+ * A guard that always fails.
+ *
+ * @param _ - The value to test.
+ *
+ * @example
+ * import { isNever } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isNever(null), false)
+ * assert.deepStrictEqual(isNever(undefined), false)
+ * assert.deepStrictEqual(isNever({}), false)
+ * assert.deepStrictEqual(isNever([]), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNever: (input: unknown) => input is never = (_: unknown): _ is never => false
+
+/**
+ * A guard that always succeeds.
+ *
+ * @param _ - The value to test.
+ *
+ * @example
+ * import { isUnknown } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isUnknown(null), true)
+ * assert.deepStrictEqual(isUnknown(undefined), true)
+ *
+ * assert.deepStrictEqual(isUnknown({}), true)
+ * assert.deepStrictEqual(isUnknown([]), true)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isUnknown: (input: unknown) => input is unknown = (_): _ is unknown => true
+
+/**
+ * Tests if a value is an `object`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isObject } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isObject({}), true)
+ * assert.deepStrictEqual(isObject([]), true)
+ *
+ * assert.deepStrictEqual(isObject(null), false)
+ * assert.deepStrictEqual(isObject(undefined), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isObject = (input: unknown): input is object =>
+  typeof input === "object" && input != null
+
+/**
+ * A guard that succeeds when the input is `null` or `undefined`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNullable } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isNullable(null), true)
+ * assert.deepStrictEqual(isNullable(undefined), true)
+ *
+ * assert.deepStrictEqual(isNullable({}), false)
+ * assert.deepStrictEqual(isNullable([]), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNullable = <A>(input: A): input is Extract<A, null | undefined> =>
+  input === null || input === undefined
+
+/**
+ * A guard that succeeds when the input is not `null` or `undefined`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isNotNullable } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isNotNullable({}), true)
+ * assert.deepStrictEqual(isNotNullable([]), true)
+ *
+ * assert.deepStrictEqual(isNotNullable(null), false)
+ * assert.deepStrictEqual(isNotNullable(undefined), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNotNullable = <A>(input: A): input is NonNullable<A> =>
+  input !== null && input !== undefined
+
+/**
+ * A guard that succeeds when the input is an `Error`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isError } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isError(new Error()), true)
+ *
+ * assert.deepStrictEqual(isError(null), false)
+ * assert.deepStrictEqual(isError({}), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isError = (input: unknown): input is Error => input instanceof Error
+
+/**
+ * A guard that succeeds when the input is a `Date`.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isDate } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isDate(new Date()), true)
+ *
+ * assert.deepStrictEqual(isDate(null), false)
+ * assert.deepStrictEqual(isDate({}), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isDate = (input: unknown): input is Date => input instanceof Date
+
+/**
+ * A guard that succeeds when the input is a record.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isRecord } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isRecord({}), true)
+ * assert.deepStrictEqual(isRecord({ a: 1 }), true)
+ *
+ * assert.deepStrictEqual(isRecord([]), false)
+ * assert.deepStrictEqual(isRecord([1, 2, 3]), false)
+ * assert.deepStrictEqual(isRecord(null), false)
+ * assert.deepStrictEqual(isRecord(undefined), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isRecord = (input: unknown): input is { [x: string | symbol]: unknown } =>
+  isObject(input) && !Array.isArray(input)
+
+/**
+ * A guard that succeeds when the input is a readonly record.
+ *
+ * @param input - The value to test.
+ *
+ * @example
+ * import { isReadonlyRecord } from "@fp-ts/core/Predicate"
+ *
+ * assert.deepStrictEqual(isReadonlyRecord({}), true)
+ * assert.deepStrictEqual(isReadonlyRecord({ a: 1 }), true)
+ *
+ * assert.deepStrictEqual(isReadonlyRecord([]), false)
+ * assert.deepStrictEqual(isReadonlyRecord([1, 2, 3]), false)
+ * assert.deepStrictEqual(isReadonlyRecord(null), false)
+ * assert.deepStrictEqual(isReadonlyRecord(undefined), false)
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isReadonlyRecord: (
+  input: unknown
+) => input is { readonly [x: string | symbol]: unknown } = isRecord
 
 /**
  * @since 1.0.0
@@ -172,7 +439,7 @@ export const tupled: <A>(self: Predicate<A>) => Predicate<readonly [A]> = invari
 /**
  * @since 1.0.0
  */
-export const of = <A>(_: A): Predicate<A> => id()
+export const of = <A>(_: A): Predicate<A> => isUnknown
 
 /**
  * @category instances
