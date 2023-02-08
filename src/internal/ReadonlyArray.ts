@@ -2,10 +2,14 @@
  * @since 1.0.0
  */
 
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
+import type { NonEmptyArray, NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
 
 /** @internal */
-export const isNonEmpty = <A>(as: ReadonlyArray<A>): as is NonEmptyReadonlyArray<A> => as.length > 0
+export function isNonEmpty<A>(self: Array<A>): self is NonEmptyArray<A>
+export function isNonEmpty<A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A>
+export function isNonEmpty<A>(self: ReadonlyArray<A>): self is readonly [] {
+  return self.length > 0
+}
 
 /** @internal */
 export const fromIterable = <A>(collection: Iterable<A>): Array<A> =>

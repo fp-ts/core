@@ -324,10 +324,14 @@ export const scanRight: {
  * @category guards
  * @since 1.0.0
  */
-export const isEmpty = <A>(self: ReadonlyArray<A>): self is readonly [] => self.length === 0
+export function isEmpty<A>(self: Array<A>): self is []
+export function isEmpty<A>(self: ReadonlyArray<A>): self is readonly []
+export function isEmpty<A>(self: ReadonlyArray<A>): self is readonly [] {
+  return self.length === 0
+}
 
 /**
- * Determine if a `ReadonlyArray` is empty narrowing down the type to `NonEmptyReadonlyArray`.
+ * Determine if a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyArray`.
  *
  * A `ReadonlyArray` is considered to be a `NonEmptyReadonlyArray` if it contains at least one element.
  *
@@ -342,8 +346,10 @@ export const isEmpty = <A>(self: ReadonlyArray<A>): self is readonly [] => self.
  * @category guards
  * @since 1.0.0
  */
-export const isNonEmpty: <A>(self: ReadonlyArray<A>) => self is NonEmptyReadonlyArray<A> =
-  readonlyArray.isNonEmpty
+export const isNonEmpty: {
+  <A>(self: Array<A>): self is NonEmptyArray<A>
+  <A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A>
+} = readonlyArray.isNonEmpty
 
 /**
  * Return the number of elements in a `ReadonlyArray`.

@@ -1111,7 +1111,8 @@ Determine if a `ReadonlyArray` is empty narrowing down the type to `[]`.
 **Signature**
 
 ```ts
-export declare const isEmpty: <A>(self: readonly A[]) => self is readonly []
+export declare function isEmpty<A>(self: Array<A>): self is []
+export declare function isEmpty<A>(self: ReadonlyArray<A>): self is readonly []
 ```
 
 **Example**
@@ -1127,14 +1128,17 @@ Added in v1.0.0
 
 ## isNonEmpty
 
-Determine if a `ReadonlyArray` is empty narrowing down the type to `NonEmptyReadonlyArray`.
+Determine if a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyArray`.
 
 A `ReadonlyArray` is considered to be a `NonEmptyReadonlyArray` if it contains at least one element.
 
 **Signature**
 
 ```ts
-export declare const isNonEmpty: <A>(self: readonly A[]) => self is readonly [A, ...A[]]
+export declare const isNonEmpty: {
+  <A>(self: A[]): self is [A, ...A[]]
+  <A>(self: readonly A[]): self is readonly [A, ...A[]]
+}
 ```
 
 **Example**
