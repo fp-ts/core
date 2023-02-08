@@ -24,6 +24,21 @@ A huge thanks to my sponsors who made the development of `@fp-ts/core` possible.
 
 If you also want to **become a sponsor** to ensure this library continues to improve and receive maintenance, check out my [GitHub Sponsors profile](https://github.com/sponsors/gcanti?o=sd&sc=t)
 
+## Requirements
+
+- TypeScript 4.8 or newer
+- The `strict` flag enabled in your `tsconfig.json` file
+
+```
+{
+  // ...
+  "compilerOptions": {
+    // ...
+    "strict": true,
+  }
+}
+```
+
 # Typed functional programming in TypeScript
 
 This project represents the next major iteration of [`fp-ts`](https://github.com/gcanti/fp-ts) and it's objective is a reconciliation with [`@effect`](https://github.com/Effect-TS) in order to unify the ecosystems.

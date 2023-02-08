@@ -12,6 +12,8 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [guards](#guards)
+  - [isFunction](#isfunction)
 - [type lambdas](#type-lambdas)
   - [FunctionTypeLambda (interface)](#functiontypelambda-interface)
 - [utils](#utils)
@@ -38,6 +40,29 @@ Added in v1.0.0
   - [untupled](#untupled)
 
 ---
+
+# guards
+
+## isFunction
+
+Tests if a value is a `function`.
+
+**Signature**
+
+```ts
+export declare const isFunction: (input: unknown) => input is Function
+```
+
+**Example**
+
+```ts
+import { isFunction } from '@fp-ts/core/Predicate'
+
+assert.deepStrictEqual(isFunction(isFunction), true)
+assert.deepStrictEqual(isFunction('function'), false)
+```
+
+Added in v1.0.0
 
 # type lambdas
 

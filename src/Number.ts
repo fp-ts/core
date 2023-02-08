@@ -242,12 +242,12 @@ export const remainder: {
   (self: number, divisor: number): number
 } = dual(2, (self: number, divisor: number): number => {
   // https://stackoverflow.com/questions/3966484/why-does-modulus-operator-return-fractional-number-in-javascript/31711034#31711034
-  const valDecCount = (self.toString().split(".")[1] || "").length
-  const stepDecCount = (divisor.toString().split(".")[1] || "").length
-  const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount
-  const valInt = parseInt(self.toFixed(decCount).replace(".", ""))
-  const stepInt = parseInt(divisor.toFixed(decCount).replace(".", ""))
-  return (valInt % stepInt) / Math.pow(10, decCount)
+  const selfDecCount = (self.toString().split(".")[1] || "").length
+  const divisorDecCount = (divisor.toString().split(".")[1] || "").length
+  const decCount = selfDecCount > divisorDecCount ? selfDecCount : divisorDecCount
+  const selfInt = parseInt(self.toFixed(decCount).replace(".", ""))
+  const divisorInt = parseInt(divisor.toFixed(decCount).replace(".", ""))
+  return (selfInt % divisorInt) / Math.pow(10, decCount)
 })
 
 /*
