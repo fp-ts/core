@@ -308,39 +308,122 @@ export const isBoth = <E, A>(self: These<E, A>): self is Both<E, A> => self._tag
  * @category interop
  * @since 1.0.0
  */
-export const liftThrowable = <A extends ReadonlyArray<unknown>, B, E>(
+export const liftThrowable: <A extends ReadonlyArray<unknown>, B, E>(
   f: (...a: A) => B,
   onThrow: (error: unknown) => E
-): ((...a: A) => These<E, B>) =>
-  (...a) => {
-    try {
-      return right(f(...a))
-    } catch (e) {
-      return left(onThrow(e))
-    }
-  }
+) => ((...a: A) => These<E, B>) = E.liftThrowable
 
 /**
+ * Extracts the value of a `These` or throws if the `These` is `Left`.
+ *
+ * If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+ *
+ * @param self - The `These` to extract the value from.
+ * @param onLeft - A function that will be called if the `These` is `Left`. It returns the error to be thrown.
+ *
+ * @example
+ * import * as E from "@fp-ts/core/These"
+ *
+ * assert.deepStrictEqual(
+ *   E.getOrThrowWith(E.right(1), () => new Error('Unexpected Left')),
+ *   1
+ * )
+ * assert.deepStrictEqual(
+ *   E.getOrThrowWith(E.both("warning", 1), () => new Error('Unexpected Left')),
+ *   1
+ * )
+ * assert.throws(() => E.getOrThrowWith(E.left("error"), () => new Error('Unexpected Left')))
+ *
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <E, A>(self: These<E, A>): A => {
+export const getOrThrowWith: {
+  <E>(onLeft: (e: E) => unknown): <A>(self: These<E, A>) => A
+  <E, A>(self: These<E, A>, onLeft: (e: E) => unknown): A
+} = dual(2, <E, A>(self: These<E, A>, onLeft: (e: E) => unknown): A => {
   if (isRightOrBoth(self)) {
     return self.right
   }
-  throw new Error("getOrThrow called on a Left")
-}
+  throw onLeft(self.left)
+})
 
 /**
+ * Extracts the value of a `These` or throws if the `These` is `Left`.
+ *
+ * The thrown error is a default error. To configure the error thrown, see {@link getOrThrowWith}.
+ *
+ * @param self - The `These` to extract the value from.
+ * @throws `Error("getOrThrow called on a Left")`
+ *
+ * @example
+ * import * as T from "@fp-ts/core/These"
+ *
+ * assert.deepStrictEqual(T.getOrThrow(T.right(1)), 1)
+ * assert.deepStrictEqual(T.getOrThrow(T.both("warning", 1)), 1)
+ * assert.throws(() => T.getOrThrow(T.left("error")))
+ *
  * @category interop
  * @since 1.0.0
  */
-export const getRightOnlyOrThrow = <E, A>(self: These<E, A>): A => {
+export const getOrThrow: <E, A>(self: These<E, A>) => A = getOrThrowWith(() =>
+  new Error("getOrThrow called on a Left")
+)
+
+/**
+ * Extracts the value of a `These` or throws if the `These` is `Left`.
+ *
+ * If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+ *
+ * @param self - The `These` to extract the value from.
+ * @param onLeft - A function that will be called if the `These` is `Left`. It returns the error to be thrown.
+ *
+ * @example
+ * import * as E from "@fp-ts/core/These"
+ *
+ * assert.deepStrictEqual(
+ *   E.getRightOnlyOrThrowWith(
+ *     E.right(1),
+ *     () => new Error("Unexpected Left or Both")
+ *   ),
+ *   1
+ * )
+ * assert.throws(() => E.getRightOnlyOrThrowWith(E.both("warning", 1), () => new Error("Unexpected Left or Both")))
+ * assert.throws(() => E.getRightOnlyOrThrowWith(E.left("error"), () => new Error("Unexpected Left or Both")))
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const getRightOnlyOrThrowWith: {
+  <E>(onLeftOrBoth: (e: E) => unknown): <A>(self: These<E, A>) => A
+  <E, A>(self: These<E, A>, onLeftOrBoth: (e: E) => unknown): A
+} = dual(2, <E, A>(self: These<E, A>, onLeftOrBoth: (e: E) => unknown): A => {
   if (isRight(self)) {
     return self.right
   }
-  throw new Error("getRightOnlyOrThrow called on Left or Both")
-}
+  throw onLeftOrBoth(self.left)
+})
+
+/**
+ * Extracts the value of a `These` or throws if the `These` is not a `Right`.
+ *
+ * The thrown error is a default error. To configure the error thrown, see {@link getRightOnlyOrThrowWith}.
+ *
+ * @param self - The `These` to extract the value from.
+ * @throws `Error("getOrThrow called on a Left")`
+ *
+ * @example
+ * import * as T from "@fp-ts/core/These"
+ *
+ * assert.deepStrictEqual(T.getRightOnlyOrThrow(T.right(1)), 1)
+ * assert.throws(() => T.getRightOnlyOrThrow(T.both("error", 1)))
+ * assert.throws(() => T.getRightOnlyOrThrow(T.left("error")))
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const getRightOnlyOrThrow: <E, A>(self: These<E, A>) => A = getRightOnlyOrThrowWith(() =>
+  new Error("getRightOnlyOrThrow called on a Left or a Both")
+)
 
 /**
  * @category conversions

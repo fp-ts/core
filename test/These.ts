@@ -491,13 +491,45 @@ describe("These", () => {
     )
   })
 
+  it("getOrThrowWith", () => {
+    expect(pipe(_.right(1), _.getOrThrowWith((e) => new Error(`Unexpected Left: ${e}`)))).toEqual(1)
+    expect(pipe(_.both("w", 1), _.getOrThrowWith((e) => new Error(`Unexpected Left: ${e}`))))
+      .toEqual(1)
+    expect(() => pipe(_.left("e"), _.getOrThrowWith((e) => new Error(`Unexpected Left: ${e}`))))
+      .toThrowError(
+        new Error("Unexpected Left: e")
+      )
+  })
+
   it("getRightOnlyOrThrow", () => {
     expect(pipe(_.right(1), _.getRightOnlyOrThrow)).toEqual(1)
     expect(() => pipe(_.left("e"), _.getRightOnlyOrThrow)).toThrow(
-      new Error("getRightOnlyOrThrow called on Left or Both")
+      new Error("getRightOnlyOrThrow called on a Left or a Both")
     )
     expect(() => pipe(_.both("e", 1), _.getRightOnlyOrThrow)).toThrow(
-      new Error("getRightOnlyOrThrow called on Left or Both")
+      new Error("getRightOnlyOrThrow called on a Left or a Both")
+    )
+  })
+
+  it("getRightOnlyOrThrowWith", () => {
+    expect(
+      pipe(_.right(1), _.getRightOnlyOrThrowWith((e) => new Error(`Unexpected Left or Both: ${e}`)))
+    ).toEqual(1)
+    expect(() =>
+      pipe(
+        _.left("e"),
+        _.getRightOnlyOrThrowWith((e) => new Error(`Unexpected Left or Both: ${e}`))
+      )
+    ).toThrow(
+      new Error("Unexpected Left or Both: e")
+    )
+    expect(() =>
+      pipe(
+        _.both("e", 1),
+        _.getRightOnlyOrThrowWith((e) => new Error(`Unexpected Left or Both: ${e}`))
+      )
+    ).toThrow(
+      new Error("Unexpected Left or Both: e")
     )
   })
 

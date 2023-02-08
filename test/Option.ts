@@ -191,6 +191,13 @@ describe.concurrent("Option", () => {
     )
   })
 
+  it("getOrThrowWith", () => {
+    expect(pipe(_.some(1), _.getOrThrowWith(() => new Error("Unexpected None")))).toEqual(1)
+    expect(() => pipe(_.none(), _.getOrThrowWith(() => new Error("Unexpected None")))).toThrowError(
+      new Error("Unexpected None")
+    )
+  })
+
   it("of", () => {
     Util.deepStrictEqual(_.of(1), _.some(1))
   })

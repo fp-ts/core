@@ -89,6 +89,7 @@ Added in v1.0.0
 - [interop](#interop)
   - [fromNullable](#fromnullable)
   - [getOrThrow](#getorthrow)
+  - [getOrThrowWith](#getorthrowwith)
   - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
   - [merge](#merge)
@@ -1101,10 +1102,52 @@ Added in v1.0.0
 
 ## getOrThrow
 
+Extracts the value of an `Either` or throws if the `Either` is `Left`.
+
+The thrown error is a default error. To configure the error thrown, see {@link getOrThrowWith}.
+
 **Signature**
 
 ```ts
 export declare const getOrThrow: <E, A>(self: Either<E, A>) => A
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.getOrThrow(E.right(1)), 1)
+assert.throws(() => E.getOrThrow(E.left('error')))
+```
+
+Added in v1.0.0
+
+## getOrThrowWith
+
+Extracts the value of an `Either` or throws if the `Either` is `Left`.
+
+If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+
+**Signature**
+
+```ts
+export declare const getOrThrowWith: {
+  <E>(onLeft: (e: E) => unknown): <A>(self: Either<E, A>) => A
+  <E, A>(self: Either<E, A>, onLeft: (e: E) => unknown): A
+}
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(
+  E.getOrThrowWith(E.right(1), () => new Error('Unexpected Left')),
+  1
+)
+assert.throws(() => E.getOrThrowWith(E.left('error'), () => new Error('Unexpected Left')))
 ```
 
 Added in v1.0.0
