@@ -943,15 +943,55 @@ export const flatMapNullable: {
 ): Either<E1 | E2, NonNullable<B>> => flatMap(self, liftNullable(f, onNullable)))
 
 /**
+ * Extracts the value of an `Either` or throws if the `Either` is `Left`.
+ *
+ * If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+ *
+ * @param self - The `Either` to extract the value from.
+ * @param onLeft - A function that will be called if the `Either` is `Left`. It returns the error to be thrown.
+ *
+ * @example
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * assert.deepStrictEqual(
+ *   E.getOrThrowWith(E.right(1), () => new Error('Unexpected Left')),
+ *   1
+ * )
+ * assert.throws(() => E.getOrThrowWith(E.left("error"), () => new Error('Unexpected Left')))
+ *
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <E, A>(self: Either<E, A>): A => {
+export const getOrThrowWith: {
+  <E>(onLeft: (e: E) => unknown): <A>(self: Either<E, A>) => A
+  <E, A>(self: Either<E, A>, onLeft: (e: E) => unknown): A
+} = dual(2, <E, A>(self: Either<E, A>, onLeft: (e: E) => unknown): A => {
   if (isRight(self)) {
     return self.right
   }
-  throw new Error("getOrThrow called on a Left")
-}
+  throw onLeft(self.left)
+})
+
+/**
+ * Extracts the value of an `Either` or throws if the `Either` is `Left`.
+ *
+ * The thrown error is a default error. To configure the error thrown, see  {@link getOrThrowWith}.
+ *
+ * @param self - The `Either` to extract the value from.
+ * @throws `Error("getOrThrow called on a Left")`
+ *
+ * @example
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * assert.deepStrictEqual(E.getOrThrow(E.right(1)), 1)
+ * assert.throws(() => E.getOrThrow(E.left("error")))
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const getOrThrow: <E, A>(self: Either<E, A>) => A = getOrThrowWith(() =>
+  new Error("getOrThrow called on a Left")
+)
 
 /**
  * Lifts a function that may throw to one returning a `Either`.

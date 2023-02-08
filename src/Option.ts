@@ -546,27 +546,55 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
   }
 
 /**
- * Returns the contained value if the `Option` is `Some`, otherwise throws an error.
+ * Extracts the value of an `Option` or throws if the `Option` is `None`.
+ *
+ * If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+ *
+ * @param self - The `Option` to extract the value from.
+ * @param onNone - A function that will be called if the `Option` is `None`. It returns the error to be thrown.
+ *
+ * @example
+ * import * as O from '@fp-ts/core/Option'
+ *
+ * assert.deepStrictEqual(
+ *   O.getOrThrowWith(O.some(1), () => new Error('Unexpected None')),
+ *   1
+ * )
+ * assert.throws(() => O.getOrThrowWith(O.none(), () => new Error('Unexpected None')))
+ *
+ * @category interop
+ * @since 1.0.0
+ */
+export const getOrThrowWith: {
+  (onNone: () => unknown): <A>(self: Option<A>) => A
+  <A>(self: Option<A>, onNone: () => unknown): A
+} = dual(2, <A>(self: Option<A>, onNone: () => unknown): A => {
+  if (isSome(self)) {
+    return self.value
+  }
+  throw onNone()
+})
+
+/**
+ * Extracts the value of an `Option` or throws if the `Option` is `None`.
+ *
+ * The thrown error is a default error. To configure the error thrown, see  {@link getOrThrowWith}.
  *
  * @param self - The `Option` to extract the value from.
  * @throws `Error("getOrThrow called on a None")`
  *
  * @example
- * import { pipe } from '@fp-ts/core/Function'
  * import * as O from '@fp-ts/core/Option'
  *
- * assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow), 1)
- * assert.throws(() => pipe(O.none(), O.getOrThrow))
+ * assert.deepStrictEqual(O.getOrThrow(O.some(1)), 1)
+ * assert.throws(() => O.getOrThrow(O.none()))
  *
  * @category interop
  * @since 1.0.0
  */
-export const getOrThrow = <A>(self: Option<A>): A => {
-  if (isSome(self)) {
-    return self.value
-  }
-  throw new Error("getOrThrow called on a None")
-}
+export const getOrThrow: <A>(self: Option<A>) => A = getOrThrowWith(() =>
+  new Error("getOrThrow called on a None")
+)
 
 // -------------------------------------------------------------------------------------
 // mapping

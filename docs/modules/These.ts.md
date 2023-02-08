@@ -104,7 +104,9 @@ Added in v1.0.0
   - [Traversable](#traversable)
 - [interop](#interop)
   - [getOrThrow](#getorthrow)
+  - [getOrThrowWith](#getorthrowwith)
   - [getRightOnlyOrThrow](#getrightonlyorthrow)
+  - [getRightOnlyOrThrowWith](#getrightonlyorthrowwith)
   - [liftThrowable](#liftthrowable)
 - [lifting](#lifting)
   - [lift2](#lift2)
@@ -1208,20 +1210,111 @@ Added in v1.0.0
 
 ## getOrThrow
 
+Extracts the value of a `These` or throws if the `These` is `Left`.
+
+The thrown error is a default error. To configure the error thrown, see {@link getOrThrowWith}.
+
 **Signature**
 
 ```ts
 export declare const getOrThrow: <E, A>(self: These<E, A>) => A
 ```
 
+**Example**
+
+```ts
+import * as T from '@fp-ts/core/These'
+
+assert.deepStrictEqual(T.getOrThrow(T.right(1)), 1)
+assert.deepStrictEqual(T.getOrThrow(T.both('warning', 1)), 1)
+assert.throws(() => T.getOrThrow(T.left('error')))
+```
+
+Added in v1.0.0
+
+## getOrThrowWith
+
+Extracts the value of a `These` or throws if the `These` is `Left`.
+
+If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+
+**Signature**
+
+```ts
+export declare const getOrThrowWith: {
+  <E>(onLeft: (e: E) => unknown): <A>(self: These<E, A>) => A
+  <E, A>(self: These<E, A>, onLeft: (e: E) => unknown): A
+}
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/These'
+
+assert.deepStrictEqual(
+  E.getOrThrowWith(E.right(1), () => new Error('Unexpected Left')),
+  1
+)
+assert.deepStrictEqual(
+  E.getOrThrowWith(E.both('warning', 1), () => new Error('Unexpected Left')),
+  1
+)
+assert.throws(() => E.getOrThrowWith(E.left('error'), () => new Error('Unexpected Left')))
+```
+
 Added in v1.0.0
 
 ## getRightOnlyOrThrow
+
+Extracts the value of a `These` or throws if the `These` is not a `Right`.
+
+The thrown error is a default error. To configure the error thrown, see {@link getRightOnlyOrThrowWith}.
 
 **Signature**
 
 ```ts
 export declare const getRightOnlyOrThrow: <E, A>(self: These<E, A>) => A
+```
+
+**Example**
+
+```ts
+import * as T from '@fp-ts/core/These'
+
+assert.deepStrictEqual(T.getRightOnlyOrThrow(T.right(1)), 1)
+assert.throws(() => T.getRightOnlyOrThrow(T.both('error', 1)))
+assert.throws(() => T.getRightOnlyOrThrow(T.left('error')))
+```
+
+Added in v1.0.0
+
+## getRightOnlyOrThrowWith
+
+Extracts the value of a `These` or throws if the `These` is `Left`.
+
+If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+
+**Signature**
+
+```ts
+export declare const getRightOnlyOrThrowWith: {
+  <E>(onLeftOrBoth: (e: E) => unknown): <A>(self: These<E, A>) => A
+  <E, A>(self: These<E, A>, onLeftOrBoth: (e: E) => unknown): A
+}
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/These'
+
+assert.deepStrictEqual(
+  E.getRightOnlyOrThrowWith(E.right(1), () => new Error('Unexpected Left or Both')),
+  1
+)
+assert.throws(() => E.getRightOnlyOrThrowWith(E.both('warning', 1), () => new Error('Unexpected Left or Both')))
+assert.throws(() => E.getRightOnlyOrThrowWith(E.left('error'), () => new Error('Unexpected Left or Both')))
 ```
 
 Added in v1.0.0

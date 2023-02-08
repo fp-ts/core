@@ -81,6 +81,7 @@ Added in v1.0.0
   - [fromNullable](#fromnullable)
   - [getOrNull](#getornull)
   - [getOrThrow](#getorthrow)
+  - [getOrThrowWith](#getorthrowwith)
   - [getOrUndefined](#getorundefined)
   - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
@@ -1108,7 +1109,9 @@ Added in v1.0.0
 
 ## getOrThrow
 
-Returns the contained value if the `Option` is `Some`, otherwise throws an error.
+Extracts the value of an `Option` or throws if the `Option` is `None`.
+
+The thrown error is a default error. To configure the error thrown, see {@link getOrThrowWith}.
 
 **Signature**
 
@@ -1119,11 +1122,39 @@ export declare const getOrThrow: <A>(self: Option<A>) => A
 **Example**
 
 ```ts
-import { pipe } from '@fp-ts/core/Function'
 import * as O from '@fp-ts/core/Option'
 
-assert.deepStrictEqual(pipe(O.some(1), O.getOrThrow), 1)
-assert.throws(() => pipe(O.none(), O.getOrThrow))
+assert.deepStrictEqual(O.getOrThrow(O.some(1)), 1)
+assert.throws(() => O.getOrThrow(O.none()))
+```
+
+Added in v1.0.0
+
+## getOrThrowWith
+
+Extracts the value of an `Option` or throws if the `Option` is `None`.
+
+If a default error is sufficient for your use case and you don't need to configure the thrown error, see {@link getOrThrow}.
+
+**Signature**
+
+```ts
+export declare const getOrThrowWith: {
+  (onNone: () => unknown): <A>(self: Option<A>) => A
+  <A>(self: Option<A>, onNone: () => unknown): A
+}
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(
+  O.getOrThrowWith(O.some(1), () => new Error('Unexpected None')),
+  1
+)
+assert.throws(() => O.getOrThrowWith(O.none(), () => new Error('Unexpected None')))
 ```
 
 Added in v1.0.0

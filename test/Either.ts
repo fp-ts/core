@@ -172,6 +172,14 @@ describe.concurrent("Either", () => {
     )
   })
 
+  it("getOrThrowWith", () => {
+    expect(pipe(E.right(1), E.getOrThrowWith((e) => new Error(`Unexpected Left: ${e}`)))).toEqual(1)
+    expect(() => pipe(E.left("e"), E.getOrThrowWith((e) => new Error(`Unexpected Left: ${e}`))))
+      .toThrowError(
+        new Error("Unexpected Left: e")
+      )
+  })
+
   it("andThenDiscard", () => {
     Util.deepStrictEqual(pipe(E.right(1), E.andThenDiscard(E.right("a"))), E.right(1))
     Util.deepStrictEqual(pipe(E.right(1), E.andThenDiscard(E.left(true))), E.left(true))
