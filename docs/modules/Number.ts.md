@@ -20,6 +20,7 @@ Added in v1.0.0
   - [divide](#divide)
   - [multiply](#multiply)
   - [multiplyAll](#multiplyall)
+  - [remainder](#remainder)
   - [subtract](#subtract)
   - [sum](#sum)
   - [sumAll](#sumall)
@@ -90,6 +91,30 @@ Added in v1.0.0
 
 ```ts
 export declare const multiplyAll: (collection: Iterable<number>) => number
+```
+
+Added in v1.0.0
+
+## remainder
+
+Returns the remainder left over when one operand is divided by a second operand.
+
+It always takes the sign of the dividend.
+
+**Signature**
+
+```ts
+export declare const remainder: { (divisor: number): (self: number) => number; (self: number, divisor: number): number }
+```
+
+**Example**
+
+```ts
+import { remainder } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(remainder(2, 2), 0)
+assert.deepStrictEqual(remainder(3, 2), 1)
+assert.deepStrictEqual(remainder(-4, 2), -0)
 ```
 
 Added in v1.0.0
