@@ -18,8 +18,13 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [and](#and)
+  - [implies](#implies)
+  - [nand](#nand)
+  - [nor](#nor)
   - [not](#not)
   - [or](#or)
+  - [xnor](#xnor)
+  - [xor](#xor)
 - [guards](#guards)
   - [isBoolean](#isboolean)
 - [instances](#instances)
@@ -29,6 +34,7 @@ Added in v1.0.0
   - [Order](#order)
   - [SemigroupAll](#semigroupall)
   - [SemigroupAny](#semigroupany)
+  - [SemigroupExclusiveAny](#semigroupexclusiveany)
 - [pattern matching](#pattern-matching)
   - [match](#match)
 - [utils](#utils)
@@ -49,6 +55,36 @@ export declare const and: { (that: boolean): (self: boolean) => boolean; (self: 
 
 Added in v1.0.0
 
+## implies
+
+**Signature**
+
+```ts
+export declare const implies: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+Added in v1.0.0
+
+## nand
+
+**Signature**
+
+```ts
+export declare const nand: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+Added in v1.0.0
+
+## nor
+
+**Signature**
+
+```ts
+export declare const nor: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+Added in v1.0.0
+
 ## not
 
 **Signature**
@@ -65,6 +101,26 @@ Added in v1.0.0
 
 ```ts
 export declare const or: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+Added in v1.0.0
+
+## xnor
+
+**Signature**
+
+```ts
+export declare const xnor: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+Added in v1.0.0
+
+## xor
+
+**Signature**
+
+```ts
+export declare const xor: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
 Added in v1.0.0
@@ -156,10 +212,11 @@ export declare const SemigroupAll: semigroup.Semigroup<boolean>
 
 ```ts
 import { SemigroupAll } from '@fp-ts/core/Boolean'
-import { pipe } from '@fp-ts/core/Function'
 
 assert.deepStrictEqual(SemigroupAll.combine(true, true), true)
 assert.deepStrictEqual(SemigroupAll.combine(true, false), false)
+assert.deepStrictEqual(SemigroupAll.combine(false, true), false)
+assert.deepStrictEqual(SemigroupAll.combine(false, false), false)
 ```
 
 Added in v1.0.0
@@ -178,11 +235,34 @@ export declare const SemigroupAny: semigroup.Semigroup<boolean>
 
 ```ts
 import { SemigroupAny } from '@fp-ts/core/Boolean'
-import { pipe } from '@fp-ts/core/Function'
 
 assert.deepStrictEqual(SemigroupAny.combine(true, true), true)
 assert.deepStrictEqual(SemigroupAny.combine(true, false), true)
+assert.deepStrictEqual(SemigroupAny.combine(false, true), true)
 assert.deepStrictEqual(SemigroupAny.combine(false, false), false)
+```
+
+Added in v1.0.0
+
+## SemigroupExclusiveAny
+
+`boolean` semigroup under disjunction.
+
+**Signature**
+
+```ts
+export declare const SemigroupExclusiveAny: semigroup.Semigroup<boolean>
+```
+
+**Example**
+
+```ts
+import { SemigroupExclusiveAny } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, true), false)
+assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, false), true)
+assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, true), true)
+assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, false), false)
 ```
 
 Added in v1.0.0

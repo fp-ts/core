@@ -6,7 +6,7 @@
  * @since 1.0.0
  */
 import type { LazyArg } from "@fp-ts/core/Function"
-import { dual } from "@fp-ts/core/Function"
+import { dual, flow } from "@fp-ts/core/Function"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
@@ -76,10 +76,11 @@ export const Order: order.Order<boolean> = order.boolean
  *
  * @example
  * import { SemigroupAll } from '@fp-ts/core/Boolean'
- * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.deepStrictEqual(SemigroupAll.combine(true, true), true)
  * assert.deepStrictEqual(SemigroupAll.combine(true, false), false)
+ * assert.deepStrictEqual(SemigroupAll.combine(false, true), false)
+ * assert.deepStrictEqual(SemigroupAll.combine(false, false), false)
  *
  * @category instances
  * @since 1.0.0
@@ -91,16 +92,32 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.booleanAll
  *
  * @example
  * import { SemigroupAny } from '@fp-ts/core/Boolean'
- * import { pipe } from '@fp-ts/core/Function'
  *
  * assert.deepStrictEqual(SemigroupAny.combine(true, true), true)
  * assert.deepStrictEqual(SemigroupAny.combine(true, false), true)
+ * assert.deepStrictEqual(SemigroupAny.combine(false, true), true)
  * assert.deepStrictEqual(SemigroupAny.combine(false, false), false)
  *
  * @category instances
  * @since 1.0.0
  */
 export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.booleanAny
+
+/**
+ * `boolean` semigroup under disjunction.
+ *
+ * @example
+ * import { SemigroupExclusiveAny } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, true), false)
+ * assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, false), true)
+ * assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, true), true)
+ * assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, false), false)
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemigroupExclusiveAny: semigroup.Semigroup<boolean> = semigroup.booleanExclusiveAny
 
 /**
  * `boolean` monoid under conjunction.
@@ -126,10 +143,25 @@ export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
  * @category combinators
  * @since 1.0.0
  */
+export const not = (self: boolean): boolean => !self
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
 export const and: {
   (that: boolean): (self: boolean) => boolean
   (self: boolean, that: boolean): boolean
 } = dual(2, semigroup.booleanAll.combine)
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const nand: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = dual(2, flow(semigroup.booleanAll.combine, not))
 
 /**
  * @category combinators
@@ -144,7 +176,37 @@ export const or: {
  * @category combinators
  * @since 1.0.0
  */
-export const not = (self: boolean): boolean => !self
+export const nor: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = dual(2, flow(semigroup.booleanAny.combine, not))
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const xor: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = dual(2, semigroup.booleanExclusiveAny.combine)
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const xnor: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = dual(2, flow(semigroup.booleanExclusiveAny.combine, not))
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const implies: {
+  (that: boolean): (self: boolean) => boolean
+  (self: boolean, that: boolean): boolean
+} = dual(2, (self, that) => self ? that : true)
 
 /**
  * @since 1.0.0

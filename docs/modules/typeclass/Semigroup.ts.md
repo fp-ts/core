@@ -30,6 +30,7 @@ Added in v1.0.0
   - [bigintSum](#bigintsum)
   - [booleanAll](#booleanall)
   - [booleanAny](#booleanany)
+  - [booleanExclusiveAny](#booleanexclusiveany)
   - [first](#first)
   - [last](#last)
   - [numberMultiply](#numbermultiply)
@@ -233,6 +234,18 @@ Added in v1.0.0
 
 ```ts
 export declare const booleanAny: Semigroup<boolean>
+```
+
+Added in v1.0.0
+
+## booleanExclusiveAny
+
+`boolean` semigroup under exclusive disjunction.
+
+**Signature**
+
+```ts
+export declare const booleanExclusiveAny: Semigroup<boolean>
 ```
 
 Added in v1.0.0

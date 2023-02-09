@@ -8,6 +8,7 @@ describe.concurrent("Boolean", () => {
     expect(Boolean.MonoidAll).exist
     expect(Boolean.SemigroupAny).exist
     expect(Boolean.MonoidAny).exist
+    expect(Boolean.SemigroupExclusiveAny).exist
     expect(Boolean.all).exist
     expect(Boolean.any).exist
   })
@@ -26,6 +27,13 @@ describe.concurrent("Boolean", () => {
     deepStrictEqual(pipe(false, Boolean.and(false)), false)
   })
 
+  it("nand", () => {
+    deepStrictEqual(pipe(true, Boolean.nand(true)), false)
+    deepStrictEqual(pipe(true, Boolean.nand(false)), true)
+    deepStrictEqual(pipe(false, Boolean.nand(true)), true)
+    deepStrictEqual(pipe(false, Boolean.nand(false)), true)
+  })
+
   it("or", () => {
     deepStrictEqual(pipe(true, Boolean.or(true)), true)
     deepStrictEqual(pipe(true, Boolean.or(false)), true)
@@ -33,9 +41,48 @@ describe.concurrent("Boolean", () => {
     deepStrictEqual(pipe(false, Boolean.or(false)), false)
   })
 
+  it("nor", () => {
+    deepStrictEqual(pipe(true, Boolean.nor(true)), false)
+    deepStrictEqual(pipe(true, Boolean.nor(false)), false)
+    deepStrictEqual(pipe(false, Boolean.nor(true)), false)
+    deepStrictEqual(pipe(false, Boolean.nor(false)), true)
+  })
+
+  it("xor", () => {
+    deepStrictEqual(pipe(true, Boolean.xor(true)), false)
+    deepStrictEqual(pipe(true, Boolean.xor(false)), true)
+    deepStrictEqual(pipe(false, Boolean.xor(true)), true)
+    deepStrictEqual(pipe(false, Boolean.xor(false)), false)
+  })
+
+  it("xnor", () => {
+    deepStrictEqual(pipe(true, Boolean.xnor(true)), true)
+    deepStrictEqual(pipe(true, Boolean.xnor(false)), false)
+    deepStrictEqual(pipe(false, Boolean.xnor(true)), false)
+    deepStrictEqual(pipe(false, Boolean.xnor(false)), true)
+  })
+
+  it("implies", () => {
+    deepStrictEqual(pipe(true, Boolean.implies(true)), true)
+    deepStrictEqual(pipe(true, Boolean.implies(false)), false)
+    deepStrictEqual(pipe(false, Boolean.implies(true)), true)
+    deepStrictEqual(pipe(false, Boolean.implies(false)), true)
+  })
+
   it("not", () => {
     deepStrictEqual(pipe(true, Boolean.not), false)
     deepStrictEqual(pipe(false, Boolean.not), true)
+  })
+
+  describe.concurrent("SemigroupExclusiveAny", () => {
+    it("baseline", () => {
+      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(true, []), true)
+      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(false, []), false)
+      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(false, [true]), true)
+      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(false, [false]), false)
+      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(true, [true]), false)
+      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(true, [false]), true)
+    })
   })
 
   describe.concurrent("MonoidAll", () => {
