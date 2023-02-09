@@ -152,6 +152,28 @@ export const booleanAny: Semigroup<boolean> = make(
 )
 
 /**
+ * `boolean` semigroup under exclusive disjunction.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanExclusiveAny: Semigroup<boolean> = make(
+  (self, that) => self !== that,
+  (self, collection) => {
+    let isEmptyIterable = true
+    for (const b of collection) {
+      if (isEmptyIterable) {
+        isEmptyIterable = false
+      }
+      if (b !== self) {
+        return true
+      }
+    }
+    return isEmptyIterable ? self : false
+  }
+)
+
+/**
  * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
  * The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
  *
