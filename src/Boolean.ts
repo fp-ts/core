@@ -107,17 +107,17 @@ export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.booleanAny
  * `boolean` semigroup under disjunction.
  *
  * @example
- * import { SemigroupExclusiveAny } from '@fp-ts/core/Boolean'
+ * import { SemigroupXor } from '@fp-ts/core/Boolean'
  *
- * assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, true), false)
- * assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, false), true)
- * assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, true), true)
- * assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, false), false)
+ * assert.deepStrictEqual(SemigroupXor.combine(true, true), false)
+ * assert.deepStrictEqual(SemigroupXor.combine(true, false), true)
+ * assert.deepStrictEqual(SemigroupXor.combine(false, true), true)
+ * assert.deepStrictEqual(SemigroupXor.combine(false, false), false)
  *
  * @category instances
  * @since 1.0.0
  */
-export const SemigroupExclusiveAny: semigroup.Semigroup<boolean> = semigroup.booleanExclusiveAny
+export const SemigroupXor: semigroup.Semigroup<boolean> = semigroup.booleanXor
 
 /**
  * `boolean` monoid under conjunction.
@@ -188,7 +188,7 @@ export const nor: {
 export const xor: {
   (that: boolean): (self: boolean) => boolean
   (self: boolean, that: boolean): boolean
-} = dual(2, semigroup.booleanExclusiveAny.combine)
+} = dual(2, semigroup.booleanXor.combine)
 
 /**
  * @category combinators
@@ -197,7 +197,7 @@ export const xor: {
 export const xnor: {
   (that: boolean): (self: boolean) => boolean
   (self: boolean, that: boolean): boolean
-} = dual(2, flow(semigroup.booleanExclusiveAny.combine, not))
+} = dual(2, flow(semigroup.booleanXor.combine, not))
 
 /**
  * @category combinators

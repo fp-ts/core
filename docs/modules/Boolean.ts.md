@@ -34,7 +34,7 @@ Added in v1.0.0
   - [Order](#order)
   - [SemigroupAll](#semigroupall)
   - [SemigroupAny](#semigroupany)
-  - [SemigroupExclusiveAny](#semigroupexclusiveany)
+  - [SemigroupXor](#semigroupxor)
 - [pattern matching](#pattern-matching)
   - [match](#match)
 - [utils](#utils)
@@ -244,25 +244,25 @@ assert.deepStrictEqual(SemigroupAny.combine(false, false), false)
 
 Added in v1.0.0
 
-## SemigroupExclusiveAny
+## SemigroupXor
 
 `boolean` semigroup under disjunction.
 
 **Signature**
 
 ```ts
-export declare const SemigroupExclusiveAny: semigroup.Semigroup<boolean>
+export declare const SemigroupXor: semigroup.Semigroup<boolean>
 ```
 
 **Example**
 
 ```ts
-import { SemigroupExclusiveAny } from '@fp-ts/core/Boolean'
+import { SemigroupXor } from '@fp-ts/core/Boolean'
 
-assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, true), false)
-assert.deepStrictEqual(SemigroupExclusiveAny.combine(true, false), true)
-assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, true), true)
-assert.deepStrictEqual(SemigroupExclusiveAny.combine(false, false), false)
+assert.deepStrictEqual(SemigroupXor.combine(true, true), false)
+assert.deepStrictEqual(SemigroupXor.combine(true, false), true)
+assert.deepStrictEqual(SemigroupXor.combine(false, true), true)
+assert.deepStrictEqual(SemigroupXor.combine(false, false), false)
 ```
 
 Added in v1.0.0

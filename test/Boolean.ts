@@ -8,7 +8,7 @@ describe.concurrent("Boolean", () => {
     expect(Boolean.MonoidAll).exist
     expect(Boolean.SemigroupAny).exist
     expect(Boolean.MonoidAny).exist
-    expect(Boolean.SemigroupExclusiveAny).exist
+    expect(Boolean.SemigroupXor).exist
     expect(Boolean.all).exist
     expect(Boolean.any).exist
   })
@@ -74,14 +74,14 @@ describe.concurrent("Boolean", () => {
     deepStrictEqual(pipe(false, Boolean.not), true)
   })
 
-  describe.concurrent("SemigroupExclusiveAny", () => {
+  describe.concurrent("SemigroupXor", () => {
     it("baseline", () => {
-      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(true, []), true)
-      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(false, []), false)
-      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(false, [true]), true)
-      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(false, [false]), false)
-      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(true, [true]), false)
-      deepStrictEqual(Boolean.SemigroupExclusiveAny.combineMany(true, [false]), true)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(true, []), true)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(false, []), false)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(false, [true]), true)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(false, [false]), false)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(true, [true]), false)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(true, [false]), true)
     })
   })
 

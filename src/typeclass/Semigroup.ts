@@ -157,7 +157,7 @@ export const booleanAny: Semigroup<boolean> = make(
  * @category instances
  * @since 1.0.0
  */
-export const booleanExclusiveAny: Semigroup<boolean> = make(
+export const booleanXor: Semigroup<boolean> = make(
   (self, that) => self !== that,
   (self, collection) => {
     let isEmptyIterable = true
