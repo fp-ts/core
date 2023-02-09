@@ -1,5 +1,17 @@
 # @fp-ts/core
 
+## 0.2.1
+
+### Patch Changes
+
+- [#59](https://github.com/fp-ts/core/pull/59) [`5efa9c03`](https://github.com/fp-ts/core/commit/5efa9c03572c9f39dd0e801dfe404e9e18d5fba2) Thanks [@gcanti](https://github.com/gcanti)! - Predicate: add more guards
+
+- [#60](https://github.com/fp-ts/core/pull/60) [`c48d2f56`](https://github.com/fp-ts/core/commit/c48d2f56063c31db5a42d426fa9a9ef270977843) Thanks [@gcanti](https://github.com/gcanti)! - add getOrThrowWith to Option, Either, These
+
+- [#57](https://github.com/fp-ts/core/pull/57) [`549509b8`](https://github.com/fp-ts/core/commit/549509b8a02a515becd514cfbb00044b313d5ede) Thanks [@gcanti](https://github.com/gcanti)! - Number: add remainder
+
+- [#56](https://github.com/fp-ts/core/pull/56) [`cf4918de`](https://github.com/fp-ts/core/commit/cf4918de74504ec59dd00df0ff251a549fb51284) Thanks [@gcanti](https://github.com/gcanti)! - ReadonlyArray: handle mutable arrays in isEmpty, isNonEmpty guards
+
 ## 0.2.0
 
 ### Minor Changes
