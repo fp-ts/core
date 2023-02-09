@@ -1,41 +1,23 @@
----
-name: "\U0001F680Feature request"
-about: Suggest an idea for `@fp-ts/core`
----
+# Feature Request
 
-## 🚀 Feature request
+Thank you for submitting a feature request for `@fp-ts/core`. Your contributions help shape the future of this library.
 
-### Current Behavior
+## Describing the Feature
 
-<!-- A clear and concise description of what is the current behavior / use.  -->
+Please provide a clear and concise description of the new feature you would like to see added to `@fp-ts/core`.
 
-### Desired Behavior
+## Problem to Solve
 
-<!-- A clear and concise description of what you want to happen.  -->
+Please describe the problem that this new feature will solve, and why it's important.
 
-### Suggested Solution
+## Use Case
 
-<!-- Suggest a solution that the community/maintainers/you may take to enable the desired behavior  -->
+Please provide a use case or an example of how this feature will be used.
 
-<!-- NOTE: Feature Requests without suggested solutions may not be addressed or treated with the same level of urgency as those that have suggested solutions. -->
+## Alternatives Considered
 
-### Who does this impact? Who is this for?
+Please describe any alternatives you have considered and why you believe this new feature is a better solution.
 
-<!-- Who is this for? All users? TypeScript users? Beginners? Advanced? Yourself? People using X, Y, X, etc.? -->
+## Additional Context
 
-### Describe alternatives you've considered
-
-<!-- A clear and concise description of any alternative solutions or features you've considered.  -->
-
-### Additional context
-
-<!-- Add any other context or links about the feature request here. -->
-
-### Your environment
-
-<!-- PLEASE FILL THIS OUT -->
-
-| Software    | Version(s) |
-| ----------- | ---------- |
-| @fp-ts/core |            |
-| TypeScript  |            |
+Please provide any additional information or context that might be relevant to this feature request.
