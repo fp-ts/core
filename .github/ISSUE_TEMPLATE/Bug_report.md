@@ -1,35 +1,26 @@
----
-name: "\U0001F41B Bug report"
-about: Create a report to help make `@fp-ts/core` better
----
+# Bug Report
 
-## 🐛 Bug report
+Thank you for reporting a bug in `@fp-ts/core`. Your contribution to this project is greatly appreciated and will help make the library better for everyone.
 
-### Current Behavior
+## Describing the Bug
 
-<!-- If applicable, add screenshots to help explain your problem. -->
+Please provide a clear and concise description of the issue you are encountering, including any error messages or unexpected behavior you have observed.
 
-### Expected behavior
+## Steps to Reproduce
 
-<!-- A clear and concise description of what you expected to happen. -->
+In order to help us understand and resolve the issue, please provide the steps to reproduce the behavior, along with a minimal, self-contained code example that demonstrates the problem.
 
-### Reproducible example
+## Expected Behavior
 
-### Suggested solution(s)
+Please describe what you expected to happen, and how the current behavior differs from your expectations.
 
-<!-- How could we solve this bug? What changes would need to made to `@fp-ts/core`? -->
+## Environment
 
-### Additional context
+Please provide the following information to help us understand your setup:
 
-<!-- Add any other context about the problem here.  -->
+- Library version: [e.g. `0.8.1`]
+- TypeScript version: [e.g. `4.2.2`]
 
-### Your environment
+## Additional Context
 
-Which versions of `@fp-ts/core` are affected by this issue? Did this work in previous versions of `@fp-ts/core`?
-
-<!-- PLEASE FILL THIS OUT -->
-
-| Software    | Version(s) |
-| ----------- | ---------- |
-| @fp-ts/core |            |
-| TypeScript  |            |
+Any additional information or context that you think would be helpful in resolving the issue.
