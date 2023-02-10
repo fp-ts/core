@@ -82,6 +82,8 @@ describe.concurrent("Boolean", () => {
       deepStrictEqual(Boolean.SemigroupXor.combineMany(false, [false]), false)
       deepStrictEqual(Boolean.SemigroupXor.combineMany(true, [true]), false)
       deepStrictEqual(Boolean.SemigroupXor.combineMany(true, [false]), true)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(true, [true, false]), false)
+      deepStrictEqual(Boolean.SemigroupXor.combineMany(true, [false, true]), false)
     })
   })
 
