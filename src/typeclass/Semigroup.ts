@@ -34,9 +34,12 @@ export interface SemigroupTypeLambda extends TypeLambda {
 export const make = <A>(
   combine: Semigroup<A>["combine"],
   combineMany: Semigroup<A>["combineMany"] = (self, collection) => {
+    if (Array.isArray(collection)) {
+      return collection.reduce(combine, self)
+    }
     let result = self
     for (const n of collection) {
-      result = combine(n, result)
+      result = combine(result, n)
     }
     return result
   }
@@ -295,7 +298,18 @@ export const imap: {
 } = dual(3, <A, B>(S: Semigroup<A>, to: (a: A) => B, from: (b: B) => A): Semigroup<B> =>
   make(
     (self, that) => to(S.combine(from(self), from(that))),
-    (self, collection) => to(S.combineMany(from(self), (fromIterable(collection)).map(from)))
+    (self, collection) => {
+      const mappedCollection = (Array.isArray(collection)) ? collection.map(from) : (function*() {
+        for (const n of collection) {
+          yield from(n)
+        }
+      })()
+
+      return to(S.combineMany(
+        from(self),
+        mappedCollection
+      ))
+    }
   ))
 
 /**
