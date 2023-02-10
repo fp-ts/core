@@ -3,7 +3,6 @@
  */
 import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
 import type * as product_ from "@fp-ts/core/typeclass/Product"
@@ -34,8 +33,13 @@ export interface SemigroupTypeLambda extends TypeLambda {
  */
 export const make = <A>(
   combine: Semigroup<A>["combine"],
-  combineMany: Semigroup<A>["combineMany"] = (self, collection) =>
-    fromIterable(collection).reduce(combine, self)
+  combineMany: Semigroup<A>["combineMany"] = (self, collection) => {
+    let result = self
+    for (const n of collection) {
+      result = combine(n, result)
+    }
+    return result
+  }
 ): Semigroup<A> => ({
   combine,
   combineMany

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "module": "commonjs",
+    "downlevelIteration": true,
     "paths": {
       "@fp-ts/core": ["../src/index.ts"],
       "@fp-ts/core/test/*": ["../test/*"],
