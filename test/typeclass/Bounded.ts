@@ -14,7 +14,7 @@ describe("Bounded", () => {
 
   it("reverse", () => {
     const B = _.reverse({ ...Number.Order, minBound: 10, maxBound: 1 })
-    U.deepStrictEqual(B.maxBound, 1)
-    U.deepStrictEqual(B.minBound, 10)
+    U.deepStrictEqual(B.maxBound, 10)
+    U.deepStrictEqual(B.minBound, 1)
   })
 })

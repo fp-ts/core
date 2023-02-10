@@ -67,6 +67,6 @@ export const clamp = <A>(B: Bounded<A>): (a: A) => A => order.clamp(B)(B.minBoun
  */
 export const reverse = <A>(B: Bounded<A>): Bounded<A> => ({
   ...order.reverse(B),
-  minBound: B.minBound,
-  maxBound: B.maxBound
+  minBound: B.maxBound,
+  maxBound: B.minBound
 })
