@@ -115,6 +115,7 @@ Added in v1.0.0
   - [flatMap](#flatmap)
   - [flatMapNullable](#flatmapnullable)
   - [flatMapOption](#flatmapoption)
+  - [productAll](#productall)
 - [traversing](#traversing)
   - [sequence](#sequence)
   - [traverse](#traverse)
@@ -1475,6 +1476,28 @@ export declare const flatMapOption: {
 
 Added in v1.0.0
 
+## productAll
+
+Flattens a collection of `Either`s into a single `Either` that contains a list of all the `Right` values.
+If there is a `Left` value in the collection, it returns `Left` as the result.
+
+**Signature**
+
+```ts
+export declare const productAll: <E, A>(collection: Iterable<Either<E, A>>) => Either<E, A[]>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.productAll([E.right(1), E.right(2), E.right(3)]), E.right([1, 2, 3]))
+assert.deepStrictEqual(E.productAll([E.right(1), E.left('error'), E.right(3)]), E.left('error'))
+```
+
+Added in v1.0.0
+
 # traversing
 
 ## sequence
@@ -1657,7 +1680,7 @@ Added in v1.0.0
 
 ```ts
 export declare const struct: <R extends Record<string, Either<any, any>>>(
-  r: R
+  fields: R
 ) => Either<
   [R[keyof R]] extends [Either<infer E, any>] ? E : never,
   { [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }
@@ -1672,7 +1695,7 @@ Added in v1.0.0
 
 ```ts
 export declare const tuple: <T extends readonly Either<any, any>[]>(
-  ...tuple: T
+  ...elements: T
 ) => Either<
   [T[number]] extends [Either<infer E, any>] ? E : never,
   { [I in keyof T]: [T[I]] extends [Either<any, infer A>] ? A : never }

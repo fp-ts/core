@@ -454,36 +454,17 @@ export const Of: of_.Of<PredicateTypeLambda> = {
  */
 export const unit: Predicate<void> = of_.unit(Of)
 
-const product = <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<[A, B]> =>
+const product = <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<readonly [A, B]> =>
   ([a, b]) => self(a) && that(b)
 
-const productMany = <A>(
-  self: Predicate<A>,
-  collection: Iterable<Predicate<A>>
-): Predicate<[A, ...Array<A>]> =>
-  ([head, ...tail]) => {
-    if (self(head) === false) {
-      return false
-    }
-    const predicates = readonlyArray.fromIterable(collection)
-    for (let i = 0; i < predicates.length; i++) {
-      if (predicates[i](tail[i]) === false) {
-        return false
-      }
-    }
-    return true
-  }
-
 /**
- * @category instances
+ * Flattens a collection of `Predicate`s into a single `Predicate` that tests a `ReadonlyArray` of values.
+ *
+ * @param collection - An iterable collection of `Predicate`s to flatten.
+ *
+ * @category sequencing
  * @since 1.0.0
  */
-export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
-  imap,
-  product,
-  productMany
-}
-
 const productAll = <A>(
   collection: Iterable<Predicate<A>>
 ): Predicate<ReadonlyArray<A>> =>
@@ -496,6 +477,24 @@ const productAll = <A>(
     }
     return true
   }
+
+const productMany = <A>(
+  self: Predicate<A>,
+  collection: Iterable<Predicate<A>>
+): Predicate<readonly [A, ...Array<A>]> => {
+  const rest = productAll(collection)
+  return ([head, ...tail]) => self(head) === false ? false : rest(tail)
+}
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemiProduct: semiProduct.SemiProduct<PredicateTypeLambda> = {
+  imap,
+  product,
+  productMany
+}
 
 /**
  * @category instances

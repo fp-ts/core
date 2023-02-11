@@ -37,10 +37,6 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
-// -------------------------------------------------------------------------------------
-// models
-// -------------------------------------------------------------------------------------
-
 /**
  * @category models
  * @since 1.0.0
@@ -72,15 +68,8 @@ export interface OptionTypeLambda extends TypeLambda {
   readonly type: Option<this["Target"]>
 }
 
-// -------------------------------------------------------------------------------------
-// constructors
-// -------------------------------------------------------------------------------------
-
 /**
  * Creates a new `Option` that represents the absence of a value.
- *
- * This can be useful when working with optional values or to represent a computation that failed.
- * It returns a new `Option` object that does not contain any value.
  *
  * @category constructors
  * @since 1.0.0
@@ -89,8 +78,6 @@ export const none = <A = never>(): Option<A> => option.none
 
 /**
  * Creates a new `Option` that wraps the given value.
- *
- * This can be useful when working with optional values or to represent a computation that succeeded with a value.
  *
  * @param value - The value to wrap.
  *
@@ -106,10 +93,6 @@ export const some: <A>(value: A) => Option<A> = option.some
  * @since 1.0.0
  */
 export const of: <A>(value: A) => Option<A> = some
-
-// -------------------------------------------------------------------------------------
-// guards
-// -------------------------------------------------------------------------------------
 
 /**
  * Tests if a value is a `Option`.
@@ -162,10 +145,6 @@ export const isNone: <A>(self: Option<A>) => self is None = option.isNone
  */
 export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
 
-// -------------------------------------------------------------------------------------
-// pattern matching
-// -------------------------------------------------------------------------------------
-
 /**
  * Matches the given `Option` and returns either the provided `onNone` value or the result of the provided `onSome`
  * function when passed the `Option`'s value.
@@ -176,7 +155,7 @@ export const isSome: <A>(self: Option<A>) => self is Some<A> = option.isSome
  *
  * @example
  * import { some, none, match } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -206,18 +185,25 @@ export const match: {
     isNone(self) ? onNone() : onSome(self.value)
 )
 
-// -------------------------------------------------------------------------------------
-// conversions
-// -------------------------------------------------------------------------------------
-
 /**
- * Returns a `Refinement` from a `Option` returning function.
- * This function ensures that a `Refinement` definition is type-safe.
+ * Returns a type guard from a `Option` returning function.
+ * This function ensures that a type guard definition is type-safe.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * const parsePositive = (n: number): O.Option<number> =>
+ *   n > 0 ? O.some(n) : O.none()
+ *
+ * const isPositive = O.toRefinement(parsePositive)
+ *
+ * assert.deepStrictEqual(isPositive(1), true)
+ * assert.deepStrictEqual(isPositive(-1), false)
  *
  * @category conversions
  * @since 1.0.0
  */
-export const toRefinement = <A, B extends A>(f: (a: A) => Option<B>): Refinement<A, B> =>
+export const toRefinement = <A, B extends A>(f: (a: A) => Option<B>): (a: A) => a is B =>
   (a: A): a is B => isSome(f(a))
 
 /**
@@ -229,8 +215,7 @@ export const toRefinement = <A, B extends A>(f: (a: A) => Option<B>): Refinement
  * @example
  * import { fromIterable, some, none } from '@fp-ts/core/Option'
  *
- * const collection = [1, 2, 3]
- * assert.deepStrictEqual(fromIterable(collection), some(1))
+ * assert.deepStrictEqual(fromIterable([1, 2, 3]), some(1))
  * assert.deepStrictEqual(fromIterable([]), none())
  *
  * @category conversions
@@ -249,11 +234,11 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
  * @param self - The `Either` to convert to an `Option`.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
  *
  * assert.deepStrictEqual(O.fromEither(E.right(1)), O.some(1))
- * assert.deepStrictEqual(O.fromEither(E.left('a')), O.none())
+ * assert.deepStrictEqual(O.fromEither(E.left('error message')), O.none())
  *
  * @category conversions
  * @since 1.0.0
@@ -266,8 +251,8 @@ export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRig
  * Alias of {@link fromEither}.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
  *
  * assert.deepStrictEqual(O.getRight(E.right('ok')), O.some('ok'))
  * assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
@@ -281,11 +266,11 @@ export const getRight: <E, A>(self: Either<E, A>) => Option<A> = fromEither
  * Converts a `Either` to an `Option` discarding the value.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
  *
- * assert.deepStrictEqual(O.getLeft(E.right('ok')), O.none())
- * assert.deepStrictEqual(O.getLeft(E.left('err')), O.some('err'))
+ * assert.deepStrictEqual(O.getLeft(E.right("ok")), O.none())
+ * assert.deepStrictEqual(O.getLeft(E.left("error")), O.some("error"))
  *
  * @category conversions
  * @since 1.0.0
@@ -299,9 +284,9 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
  * @param onNone - a function that produces an error value when the `Option` is `None`.
  *
  * @example
- * import { pipe } from '@fp-ts/core/Function'
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
+ * import { pipe } from "@fp-ts/core/Function"
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
  *
  * const onNone = () => 'error'
  * assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
@@ -315,10 +300,6 @@ export const toEither: {
   <E>(onNone: () => E): <A>(self: Option<A>) => Either<E, A>
 } = either.fromOption
 
-// -------------------------------------------------------------------------------------
-// error handling
-// -------------------------------------------------------------------------------------
-
 /**
  * Returns the value of the `Option` if it is `Some`, otherwise returns `onNone`
  *
@@ -327,12 +308,12 @@ export const toEither: {
  *
  * @example
  * import { some, none, getOrElse } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * assert.deepStrictEqual(pipe(some(1), getOrElse(() => 0)), 1)
  * assert.deepStrictEqual(pipe(none(), getOrElse(() => 0)), 0)
  *
- * @category error handling
+ * @category getters
  * @since 1.0.0
  */
 export const getOrElse: {
@@ -350,8 +331,8 @@ export const getOrElse: {
  * @param that - The `Option` to return if `self` is `None`.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from "@fp-ts/core/Option"
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * assert.deepStrictEqual(
  *   pipe(
@@ -415,9 +396,14 @@ export const orElseEither: {
 )
 
 /**
- * Given an `Iterable` collection of `Option`s, the function returns the first `Some` found in the collection.
+ * Given an `Iterable` collection of `Option`s, returns the first `Some` found in the collection.
  *
  * @param collection - An iterable collection of `Option` to be searched.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(O.firstSomeOf([O.none(), O.some(1), O.some(2)]), O.some(1))
  *
  * @category error handling
  * @since 1.0.0
@@ -432,9 +418,31 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
   return out
 }
 
-// -------------------------------------------------------------------------------------
-// interop
-// -------------------------------------------------------------------------------------
+/**
+ * Flattens a collection of `Option`s into a single `Option` that contains a list of all the `Some` values.
+ * If there is a `None` value in the collection, it returns `None` as the result.
+ *
+ * @param collection - An iterable collection of `Option`s to flatten.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(O.productAll([O.some(1), O.some(2), O.some(3)]), O.some([1, 2, 3]))
+ * assert.deepStrictEqual(O.productAll([O.some(1), O.none(), O.some(3)]), O.none())
+ *
+ * @category sequencing
+ * @since 1.0.0
+ */
+export const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
+  const out: Array<A> = []
+  for (const o of collection) {
+    if (isNone(o)) {
+      return none()
+    }
+    out.push(o.value)
+  }
+  return some(out)
+}
 
 /**
  * Constructs a new `Option` from a nullable type. If the value is `null` or `undefined`, returns `None`, otherwise
@@ -443,13 +451,13 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
  * @param nullableValue - The nullable value to be converted to an `Option`.
  *
  * @example
- * import { none, some, fromNullable } from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  *
- * assert.deepStrictEqual(fromNullable(undefined), none())
- * assert.deepStrictEqual(fromNullable(null), none())
- * assert.deepStrictEqual(fromNullable(1), some(1))
+ * assert.deepStrictEqual(O.fromNullable(undefined), O.none())
+ * assert.deepStrictEqual(O.fromNullable(null), O.none())
+ * assert.deepStrictEqual(O.fromNullable(1), O.some(1))
  *
- * @category interop
+ * @category conversions
  * @since 1.0.0
  */
 export const fromNullable = <A>(
@@ -462,19 +470,19 @@ export const fromNullable = <A>(
  * This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.
  *
  * @example
- * import { liftNullable, none, some } from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  *
  * const parse = (s: string): number | undefined => {
  *   const n = parseFloat(s)
  *   return isNaN(n) ? undefined : n
  * }
  *
- * const parseOption = liftNullable(parse)
+ * const parseOption = O.liftNullable(parse)
  *
- * assert.deepStrictEqual(parseOption('1'), some(1))
- * assert.deepStrictEqual(parseOption('not a number'), none())
+ * assert.deepStrictEqual(parseOption('1'), O.some(1))
+ * assert.deepStrictEqual(parseOption('not a number'), O.none())
  *
- * @category interop
+ * @category conversions
  * @since 1.0.0
  */
 export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
@@ -487,13 +495,12 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B>(
  * @param self - The `Option` to extract the value from.
  *
  * @example
- * import { some, none, getOrNull } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from "@fp-ts/core/Option"
  *
- * assert.deepStrictEqual(pipe(some(1), getOrNull), 1)
- * assert.deepStrictEqual(pipe(none(), getOrNull), null)
+ * assert.deepStrictEqual(O.getOrNull(O.some(1)), 1)
+ * assert.deepStrictEqual(O.getOrNull(O.none()), null)
  *
- * @category interop
+ * @category getters
  * @since 1.0.0
  */
 export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
@@ -504,13 +511,12 @@ export const getOrNull: <A>(self: Option<A>) => A | null = getOrElse(constNull)
  * @param self - The `Option` to extract the value from.
  *
  * @example
- * import { some, none, getOrUndefined } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from "@fp-ts/core/Option"
  *
- * assert.deepStrictEqual(pipe(some(1), getOrUndefined), 1)
- * assert.deepStrictEqual(pipe(none(), getOrUndefined), undefined)
+ * assert.deepStrictEqual(O.getOrUndefined(O.some(1)), 1)
+ * assert.deepStrictEqual(O.getOrUndefined(O.none()), undefined)
  *
- * @category interop
+ * @category getters
  * @since 1.0.0
  */
 export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(constUndefined)
@@ -524,14 +530,14 @@ export const getOrUndefined: <A>(self: Option<A>) => A | undefined = getOrElse(c
  * @param f - the function that can throw exceptions.
  *
  * @example
- * import { liftThrowable, some, none } from "@fp-ts/core/Option";
+ * import * as O from "@fp-ts/core/Option"
  *
- * const parse = liftThrowable(JSON.parse)
+ * const parse = O.liftThrowable(JSON.parse)
  *
- * assert.deepStrictEqual(parse("1"), some(1))
- * assert.deepStrictEqual(parse(""), none())
+ * assert.deepStrictEqual(parse("1"), O.some(1))
+ * assert.deepStrictEqual(parse(""), O.none())
  *
- * @category interop
+ * @category conversions
  * @since 1.0.0
  */
 export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
@@ -554,7 +560,7 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
  * @param onNone - A function that will be called if the `Option` is `None`. It returns the error to be thrown.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  *
  * assert.deepStrictEqual(
  *   O.getOrThrowWith(O.some(1), () => new Error('Unexpected None')),
@@ -562,7 +568,7 @@ export const liftThrowable = <A extends ReadonlyArray<unknown>, B>(
  * )
  * assert.throws(() => O.getOrThrowWith(O.none(), () => new Error('Unexpected None')))
  *
- * @category interop
+ * @category conversions
  * @since 1.0.0
  */
 export const getOrThrowWith: {
@@ -584,21 +590,17 @@ export const getOrThrowWith: {
  * @throws `Error("getOrThrow called on a None")`
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  *
  * assert.deepStrictEqual(O.getOrThrow(O.some(1)), 1)
  * assert.throws(() => O.getOrThrow(O.none()))
  *
- * @category interop
+ * @category conversions
  * @since 1.0.0
  */
 export const getOrThrow: <A>(self: Option<A>) => A = getOrThrowWith(() =>
   new Error("getOrThrow called on a None")
 )
-
-// -------------------------------------------------------------------------------------
-// mapping
-// -------------------------------------------------------------------------------------
 
 /**
  * Maps the `Some` side of an `Option` value to a new `Option` value.
@@ -606,7 +608,7 @@ export const getOrThrow: <A>(self: Option<A>) => A = getOrThrowWith(() =>
  * @param self - An `Option` to map
  * @param f - The function to map over the value of the `Option`
  *
- * @category mapping
+ * @category transforming
  * @since 1.0.0
  */
 export const map: {
@@ -620,7 +622,6 @@ export const map: {
 const imap = covariant.imap<OptionTypeLambda>(map)
 
 /**
- * @category mapping
  * @since 1.0.0
  */
 export const Covariant: covariant.Covariant<OptionTypeLambda> = {
@@ -629,7 +630,6 @@ export const Covariant: covariant.Covariant<OptionTypeLambda> = {
 }
 
 /**
- * @category mapping
  * @since 1.0.0
  */
 export const Invariant: invariant.Invariant<OptionTypeLambda> = {
@@ -637,13 +637,13 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
 }
 
 /**
- * @category mapping
+ * @category transforming
  * @since 1.0.0
  */
 export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
 
 /**
- * @category mapping
+ * @category transforming
  * @since 1.0.0
  */
 export const flap: {
@@ -654,7 +654,7 @@ export const flap: {
 /**
  * Maps the `Some` value of this `Option` to the specified constant value.
  *
- * @category mapping
+ * @category transforming
  * @since 1.0.0
  */
 export const as: {
@@ -667,7 +667,7 @@ export const as: {
  *
  * This is useful when the value of the `Option` is not needed, but the presence or absence of the value is important.
  *
- * @category mapping
+ * @category transforming
  * @since 1.0.0
  */
 export const asUnit: <_>(self: Option<_>) => Option<void> = covariant.asUnit(Covariant)
@@ -693,14 +693,10 @@ export const Pointed: pointed.Pointed<OptionTypeLambda> = {
   map
 }
 
-// -------------------------------------------------------------------------------------
-// sequencing
-// -------------------------------------------------------------------------------------
-
 /**
  * Applies a function to the value of an `Option` and flattens the result, if the input is `Some`.
  *
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const flatMap: {
@@ -719,16 +715,16 @@ export const flatMap: {
  * @param f - The function to be applied to the contents of the `Option`.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
- * import { pipe } from '@fp-ts/core/Function'
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
  *
  * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
  * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
  *
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const flatMapEither: {
@@ -744,7 +740,7 @@ export const flatMapEither: {
  *
  * @example
  * import { some, none, flatMapNullable } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * interface Employee {
  *   company?: {
@@ -776,7 +772,7 @@ export const flatMapEither: {
  *   none()
  * )
  *
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const flatMapNullable: {
@@ -789,7 +785,6 @@ export const flatMapNullable: {
 )
 
 /**
- * @category sequencing
  * @since 1.0.0
  */
 export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
@@ -797,13 +792,13 @@ export const FlatMap: flatMap_.FlatMap<OptionTypeLambda> = {
 }
 
 /**
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const flatten: <A>(self: Option<Option<A>>) => Option<A> = flatMap_.flatten(FlatMap)
 
 /**
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const andThen: {
@@ -812,7 +807,7 @@ export const andThen: {
 } = flatMap_.andThen(FlatMap)
 
 /**
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const composeKleisliArrow: {
@@ -821,7 +816,6 @@ export const composeKleisliArrow: {
 } = flatMap_.composeKleisliArrow(FlatMap)
 
 /**
- * @category sequencing
  * @since 1.0.0
  */
 export const Chainable: chainable.Chainable<OptionTypeLambda> = {
@@ -838,7 +832,7 @@ export const Chainable: chainable.Chainable<OptionTypeLambda> = {
  * @param that - The `Option` that will be ignored in the chain and discarded
  * @param self - The `Option` we care about
  *
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const andThenDiscard: {
@@ -855,7 +849,7 @@ export const andThenDiscard: {
  * @param f - Function to apply to the value of the `Option` if it is `Some`
  * @param self - The `Option` to apply the function to
  *
- * @category sequencing
+ * @category transforming
  * @since 1.0.0
  */
 export const tap: {
@@ -906,7 +900,6 @@ export const inspectNone: {
 })
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Monad: monad.Monad<OptionTypeLambda> = {
@@ -937,7 +930,6 @@ const productMany = <A>(
 }
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
@@ -956,19 +948,7 @@ export const appendElement: {
   <B>(that: Option<B>): <A extends ReadonlyArray<any>>(self: Option<A>) => Option<[...A, B]>
 } = semiProduct.appendElement(SemiProduct)
 
-const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
-  const out: Array<A> = []
-  for (const o of collection) {
-    if (isNone(o)) {
-      return none()
-    }
-    out.push(o.value)
-  }
-  return some(out)
-}
-
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Product: product_.Product<OptionTypeLambda> = {
@@ -980,25 +960,45 @@ export const Product: product_.Product<OptionTypeLambda> = {
 }
 
 /**
+ * Takes a tuple of `Option`s and returns an `Option` of a tuple of values.
+ *
+ * @param elements - the tuple of `Option`s to be sequenced.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(O.tuple(O.some(1), O.some("hello")), O.some([1, "hello"]))
+ * assert.deepStrictEqual(O.tuple(O.some(1), O.none()), O.none())
+ *
+ * @category sequencing
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Option<any>>>(
-  ...tuple: T
+  ...elements: T
 ) => Option<{ [I in keyof T]: [T[I]] extends [Option<infer A>] ? A : never }> = product_.tuple(
   Product
 )
 
 /**
+ * Takes a struct of `Option`s and returns an `Option` of a struct of values.
+ *
+ * @param fields - the struct of `Option`s to be sequenced.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.some("hello") }), O.some({ a: 1, b: "hello" }))
+ * assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.none() }), O.none())
+ *
+ * @category sequencing
  * @since 1.0.0
  */
 export const struct: <R extends Record<string, Option<any>>>(
-  r: R
-) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }> = product_.struct(
-  Product
-)
+  fields: R
+) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }> = product_
+  .struct(Product)
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> = {
@@ -1012,18 +1012,22 @@ export const SemiApplicative: semiApplicative.SemiApplicative<OptionTypeLambda> 
  * Monoid that models the combination of values that may be absent, elements that are `None` are ignored
  * while elements that are `Some` are combined using the provided `Semigroup`.
  *
+ * The `empty` value is `none()`.
+ *
+ * @param Semigroup - The `Semigroup` used to combine two values of type `A`.
+ *
  * @example
- * import { getOptionalMonoid, some, none } from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  * import * as N from '@fp-ts/core/Number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
- * const M = getOptionalMonoid(N.SemigroupSum)
- * assert.deepStrictEqual(M.combine(none(), none()), none())
- * assert.deepStrictEqual(M.combine(some(1), none()), some(1))
- * assert.deepStrictEqual(M.combine(none(), some(1)), some(1))
- * assert.deepStrictEqual(M.combine(some(1), some(2)), some(3))
+ * const M = O.getOptionalMonoid(N.SemigroupSum)
  *
- * @category instances
+ * assert.deepStrictEqual(M.combine(O.none(), O.none()), O.none())
+ * assert.deepStrictEqual(M.combine(O.some(1), O.none()), O.some(1))
+ * assert.deepStrictEqual(M.combine(O.none(), O.some(1)), O.some(1))
+ * assert.deepStrictEqual(M.combine(O.some(1), O.some(2)), O.some(3))
+ *
  * @since 1.0.0
  */
 export const getOptionalMonoid = <A>(
@@ -1035,10 +1039,6 @@ export const getOptionalMonoid = <A>(
     ),
     none()
   )
-
-// -------------------------------------------------------------------------------------
-// combining
-// -------------------------------------------------------------------------------------
 
 /**
  * Zips two `Option` values together using a provided function, returning a new `Option` of the result.
@@ -1078,7 +1078,6 @@ export const getFailureSemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>> =
   .getSemigroup(SemiApplicative)
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Applicative: applicative.Applicative<OptionTypeLambda> = {
@@ -1109,21 +1108,10 @@ export const getFailureMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>> = applicat
 const coproduct = <A, B>(self: Option<A>, that: Option<B>): Option<A | B> =>
   isSome(self) ? self : that
 
-const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> => {
-  let out = self
-  if (isSome(out)) {
-    return out
-  }
-  for (out of collection) {
-    if (isSome(out)) {
-      return out
-    }
-  }
-  return out
-}
+const coproductMany = <A>(self: Option<A>, collection: Iterable<Option<A>>): Option<A> =>
+  isSome(self) ? self : firstSomeOf(collection)
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
@@ -1138,11 +1126,11 @@ export const SemiCoproduct: semiCoproduct.SemiCoproduct<OptionTypeLambda> = {
  * @category combining
  * @since 1.0.0
  */
-export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduct
-  .getSemigroup(SemiCoproduct)
+export const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>> = semiCoproduct.getSemigroup(
+  SemiCoproduct
+)
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
@@ -1154,7 +1142,6 @@ export const Coproduct: coproduct_.Coproduct<OptionTypeLambda> = {
 }
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> = {
@@ -1165,7 +1152,6 @@ export const SemiAlternative: semiAlternative.SemiAlternative<OptionTypeLambda> 
 }
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Alternative: alternative.Alternative<OptionTypeLambda> = {
@@ -1177,10 +1163,6 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
   zero: none
 }
 
-// -------------------------------------------------------------------------------------
-// folding
-// -------------------------------------------------------------------------------------
-
 /**
  * Reduces an `Iterable` of `Option<A>` to a single value of type `B`, elements that are `None` are ignored.
  *
@@ -1190,7 +1172,7 @@ export const Alternative: alternative.Alternative<OptionTypeLambda> = {
  *
  * @example
  * import { some, none, reduceCompact } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * const iterable = [some(1), none(), some(2), none()]
  * assert.deepStrictEqual(pipe(iterable, reduceCompact(0, (b, a) => b + a)), 3)
@@ -1215,7 +1197,6 @@ export const reduceCompact: {
 )
 
 /**
- * @category folding
  * @since 1.0.0
  */
 export const Foldable: foldable.Foldable<OptionTypeLambda> = {
@@ -1233,19 +1214,15 @@ export const Foldable: foldable.Foldable<OptionTypeLambda> = {
  * @param self - The `Option` to convert to an array.
  *
  * @example
- * import { some, none, toArray } from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  *
- * assert.deepStrictEqual(toArray(some(1)), [1])
- * assert.deepStrictEqual(toArray(none()), [])
+ * assert.deepStrictEqual(O.toArray(O.some(1)), [1])
+ * assert.deepStrictEqual(O.toArray(O.none()), [])
  *
  * @category conversions
  * @since 1.0.0
  */
 export const toArray: <A>(self: Option<A>) => Array<A> = foldable.toArray(Foldable)
-
-// -------------------------------------------------------------------------------------
-// filtering
-// -------------------------------------------------------------------------------------
 
 /**
  * @category filtering
@@ -1286,7 +1263,6 @@ export const filterMap: {
 )
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Filterable: filterable.Filterable<OptionTypeLambda> = {
@@ -1312,12 +1288,25 @@ export const filter: {
   <B extends A, A = B>(predicate: (a: A) => boolean): (self: Option<B>) => Option<B>
 } = filterable.filter(Filterable)
 
-// -------------------------------------------------------------------------------------
-// traversing
-// -------------------------------------------------------------------------------------
-
 /**
- * @category traversing
+ * Applies an `Option` value to an effectful function that returns an `F` value.
+ *
+ * @param F - {@link applicative.Applicative} instance
+ * @param self - The `Option` value.
+ * @param f - An effectful function that returns an `F` value.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * const traverse = O.traverse(E.Applicative)
+ * const f = (n: number) => n >= 0 ? E.right(1) : E.left("negative")
+ *
+ * assert.deepStrictEqual(traverse(O.some(1), f), E.right(O.some(1)))
+ * assert.deepStrictEqual(traverse(O.some(-1), f), E.left("negative"))
+ * assert.deepStrictEqual(traverse(O.none(), f), E.right(O.none()))
+ *
+ * @category sequencing
  * @since 1.0.0
  */
 export const traverse = <F extends TypeLambda>(
@@ -1337,7 +1326,6 @@ export const traverse = <F extends TypeLambda>(
   )
 
 /**
- * @category instances
  * @since 1.0.0
  */
 export const Traversable: traversable.Traversable<OptionTypeLambda> = {
@@ -1345,7 +1333,22 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
 }
 
 /**
- * @category traversing
+ * Combines an `Option` of an `F`-structure to an `F`-structure of an `Option` with the same inner type.
+ *
+ * @param F - {@link applicative.Applicative} instance
+ * @param self - `Option` of Kind `F`
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * const sequence = O.sequence(E.Applicative)
+ *
+ * assert.deepStrictEqual(sequence(O.some(E.right(1))), E.right(O.some(1)))
+ * assert.deepStrictEqual(sequence(O.some(E.left("error"))), E.left("error"))
+ * assert.deepStrictEqual(sequence(O.none()), E.right(O.none()))
+ *
+ * @category sequencing
  * @since 1.0.0
  */
 export const sequence: <F extends TypeLambda>(
@@ -1354,7 +1357,7 @@ export const sequence: <F extends TypeLambda>(
   .sequence(Traversable)
 
 /**
- * @category traversing
+ * @category sequencing
  * @since 1.0.0
  */
 export const traverseTap: <F extends TypeLambda>(
@@ -1368,10 +1371,6 @@ export const traverseTap: <F extends TypeLambda>(
     f: (a: A) => Kind<F, R, O, E, B>
   ): (self: Option<A>) => Kind<F, R, O, E, Option<A>>
 } = traversable.traverseTap(Traversable)
-
-// -------------------------------------------------------------------------------------
-// equivalence
-// -------------------------------------------------------------------------------------
 
 /**
  * @example
@@ -1393,10 +1392,6 @@ export const getEquivalence = <A>(E: Equivalence<A>): Equivalence<Option<A>> =>
     x === y || (isNone(x) ? isNone(y) : isNone(y) ? false : E(x.value, y.value))
   )
 
-// -------------------------------------------------------------------------------------
-// sorting
-// -------------------------------------------------------------------------------------
-
 /**
  * The `Order` instance allows `Option` values to be compared with
  * `compare`, whenever there is an `Order` instance for
@@ -1407,7 +1402,7 @@ export const getEquivalence = <A>(E: Equivalence<A>): Equivalence<Option<A>> =>
  * @example
  * import { none, some, getOrder } from '@fp-ts/core/Option'
  * import * as N from '@fp-ts/core/Number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * const O = getOrder(N.Order)
  * assert.deepStrictEqual(O.compare(none(), none()), 0)
@@ -1423,10 +1418,6 @@ export const getOrder = <A>(O: Order<A>): Order<Option<A>> =>
   order.make((self, that) =>
     isSome(self) ? (isSome(that) ? O.compare(self.value, that.value) : 1) : -1
   )
-
-// -------------------------------------------------------------------------------------
-// lifting
-// -------------------------------------------------------------------------------------
 
 /**
  * Lifts a binary function into `Option`.
@@ -1448,7 +1439,7 @@ export const lift2: <A, B, C>(f: (a: A, b: B) => C) => {
  * @param predicate - A `Predicate` function that takes in a value of type `A` and returns a boolean.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
+ * import * as O from "@fp-ts/core/Option"
  *
  * const getOption = O.liftPredicate((n: number) => n >= 0)
  *
@@ -1469,8 +1460,8 @@ export const liftPredicate: {
  * @param f - Any variadic function that returns an `Either`.
  *
  * @example
- * import * as O from '@fp-ts/core/Option'
- * import * as E from '@fp-ts/core/Either'
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
  *
  * const parse = (s: string) =>
  *   isNaN(+s) ? E.left(`Error: ${s} is not a number`) : E.right(+s)
@@ -1487,10 +1478,6 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
   f: (...a: A) => Either<E, B>
 ) => (...a: A): Option<B> => fromEither(f(...a))
 
-// -------------------------------------------------------------------------------------
-// utils
-// -------------------------------------------------------------------------------------
-
 /**
  * Returns a function that checks if an `Option` contains a given value using a provided `Equivalence` instance.
  *
@@ -1501,7 +1488,7 @@ export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
  * @example
  * import { some, none, contains } from '@fp-ts/core/Option'
  * import { Equivalence } from '@fp-ts/core/Number'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * assert.deepStrictEqual(pipe(some(2), contains(Equivalence)(2)), true)
  * assert.deepStrictEqual(pipe(some(1), contains(Equivalence)(2)), false)
@@ -1522,7 +1509,7 @@ export const contains = <A>(isEquivalent: (self: A, that: A) => boolean): {
  *
  * @example
  * import { some, none, exists } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
  * const isEven = (n: number) => n % 2 === 0
  *
