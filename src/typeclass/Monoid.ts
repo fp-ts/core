@@ -120,6 +120,26 @@ export const booleanAll: Monoid<boolean> = fromSemigroup(semigroup.booleanAll, t
 export const booleanAny: Monoid<boolean> = fromSemigroup(semigroup.booleanAny, false)
 
 /**
+ * `boolean` monoid under exclusive disjunction.
+ *
+ * The `empty` value is `false`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanXor: Monoid<boolean> = fromSemigroup(semigroup.booleanXor, false)
+
+/**
+ * `boolean` monoid under equivalence.
+ *
+ * The `empty` value is `true`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const booleanEqv: Monoid<boolean> = fromSemigroup(semigroup.booleanEqv, true)
+
+/**
  * This function creates and returns a new `Monoid` for a tuple of values based on the given `Monoid`s for each element in the tuple.
  * The returned `Monoid` combines two tuples of the same type by applying the corresponding `Monoid` passed as arguments to each element in the tuple.
  *
