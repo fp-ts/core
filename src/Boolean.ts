@@ -104,7 +104,7 @@ export const SemigroupAll: semigroup.Semigroup<boolean> = semigroup.booleanAll
 export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.booleanAny
 
 /**
- * `boolean` semigroup under disjunction.
+ * `boolean` semigroup under exclusive disjunction.
  *
  * @example
  * import { SemigroupXor } from '@fp-ts/core/Boolean'
@@ -118,6 +118,21 @@ export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.booleanAny
  * @since 1.0.0
  */
 export const SemigroupXor: semigroup.Semigroup<boolean> = semigroup.booleanXor
+/**
+ * `boolean` semigroup under equivalence.
+ *
+ * @example
+ * import { SemigroupEqv } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(SemigroupEqv.combine(true, true), true)
+ * assert.deepStrictEqual(SemigroupEqv.combine(true, false), false)
+ * assert.deepStrictEqual(SemigroupEqv.combine(false, true), false)
+ * assert.deepStrictEqual(SemigroupEqv.combine(false, false), true)
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemigroupEqv: semigroup.Semigroup<boolean> = semigroup.booleanEqv
 
 /**
  * `boolean` monoid under conjunction.

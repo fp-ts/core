@@ -9,8 +9,16 @@ describe.concurrent("Boolean", () => {
     expect(Boolean.SemigroupAny).exist
     expect(Boolean.MonoidAny).exist
     expect(Boolean.SemigroupXor).exist
+    expect(Boolean.MonoidXor).exist
+    expect(Boolean.SemigroupEqv).exist
+    expect(Boolean.MonoidEqv).exist
     expect(Boolean.all).exist
     expect(Boolean.any).exist
+    expect(Boolean.xor).exist
+    expect(Boolean.eqv).exist
+    expect(Boolean.nand).exist
+    expect(Boolean.nor).exist
+    expect(Boolean.implies).exist
   })
 
   it("isBoolean", () => {

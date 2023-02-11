@@ -36,6 +36,7 @@ Added in v1.0.0
   - [Order](#order)
   - [SemigroupAll](#semigroupall)
   - [SemigroupAny](#semigroupany)
+  - [SemigroupEqv](#semigroupeqv)
   - [SemigroupXor](#semigroupxor)
 - [pattern matching](#pattern-matching)
   - [match](#match)
@@ -274,9 +275,32 @@ assert.deepStrictEqual(SemigroupAny.combine(false, false), false)
 
 Added in v1.0.0
 
+## SemigroupEqv
+
+`boolean` semigroup under equivalence.
+
+**Signature**
+
+```ts
+export declare const SemigroupEqv: semigroup.Semigroup<boolean>
+```
+
+**Example**
+
+```ts
+import { SemigroupEqv } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(SemigroupEqv.combine(true, true), true)
+assert.deepStrictEqual(SemigroupEqv.combine(true, false), false)
+assert.deepStrictEqual(SemigroupEqv.combine(false, true), false)
+assert.deepStrictEqual(SemigroupEqv.combine(false, false), true)
+```
+
+Added in v1.0.0
+
 ## SemigroupXor
 
-`boolean` semigroup under disjunction.
+`boolean` semigroup under exclusive disjunction.
 
 **Signature**
 
