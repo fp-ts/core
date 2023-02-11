@@ -525,7 +525,22 @@ export const appendElement: {
   ): <E1, A extends ReadonlyArray<any>>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
 } = semiProduct.appendElement(SemiProduct)
 
-const productAll = <E, A>(
+/**
+ * Flattens a collection of `Either`s into a single `Either` that contains a list of all the `Right` values.
+ * If there is a `Left` value in the collection, it returns `Left` as the result.
+ *
+ * @param collection - An iterable collection of `Either`s to flatten.
+ *
+ * @example
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * assert.deepStrictEqual(E.productAll([E.right(1), E.right(2), E.right(3)]), E.right([1, 2, 3]))
+ * assert.deepStrictEqual(E.productAll([E.right(1), E.left("error"), E.right(3)]), E.left("error"))
+ *
+ * @category sequencing
+ * @since 1.0.0
+ */
+export const productAll = <E, A>(
   collection: Iterable<Either<E, A>>
 ): Either<E, Array<A>> => {
   const out: Array<A> = []
@@ -554,7 +569,7 @@ export const Product: product_.Product<EitherTypeLambda> = {
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Either<any, any>>>(
-  ...tuple: T
+  ...elements: T
 ) => Either<
   [T[number]] extends [Either<infer E, any>] ? E : never,
   { [I in keyof T]: [T[I]] extends [Either<any, infer A>] ? A : never }
@@ -564,7 +579,7 @@ export const tuple: <T extends ReadonlyArray<Either<any, any>>>(
  * @since 1.0.0
  */
 export const struct: <R extends Record<string, Either<any, any>>>(
-  r: R
+  fields: R
 ) => Either<
   [R[keyof R]] extends [Either<infer E, any>] ? E : never,
   { [K in keyof R]: [R[K]] extends [Either<any, infer A>] ? A : never }

@@ -578,10 +578,11 @@ This is because the `zipWith` function only combines the values if both `Either`
 
 **Cheat sheet** (combining)
 
-| Name      | Given                                           | To                    |
-| --------- | ----------------------------------------------- | --------------------- |
-| `zipWith` | `Either<E1, A>`, `Either<E2, B>`, `(A, B) => C` | `Either<E1 \| E2, C>` |
-| `ap`      | `Either<E1, (a: A) => B>`, `Either<E2, A>`      | `Either<E1 \| E2, B>` |
+| Name         | Given                                           | To                    |
+| ------------ | ----------------------------------------------- | --------------------- |
+| `zipWith`    | `Either<E1, A>`, `Either<E2, B>`, `(A, B) => C` | `Either<E1 \| E2, C>` |
+| `productAll` | `Iterable<Either<E, A>>`                        | `Either<E, A[]>`      |
+| `ap`         | `Either<E1, (a: A) => B>`, `Either<E2, A>`      | `Either<E1 \| E2, B>` |
 
 For convenience, a series of algebraic operations such as sums and products are exported.
 

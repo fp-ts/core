@@ -1,5 +1,5 @@
 ---
-"@fp-ts/core": minor
+"@fp-ts/core": patch
 ---
 
 add missing boolean semigroups, monoids and combinators

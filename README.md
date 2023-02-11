@@ -76,9 +76,8 @@ npm install @fp-ts/core
 - Guides (WIP)
   - [Typeclass overview](./guides/typeclass.md)
   - [Standard TypeScript types](./guides/ts-types.md)
-  - Functional Error handling
-    - [The `Option` data type](./guides/Option.md)
-    - [The `Either` data type](./guides/Either.md)
+  - Data types
+    - [`Option`](./guides/Option.md)
 - [API Reference](https://fp-ts.github.io/core/)
 
 # License

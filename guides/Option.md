@@ -1,31 +1,22 @@
 # The `Option` data type
 
-The `Option` data type is a powerful and flexible tool in functional programming, it can be found in the `@fp-ts/core/Option module`. It is used to model optional values in TypeScript, by providing a container that can hold either a value of a specific type (`Some`) or no value at all (`None`). This helps in handling the presence or absence of a value in a safe and predictable way, making it easy to chain computations and handle errors in a functional way.
+The `Option` data type represents an optional value: every `Option` is either `Some` and contains a value, or `None`, and does not. `Option` types are very common in functional programming, as they have a number of uses:
 
-There are two possible interpretations of the `Option` data type:
-
-1. as a representation of an **optional value** of type `A`
-2. as a representation of the result of a **computation that can fail** or return a value of type `A`
-
-**Optional value**
-
-In the first of these two interpretations, the `None` union member represents the absence of the value, while the `Some<A>` union member represents the presence of the value of type `A`
-
-**Computation that can fail**
-
-In the second of these two interpretations, the `None` union member represents the result of a computation that has failed and therefore was not able to return any value, while the `Some<A>` union member represents the result of a computation that has succeeded and was able to return a value of type `A`.
+- Initial values
+- Return values for functions that are not defined over their entire input range (partial functions)
+- Return value for otherwise reporting simple errors, where `None` is returned on error
+- Optional struct fields
+- Optional function arguments
 
 # Definition
 
-The `Option` data type is the union of two members: `None` and `Some`. The way chosen by the `@fp-ts/core` library to model this union in TypeScript is to use a feature of the language called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminating-unions).
+The `Option` data type is a union of two members: `None` and `Some`. The `@fp-ts/core` library models this union in TypeScript using a feature called [Discriminating Unions](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html#discriminatory-unions).
 
-> A common technique for working with unions is to have a single field which uses literal types which you can use to let TypeScript narrow down the possible current type
+A common approach for working with unions is to have a single field that uses literal types, which helps TypeScript narrow down the possible current type. In `@fp-ts/core`, this single field is named "\_tag" (but any name can be used when defining your own unions).
 
-By convention in `@fp-ts/core`, this single field which uses literal types is named "\_tag" (but you can use any name when defining your unions).
+The `Option` data type is a "polymorphic" data type, which makes use of a feature of TypeScript named ["Generics"](https://www.typescriptlang.org/docs/handbook/2/generics.html). This means that the `Option` data type is a container that can hold any type.
 
-Furthermore, `Option` is a "polymorphic" data type, that is, it makes use of a feature of TypeScript named ["Generics"](https://www.typescriptlang.org/docs/handbook/2/generics.html), meaning that the `Option` data type is a container that can hold any type.
-
-Here's the complete definition of the `Option` type:
+Here is the complete definition of the `Option` data type:
 
 ```ts
 // Represents the absence of a value
@@ -36,7 +27,7 @@ export type None = {
 
 // Represents the presence of a value
 export type Some<A> = {
-  // Discriminating field used to identify the variant
+  // Discriminatory field used to identify the variant
   readonly _tag: "Some";
   // The actual value
   readonly value: A;
@@ -46,33 +37,34 @@ export type Some<A> = {
 export type Option<A> = None | Some<A>;
 ```
 
-The `Option` type is defined as a union of two other types, `None` and `Some`, that represent the two possible states of the `Option`: having a value or not.
-
-The type parameter `A` is used to specify the type of the value that the `Option` holds.
-
+The type parameter `A` is used to specify the type of the `value` that the `Option` holds.
 The `_tag` field is used to distinguish between the two variants, `None` and `Some`.
 
 # Using `Option`
 
-To create an instance of `Option`, you can use the `some` and `none` constructors, which construct a new `Option` holding a `Some` or `None` value respectively:
+The `Option` data type can be used to handle the presence or absence of a value in a safe and predictable manner. The `Option` data type has two constructors `some` and `none` that can be used to create a new instance of `Option` holding either a `Some` value or a `None` value, respectively.
+
+## Constructing a `Some` value
+
+The `some` constructor takes a value of type `A` and returns an instance of `Option<A>` that holds that value:
 
 ```ts
-import { none, some } from "@fp-ts/core/Option";
+import { some } from "@fp-ts/core/Option";
 
-const success: Option<number> = some(1);
-const failure: Option<never> = none();
+const value: Option<number> = some(1); // an Option holding the number 1
 ```
 
-Let's summarize the two cases in a table:
+## Constructing a `None` value
 
-**Cheat sheet** (constructors)
+The `none` constructor returns an instance of `Option<never`> representing the absence of a value:
 
-| Name   | Given | To              |
-| ------ | ----- | --------------- |
-| `some` | `A`   | `Option<A>`     |
-| `none` |       | `Option<never>` |
+```ts
+import { none } from "@fp-ts/core/Option";
 
-It is important to note that the `none` constructor by default returns a value of type `Option<never>`, this makes it possible to assign this value to any `Option<A>`, whatever the type `A` is.
+const empty: Option<never> = none(); // an Option holding no value
+```
+
+By default, `none` returns an instance of `Option<never>`, which can be assigned to any `Option<A>` regardless of the type `A`:
 
 ```ts
 const optionNumber: Option<number> = none();
@@ -80,7 +72,7 @@ const optionString: Option<string> = none();
 const optionBoolean: Option<boolean> = none();
 ```
 
-Alternatively, if it is useful to you, you can specify the desired type at the call site, explicitly indicating which type `A` you are interested in. This way, you don't need the type annotations:
+However, if you prefer, you can specify the desired type at the call site by explicitly indicating the type `A` you're interested in. In this case, you won't need to provide type annotations:
 
 ```ts
 const optionNumber = none<number>();
@@ -88,21 +80,159 @@ const optionString = none<string>();
 const optionBoolean = none<boolean>();
 ```
 
-In this way you don't need to specify the type of the variables `optionNumber`, `optionString`, `optionBoolean` because TypeScript infers the type from the call site.
+Here's a quick reference guide for the two constructors:
+
+**Cheat sheet** (constructors)
+
+| **Function** | **Given input** | **Resulting Output** |
+| ------------ | --------------- | -------------------- |
+| `some`       | `A`             | `Option<A>`          |
+| `none`       |                 | `Option<never>`      |
+
+With these two constructors, you can construct an `Option` holding either a `Some` value or a `None` value, depending on your needs.
 
 # Conversions
 
+The following table provides a quick reference for the various conversion functions available in this module:
+
 **Cheat sheet** (conversions)
 
-| Name           | Given                             | To                 | Note                  |
-| -------------- | --------------------------------- | ------------------ | --------------------- |
-| `fromEither`   | `Either<E, A>`                    | `Option<A>`        |                       |
-| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`     |                       |
-| `getRight`     | `Either<E, A>`                    | `Option<A>`        | alias of `fromEither` |
-| `getLeft`      | `Either<E, A>`                    | `Option<E>`        |                       |
-| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>` |                       |
-| `fromIterable` | `Iterable<A>`                     | `Option<A>`        |                       |
-| `toArray`      | `Option<A>`                       | `Array<A>`         |                       |
+| **Function**   | **Given input**                   | **Resulting Output** |
+| -------------- | --------------------------------- | -------------------- | --------------------- |
+| `fromEither`   | `Either<E, A>`                    | `Option<A>`          |                       |
+| `toEither`     | `Option<A>`, `onNone: LazyArg<E>` | `Either<E, A>`       |                       |
+| `getRight`     | `Either<E, A>`                    | `Option<A>`          | alias of `fromEither` |
+| `getLeft`      | `Either<E, A>`                    | `Option<E>`          |                       |
+| `toRefinement` | `A => Option<B>`                  | `Refinement<A, B>`   |                       |
+| `fromIterable` | `Iterable<A>`                     | `Option<A>`          |                       |
+| `toArray`      | `Option<A>`                       | `Array<A>`           |                       |
+
+## fromEither
+
+The `fromEither` function takes in an `Either<E, A>` value and returns an `Option<A>`. This is useful when you have a value that can either be of type `E` (an error) or `A` (the correct value), and you want to convert it to an `Option` discarding the error.
+
+Example:
+
+```ts
+import * as O from "@fp-ts/core/Option";
+import * as E from "@fp-ts/core/Either";
+
+console.log(O.fromEither(E.right(1))); // some(1)
+console.log(O.fromEither(E.left("error message"))); // none()
+```
+
+In this example, `fromEither` is used to convert the `Either` value `E.right(1)` to an `Option<number>`. The result is `some(1)`, which indicates that the input `Either` was of type `Right` and contained the value `1`.
+
+If the input `Either` was of type `Left` (`E.left("error message")` in this case), the result would be `none()`, which indicates that the input contained an error and no valid value was present.
+
+## toEither
+
+The `toEither` function takes in an `Option<A>` value and a `LazyArg<E>` value and returns an `Either<E, A>`.
+
+The `LazyArg<E>` value is a lazy (or "deferred") argument that is only executed if the input `Option` is `None`. If the input `Option` is `None`, the `toEither` function returns an `Either<E, A>` with the `Left` value being the result of the lazy argument. If the input `Option` is `Some`, the `toEither` function returns an `Either<E, A>` with the `Right` value being the value contained in the `Some` case of the `Option`.
+
+Here's an example of how to use toEither:
+
+```ts
+import { pipe } from "@fp-ts/core/Function";
+import * as O from "@fp-ts/core/Option";
+import * as E from "@fp-ts/core/Either";
+
+const onNone = () => "error";
+console.log(pipe(O.some(1), O.toEither(onNone))); // right(1)
+console.log(pipe(O.none(), O.toEither(onNone))); // left("error")
+```
+
+## getRight
+
+The `getRight` function is an alias for `fromEither`, and is used to convert an `Either<E, A>` value to an `Option<A>`. See the explanation and example for `fromEither` for more information.
+
+## getLeft
+
+The `getLeft` function is a utility function that is used to extract the `Left` value from an `Either<E, A>` value. The function takes in a single argument - an `Either<E, A>` value and returns an `Option<E>` value.
+
+```ts
+import * as O from "@fp-ts/core/Option";
+import * as E from "@fp-ts/core/Either";
+
+console.log(O.getLeft(E.right("ok"))); // none()
+console.log(O.getLeft(E.left("error"))); // some("error")
+```
+
+Note that the `Option<E>` value returned by the `getLeft` function will be `Some(value)` if the input `Either<E, A>` value is a `Left` value, and `None` if the input `Either<E, A>` value is a `Right` value.
+
+## toRefinement
+
+This function allows to convert a function `A => Option<B>` into a `(a: A) => a is B`, which can be used as a predefined type guard.
+A type guard function is used to check if a value is of a certain type.
+
+The `toRefinement` ensures that a type guard definition is type-safe.
+
+Here is an example of using `toRefinement` to create a type guard for positive numbers:
+
+```ts
+import * as O from "@fp-ts/core/Option";
+
+// This function checks if a given number is positive
+const parsePositive = (n: number): O.Option<number> =>
+  n > 0 ? O.some(n) : O.none();
+
+// convert the `parsePositive` function into a type guard
+const isPositive = O.toRefinement(parsePositive);
+
+console.log(isPositive(1)); // true
+console.log(isPositive(-1)); // false
+```
+
+In this example, `parsePositive` is a function that takes in a number and returns an `Option<number>`. If the number is positive, it returns `some(n)`, where `n` is the positive number. If the number is not positive, it returns `none()`.
+
+`toRefinement` takes in the `parsePositive` function and returns a type guard function `isPositive`. The `isPositive` function can be used to check if a value is a positive number and can be used in type refinement statements to provide type-safety for your code.
+
+## fromIterable
+
+The `fromIterable` function takes an iterable (something you can loop over, for example arrays, sets, maps, etc.) and returns an `Option` value.
+
+If the iterable is not empty (i.e., it has at least one item), `fromIterable` returns the first value of the iterable wrapped in a `Some` value. If the iterable is empty, `fromIterable` returns `None`.
+
+Here are two examples to demonstrate the usage of `fromIterable`:
+
+```ts
+import { fromIterable, some, none } from "@fp-ts/core/Option";
+
+console.log(fromIterable([1, 2, 3])); // some(1)
+```
+
+In this example, `fromIterable` is passed an array with three values. Since the array is not empty, `fromIterable` returns the first value, `1`, wrapped in a `Some` value.
+
+```ts
+console.log(fromIterable([])); // none()
+```
+
+In this example, `fromIterable` is passed an empty array. Since the array is empty, `fromIterable` returns `None`.
+
+## toArray
+
+The `toArray` function takes in an `Option` value and returns an array.
+
+If the input is a `Some` value, the value inside the `Some` is wrapped in an array and returned.
+
+If the input is a `None` value, an empty array is returned.
+
+Here are two examples of how `toArray` can be used:
+
+```ts
+import * as O from "@fp-ts/core/Option";
+
+console.log(O.toArray(O.some(1))); // [1]
+```
+
+In this example, `some(1)` is passed as the argument to `toArray`, which returns an array with the value `1`.
+
+```ts
+console.log(O.toArray(O.none())); // []
+```
+
+In this example, `none()` is passed as the argument to `toArray`, which returns an empty array.
 
 # Modeling optional properties with `Option`
 
@@ -114,9 +244,7 @@ interface User {
   username: string;
   email: Option<string>;
 }
-```
 
-```ts
 import { some, none } from "@fp-ts/core/Option";
 
 // case with email
@@ -154,8 +282,9 @@ const success: Option<number> = pipe(
 ```
 
 As you can see you can transform the result of your computation without unwrapping and wrapping the underlying value of `Option`.
+This allows for a safe and convenient way of transforming optional values.
 
-What is very convenient about `Option` is how the absence of value (i.e. a `None`) is handled. See the example below:
+What is also convenient about `Option` is how the absence of value (i.e. a `None`) is handled. See the example below:
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -168,28 +297,30 @@ const failure: Option<number> = pipe(
 );
 ```
 
-As you can see, even though we started with a `None` value, we can still operate on our `Option`. No errors are thrown or shown to the user, unless we do it intentionally. What happens is that when the `Option` is `None`, the mapping doesn't even happen and the `None` value representing the absence of value is returned unchanged.
+As you can see, even though we started with a `None` value, we can still operate on our `Option`. No errors are thrown or shown to the user, unless we do it intentionally. When the `Option` is `None, the mapping doesn't even occur, and the `None` value representing the absence of value is returned unchanged.
 
 # Handling failing computations
 
-Let's see how to use the `Option` data type to model a computation that can fail, such as a function that can throw an exception based on certain conditions. Let's take the case of the following function:
+In software development, there are times when a function can "fail" to produce a result, either because of invalid inputs, lack of data, or other reasons. The `Option` data type helps us to handle these cases in a clean and functional way.
+
+Here's an example of a function `parseNumber` that takes a `string` as input and returns either a `number` or `null` depending on the input:
 
 ```ts
-function parseNumber(s: string): number {
+function parseNumber(s: string): number | null {
   const n = parseFloat(s);
   if (isNaN(n)) {
-    throw new Error();
+    return null;
   }
   return n;
 }
 ```
 
-An alternative to throwing an exception is to always return a value, but this value will be of type `Option<number>` instead of `number`, with the following interpretation:
+A better way to handle these types of computations is to use the `Option` data type. This data type offers a cleaner way to model the "success" or "failure" of a computation. With `Option`, we can eliminate the need to return a `null` value. Instead, we will always return a value, but this value will be of type `Option<number>`.
 
-- if `parseNumber` returns a `None` value, it means that the computation failed
-- if the result is instead a `Some<number>` value, it means that the computation succeeded and the computed value is wrapped inside the `Some`
+- if `parseNumber` returns a `None` value, it means that the computation "failed"
+- if the result is a `Some<number>` value, it means that the computation "succeeded" and the computed value is wrapped inside the `Some`
 
-Let's see how we can rewrite the `parseNumber` function without throwing exceptions and using the `Option` data type instead:
+Here's how the `parseNumber` function would look using the `Option` data type:
 
 ```ts
 import { Option, none, some } from "@fp-ts/core/Option";
@@ -203,7 +334,7 @@ console.log(parseNumber("2")); // some(2)
 console.log(parseNumber("Not a number")); // none()
 ```
 
-What happens if we add a call to the `parseNumber` function to a pipeline that already involves an `Option`?
+Now, let's say we have a pipeline of computations that already involves the `Option` data type and we want to add a call to the `parseNumber` function. We might run into an issue with the following code:
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -216,9 +347,7 @@ const result = pipe(
 );
 ```
 
-There's something wrong, we received an error from the type checker, what happened?
-
-The problem is that in the second `map` the parameter `n` is of type `Option<number>` and not `number`.
+The code above generates a type-checker error. This happens because the second `map` function expects the input `n` to be of type `number`, but `n` is of type `Option<number>`.
 
 ```ts
 const result = pipe(
@@ -228,7 +357,7 @@ const result = pipe(
 );
 ```
 
-Fortunately, the fix is simple, when adding a computation that returns an `Option` to our pipeline we should use the `flatMap` function instead of the `map` function:
+To solve this issue, we need to use the `flatMap` function instead of the `map` function when adding a computation that returns an `Option` to our pipeline:
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -245,14 +374,14 @@ Let's summarize the two cases in a table:
 
 **Cheat sheet** (sequencing)
 
-| Name      | Given                         | To          |
-| --------- | ----------------------------- | ----------- |
-| `map`     | `Option<A>`, `A => B`         | `Option<B>` |
-| `flatMap` | `Option<A>`, `A => Option<B>` | `Option<B>` |
+| **Function** | **Given input**               | **Resulting Output** |
+| ------------ | ----------------------------- | -------------------- |
+| `map`        | `Option<A>`, `A => B`         | `Option<B>`          |
+| `flatMap`    | `Option<A>`, `A => Option<B>` | `Option<B>`          |
 
-The `flatMap` function offers the same convenience as the `map` function, which only continues with the computations contained in the pipeline if a `None` value is **not** encountered:
+The `flatMap` function works similarly to the `map` function, but with the added feature of only continuing with the computations if a `None` value is not encountered. Let's look at some code examples to understand how these functions work in practice.
 
-**Happy path, starting with a valid input**
+**Example 1: Successful Path with Valid Input**
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -266,7 +395,9 @@ const success: Option<number> = pipe(
 ); // some(1)
 ```
 
-**Error path, starting with an invalid input**
+In this example, the `pipe` function is used to chain together a series of computations, starting with a string value of `"2"`. This value is first passed to the `flatMap` function which applies the `parseNumber` function to parse the input string to a number. If the parsing is successful, the resulting number is then passed to the `map` function which doubles it. Finally, the resulting value is passed to another `map` function which subtracts `3` from it. The final output of the pipeline is the `Option` value of `some(1)`.
+
+**Example 2: Error Path with Invalid Input**
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -280,7 +411,9 @@ const failure: Option<number> = pipe(
 ); // none()
 ```
 
-**Error path, starting with None**
+In this example, the input to the pipeline is the string value of `"Not a number"`. When this value is passed to the `flatMap` function which applies the `parseNumber` function, it will return `None` as the string cannot be parsed to a number. This means that the following `map `functions will not be executed and the final output of the pipeline will be `None`.
+
+**Example 3: Error Path Starting with None**
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -294,53 +427,56 @@ const noneStart: Option<number> = pipe(
 ); // none()
 ```
 
-When using this approach, the **desired outcome** is always in clear view while defining your pipeline. This allows you to focus on the expected result, while leaving it to `Option` to handle any potential errors that may arise seamlessly and transparently.
+In this example, we start the pipeline with the `None` value, which represents an absent or empty value. This means that the `flatMap` step will not be executed and any subsequent steps in the pipeline will not be executed either.
 
-You can focus on the successful scenario and let `Option` handle the tedious task of managing potential errors at every step of the pipeline, without the need for explicit handling.
+The advantage of using this approach is that the desired outcome is always in clear view while defining your pipeline. This allows you to focus on the expected result, while leaving it to the `Option` type to handle any potential errors that may arise seamlessly and transparently.
+
+You can concentrate on the successful scenario and let `Option` handle the management of potential errors at every step of the pipeline, without the need for explicit error handling.
 
 # Debugging
 
-At any time, it is possible to inspect what is happening in your pipeline using two utility functions:
+Debugging your code can be difficult, especially when you have multiple transformations happening in a pipeline. The `Option` module provides two utility functions, `inspectSome` and `inspectNone`, that can help you inspect what is happening in your code and diagnose issues.
 
-**Cheat sheet** (debugging)
+The `inspectSome` function returns the original `Option<A>` value, but if it is a `Some<A>`, the provided callback function is called with the value wrapped inside the `Some`.
 
-| Name          | Given                     | To          | Note                                 |
-| ------------- | ------------------------- | ----------- | ------------------------------------ |
-| `inspectSome` | `Option<A>`, `A => void`  | `Option<A>` | callback called if it is a `Some<A>` |
-| `inspectNone` | `Option<A>`, `() => void` | `Option<A>` | callback called if it is a `None`    |
+The `inspectNone` function returns the original `Option<A>` value, but if it is a `None`, the provided callback function is called without any arguments.
 
-Let's see an example where both are in action:
+Here is an example of how you can use `inspectSome` and `inspectNone` to debug a pipeline:
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
-import {
-  Option,
-  some,
-  inspectSome,
-  flatMap,
-  inspectNone,
-  map,
-} from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-const failure: Option<number> = pipe(
-  some("Not a number"),
-  inspectSome(console.log),
-  flatMap((s) => parseNumber(s)),
-  inspectNone(() => console.error("none")),
-  map((x) => x2),
-  map((x) => x - 3)
+const failure: O.Option<number> = pipe(
+  O.some("Not a number"), // start with a Some containing the string "Not a number"
+  O.inspectSome(console.log), // log the value if it is a Some
+  O.flatMap((s) => parseNumber(s)), // attempt to parse the string as a number
+  O.inspectNone(() => console.error("none")), // log an error if the parseNumber function returns None
+  O.map((x) => x * 2), // double the number if it is a Some
+  O.map((x) => x - 3) // subtract 3 from the number if it is a Some
 );
-// "Not a number"
-// "none"
+// logs "Not a number" to the console
+// logs "none" to the console (because the parseNumber function returns None)
 ```
 
-Please note that these two functions should only be used for debugging purposes and it is not recommended to use them for performing side effects or encoding business logic.
+It is important to note that `inspectSome` and `inspectNone` should only be used for debugging purposes, and it is not recommended to use them for performing side effects or encoding business logic.
 
-# Pattern matching and error handling
+**Cheat sheet** (debugging)
+
+| **Function**  | **Given input**           | **Resulting Output** | **Note**                             |
+| ------------- | ------------------------- | -------------------- | ------------------------------------ |
+| `inspectSome` | `Option<A>`, `A => void`  | `Option<A>`          | callback called if it is a `Some<A>` |
+| `inspectNone` | `Option<A>`, `() => void` | `Option<A>`          | callback called if it is a `None`    |
+
+# Pattern matching
 
 We have seen how easy and convenient it is to build pipelines involving the `Option` data type, leaving it to handle any errors that may occur at any step. However, at some point, you will be interested in manually handling the error to understand the overall result obtained from the pipeline and decide what to do accordingly.
 
-The fastest way to get the value wrapped in an `Option` is to call the `getOrThrow` function, but be aware that, as the name suggests, an exception will be thrown in case the `Option` you are querying is a `None`:
+## Getting the value from an `Option`
+
+To extract the value from an `Option`, you can use the `getOrThrow` function, which retrieves the value wrapped in an `Option`, or throws an error if the `Option` you are querying is a `None`.
+
+Here's an example of how you can use `getOrThrow`:
 
 ```ts
 import { getOrThrow, some, none } from "@fp-ts/core/Option";
@@ -349,25 +485,25 @@ console.log(getOrThrow(some(10)); // 10
 console.log(getOrThrow(none()); // throws new Error("getOrThrow called on a None")
 ```
 
-A more safe alternative is using the `isSome` and `isNone` guards:
+However, using `getOrThrow` can lead to exceptions being thrown in your code, which can lead to unexpected behavior and crashes. To avoid this, you can use the `isSome` and `isNone` guards:
 
 ```ts
 import { some, isSome } from "@fp-ts/core/Option";
 
-const success = some(1);
+const option = some(1);
 
-// Use the `isSome` function to check if the `success` is an instance of `Some`
-if (isSome(success)) {
-  console.log(`Option has a value: ${success.value}`);
+// Use the `isSome` function to check if the `option` is an instance of `Some`
+if (isSome(option)) {
+  console.log(`Option has a value: ${option.value}`);
 } else {
   console.log(`Option is empty.`);
 }
-// Option has a value: 1
+// Output: Option has a value: 1
 ```
 
-Another alternative is [pattern matching](https://github.com/gvergnaud/ts-pattern#what-is-pattern-matching) on the `Option`.
+## Pattern matching with `Option`
 
-The `match` function allows you to match on the `None` and `Some` cases of an `Option` value and provide different actions for each.
+An alternative way to handle the cases of an `Option` being `None` or `Some` is by using the `match` function. The `match` function allows you to provide different actions for each case of the `Option` value.
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
@@ -386,84 +522,111 @@ const output = match(
   (value) => `Option has a value: ${value}`
 );
 
-console.log(output); // Option has a value: 1
+console.log(output); // Output: Option has a value: 1
 ```
 
-One reason to use `match` instead of `isSome` or `isNone` is that `match` is more expressive and provides a clear way to handle both cases of an `Option`. With `match`, you can directly provide two functions to handle the case of the `Option` being `None` or `Some`, respectively. On the other hand, with `isSome`, you would need to manually check the value and take separate actions based on whether it's `Some` or `None`. With `match`, the code can be more concise and easy to understand. Additionally, if you have complex logic to handle both cases, using `match` can make the code easier to read and maintain.
+Using `match` instead of `isSome` or `isNone` can be more expressive and provide a clear way to handle both cases of an `Option`. Additionally, if you have complex logic to handle both cases, using `match` can make your code easier to read and maintain.
 
-There are specializations of `match` to make working with code that does not use `Option` more convenient and faster, particularly `getOrNull` and `getOrUndefined`.
+## Other functions for extracting values from an `Option`
+
+To make working with code that does not use `Option` more convenient, there are specializations of `match` called `getOrNull` and `getOrUndefined`, which allow you to retrieve the value of an `Option` or `null` or `undefined`, respectively.
+
+Here's an example of how you can use `getOrNull` and `getOrUndefined`:
 
 ```ts
-import { getOrNull, getOrUndefined, some, none } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-getOrNull(some(5)); // 5
-getOrNull(none()); // null
+O.getOrNull(O.some(5)); // 5
+O.getOrNull(O.none()); // null
 
-getOrUndefined(some(5)); // 5
-getOrUndefined(none()); // undefined
+O.getOrUndefined(O.some(5)); // 5
+O.getOrUndefined(O.none()); // undefined
 ```
 
-For greater flexibility, there is also the `getOrElse` function which allows you to set what value corresponds to the `None` case:
+`getOrElse` allows you to specify a default value that should be returned if the `Option` is `None`. Here's an example of how you can use `getOrElse`:
 
 ```ts
-import { getOrElse, some, none } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-getOrElse(some(5), () => 0); // 5
-getOrElse(none(), () => 0); // 0
+O.getOrElse(O.some(5), () => 0); // 5
+O.getOrElse(O.none(), () => 0); // 0
 ```
 
-It often happens that the action you want to take when a computation returns `None` is to continue with another computation that returns an `Option`, in this case you can use the `orElse` API:
+Sometimes, when a computation returns `None`, you may want to continue with another computation that returns an `Option`. In this case, you can use the `orElse` function. This is useful for implementing retry logic, for example, where you want to attempt a computation multiple times until you either succeed or exhaust all possible attempts.
+
+Here's an example:
 
 ```ts
 import { pipe } from "@fp-ts/core/Function";
-import { Option, some, none, orElse } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-const fetchData = (): Option<string> => {
-  // Imagine we have a function that returns an `Option` of data
-  return Math.random() < 0.5 ? some("Data fetched successfully") : none();
+const tryToConnect = (): O.Option<string> => {
+  // Imagine we have a function that returns an `Option` of connection status
+  return Math.random() < 0.5 ? O.some("Connected successfully") : O.none();
 };
 
-const retryFetchData = (): Option<string> =>
+const retryConnect = (attemptsLeft: number): O.Option<string> =>
   pipe(
-    fetchData(), // Call the function for the first time
-    orElse(() => fetchData()) // If it fails, call it again
+    tryToConnect(), // Try to connect for the first time
+    O.orElse(() => {
+      // If it fails, check if we still have attempts left
+      if (attemptsLeft > 0) {
+        return retryConnect(attemptsLeft - 1); // If we do, try again with one less attempt
+      }
+      return O.none(); // If we don't, return none
+    })
   );
 
-const result = retryFetchData();
+const result = retryConnect(3); // Try to connect three times
 ```
 
-**Cheat sheet** (error handling)
+In this example, the function `tryToConnect` returns an `Option` representing the connection status. We use `orElse` to implement retry logic by attempting the connection again if the first attempt fails (returns `None`) and we still have attempts left. If all attempts fail, `retryConnect` returns `None`.
 
-| Name             | Given                                               | To               |
-| ---------------- | --------------------------------------------------- | ---------------- |
-| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`         |
-| `getOrThrow`     | `Option<A>`                                         | `A` (may throw)  |
-| `getOrNull`      | `Option<A>`                                         | `A \| null`      |
-| `getOrUndefined` | `Option<A>`                                         | `A \| undefined` |
-| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`         |
-| `orElse`         | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>` |
-| `firstSomeOf`    | `Iterable<Option<A>>`                               | `Option<A>`      |
+The `firstSomeOf` function is used to retrieve the first value that is present within an `Iterable` of `Option` values. The function takes an `Iterable` of `Option` values and returns the first `Option` value that is `Some`, or `None` if there are no `Some` values in the `Iterable`.
 
-# Interop
-
-A need that arises quickly when using the `Option` data type is the ability to interoperate with code that does not share the same style, in particular code that for example uses `undefined` or `null` to indicate that a value is optional, or code that throws exceptions.
-
-The `Option` data type offers a series of APIs to make this task easier, let's start with the first of the two cases, that is when the need is to interoperate with code that use a nullable type to indicate that a value is optional.
-
-It is possible to create an `Option` from a nullable value using the `fromNullable` API, let's see an example:
+Here is an example of how you can use `firstSomeOf`:
 
 ```ts
-import { fromNullable } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-console.log(fromNullable(null)); // none()
-console.log(fromNullable(undefined)); // none()
-console.log(fromNullable(1)); // some(1)
+const arr = [O.none(), O.some(2), O.none(), O.some(3)];
+
+const first = O.firstSomeOf(arr); // some(2)
 ```
 
-Instead of a single value, we can also modify the definition of a function that returns a nullable value to a function that returns an `Option` (a process that goes by the name of "lifting"):
+**Cheat sheet** (pattern matching)
+
+| **Function**     | **Given input**                                     | **Resulting Output** |
+| ---------------- | --------------------------------------------------- | -------------------- |
+| `match`          | `Option<A>`, `onNone: LazyArg<B>`, `onSome: A => C` | `B \| C`             |
+| `getOrThrow`     | `Option<A>`                                         | `A` (may throw)      |
+| `getOrThrowWith` | `Option<A>`, `onNone: () => unknown`                | `A` (may throw)      |
+| `getOrNull`      | `Option<A>`                                         | `A \| null`          |
+| `getOrUndefined` | `Option<A>`                                         | `A \| undefined`     |
+| `getOrElse`      | `Option<A>`, `onNone: LazyArg<B>`                   | `A \| B`             |
+| `orElse`         | `Option<A>`, `LazyArg<Option<B>>`                   | `Option<A \| B>`     |
+| `firstSomeOf`    | `Iterable<Option<A>>`                               | `Option<A>`          |
+
+# Interop with Code Using Nullable Types
+
+When using the `Option` data type, you may need to interact with code that uses `undefined` or `null` to indicate optional values. The `Option` data type provides several APIs to make this task easier.
+
+## Converting a Nullable Value to an Option
+
+You can create an `Option` from a nullable value using the `fromNullable` API.
 
 ```ts
-import { liftNullable, none, some } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
+
+console.log(O.fromNullable(null)); // none()
+console.log(O.fromNullable(undefined)); // none()
+console.log(O.fromNullable(1)); // some(1)
+```
+
+You can also modify a function that returns a nullable value to a function that returns an `Option` using the `liftNullable` API. This process is known as "lifting."
+
+```ts
+import * as O from "@fp-ts/core/Option";
 
 const parse = (s: string): number | undefined => {
   const n = parseFloat(s);
@@ -471,90 +634,38 @@ const parse = (s: string): number | undefined => {
 };
 
 // const parseOption: (s: string) => Option<number>
-const parseOption = liftNullable(parse);
+const parseOption = O.liftNullable(parse);
 
 console.log(parseOption("1")); // some(1)
 console.log(parseOption("not a number")); // none()
 ```
 
-On the other hand, if we have a value of type `Option` and we want to convert it into a nullable value we have two possibilities:
+## Converting an Option to a Nullable Value
 
-- convert `None` to `null`
-- convert `None` to `undefined`
+If you have a value of type `Option` and want to convert it to a nullable value, you have two options:
 
-The two APIs `getOrNull` and `getOrUndefined` respectively achieve these two tasks:
+- Convert `None` to `null` using the `getOrNull` API
+- Convert `None` to `undefined` using the `getOrUndefined` API
 
 ```ts
-import { getOrNull, getOrUndefined, some, none } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-console.log(getOrNull(some(1))); // 1
-console.log(getOrNull(none())); // null
+console.log(O.getOrNull(O.some(1))); // 1
+console.log(O.getOrNull(O.none())); // null
 
-console.log(getOrUndefined(some(1))); // 1
-console.log(getOrUndefined(none())); // undefined
+console.log(O.getOrUndefined(O.some(1))); // 1
+console.log(O.getOrUndefined(O.none())); // undefined
 ```
 
 **Cheat sheet** (interop - nullable)
 
-| Name              | Given                                              | To                                   |
+| **Function**      | **Given input**                                    | **Resulting Output**                 |
 | ----------------- | -------------------------------------------------- | ------------------------------------ |
 | `fromNullable`    | `A`                                                | `Option<NonNullable<A>>`             |
 | `liftNullable`    | `(...a: A) => B \| null \| undefined`              | `(...a: A) => Option<NonNullable<B>` |
 | `flatMapNullable` | `Option<A>`, `(...a: A) => B \| null \| undefined` | `Option<NonNullable<B>>`             |
 | `getOrNull`       | `Option<A>`                                        | `A \| null`                          |
 | `getOrUndefined`  | `Option<A>`                                        | `A \| undefined`                     |
-
-Now let's see the other case, that is when we need to interoperate with code that throws exceptions.
-
-In a previous section, we saw how to convert the following function that can throw exceptions:
-
-```ts
-function parseNumber(s: string): number {
-  const n = parseFloat(s);
-  if (isNaN(n)) {
-    throw new Error();
-  }
-  return n;
-}
-```
-
-into a function that returns a `Option`:
-
-```ts
-import { some, none } from "@fp-ts/core/Option";
-
-function parseNumber(s: string): Option<number> {
-  const n = parseFloat(s);
-  return isNaN(n) ? none() : some(n);
-}
-```
-
-However, this involves tedious, error-prone, and boilerplate-heavy work. It would be much more convenient not to have to rewrite the `parseNumber` function from scratch but only to transform it into the desired result in one step, and that's exactly what the `fromThrowable` API takes care of doing:
-
-```ts
-import { liftThrowable } from "@fp-ts/core/Option";
-
-const parse = liftThrowable(JSON.parse);
-
-console.log(parse("1")); // some(1)
-console.log(parse("")); // none()
-```
-
-On the other hand, if we have a value of type `Option` and want to get the wrapped value, accepting the fact that if the `Option` is a `None` we will get an exception, we can use the `getOrThrow` API:
-
-```ts
-import { getOrThrow, some, none } from "@fp-ts/core/Option";
-
-console.log(getOrThrow(some(10)); // 10
-console.log(getOrThrow(none()); // throws new Error("getOrThrow called on a None")
-```
-
-**Cheat sheet** (interop - throwing)
-
-| Name            | Given                        | To                       |
-| --------------- | ---------------------------- | ------------------------ |
-| `liftThrowable` | `(...a: A) => B` (may throw) | `(...a: A) => Option<B>` |
-| `getOrThrow`    | `Option<A>`                  | `A` (may throw)          |
 
 # Combining two or more `Option`s
 
@@ -578,9 +689,15 @@ const combine = zipWith(name, age, (n, a) => ({ name: n, age: a }));
 console.log(combine); // some({ name: 'John', age: 25 })
 ```
 
-The `zipWith` function takes three arguments: the two `Option`s that you want to combine, and a function that takes two arguments - the values held by the two `Option`s - and returns the combined value.
+The `zipWith` function takes three arguments:
 
-If either of the two `Option`s is `None`, the resulting `Option` will be `None` as well:
+- The first `Option` you want to combine
+- The second `Option` you want to combine
+- A function that takes two arguments, which are the values held by the two `Options`, and returns the combined value
+
+It's important to note that if either of the two `Option`s is `None`, the resulting `Option` will also be `None`. This is because the `zipWith` function only combines the values if both `Option`s are `Some`.
+
+For example:
 
 ```ts
 const name: Option<string> = none();
@@ -589,28 +706,39 @@ const combine = zipWith(name, age, (n, a) => ({ name: n, age: a }));
 console.log(combine); // none()
 ```
 
-This is because the `zipWith` function only combines the values if both `Option`s are `Some`.
-
 **Cheat sheet** (combining)
 
-| Name      | Given                                   | To          |
-| --------- | --------------------------------------- | ----------- |
-| `zipWith` | `Option<A>`, `Option<B>`, `(A, B) => C` | `Option<C>` |
-| `ap`      | `Option<(a: A) => B>`, `Option<A>`      | `Option<B>` |
+| **Function** | **Given input**                         | **Resulting Output** |
+| ------------ | --------------------------------------- | -------------------- |
+| `zipWith`    | `Option<A>`, `Option<B>`, `(A, B) => C` | `Option<C>`          |
+| `productAll` | `Iterable<Option<A>>`                   | `Option<A[]>`        |
+| `ap`         | `Option<(a: A) => B>`, `Option<A>`      | `Option<B>`          |
 
-For convenience, a series of algebraic operations such as sums and products are exported.
+## Algebraic operations with `Option`s
+
+In addition to `zipWith`, a series of algebraic operations such as sums, products, subtractions, and divisions are exported to make it easier to work with `Option`s.
+
+For example, consider the following `Option`s holding numbers:
 
 ```ts
-import { some, none, sum } from "@fp-ts/core/Option";
+import * as O from "@fp-ts/core/Option";
 
-const num1 = some(3);
-const num2 = some(4);
-const num3 = none();
+const num1 = O.some(3);
+const num2 = O.some(4);
+const num3 = O.none();
+```
 
+Summing two `Some` values will result in a `Some` with the sum of the values:
+
+```ts
 // Summing two `Some` values will result in a `Some` with the sum of the values
 const sumOfSome = sum(num1, num2);
 console.log(sumOfSome); // some(7)
+```
 
+Summing a `Some` and a `None` will result in a `None`:
+
+```ts
 // Summing a `Some` and a `None` will result in a `None`
 const sumOfSomeAndNone = sum(num1, num3);
 console.log(sumOfSomeAndNone); // none()
@@ -618,9 +746,9 @@ console.log(sumOfSomeAndNone); // none()
 
 **Cheat sheet** (algebraic operations)
 
-| Name       | Given                              | To               |
-| ---------- | ---------------------------------- | ---------------- |
-| `sum`      | `Option<number>`, `Option<number>` | `Option<number>` |
-| `multiply` | `Option<number>`, `Option<number>` | `Option<number>` |
-| `subtract` | `Option<number>`, `Option<number>` | `Option<number>` |
-| `divide`   | `Option<number>`, `Option<number>` | `Option<number>` |
+| **Function** | **Given input**                    | **Resulting Output** |
+| ------------ | ---------------------------------- | -------------------- |
+| `sum`        | `Option<number>`, `Option<number>` | `Option<number>`     |
+| `multiply`   | `Option<number>`, `Option<number>` | `Option<number>`     |
+| `subtract`   | `Option<number>`, `Option<number>` | `Option<number>`     |
+| `divide`     | `Option<number>`, `Option<number>` | `Option<number>`     |
