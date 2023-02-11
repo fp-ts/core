@@ -18,12 +18,12 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [and](#and)
+  - [eqv](#eqv)
   - [implies](#implies)
   - [nand](#nand)
   - [nor](#nor)
   - [not](#not)
   - [or](#or)
-  - [xnor](#xnor)
   - [xor](#xor)
 - [guards](#guards)
   - [isBoolean](#isboolean)
@@ -31,6 +31,8 @@ Added in v1.0.0
   - [Equivalence](#equivalence)
   - [MonoidAll](#monoidall)
   - [MonoidAny](#monoidany)
+  - [MonoidEqv](#monoideqv)
+  - [MonoidXor](#monoidxor)
   - [Order](#order)
   - [SemigroupAll](#semigroupall)
   - [SemigroupAny](#semigroupany)
@@ -51,6 +53,16 @@ Added in v1.0.0
 
 ```ts
 export declare const and: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+Added in v1.0.0
+
+## eqv
+
+**Signature**
+
+```ts
+export declare const eqv: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
 Added in v1.0.0
@@ -101,16 +113,6 @@ Added in v1.0.0
 
 ```ts
 export declare const or: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
-```
-
-Added in v1.0.0
-
-## xnor
-
-**Signature**
-
-```ts
-export declare const xnor: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
 Added in v1.0.0
@@ -184,6 +186,34 @@ The `empty` value is `false`.
 
 ```ts
 export declare const MonoidAny: monoid.Monoid<boolean>
+```
+
+Added in v1.0.0
+
+## MonoidEqv
+
+`boolean` monoid under equivalence.
+
+The `empty` value is `true`.
+
+**Signature**
+
+```ts
+export declare const MonoidEqv: monoid.Monoid<boolean>
+```
+
+Added in v1.0.0
+
+## MonoidXor
+
+`boolean` monoid under exclusive disjunction.
+
+The `empty` value is `false`.
+
+**Signature**
+
+```ts
+export declare const MonoidXor: monoid.Monoid<boolean>
 ```
 
 Added in v1.0.0

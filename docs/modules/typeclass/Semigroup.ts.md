@@ -30,6 +30,7 @@ Added in v1.0.0
   - [bigintSum](#bigintsum)
   - [booleanAll](#booleanall)
   - [booleanAny](#booleanany)
+  - [booleanEqv](#booleaneqv)
   - [booleanXor](#booleanxor)
   - [first](#first)
   - [last](#last)
@@ -234,6 +235,18 @@ Added in v1.0.0
 
 ```ts
 export declare const booleanAny: Semigroup<boolean>
+```
+
+Added in v1.0.0
+
+## booleanEqv
+
+`boolean` semigroup under equivalence.
+
+**Signature**
+
+```ts
+export declare const booleanEqv: Semigroup<boolean>
 ```
 
 Added in v1.0.0

@@ -140,6 +140,26 @@ export const MonoidAll: monoid.Monoid<boolean> = monoid.booleanAll
 export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
 
 /**
+ * `boolean` monoid under exclusive disjunction.
+ *
+ * The `empty` value is `false`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const MonoidXor: monoid.Monoid<boolean> = monoid.booleanXor
+
+/**
+ * `boolean` monoid under equivalence.
+ *
+ * The `empty` value is `true`.
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const MonoidEqv: monoid.Monoid<boolean> = monoid.booleanEqv
+
+/**
  * @category combinators
  * @since 1.0.0
  */
@@ -194,10 +214,10 @@ export const xor: {
  * @category combinators
  * @since 1.0.0
  */
-export const xnor: {
+export const eqv: {
   (that: boolean): (self: boolean) => boolean
   (self: boolean, that: boolean): boolean
-} = dual(2, flow(semigroup.booleanXor.combine, not))
+} = dual(2, semigroup.booleanEqv.combine)
 
 /**
  * @category combinators

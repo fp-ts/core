@@ -27,6 +27,8 @@ Added in v1.0.0
   - [bigintSum](#bigintsum)
   - [booleanAll](#booleanall)
   - [booleanAny](#booleanany)
+  - [booleanEqv](#booleaneqv)
+  - [booleanXor](#booleanxor)
   - [numberMultiply](#numbermultiply)
   - [numberSum](#numbersum)
   - [string](#string)
@@ -205,6 +207,34 @@ The `empty` value is `false`.
 
 ```ts
 export declare const booleanAny: Monoid<boolean>
+```
+
+Added in v1.0.0
+
+## booleanEqv
+
+`boolean` monoid under equivalence.
+
+The `empty` value is `true`.
+
+**Signature**
+
+```ts
+export declare const booleanEqv: Monoid<boolean>
+```
+
+Added in v1.0.0
+
+## booleanXor
+
+`boolean` monoid under exclusive disjunction.
+
+The `empty` value is `false`.
+
+**Signature**
+
+```ts
+export declare const booleanXor: Monoid<boolean>
 ```
 
 Added in v1.0.0
