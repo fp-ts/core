@@ -3,7 +3,12 @@ import * as _ from "@fp-ts/core/typeclass/Equivalence"
 
 describe("Equivalence", () => {
   it("exports", () => {
+    expect(_.Invariant).exists
     expect(_.Contravariant).exists
+    expect(_.SemiProduct).exists
+    expect(_.Product).exists
+    expect(_.tuple).exists
+    expect(_.struct).exists
   })
 
   test("strict returns an Equivalence that uses strict equality (===) to compare values", () => {
@@ -11,78 +16,6 @@ describe("Equivalence", () => {
     const a = { a: 1 }
     expect(eq(a, a)).toBe(true)
     expect(eq({ a: 1 }, { a: 1 })).toBe(false)
-  })
-
-  it("bigint", () => {
-    const eq = _.bigint
-    expect(eq(1n, 1n)).toBe(true)
-    expect(eq(1n, 2n)).toBe(false)
-  })
-
-  it("symbol", () => {
-    const eq = _.symbol
-    expect(eq(Symbol.for("@fp-ts/core/test/a"), Symbol.for("@fp-ts/core/test/a"))).toBe(true)
-    expect(eq(Symbol.for("@fp-ts/core/test/a"), Symbol.for("@fp-ts/core/test/b"))).toBe(false)
-  })
-
-  it("tuple", () => {
-    const eqTuple = _.tuple(_.string, _.number, _.boolean)
-    expect(eqTuple(["a", 1, true], ["a", 1, true])).toEqual(true)
-    expect(eqTuple(["a", 1, true], ["b", 1, true])).toEqual(false)
-    expect(eqTuple(["a", 1, true], ["a", 2, true])).toEqual(false)
-    expect(eqTuple(["a", 1, true], ["a", 1, false])).toEqual(false)
-  })
-
-  describe("array", () => {
-    it("returns true when all the elements of the arrays are equal according to the provided Equivalence", () => {
-      const eqA = _.string
-      const eqArray = _.array(eqA)
-      expect(eqArray(["a", "b"], ["a", "b"])).toBe(true)
-    })
-
-    it("returns false when at least one element of the arrays is not equal according to the provided Equivalence", () => {
-      const eqA = _.string
-      const eqArray = _.array(eqA)
-      expect(eqArray(["a", "b"], ["b", "b"])).toBe(false)
-      expect(eqArray(["a", "b"], ["a", "c"])).toBe(false)
-    })
-
-    it("returns false when comparing arrays of different length", () => {
-      const eqA = _.string
-      const eqArray = _.array(eqA)
-      expect(eqArray(["a"], ["a", "b"])).toBe(false)
-      expect(eqArray(["a", "b"], ["a"])).toBe(false)
-    })
-  })
-
-  describe("record", () => {
-    it("returns true when all the values of the records are equal according to the provided Equivalence", () => {
-      const eqA = _.string
-      const eqRecord = _.record(eqA)
-      expect(eqRecord({ a: "a", b: "b" }, { a: "a", b: "b" })).toBe(true)
-    })
-
-    it("returns false when at least one value of the records is not equal according to the provided Equivalence", () => {
-      const eqA = _.string
-      const eqRecord = _.record(eqA)
-      expect(eqRecord({ a: "a", b: "b" }, { a: "b", b: "b" })).toBe(false)
-      expect(eqRecord({ a: "a", b: "b" }, { a: "a", b: "c" })).toBe(false)
-    })
-
-    it("returns false when comparing records with a different number of keys", () => {
-      const eqA = _.string
-      const eqRecord = _.record(eqA)
-      expect(eqRecord({ a: "a" }, { a: "a", b: "b" })).toBe(false)
-      expect(eqRecord({ a: "a", b: "b" }, { a: "a" })).toBe(false)
-    })
-  })
-
-  it("struct", () => {
-    const eqStruct = _.struct({ a: _.string, b: _.number, c: _.boolean })
-    expect(eqStruct({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: true })).toEqual(true)
-    expect(eqStruct({ a: "a", b: 1, c: true }, { a: "b", b: 1, c: true })).toEqual(false)
-    expect(eqStruct({ a: "a", b: 1, c: true }, { a: "a", b: 2, c: true })).toEqual(false)
-    expect(eqStruct({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: false })).toEqual(false)
   })
 
   it("contramap", () => {
@@ -128,38 +61,40 @@ describe("Equivalence", () => {
     expect(eqE0E1E2(["a", 1, true], ["a", 1, false])).toEqual(false)
   })
 
-  it("Invariant", () => {
-    const eq = _.Invariant.imap((s: string) => [s], ([s]) => s)(
-      _.string
-    )
-    expect(eq(["a"], ["a"])).toEqual(true)
-    expect(eq(["a"], ["b"])).toEqual(false)
+  it("of", () => {
+    const eq = _.Product.of([])
+    expect(eq([], [])).toEqual(true)
   })
 
-  it("SemiProduct/product", () => {
-    const eq = _.SemiProduct.product(
-      _.string,
-      _.string
-    )
+  it("product", () => {
+    const eq = _.Product.product(_.string, _.string)
+    expect(eq(["a", "b"], ["a", "b"])).toEqual(true)
+    expect(eq(["a", "b"], ["c", "b"])).toEqual(false)
+    expect(eq(["a", "b"], ["a", "c"])).toEqual(false)
+  })
+
+  it("productMany", () => {
+    const eq = _.Product.productMany(_.string, [_.string])
+    expect(eq(["a", "b"], ["a", "b"])).toEqual(true)
+    expect(eq(["a", "b"], ["a", "b", "c"])).toEqual(true)
+    expect(eq(["a", "b", "c"], ["a", "b"])).toEqual(true)
+    expect(eq(["a", "b"], ["c", "b"])).toEqual(false)
+    expect(eq(["a", "b"], ["a", "c"])).toEqual(false)
+  })
+
+  it("all", () => {
+    const eq = _.all([_.string, _.string])
+    expect(eq(["a"], ["a"])).toEqual(true)
+    expect(eq(["a"], ["b"])).toEqual(false)
     expect(eq(["a", "b"], ["a", "b"])).toEqual(true)
     expect(eq(["a", "b"], ["a", "c"])).toEqual(false)
   })
 
-  it("SemiProduct/productMany", () => {
-    const eq = _.SemiProduct.productMany(_.string, [_.string])
+  it("array", () => {
+    const eq = _.array(_.string)
     expect(eq(["a"], ["a"])).toEqual(true)
     expect(eq(["a"], ["b"])).toEqual(false)
-    expect(eq(["a"], ["a", "b"])).toEqual(false)
     expect(eq(["a", "b"], ["a", "b"])).toEqual(true)
-    expect(eq(["a", "b"], ["a", "b", "d"])).toEqual(true)
-    expect(eq(["a", "b", "c"], ["a", "b", "d"])).toEqual(true)
-  })
-
-  it("SemiProduct/productAll", () => {
-    const eq = _.Product.productAll([_.Product.of(""), _.string, _.string])
-    expect(eq(["a"], ["a"])).toEqual(true)
-    expect(eq(["a"], ["b"])).toEqual(true)
-    expect(eq(["a", "c"], ["b", "c"])).toEqual(true)
-    expect(eq(["a", "c"], ["b", "d"])).toEqual(false)
+    expect(eq(["a", "b"], ["a", "c"])).toEqual(false)
   })
 })

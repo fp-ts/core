@@ -3,6 +3,7 @@
  */
 
 import * as predicate from "@fp-ts/core/Predicate"
+import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 
 /**
  * Tests if a value is a `symbol`.
@@ -19,3 +20,9 @@ import * as predicate from "@fp-ts/core/Predicate"
  * @since 1.0.0
  */
 export const isSymbol: (u: unknown) => u is symbol = predicate.isSymbol
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Equivalence: equivalence.Equivalence<symbol> = equivalence.symbol

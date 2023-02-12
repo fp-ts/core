@@ -1478,7 +1478,7 @@ export const Pointed: pointed.Pointed<ReadonlyArrayTypeLambda> = {
 }
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMap: {
@@ -1499,7 +1499,7 @@ export const flatMap: {
 )
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapNonEmpty: {
@@ -1521,14 +1521,14 @@ export const FlatMap: flatMap_.FlatMap<ReadonlyArrayTypeLambda> = {
 }
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatten: <A>(self: ReadonlyArray<ReadonlyArray<A>>) => Array<A> = flatMap_
   .flatten(FlatMap) as any
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flattenNonEmpty: <A>(
@@ -2101,7 +2101,7 @@ export const liftNullable = <A extends Array<unknown>, B>(
 ): (...a: A) => Array<NonNullable<B>> => (...a) => fromNullable(f(...a))
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapNullable: {
@@ -2128,7 +2128,7 @@ export const liftEither = <A extends Array<unknown>, E, B>(
 /**
  * Check if a predicate holds true for every `ReadonlyArray` member.
  *
- * @category lifting
+ * @category predicates
  * @since 1.0.0
  */
 export function every<A, B extends A>(
@@ -2140,7 +2140,7 @@ export function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>> {
 }
 
 /**
- * Check if a predicate holds true for any `ReadonlyArray` member.
+ * Check if a predicate holds true for some `ReadonlyArray` member.
  *
  * @category predicates
  * @since 1.0.0

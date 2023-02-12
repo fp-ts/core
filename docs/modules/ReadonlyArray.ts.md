@@ -14,6 +14,12 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combining](#combining)
+  - [flatMap](#flatmap)
+  - [flatMapNonEmpty](#flatmapnonempty)
+  - [flatMapNullable](#flatmapnullable)
+  - [flatten](#flatten)
+  - [flattenNonEmpty](#flattennonempty)
 - [constructors](#constructors)
   - [empty](#empty)
   - [make](#make)
@@ -109,7 +115,6 @@ Added in v1.0.0
   - [getUnionMonoid](#getunionmonoid)
   - [getUnionSemigroup](#getunionsemigroup)
 - [lifting](#lifting)
-  - [every](#every)
   - [getOrder](#getorder)
   - [lift2](#lift2)
   - [liftEither](#lifteither)
@@ -132,13 +137,8 @@ Added in v1.0.0
   - [matchRight](#matchright)
 - [predicates](#predicates)
   - [contains](#contains)
+  - [every](#every)
   - [some](#some)
-- [sequencing](#sequencing)
-  - [flatMap](#flatmap)
-  - [flatMapNonEmpty](#flatmapnonempty)
-  - [flatMapNullable](#flatmapnullable)
-  - [flatten](#flatten)
-  - [flattenNonEmpty](#flattennonempty)
 - [sorting](#sorting)
   - [sort](#sort)
   - [sortBy](#sortby)
@@ -204,6 +204,69 @@ Added in v1.0.0
   - [zipWith](#zipwith)
 
 ---
+
+# combining
+
+## flatMap
+
+**Signature**
+
+```ts
+export declare const flatMap: {
+  <A, B>(f: (a: A, i: number) => readonly B[]): (self: readonly A[]) => B[]
+  <A, B>(self: readonly A[], f: (a: A, i: number) => readonly B[]): B[]
+}
+```
+
+Added in v1.0.0
+
+## flatMapNonEmpty
+
+**Signature**
+
+```ts
+export declare const flatMapNonEmpty: {
+  <A, B>(f: (a: A, i: number) => readonly [B, ...B[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
+  <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => readonly [B, ...B[]]): [B, ...B[]]
+}
+```
+
+Added in v1.0.0
+
+## flatMapNullable
+
+**Signature**
+
+```ts
+export declare const flatMapNullable: {
+  <A, B>(f: (a: A) => B | null | undefined): (self: readonly A[]) => NonNullable<B>[]
+  <A, B>(self: readonly A[], f: (a: A) => B | null | undefined): NonNullable<B>[]
+}
+```
+
+Added in v1.0.0
+
+## flatten
+
+**Signature**
+
+```ts
+export declare const flatten: <A>(self: readonly (readonly A[])[]) => A[]
+```
+
+Added in v1.0.0
+
+## flattenNonEmpty
+
+**Signature**
+
+```ts
+export declare const flattenNonEmpty: <A>(
+  self: readonly [readonly [A, ...A[]], ...(readonly [A, ...A[]])[]]
+) => [A, ...A[]]
+```
+
+Added in v1.0.0
 
 # constructors
 
@@ -1362,21 +1425,6 @@ Added in v1.0.0
 
 # lifting
 
-## every
-
-Check if a predicate holds true for every `ReadonlyArray` member.
-
-**Signature**
-
-```ts
-export declare function every<A, B extends A>(
-  refinement: Refinement<A, B>
-): Refinement<ReadonlyArray<A>, ReadonlyArray<B>>
-export declare function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>>
-```
-
-Added in v1.0.0
-
 ## getOrder
 
 This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
@@ -1604,77 +1652,29 @@ export declare const contains: <A>(isEquivalent: (self: A, that: A) => boolean) 
 
 Added in v1.0.0
 
+## every
+
+Check if a predicate holds true for every `ReadonlyArray` member.
+
+**Signature**
+
+```ts
+export declare function every<A, B extends A>(
+  refinement: Refinement<A, B>
+): Refinement<ReadonlyArray<A>, ReadonlyArray<B>>
+export declare function every<A>(predicate: Predicate<A>): Predicate<ReadonlyArray<A>>
+```
+
+Added in v1.0.0
+
 ## some
 
-Check if a predicate holds true for any `ReadonlyArray` member.
+Check if a predicate holds true for some `ReadonlyArray` member.
 
 **Signature**
 
 ```ts
 export declare const some: <A>(predicate: Predicate<A>) => (self: readonly A[]) => self is readonly [A, ...A[]]
-```
-
-Added in v1.0.0
-
-# sequencing
-
-## flatMap
-
-**Signature**
-
-```ts
-export declare const flatMap: {
-  <A, B>(f: (a: A, i: number) => readonly B[]): (self: readonly A[]) => B[]
-  <A, B>(self: readonly A[], f: (a: A, i: number) => readonly B[]): B[]
-}
-```
-
-Added in v1.0.0
-
-## flatMapNonEmpty
-
-**Signature**
-
-```ts
-export declare const flatMapNonEmpty: {
-  <A, B>(f: (a: A, i: number) => readonly [B, ...B[]]): (self: readonly [A, ...A[]]) => [B, ...B[]]
-  <A, B>(self: readonly [A, ...A[]], f: (a: A, i: number) => readonly [B, ...B[]]): [B, ...B[]]
-}
-```
-
-Added in v1.0.0
-
-## flatMapNullable
-
-**Signature**
-
-```ts
-export declare const flatMapNullable: {
-  <A, B>(f: (a: A) => B | null | undefined): (self: readonly A[]) => NonNullable<B>[]
-  <A, B>(self: readonly A[], f: (a: A) => B | null | undefined): NonNullable<B>[]
-}
-```
-
-Added in v1.0.0
-
-## flatten
-
-**Signature**
-
-```ts
-export declare const flatten: <A>(self: readonly (readonly A[])[]) => A[]
-```
-
-Added in v1.0.0
-
-## flattenNonEmpty
-
-**Signature**
-
-```ts
-export declare const flattenNonEmpty: <A>(
-  self: readonly [readonly [A, ...A[]], ...(readonly [A, ...A[]])[]]
-) => [A, ...A[]]
 ```
 
 Added in v1.0.0

@@ -458,25 +458,34 @@ const product = <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<readon
   ([a, b]) => self(a) && that(b)
 
 /**
- * Flattens a collection of `Predicate`s into a single `Predicate` that tests a `ReadonlyArray` of values.
+ * Similar to `Promise.all` but operates on `Predicate`s.
+ *
+ * ```
+ * Iterable<Predicate<A>> -> Predicate<A[]>
+ * ```
+ *
+ * Given an iterable of `Predicate<A>` returns an `Predicate<Array<A>>` that operates on arrays
+ * by applying each predicate in the iterable in order until a predicate fails.
  *
  * @param collection - An iterable collection of `Predicate`s to flatten.
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
-const productAll = <A>(
+export const productAll = <A>(
   collection: Iterable<Predicate<A>>
-): Predicate<ReadonlyArray<A>> =>
-  (as) => {
-    const predicates = readonlyArray.fromIterable(collection)
-    for (let i = 0; i < predicates.length; i++) {
+): Predicate<ReadonlyArray<A>> => {
+  const predicates = readonlyArray.fromIterable(collection)
+  return (as) => {
+    const len = Math.min(as.length, predicates.length)
+    for (let i = 0; i < len; i++) {
       if (predicates[i](as[i]) === false) {
         return false
       }
     }
     return true
   }
+}
 
 const productMany = <A>(
   self: Predicate<A>,
@@ -509,7 +518,11 @@ export const Product: product_.Product<PredicateTypeLambda> = {
 }
 
 /**
- * Appends an element to the end of a tuple.
+ * This function appends a predicate to a tuple-like predicate, allowing you to create a new predicate that includes
+ * the original elements and the new one.
+ *
+ * @param self - The tuple-like predicate to append to.
+ * @param that - The predicate to append.
  *
  * @since 1.0.0
  */
@@ -524,6 +537,8 @@ export const appendElement: {
 } = semiProduct.appendElement(SemiProduct) as any
 
 /**
+ * Similar to `Promise.all` but operates on `Predicate`s.
+ *
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Predicate<any>>>(

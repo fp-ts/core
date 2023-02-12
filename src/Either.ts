@@ -400,7 +400,7 @@ export const Pointed: pointed.Pointed<EitherTypeLambda> = {
 }
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMap: {
@@ -461,7 +461,7 @@ export const Chainable: chainable.Chainable<EitherTypeLambda> = {
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const andThenDiscard: {
@@ -526,21 +526,27 @@ export const appendElement: {
 } = semiProduct.appendElement(SemiProduct)
 
 /**
+ * Similar to `Promise.all` but operates on `Either`s.
+ *
+ * ```
+ * Iterable<Either<E, A>> -> Either<E, A[]>
+ * ```
+ *
  * Flattens a collection of `Either`s into a single `Either` that contains a list of all the `Right` values.
- * If there is a `Left` value in the collection, it returns `Left` as the result.
+ * If there is a `Left` value in the collection, it returns the first `Left` found as the result.
  *
  * @param collection - An iterable collection of `Either`s to flatten.
  *
  * @example
  * import * as E from "@fp-ts/core/Either"
  *
- * assert.deepStrictEqual(E.productAll([E.right(1), E.right(2), E.right(3)]), E.right([1, 2, 3]))
- * assert.deepStrictEqual(E.productAll([E.right(1), E.left("error"), E.right(3)]), E.left("error"))
+ * assert.deepStrictEqual(E.all([E.right(1), E.right(2), E.right(3)]), E.right([1, 2, 3]))
+ * assert.deepStrictEqual(E.all([E.right(1), E.left("error"), E.right(3)]), E.left("error"))
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
-export const productAll = <E, A>(
+export const all = <E, A>(
   collection: Iterable<Either<E, A>>
 ): Either<E, Array<A>> => {
   const out: Array<A> = []
@@ -562,10 +568,12 @@ export const Product: product_.Product<EitherTypeLambda> = {
   imap,
   product,
   productMany,
-  productAll
+  productAll: all
 }
 
 /**
+ * Similar to `Promise.all` but operates on `Either`s.
+ *
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Either<any, any>>>(
@@ -643,7 +651,7 @@ export const Applicative: applicative.Applicative<EitherTypeLambda> = {
   map,
   product,
   productMany,
-  productAll
+  productAll: all
 }
 
 /**
@@ -938,7 +946,7 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B, E>(
 export const merge: <E, A>(self: Either<E, A>) => E | A = match(identity, identity)
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapNullable: {
@@ -1271,7 +1279,7 @@ export const liftOption = <A extends ReadonlyArray<unknown>, B, E>(
 ) => (...a: A): Either<E, B> => fromOption(() => onNone(...a))(f(...a))
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapOption: {

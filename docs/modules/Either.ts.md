@@ -20,6 +20,11 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
+  - [all](#all)
+  - [andThenDiscard](#andthendiscard)
+  - [flatMap](#flatmap)
+  - [flatMapNullable](#flatmapnullable)
+  - [flatMapOption](#flatmapoption)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
   - [getFirstRightSemigroup](#getfirstrightsemigroup)
@@ -110,12 +115,6 @@ Added in v1.0.0
   - [Right (interface)](#right-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
-- [sequencing](#sequencing)
-  - [andThenDiscard](#andthendiscard)
-  - [flatMap](#flatmap)
-  - [flatMapNullable](#flatmapnullable)
-  - [flatMapOption](#flatmapoption)
-  - [productAll](#productall)
 - [traversing](#traversing)
   - [sequence](#sequence)
   - [traverse](#traverse)
@@ -209,6 +208,94 @@ export declare const tap: {
 Added in v1.0.0
 
 # combining
+
+## all
+
+Similar to `Promise.all` but operates on `Either`s.
+
+```
+Iterable<Either<E, A>> -> Either<E, A[]>
+```
+
+Flattens a collection of `Either`s into a single `Either` that contains a list of all the `Right` values.
+If there is a `Left` value in the collection, it returns the first `Left` found as the result.
+
+**Signature**
+
+```ts
+export declare const all: <E, A>(collection: Iterable<Either<E, A>>) => Either<E, A[]>
+```
+
+**Example**
+
+```ts
+import * as E from '@fp-ts/core/Either'
+
+assert.deepStrictEqual(E.all([E.right(1), E.right(2), E.right(3)]), E.right([1, 2, 3]))
+assert.deepStrictEqual(E.all([E.right(1), E.left('error'), E.right(3)]), E.left('error'))
+```
+
+Added in v1.0.0
+
+## andThenDiscard
+
+Sequences the specified effect after this effect, but ignores the value
+produced by the effect.
+
+**Signature**
+
+```ts
+export declare const andThenDiscard: {
+  <E1, A, E2, _>(self: Either<E1, A>, that: Either<E2, _>): Either<E1 | E2, A>
+  <E2, _>(that: Either<E2, _>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, A>
+}
+```
+
+Added in v1.0.0
+
+## flatMap
+
+**Signature**
+
+```ts
+export declare const flatMap: {
+  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+  <E1, A, E2, B>(self: Either<E1, A>, f: (a: A) => Either<E2, B>): Either<E1 | E2, B>
+}
+```
+
+Added in v1.0.0
+
+## flatMapNullable
+
+**Signature**
+
+```ts
+export declare const flatMapNullable: {
+  <A, B, E2>(f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): <E1>(
+    self: Either<E1, A>
+  ) => Either<E2 | E1, NonNullable<B>>
+  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): Either<
+    E1 | E2,
+    NonNullable<B>
+  >
+}
+```
+
+Added in v1.0.0
+
+## flatMapOption
+
+**Signature**
+
+```ts
+export declare const flatMapOption: {
+  <A, B, E2>(f: (a: A) => Option<B>, onNone: (a: A) => E2): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
+  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => Option<B>, onNone: (a: A) => E2): Either<E1 | E2, B>
+}
+```
+
+Added in v1.0.0
 
 ## getFirstLeftMonoid
 
@@ -1414,90 +1501,6 @@ assert.deepStrictEqual(pipe(E.left(['error 1', 'error 2']), E.match(onLeft, onRi
 
 Added in v1.0.0
 
-# sequencing
-
-## andThenDiscard
-
-Sequences the specified effect after this effect, but ignores the value
-produced by the effect.
-
-**Signature**
-
-```ts
-export declare const andThenDiscard: {
-  <E1, A, E2, _>(self: Either<E1, A>, that: Either<E2, _>): Either<E1 | E2, A>
-  <E2, _>(that: Either<E2, _>): <E1, A>(self: Either<E1, A>) => Either<E2 | E1, A>
-}
-```
-
-Added in v1.0.0
-
-## flatMap
-
-**Signature**
-
-```ts
-export declare const flatMap: {
-  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
-  <E1, A, E2, B>(self: Either<E1, A>, f: (a: A) => Either<E2, B>): Either<E1 | E2, B>
-}
-```
-
-Added in v1.0.0
-
-## flatMapNullable
-
-**Signature**
-
-```ts
-export declare const flatMapNullable: {
-  <A, B, E2>(f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): <E1>(
-    self: Either<E1, A>
-  ) => Either<E2 | E1, NonNullable<B>>
-  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): Either<
-    E1 | E2,
-    NonNullable<B>
-  >
-}
-```
-
-Added in v1.0.0
-
-## flatMapOption
-
-**Signature**
-
-```ts
-export declare const flatMapOption: {
-  <A, B, E2>(f: (a: A) => Option<B>, onNone: (a: A) => E2): <E1>(self: Either<E1, A>) => Either<E2 | E1, B>
-  <E1, A, B, E2>(self: Either<E1, A>, f: (a: A) => Option<B>, onNone: (a: A) => E2): Either<E1 | E2, B>
-}
-```
-
-Added in v1.0.0
-
-## productAll
-
-Flattens a collection of `Either`s into a single `Either` that contains a list of all the `Right` values.
-If there is a `Left` value in the collection, it returns `Left` as the result.
-
-**Signature**
-
-```ts
-export declare const productAll: <E, A>(collection: Iterable<Either<E, A>>) => Either<E, A[]>
-```
-
-**Example**
-
-```ts
-import * as E from '@fp-ts/core/Either'
-
-assert.deepStrictEqual(E.productAll([E.right(1), E.right(2), E.right(3)]), E.right([1, 2, 3]))
-assert.deepStrictEqual(E.productAll([E.right(1), E.left('error'), E.right(3)]), E.left('error'))
-```
-
-Added in v1.0.0
-
 # traversing
 
 ## sequence
@@ -1690,6 +1693,8 @@ export declare const struct: <R extends Record<string, Either<any, any>>>(
 Added in v1.0.0
 
 ## tuple
+
+Similar to `Promise.all` but operates on `Either`s.
 
 **Signature**
 

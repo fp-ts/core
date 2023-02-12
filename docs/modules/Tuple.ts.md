@@ -36,9 +36,11 @@ by applying each `Equivalence` to the corresponding element of the tuple.
 **Signature**
 
 ```ts
-export declare const getEquivalence: <A extends readonly any[]>(
-  ...equivalences: { readonly [K in keyof A]: equivalence.Equivalence<A[K]> }
-) => equivalence.Equivalence<Readonly<A>>
+export declare const getEquivalence: <T extends readonly equivalence.Equivalence<any>[]>(
+  ...predicates: T
+) => equivalence.Equivalence<
+  Readonly<{ [I in keyof T]: [T[I]] extends [equivalence.Equivalence<infer A>] ? A : never }>
+>
 ```
 
 Added in v1.0.0
@@ -72,9 +74,9 @@ of the tuple.
 **Signature**
 
 ```ts
-export declare const getOrder: <A extends readonly any[]>(
-  ...orders: { readonly [K in keyof A]: order.Order<A[K]> }
-) => order.Order<Readonly<A>>
+export declare const getOrder: <T extends readonly order.Order<any>[]>(
+  ...elements: T
+) => order.Order<{ [I in keyof T]: [T[I]] extends [order.Order<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
@@ -89,9 +91,9 @@ It is useful when you need to combine two tuples of the same type and you have a
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A extends readonly any[]>(
-  ...semigroups: { readonly [K in keyof A]: semigroup.Semigroup<A[K]> }
-) => semigroup.Semigroup<A>
+export declare const getSemigroup: <T extends readonly semigroup.Semigroup<any>[]>(
+  ...elements: T
+) => semigroup.Semigroup<{ [I in keyof T]: [T[I]] extends [semigroup.Semigroup<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0

@@ -419,6 +419,12 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
 }
 
 /**
+ * Similar to `Promise.all` but operates on `Option`s.
+ *
+ * ```
+ * Iterable<Option<A>> -> Option<A[]>
+ * ```
+ *
  * Flattens a collection of `Option`s into a single `Option` that contains a list of all the `Some` values.
  * If there is a `None` value in the collection, it returns `None` as the result.
  *
@@ -427,13 +433,13 @@ export const firstSomeOf = <A>(collection: Iterable<Option<A>>): Option<A> => {
  * @example
  * import * as O from "@fp-ts/core/Option"
  *
- * assert.deepStrictEqual(O.productAll([O.some(1), O.some(2), O.some(3)]), O.some([1, 2, 3]))
- * assert.deepStrictEqual(O.productAll([O.some(1), O.none(), O.some(3)]), O.none())
+ * assert.deepStrictEqual(O.all([O.some(1), O.some(2), O.some(3)]), O.some([1, 2, 3]))
+ * assert.deepStrictEqual(O.all([O.some(1), O.none(), O.some(3)]), O.none())
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
-export const productAll = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
+export const all = <A>(collection: Iterable<Option<A>>): Option<Array<A>> => {
   const out: Array<A> = []
   for (const o of collection) {
     if (isNone(o)) {
@@ -857,10 +863,6 @@ export const tap: {
   <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
 } = chainable.tap(Chainable)
 
-// -------------------------------------------------------------------------------------
-// debugging
-// -------------------------------------------------------------------------------------
-
 /**
  * Useful for debugging purposes, the `onSome` callback is called with the value of `self` if it is a `Some`.
  *
@@ -939,8 +941,18 @@ export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
 }
 
 /**
- * Appends an element to the end of a tuple.
+ * Appends an element to the end of a tuple wrapped in an `Option` type.
  *
+ * @param self - The option of a tuple to which an element needs to be added.
+ * @param that - The element which needs to be added to the tuple.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.some(3)), O.some([1, 2, 3]))
+ * assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.none()), O.none())
+ *
+ * @category combining
  * @since 1.0.0
  */
 export const appendElement: {
@@ -956,10 +968,12 @@ export const Product: product_.Product<OptionTypeLambda> = {
   imap,
   product,
   productMany,
-  productAll
+  productAll: all
 }
 
 /**
+ * Similar to `Promise.all` but operates on `Option`s.
+ *
  * Takes a tuple of `Option`s and returns an `Option` of a tuple of values.
  *
  * @param elements - the tuple of `Option`s to be sequenced.
@@ -970,7 +984,7 @@ export const Product: product_.Product<OptionTypeLambda> = {
  * assert.deepStrictEqual(O.tuple(O.some(1), O.some("hello")), O.some([1, "hello"]))
  * assert.deepStrictEqual(O.tuple(O.some(1), O.none()), O.none())
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Option<any>>>(
@@ -990,7 +1004,7 @@ export const tuple: <T extends ReadonlyArray<Option<any>>>(
  * assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.some("hello") }), O.some({ a: 1, b: "hello" }))
  * assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.none() }), O.none())
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const struct: <R extends Record<string, Option<any>>>(
@@ -1086,7 +1100,7 @@ export const Applicative: applicative.Applicative<OptionTypeLambda> = {
   map,
   product,
   productMany,
-  productAll
+  productAll: all
 }
 
 /**
@@ -1306,7 +1320,7 @@ export const filter: {
  * assert.deepStrictEqual(traverse(O.some(-1), f), E.left("negative"))
  * assert.deepStrictEqual(traverse(O.none(), f), E.right(O.none()))
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const traverse = <F extends TypeLambda>(
@@ -1348,7 +1362,7 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
  * assert.deepStrictEqual(sequence(O.some(E.left("error"))), E.left("error"))
  * assert.deepStrictEqual(sequence(O.none()), E.right(O.none()))
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const sequence: <F extends TypeLambda>(
@@ -1357,7 +1371,7 @@ export const sequence: <F extends TypeLambda>(
   .sequence(Traversable)
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const traverseTap: <F extends TypeLambda>(

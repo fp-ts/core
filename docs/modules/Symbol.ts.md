@@ -14,6 +14,8 @@ Added in v1.0.0
 
 - [guards](#guards)
   - [isSymbol](#issymbol)
+- [instances](#instances)
+  - [Equivalence](#equivalence)
 
 ---
 
@@ -36,6 +38,18 @@ import { isSymbol } from '@fp-ts/core/Predicate'
 
 assert.deepStrictEqual(isSymbol(Symbol.for('a')), true)
 assert.deepStrictEqual(isSymbol('a'), false)
+```
+
+Added in v1.0.0
+
+# instances
+
+## Equivalence
+
+**Signature**
+
+```ts
+export declare const Equivalence: equivalence.Equivalence<symbol>
 ```
 
 Added in v1.0.0

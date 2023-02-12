@@ -16,7 +16,7 @@ export interface Chainable<F extends TypeLambda> extends FlatMap<F>, Covariant<F
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const andThenDiscard = <F extends TypeLambda>(F: Chainable<F>): {

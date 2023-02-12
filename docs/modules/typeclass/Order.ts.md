@@ -17,6 +17,8 @@ Added in v1.0.0
   - [contramap](#contramap)
   - [struct](#struct)
   - [tuple](#tuple)
+- [combining](#combining)
+  - [all](#all)
 - [constructors](#constructors)
   - [make](#make)
 - [instances](#instances)
@@ -85,14 +87,16 @@ for each property in the struct.
 **Signature**
 
 ```ts
-export declare const struct: <A>(orders: { readonly [K in keyof A]: Order<A[K]> }) => Order<{
-  readonly [K in keyof A]: A[K]
-}>
+export declare const struct: <R extends { readonly [x: string]: Order<any> }>(
+  fields: R
+) => Order<{ [K in keyof R]: [R[K]] extends [Order<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
 
 ## tuple
+
+Similar to `Promise.all` but operates on `Order`s.
 
 This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
 The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
@@ -102,9 +106,30 @@ of the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(
-  ...orders: { readonly [K in keyof A]: Order<A[K]> }
-) => Order<Readonly<A>>
+export declare const tuple: <T extends readonly Order<any>[]>(
+  ...elements: T
+) => Order<{ [I in keyof T]: [T[I]] extends [Order<infer A>] ? A : never }>
+```
+
+Added in v1.0.0
+
+# combining
+
+## all
+
+Similar to `Promise.all` but operates on `Order`s.
+
+```
+Iterable<Order<A>> -> Order<A[]>
+```
+
+Given an iterable of `Order<A>` returns an `Order<Array<A>>` that operates on arrays
+by applying each order in the iterable in order until a difference is found.
+
+**Signature**
+
+```ts
+export declare const all: <A>(collection: Iterable<Order<A>>) => Order<A[]>
 ```
 
 Added in v1.0.0

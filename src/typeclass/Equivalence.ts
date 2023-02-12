@@ -7,12 +7,12 @@
  */
 import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
-import type { ReadonlyRecord } from "@fp-ts/core/ReadonlyRecord"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as product_ from "@fp-ts/core/typeclass/Product"
+import * as product_ from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
@@ -81,74 +81,6 @@ export const bigint: Equivalence<bigint> = strict()
 export const symbol: Equivalence<symbol> = strict()
 
 /**
- * Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
- * by applying each `Equivalence` to the corresponding element of the tuple.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...equivalences: { readonly [K in keyof A]: Equivalence<A[K]> }
-): Equivalence<Readonly<A>> =>
-  make((x, y) => equivalences.every((equivalence, i) => equivalence(x[i], y[i])))
-
-/**
- * Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `ReadonlyArray<A>`.
- * The returned `Equivalence` compares arrays by first checking their length and then applying the provided `Equivalence` to each element.
- * If all comparisons return true, the arrays are considered equal.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const array = <A>(
-  equivalence: Equivalence<A>
-): Equivalence<ReadonlyArray<A>> =>
-  make((x, y) => x.length === y.length && x.every((a, i) => equivalence(a, y[i])))
-
-/**
- * Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct
- * by applying each `Equivalence` to the corresponding property of the struct.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const struct = <A>(
-  equivalences: { [K in keyof A]: Equivalence<A[K]> }
-): Equivalence<{ readonly [K in keyof A]: A[K] }> =>
-  make((x, y) => {
-    for (const key in equivalences) {
-      if (!equivalences[key](x[key], y[key])) {
-        return false
-      }
-    }
-    return true
-  })
-
-/**
- * Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `{ readonly [x: string]: A }`.
- * The returned `Equivalence` compares records by first checking their number of keys and then applying the provided `Equivalence` to each value.
- * If all comparisons return true, the records are considered equal.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const record = <A>(
-  equivalence: Equivalence<A>
-): Equivalence<ReadonlyRecord<A>> =>
-  make((x, y) => {
-    const keys = Object.keys(x)
-    if (Object.keys(y).length !== keys.length) {
-      return false
-    }
-    for (const key of keys) {
-      if (!equivalence(x[key], y[key])) {
-        return false
-      }
-    }
-    return true
-  })
-
-/**
  * @category instances
  * @since 1.0.0
  */
@@ -210,12 +142,41 @@ export const Invariant: invariant.Invariant<EquivalenceTypeLambda> = {
 }
 
 const product = <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]> =>
-  tuple(self, that)
+  make(([xa, xb], [ya, yb]) => self(xa, ya) && that(xb, yb))
+
+/**
+ * Similar to `Promise.all` but operates on `Equivalence`s.
+ *
+ * ```
+ * Iterable<Equivalence<A>> -> Equivalence<A[]>
+ * ```
+ *
+ * Given an iterable of `Equivalence<A>` returns an `Equivalence<Array<A>>` that operates on arrays
+ * by applying each equivalence in the iterable in order until a difference is found.
+ *
+ * @category combining
+ * @since 1.0.0
+ */
+export const all = <A>(collection: Iterable<Equivalence<A>>): Equivalence<Array<A>> => {
+  const equivalences = readonlyArray.fromIterable(collection)
+  return make((x, y) => {
+    const len = Math.min(x.length, y.length, equivalences.length)
+    for (let i = 0; i < len; i++) {
+      if (!equivalences[i](x[i], y[i])) {
+        return false
+      }
+    }
+    return true
+  })
+}
 
 const productMany = <A>(
   self: Equivalence<A>,
   collection: Iterable<Equivalence<A>>
-): Equivalence<[A, ...Array<A>]> => tuple(self, ...collection)
+): Equivalence<[A, ...Array<A>]> => {
+  const equivalence = all(collection)
+  return make((x, y) => !self(x[0], y[0]) ? false : equivalence(x.slice(1), y.slice(1)))
+}
 
 /**
  * @category instances
@@ -229,17 +190,57 @@ export const SemiProduct: semiProduct.SemiProduct<EquivalenceTypeLambda> = {
 
 const of: <A>(a: A) => Equivalence<A> = () => isAlwaysEquivalent
 
-const productAll = <A>(collection: Iterable<Equivalence<A>>): Equivalence<Array<A>> =>
-  tuple<Array<A>>(...collection)
-
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Product: product_.Product<EquivalenceTypeLambda> = {
   of,
-  imap: Invariant.imap,
+  imap,
   product,
   productMany,
-  productAll
+  productAll: all
 }
+
+/**
+ * Similar to `Promise.all` but operates on `Equivalence`s.
+ *
+ * Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
+ * by applying each `Equivalence` to the corresponding element of the tuple.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const tuple: <T extends ReadonlyArray<Equivalence<any>>>(
+  ...predicates: T
+) => Equivalence<Readonly<{ [I in keyof T]: [T[I]] extends [Equivalence<infer A>] ? A : never }>> =
+  product_.tuple(Product)
+
+/**
+ * @category combinators
+ * @since 1.0.0
+ */
+export const array = <A>(
+  equivalence: Equivalence<A>
+): Equivalence<ReadonlyArray<A>> =>
+  make((x, y) => {
+    const len = Math.min(x.length, y.length)
+    for (let i = 0; i < len; i++) {
+      if (!equivalence(x[i], y[i])) {
+        return false
+      }
+    }
+    return true
+  })
+
+/**
+ * Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct
+ * by applying each `Equivalence` to the corresponding property of the struct.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const struct: <R extends Record<string, Equivalence<any>>>(
+  predicates: R
+) => Equivalence<{ readonly [K in keyof R]: [R[K]] extends [Equivalence<infer A>] ? A : never }> =
+  product_.struct(Product)

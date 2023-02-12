@@ -4,9 +4,10 @@
 import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
 import { fromIterable } from "@fp-ts/core/internal/ReadonlyArray"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Order } from "@fp-ts/core/typeclass/Order"
-import type * as product_ from "@fp-ts/core/typeclass/Product"
+import * as product_ from "@fp-ts/core/typeclass/Product"
 import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 
 /**
@@ -168,60 +169,6 @@ export const booleanXor: Semigroup<boolean> = make((self, that) => self !== that
 export const booleanEqv: Semigroup<boolean> = make((self, that) => self === that)
 
 /**
- * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
- * The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
- *
- * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
-): Semigroup<A> =>
-  make((self, that) => semigroups.map((S, i) => S.combine(self[i], that[i])) as any)
-
-/**
- * Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
- * The returned `Semigroup` combines two arrays by concatenating them.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const mutableArray = <A>(): Semigroup<Array<A>> => make((self, that) => self.concat(that))
-
-/**
- * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
- * The returned `Semigroup` combines two arrays by concatenating them.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const array: <A>() => Semigroup<ReadonlyArray<A>> = mutableArray as any
-
-/**
- * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
- * The returned `Semigroup` combines two structs of the same type by applying the corresponding `Semigroup` passed as arguments to each property in the struct.
- *
- * It is useful when you need to combine two structs of the same type and you have a specific way of combining each property of the struct.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const struct = <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }): Semigroup<
-  { readonly [K in keyof A]: A[K] }
-> =>
-  make((self, that) => {
-    const r = {} as any
-    for (const k in semigroups) {
-      if (Object.prototype.hasOwnProperty.call(semigroups, k)) {
-        r[k] = semigroups[k].combine(self[k], that[k])
-      }
-    }
-    return r
-  })
-
-/**
  * `Semigroup` that returns last minimum of elements.
  *
  * @category constructors
@@ -319,12 +266,37 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
 }
 
 const product = <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]> =>
-  tuple(self, that)
+  make(([xa, xb], [ya, yb]) => [self.combine(xa, ya), that.combine(xb, yb)])
+
+/**
+ * Similar to `Promise.all` but operates on `Semigroup`s.
+ *
+ * ```
+ * Iterable<Semigroup<A>> -> Semigroup<A[]>
+ * ```
+ *
+ * @category combining
+ * @since 1.0.0
+ */
+export const all = <A>(collection: Iterable<Semigroup<A>>): Semigroup<Array<A>> => {
+  const semigroups = readonlyArray.fromIterable(collection)
+  return make((x, y) => {
+    const len = Math.min(x.length, y.length, semigroups.length)
+    const out = []
+    for (let i = 0; i < len; i++) {
+      out.push(semigroups[i].combine(x[i], y[i]))
+    }
+    return out
+  })
+}
 
 const productMany = <A>(
   self: Semigroup<A>,
   collection: Iterable<Semigroup<A>>
-): Semigroup<[A, ...Array<A>]> => tuple(self, ...collection)
+): Semigroup<[A, ...Array<A>]> => {
+  const semigroup = all(collection)
+  return make((x, y) => [self.combine(x[0], y[0]), ...semigroup.combine(x.slice(1), y.slice(1))])
+}
 
 /**
  * @category instances
@@ -338,17 +310,62 @@ export const SemiProduct: semiProduct.SemiProduct<SemigroupTypeLambda> = {
 
 const of: <A>(a: A) => Semigroup<A> = constant
 
-const productAll = <A>(collection: Iterable<Semigroup<A>>): Semigroup<Array<A>> =>
-  tuple<Array<A>>(...collection)
-
 /**
  * @category instances
  * @since 1.0.0
  */
 export const Product: product_.Product<SemigroupTypeLambda> = {
   of,
-  imap: Invariant.imap,
+  imap,
   product,
   productMany,
-  productAll
+  productAll: all
 }
+
+/**
+ * Similar to `Promise.all` but operates on `Semigroup`s.
+ *
+ * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
+ * The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
+ *
+ * It is useful when you need to combine two tuples of the same type and you have a specific way of combining each element of the tuple.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const tuple: <T extends ReadonlyArray<Semigroup<any>>>(
+  ...elements: T
+) => Semigroup<{ [I in keyof T]: [T[I]] extends [Semigroup<infer A>] ? A : never }> = product_
+  .tuple(Product)
+
+/**
+ * Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
+ * The returned `Semigroup` combines two arrays by concatenating them.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const mutableArray = <A>(): Semigroup<Array<A>> => make((self, that) => self.concat(that))
+
+/**
+ * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
+ * The returned `Semigroup` combines two arrays by concatenating them.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const array: <A>() => Semigroup<ReadonlyArray<A>> = mutableArray as any
+
+/**
+ * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
+ * The returned `Semigroup` combines two structs of the same type by applying the corresponding `Semigroup` passed as arguments to each property in the struct.
+ *
+ * It is useful when you need to combine two structs of the same type and you have a specific way of combining each property of the struct.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const struct: <R extends { readonly [x: string]: Semigroup<any> }>(
+  fields: R
+) => Semigroup<{ [K in keyof R]: [R[K]] extends [Semigroup<infer A>] ? A : never }> = product_
+  .struct(Product)

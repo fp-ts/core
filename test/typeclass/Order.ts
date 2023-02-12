@@ -5,6 +5,7 @@ import * as U from "../util"
 
 describe("Order", () => {
   it("exports", () => {
+    expect(_.Invariant).exist
     expect(_.Contravariant).exist
     expect(_.string).exist
     expect(_.number).exist
@@ -12,27 +13,14 @@ describe("Order", () => {
     expect(_.bigint).exist
   })
 
-  it("bigint", () => {
-    const O = _.bigint
-    expect(pipe(1n, _.lessThanOrEqualTo(O)(2n))).toBe(true)
-    expect(pipe(1n, _.lessThanOrEqualTo(O)(1n))).toBe(true)
-    expect(pipe(1n, _.lessThan(O)(1n))).toBe(false)
-    expect(pipe(1n, _.lessThanOrEqualTo(O)(0n))).toBe(false)
-  })
-
-  it("tuple", () => {
-    const O = _.tuple(_.string, _.number, _.boolean)
-    U.deepStrictEqual(O.compare(["a", 1, true], ["b", 2, true]), -1)
-    U.deepStrictEqual(O.compare(["a", 1, true], ["a", 2, true]), -1)
-    U.deepStrictEqual(O.compare(["a", 1, true], ["a", 1, false]), 1)
-  })
-
-  it("struct", () => {
-    const O = _.struct({ a: _.string, b: _.number, c: _.boolean })
-    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "b", b: 2, c: true }), -1)
-    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 2, c: true }), -1)
-    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: false }), 1)
-    U.deepStrictEqual(O.compare({ a: "a", b: 1, c: true }, { a: "a", b: 1, c: true }), 0)
+  it("all", () => {
+    const O = _.all([_.string, _.string])
+    U.deepStrictEqual(O.compare(["a"], ["b"]), -1)
+    U.deepStrictEqual(O.compare(["a"], ["a"]), 0)
+    U.deepStrictEqual(O.compare(["b"], ["a"]), 1)
+    U.deepStrictEqual(O.compare(["a", "b"], ["a", "c"]), -1)
+    U.deepStrictEqual(O.compare(["a", "b"], ["a", "b"]), 0)
+    U.deepStrictEqual(O.compare(["a", "c"], ["a", "b"]), 1)
   })
 
   it("contramap", () => {
@@ -40,15 +28,6 @@ describe("Order", () => {
     U.deepStrictEqual(O.compare("a", "b"), 0)
     U.deepStrictEqual(O.compare("a", "bb"), -1)
     U.deepStrictEqual(O.compare("aa", "b"), 1)
-  })
-
-  it("Invariant", () => {
-    const O = _.Invariant.imap((s: string) => [s], ([s]) => s)(
-      _.string
-    )
-    U.deepStrictEqual(O.compare(["a"], ["b"]), -1)
-    U.deepStrictEqual(O.compare(["a"], ["a"]), 0)
-    U.deepStrictEqual(O.compare(["b"], ["a"]), 1)
   })
 
   it("getSemigroup", () => {

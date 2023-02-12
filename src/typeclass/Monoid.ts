@@ -140,6 +140,8 @@ export const booleanXor: Monoid<boolean> = fromSemigroup(semigroup.booleanXor, f
 export const booleanEqv: Monoid<boolean> = fromSemigroup(semigroup.booleanEqv, true)
 
 /**
+ * Similar to `Promise.all` but operates on `Monoid`s.
+ *
  * This function creates and returns a new `Monoid` for a tuple of values based on the given `Monoid`s for each element in the tuple.
  * The returned `Monoid` combines two tuples of the same type by applying the corresponding `Monoid` passed as arguments to each element in the tuple.
  *
