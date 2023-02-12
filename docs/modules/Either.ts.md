@@ -1696,6 +1696,10 @@ Added in v1.0.0
 
 Similar to `Promise.all` but operates on `Either`s.
 
+```
+[Either<E1, A>, Either<E1, B>, ...] -> Either<E1 \| E2 \| ..., [A, B, ...]>
+```
+
 **Signature**
 
 ```ts

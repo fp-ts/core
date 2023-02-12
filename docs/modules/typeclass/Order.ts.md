@@ -98,6 +98,10 @@ Added in v1.0.0
 
 Similar to `Promise.all` but operates on `Order`s.
 
+```
+[Order<A>, Order<B>, ...] -> Order<[A, B, ...]>
+```
+
 This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
 The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
 It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
@@ -286,8 +290,8 @@ Test whether a value is between a minimum and a maximum (inclusive).
 
 ```ts
 export declare const between: <A>(O: Order<A>) => {
-  (minimum: A, maximum: A): (a: A) => boolean
-  (a: A, minimum: A, maximum: A): boolean
+  (minimum: A, maximum: A): (self: A) => boolean
+  (self: A, minimum: A, maximum: A): boolean
 }
 ```
 
@@ -301,8 +305,8 @@ Clamp a value between a minimum and a maximum.
 
 ```ts
 export declare const clamp: <A>(O: Order<A>) => {
-  (minimum: A, maximum: A): (a: A) => A
-  (a: A, minimum: A, maximum: A): A
+  (minimum: A, maximum: A): (self: A) => A
+  (self: A, minimum: A, maximum: A): A
 }
 ```
 

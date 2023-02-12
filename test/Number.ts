@@ -10,6 +10,14 @@ describe.concurrent("Number", () => {
     expect(Number.MonoidMin).exists
     expect(Number.sumAll).exists
     expect(Number.multiplyAll).exists
+    expect(Number.lessThan).exists
+    expect(Number.lessThanOrEqualTo).exists
+    expect(Number.greaterThan).exists
+    expect(Number.greaterThanOrEqualTo).exists
+    expect(Number.between).exists
+    expect(Number.clamp).exists
+    expect(Number.min).exists
+    expect(Number.max).exists
   })
 
   it("isNumber", () => {

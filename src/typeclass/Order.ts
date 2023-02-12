@@ -208,6 +208,10 @@ export const Product: product_.Product<OrderTypeLambda> = {
 /**
  * Similar to `Promise.all` but operates on `Order`s.
  *
+ * ```
+ * [Order<A>, Order<B>, ...] -> Order<[A, B, ...]>
+ * ```
+ *
  * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
  * The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
  * It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
@@ -324,12 +328,12 @@ export const max = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const clamp = <A>(O: Order<A>): {
-  (minimum: A, maximum: A): (a: A) => A
-  (a: A, minimum: A, maximum: A): A
+  (minimum: A, maximum: A): (self: A) => A
+  (self: A, minimum: A, maximum: A): A
 } =>
   dual(
     3,
-    (a: A, minimum: A, maximum: A): A => min(O)(maximum, max(O)(minimum, a))
+    (self: A, minimum: A, maximum: A): A => min(O)(maximum, max(O)(minimum, self))
   )
 
 /**
@@ -338,11 +342,11 @@ export const clamp = <A>(O: Order<A>): {
  * @since 1.0.0
  */
 export const between = <A>(O: Order<A>): {
-  (minimum: A, maximum: A): (a: A) => boolean
-  (a: A, minimum: A, maximum: A): boolean
+  (minimum: A, maximum: A): (self: A) => boolean
+  (self: A, minimum: A, maximum: A): boolean
 } =>
   dual(
     3,
-    (a: A, minimum: A, maximum: A): boolean =>
-      !lessThan(O)(a, minimum) && !greaterThan(O)(a, maximum)
+    (self: A, minimum: A, maximum: A): boolean =>
+      !lessThan(O)(self, minimum) && !greaterThan(O)(self, maximum)
   )

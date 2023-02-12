@@ -57,9 +57,9 @@ It is useful when you need to combine two tuples of the same type and you have a
 **Signature**
 
 ```ts
-export declare const getMonoid: <A extends readonly any[]>(
-  ...monoids: { [K in keyof A]: monoid.Monoid<A[K]> }
-) => monoid.Monoid<A>
+export declare const getMonoid: <T extends readonly monoid.Monoid<any>[]>(
+  ...elements: T
+) => monoid.Monoid<{ [I in keyof T]: [T[I]] extends [monoid.Monoid<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0

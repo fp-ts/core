@@ -1339,6 +1339,10 @@ export const Product: product_.Product<ValidatedTypeLambda> = {
 /**
  * Similar to `Promise.all` but operates on `These`s.
  *
+ * ```
+ * [These<E1, A>, These<E1, B>, ...] -> These<E1 \| E2 \| ..., [A, B, ...]>
+ * ```
+ *
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Validated<any, any>>>(...tuple: T) => Validated<
