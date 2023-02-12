@@ -974,6 +974,10 @@ export const Product: product_.Product<OptionTypeLambda> = {
 /**
  * Similar to `Promise.all` but operates on `Option`s.
  *
+ * ```
+ * [Option<A>, Option<B>, ...] -> Option<[A, B, ...]>
+ * ```
+ *
  * Takes a tuple of `Option`s and returns an `Option` of a tuple of values.
  *
  * @param elements - the tuple of `Option`s to be sequenced.

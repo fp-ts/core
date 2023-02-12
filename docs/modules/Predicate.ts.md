@@ -13,9 +13,13 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
-  - [contramap](#contramap)
+  - [and](#and)
+  - [not](#not)
+  - [or](#or)
 - [combining](#combining)
   - [productAll](#productall)
+- [constructors](#constructors)
+  - [contramap](#contramap)
 - [do notation](#do-notation)
   - [Do](#do)
   - [andThenBind](#andthenbind)
@@ -57,13 +61,10 @@ Added in v1.0.0
   - [PredicateTypeLambda (interface)](#predicatetypelambda-interface)
 - [utils](#utils)
   - [all](#all)
-  - [and](#and)
   - [any](#any)
   - [appendElement](#appendelement)
   - [compose](#compose)
-  - [not](#not)
   - [of](#of)
-  - [or](#or)
   - [struct](#struct)
   - [tuple](#tuple)
   - [tupled](#tupled)
@@ -73,15 +74,85 @@ Added in v1.0.0
 
 # combinators
 
-## contramap
+## and
+
+Combines two predicates into a new predicate that returns `true` if both of the predicates returns `true`.
 
 **Signature**
 
 ```ts
-export declare const contramap: {
-  <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
-  <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
+export declare const and: {
+  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
+  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
 }
+```
+
+**Example**
+
+```ts
+import * as P from '@fp-ts/core/Predicate'
+
+const minLength = (n: number) => (s: string) => s.length >= n
+const maxLength = (n: number) => (s: string) => s.length <= n
+
+const length = (n: number) => P.and(minLength(n), maxLength(n))
+
+assert.deepStrictEqual(length(2)('aa'), true)
+assert.deepStrictEqual(length(2)('a'), false)
+assert.deepStrictEqual(length(2)('aaa'), false)
+```
+
+Added in v1.0.0
+
+## not
+
+Negates the result of a given predicate.
+
+**Signature**
+
+```ts
+export declare const not: <A>(self: Predicate<A>) => Predicate<A>
+```
+
+**Example**
+
+```ts
+import * as P from '@fp-ts/core/Predicate'
+import * as N from '@fp-ts/core/Number'
+
+const isPositive = P.not(N.lessThan(0))
+
+assert.deepStrictEqual(isPositive(-1), false)
+assert.deepStrictEqual(isPositive(0), true)
+assert.deepStrictEqual(isPositive(1), true)
+```
+
+Added in v1.0.0
+
+## or
+
+Combines two predicates into a new predicate that returns `true` if at least one of the predicates returns `true`.
+
+**Signature**
+
+```ts
+export declare const or: {
+  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
+  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
+}
+```
+
+**Example**
+
+```ts
+import * as P from '@fp-ts/core/Predicate'
+import * as N from '@fp-ts/core/Number'
+
+const nonZero = P.or(N.lessThan(0), N.greaterThan(0))
+
+assert.deepStrictEqual(nonZero(-1), true)
+assert.deepStrictEqual(nonZero(0), false)
+assert.deepStrictEqual(nonZero(1), true)
 ```
 
 Added in v1.0.0
@@ -103,6 +174,37 @@ by applying each predicate in the iterable in order until a predicate fails.
 
 ```ts
 export declare const productAll: <A>(collection: Iterable<Predicate<A>>) => Predicate<readonly A[]>
+```
+
+Added in v1.0.0
+
+# constructors
+
+## contramap
+
+Given a `Predicate<A>` returns a `Predicate<B>`
+
+**Signature**
+
+```ts
+export declare const contramap: {
+  <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
+  <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
+}
+```
+
+**Example**
+
+```ts
+import * as P from '@fp-ts/core/Predicate'
+import * as N from '@fp-ts/core/Number'
+
+const minLength3 = P.contramap(N.greaterThan(2), (s: string) => s.length)
+
+assert.deepStrictEqual(minLength3('a'), false)
+assert.deepStrictEqual(minLength3('aa'), false)
+assert.deepStrictEqual(minLength3('aaa'), true)
+assert.deepStrictEqual(minLength3('aaaa'), true)
 ```
 
 Added in v1.0.0
@@ -740,19 +842,6 @@ export declare const all: <A>(collection: Iterable<Predicate<A>>) => Predicate<A
 
 Added in v1.0.0
 
-## and
-
-**Signature**
-
-```ts
-export declare const and: {
-  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
-  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
-}
-```
-
-Added in v1.0.0
-
 ## any
 
 **Signature**
@@ -792,35 +881,12 @@ export declare const compose: {
 
 Added in v1.0.0
 
-## not
-
-**Signature**
-
-```ts
-export declare const not: <A>(self: Predicate<A>) => Predicate<A>
-```
-
-Added in v1.0.0
-
 ## of
 
 **Signature**
 
 ```ts
 export declare const of: <A>(_: A) => Predicate<A>
-```
-
-Added in v1.0.0
-
-## or
-
-**Signature**
-
-```ts
-export declare const or: {
-  <A>(that: Predicate<A>): (self: Predicate<A>) => Predicate<A>
-  <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A>
-}
 ```
 
 Added in v1.0.0
@@ -840,6 +906,10 @@ Added in v1.0.0
 ## tuple
 
 Similar to `Promise.all` but operates on `Predicate`s.
+
+```
+[Predicate<A>, Predicate<B>, ...] -> Predicate<[A, B, ...]>
+```
 
 **Signature**
 

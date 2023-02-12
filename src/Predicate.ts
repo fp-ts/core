@@ -38,12 +38,37 @@ export interface Refinement<A, B extends A> {
 }
 
 /**
+ * Given a `Predicate<A>` returns a `Predicate<B>`
+ *
+ * @param self - the `Predicate<A>` to be transformed to `Predicate<B>`.
+ * @param f - a function to transform `B` to `A`.
+ *
+ * @example
+ * import * as P from "@fp-ts/core/Predicate"
+ * import * as N from "@fp-ts/core/Number"
+ *
+ * const minLength3 = P.contramap(N.greaterThan(2), (s: string) => s.length)
+ *
+ * assert.deepStrictEqual(minLength3("a"), false)
+ * assert.deepStrictEqual(minLength3("aa"), false)
+ * assert.deepStrictEqual(minLength3("aaa"), true)
+ * assert.deepStrictEqual(minLength3("aaaa"), true)
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const contramap: {
+  <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
+  <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
+} = dual(2, <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B> => (b) => self(f(b)))
+
+/**
  * Tests if a value is a `string`.
  *
  * @param input - The value to test.
  *
  * @example
- * import { isString } from '@fp-ts/core/Predicate'
+ * import { isString } from "@fp-ts/core/Predicate"
  *
  * assert.deepStrictEqual(isString("a"), true)
  *
@@ -60,7 +85,7 @@ export const isString = (input: unknown): input is string => typeof input === "s
  * @param input - The value to test.
  *
  * @example
- * import { isNumber } from '@fp-ts/core/Predicate'
+ * import { isNumber } from "@fp-ts/core/Predicate"
  *
  * assert.deepStrictEqual(isNumber(2), true)
  *
@@ -77,7 +102,7 @@ export const isNumber = (input: unknown): input is number => typeof input === "n
  * @param input - The value to test.
  *
  * @example
- * import { isBoolean } from '@fp-ts/core/Predicate'
+ * import { isBoolean } from "@fp-ts/core/Predicate"
  *
  * assert.deepStrictEqual(isBoolean(true), true)
  *
@@ -128,7 +153,7 @@ export const isSymbol = (input: unknown): input is symbol => typeof input === "s
  * @param input - The value to test.
  *
  * @example
- * import { isFunction } from '@fp-ts/core/Predicate'
+ * import { isFunction } from "@fp-ts/core/Predicate"
  *
  * assert.deepStrictEqual(isFunction(isFunction), true)
  *
@@ -401,15 +426,6 @@ export const compose: {
     (a): a is C => ab(a) && bc(a)
 )
 
-/**
- * @category combinators
- * @since 1.0.0
- */
-export const contramap: {
-  <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
-  <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
-} = dual(2, <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B> => (b) => self(f(b)))
-
 const imap = contravariant.imap<PredicateTypeLambda>(contramap)
 
 /**
@@ -539,6 +555,10 @@ export const appendElement: {
 /**
  * Similar to `Promise.all` but operates on `Predicate`s.
  *
+ * ```
+ * [Predicate<A>, Predicate<B>, ...] -> Predicate<[A, B, ...]>
+ * ```
+ *
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Predicate<any>>>(
@@ -555,11 +575,42 @@ export const struct: <R extends Record<string, Predicate<any>>>(
   product_.struct(Product)
 
 /**
+ * Negates the result of a given predicate.
+ *
+ * @param self - A predicate.
+ *
+ * @example
+ * import * as P from "@fp-ts/core/Predicate"
+ * import * as N from "@fp-ts/core/Number"
+ *
+ * const isPositive = P.not(N.lessThan(0))
+ *
+ * assert.deepStrictEqual(isPositive(-1), false)
+ * assert.deepStrictEqual(isPositive(0), true)
+ * assert.deepStrictEqual(isPositive(1), true)
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const not = <A>(self: Predicate<A>): Predicate<A> => (a) => !self(a)
 
 /**
+ * Combines two predicates into a new predicate that returns `true` if at least one of the predicates returns `true`.
+ *
+ * @param self - A predicate.
+ * @param that - A predicate.
+ *
+ * @example
+ * import * as P from "@fp-ts/core/Predicate"
+ * import * as N from "@fp-ts/core/Number"
+ *
+ * const nonZero = P.or(N.lessThan(0), N.greaterThan(0))
+ *
+ * assert.deepStrictEqual(nonZero(-1), true)
+ * assert.deepStrictEqual(nonZero(0), false)
+ * assert.deepStrictEqual(nonZero(1), true)
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const or: {
@@ -568,6 +619,24 @@ export const or: {
 } = dual(2, <A>(self: Predicate<A>, that: Predicate<A>): Predicate<A> => (a) => self(a) || that(a))
 
 /**
+ * Combines two predicates into a new predicate that returns `true` if both of the predicates returns `true`.
+ *
+ * @param self - A predicate.
+ * @param that - A predicate.
+ *
+ * @example
+ * import * as P from "@fp-ts/core/Predicate"
+ *
+ * const minLength = (n: number) => (s: string) => s.length >= n
+ * const maxLength = (n: number) => (s: string) => s.length <= n
+ *
+ * const length = (n: number) => P.and(minLength(n), maxLength(n))
+ *
+ * assert.deepStrictEqual(length(2)("aa"), true)
+ * assert.deepStrictEqual(length(2)("a"), false)
+ * assert.deepStrictEqual(length(2)("aaa"), false)
+ *
+ * @category combinators
  * @since 1.0.0
  */
 export const and: {

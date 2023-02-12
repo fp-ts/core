@@ -142,6 +142,10 @@ export const booleanEqv: Monoid<boolean> = fromSemigroup(semigroup.booleanEqv, t
 /**
  * Similar to `Promise.all` but operates on `Monoid`s.
  *
+ * ```
+ * [Monoid<A>, Monoid<B>, ...] -> Monoid<[A, B, ...]>
+ * ```
+ *
  * This function creates and returns a new `Monoid` for a tuple of values based on the given `Monoid`s for each element in the tuple.
  * The returned `Monoid` combines two tuples of the same type by applying the corresponding `Monoid` passed as arguments to each element in the tuple.
  *
@@ -152,11 +156,11 @@ export const booleanEqv: Monoid<boolean> = fromSemigroup(semigroup.booleanEqv, t
  * @category combinators
  * @since 1.0.0
  */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...monoids: { [K in keyof A]: Monoid<A[K]> }
-): Monoid<A> => {
-  const empty: A = monoids.map((m) => m.empty) as any
-  return fromSemigroup(semigroup.tuple<A>(...monoids), empty)
+export const tuple = <T extends ReadonlyArray<Monoid<any>>>(
+  ...elements: T
+): Monoid<{ [I in keyof T]: [T[I]] extends [Monoid<infer A>] ? A : never }> => {
+  const empty = elements.map((m) => m.empty) as any
+  return fromSemigroup(semigroup.tuple(...elements), empty)
 }
 
 /**
@@ -189,14 +193,14 @@ export const array: <A>() => Monoid<ReadonlyArray<A>> = mutableArray as any
  * @category combinators
  * @since 1.0.0
  */
-export const struct = <A>(
-  monoids: { readonly [K in keyof A]: Monoid<A[K]> }
-): Monoid<{ readonly [K in keyof A]: A[K] }> => {
-  const empty: A = {} as any
-  for (const k in monoids) {
-    if (Object.prototype.hasOwnProperty.call(monoids, k)) {
-      empty[k] = monoids[k].empty
+export const struct = <R extends { readonly [x: string]: Monoid<any> }>(
+  fields: R
+): Monoid<{ [K in keyof R]: [R[K]] extends [Monoid<infer A>] ? A : never }> => {
+  const empty = {} as any
+  for (const k in fields) {
+    if (Object.prototype.hasOwnProperty.call(fields, k)) {
+      empty[k] = fields[k].empty
     }
   }
-  return fromSemigroup(semigroup.struct(monoids), empty)
+  return fromSemigroup(semigroup.struct(fields), empty)
 }

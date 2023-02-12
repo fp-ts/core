@@ -89,6 +89,10 @@ Added in v1.0.0
 
 Similar to `Promise.all` but operates on `Equivalence`s.
 
+```
+[Equivalence<A>, Equivalence<B>, ...] -> Equivalence<[A, B, ...]>
+```
+
 Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
 by applying each `Equivalence` to the corresponding element of the tuple.
 

@@ -48,9 +48,11 @@ export const omit = <S, Keys extends readonly [keyof S, ...Array<keyof S>]>(
  * @category combinators
  * @since 1.0.0
  */
-export const getEquivalence: <A>(
-  equivalences: { [K in keyof A]: equivalence.Equivalence<A[K]> }
-) => equivalence.Equivalence<{ readonly [K in keyof A]: A[K] }> = equivalence.struct
+export const getEquivalence: <R extends Record<string, equivalence.Equivalence<any>>>(
+  predicates: R
+) => equivalence.Equivalence<
+  { readonly [K in keyof R]: [R[K]] extends [equivalence.Equivalence<infer A>] ? A : never }
+> = equivalence.struct
 
 /**
  * This function creates and returns a new `Order` for a struct of values based on the given `Order`s
@@ -59,9 +61,10 @@ export const getEquivalence: <A>(
  * @category combinators
  * @since 1.0.0
  */
-export const getOrder: <A>(
-  orders: { readonly [K in keyof A]: order.Order<A[K]> }
-) => order.Order<{ readonly [K in keyof A]: A[K] }> = order.struct
+export const getOrder: <R extends { readonly [x: string]: order.Order<any> }>(
+  fields: R
+) => order.Order<{ [K in keyof R]: [R[K]] extends [order.Order<infer A>] ? A : never }> =
+  order.struct
 
 /**
  * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
@@ -72,9 +75,11 @@ export const getOrder: <A>(
  * @category combinators
  * @since 1.0.0
  */
-export const getSemigroup: <A>(
-  semigroups: { readonly [K in keyof A]: semigroup.Semigroup<A[K]> }
-) => semigroup.Semigroup<{ readonly [K in keyof A]: A[K] }> = semigroup.struct
+export const getSemigroup: <R extends { readonly [x: string]: semigroup.Semigroup<any> }>(
+  fields: R
+) => semigroup.Semigroup<
+  { [K in keyof R]: [R[K]] extends [semigroup.Semigroup<infer A>] ? A : never }
+> = semigroup.struct
 
 /**
  * This function creates and returns a new `Monoid` for a struct of values based on the given `Monoid`s for each property in the struct.
@@ -87,9 +92,10 @@ export const getSemigroup: <A>(
  * @category combinators
  * @since 1.0.0
  */
-export const getMonoid: <A>(
-  monoids: { readonly [K in keyof A]: monoid.Monoid<A[K]> }
-) => monoid.Monoid<{ readonly [K in keyof A]: A[K] }> = monoid.struct
+export const getMonoid: <R extends { readonly [x: string]: monoid.Monoid<any> }>(
+  fields: R
+) => monoid.Monoid<{ [K in keyof R]: [R[K]] extends [monoid.Monoid<infer A>] ? A : never }> =
+  monoid.struct
 
 /*
 

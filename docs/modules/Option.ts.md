@@ -441,6 +441,10 @@ Added in v1.0.0
 
 Similar to `Promise.all` but operates on `Option`s.
 
+```
+[Option<A>, Option<B>, ...] -> Option<[A, B, ...]>
+```
+
 Takes a tuple of `Option`s and returns an `Option` of a tuple of values.
 
 **Signature**

@@ -35,9 +35,9 @@ by applying each `Equivalence` to the corresponding property of the struct.
 **Signature**
 
 ```ts
-export declare const getEquivalence: <A>(equivalences: {
-  [K in keyof A]: equivalence.Equivalence<A[K]>
-}) => equivalence.Equivalence<{ readonly [K in keyof A]: A[K] }>
+export declare const getEquivalence: <R extends Record<string, equivalence.Equivalence<any>>>(
+  predicates: R
+) => equivalence.Equivalence<{ readonly [K in keyof R]: [R[K]] extends [equivalence.Equivalence<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
@@ -54,9 +54,9 @@ It is useful when you need to combine two structs of the same type and you have 
 **Signature**
 
 ```ts
-export declare const getMonoid: <A>(monoids: { readonly [K in keyof A]: monoid.Monoid<A[K]> }) => monoid.Monoid<{
-  readonly [K in keyof A]: A[K]
-}>
+export declare const getMonoid: <R extends { readonly [x: string]: monoid.Monoid<any> }>(
+  fields: R
+) => monoid.Monoid<{ [K in keyof R]: [R[K]] extends [monoid.Monoid<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
@@ -69,9 +69,9 @@ for each property in the struct.
 **Signature**
 
 ```ts
-export declare const getOrder: <A>(orders: { readonly [K in keyof A]: order.Order<A[K]> }) => order.Order<{
-  readonly [K in keyof A]: A[K]
-}>
+export declare const getOrder: <R extends { readonly [x: string]: order.Order<any> }>(
+  fields: R
+) => order.Order<{ [K in keyof R]: [R[K]] extends [order.Order<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
@@ -86,9 +86,9 @@ It is useful when you need to combine two structs of the same type and you have 
 **Signature**
 
 ```ts
-export declare const getSemigroup: <A>(semigroups: {
-  readonly [K in keyof A]: semigroup.Semigroup<A[K]>
-}) => semigroup.Semigroup<{ readonly [K in keyof A]: A[K] }>
+export declare const getSemigroup: <R extends { readonly [x: string]: semigroup.Semigroup<any> }>(
+  fields: R
+) => semigroup.Semigroup<{ [K in keyof R]: [R[K]] extends [semigroup.Semigroup<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
