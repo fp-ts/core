@@ -4,10 +4,6 @@ import * as _ from "@fp-ts/core/typeclass/Monoid"
 import * as U from "../util"
 
 describe("Monoid", () => {
-  it("exports", () => {
-    expect(_.mutableArray).exists
-  })
-
   it("min", () => {
     const M = _.min(N.Bounded)
     U.deepStrictEqual(M.combineAll([]), +Infinity)

@@ -6,14 +6,18 @@ import * as String from "@fp-ts/core/String"
 // tuple
 //
 
-// $ExpectType Semigroup<[string, number]>
+// $ExpectType Semigroup<readonly [string, number]>
 _.tuple(
   String.Semigroup,
   Number.SemigroupSum
 )
 
-// $ExpectType Semigroup<readonly [string, number]>
-_.tuple<readonly [string, number]>(
-  String.Semigroup,
-  Number.SemigroupSum
-)
+//
+// struct
+//
+
+// $ExpectType Semigroup<{ readonly a: string; readonly b: number; }>
+_.struct({
+  a: String.Semigroup,
+  b: Number.SemigroupSum
+})

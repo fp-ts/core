@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [array](#array)
-  - [mutableArray](#mutablearray)
   - [reverse](#reverse)
   - [struct](#struct)
   - [tuple](#tuple)
@@ -52,19 +51,6 @@ export declare const array: <A>() => Monoid<readonly A[]>
 
 Added in v1.0.0
 
-## mutableArray
-
-Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
-The returned `Monoid`'s `empty` value is the empty array.
-
-**Signature**
-
-```ts
-export declare const mutableArray: <A>() => Monoid<A[]>
-```
-
-Added in v1.0.0
-
 ## reverse
 
 The dual of a `Monoid`, obtained by swapping the arguments of `combine`.
@@ -91,7 +77,7 @@ It is useful when you need to combine two structs of the same type and you have 
 ```ts
 export declare const struct: <R extends { readonly [x: string]: Monoid<any> }>(
   fields: R
-) => Monoid<{ [K in keyof R]: [R[K]] extends [Monoid<infer A>] ? A : never }>
+) => Monoid<{ readonly [K in keyof R]: [R[K]] extends [Monoid<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
@@ -116,7 +102,7 @@ It is useful when you need to combine two tuples of the same type and you have a
 ```ts
 export declare const tuple: <T extends readonly Monoid<any>[]>(
   ...elements: T
-) => Monoid<{ [I in keyof T]: [T[I]] extends [Monoid<infer A>] ? A : never }>
+) => Monoid<{ readonly [I in keyof T]: [T[I]] extends [Monoid<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
