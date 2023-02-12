@@ -17,6 +17,8 @@ Added in v1.0.0
   - [mutableArray](#mutablearray)
   - [struct](#struct)
   - [tuple](#tuple)
+- [combining](#combining)
+  - [all](#all)
 - [constructors](#constructors)
   - [constant](#constant)
   - [make](#make)
@@ -86,14 +88,16 @@ It is useful when you need to combine two structs of the same type and you have 
 **Signature**
 
 ```ts
-export declare const struct: <A>(semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }) => Semigroup<{
-  readonly [K in keyof A]: A[K]
-}>
+export declare const struct: <R extends { readonly [x: string]: Semigroup<any> }>(
+  fields: R
+) => Semigroup<{ [K in keyof R]: [R[K]] extends [Semigroup<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
 
 ## tuple
+
+Similar to `Promise.all` but operates on `Semigroup`s.
 
 This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.
 The returned `Semigroup` combines two tuples of the same type by applying the corresponding `Semigroup` passed as arguments to each element in the tuple.
@@ -103,9 +107,27 @@ It is useful when you need to combine two tuples of the same type and you have a
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(
-  ...semigroups: { readonly [K in keyof A]: Semigroup<A[K]> }
-) => Semigroup<A>
+export declare const tuple: <T extends readonly Semigroup<any>[]>(
+  ...elements: T
+) => Semigroup<{ [I in keyof T]: [T[I]] extends [Semigroup<infer A>] ? A : never }>
+```
+
+Added in v1.0.0
+
+# combining
+
+## all
+
+Similar to `Promise.all` but operates on `Semigroup`s.
+
+```
+Iterable<Semigroup<A>> -> Semigroup<A[]>
+```
+
+**Signature**
+
+```ts
+export declare const all: <A>(collection: Iterable<Semigroup<A>>) => Semigroup<A[]>
 ```
 
 Added in v1.0.0

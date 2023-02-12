@@ -8,4 +8,10 @@ describe.concurrent("Symbol", () => {
     expect(S.isSymbol("a")).toEqual(false)
     expect(S.isSymbol(true)).toEqual(false)
   })
+
+  it("Equivalence", () => {
+    const eq = S.Equivalence
+    expect(eq(Symbol.for("@fp-ts/core/test/a"), Symbol.for("@fp-ts/core/test/a"))).toBe(true)
+    expect(eq(Symbol.for("@fp-ts/core/test/a"), Symbol.for("@fp-ts/core/test/b"))).toBe(false)
+  })
 })

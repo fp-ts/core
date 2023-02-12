@@ -3,11 +3,12 @@
  */
 import { dual } from "@fp-ts/core/Function"
 import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import * as contravariant from "@fp-ts/core/typeclass/Contravariant"
 import type * as invariant from "@fp-ts/core/typeclass/Invariant"
 import type { Monoid } from "@fp-ts/core/typeclass/Monoid"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
-import type * as product_ from "@fp-ts/core/typeclass/Product"
+import * as product_ from "@fp-ts/core/typeclass/Product"
 import type { Semigroup } from "@fp-ts/core/typeclass/Semigroup"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import type * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
@@ -61,72 +62,6 @@ export const boolean: Order<boolean> = make((self, that) => self < that ? -1 : 1
  * @since 1.0.0
  */
 export const bigint: Order<bigint> = make((self, that) => self < that ? -1 : 1)
-
-/**
- * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
- * The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
- * It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
- * of the tuple.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const tuple = <A extends ReadonlyArray<any>>(
-  ...orders: { readonly [K in keyof A]: Order<A[K]> }
-): Order<Readonly<A>> =>
-  make((self, that) => {
-    let i = 0
-    for (; i < orders.length - 1; i++) {
-      const r = orders[i].compare(self[i], that[i])
-      if (r !== 0) {
-        return r
-      }
-    }
-    return orders[i].compare(self[i], that[i])
-  })
-
-/**
- * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
- * The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
- * If all elements are equal, the arrays are then compared based on their length.
- * It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
-  make((self, that) => {
-    const aLen = self.length
-    const bLen = that.length
-    const len = Math.min(aLen, bLen)
-    for (let i = 0; i < len; i++) {
-      const o = O.compare(self[i], that[i])
-      if (o !== 0) {
-        return o
-      }
-    }
-    return number.compare(aLen, bLen)
-  })
-
-/**
- * This function creates and returns a new `Order` for a struct of values based on the given `Order`s
- * for each property in the struct.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const struct = <A>(orders: { readonly [K in keyof A]: Order<A[K]> }): Order<
-  { readonly [K in keyof A]: A[K] }
-> =>
-  make((self, that) => {
-    for (const key of Object.keys(orders)) {
-      const o = orders[key].compare(self[key], that[key])
-      if (o !== 0) {
-        return o
-      }
-    }
-    return 0
-  })
 
 /**
  * @since 1.0.0
@@ -202,10 +137,49 @@ export const Invariant: invariant.Invariant<OrderTypeLambda> = {
   imap
 }
 
-const product = <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]> => tuple(self, that)
+const product = <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]> =>
+  make(([xa, xb], [ya, yb]) => {
+    const o = self.compare(xa, ya)
+    return o !== 0 ? o : that.compare(xb, yb)
+  })
 
-const productMany = <A>(self: Order<A>, collection: Iterable<Order<A>>): Order<[A, ...Array<A>]> =>
-  tuple(self, ...collection)
+/**
+ * Similar to `Promise.all` but operates on `Order`s.
+ *
+ * ```
+ * Iterable<Order<A>> -> Order<A[]>
+ * ```
+ *
+ * Given an iterable of `Order<A>` returns an `Order<Array<A>>` that operates on arrays
+ * by applying each order in the iterable in order until a difference is found.
+ *
+ * @category combining
+ * @since 1.0.0
+ */
+export const all = <A>(collection: Iterable<Order<A>>): Order<Array<A>> => {
+  const orders = readonlyArray.fromIterable(collection)
+  return make((x, y) => {
+    const len = Math.min(x.length, y.length, orders.length)
+    for (let i = 0; i < len; i++) {
+      const o = orders[i].compare(x[i], y[i])
+      if (o !== 0) {
+        return o
+      }
+    }
+    return 0
+  })
+}
+
+const productMany = <A>(
+  self: Order<A>,
+  collection: Iterable<Order<A>>
+): Order<[A, ...Array<A>]> => {
+  const order = all(collection)
+  return make((x, y) => {
+    const o = self.compare(x[0], y[0])
+    return o !== 0 ? o : order.compare(x.slice(1), y.slice(1))
+  })
+}
 
 /**
  * @category instances
@@ -219,9 +193,6 @@ export const SemiProduct: semiProduct.SemiProduct<OrderTypeLambda> = {
 
 const of: <A>(a: A) => Order<A> = () => empty
 
-const productAll = <A>(collection: Iterable<Order<A>>): Order<Array<A>> =>
-  tuple<Array<A>>(...collection)
-
 /**
  * @category instances
  * @since 1.0.0
@@ -229,10 +200,63 @@ const productAll = <A>(collection: Iterable<Order<A>>): Order<Array<A>> =>
 export const Product: product_.Product<OrderTypeLambda> = {
   of,
   imap,
-  product: SemiProduct.product,
-  productMany: SemiProduct.productMany,
-  productAll
+  product,
+  productMany,
+  productAll: all
 }
+
+/**
+ * Similar to `Promise.all` but operates on `Order`s.
+ *
+ * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
+ * The returned `Order` compares two tuples of the same type by applying the corresponding `Order` to each element in the tuple.
+ * It is useful when you need to compare two tuples of the same type and you have a specific way of comparing each element
+ * of the tuple.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const tuple: <T extends ReadonlyArray<Order<any>>>(
+  ...elements: T
+) => Order<{ [I in keyof T]: [T[I]] extends [Order<infer A>] ? A : never }> = product_.tuple(
+  Product
+)
+
+/**
+ * This function creates and returns a new `Order` for an array of values based on a given `Order` for the elements of the array.
+ * The returned `Order` compares two arrays by applying the given `Order` to each element in the arrays.
+ * If all elements are equal, the arrays are then compared based on their length.
+ * It is useful when you need to compare two arrays of the same type and you have a specific way of comparing each element of the array.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const array = <A>(O: Order<A>): Order<ReadonlyArray<A>> =>
+  make((self, that) => {
+    const aLen = self.length
+    const bLen = that.length
+    const len = Math.min(aLen, bLen)
+    for (let i = 0; i < len; i++) {
+      const o = O.compare(self[i], that[i])
+      if (o !== 0) {
+        return o
+      }
+    }
+    return number.compare(aLen, bLen)
+  })
+
+/**
+ * This function creates and returns a new `Order` for a struct of values based on the given `Order`s
+ * for each property in the struct.
+ *
+ * @category combinators
+ * @since 1.0.0
+ */
+export const struct: <R extends { readonly [x: string]: Order<any> }>(
+  fields: R
+) => Order<{ [K in keyof R]: [R[K]] extends [Order<infer A>] ? A : never }> = product_.struct(
+  Product
+)
 
 /**
  * Test whether one value is _strictly less than_ another.

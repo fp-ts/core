@@ -486,7 +486,7 @@ export const liftNullable = <A extends ReadonlyArray<unknown>, B, E>(
 ) => (...a: A): These<E, NonNullable<B>> => fromNullable(() => onNullable(...a))(f(...a))
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapNullable: {
@@ -577,7 +577,7 @@ export const liftThese = <A extends ReadonlyArray<unknown>, E, B>(
 ) => (...a: A): Validated<E, B> => toValidated(f(...a))
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapOption: {
@@ -597,7 +597,7 @@ export const flatMapOption: {
 ): Validated<E1 | E2, B> => flatMap(self, liftOption(f, (a) => [onNone(a)])))
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapEither: {
@@ -610,7 +610,7 @@ export const flatMapEither: {
 )
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMapThese: {
@@ -1203,7 +1203,17 @@ const product = <E1, A, E2, B>(
   return both(RA.appendAllNonEmpty(self.left, that.left), [self.right, that.right])
 }
 
-const productAll = <E, A>(
+/**
+ * Similar to `Promise.all` but operates on `These`s.
+ *
+ * ```
+ * Iterable<These<E, A>> -> These<E, A[]>
+ * ```
+ *
+ * @category combining
+ * @since 1.0.0
+ */
+const all = <E, A>(
   collection: Iterable<Validated<E, A>>
 ): Validated<E, Array<A>> => {
   const rights: Array<A> = []
@@ -1230,8 +1240,7 @@ const productAll = <E, A>(
 const productMany = <E, A>(
   self: Validated<E, A>,
   collection: Iterable<Validated<E, A>>
-): Validated<E, [A, ...Array<A>]> =>
-  map(product(self, productAll(collection)), ([a, as]) => [a, ...as])
+): Validated<E, [A, ...Array<A>]> => map(product(self, all(collection)), ([a, as]) => [a, ...as])
 
 /**
  * @category instances
@@ -1324,10 +1333,12 @@ export const Product: product_.Product<ValidatedTypeLambda> = {
   imap,
   product,
   productMany,
-  productAll
+  productAll: all
 }
 
 /**
+ * Similar to `Promise.all` but operates on `These`s.
+ *
  * @since 1.0.0
  */
 export const tuple: <T extends ReadonlyArray<Validated<any, any>>>(...tuple: T) => Validated<
@@ -1347,7 +1358,7 @@ export const struct: <R extends Record<string, Validated<any, any>>>(
   .struct(Product)
 
 /**
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const flatMap: {
@@ -1383,7 +1394,7 @@ export const Applicative: applicative.Applicative<ValidatedTypeLambda> = {
   map,
   product,
   productMany,
-  productAll
+  productAll: all
 }
 
 /**
@@ -1445,7 +1456,7 @@ export const Chainable: chainable.Chainable<ValidatedTypeLambda> = {
  * Sequences the specified effect after this effect, but ignores the value
  * produced by the effect.
  *
- * @category sequencing
+ * @category combining
  * @since 1.0.0
  */
 export const andThenDiscard: {

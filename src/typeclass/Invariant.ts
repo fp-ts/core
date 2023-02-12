@@ -1,4 +1,9 @@
 /**
+ * The `Invariant` typeclass is a higher-order abstraction over types that allow mapping the contents of a type in both directions.
+ * It is similar to the `Covariant` typeclass but provides an `imap` opration, which allows transforming a value in both directions.
+ * This typeclass is useful when dealing with data types that can be converted to and from some other types.
+ * The `imap` operation provides a way to convert such data types to other types that they can interact with while preserving their invariants.
+ *
  * @since 1.0.0
  */
 import { dual } from "@fp-ts/core/Function"
@@ -57,6 +62,8 @@ export const bindTo = <F extends TypeLambda>(F: Invariant<F>): {
     F.imap(self, a => ({ [name]: a } as any), ({ [name]: a }) => a))
 
 /**
+ * Convert a value in a singleton array in a given effect.
+ *
  * @since 1.0.0
  */
 export const tupled = <F extends TypeLambda>(

@@ -7,6 +7,7 @@ import * as U from "../util"
 
 describe("Semigroup", () => {
   it("exports", () => {
+    expect(_.Invariant).exist
     expect(_.mutableArray).exists
   })
 
@@ -65,43 +66,6 @@ describe("Semigroup", () => {
     })
   })
 
-  it("struct", () => {
-    const S = _.struct({
-      name: String.Semigroup,
-      age: Number.SemigroupSum
-    })
-    U.deepStrictEqual(S.combine({ name: "a", age: 10 }, { name: "b", age: 20 }), {
-      name: "ab",
-      age: 30
-    })
-    U.deepStrictEqual(S.combineMany({ name: "a", age: 10 }, []), {
-      name: "a",
-      age: 10
-    })
-    U.deepStrictEqual(S.combineMany({ name: "a", age: 10 }, [{ name: "b", age: 20 }]), {
-      name: "ab",
-      age: 30
-    })
-    U.deepStrictEqual(
-      S.combineMany({ name: "a", age: 10 }, [{ name: "b", age: 20 }, { name: "c", age: 30 }]),
-      {
-        name: "abc",
-        age: 60
-      }
-    )
-  })
-
-  it("tuple", () => {
-    const S = _.tuple(
-      String.Semigroup,
-      Number.SemigroupSum
-    )
-    U.deepStrictEqual(S.combine(["a", 10], ["b", 20]), ["ab", 30])
-    U.deepStrictEqual(S.combineMany(["a", 10], []), ["a", 10])
-    U.deepStrictEqual(S.combineMany(["a", 10], [["b", 20]]), ["ab", 30])
-    U.deepStrictEqual(S.combineMany(["a", 10], [["b", 20], ["c", 30]]), ["abc", 60])
-  })
-
   it("first", () => {
     const S = _.first<number>()
     U.deepStrictEqual(S.combine(1, 2), 1)
@@ -147,5 +111,10 @@ describe("Semigroup", () => {
   it("productMany", () => {
     const S = _.SemiProduct.productMany(String.Semigroup, [String.Semigroup, String.Semigroup])
     U.deepStrictEqual(S.combine(["a", "b", "c"], ["d", "e", "f"]), ["ad", "be", "cf"])
+  })
+
+  it("all", () => {
+    const S = _.all([String.Semigroup, String.Semigroup])
+    U.deepStrictEqual(S.combine(["a1", "b1"], ["a2", "b2"]), ["a1a2", "b1b2"])
   })
 })

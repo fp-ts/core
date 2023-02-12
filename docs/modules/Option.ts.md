@@ -20,10 +20,17 @@ Added in v1.0.0
   - [sum](#sum)
   - [sumCompact](#sumcompact)
 - [combining](#combining)
+  - [all](#all)
   - [ap](#ap)
+  - [appendElement](#appendelement)
   - [getFailureMonoid](#getfailuremonoid)
   - [getFailureSemigroup](#getfailuresemigroup)
   - [getFirstSomeSemigroup](#getfirstsomesemigroup)
+  - [sequence](#sequence)
+  - [struct](#struct)
+  - [traverse](#traverse)
+  - [traverseTap](#traversetap)
+  - [tuple](#tuple)
   - [zipWith](#zipwith)
 - [constructors](#constructors)
   - [none](#none)
@@ -81,13 +88,6 @@ Added in v1.0.0
   - [Some (interface)](#some-interface)
 - [pattern matching](#pattern-matching)
   - [match](#match)
-- [sequencing](#sequencing)
-  - [productAll](#productall)
-  - [sequence](#sequence)
-  - [struct](#struct)
-  - [traverse](#traverse)
-  - [traverseTap](#traversetap)
-  - [tuple](#tuple)
 - [sorting](#sorting)
   - [getOrder](#getorder)
 - [transforming](#transforming)
@@ -125,7 +125,6 @@ Added in v1.0.0
   - [SemiCoproduct](#semicoproduct)
   - [SemiProduct](#semiproduct)
   - [Traversable](#traversable)
-  - [appendElement](#appendelement)
   - [contains](#contains)
   - [exists](#exists)
   - [getOptionalMonoid](#getoptionalmonoid)
@@ -231,6 +230,34 @@ Added in v1.0.0
 
 # combining
 
+## all
+
+Similar to `Promise.all` but operates on `Option`s.
+
+```
+Iterable<Option<A>> -> Option<A[]>
+```
+
+Flattens a collection of `Option`s into a single `Option` that contains a list of all the `Some` values.
+If there is a `None` value in the collection, it returns `None` as the result.
+
+**Signature**
+
+```ts
+export declare const all: <A>(collection: Iterable<Option<A>>) => Option<A[]>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(O.all([O.some(1), O.some(2), O.some(3)]), O.some([1, 2, 3]))
+assert.deepStrictEqual(O.all([O.some(1), O.none(), O.some(3)]), O.none())
+```
+
+Added in v1.0.0
+
 ## ap
 
 **Signature**
@@ -240,6 +267,30 @@ export declare const ap: {
   <A, B>(self: Option<(a: A) => B>, that: Option<A>): Option<B>
   <A>(that: Option<A>): <B>(self: Option<(a: A) => B>) => Option<B>
 }
+```
+
+Added in v1.0.0
+
+## appendElement
+
+Appends an element to the end of a tuple wrapped in an `Option` type.
+
+**Signature**
+
+```ts
+export declare const appendElement: {
+  <A extends readonly any[], B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
+  <B>(that: Option<B>): <A extends readonly any[]>(self: Option<A>) => Option<[...A, B]>
+}
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.some(3)), O.some([1, 2, 3]))
+assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.none()), O.none())
 ```
 
 Added in v1.0.0
@@ -286,6 +337,127 @@ Semigroup returning the first `Some` value encountered.
 
 ```ts
 export declare const getFirstSomeSemigroup: <A>() => Semigroup<Option<A>>
+```
+
+Added in v1.0.0
+
+## sequence
+
+Combines an `Option` of an `F`-structure to an `F`-structure of an `Option` with the same inner type.
+
+**Signature**
+
+```ts
+export declare const sequence: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => <R, O, E, A>(self: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+const sequence = O.sequence(E.Applicative)
+
+assert.deepStrictEqual(sequence(O.some(E.right(1))), E.right(O.some(1)))
+assert.deepStrictEqual(sequence(O.some(E.left('error'))), E.left('error'))
+assert.deepStrictEqual(sequence(O.none()), E.right(O.none()))
+```
+
+Added in v1.0.0
+
+## struct
+
+Takes a struct of `Option`s and returns an `Option` of a struct of values.
+
+**Signature**
+
+```ts
+export declare const struct: <R extends Record<string, Option<any>>>(
+  fields: R
+) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.some('hello') }), O.some({ a: 1, b: 'hello' }))
+assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.none() }), O.none())
+```
+
+Added in v1.0.0
+
+## traverse
+
+Applies an `Option` value to an effectful function that returns an `F` value.
+
+**Signature**
+
+```ts
+export declare const traverse: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => {
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
+}
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as E from '@fp-ts/core/Either'
+
+const traverse = O.traverse(E.Applicative)
+const f = (n: number) => (n >= 0 ? E.right(1) : E.left('negative'))
+
+assert.deepStrictEqual(traverse(O.some(1), f), E.right(O.some(1)))
+assert.deepStrictEqual(traverse(O.some(-1), f), E.left('negative'))
+assert.deepStrictEqual(traverse(O.none(), f), E.right(O.none()))
+```
+
+Added in v1.0.0
+
+## traverseTap
+
+**Signature**
+
+```ts
+export declare const traverseTap: <F extends TypeLambda>(
+  F: applicative.Applicative<F>
+) => {
+  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<A>>
+  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Option<A>) => Kind<F, R, O, E, Option<A>>
+}
+```
+
+Added in v1.0.0
+
+## tuple
+
+Similar to `Promise.all` but operates on `Option`s.
+
+Takes a tuple of `Option`s and returns an `Option` of a tuple of values.
+
+**Signature**
+
+```ts
+export declare const tuple: <T extends readonly Option<any>[]>(
+  ...elements: T
+) => Option<{ [I in keyof T]: [T[I]] extends [Option<infer A>] ? A : never }>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(O.tuple(O.some(1), O.some('hello')), O.some([1, 'hello']))
+assert.deepStrictEqual(O.tuple(O.some(1), O.none()), O.none())
 ```
 
 Added in v1.0.0
@@ -1255,149 +1427,6 @@ assert.deepStrictEqual(
 
 Added in v1.0.0
 
-# sequencing
-
-## productAll
-
-Flattens a collection of `Option`s into a single `Option` that contains a list of all the `Some` values.
-If there is a `None` value in the collection, it returns `None` as the result.
-
-**Signature**
-
-```ts
-export declare const productAll: <A>(collection: Iterable<Option<A>>) => Option<A[]>
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(O.productAll([O.some(1), O.some(2), O.some(3)]), O.some([1, 2, 3]))
-assert.deepStrictEqual(O.productAll([O.some(1), O.none(), O.some(3)]), O.none())
-```
-
-Added in v1.0.0
-
-## sequence
-
-Combines an `Option` of an `F`-structure to an `F`-structure of an `Option` with the same inner type.
-
-**Signature**
-
-```ts
-export declare const sequence: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => <R, O, E, A>(self: Option<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, Option<A>>
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-import * as E from '@fp-ts/core/Either'
-
-const sequence = O.sequence(E.Applicative)
-
-assert.deepStrictEqual(sequence(O.some(E.right(1))), E.right(O.some(1)))
-assert.deepStrictEqual(sequence(O.some(E.left('error'))), E.left('error'))
-assert.deepStrictEqual(sequence(O.none()), E.right(O.none()))
-```
-
-Added in v1.0.0
-
-## struct
-
-Takes a struct of `Option`s and returns an `Option` of a struct of values.
-
-**Signature**
-
-```ts
-export declare const struct: <R extends Record<string, Option<any>>>(
-  fields: R
-) => Option<{ [K in keyof R]: [R[K]] extends [Option<infer A>] ? A : never }>
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.some('hello') }), O.some({ a: 1, b: 'hello' }))
-assert.deepStrictEqual(O.struct({ a: O.some(1), b: O.none() }), O.none())
-```
-
-Added in v1.0.0
-
-## traverse
-
-Applies an `Option` value to an effectful function that returns an `F` value.
-
-**Signature**
-
-```ts
-export declare const traverse: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => {
-  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Option<A>) => Kind<F, R, O, E, Option<B>>
-  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<B>>
-}
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-import * as E from '@fp-ts/core/Either'
-
-const traverse = O.traverse(E.Applicative)
-const f = (n: number) => (n >= 0 ? E.right(1) : E.left('negative'))
-
-assert.deepStrictEqual(traverse(O.some(1), f), E.right(O.some(1)))
-assert.deepStrictEqual(traverse(O.some(-1), f), E.left('negative'))
-assert.deepStrictEqual(traverse(O.none(), f), E.right(O.none()))
-```
-
-Added in v1.0.0
-
-## traverseTap
-
-**Signature**
-
-```ts
-export declare const traverseTap: <F extends TypeLambda>(
-  F: applicative.Applicative<F>
-) => {
-  <A, R, O, E, B>(self: Option<A>, f: (a: A) => Kind<F, R, O, E, B>): Kind<F, R, O, E, Option<A>>
-  <A, R, O, E, B>(f: (a: A) => Kind<F, R, O, E, B>): (self: Option<A>) => Kind<F, R, O, E, Option<A>>
-}
-```
-
-Added in v1.0.0
-
-## tuple
-
-Takes a tuple of `Option`s and returns an `Option` of a tuple of values.
-
-**Signature**
-
-```ts
-export declare const tuple: <T extends readonly Option<any>[]>(
-  ...elements: T
-) => Option<{ [I in keyof T]: [T[I]] extends [Option<infer A>] ? A : never }>
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(O.tuple(O.some(1), O.some('hello')), O.some([1, 'hello']))
-assert.deepStrictEqual(O.tuple(O.some(1), O.none()), O.none())
-```
-
-Added in v1.0.0
-
 # sorting
 
 ## getOrder
@@ -1855,21 +1884,6 @@ Added in v1.0.0
 
 ```ts
 export declare const Traversable: traversable.Traversable<OptionTypeLambda>
-```
-
-Added in v1.0.0
-
-## appendElement
-
-Appends an element to the end of a tuple.
-
-**Signature**
-
-```ts
-export declare const appendElement: {
-  <A extends readonly any[], B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
-  <B>(that: Option<B>): <A extends readonly any[]>(self: Option<A>) => Option<[...A, B]>
-}
 ```
 
 Added in v1.0.0

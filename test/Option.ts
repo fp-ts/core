@@ -49,7 +49,7 @@ describe.concurrent("Option", () => {
     expect(_.SemiProduct).exist
 
     expect(_.Product).exist
-    expect(_.productAll).exist
+    expect(_.all).exist
     expect(_.tuple).exist
     expect(_.struct).exist
 

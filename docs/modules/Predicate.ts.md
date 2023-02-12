@@ -14,6 +14,8 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [contramap](#contramap)
+- [combining](#combining)
+  - [productAll](#productall)
 - [do notation](#do-notation)
   - [Do](#do)
   - [andThenBind](#andthenbind)
@@ -80,6 +82,27 @@ export declare const contramap: {
   <B, A>(f: (b: B) => A): (self: Predicate<A>) => Predicate<B>
   <A, B>(self: Predicate<A>, f: (b: B) => A): Predicate<B>
 }
+```
+
+Added in v1.0.0
+
+# combining
+
+## productAll
+
+Similar to `Promise.all` but operates on `Predicate`s.
+
+```
+Iterable<Predicate<A>> -> Predicate<A[]>
+```
+
+Given an iterable of `Predicate<A>` returns an `Predicate<Array<A>>` that operates on arrays
+by applying each predicate in the iterable in order until a predicate fails.
+
+**Signature**
+
+```ts
+export declare const productAll: <A>(collection: Iterable<Predicate<A>>) => Predicate<readonly A[]>
 ```
 
 Added in v1.0.0
@@ -742,7 +765,8 @@ Added in v1.0.0
 
 ## appendElement
 
-Appends an element to the end of a tuple.
+This function appends a predicate to a tuple-like predicate, allowing you to create a new predicate that includes
+the original elements and the new one.
 
 **Signature**
 
@@ -814,6 +838,8 @@ export declare const struct: <R extends Record<string, Predicate<any>>>(
 Added in v1.0.0
 
 ## tuple
+
+Similar to `Promise.all` but operates on `Predicate`s.
 
 **Signature**
 

@@ -6,6 +6,11 @@ parent: Modules
 
 ## Invariant overview
 
+The `Invariant` typeclass is a higher-order abstraction over types that allow mapping the contents of a type in both directions.
+It is similar to the `Covariant` typeclass but provides an `imap` opration, which allows transforming a value in both directions.
+This typeclass is useful when dealing with data types that can be converted to and from some other types.
+The `imap` operation provides a way to convert such data types to other types that they can interact with while preserving their invariants.
+
 Added in v1.0.0
 
 ---
@@ -78,6 +83,8 @@ export declare const imapComposition: <F extends TypeLambda, G extends TypeLambd
 Added in v1.0.0
 
 ## tupled
+
+Convert a value in a singleton array in a given effect.
 
 **Signature**
 

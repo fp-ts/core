@@ -19,9 +19,10 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [array](#array)
   - [contramap](#contramap)
-  - [record](#record)
   - [struct](#struct)
   - [tuple](#tuple)
+- [combining](#combining)
+  - [all](#all)
 - [constructors](#constructors)
   - [make](#make)
   - [strict](#strict)
@@ -48,10 +49,6 @@ Added in v1.0.0
 
 ## array
 
-Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `ReadonlyArray<A>`.
-The returned `Equivalence` compares arrays by first checking their length and then applying the provided `Equivalence` to each element.
-If all comparisons return true, the arrays are considered equal.
-
 **Signature**
 
 ```ts
@@ -73,20 +70,6 @@ export declare const contramap: {
 
 Added in v1.0.0
 
-## record
-
-Given an `Equivalence` of type `A`, returns a new `Equivalence` of type `{ readonly [x: string]: A }`.
-The returned `Equivalence` compares records by first checking their number of keys and then applying the provided `Equivalence` to each value.
-If all comparisons return true, the records are considered equal.
-
-**Signature**
-
-```ts
-export declare const record: <A>(equivalence: Equivalence<A>) => Equivalence<ReadonlyRecord<A>>
-```
-
-Added in v1.0.0
-
 ## struct
 
 Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct
@@ -95,14 +78,16 @@ by applying each `Equivalence` to the corresponding property of the struct.
 **Signature**
 
 ```ts
-export declare const struct: <A>(equivalences: { [K in keyof A]: Equivalence<A[K]> }) => Equivalence<{
-  readonly [K in keyof A]: A[K]
-}>
+export declare const struct: <R extends Record<string, Equivalence<any>>>(
+  predicates: R
+) => Equivalence<{ readonly [K in keyof R]: [R[K]] extends [Equivalence<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
 
 ## tuple
+
+Similar to `Promise.all` but operates on `Equivalence`s.
 
 Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
 by applying each `Equivalence` to the corresponding element of the tuple.
@@ -110,9 +95,30 @@ by applying each `Equivalence` to the corresponding element of the tuple.
 **Signature**
 
 ```ts
-export declare const tuple: <A extends readonly any[]>(
-  ...equivalences: { readonly [K in keyof A]: Equivalence<A[K]> }
-) => Equivalence<Readonly<A>>
+export declare const tuple: <T extends readonly Equivalence<any>[]>(
+  ...predicates: T
+) => Equivalence<Readonly<{ [I in keyof T]: [T[I]] extends [Equivalence<infer A>] ? A : never }>>
+```
+
+Added in v1.0.0
+
+# combining
+
+## all
+
+Similar to `Promise.all` but operates on `Equivalence`s.
+
+```
+Iterable<Equivalence<A>> -> Equivalence<A[]>
+```
+
+Given an iterable of `Equivalence<A>` returns an `Equivalence<Array<A>>` that operates on arrays
+by applying each equivalence in the iterable in order until a difference is found.
+
+**Signature**
+
+```ts
+export declare const all: <A>(collection: Iterable<Equivalence<A>>) => Equivalence<A[]>
 ```
 
 Added in v1.0.0

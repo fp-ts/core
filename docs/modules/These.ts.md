@@ -20,6 +20,12 @@ Added in v1.0.0
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
+  - [andThenDiscard](#andthendiscard)
+  - [flatMap](#flatmap)
+  - [flatMapEither](#flatmapeither)
+  - [flatMapNullable](#flatmapnullable)
+  - [flatMapOption](#flatmapoption)
+  - [flatMapThese](#flatmapthese)
   - [getFirstLeftMonoid](#getfirstleftmonoid)
   - [getFirstLeftSemigroup](#getfirstleftsemigroup)
   - [getFirstRightOrBothSemigroup](#getfirstrightorbothsemigroup)
@@ -130,13 +136,6 @@ Added in v1.0.0
   - [match](#match)
 - [predicates](#predicates)
   - [exists](#exists)
-- [sequencing](#sequencing)
-  - [andThenDiscard](#andthendiscard)
-  - [flatMap](#flatmap)
-  - [flatMapEither](#flatmapeither)
-  - [flatMapNullable](#flatmapnullable)
-  - [flatMapOption](#flatmapoption)
-  - [flatMapThese](#flatmapthese)
 - [traversing](#traversing)
   - [sequence](#sequence)
   - [traverse](#traverse)
@@ -255,6 +254,118 @@ export declare const tap: {
 Added in v1.0.0
 
 # combining
+
+## andThenDiscard
+
+Sequences the specified effect after this effect, but ignores the value
+produced by the effect.
+
+**Signature**
+
+```ts
+export declare const andThenDiscard: {
+  <E1, A, E2, _>(self: These<readonly [E1, ...E1[]], A>, that: These<readonly [E2, ...E2[]], _>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    A
+  >
+  <E2, _>(that: These<readonly [E2, ...E2[]], _>): <E1, A>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], A>
+}
+```
+
+Added in v1.0.0
+
+## flatMap
+
+**Signature**
+
+```ts
+export declare const flatMap: {
+  <A, E2, B>(f: (a: A) => These<readonly [E2, ...E2[]], B>): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => These<readonly [E2, ...E2[]], B>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+}
+```
+
+Added in v1.0.0
+
+## flatMapEither
+
+**Signature**
+
+```ts
+export declare const flatMapEither: {
+  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => Either<E2, B>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+}
+```
+
+Added in v1.0.0
+
+## flatMapNullable
+
+**Signature**
+
+```ts
+export declare const flatMapNullable: {
+  <A, B, E2>(f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], NonNullable<B>>
+  <E1, A, B, E2>(
+    self: These<readonly [E1, ...E1[]], A>,
+    f: (a: A) => B | null | undefined,
+    onNullable: (a: A) => E2
+  ): These<readonly [E1 | E2, ...(E1 | E2)[]], NonNullable<B>>
+}
+```
+
+Added in v1.0.0
+
+## flatMapOption
+
+**Signature**
+
+```ts
+export declare const flatMapOption: {
+  <A, B, E2>(f: (a: A) => O.Option<B>, onNone: (a: A) => E2): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+  <E1, A, B, E2>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => O.Option<B>, onNone: (a: A) => E2): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+}
+```
+
+Added in v1.0.0
+
+## flatMapThese
+
+**Signature**
+
+```ts
+export declare const flatMapThese: {
+  <A, E2, B>(f: (a: A) => These<E2, B>): <E1>(
+    self: These<readonly [E1, ...E1[]], A>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
+  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => These<E2, B>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    B
+  >
+}
+```
+
+Added in v1.0.0
 
 ## getFirstLeftMonoid
 
@@ -1572,120 +1683,6 @@ export declare const exists: {
 
 Added in v1.0.0
 
-# sequencing
-
-## andThenDiscard
-
-Sequences the specified effect after this effect, but ignores the value
-produced by the effect.
-
-**Signature**
-
-```ts
-export declare const andThenDiscard: {
-  <E1, A, E2, _>(self: These<readonly [E1, ...E1[]], A>, that: These<readonly [E2, ...E2[]], _>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    A
-  >
-  <E2, _>(that: These<readonly [E2, ...E2[]], _>): <E1, A>(
-    self: These<readonly [E1, ...E1[]], A>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], A>
-}
-```
-
-Added in v1.0.0
-
-## flatMap
-
-**Signature**
-
-```ts
-export declare const flatMap: {
-  <A, E2, B>(f: (a: A) => These<readonly [E2, ...E2[]], B>): <E1>(
-    self: These<readonly [E1, ...E1[]], A>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
-  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => These<readonly [E2, ...E2[]], B>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    B
-  >
-}
-```
-
-Added in v1.0.0
-
-## flatMapEither
-
-**Signature**
-
-```ts
-export declare const flatMapEither: {
-  <A, E2, B>(f: (a: A) => Either<E2, B>): <E1>(
-    self: These<readonly [E1, ...E1[]], A>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
-  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => Either<E2, B>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    B
-  >
-}
-```
-
-Added in v1.0.0
-
-## flatMapNullable
-
-**Signature**
-
-```ts
-export declare const flatMapNullable: {
-  <A, B, E2>(f: (a: A) => B | null | undefined, onNullable: (a: A) => E2): <E1>(
-    self: These<readonly [E1, ...E1[]], A>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], NonNullable<B>>
-  <E1, A, B, E2>(
-    self: These<readonly [E1, ...E1[]], A>,
-    f: (a: A) => B | null | undefined,
-    onNullable: (a: A) => E2
-  ): These<readonly [E1 | E2, ...(E1 | E2)[]], NonNullable<B>>
-}
-```
-
-Added in v1.0.0
-
-## flatMapOption
-
-**Signature**
-
-```ts
-export declare const flatMapOption: {
-  <A, B, E2>(f: (a: A) => O.Option<B>, onNone: (a: A) => E2): <E1>(
-    self: These<readonly [E1, ...E1[]], A>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
-  <E1, A, B, E2>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => O.Option<B>, onNone: (a: A) => E2): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    B
-  >
-}
-```
-
-Added in v1.0.0
-
-## flatMapThese
-
-**Signature**
-
-```ts
-export declare const flatMapThese: {
-  <A, E2, B>(f: (a: A) => These<E2, B>): <E1>(
-    self: These<readonly [E1, ...E1[]], A>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], B>
-  <E1, A, E2, B>(self: These<readonly [E1, ...E1[]], A>, f: (a: A) => These<E2, B>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    B
-  >
-}
-```
-
-Added in v1.0.0
-
 # traversing
 
 ## sequence
@@ -1887,6 +1884,8 @@ export declare const struct: <R extends Record<string, These<readonly [any, ...a
 Added in v1.0.0
 
 ## tuple
+
+Similar to `Promise.all` but operates on `These`s.
 
 **Signature**
 

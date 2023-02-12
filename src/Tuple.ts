@@ -22,9 +22,11 @@ export const tuple = <A extends ReadonlyArray<any>>(...elements: A): A => elemen
  * @category combinators
  * @since 1.0.0
  */
-export const getEquivalence: <A extends ReadonlyArray<any>>(
-  ...equivalences: { readonly [K in keyof A]: equivalence.Equivalence<A[K]> }
-) => equivalence.Equivalence<Readonly<A>> = equivalence.tuple
+export const getEquivalence: <T extends ReadonlyArray<equivalence.Equivalence<any>>>(
+  ...predicates: T
+) => equivalence.Equivalence<
+  Readonly<{ [I in keyof T]: [T[I]] extends [equivalence.Equivalence<infer A>] ? A : never }>
+> = equivalence.tuple
 
 /**
  * This function creates and returns a new `Order` for a tuple of values based on the given `Order`s for each element in the tuple.
@@ -35,9 +37,10 @@ export const getEquivalence: <A extends ReadonlyArray<any>>(
  * @category combinators
  * @since 1.0.0
  */
-export const getOrder: <A extends ReadonlyArray<any>>(
-  ...orders: { readonly [K in keyof A]: order.Order<A[K]> }
-) => order.Order<Readonly<A>> = order.tuple
+export const getOrder: <T extends ReadonlyArray<order.Order<any>>>(
+  ...elements: T
+) => order.Order<{ [I in keyof T]: [T[I]] extends [order.Order<infer A>] ? A : never }> =
+  order.tuple
 
 /**
  * This function creates and returns a new `Semigroup` for a tuple of values based on the given `Semigroup`s for each element in the tuple.

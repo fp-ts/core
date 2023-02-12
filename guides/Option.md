@@ -708,11 +708,14 @@ console.log(combine); // none()
 
 **Cheat sheet** (combining)
 
-| **Function** | **Given input**                         | **Resulting Output** |
-| ------------ | --------------------------------------- | -------------------- |
-| `zipWith`    | `Option<A>`, `Option<B>`, `(A, B) => C` | `Option<C>`          |
-| `productAll` | `Iterable<Option<A>>`                   | `Option<A[]>`        |
-| `ap`         | `Option<(a: A) => B>`, `Option<A>`      | `Option<B>`          |
+| **Function**    | **Given input**                         | **Resulting Output**          |
+| --------------- | --------------------------------------- | ----------------------------- |
+| `zipWith`       | `Option<A>`, `Option<B>`, `(A, B) => C` | `Option<C>`                   |
+| `tuple`         | `[Option<A>, Option<B>, ...]`           | `Option<[A, B, ...]>`         |
+| `struct`        | `{ a: Option<A>, b: Option<B>, ... }`   | `Option<{ a: A, b: B, ... }>` |
+| `all`           | `Iterable<Option<A>>`                   | `Option<A[]>`                 |
+| `appendElement` | `Option<[A, B, ...]>`, `Option<C>`      | `Option<[A, B, ..., C]>`      |
+| `ap`            | `Option<(a: A) => B>`, `Option<A>`      | `Option<B>`                   |
 
 ## Algebraic operations with `Option`s
 
