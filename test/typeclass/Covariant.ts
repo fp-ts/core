@@ -8,11 +8,11 @@ describe("Covariant", () => {
   it("mapComposition", () => {
     const map = _.mapComposition(RA.Covariant, RA.Covariant)
     const f = (a: string) => a + "!"
-    U.deepStrictEqual(pipe([], map(f)), [])
-    U.deepStrictEqual(pipe([[]], map(f)), [[]])
-    U.deepStrictEqual(pipe([["a"]], map(f)), [["a!"]])
-    U.deepStrictEqual(pipe([["a"], ["b"]], map(f)), [["a!"], ["b!"]])
-    U.deepStrictEqual(pipe([["a", "c"], ["b", "d", "e"]], map(f)), [["a!", "c!"], [
+    U.deepStrictEqual(map([], f), [])
+    U.deepStrictEqual(map([[]], f), [[]])
+    U.deepStrictEqual(map([["a"]], f), [["a!"]])
+    U.deepStrictEqual(map([["a"], ["b"]], f), [["a!"], ["b!"]])
+    U.deepStrictEqual(map([["a", "c"], ["b", "d", "e"]], f), [["a!", "c!"], [
       "b!",
       "d!",
       "e!"

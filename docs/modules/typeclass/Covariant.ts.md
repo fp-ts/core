@@ -139,10 +139,9 @@ Returns a default `map` composition.
 export declare const mapComposition: <F extends TypeLambda, G extends TypeLambda>(
   F: Covariant<F>,
   G: Covariant<G>
-) => <A, B>(
+) => <FR, FO, FE, GR, GO, GE, A, B>(
+  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>,
   f: (a: A) => B
-) => <FR, FO, FE, GR, GO, GE>(
-  self: Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, A>>
 ) => Kind<F, FR, FO, FE, Kind<G, GR, GO, GE, B>>
 ```
 
