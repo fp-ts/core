@@ -30,21 +30,19 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export const isBoolean: (input: unknown) => input is boolean = predicate.isBoolean
 
 /**
- * Defines the match over a boolean value.
- * Takes two thunks `onTrue`, `onFalse` and a `boolean` value.
- * If `value` is `false`, `onFalse()` is returned, otherwise `onTrue()`.
+ * This function returns the result of either of the given functions depending on the value of the boolean parameter.
+ * It is useful when you have to run one of two functions depending on the boolean value.
+ *
+ * @param value - the boolean value that decides which function will be executed.
+ * @param onFalse - a lazy evaluation function that will be executed when the `value` is `false`.
+ * @param onTrue - a lazy evaluation function that will be executed when the `value` is `true`.
  *
  * @example
- * import { some, map } from '@fp-ts/core/Option'
- * import { pipe } from '@fp-ts/core/Function'
- * import { match } from '@fp-ts/core/Boolean'
+ * import * as B from "@fp-ts/core/Boolean"
  *
  * assert.deepStrictEqual(
- *  pipe(
- *    some(true),
- *    map(match(() => 'false', () => 'true'))
- *  ),
- *  some('true')
+ *  B.match(true, () => "It's false!", () => "It's true!"),
+ *  "It's true!"
  * )
  *
  * @category pattern matching
@@ -118,6 +116,7 @@ export const SemigroupAny: semigroup.Semigroup<boolean> = semigroup.booleanAny
  * @since 1.0.0
  */
 export const SemigroupXor: semigroup.Semigroup<boolean> = semigroup.booleanXor
+
 /**
  * `boolean` semigroup under equivalence.
  *
@@ -135,7 +134,7 @@ export const SemigroupXor: semigroup.Semigroup<boolean> = semigroup.booleanXor
 export const SemigroupEqv: semigroup.Semigroup<boolean> = semigroup.booleanEqv
 
 /**
- * `boolean` monoid under conjunction.
+ * `boolean` monoid under conjunction, see also {@link SemigroupAll}.
  *
  * The `empty` value is `true`.
  *
@@ -145,7 +144,7 @@ export const SemigroupEqv: semigroup.Semigroup<boolean> = semigroup.booleanEqv
 export const MonoidAll: monoid.Monoid<boolean> = monoid.booleanAll
 
 /**
- * `boolean` monoid under disjunction.
+ * `boolean` monoid under disjunction, see also {@link SemigroupAny}.
  *
  * The `empty` value is `false`.
  *
@@ -155,7 +154,7 @@ export const MonoidAll: monoid.Monoid<boolean> = monoid.booleanAll
 export const MonoidAny: monoid.Monoid<boolean> = monoid.booleanAny
 
 /**
- * `boolean` monoid under exclusive disjunction.
+ * `boolean` monoid under exclusive disjunction, see also {@link SemigroupXor}.
  *
  * The `empty` value is `false`.
  *
@@ -175,12 +174,30 @@ export const MonoidXor: monoid.Monoid<boolean> = monoid.booleanXor
 export const MonoidEqv: monoid.Monoid<boolean> = monoid.booleanEqv
 
 /**
+ * Negates the given boolean: `!self`
+ *
+ * @example
+ * import { not } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(not(true), false)
+ * assert.deepStrictEqual(not(false), true)
+ *
  * @category combinators
  * @since 1.0.0
  */
 export const not = (self: boolean): boolean => !self
 
 /**
+ * Combines two boolean using AND: `self && that`.
+ *
+ * @example
+ * import { and } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(and(true, true), true)
+ * assert.deepStrictEqual(and(true, false), false)
+ * assert.deepStrictEqual(and(false, true), false)
+ * assert.deepStrictEqual(and(false, false), false)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -190,6 +207,16 @@ export const and: {
 } = dual(2, semigroup.booleanAll.combine)
 
 /**
+ * Combines two boolean using NAND: `!(self && that)`.
+ *
+ * @example
+ * import { nand } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(nand(true, true), false)
+ * assert.deepStrictEqual(nand(true, false), true)
+ * assert.deepStrictEqual(nand(false, true), true)
+ * assert.deepStrictEqual(nand(false, false), true)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -199,6 +226,16 @@ export const nand: {
 } = dual(2, flow(semigroup.booleanAll.combine, not))
 
 /**
+ * Combines two boolean using OR: `self || that`.
+ *
+ * @example
+ * import { or } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(or(true, true), true)
+ * assert.deepStrictEqual(or(true, false), true)
+ * assert.deepStrictEqual(or(false, true), true)
+ * assert.deepStrictEqual(or(false, false), false)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -208,6 +245,16 @@ export const or: {
 } = dual(2, semigroup.booleanAny.combine)
 
 /**
+ * Combines two booleans using NOR: `!(self || that)`.
+ *
+ * @example
+ * import { nor } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(nor(true, true), false)
+ * assert.deepStrictEqual(nor(true, false), false)
+ * assert.deepStrictEqual(nor(false, true), false)
+ * assert.deepStrictEqual(nor(false, false), true)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -217,6 +264,16 @@ export const nor: {
 } = dual(2, flow(semigroup.booleanAny.combine, not))
 
 /**
+ * Combines two booleans using XOR: `(!self && that) || (self && !that)`.
+ *
+ * @example
+ * import { xor } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(xor(true, true), false)
+ * assert.deepStrictEqual(xor(true, false), true)
+ * assert.deepStrictEqual(xor(false, true), true)
+ * assert.deepStrictEqual(xor(false, false), false)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -226,6 +283,16 @@ export const xor: {
 } = dual(2, semigroup.booleanXor.combine)
 
 /**
+ * Combines two booleans using EQV (aka XNOR): `!xor(self, that)`.
+ *
+ * @example
+ * import { eqv } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(eqv(true, true), true)
+ * assert.deepStrictEqual(eqv(true, false), false)
+ * assert.deepStrictEqual(eqv(false, true), false)
+ * assert.deepStrictEqual(eqv(false, false), true)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -235,6 +302,16 @@ export const eqv: {
 } = dual(2, semigroup.booleanEqv.combine)
 
 /**
+ * Combines two booleans using an implication: `(!self || that)`.
+ *
+ * @example
+ * import { implies } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(implies(true, true), true)
+ * assert.deepStrictEqual(implies(true, false), false)
+ * assert.deepStrictEqual(implies(false, true), true)
+ * assert.deepStrictEqual(implies(false, false), true)
+ *
  * @category combinators
  * @since 1.0.0
  */
@@ -244,11 +321,31 @@ export const implies: {
 } = dual(2, (self, that) => self ? that : true)
 
 /**
+ * This utility function is used to check if all the elements in a collection of boolean values are `true`.
+ *
+ * @param collection - An iterable collection of booleans.
+ *
+ * @example
+ * import { all } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(all([true, true, true]), true)
+ * assert.deepStrictEqual(all([true, false, true]), false)
+ *
  * @since 1.0.0
  */
 export const all: (collection: Iterable<boolean>) => boolean = MonoidAll.combineAll
 
 /**
+ * This utility function is used to check if at least one of the elements in a collection of boolean values is `true`.
+ *
+ * @param collection - An iterable collection of booleans.
+ *
+ * @example
+ * import { any } from '@fp-ts/core/Boolean'
+ *
+ * assert.deepStrictEqual(any([true, false, true]), true)
+ * assert.deepStrictEqual(any([false, false, false]), false)
+ *
  * @since 1.0.0
  */
 export const any: (collection: Iterable<boolean>) => boolean = MonoidAny.combineAll
