@@ -158,20 +158,10 @@ export const booleanEqv: Monoid<boolean> = fromSemigroup(semigroup.booleanEqv, t
  */
 export const tuple = <T extends ReadonlyArray<Monoid<any>>>(
   ...elements: T
-): Monoid<{ [I in keyof T]: [T[I]] extends [Monoid<infer A>] ? A : never }> => {
+): Monoid<{ readonly [I in keyof T]: [T[I]] extends [Monoid<infer A>] ? A : never }> => {
   const empty = elements.map((m) => m.empty) as any
   return fromSemigroup(semigroup.tuple(...elements), empty)
 }
-
-/**
- * Given a type `A`, this function creates and returns a `Monoid` for `Array<A>`.
- * The returned `Monoid`'s `empty` value is the empty array.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const mutableArray = <A>(): Monoid<Array<A>> =>
-  fromSemigroup(semigroup.mutableArray<A>(), [])
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
@@ -180,7 +170,7 @@ export const mutableArray = <A>(): Monoid<Array<A>> =>
  * @category combinators
  * @since 1.0.0
  */
-export const array: <A>() => Monoid<ReadonlyArray<A>> = mutableArray as any
+export const array = <A>(): Monoid<ReadonlyArray<A>> => fromSemigroup(semigroup.array<A>(), [])
 
 /**
  * This function creates and returns a new `Monoid` for a struct of values based on the given `Monoid`s for each property in the struct.
@@ -195,7 +185,7 @@ export const array: <A>() => Monoid<ReadonlyArray<A>> = mutableArray as any
  */
 export const struct = <R extends { readonly [x: string]: Monoid<any> }>(
   fields: R
-): Monoid<{ [K in keyof R]: [R[K]] extends [Monoid<infer A>] ? A : never }> => {
+): Monoid<{ readonly [K in keyof R]: [R[K]] extends [Monoid<infer A>] ? A : never }> => {
   const empty = {} as any
   for (const k in fields) {
     if (Object.prototype.hasOwnProperty.call(fields, k)) {

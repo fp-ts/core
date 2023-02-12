@@ -14,7 +14,6 @@ Added in v1.0.0
 
 - [combinators](#combinators)
   - [array](#array)
-  - [mutableArray](#mutablearray)
   - [struct](#struct)
   - [tuple](#tuple)
 - [combining](#combining)
@@ -65,19 +64,6 @@ export declare const array: <A>() => Semigroup<readonly A[]>
 
 Added in v1.0.0
 
-## mutableArray
-
-Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
-The returned `Semigroup` combines two arrays by concatenating them.
-
-**Signature**
-
-```ts
-export declare const mutableArray: <A>() => Semigroup<A[]>
-```
-
-Added in v1.0.0
-
 ## struct
 
 This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
@@ -90,7 +76,7 @@ It is useful when you need to combine two structs of the same type and you have 
 ```ts
 export declare const struct: <R extends { readonly [x: string]: Semigroup<any> }>(
   fields: R
-) => Semigroup<{ [K in keyof R]: [R[K]] extends [Semigroup<infer A>] ? A : never }>
+) => Semigroup<{ readonly [K in keyof R]: [R[K]] extends [Semigroup<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0
@@ -113,7 +99,7 @@ It is useful when you need to combine two tuples of the same type and you have a
 ```ts
 export declare const tuple: <T extends readonly Semigroup<any>[]>(
   ...elements: T
-) => Semigroup<{ [I in keyof T]: [T[I]] extends [Semigroup<infer A>] ? A : never }>
+) => Semigroup<{ readonly [I in keyof T]: [T[I]] extends [Semigroup<infer A>] ? A : never }>
 ```
 
 Added in v1.0.0

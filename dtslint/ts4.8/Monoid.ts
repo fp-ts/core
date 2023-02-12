@@ -6,14 +6,18 @@ import * as String from "@fp-ts/core/String"
 // tuple
 //
 
-// $ExpectType Monoid<[string, number]>
+// $ExpectType Monoid<readonly [string, number]>
 _.tuple(
   String.Monoid,
   Number.MonoidSum
 )
 
-// $ExpectType Monoid<readonly [string, number]>
-_.tuple<readonly [string, number]>(
-  String.Monoid,
-  Number.MonoidSum
-)
+//
+// struct
+//
+
+// $ExpectType Monoid<{ readonly a: string; readonly b: number; }>
+_.struct({
+  a: String.Monoid,
+  b: Number.MonoidSum
+})

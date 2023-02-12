@@ -8,7 +8,6 @@ import * as U from "../util"
 describe("Semigroup", () => {
   it("exports", () => {
     expect(_.Invariant).exist
-    expect(_.mutableArray).exists
   })
 
   it("reverse", () => {

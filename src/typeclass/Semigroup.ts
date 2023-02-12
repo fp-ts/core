@@ -282,7 +282,7 @@ export const all = <A>(collection: Iterable<Semigroup<A>>): Semigroup<Array<A>> 
   const semigroups = readonlyArray.fromIterable(collection)
   return make((x, y) => {
     const len = Math.min(x.length, y.length, semigroups.length)
-    const out = []
+    const out: Array<A> = []
     for (let i = 0; i < len; i++) {
       out.push(semigroups[i].combine(x[i], y[i]))
     }
@@ -339,17 +339,8 @@ export const Product: product_.Product<SemigroupTypeLambda> = {
  */
 export const tuple: <T extends ReadonlyArray<Semigroup<any>>>(
   ...elements: T
-) => Semigroup<{ [I in keyof T]: [T[I]] extends [Semigroup<infer A>] ? A : never }> = product_
-  .tuple(Product)
-
-/**
- * Given a type `A`, this function creates and returns a `Semigroup` for `Array<A>`.
- * The returned `Semigroup` combines two arrays by concatenating them.
- *
- * @category combinators
- * @since 1.0.0
- */
-export const mutableArray = <A>(): Semigroup<Array<A>> => make((self, that) => self.concat(that))
+) => Semigroup<{ readonly [I in keyof T]: [T[I]] extends [Semigroup<infer A>] ? A : never }> =
+  product_.tuple(Product)
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
@@ -358,7 +349,7 @@ export const mutableArray = <A>(): Semigroup<Array<A>> => make((self, that) => s
  * @category combinators
  * @since 1.0.0
  */
-export const array: <A>() => Semigroup<ReadonlyArray<A>> = mutableArray as any
+export const array = <A>(): Semigroup<ReadonlyArray<A>> => make((self, that) => self.concat(that))
 
 /**
  * This function creates and returns a new `Semigroup` for a struct of values based on the given `Semigroup`s for each property in the struct.
@@ -371,5 +362,5 @@ export const array: <A>() => Semigroup<ReadonlyArray<A>> = mutableArray as any
  */
 export const struct: <R extends { readonly [x: string]: Semigroup<any> }>(
   fields: R
-) => Semigroup<{ [K in keyof R]: [R[K]] extends [Semigroup<infer A>] ? A : never }> = product_
-  .struct(Product)
+) => Semigroup<{ readonly [K in keyof R]: [R[K]] extends [Semigroup<infer A>] ? A : never }> =
+  product_.struct(Product)
