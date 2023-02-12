@@ -50,15 +50,30 @@ Added in v1.0.0
 
 ## and
 
+Combines two boolean using AND: `self && that`.
+
 **Signature**
 
 ```ts
 export declare const and: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
+**Example**
+
+```ts
+import { and } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(and(true, true), true)
+assert.deepStrictEqual(and(true, false), false)
+assert.deepStrictEqual(and(false, true), false)
+assert.deepStrictEqual(and(false, false), false)
+```
+
 Added in v1.0.0
 
 ## eqv
+
+Combines two booleans using EQV (aka XNOR): `!xor(self, that)`.
 
 **Signature**
 
@@ -66,9 +81,22 @@ Added in v1.0.0
 export declare const eqv: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
+**Example**
+
+```ts
+import { eqv } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(eqv(true, true), true)
+assert.deepStrictEqual(eqv(true, false), false)
+assert.deepStrictEqual(eqv(false, true), false)
+assert.deepStrictEqual(eqv(false, false), true)
+```
+
 Added in v1.0.0
 
 ## implies
+
+Combines two booleans using an implication: `(!self || that)`.
 
 **Signature**
 
@@ -76,9 +104,22 @@ Added in v1.0.0
 export declare const implies: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
+**Example**
+
+```ts
+import { implies } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(implies(true, true), true)
+assert.deepStrictEqual(implies(true, false), false)
+assert.deepStrictEqual(implies(false, true), true)
+assert.deepStrictEqual(implies(false, false), true)
+```
+
 Added in v1.0.0
 
 ## nand
+
+Combines two boolean using NAND: `!(self && that)`.
 
 **Signature**
 
@@ -86,9 +127,22 @@ Added in v1.0.0
 export declare const nand: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
+**Example**
+
+```ts
+import { nand } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(nand(true, true), false)
+assert.deepStrictEqual(nand(true, false), true)
+assert.deepStrictEqual(nand(false, true), true)
+assert.deepStrictEqual(nand(false, false), true)
+```
+
 Added in v1.0.0
 
 ## nor
+
+Combines two booleans using NOR: `!(self || that)`.
 
 **Signature**
 
@@ -96,9 +150,22 @@ Added in v1.0.0
 export declare const nor: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
+**Example**
+
+```ts
+import { nor } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(nor(true, true), false)
+assert.deepStrictEqual(nor(true, false), false)
+assert.deepStrictEqual(nor(false, true), false)
+assert.deepStrictEqual(nor(false, false), true)
+```
+
 Added in v1.0.0
 
 ## not
+
+Negates the given boolean: `!self`
 
 **Signature**
 
@@ -106,9 +173,20 @@ Added in v1.0.0
 export declare const not: (self: boolean) => boolean
 ```
 
+**Example**
+
+```ts
+import { not } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(not(true), false)
+assert.deepStrictEqual(not(false), true)
+```
+
 Added in v1.0.0
 
 ## or
+
+Combines two boolean using OR: `self || that`.
 
 **Signature**
 
@@ -116,14 +194,38 @@ Added in v1.0.0
 export declare const or: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
 ```
 
+**Example**
+
+```ts
+import { or } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(or(true, true), true)
+assert.deepStrictEqual(or(true, false), true)
+assert.deepStrictEqual(or(false, true), true)
+assert.deepStrictEqual(or(false, false), false)
+```
+
 Added in v1.0.0
 
 ## xor
+
+Combines two booleans using XOR: `(!self && that) || (self && !that)`.
 
 **Signature**
 
 ```ts
 export declare const xor: { (that: boolean): (self: boolean) => boolean; (self: boolean, that: boolean): boolean }
+```
+
+**Example**
+
+```ts
+import { xor } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(xor(true, true), false)
+assert.deepStrictEqual(xor(true, false), true)
+assert.deepStrictEqual(xor(false, true), true)
+assert.deepStrictEqual(xor(false, false), false)
 ```
 
 Added in v1.0.0
@@ -165,7 +267,7 @@ Added in v1.0.0
 
 ## MonoidAll
 
-`boolean` monoid under conjunction.
+`boolean` monoid under conjunction, see also {@link SemigroupAll}.
 
 The `empty` value is `true`.
 
@@ -179,7 +281,7 @@ Added in v1.0.0
 
 ## MonoidAny
 
-`boolean` monoid under disjunction.
+`boolean` monoid under disjunction, see also {@link SemigroupAny}.
 
 The `empty` value is `false`.
 
@@ -207,7 +309,7 @@ Added in v1.0.0
 
 ## MonoidXor
 
-`boolean` monoid under exclusive disjunction.
+`boolean` monoid under exclusive disjunction, see also {@link SemigroupXor}.
 
 The `empty` value is `false`.
 
@@ -325,9 +427,8 @@ Added in v1.0.0
 
 ## match
 
-Defines the match over a boolean value.
-Takes two thunks `onTrue`, `onFalse` and a `boolean` value.
-If `value` is `false`, `onFalse()` is returned, otherwise `onTrue()`.
+This function returns the result of either of the given functions depending on the value of the boolean parameter.
+It is useful when you have to run one of two functions depending on the boolean value.
 
 **Signature**
 
@@ -341,21 +442,15 @@ export declare const match: {
 **Example**
 
 ```ts
-import { some, map } from '@fp-ts/core/Option'
-import { pipe } from '@fp-ts/core/Function'
-import { match } from '@fp-ts/core/Boolean'
+import * as B from '@fp-ts/core/Boolean'
 
 assert.deepStrictEqual(
-  pipe(
-    some(true),
-    map(
-      match(
-        () => 'false',
-        () => 'true'
-      )
-    )
+  B.match(
+    true,
+    () => "It's false!",
+    () => "It's true!"
   ),
-  some('true')
+  "It's true!"
 )
 ```
 
@@ -365,20 +460,42 @@ Added in v1.0.0
 
 ## all
 
+This utility function is used to check if all the elements in a collection of boolean values are `true`.
+
 **Signature**
 
 ```ts
 export declare const all: (collection: Iterable<boolean>) => boolean
 ```
 
+**Example**
+
+```ts
+import { all } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(all([true, true, true]), true)
+assert.deepStrictEqual(all([true, false, true]), false)
+```
+
 Added in v1.0.0
 
 ## any
+
+This utility function is used to check if at least one of the elements in a collection of boolean values is `true`.
 
 **Signature**
 
 ```ts
 export declare const any: (collection: Iterable<boolean>) => boolean
+```
+
+**Example**
+
+```ts
+import { any } from '@fp-ts/core/Boolean'
+
+assert.deepStrictEqual(any([true, false, true]), true)
+assert.deepStrictEqual(any([false, false, false]), false)
 ```
 
 Added in v1.0.0
