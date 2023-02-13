@@ -165,7 +165,8 @@ export const tuple = <T extends ReadonlyArray<Monoid<any>>>(
 
 /**
  * Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
- * The returned `Monoid`'s empty value is the empty array.
+ *
+ * The `empty` value is the empty array.
  *
  * @category combinators
  * @since 1.0.0

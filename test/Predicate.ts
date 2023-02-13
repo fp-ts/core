@@ -78,7 +78,7 @@ describe.concurrent("Predicate", () => {
   })
 
   it("productAll", () => {
-    const p = _.productAll([isPositive, isNegative])
+    const p = _.Product.productAll([isPositive, isNegative])
     deepStrictEqual(p([1]), true)
     deepStrictEqual(p([1, -1]), true)
     deepStrictEqual(p([1, 1]), false)

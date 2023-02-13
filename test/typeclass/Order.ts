@@ -13,8 +13,8 @@ describe("Order", () => {
     expect(_.bigint).exist
   })
 
-  it("all", () => {
-    const O = _.all([_.string, _.string])
+  it("productAll", () => {
+    const O = _.Product.productAll([_.string, _.string])
     U.deepStrictEqual(O.compare(["a"], ["b"]), -1)
     U.deepStrictEqual(O.compare(["a"], ["a"]), 0)
     U.deepStrictEqual(O.compare(["b"], ["a"]), 1)

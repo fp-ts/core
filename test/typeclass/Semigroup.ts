@@ -112,8 +112,8 @@ describe("Semigroup", () => {
     U.deepStrictEqual(S.combine(["a", "b", "c"], ["d", "e", "f"]), ["ad", "be", "cf"])
   })
 
-  it("all", () => {
-    const S = _.all([String.Semigroup, String.Semigroup])
+  it("productAll", () => {
+    const S = _.Product.productAll([String.Semigroup, String.Semigroup])
     U.deepStrictEqual(S.combine(["a1", "b1"], ["a2", "b2"]), ["a1a2", "b1b2"])
   })
 })

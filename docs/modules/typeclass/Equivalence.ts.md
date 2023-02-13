@@ -17,12 +17,9 @@ Added in v1.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
-  - [array](#array)
   - [contramap](#contramap)
   - [struct](#struct)
   - [tuple](#tuple)
-- [combining](#combining)
-  - [all](#all)
 - [constructors](#constructors)
   - [make](#make)
   - [strict](#strict)
@@ -46,16 +43,6 @@ Added in v1.0.0
 ---
 
 # combinators
-
-## array
-
-**Signature**
-
-```ts
-export declare const array: <A>(equivalence: Equivalence<A>) => Equivalence<readonly A[]>
-```
-
-Added in v1.0.0
 
 ## contramap
 
@@ -102,27 +89,6 @@ by applying each `Equivalence` to the corresponding element of the tuple.
 export declare const tuple: <T extends readonly Equivalence<any>[]>(
   ...predicates: T
 ) => Equivalence<Readonly<{ [I in keyof T]: [T[I]] extends [Equivalence<infer A>] ? A : never }>>
-```
-
-Added in v1.0.0
-
-# combining
-
-## all
-
-Similar to `Promise.all` but operates on `Equivalence`s.
-
-```
-Iterable<Equivalence<A>> -> Equivalence<A[]>
-```
-
-Given an iterable of `Equivalence<A>` returns an `Equivalence<Array<A>>` that operates on arrays
-by applying each equivalence in the iterable in order until a difference is found.
-
-**Signature**
-
-```ts
-export declare const all: <A>(collection: Iterable<Equivalence<A>>) => Equivalence<A[]>
 ```
 
 Added in v1.0.0

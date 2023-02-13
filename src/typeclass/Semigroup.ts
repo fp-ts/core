@@ -268,17 +268,7 @@ export const Invariant: invariant.Invariant<SemigroupTypeLambda> = {
 const product = <A, B>(self: Semigroup<A>, that: Semigroup<B>): Semigroup<[A, B]> =>
   make(([xa, xb], [ya, yb]) => [self.combine(xa, ya), that.combine(xb, yb)])
 
-/**
- * Similar to `Promise.all` but operates on `Semigroup`s.
- *
- * ```
- * Iterable<Semigroup<A>> -> Semigroup<A[]>
- * ```
- *
- * @category combining
- * @since 1.0.0
- */
-export const all = <A>(collection: Iterable<Semigroup<A>>): Semigroup<Array<A>> => {
+const productAll = <A>(collection: Iterable<Semigroup<A>>): Semigroup<Array<A>> => {
   const semigroups = readonlyArray.fromIterable(collection)
   return make((x, y) => {
     const len = Math.min(x.length, y.length, semigroups.length)
@@ -294,7 +284,7 @@ const productMany = <A>(
   self: Semigroup<A>,
   collection: Iterable<Semigroup<A>>
 ): Semigroup<[A, ...Array<A>]> => {
-  const semigroup = all(collection)
+  const semigroup = productAll(collection)
   return make((x, y) => [self.combine(x[0], y[0]), ...semigroup.combine(x.slice(1), y.slice(1))])
 }
 
@@ -319,7 +309,7 @@ export const Product: product_.Product<SemigroupTypeLambda> = {
   imap,
   product,
   productMany,
-  productAll: all
+  productAll
 }
 
 /**

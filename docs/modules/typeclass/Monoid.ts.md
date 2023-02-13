@@ -41,7 +41,8 @@ Added in v1.0.0
 ## array
 
 Given a type `A`, this function creates and returns a `Semigroup` for `ReadonlyArray<A>`.
-The returned `Monoid`'s empty value is the empty array.
+
+The `empty` value is the empty array.
 
 **Signature**
 
