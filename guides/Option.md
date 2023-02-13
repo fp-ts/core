@@ -19,6 +19,9 @@ The `Option` data type is a "polymorphic" data type, which makes use of a featur
 Here is the complete definition of the `Option` data type:
 
 ```ts
+// Define the `Option` data type as the union of `None` and `Some`
+export type Option<A> = None | Some<A>;
+
 // Represents the absence of a value
 export type None = {
   // Discriminating field used to identify the variant
@@ -32,9 +35,6 @@ export type Some<A> = {
   // The actual value
   readonly value: A;
 };
-
-// Define the `Option` data type as the union of `None` and `Some`
-export type Option<A> = None | Some<A>;
 ```
 
 The type parameter `A` is used to specify the type of the `value` that the `Option` holds.
