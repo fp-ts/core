@@ -5,6 +5,7 @@ import { structural } from "@fp-ts/core/internal/effect"
 import * as N from "@fp-ts/core/Number"
 import * as _ from "@fp-ts/core/Option"
 import * as ReadonlyArray from "@fp-ts/core/ReadonlyArray"
+import * as R from "@fp-ts/core/Result"
 import * as S from "@fp-ts/core/String"
 import * as Util from "@fp-ts/core/test/util"
 
@@ -15,6 +16,8 @@ describe.concurrent("Option", () => {
     expect(_.toEither).exist
     expect(_.getRight).exist
     expect(_.getLeft).exist
+    expect(_.getSuccess).exist
+    expect(_.getFailure).exist
 
     expect(_.Invariant).exist
     expect(_.tupled).exist
@@ -341,6 +344,11 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(pipe(_.some(1), _.toEither(() => "e")), E.right(1))
   })
 
+  it("toResult", () => {
+    Util.deepStrictEqual(pipe(_.none(), _.toResult(() => "e")), R.failure("e"))
+    Util.deepStrictEqual(pipe(_.some(1), _.toResult(() => "e")), R.success(1))
+  })
+
   it("match", () => {
     const f = () => "none"
     const g = (s: string) => `some${s.length}`
@@ -482,6 +490,11 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(_.fromEither(E.left("e")), _.none())
   })
 
+  it("fromResult", () => {
+    Util.deepStrictEqual(_.fromResult(R.success(1)), _.some(1))
+    Util.deepStrictEqual(_.fromResult(R.failure("e")), _.none())
+  })
+
   it("do notation", () => {
     Util.deepStrictEqual(
       pipe(
@@ -524,8 +537,21 @@ describe.concurrent("Option", () => {
     Util.deepStrictEqual(f(-1), _.none())
   })
 
+  it("liftResult", () => {
+    const f = _.liftResult((n: number) => (n > 0 ? R.success(n) : R.failure("e")))
+    Util.deepStrictEqual(f(1), _.some(1))
+    Util.deepStrictEqual(f(-1), _.none())
+  })
+
   it("flatMapEither", () => {
     const f = _.flatMapEither((n: number) => (n > 0 ? E.right(n) : E.left("e")))
+    Util.deepStrictEqual(pipe(_.none(), f), _.none())
+    Util.deepStrictEqual(pipe(_.some(0), f), _.none())
+    Util.deepStrictEqual(pipe(_.some(1), f), _.some(1))
+  })
+
+  it("flatMapResult", () => {
+    const f = _.flatMapResult((n: number) => (n > 0 ? R.success(n) : R.failure("e")))
     Util.deepStrictEqual(pipe(_.none(), f), _.none())
     Util.deepStrictEqual(pipe(_.some(0), f), _.none())
     Util.deepStrictEqual(pipe(_.some(1), f), _.some(1))

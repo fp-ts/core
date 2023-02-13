@@ -23,6 +23,7 @@ import * as ordering from "@fp-ts/core/Ordering"
 import * as predicate from "@fp-ts/core/Predicate"
 import * as readonlyArray from "@fp-ts/core/ReadonlyArray"
 import * as readonlyRecord from "@fp-ts/core/ReadonlyRecord"
+import * as result from "@fp-ts/core/Result"
 import * as string from "@fp-ts/core/String"
 import * as struct from "@fp-ts/core/Struct"
 import * as symbol from "@fp-ts/core/Symbol"
@@ -204,6 +205,10 @@ export {
    * @since 1.0.0
    */
   readonlyRecord,
+  /**
+   * @since 1.0.0
+   */
+  result,
   /**
    * @category typeclass
    * @since 1.0.0

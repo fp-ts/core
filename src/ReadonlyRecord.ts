@@ -5,11 +5,11 @@
  */
 
 import type { Either } from "@fp-ts/core/Either"
-import * as E from "@fp-ts/core/Either"
 import { dual, identity } from "@fp-ts/core/Function"
 import type { Kind, TypeLambda } from "@fp-ts/core/HKT"
+import * as either from "@fp-ts/core/internal/Either"
+import * as O from "@fp-ts/core/internal/Option"
 import type { Option } from "@fp-ts/core/Option"
-import * as O from "@fp-ts/core/Option"
 import type * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as covariant from "@fp-ts/core/typeclass/Covariant"
 import type * as filterable from "@fp-ts/core/typeclass/Filterable"
@@ -513,7 +513,7 @@ export const partitionMap: {
     const right: Record<string, C> = {}
     for (const key of Object.keys(self)) {
       const e = f(self[key], key)
-      if (E.isLeft(e)) {
+      if (either.isLeft(e)) {
         left[key] = e.left
       } else {
         right[key] = e.right

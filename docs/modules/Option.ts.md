@@ -39,15 +39,19 @@ Added in v1.0.0
   - [fromEither](#fromeither)
   - [fromIterable](#fromiterable)
   - [fromNullable](#fromnullable)
+  - [fromResult](#fromresult)
+  - [getFailure](#getfailure)
   - [getLeft](#getleft)
   - [getOrThrow](#getorthrow)
   - [getOrThrowWith](#getorthrowwith)
   - [getRight](#getright)
+  - [getSuccess](#getsuccess)
   - [liftNullable](#liftnullable)
   - [liftThrowable](#liftthrowable)
   - [toArray](#toarray)
   - [toEither](#toeither)
   - [toRefinement](#torefinement)
+  - [toResult](#toresult)
 - [debugging](#debugging)
   - [inspectNone](#inspectnone)
   - [inspectSome](#inspectsome)
@@ -83,6 +87,7 @@ Added in v1.0.0
   - [lift2](#lift2)
   - [liftEither](#lifteither)
   - [liftPredicate](#liftpredicate)
+  - [liftResult](#liftresult)
 - [models](#models)
   - [None (interface)](#none-interface)
   - [Option (type alias)](#option-type-alias)
@@ -101,6 +106,7 @@ Added in v1.0.0
   - [flatMap](#flatmap)
   - [flatMapEither](#flatmapeither)
   - [flatMapNullable](#flatmapnullable)
+  - [flatMapResult](#flatmapresult)
   - [flatten](#flatten)
   - [map](#map)
   - [tap](#tap)
@@ -386,14 +392,14 @@ export declare const traverse: <F extends TypeLambda>(
 
 ```ts
 import * as O from '@fp-ts/core/Option'
-import * as E from '@fp-ts/core/Either'
+import * as R from '@fp-ts/core/Result'
 
-const traverse = O.traverse(E.Applicative)
-const f = (n: number) => (n >= 0 ? E.right(1) : E.left('negative'))
+const traverse = O.traverse(R.Applicative)
+const f = (n: number) => (n >= 0 ? R.success(1) : R.failure('negative'))
 
-assert.deepStrictEqual(traverse(O.some(1), f), E.right(O.some(1)))
-assert.deepStrictEqual(traverse(O.some(-1), f), E.left('negative'))
-assert.deepStrictEqual(traverse(O.none(), f), E.right(O.none()))
+assert.deepStrictEqual(traverse(O.some(1), f), R.success(O.some(1)))
+assert.deepStrictEqual(traverse(O.some(-1), f), R.failure('negative'))
+assert.deepStrictEqual(traverse(O.none(), f), R.success(O.none()))
 ```
 
 Added in v1.0.0
@@ -564,6 +570,50 @@ assert.deepStrictEqual(O.fromNullable(1), O.some(1))
 
 Added in v1.0.0
 
+## fromResult
+
+Converts a `Result` to an `Option` discarding the error.
+
+**Signature**
+
+```ts
+export declare const fromResult: <E, A>(self: Result<E, A>) => Option<A>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as R from '@fp-ts/core/Result'
+
+assert.deepStrictEqual(O.fromResult(R.success(1)), O.some(1))
+assert.deepStrictEqual(O.fromResult(R.failure('error message')), O.none())
+```
+
+Added in v1.0.0
+
+## getFailure
+
+Converts a `Either` to an `Option` discarding the value.
+
+**Signature**
+
+```ts
+export declare const getFailure: <E, A>(self: Result<E, A>) => Option<E>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as R from '@fp-ts/core/Result'
+
+assert.deepStrictEqual(O.getFailure(R.success('ok')), O.none())
+assert.deepStrictEqual(O.getFailure(R.failure('error')), O.some('error'))
+```
+
+Added in v1.0.0
+
 ## getLeft
 
 Converts a `Either` to an `Option` discarding the value.
@@ -662,6 +712,30 @@ assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
 
 Added in v1.0.0
 
+## getSuccess
+
+Converts a `Result` to an `Option` discarding the error.
+
+Alias of {@link fromResult}.
+
+**Signature**
+
+```ts
+export declare const getSuccess: <E, A>(self: Result<E, A>) => Option<A>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as R from '@fp-ts/core/Result'
+
+assert.deepStrictEqual(O.getSuccess(R.success('ok')), O.some('ok'))
+assert.deepStrictEqual(O.getSuccess(R.failure('err')), O.none())
+```
+
+Added in v1.0.0
+
 ## liftNullable
 
 This API is useful for lifting a function that returns `null` or `undefined` into the `Option` context.
@@ -749,8 +823,8 @@ Converts an `Option` to an `Either`, allowing you to provide a value to be used 
 
 ```ts
 export declare const toEither: {
-  <A, E>(self: Option<A>, onNone: () => E): Either<E, A>
   <E>(onNone: () => E): <A>(self: Option<A>) => Either<E, A>
+  <A, E>(self: Option<A>, onNone: () => E): Either<E, A>
 }
 ```
 
@@ -790,6 +864,33 @@ const isPositive = O.toRefinement(parsePositive)
 
 assert.deepStrictEqual(isPositive(1), true)
 assert.deepStrictEqual(isPositive(-1), false)
+```
+
+Added in v1.0.0
+
+## toResult
+
+Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
+
+**Signature**
+
+```ts
+export declare const toResult: {
+  <E>(onNone: () => E): <A>(self: Option<A>) => Result<E, A>
+  <A, E>(self: Option<A>, onNone: () => E): Result<E, A>
+}
+```
+
+**Example**
+
+```ts
+import { pipe } from '@fp-ts/core/Function'
+import * as O from '@fp-ts/core/Option'
+import * as R from '@fp-ts/core/Result'
+
+const onNone = () => 'error'
+assert.deepStrictEqual(pipe(O.some(1), O.toResult(onNone)), R.success(1))
+assert.deepStrictEqual(pipe(O.none(), O.toResult(onNone)), R.failure('error'))
 ```
 
 Added in v1.0.0
@@ -1357,6 +1458,34 @@ assert.deepStrictEqual(getOption(1), O.some(1))
 
 Added in v1.0.0
 
+## liftResult
+
+Lifts a `Result` function to an `Option` function.
+
+**Signature**
+
+```ts
+export declare const liftResult: <A extends readonly unknown[], E, B>(
+  f: (...a: A) => Result<E, B>
+) => (...a: A) => Option<B>
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as R from '@fp-ts/core/Result'
+
+const parse = (s: string) => (isNaN(+s) ? R.failure(`Error: ${s} is not a number`) : R.success(+s))
+
+const parseNumber = O.liftResult(parse)
+
+assert.deepEqual(parseNumber('12'), O.some(12))
+assert.deepEqual(parseNumber('not a number'), O.none())
+```
+
+Added in v1.0.0
+
 # models
 
 ## None (interface)
@@ -1649,6 +1778,34 @@ assert.deepStrictEqual(
   ),
   none()
 )
+```
+
+Added in v1.0.0
+
+## flatMapResult
+
+Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+
+**Signature**
+
+```ts
+export declare const flatMapResult: {
+  <A, E, B>(f: (a: A) => Result<E, B>): (self: Option<A>) => Option<B>
+  <A, E, B>(self: Option<A>, f: (a: A) => Result<E, B>): Option<B>
+}
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+import * as R from '@fp-ts/core/Result'
+import { pipe } from '@fp-ts/core/Function'
+
+const f = (n: number) => (n > 2 ? R.failure('Too big') : R.success(n + 1))
+
+assert.deepStrictEqual(pipe(O.some(1), O.flatMapResult(f)), O.some(2))
+assert.deepStrictEqual(pipe(O.some(3), O.flatMapResult(f)), O.none())
 ```
 
 Added in v1.0.0

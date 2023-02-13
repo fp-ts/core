@@ -9,10 +9,10 @@ import * as option from "@fp-ts/core/internal/Option"
 import type { Option } from "@fp-ts/core/Option"
 
 /** @internal */
-export const isLeft = <E, A>(ma: Either<E, A>): ma is Left<E> => ma._tag === "Left"
+export const isLeft = <E, A>(self: Either<E, A>): self is Left<E> => self._tag === "Left"
 
 /** @internal */
-export const isRight = <E, A>(ma: Either<E, A>): ma is Right<A> => ma._tag === "Right"
+export const isRight = <E, A>(self: Either<E, A>): self is Right<A> => self._tag === "Right"
 
 /** @internal */
 export const left = <E>(e: E): Either<E, never> =>
@@ -25,12 +25,12 @@ export const right = <A>(a: A): Either<never, A> =>
 /** @internal */
 export const getLeft = <E, A>(
   self: Either<E, A>
-): Option<E> => (isRight(self) ? option.none : option.some(self.left))
+): Option<E> => (isRight(self) ? option.none() : option.some(self.left))
 
 /** @internal */
 export const getRight = <E, A>(
   self: Either<E, A>
-): Option<A> => (isLeft(self) ? option.none : option.some(self.right))
+): Option<A> => (isLeft(self) ? option.none() : option.some(self.right))
 
 /** @internal */
 export const fromOption = dual(

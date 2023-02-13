@@ -52,6 +52,7 @@ Added in v1.0.0
   - [predicate](#predicate)
   - [readonlyArray](#readonlyarray)
   - [readonlyRecord](#readonlyrecord)
+  - [result](#result)
   - [string](#string)
   - [struct](#struct)
   - [symbol](#symbol)
@@ -440,6 +441,16 @@ Added in v1.0.0
 
 ```ts
 export declare const readonlyRecord: typeof readonlyRecord
+```
+
+Added in v1.0.0
+
+## result
+
+**Signature**
+
+```ts
+export declare const result: typeof result
 ```
 
 Added in v1.0.0

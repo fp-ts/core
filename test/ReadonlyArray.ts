@@ -4,6 +4,7 @@ import * as Number from "@fp-ts/core/Number"
 import * as O from "@fp-ts/core/Option"
 import type { Predicate } from "@fp-ts/core/Predicate"
 import * as RA from "@fp-ts/core/ReadonlyArray"
+import * as R from "@fp-ts/core/Result"
 import * as String from "@fp-ts/core/String"
 import { deepStrictEqual, double, strictEqual } from "@fp-ts/core/test/util"
 import * as Order from "@fp-ts/core/typeclass/Order"
@@ -77,6 +78,9 @@ describe.concurrent("ReadonlyArray", () => {
     expect(RA.liftOption).exist
     expect(RA.liftNullable).exist
     expect(RA.flatMapNullable).exist
+
+    expect(RA.getSuccesses).exist
+    expect(RA.getFailures).exist
   })
 
   it("fromIterable/Array should return the same reference if the iterable is an Array", () => {
@@ -701,6 +705,12 @@ describe.concurrent("ReadonlyArray", () => {
 
   it("liftEither", () => {
     const f = RA.liftEither((s: string) => s.length > 2 ? E.right(s.length) : E.left("e"))
+    deepStrictEqual(f("a"), [])
+    deepStrictEqual(f("aaa"), [3])
+  })
+
+  it("liftResult", () => {
+    const f = RA.liftResult((s: string) => s.length > 2 ? R.success(s.length) : R.failure("e"))
     deepStrictEqual(f("a"), [])
     deepStrictEqual(f("aaa"), [3])
   })
@@ -1532,9 +1542,14 @@ describe.concurrent("ReadonlyArray", () => {
     deepStrictEqual(RA.fromOption(O.none()), [])
   })
 
-  it("fromResult", () => {
+  it("fromEither", () => {
     deepStrictEqual(RA.fromEither(E.right(1)), [1])
-    deepStrictEqual(RA.fromEither(E.left("a")), RA.empty())
+    deepStrictEqual(RA.fromEither(E.left("a")), [])
+  })
+
+  it("fromResult", () => {
+    deepStrictEqual(RA.fromResult(R.success(1)), [1])
+    deepStrictEqual(RA.fromResult(R.failure("a")), [])
   })
 
   test("product", () => {

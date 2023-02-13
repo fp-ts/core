@@ -33,6 +33,7 @@ Added in v1.0.0
   - [fromIterable](#fromiterable)
   - [fromNullable](#fromnullable)
   - [fromOption](#fromoption)
+  - [fromResult](#fromresult)
 - [do notation](#do-notation)
   - [Do](#do)
   - [andThenBind](#andthenbind)
@@ -69,6 +70,8 @@ Added in v1.0.0
   - [findLast](#findlast)
   - [findLastIndex](#findlastindex)
   - [get](#get)
+  - [getFailures](#getfailures)
+  - [getSuccesses](#getsuccesses)
   - [head](#head)
   - [headNonEmpty](#headnonempty)
   - [init](#init)
@@ -122,6 +125,7 @@ Added in v1.0.0
   - [liftNullable](#liftnullable)
   - [liftOption](#liftoption)
   - [liftPredicate](#liftpredicate)
+  - [liftResult](#liftresult)
 - [mapping](#mapping)
   - [as](#as)
   - [flap](#flap)
@@ -419,6 +423,16 @@ Added in v1.0.0
 
 ```ts
 export declare const fromOption: <A>(self: Option<A>) => A[]
+```
+
+Added in v1.0.0
+
+## fromResult
+
+**Signature**
+
+```ts
+export declare const fromResult: <E, A>(self: R.Result<E, A>) => A[]
 ```
 
 Added in v1.0.0
@@ -904,6 +918,30 @@ export declare const get: {
   (index: number): <A>(self: readonly A[]) => Option<A>
   <A>(self: readonly A[], index: number): Option<A>
 }
+```
+
+Added in v1.0.0
+
+## getFailures
+
+Return all the `Failure` elements from an `Interable` of `Result`s.
+
+**Signature**
+
+```ts
+export declare const getFailures: <E, A>(self: Iterable<R.Result<E, A>>) => E[]
+```
+
+Added in v1.0.0
+
+## getSuccesses
+
+Return all the `Success` elements from an `Interable` of `Result`s.
+
+**Signature**
+
+```ts
+export declare const getSuccesses: <E, A>(self: Iterable<R.Result<E, A>>) => A[]
 ```
 
 Added in v1.0.0
@@ -1505,6 +1543,16 @@ export declare const liftPredicate: {
   <C extends A, B extends A, A = C>(refinement: Refinement<A, B>): (c: C) => B[]
   <B extends A, A = B>(predicate: Predicate<A>): (b: B) => B[]
 }
+```
+
+Added in v1.0.0
+
+## liftResult
+
+**Signature**
+
+```ts
+export declare const liftResult: <A extends unknown[], E, B>(f: (...a: A) => R.Result<E, B>) => (...a: A) => B[]
 ```
 
 Added in v1.0.0

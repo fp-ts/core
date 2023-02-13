@@ -103,7 +103,7 @@ export const filter: <F extends TypeLambda>(
   dual(
     2,
     <R, O, E, A>(self: Kind<F, R, O, E, A>, predicate: (a: A) => boolean): Kind<F, R, O, E, A> =>
-      Filterable.filterMap(self, (b) => (predicate(b) ? option.some(b) : option.none))
+      Filterable.filterMap(self, (b) => (predicate(b) ? option.some(b) : option.none()))
   )
 
 /**

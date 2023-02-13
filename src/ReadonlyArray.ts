@@ -13,6 +13,8 @@ import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Option } from "@fp-ts/core/Option"
 import * as O from "@fp-ts/core/Option"
 import type { Predicate, Refinement } from "@fp-ts/core/Predicate"
+import * as R from "@fp-ts/core/Result"
+import type { Result } from "@fp-ts/core/Result"
 import * as string from "@fp-ts/core/String"
 import * as applicative from "@fp-ts/core/typeclass/Applicative"
 import * as chainable from "@fp-ts/core/typeclass/Chainable"
@@ -138,6 +140,12 @@ export const fromOption: <A>(self: Option<A>) => Array<A> = O.toArray
  * @since 1.0.0
  */
 export const fromEither: <E, A>(self: Either<E, A>) => Array<A> = E.toArray
+
+/**
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromResult: <E, A>(self: Result<E, A>) => Array<A> = R.toArray
 
 /**
  * @category pattern matching
@@ -824,6 +832,22 @@ export const rights: <E, A>(self: Iterable<Either<E, A>>) => Array<A> = E.rights
  * @since 1.0.0
  */
 export const lefts: <E, A>(self: Iterable<Either<E, A>>) => Array<E> = E.lefts
+
+/**
+ * Return all the `Success` elements from an `Interable` of `Result`s.
+ *
+ * @category getters
+ * @since 1.0.0
+ */
+export const getSuccesses: <E, A>(self: Iterable<Result<E, A>>) => Array<A> = R.getSuccesses
+
+/**
+ * Return all the `Failure` elements from an `Interable` of `Result`s.
+ *
+ * @category getters
+ * @since 1.0.0
+ */
+export const getFailures: <E, A>(self: Iterable<Result<E, A>>) => Array<E> = R.getFailures
 
 /**
  * Sort the elements of an `Iterable` in increasing order, creating a new `Array`.
@@ -2119,11 +2143,15 @@ export const flatMapNullable: {
  */
 export const liftEither = <A extends Array<unknown>, E, B>(
   f: (...a: A) => Either<E, B>
-) =>
-  (...a: A): Array<B> => {
-    const e = f(...a)
-    return E.isLeft(e) ? [] : [e.right]
-  }
+) => (...a: A): Array<B> => fromEither(f(...a))
+
+/**
+ * @category lifting
+ * @since 1.0.0
+ */
+export const liftResult = <A extends Array<unknown>, E, B>(
+  f: (...a: A) => Result<E, B>
+) => (...a: A): Array<B> => fromResult(f(...a))
 
 /**
  * Check if a predicate holds true for every `ReadonlyArray` member.
