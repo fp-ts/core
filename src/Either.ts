@@ -84,14 +84,6 @@ export const right: <A>(a: A) => Either<never, A> = either.right
 export const left: <E>(e: E) => Either<E, never> = either.left
 
 /**
- * Alias of {@link right}.
- *
- * @category constructors
- * @since 1.0.0
- */
-export const of: <A>(a: A) => Either<never, A> = right
-
-/**
  * Tests if a value is a `Either`.
  *
  * @param input - The value to test.
@@ -141,6 +133,110 @@ export const isLeft: <E, A>(self: Either<E, A>) => self is Left<E> = either.isLe
  * @since 1.0.0
  */
 export const isRight: <E, A>(self: Either<E, A>) => self is Right<A> = either.isRight
+
+/**
+ * Takes two functions and an `Either` value, if the value is a `Left` the inner value is applied to the first function,
+ * if the value is a `Right` the inner value is applied to the second function.
+ *
+ * @example
+ * import * as E from '@fp-ts/core/Either'
+ * import { pipe } from '@fp-ts/core/Function'
+ *
+ * const onLeft  = (errors: ReadonlyArray<string>): string => `Errors: ${errors.join(', ')}`
+ *
+ * const onRight = (value: number): string => `Ok: ${value}`
+ *
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     E.right(1),
+ *     E.match(onLeft , onRight)
+ *   ),
+ *   'Ok: 1'
+ * )
+ * assert.deepStrictEqual(
+ *   pipe(
+ *     E.left(['error 1', 'error 2']),
+ *     E.match(onLeft , onRight)
+ *   ),
+ *   'Errors: error 1, error 2'
+ * )
+ *
+ * @category pattern matching
+ * @since 1.0.0
+ */
+export const match: {
+  <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C): (self: Either<E, A>) => B | C
+  <E, A, B, C = B>(self: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => C): B | C
+} = dual(
+  3,
+  <E, A, B, C = B>(self: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => C): B | C =>
+    isLeft(self) ? onLeft(self.left) : onRight(self.right)
+)
+
+/**
+ * @category mapping
+ * @since 1.0.0
+ */
+export const bimap: {
+  <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: Either<E1, A>) => Either<E2, B>
+  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B>
+} = dual(
+  3,
+  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B> =>
+    isLeft(self) ? left(f(self.left)) : right(g(self.right))
+)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = {
+  bimap
+}
+
+/**
+ * Maps the `Left` side of an `Either` value to a new `Either` value.
+ *
+ * @param self - The input `Either` value to map.
+ * @param f - A transformation function to apply to the `Left` value of the input `Either`.
+ *
+ * @category mapping
+ * @since 1.0.0
+ */
+export const mapLeft: {
+  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
+  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
+} = bicovariant.mapLeft(Bicovariant)
+
+/**
+ * Maps the `Right` side of an `Either` value to a new `Either` value.
+ *
+ * @param self - An `Either` to map.
+ * @param f - The function to map over the value of the `Either`.
+ *
+ * @category mapping
+ * @since 1.0.0
+ */
+export const mapRight: {
+  <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
+} = dual(
+  2,
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B> =>
+    isRight(self) ? right(f(self.right)) : self
+)
+
+// -------------------------------------------------------------------------------------
+// deprecated (proposal)
+// -------------------------------------------------------------------------------------
+
+/**
+ * Alias of {@link right}.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const of: <A>(a: A) => Either<never, A> = right
 
 /**
  * Returns a `Refinement` from a `Either` returning function.
@@ -245,59 +341,6 @@ export const getEquivalence = <E, A>(
       isLeft(y) && EE(x.left, y.left) :
       isRight(y) && EA(x.right, y.right))
   )
-
-/**
- * @category mapping
- * @since 1.0.0
- */
-export const bimap: {
-  <E1, E2, A, B>(f: (e: E1) => E2, g: (a: A) => B): (self: Either<E1, A>) => Either<E2, B>
-  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B>
-} = dual(
-  3,
-  <E1, A, E2, B>(self: Either<E1, A>, f: (e: E1) => E2, g: (a: A) => B): Either<E2, B> =>
-    isLeft(self) ? left(f(self.left)) : right(g(self.right))
-)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = {
-  bimap
-}
-
-/**
- * Maps the `Left` side of an `Either` value to a new `Either` value.
- *
- * @param self - The input `Either` value to map.
- * @param f - A transformation function to apply to the `Left` value of the input `Either`.
- *
- * @category mapping
- * @since 1.0.0
- */
-export const mapLeft: {
-  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
-  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
-} = bicovariant.mapLeft(Bicovariant)
-
-/**
- * Maps the `Right` side of an `Either` value to a new `Either` value.
- *
- * @param self - An `Either` to map.
- * @param f - The function to map over the value of the `Either`.
- *
- * @category mapping
- * @since 1.0.0
- */
-export const mapRight: {
-  <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
-} = dual(
-  2,
-  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B> =>
-    isRight(self) ? right(f(self.right)) : self
-)
 
 /**
  * Alias of {@link mapRight}.
@@ -834,45 +877,6 @@ export const Foldable: foldable.Foldable<EitherTypeLambda> = {
  * @since 1.0.0
  */
 export const toArray: <E, A>(self: Either<E, A>) => Array<A> = foldable.toArray(Foldable)
-
-/**
- * Takes two functions and an `Either` value, if the value is a `Left` the inner value is applied to the first function,
- * if the value is a `Right` the inner value is applied to the second function.
- *
- * @example
- * import * as E from '@fp-ts/core/Either'
- * import { pipe } from '@fp-ts/core/Function'
- *
- * const onLeft  = (errors: ReadonlyArray<string>): string => `Errors: ${errors.join(', ')}`
- *
- * const onRight = (value: number): string => `Ok: ${value}`
- *
- * assert.deepStrictEqual(
- *   pipe(
- *     E.right(1),
- *     E.match(onLeft , onRight)
- *   ),
- *   'Ok: 1'
- * )
- * assert.deepStrictEqual(
- *   pipe(
- *     E.left(['error 1', 'error 2']),
- *     E.match(onLeft , onRight)
- *   ),
- *   'Errors: error 1, error 2'
- * )
- *
- * @category pattern matching
- * @since 1.0.0
- */
-export const match: {
-  <E, B, A, C = B>(onLeft: (e: E) => B, onRight: (a: A) => C): (self: Either<E, A>) => B | C
-  <E, A, B, C = B>(self: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => C): B | C
-} = dual(
-  3,
-  <E, A, B, C = B>(self: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => C): B | C =>
-    isLeft(self) ? onLeft(self.left) : onRight(self.right)
-)
 
 /**
  * Takes a lazy default and a nullable value, if the value is not nully, turn it into a `Right`, if the value is nully use

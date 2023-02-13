@@ -231,23 +231,6 @@ export const fromIterable = <A>(collection: Iterable<A>): Option<A> => {
 }
 
 /**
- * Converts a `Either` to an `Option` discarding the error.
- *
- * @param self - The `Either` to convert to an `Option`.
- *
- * @example
- * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
- *
- * assert.deepStrictEqual(O.fromEither(E.right(1)), O.some(1))
- * assert.deepStrictEqual(O.fromEither(E.left('error message')), O.none())
- *
- * @category conversions
- * @since 1.0.0
- */
-export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
-
-/**
  * Converts a `Result` to an `Option` discarding the error.
  *
  * @param self - The `Result` to convert to an `Option`.
@@ -263,23 +246,6 @@ export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRig
  * @since 1.0.0
  */
 export const fromResult: <E, A>(self: Result<E, A>) => Option<A> = result.getSuccess
-
-/**
- * Converts a `Either` to an `Option` discarding the error.
- *
- * Alias of {@link fromEither}.
- *
- * @example
- * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
- *
- * assert.deepStrictEqual(O.getRight(E.right('ok')), O.some('ok'))
- * assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
- *
- * @category conversions
- * @since 1.0.0
- */
-export const getRight: <E, A>(self: Either<E, A>) => Option<A> = fromEither
 
 /**
  * Converts a `Result` to an `Option` discarding the error.
@@ -299,22 +265,7 @@ export const getRight: <E, A>(self: Either<E, A>) => Option<A> = fromEither
 export const getSuccess: <E, A>(self: Result<E, A>) => Option<A> = fromResult
 
 /**
- * Converts a `Either` to an `Option` discarding the value.
- *
- * @example
- * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
- *
- * assert.deepStrictEqual(O.getLeft(E.right("ok")), O.none())
- * assert.deepStrictEqual(O.getLeft(E.left("error")), O.some("error"))
- *
- * @category conversions
- * @since 1.0.0
- */
-export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
-
-/**
- * Converts a `Either` to an `Option` discarding the value.
+ * Converts a `Result` to an `Option` discarding the value.
  *
  * @example
  * import * as O from "@fp-ts/core/Option"
@@ -329,30 +280,7 @@ export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
 export const getFailure: <E, A>(self: Result<E, A>) => Option<E> = result.getFailure
 
 /**
- * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
- *
- * @param self - the `Option` to convert.
- * @param onNone - a function that produces an error value when the `Option` is `None`.
- *
- * @example
- * import { pipe } from "@fp-ts/core/Function"
- * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
- *
- * const onNone = () => 'error'
- * assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
- * assert.deepStrictEqual(pipe(O.none(), O.toEither(onNone)), E.left('error'))
- *
- * @category conversions
- * @since 1.0.0
- */
-export const toEither: {
-  <E>(onNone: () => E): <A>(self: Option<A>) => Either<E, A>
-  <A, E>(self: Option<A>, onNone: () => E): Either<E, A>
-} = either.fromOption
-
-/**
- * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
+ * Converts an `Option` to an `Result`, allowing you to provide a value to be used in the case of a `None`.
  *
  * @param self - the `Option` to convert.
  * @param onNone - a function that produces an error value when the `Option` is `None`.
@@ -783,34 +711,7 @@ export const flatMap: {
 )
 
 /**
- * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
- *
- * @param self - The `Option` to apply the function to.
- * @param f - The function to be applied to the contents of the `Option`.
- *
- * @example
- * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
- * import { pipe } from "@fp-ts/core/Function"
- *
- * const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
- *
- * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
- * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
- *
- * @category transforming
- * @since 1.0.0
- */
-export const flatMapEither: {
-  <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
-} = dual(
-  2,
-  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> => flatMap(self, liftEither(f))
-)
-
-/**
- * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+ * Applies a provided function that returns an `Result` to the contents of an `Option`, flattening the result into another `Option`.
  *
  * @param self - The `Option` to apply the function to.
  * @param f - The function to be applied to the contents of the `Option`.
@@ -1433,13 +1334,13 @@ export const Traversable: traversable.Traversable<OptionTypeLambda> = {
  *
  * @example
  * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
+ * import * as R from "@fp-ts/core/Result"
  *
- * const sequence = O.sequence(E.Applicative)
+ * const sequence = O.sequence(R.Applicative)
  *
- * assert.deepStrictEqual(sequence(O.some(E.right(1))), E.right(O.some(1)))
- * assert.deepStrictEqual(sequence(O.some(E.left("error"))), E.left("error"))
- * assert.deepStrictEqual(sequence(O.none()), E.right(O.none()))
+ * assert.deepStrictEqual(sequence(O.some(R.success(1))), R.success(O.some(1)))
+ * assert.deepStrictEqual(sequence(O.some(R.failure("error"))), R.failure("error"))
+ * assert.deepStrictEqual(sequence(O.none()), R.success(O.none()))
  *
  * @category combining
  * @since 1.0.0
@@ -1548,33 +1449,9 @@ export const liftPredicate: {
 } = <B extends A, A = B>(predicate: Predicate<A>) => (b: B) => predicate(b) ? some(b) : none()
 
 /**
- * Lifts an `Either` function to an `Option` function.
- *
- * @param f - Any variadic function that returns an `Either`.
- *
- * @example
- * import * as O from "@fp-ts/core/Option"
- * import * as E from "@fp-ts/core/Either"
- *
- * const parse = (s: string) =>
- *   isNaN(+s) ? E.left(`Error: ${s} is not a number`) : E.right(+s)
- *
- * const parseNumber = O.liftEither(parse)
- *
- * assert.deepEqual(parseNumber('12'), O.some(12))
- * assert.deepEqual(parseNumber('not a number'), O.none())
- *
- * @category lifting
- * @since 1.0.0
- */
-export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
-  f: (...a: A) => Either<E, B>
-) => (...a: A): Option<B> => fromEither(f(...a))
-
-/**
  * Lifts a `Result` function to an `Option` function.
  *
- * @param f - Any variadic function that returns an `Either`.
+ * @param f - Any variadic function that returns an `Result`.
  *
  * @example
  * import * as O from "@fp-ts/core/Option"
@@ -1835,3 +1712,130 @@ export const andThenBind: {
     that: Option<B>
   ): Option<{ [K in N | keyof A]: K extends keyof A ? A[K] : B }>
 } = semiProduct.andThenBind(SemiProduct)
+
+// -------------------------------------------------------------------------------------
+// deprecated (proposal)
+// -------------------------------------------------------------------------------------
+
+/**
+ * Converts a `Either` to an `Option` discarding the error.
+ *
+ * @param self - The `Either` to convert to an `Option`.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * assert.deepStrictEqual(O.fromEither(E.right(1)), O.some(1))
+ * assert.deepStrictEqual(O.fromEither(E.left('error message')), O.none())
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const fromEither: <E, A>(self: Either<E, A>) => Option<A> = either.getRight
+
+/**
+ * Converts a `Either` to an `Option` discarding the error.
+ *
+ * Alias of {@link fromEither}.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * assert.deepStrictEqual(O.getRight(E.right('ok')), O.some('ok'))
+ * assert.deepStrictEqual(O.getRight(E.left('err')), O.none())
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const getRight: <E, A>(self: Either<E, A>) => Option<A> = fromEither
+
+/**
+ * Converts a `Either` to an `Option` discarding the value.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * assert.deepStrictEqual(O.getLeft(E.right("ok")), O.none())
+ * assert.deepStrictEqual(O.getLeft(E.left("error")), O.some("error"))
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const getLeft: <E, A>(self: Either<E, A>) => Option<E> = either.getLeft
+
+/**
+ * Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
+ *
+ * @param self - the `Option` to convert.
+ * @param onNone - a function that produces an error value when the `Option` is `None`.
+ *
+ * @example
+ * import { pipe } from "@fp-ts/core/Function"
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * const onNone = () => 'error'
+ * assert.deepStrictEqual(pipe(O.some(1), O.toEither(onNone)), E.right(1))
+ * assert.deepStrictEqual(pipe(O.none(), O.toEither(onNone)), E.left('error'))
+ *
+ * @category conversions
+ * @since 1.0.0
+ */
+export const toEither: {
+  <E>(onNone: () => E): <A>(self: Option<A>) => Either<E, A>
+  <A, E>(self: Option<A>, onNone: () => E): Either<E, A>
+} = either.fromOption
+
+/**
+ * Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+ *
+ * @param self - The `Option` to apply the function to.
+ * @param f - The function to be applied to the contents of the `Option`.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ * import { pipe } from "@fp-ts/core/Function"
+ *
+ * const f = (n: number) => (n > 2 ? E.left('Too big') : E.right(n + 1))
+ *
+ * assert.deepStrictEqual(pipe(O.some(1), O.flatMapEither(f)), O.some(2))
+ * assert.deepStrictEqual(pipe(O.some(3), O.flatMapEither(f)), O.none())
+ *
+ * @category transforming
+ * @since 1.0.0
+ */
+export const flatMapEither: {
+  <A, E, B>(f: (a: A) => Either<E, B>): (self: Option<A>) => Option<B>
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B>
+} = dual(
+  2,
+  <A, E, B>(self: Option<A>, f: (a: A) => Either<E, B>): Option<B> => flatMap(self, liftEither(f))
+)
+
+/**
+ * Lifts an `Either` function to an `Option` function.
+ *
+ * @param f - Any variadic function that returns an `Either`.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ * import * as E from "@fp-ts/core/Either"
+ *
+ * const parse = (s: string) =>
+ *   isNaN(+s) ? E.left(`Error: ${s} is not a number`) : E.right(+s)
+ *
+ * const parseNumber = O.liftEither(parse)
+ *
+ * assert.deepEqual(parseNumber('12'), O.some(12))
+ * assert.deepEqual(parseNumber('not a number'), O.none())
+ *
+ * @category lifting
+ * @since 1.0.0
+ */
+export const liftEither = <A extends ReadonlyArray<unknown>, E, B>(
+  f: (...a: A) => Either<E, B>
+) => (...a: A): Option<B> => fromEither(f(...a))

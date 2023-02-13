@@ -339,13 +339,13 @@ export declare const sequence: <F extends TypeLambda>(
 
 ```ts
 import * as O from '@fp-ts/core/Option'
-import * as E from '@fp-ts/core/Either'
+import * as R from '@fp-ts/core/Result'
 
-const sequence = O.sequence(E.Applicative)
+const sequence = O.sequence(R.Applicative)
 
-assert.deepStrictEqual(sequence(O.some(E.right(1))), E.right(O.some(1)))
-assert.deepStrictEqual(sequence(O.some(E.left('error'))), E.left('error'))
-assert.deepStrictEqual(sequence(O.none()), E.right(O.none()))
+assert.deepStrictEqual(sequence(O.some(R.success(1))), R.success(O.some(1)))
+assert.deepStrictEqual(sequence(O.some(R.failure('error'))), R.failure('error'))
+assert.deepStrictEqual(sequence(O.none()), R.success(O.none()))
 ```
 
 Added in v1.0.0
@@ -594,7 +594,7 @@ Added in v1.0.0
 
 ## getFailure
 
-Converts a `Either` to an `Option` discarding the value.
+Converts a `Result` to an `Option` discarding the value.
 
 **Signature**
 
@@ -870,7 +870,7 @@ Added in v1.0.0
 
 ## toResult
 
-Converts an `Option` to an `Either`, allowing you to provide a value to be used in the case of a `None`.
+Converts an `Option` to an `Result`, allowing you to provide a value to be used in the case of a `None`.
 
 **Signature**
 
@@ -1784,7 +1784,7 @@ Added in v1.0.0
 
 ## flatMapResult
 
-Applies a provided function that returns an `Either` to the contents of an `Option`, flattening the result into another `Option`.
+Applies a provided function that returns an `Result` to the contents of an `Option`, flattening the result into another `Option`.
 
 **Signature**
 
