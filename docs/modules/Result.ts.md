@@ -298,7 +298,7 @@ Added in v1.0.0
 
 ## getFirstFailureMonoid
 
-`Monoid` returning the failure-most `Failure` value. If both operands are `Success`s then the inner values
+`Monoid` returning the left-most `Failure` value. If both operands are `Success`s then the inner values
 are combined using the provided `Monoid`.
 
 - `combine` is provided by {@link getFirstFailureSemigroup}.
@@ -314,7 +314,7 @@ Added in v1.0.0
 
 ## getFirstFailureSemigroup
 
-`Semigroup` returning the failure-most `Failure` value. If both operands are `Success`s then the inner values
+`Semigroup` returning the left-most `Failure` value. If both operands are `Success`s then the inner values
 are combined using the provided `Semigroup`.
 
 ```
@@ -336,7 +336,7 @@ Added in v1.0.0
 
 ## getFirstSuccessSemigroup
 
-Semigroup returning the failure-most `Success` value.
+Semigroup returning the left-most `Success` value.
 
 ```
 | self        | that        | combine(self, that) |

@@ -614,7 +614,7 @@ export const Applicative: applicative.Applicative<ResultTypeLambda> = {
 }
 
 /**
- * `Semigroup` returning the failure-most `Failure` value. If both operands are `Success`s then the inner values
+ * `Semigroup` returning the left-most `Failure` value. If both operands are `Success`s then the inner values
  * are combined using the provided `Semigroup`.
  *
  * ```
@@ -633,7 +633,7 @@ export const getFirstFailureSemigroup: <A, E>(S: Semigroup<A>) => Semigroup<Resu
   semiApplicative.getSemigroup(SemiApplicative)
 
 /**
- * `Monoid` returning the failure-most `Failure` value. If both operands are `Success`s then the inner values
+ * `Monoid` returning the left-most `Failure` value. If both operands are `Success`s then the inner values
  * are combined using the provided `Monoid`.
  *
  * - `combine` is provided by {@link getFirstFailureSemigroup}.
@@ -686,7 +686,7 @@ export const firstSuccessOf: {
 } = dual(2, coproductMany)
 
 /**
- * Semigroup returning the failure-most `Success` value.
+ * Semigroup returning the left-most `Success` value.
  *
  * ```
  * | self        | that        | combine(self, that) |
