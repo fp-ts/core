@@ -473,22 +473,7 @@ export const unit: Predicate<void> = of_.unit(Of)
 const product = <A, B>(self: Predicate<A>, that: Predicate<B>): Predicate<readonly [A, B]> =>
   ([a, b]) => self(a) && that(b)
 
-/**
- * Similar to `Promise.all` but operates on `Predicate`s.
- *
- * ```
- * Iterable<Predicate<A>> -> Predicate<A[]>
- * ```
- *
- * Given an iterable of `Predicate<A>` returns an `Predicate<Array<A>>` that operates on arrays
- * by applying each predicate in the iterable in order until a predicate fails.
- *
- * @param collection - An iterable collection of `Predicate`s to flatten.
- *
- * @category combining
- * @since 1.0.0
- */
-export const productAll = <A>(
+const productAll = <A>(
   collection: Iterable<Predicate<A>>
 ): Predicate<ReadonlyArray<A>> => {
   const predicates = readonlyArray.fromIterable(collection)

@@ -82,16 +82,8 @@ describe("Equivalence", () => {
     expect(eq(["a", "b"], ["a", "c"])).toEqual(false)
   })
 
-  it("all", () => {
-    const eq = _.all([_.string, _.string])
-    expect(eq(["a"], ["a"])).toEqual(true)
-    expect(eq(["a"], ["b"])).toEqual(false)
-    expect(eq(["a", "b"], ["a", "b"])).toEqual(true)
-    expect(eq(["a", "b"], ["a", "c"])).toEqual(false)
-  })
-
-  it("array", () => {
-    const eq = _.array(_.string)
+  it("productAll", () => {
+    const eq = _.Product.productAll([_.string, _.string])
     expect(eq(["a"], ["a"])).toEqual(true)
     expect(eq(["a"], ["b"])).toEqual(false)
     expect(eq(["a", "b"], ["a", "b"])).toEqual(true)

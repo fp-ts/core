@@ -144,20 +144,7 @@ export const Invariant: invariant.Invariant<EquivalenceTypeLambda> = {
 const product = <A, B>(self: Equivalence<A>, that: Equivalence<B>): Equivalence<[A, B]> =>
   make(([xa, xb], [ya, yb]) => self(xa, ya) && that(xb, yb))
 
-/**
- * Similar to `Promise.all` but operates on `Equivalence`s.
- *
- * ```
- * Iterable<Equivalence<A>> -> Equivalence<A[]>
- * ```
- *
- * Given an iterable of `Equivalence<A>` returns an `Equivalence<Array<A>>` that operates on arrays
- * by applying each equivalence in the iterable in order until a difference is found.
- *
- * @category combining
- * @since 1.0.0
- */
-export const all = <A>(collection: Iterable<Equivalence<A>>): Equivalence<Array<A>> => {
+const productAll = <A>(collection: Iterable<Equivalence<A>>): Equivalence<Array<A>> => {
   const equivalences = readonlyArray.fromIterable(collection)
   return make((x, y) => {
     const len = Math.min(x.length, y.length, equivalences.length)
@@ -174,7 +161,7 @@ const productMany = <A>(
   self: Equivalence<A>,
   collection: Iterable<Equivalence<A>>
 ): Equivalence<[A, ...Array<A>]> => {
-  const equivalence = all(collection)
+  const equivalence = productAll(collection)
   return make((x, y) => !self(x[0], y[0]) ? false : equivalence(x.slice(1), y.slice(1)))
 }
 
@@ -199,7 +186,7 @@ export const Product: product_.Product<EquivalenceTypeLambda> = {
   imap,
   product,
   productMany,
-  productAll: all
+  productAll
 }
 
 /**
@@ -219,23 +206,6 @@ export const tuple: <T extends ReadonlyArray<Equivalence<any>>>(
   ...predicates: T
 ) => Equivalence<Readonly<{ [I in keyof T]: [T[I]] extends [Equivalence<infer A>] ? A : never }>> =
   product_.tuple(Product)
-
-/**
- * @category combinators
- * @since 1.0.0
- */
-export const array = <A>(
-  equivalence: Equivalence<A>
-): Equivalence<ReadonlyArray<A>> =>
-  make((x, y) => {
-    const len = Math.min(x.length, y.length)
-    for (let i = 0; i < len; i++) {
-      if (!equivalence(x[i], y[i])) {
-        return false
-      }
-    }
-    return true
-  })
 
 /**
  * Given a struct of `Equivalence`s returns a new `Equivalence` that compares values of a struct

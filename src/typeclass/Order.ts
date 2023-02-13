@@ -143,20 +143,7 @@ const product = <A, B>(self: Order<A>, that: Order<B>): Order<[A, B]> =>
     return o !== 0 ? o : that.compare(xb, yb)
   })
 
-/**
- * Similar to `Promise.all` but operates on `Order`s.
- *
- * ```
- * Iterable<Order<A>> -> Order<A[]>
- * ```
- *
- * Given an iterable of `Order<A>` returns an `Order<Array<A>>` that operates on arrays
- * by applying each order in the iterable in order until a difference is found.
- *
- * @category combining
- * @since 1.0.0
- */
-export const all = <A>(collection: Iterable<Order<A>>): Order<Array<A>> => {
+const productAll = <A>(collection: Iterable<Order<A>>): Order<Array<A>> => {
   const orders = readonlyArray.fromIterable(collection)
   return make((x, y) => {
     const len = Math.min(x.length, y.length, orders.length)
@@ -174,7 +161,7 @@ const productMany = <A>(
   self: Order<A>,
   collection: Iterable<Order<A>>
 ): Order<[A, ...Array<A>]> => {
-  const order = all(collection)
+  const order = productAll(collection)
   return make((x, y) => {
     const o = self.compare(x[0], y[0])
     return o !== 0 ? o : order.compare(x.slice(1), y.slice(1))
@@ -202,7 +189,7 @@ export const Product: product_.Product<OrderTypeLambda> = {
   imap,
   product,
   productMany,
-  productAll: all
+  productAll
 }
 
 /**

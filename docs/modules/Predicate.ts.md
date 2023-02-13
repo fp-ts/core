@@ -16,8 +16,6 @@ Added in v1.0.0
   - [and](#and)
   - [not](#not)
   - [or](#or)
-- [combining](#combining)
-  - [productAll](#productall)
 - [constructors](#constructors)
   - [contramap](#contramap)
 - [do notation](#do-notation)
@@ -153,27 +151,6 @@ const nonZero = P.or(N.lessThan(0), N.greaterThan(0))
 assert.deepStrictEqual(nonZero(-1), true)
 assert.deepStrictEqual(nonZero(0), false)
 assert.deepStrictEqual(nonZero(1), true)
-```
-
-Added in v1.0.0
-
-# combining
-
-## productAll
-
-Similar to `Promise.all` but operates on `Predicate`s.
-
-```
-Iterable<Predicate<A>> -> Predicate<A[]>
-```
-
-Given an iterable of `Predicate<A>` returns an `Predicate<Array<A>>` that operates on arrays
-by applying each predicate in the iterable in order until a predicate fails.
-
-**Signature**
-
-```ts
-export declare const productAll: <A>(collection: Iterable<Predicate<A>>) => Predicate<readonly A[]>
 ```
 
 Added in v1.0.0
