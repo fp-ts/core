@@ -18,6 +18,7 @@ describe.concurrent("Either", () => {
 
     expect(E.Covariant).exist
     expect(E.map).exist
+    expect(E.mapRight).exist
     expect(E.let).exist
     expect(E.flap).exist
     expect(E.as).exist

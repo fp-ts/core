@@ -273,7 +273,7 @@ export const Bicovariant: bicovariant.Bicovariant<EitherTypeLambda> = {
  * @param self - The input `Either` value to map.
  * @param f - A transformation function to apply to the `Left` value of the input `Either`.
  *
- * @category error handling
+ * @category mapping
  * @since 1.0.0
  */
 export const mapLeft: {
@@ -284,13 +284,13 @@ export const mapLeft: {
 /**
  * Maps the `Right` side of an `Either` value to a new `Either` value.
  *
- * @param self - An `Either` to map
- * @param f - The function to map over the value of the `Either`
+ * @param self - An `Either` to map.
+ * @param f - The function to map over the value of the `Either`.
  *
  * @category mapping
  * @since 1.0.0
  */
-export const map: {
+export const mapRight: {
   <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
   <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
 } = dual(
@@ -298,6 +298,17 @@ export const map: {
   <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B> =>
     isRight(self) ? right(f(self.right)) : self
 )
+
+/**
+ * Alias of {@link mapRight}.
+ *
+ * @category mapping
+ * @since 1.0.0
+ */
+export const map: {
+  <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
+} = mapRight
 
 const imap = covariant.imap<EitherTypeLambda>(map)
 

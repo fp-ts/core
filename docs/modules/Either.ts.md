@@ -56,7 +56,6 @@ Added in v1.0.0
   - [getEquivalence](#getequivalence)
 - [error handling](#error-handling)
   - [firstRightOf](#firstrightof)
-  - [mapLeft](#mapleft)
   - [orElse](#orelse)
   - [orElseEither](#orelseeither)
   - [orElseFail](#orelsefail)
@@ -110,6 +109,8 @@ Added in v1.0.0
   - [bimap](#bimap)
   - [flap](#flap)
   - [map](#map)
+  - [mapLeft](#mapleft)
+  - [mapRight](#mapright)
 - [models](#models)
   - [Either (type alias)](#either-type-alias)
   - [Left (interface)](#left-interface)
@@ -732,21 +733,6 @@ Added in v1.0.0
 export declare const firstRightOf: {
   <E, A>(collection: Iterable<Either<E, A>>): (self: Either<E, A>) => Either<E, A>
   <E, A>(self: Either<E, A>, collection: Iterable<Either<E, A>>): Either<E, A>
-}
-```
-
-Added in v1.0.0
-
-## mapLeft
-
-Maps the `Left` side of an `Either` value to a new `Either` value.
-
-**Signature**
-
-```ts
-export declare const mapLeft: {
-  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
-  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
 }
 ```
 
@@ -1433,12 +1419,42 @@ Added in v1.0.0
 
 ## map
 
-Maps the `Right` side of an `Either` value to a new `Either` value.
+Alias of {@link mapRight}.
 
 **Signature**
 
 ```ts
 export declare const map: {
+  <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
+  <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
+}
+```
+
+Added in v1.0.0
+
+## mapLeft
+
+Maps the `Left` side of an `Either` value to a new `Either` value.
+
+**Signature**
+
+```ts
+export declare const mapLeft: {
+  <E, G>(f: (e: E) => G): <A>(self: Either<E, A>) => Either<G, A>
+  <E, A, G>(self: Either<E, A>, f: (e: E) => G): Either<G, A>
+}
+```
+
+Added in v1.0.0
+
+## mapRight
+
+Maps the `Right` side of an `Either` value to a new `Either` value.
+
+**Signature**
+
+```ts
+export declare const mapRight: {
   <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
   <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
 }
