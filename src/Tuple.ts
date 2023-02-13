@@ -4,16 +4,161 @@
  * @since 1.0.0
  */
 import { dual } from "@fp-ts/core/Function"
+import type { TypeLambda } from "@fp-ts/core/HKT"
+import * as bicovariant from "@fp-ts/core/typeclass/Bicovariant"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
 import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 
 /**
+ * @category type lambdas
+ * @since 1.0.0
+ */
+export interface TupleTypeLambda extends TypeLambda {
+  readonly type: [this["Out1"], this["Target"]]
+}
+
+/**
+ * Constructs a new tuple from the provided values.
+ *
+ * @param elements - The list of elements to create the tuple from.
+ *
+ * @example
+ * import { tuple } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(tuple(1, 'hello', true), [1, 'hello', true])
+ *
  * @category constructors
  * @since 1.0.0
  */
 export const tuple = <A extends ReadonlyArray<any>>(...elements: A): A => elements
+
+/**
+ * Return the first element of a tuple.
+ *
+ * @param self - A tuple of length `2`.
+ *
+ * @example
+ * import { getFirst } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(getFirst(["hello", 42]), "hello")
+ *
+ * @category getters
+ * @since 1.0.0
+ */
+export const getFirst = <L, R>(self: readonly [L, R]): L => self[0]
+
+/**
+ * Return the second element of a tuple.
+ *
+ * @param self - A tuple of length `2`.
+ *
+ * @example
+ * import { getSecond } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(getSecond(["hello", 42]), 42)
+ *
+ * @category getters
+ * @since 1.0.0
+ */
+export const getSecond = <L, R>(self: readonly [L, R]): R => self[1]
+
+/**
+ * Transforms both elements of a tuple using the given functions.
+ *
+ * @param self - A tuple of length `2`.
+ * @param f - The function to transform the first element of the tuple.
+ * @param g - The function to transform the second element of the tuple.
+ *
+ * @example
+ * import { bimap } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(
+ *   bimap(["hello", 42], s => s.toUpperCase(), n => n.toString()),
+ *   ["HELLO", "42"]
+ * )
+ *
+ * @category mapping
+ * @since 1.0.0
+ */
+export const bimap: {
+  <L1, L2, R1, R2>(f: (e: L1) => L2, g: (a: R1) => R2): (self: readonly [L1, R1]) => [L2, R2]
+  <L1, R1, L2, R2>(self: readonly [L1, R1], f: (e: L1) => L2, g: (a: R1) => R2): [L2, R2]
+} = dual(
+  3,
+  <L1, R1, L2, R2>(
+    self: readonly [L1, R1],
+    f: (e: L1) => L2,
+    g: (a: R1) => R2
+  ): [L2, R2] => [f(self[0]), g(self[1])]
+)
+
+/**
+ * @category instances
+ * @since 1.0.0
+ */
+export const Bicovariant: bicovariant.Bicovariant<TupleTypeLambda> = {
+  bimap
+}
+
+/**
+ * Transforms the first component of a tuple using a given function.
+ *
+ * @param self - A tuple of length `2`.
+ * @param f - The function to transform the first element of the tuple.
+ *
+ * @example
+ * import { mapFirst } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(
+ *   mapFirst(["hello", 42], s => s.toUpperCase()),
+ *   ["HELLO", 42]
+ * )
+ *
+ * @category mapping
+ * @since 1.0.0
+ */
+export const mapFirst: {
+  <L1, L2>(f: (left: L1) => L2): <R>(self: readonly [L1, R]) => [L2, R]
+  <L1, R, L2>(self: readonly [L1, R], f: (left: L1) => L2): [L2, R]
+} = bicovariant.mapLeft(Bicovariant) as any
+
+/**
+ * Transforms the second component of a tuple using a given function.
+ *
+ * @param self - A tuple of length `2`.
+ * @param f - The function to transform the second element of the tuple.
+ *
+ * @example
+ * import { mapSecond } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(
+ *   mapSecond(["hello", 42], n => n.toString()),
+ *   ["hello", "42"]
+ * )
+ *
+ * @category mapping
+ * @since 1.0.0
+ */
+export const mapSecond: {
+  <R1, R2>(f: (right: R1) => R2): <L>(self: readonly [L, R1]) => [L, R2]
+  <L, R1, R2>(self: readonly [L, R1], f: (right: R1) => R2): [L, R2]
+} = bicovariant.map(Bicovariant) as any
+
+/**
+ * Swaps the two elements of a tuple.
+ *
+ * @param self - A tuple of length `2`.
+ *
+ * @example
+ * import { swap } from "@fp-ts/core/Tuple"
+ *
+ * assert.deepStrictEqual(swap(["hello", 42]), [42, "hello"])
+ *
+ * @since 1.0.0
+ */
+export const swap = <L, R>(self: readonly [L, R]): [R, L] => [self[1], self[0]]
 
 /**
  * Given a tuple of `Equivalence`s returns a new `Equivalence` that compares values of a tuple
@@ -81,11 +226,6 @@ export const appendElement: {
   TODO:
 
   - at
-  - first
-  - second
   - swap
-  - bimap
-  - mapLeft
-  - map
 
 */

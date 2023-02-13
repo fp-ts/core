@@ -33,9 +33,11 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 import * as semiProduct from "@fp-ts/core/typeclass/SemiProduct"
 import * as traversable from "@fp-ts/core/typeclass/Traversable"
 
-// -------------------------------------------------------------------------------------
-// models
-// -------------------------------------------------------------------------------------
+/**
+ * @category models
+ * @since 1.0.0
+ */
+export type Either<E, A> = Left<E> | Right<A>
 
 /**
  * @category models
@@ -56,22 +58,12 @@ export interface Right<A> {
 }
 
 /**
- * @category models
- * @since 1.0.0
- */
-export type Either<E, A> = Left<E> | Right<A>
-
-/**
  * @category type lambdas
  * @since 1.0.0
  */
 export interface EitherTypeLambda extends TypeLambda {
   readonly type: Either<this["Out1"], this["Target"]>
 }
-
-// -------------------------------------------------------------------------------------
-// constructors
-// -------------------------------------------------------------------------------------
 
 /**
  * Constructs a new `Either` holding a `Right` value. This usually represents a successful value due to the right bias
@@ -98,10 +90,6 @@ export const left: <E>(e: E) => Either<E, never> = either.left
  * @since 1.0.0
  */
 export const of: <A>(a: A) => Either<never, A> = right
-
-// -------------------------------------------------------------------------------------
-// guards
-// -------------------------------------------------------------------------------------
 
 /**
  * Tests if a value is a `Either`.
@@ -153,10 +141,6 @@ export const isLeft: <E, A>(self: Either<E, A>) => self is Left<E> = either.isLe
  * @since 1.0.0
  */
 export const isRight: <E, A>(self: Either<E, A>) => self is Right<A> = either.isRight
-
-// -------------------------------------------------------------------------------------
-// conversions
-// -------------------------------------------------------------------------------------
 
 /**
  * Returns a `Refinement` from a `Either` returning function.
@@ -247,10 +231,6 @@ export const fromOption: {
   <E>(onNone: () => E): <A>(fa: Option<A>) => Either<E, A>
 } = either.fromOption
 
-// -------------------------------------------------------------------------------------
-// equivalence
-// -------------------------------------------------------------------------------------
-
 /**
  * @category equivalence
  * @since 1.0.0
@@ -337,14 +317,6 @@ export const Covariant: covariant.Covariant<EitherTypeLambda> = {
 export const Invariant: invariant.Invariant<EitherTypeLambda> = {
   imap
 }
-
-/**
- * @category mapping
- * @since 1.0.0
- */
-export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tupled(
-  Invariant
-)
 
 /**
  * @category mapping
@@ -509,21 +481,6 @@ export const SemiProduct: semiProduct.SemiProduct<EitherTypeLambda> = {
   product,
   productMany
 }
-
-/**
- * Appends an element to the end of a tuple.
- *
- * @since 1.0.0
- */
-export const appendElement: {
-  <E1, A extends ReadonlyArray<any>, E2, B>(
-    self: Either<E1, A>,
-    that: Either<E2, B>
-  ): Either<E1 | E2, [...A, B]>
-  <E2, B>(
-    that: Either<E2, B>
-  ): <E1, A extends ReadonlyArray<any>>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
-} = semiProduct.appendElement(SemiProduct)
 
 /**
  * Similar to `Promise.all` but operates on `Either`s.
@@ -906,10 +863,6 @@ export const match: {
     isLeft(self) ? onLeft(self.left) : onRight(self.right)
 )
 
-// -------------------------------------------------------------------------------------
-// interop
-// -------------------------------------------------------------------------------------
-
 /**
  * Takes a lazy default and a nullable value, if the value is not nully, turn it into a `Right`, if the value is nully use
  * the provided default as a `Left`.
@@ -1177,10 +1130,6 @@ export const tap: {
   <A, E2, _>(f: (a: A) => Either<E2, _>): <E1>(self: Either<E1, A>) => Either<E2 | E1, A>
 } = chainable.tap(Chainable)
 
-// -------------------------------------------------------------------------------------
-// debugging
-// -------------------------------------------------------------------------------------
-
 /**
  * @category debugging
  * @since 1.0.0
@@ -1352,10 +1301,6 @@ export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E,
     y
   ) => (isLeft(y) ? x : isLeft(x) ? y : right(S.combine(x.right, y.right))))
 
-// -------------------------------------------------------------------------------------
-// algebraic operations
-// -------------------------------------------------------------------------------------
-
 /**
  * @category algebraic operations
  * @since 1.0.0
@@ -1392,10 +1337,6 @@ export const divide: {
   <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 } = lift2(N.divide)
 
-// -------------------------------------------------------------------------------------
-// utils
-// -------------------------------------------------------------------------------------
-
 /**
  * Return all the `Right` elements from an `Interable` of `Either`s.
  *
@@ -1431,6 +1372,30 @@ export const lefts = <E, A>(self: Iterable<Either<E, A>>): Array<E> => {
 // -------------------------------------------------------------------------------------
 // do notation
 // -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]> = invariant.tupled(
+  Invariant
+)
+
+/**
+ * Appends an element to the end of a tuple.
+ *
+ * @category do notation
+ * @since 1.0.0
+ */
+export const appendElement: {
+  <E1, A extends ReadonlyArray<any>, E2, B>(
+    self: Either<E1, A>,
+    that: Either<E2, B>
+  ): Either<E1 | E2, [...A, B]>
+  <E2, B>(
+    that: Either<E2, B>
+  ): <E1, A extends ReadonlyArray<any>>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
+} = semiProduct.appendElement(SemiProduct)
 
 /**
  * @category do notation

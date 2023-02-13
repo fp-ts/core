@@ -47,9 +47,11 @@ Added in v1.0.0
 - [do notation](#do-notation)
   - [Do](#do)
   - [andThenBind](#andthenbind)
+  - [appendElement](#appendelement)
   - [bind](#bind)
   - [bindTo](#bindto)
   - [let](#let)
+  - [tupled](#tupled)
 - [equivalence](#equivalence)
   - [getEquivalence](#getequivalence)
 - [error handling](#error-handling)
@@ -108,7 +110,6 @@ Added in v1.0.0
   - [bimap](#bimap)
   - [flap](#flap)
   - [map](#map)
-  - [tupled](#tupled)
 - [models](#models)
   - [Either (type alias)](#either-type-alias)
   - [Left (interface)](#left-interface)
@@ -124,7 +125,6 @@ Added in v1.0.0
 - [utils](#utils)
   - [andThen](#andthen)
   - [ap](#ap)
-  - [appendElement](#appendelement)
   - [composeKleisliArrow](#composekleisliarrow)
   - [contains](#contains)
   - [exists](#exists)
@@ -635,6 +635,21 @@ assert.deepStrictEqual(result, E.left('e1'))
 
 Added in v1.0.0
 
+## appendElement
+
+Appends an element to the end of a tuple.
+
+**Signature**
+
+```ts
+export declare const appendElement: {
+  <E1, A extends readonly any[], E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [...A, B]>
+  <E2, B>(that: Either<E2, B>): <E1, A extends readonly any[]>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
+}
+```
+
+Added in v1.0.0
+
 ## bind
 
 **Signature**
@@ -681,6 +696,16 @@ export declare const let: {
     { [K in N | keyof A]: K extends keyof A ? A[K] : B }
   >
 }
+```
+
+Added in v1.0.0
+
+## tupled
+
+**Signature**
+
+```ts
+export declare const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]>
 ```
 
 Added in v1.0.0
@@ -1421,16 +1446,6 @@ export declare const map: {
 
 Added in v1.0.0
 
-## tupled
-
-**Signature**
-
-```ts
-export declare const tupled: <E, A>(self: Either<E, A>) => Either<E, [A]>
-```
-
-Added in v1.0.0
-
 # models
 
 ## Either (type alias)
@@ -1582,21 +1597,6 @@ Added in v1.0.0
 export declare const ap: {
   <E1, A, B, E2>(self: Either<E1, (a: A) => B>, that: Either<E2, A>): Either<E1 | E2, B>
   <E2, A>(that: Either<E2, A>): <E1, B>(self: Either<E1, (a: A) => B>) => Either<E2 | E1, B>
-}
-```
-
-Added in v1.0.0
-
-## appendElement
-
-Appends an element to the end of a tuple.
-
-**Signature**
-
-```ts
-export declare const appendElement: {
-  <E1, A extends readonly any[], E2, B>(self: Either<E1, A>, that: Either<E2, B>): Either<E1 | E2, [...A, B]>
-  <E2, B>(that: Either<E2, B>): <E1, A extends readonly any[]>(self: Either<E1, A>) => Either<E2 | E1, [...A, B]>
 }
 ```
 
