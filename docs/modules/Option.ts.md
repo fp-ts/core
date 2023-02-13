@@ -22,7 +22,6 @@ Added in v1.0.0
 - [combining](#combining)
   - [all](#all)
   - [ap](#ap)
-  - [appendElement](#appendelement)
   - [getFailureMonoid](#getfailuremonoid)
   - [getFailureSemigroup](#getfailuresemigroup)
   - [getFirstSomeSemigroup](#getfirstsomesemigroup)
@@ -55,9 +54,11 @@ Added in v1.0.0
 - [do notation](#do-notation)
   - [Do](#do)
   - [andThenBind](#andthenbind)
+  - [appendElement](#appendelement)
   - [bind](#bind)
   - [bindTo](#bindto)
   - [let](#let)
+  - [tupled](#tupled)
 - [equivalence](#equivalence)
   - [getEquivalence](#getequivalence)
 - [error handling](#error-handling)
@@ -103,7 +104,6 @@ Added in v1.0.0
   - [flatten](#flatten)
   - [map](#map)
   - [tap](#tap)
-  - [tupled](#tupled)
 - [type lambdas](#type-lambdas)
   - [OptionTypeLambda (interface)](#optiontypelambda-interface)
 - [utils](#utils)
@@ -267,30 +267,6 @@ export declare const ap: {
   <A, B>(self: Option<(a: A) => B>, that: Option<A>): Option<B>
   <A>(that: Option<A>): <B>(self: Option<(a: A) => B>) => Option<B>
 }
-```
-
-Added in v1.0.0
-
-## appendElement
-
-Appends an element to the end of a tuple wrapped in an `Option` type.
-
-**Signature**
-
-```ts
-export declare const appendElement: {
-  <A extends readonly any[], B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
-  <B>(that: Option<B>): <A extends readonly any[]>(self: Option<A>) => Option<[...A, B]>
-}
-```
-
-**Example**
-
-```ts
-import * as O from '@fp-ts/core/Option'
-
-assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.some(3)), O.some([1, 2, 3]))
-assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.none()), O.none())
 ```
 
 Added in v1.0.0
@@ -881,6 +857,30 @@ export declare const andThenBind: {
 
 Added in v1.0.0
 
+## appendElement
+
+Appends an element to the end of a tuple wrapped in an `Option` type.
+
+**Signature**
+
+```ts
+export declare const appendElement: {
+  <A extends readonly any[], B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
+  <B>(that: Option<B>): <A extends readonly any[]>(self: Option<A>) => Option<[...A, B]>
+}
+```
+
+**Example**
+
+```ts
+import * as O from '@fp-ts/core/Option'
+
+assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.some(3)), O.some([1, 2, 3]))
+assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.none()), O.none())
+```
+
+Added in v1.0.0
+
 ## bind
 
 **Signature**
@@ -924,6 +924,16 @@ export declare const let: {
     [K in N | keyof A]: K extends keyof A ? A[K] : B
   }>
 }
+```
+
+Added in v1.0.0
+
+## tupled
+
+**Signature**
+
+```ts
+export declare const tupled: <A>(self: Option<A>) => Option<[A]>
 ```
 
 Added in v1.0.0
@@ -1682,16 +1692,6 @@ export declare const tap: {
   <A, _>(self: Option<A>, f: (a: A) => Option<_>): Option<A>
   <A, _>(f: (a: A) => Option<_>): (self: Option<A>) => Option<A>
 }
-```
-
-Added in v1.0.0
-
-## tupled
-
-**Signature**
-
-```ts
-export declare const tupled: <A>(self: Option<A>) => Option<[A]>
 ```
 
 Added in v1.0.0

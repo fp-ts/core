@@ -41,6 +41,12 @@ import * as traversable from "@fp-ts/core/typeclass/Traversable"
  * @category models
  * @since 1.0.0
  */
+export type Option<A> = None | Some<A>
+
+/**
+ * @category models
+ * @since 1.0.0
+ */
 export interface None {
   readonly _tag: "None"
 }
@@ -53,12 +59,6 @@ export interface Some<A> {
   readonly _tag: "Some"
   readonly value: A
 }
-
-/**
- * @category models
- * @since 1.0.0
- */
-export type Option<A> = None | Some<A>
 
 /**
  * @category type lambdas
@@ -646,12 +646,6 @@ export const Invariant: invariant.Invariant<OptionTypeLambda> = {
  * @category transforming
  * @since 1.0.0
  */
-export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
-
-/**
- * @category transforming
- * @since 1.0.0
- */
 export const flap: {
   <A, B>(a: A, self: Option<(a: A) => B>): Option<B>
   <A, B>(self: Option<(a: A) => B>): (a: A) => Option<B>
@@ -939,26 +933,6 @@ export const SemiProduct: semiProduct.SemiProduct<OptionTypeLambda> = {
   product,
   productMany
 }
-
-/**
- * Appends an element to the end of a tuple wrapped in an `Option` type.
- *
- * @param self - The option of a tuple to which an element needs to be added.
- * @param that - The element which needs to be added to the tuple.
- *
- * @example
- * import * as O from "@fp-ts/core/Option"
- *
- * assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.some(3)), O.some([1, 2, 3]))
- * assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.none()), O.none())
- *
- * @category combining
- * @since 1.0.0
- */
-export const appendElement: {
-  <A extends ReadonlyArray<any>, B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
-  <B>(that: Option<B>): <A extends ReadonlyArray<any>>(self: Option<A>) => Option<[...A, B]>
-} = semiProduct.appendElement(SemiProduct)
 
 /**
  * @since 1.0.0
@@ -1641,6 +1615,32 @@ export const multiplyCompact = (self: Iterable<Option<number>>): number => {
 // -------------------------------------------------------------------------------------
 // do notation
 // -------------------------------------------------------------------------------------
+
+/**
+ * @category do notation
+ * @since 1.0.0
+ */
+export const tupled: <A>(self: Option<A>) => Option<[A]> = invariant.tupled(Invariant)
+
+/**
+ * Appends an element to the end of a tuple wrapped in an `Option` type.
+ *
+ * @param self - The option of a tuple to which an element needs to be added.
+ * @param that - The element which needs to be added to the tuple.
+ *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.some(3)), O.some([1, 2, 3]))
+ * assert.deepStrictEqual(O.appendElement(O.some([1, 2]), O.none()), O.none())
+ *
+ * @category do notation
+ * @since 1.0.0
+ */
+export const appendElement: {
+  <A extends ReadonlyArray<any>, B>(self: Option<A>, that: Option<B>): Option<[...A, B]>
+  <B>(that: Option<B>): <A extends ReadonlyArray<any>>(self: Option<A>) => Option<[...A, B]>
+} = semiProduct.appendElement(SemiProduct)
 
 /**
  * @category do notation
