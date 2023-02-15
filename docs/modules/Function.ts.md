@@ -160,16 +160,16 @@ Apply a function to a given value.
 **Signature**
 
 ```ts
-export declare const apply: <A, B>(self: (a: A) => B) => (a: A) => B
+export declare const apply: <A>(a: A) => <B>(self: (a: A) => B) => B
 ```
 
 **Example**
 
 ```ts
 import { pipe, apply } from '@fp-ts/core/Function'
-import { increment } from '@fp-ts/core/Number'
+import { length } from '@fp-ts/core/String'
 
-assert.deepStrictEqual(pipe(2, apply(increment)), 3)
+assert.deepStrictEqual(pipe(length, apply('hello')), 5)
 ```
 
 Added in v1.0.0
@@ -278,7 +278,7 @@ Added in v1.0.0
 
 ## dual
 
-Creates a function that is both data-last and data-first.
+Creates a function that can be used in a data-last (aka `pipe`able) or data-first style.
 
 **Signature**
 
@@ -290,6 +290,20 @@ export declare const dual: <
   dataFirstArity: Parameters<DataFirst>['length'],
   body: DataFirst
 ) => DataLast & DataFirst
+```
+
+**Example**
+
+```ts
+import { dual, pipe } from '@fp-ts/core/Function'
+
+export const sum: {
+  (that: number): (self: number) => number
+  (self: number, that: number): number
+} = dual(2, (self: number, that: number): number => self + that)
+
+assert.deepStrictEqual(sum(2, 3), 5)
+assert.deepStrictEqual(pipe(2, sum(3)), 5)
 ```
 
 Added in v1.0.0

@@ -32,7 +32,21 @@ export interface FunctionTypeLambda extends TypeLambda {
 export const isFunction = (input: unknown): input is Function => typeof input === "function"
 
 /**
- * Creates a function that is both data-last and data-first.
+ * Creates a function that can be used in a data-last (aka `pipe`able) or data-first style.
+ *
+ * @param dataFirstArity - The arity of the uncurried function.
+ * @param body - The definition of the uncurried function.
+ *
+ * @example
+ * import { dual, pipe } from "@fp-ts/core/Function"
+ *
+ * export const sum: {
+ *   (that: number): (self: number) => number
+ *   (self: number, that: number): number
+ * } = dual(2, (self: number, that: number): number => self + that)
+ *
+ * assert.deepStrictEqual(sum(2, 3), 5)
+ * assert.deepStrictEqual(pipe(2, sum(3)), 5)
  *
  * @since 1.0.0
  */
@@ -56,15 +70,18 @@ export const dual = <
 /**
  * Apply a function to a given value.
  *
+ * @param a - The value that the function will be applied to.
+ * @param self - The function to be applied to a value.
+ *
  * @example
  * import { pipe, apply } from '@fp-ts/core/Function'
- * import { increment } from '@fp-ts/core/Number'
+ * import { length } from '@fp-ts/core/String'
  *
- * assert.deepStrictEqual(pipe(2, apply(increment)), 3)
+ * assert.deepStrictEqual(pipe(length, apply("hello")), 5)
  *
  * @since 1.0.0
  */
-export const apply = <A, B>(self: (a: A) => B) => (a: A): B => self(a)
+export const apply = <A>(a: A) => <B>(self: (a: A) => B): B => self(a)
 
 /**
  * A lazy argument
@@ -147,7 +164,7 @@ export const constVoid: LazyArg<void> = constUndefined
 /**
  * Reverses the order of arguments for a curried function.
  *
- * @param f -A curried function that takes multiple arguments.
+ * @param f - A curried function that takes multiple arguments.
  *
  * @example
  * import { flip } from '@fp-ts/core/Function'

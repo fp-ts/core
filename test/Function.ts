@@ -8,7 +8,7 @@ const g = double
 
 describe.concurrent("Function", () => {
   it("apply", () => {
-    deepStrictEqual(_.pipe("a", _.apply(String.length)), 1)
+    deepStrictEqual(_.pipe(String.length, _.apply("a")), 1)
   })
 
   it("compose", () => {
