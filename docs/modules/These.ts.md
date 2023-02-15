@@ -12,11 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [algebraic operations](#algebraic-operations)
-  - [divide](#divide)
-  - [multiply](#multiply)
-  - [subtract](#subtract)
-  - [sum](#sum)
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
@@ -128,6 +123,11 @@ Added in v1.0.0
   - [flap](#flap)
   - [map](#map)
   - [tupled](#tupled)
+- [math](#math)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [subtract](#subtract)
+  - [sum](#sum)
 - [model](#model)
   - [Both (interface)](#both-interface)
   - [These (type alias)](#these-type-alias)
@@ -156,80 +156,6 @@ Added in v1.0.0
   - [unit](#unit)
 
 ---
-
-# algebraic operations
-
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    number
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
-    self: These<readonly [E1, ...E1[]], number>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
-}
-```
-
-Added in v1.0.0
-
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    number
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
-    self: These<readonly [E1, ...E1[]], number>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
-}
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    number
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
-    self: These<readonly [E1, ...E1[]], number>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
-}
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: {
-  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
-    readonly [E1 | E2, ...(E1 | E2)[]],
-    number
-  >
-  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
-    self: These<readonly [E1, ...E1[]], number>
-  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
-}
-```
-
-Added in v1.0.0
 
 # combinators
 
@@ -1608,6 +1534,80 @@ Added in v1.0.0
 
 ```ts
 export declare const tupled: <E, A>(self: These<E, A>) => These<E, [A]>
+```
+
+Added in v1.0.0
+
+# math
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: {
+  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    number
+  >
+  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
+    self: These<readonly [E1, ...E1[]], number>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
+}
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: {
+  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    number
+  >
+  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
+    self: These<readonly [E1, ...E1[]], number>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
+}
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: {
+  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    number
+  >
+  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
+    self: These<readonly [E1, ...E1[]], number>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
+}
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: {
+  <E1, E2>(self: These<readonly [E1, ...E1[]], number>, that: These<readonly [E2, ...E2[]], number>): These<
+    readonly [E1 | E2, ...(E1 | E2)[]],
+    number
+  >
+  <E2>(that: These<readonly [E2, ...E2[]], number>): <E1>(
+    self: These<readonly [E1, ...E1[]], number>
+  ) => These<readonly [E2 | E1, ...(E2 | E1)[]], number>
+}
 ```
 
 Added in v1.0.0

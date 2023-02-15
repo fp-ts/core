@@ -1302,7 +1302,7 @@ export const getOptionalSemigroup = <E, A>(S: Semigroup<A>): Semigroup<Either<E,
   ) => (isLeft(y) ? x : isLeft(x) ? y : right(S.combine(x.right, y.right))))
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const sum: {
@@ -1311,7 +1311,7 @@ export const sum: {
 } = lift2(N.sum)
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const multiply: {
@@ -1320,7 +1320,7 @@ export const multiply: {
 } = lift2(N.multiply)
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const subtract: {
@@ -1329,7 +1329,7 @@ export const subtract: {
 } = lift2(N.subtract)
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const divide: {

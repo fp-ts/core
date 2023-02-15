@@ -3,6 +3,27 @@ import { pipe } from "@fp-ts/core/Function"
 import { deepStrictEqual } from "@fp-ts/core/test/util"
 
 describe.concurrent("Bigint", () => {
+  it("exports", () => {
+    expect(Bigint.SemigroupMax).exists
+    expect(Bigint.SemigroupMin).exists
+    expect(Bigint.sumAll).exists
+    expect(Bigint.multiplyAll).exists
+    expect(Bigint.lessThan).exists
+    expect(Bigint.lessThanOrEqualTo).exists
+    expect(Bigint.greaterThan).exists
+    expect(Bigint.greaterThanOrEqualTo).exists
+    expect(Bigint.between).exists
+    expect(Bigint.clamp).exists
+    expect(Bigint.min).exists
+    expect(Bigint.max).exists
+  })
+
+  it("sign", () => {
+    assert.deepStrictEqual(Bigint.sign(-5n), -1)
+    assert.deepStrictEqual(Bigint.sign(0n), 0)
+    assert.deepStrictEqual(Bigint.sign(5n), 1)
+  })
+
   it("isBigint", () => {
     expect(Bigint.isBigint(1n)).toEqual(true)
     expect(Bigint.isBigint(1)).toEqual(false)
