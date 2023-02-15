@@ -13,11 +13,43 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export type Ordering = -1 | 0 | 1
 
 /**
+ * Inverts the ordering of the input `Ordering`.
+ *
+ * @param o - The input `Ordering`.
+ *
+ * @example
+ * import { reverse } from "@fp-ts/core/Ordering"
+ *
+ * assert.deepStrictEqual(reverse(1), -1)
+ * assert.deepStrictEqual(reverse(-1), 1)
+ * assert.deepStrictEqual(reverse(0), 0)
+ *
  * @since 1.0.0
  */
 export const reverse = (o: Ordering): Ordering => (o === -1 ? 1 : o === 1 ? -1 : 0)
 
 /**
+ * Depending on the `Ordering` parameter given to it, returns a value produced by one of the 3 functions provided as parameters.
+ *
+ * @param self - The `Ordering` parameter to match against.
+ * @param onLessThan - A function that will be called if the `Ordering` parameter is `-1`.
+ * @param onEqual - A function that will be called if the `Ordering` parameter is `0`.
+ * @param onGreaterThan - A function that will be called if the `Ordering` parameter is `1`.
+ *
+ * @example
+ * import { match } from "@fp-ts/core/Ordering"
+ * import { constant } from "@fp-ts/core/Function"
+ *
+ * const toMessage = match(
+ *   constant('less than'),
+ *   constant('equal'),
+ *   constant('greater than')
+ * )
+ *
+ * assert.deepStrictEqual(toMessage(-1), "less than")
+ * assert.deepStrictEqual(toMessage(0), "equal")
+ * assert.deepStrictEqual(toMessage(1), "greater than")
+ *
  * @category pattern matching
  * @since 1.0.0
  */
@@ -26,7 +58,7 @@ export const match: {
     onLessThan: LazyArg<A>,
     onEqual: LazyArg<B>,
     onGreaterThan: LazyArg<C>
-  ): (o: Ordering) => A | B | C
+  ): (self: Ordering) => A | B | C
   <A, B, C = B>(
     o: Ordering,
     onLessThan: LazyArg<A>,
@@ -34,13 +66,22 @@ export const match: {
     onGreaterThan: LazyArg<C>
   ): A | B | C
 } = dual(4, <A, B, C = B>(
-  o: Ordering,
+  self: Ordering,
   onLessThan: LazyArg<A>,
   onEqual: LazyArg<B>,
   onGreaterThan: LazyArg<C>
-): A | B | C => o === -1 ? onLessThan() : o === 0 ? onEqual() : onGreaterThan())
+): A | B | C => self === -1 ? onLessThan() : self === 0 ? onEqual() : onGreaterThan())
 
 /**
+ * `Semigroup` instance for `Ordering`, returns the left-most non-zero `Ordering`.
+ *
+ * @example
+ * import { Semigroup } from "@fp-ts/core/Ordering"
+ *
+ * assert.deepStrictEqual(Semigroup.combine(0, -1), -1)
+ * assert.deepStrictEqual(Semigroup.combine(0, 1), 1)
+ * assert.deepStrictEqual(Semigroup.combine(1, -1), 1)
+ *
  * @category instances
  * @since 1.0.0
  */
@@ -61,6 +102,17 @@ export const Semigroup: semigroup.Semigroup<Ordering> = semigroup.make(
 )
 
 /**
+ * `Monoid` instance for `Ordering`, returns the left-most non-zero `Ordering`.
+ *
+ * The `empty` value is `0`.
+ *
+ * @example
+ * import { Monoid } from "@fp-ts/core/Ordering"
+ *
+ * assert.deepStrictEqual(Monoid.combine(Monoid.empty, -1), -1)
+ * assert.deepStrictEqual(Monoid.combine(Monoid.empty, 1), 1)
+ * assert.deepStrictEqual(Monoid.combine(1, -1), 1)
+ *
  * @category instances
  * @since 1.0.0
  */
