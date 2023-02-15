@@ -697,8 +697,8 @@ Maps a `ReadonlyRecord` into another `Record` by applying a transformation funct
 
 ```ts
 export declare const map: {
-  <A, B>(f: (a: A, key: string) => B): (self: ReadonlyRecord<A>) => Record<string, B>
-  <A, B>(self: ReadonlyRecord<A>, f: (a: A, key: string) => B): Record<string, B>
+  <K extends string, A, B>(f: (a: A, key: K) => B): (self: Readonly<Record<K, A>>) => Record<K, B>
+  <K extends string, A, B>(self: Readonly<Record<K, A>>, f: (a: A, key: K) => B): Record<K, B>
 }
 ```
 
