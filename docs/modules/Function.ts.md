@@ -805,7 +805,7 @@ export declare const unsafeCoerce: <A, B>(a: A) => B
 **Example**
 
 ```ts
-import { unsafeCoerce, identity } from '@fp-ts/core/function'
+import { unsafeCoerce, identity } from '@fp-ts/core/Function'
 
 assert.deepStrictEqual(unsafeCoerce, identity)
 ```

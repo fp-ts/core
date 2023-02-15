@@ -125,7 +125,7 @@ export const identity = <A>(a: A): A => a
  * @param a - The value to be casted to the target type.
  *
  * @example
- * import { unsafeCoerce, identity } from "@fp-ts/core/function"
+ * import { unsafeCoerce, identity } from "@fp-ts/core/Function"
  *
  * assert.deepStrictEqual(unsafeCoerce, identity)
  *
