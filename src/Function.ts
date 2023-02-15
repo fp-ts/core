@@ -3,10 +3,6 @@
  */
 import type { TypeLambda } from "@fp-ts/core/HKT"
 
-// -------------------------------------------------------------------------------------
-// type lambdas
-// -------------------------------------------------------------------------------------
-
 /**
  * @category type lambdas
  * @since 1.0.0
@@ -34,7 +30,7 @@ export const isFunction = (input: unknown): input is Function => typeof input ==
 /**
  * Creates a function that can be used in a data-last (aka `pipe`able) or data-first style.
  *
- * @param dataFirstArity - The arity of the uncurried function.
+ * @param arity - The arity of the uncurried function.
  * @param body - The definition of the uncurried function.
  *
  * @example
@@ -54,12 +50,12 @@ export const dual = <
   DataLast extends (...args: Array<any>) => any,
   DataFirst extends (...args: Array<any>) => any
 >(
-  dataFirstArity: Parameters<DataFirst>["length"],
+  arity: Parameters<DataFirst>["length"],
   body: DataFirst
 ): DataLast & DataFirst => {
   // @ts-expect-error
   return function() {
-    if (arguments.length >= dataFirstArity) {
+    if (arguments.length >= arity) {
       // @ts-expect-error
       return body.apply(this, arguments)
     }
@@ -74,7 +70,7 @@ export const dual = <
  * @param self - The function to be applied to a value.
  *
  * @example
- * import { pipe, apply } from '@fp-ts/core/Function'
+ * import { pipe, apply } from "@fp-ts/core/Function"
  * import { length } from '@fp-ts/core/String'
  *
  * assert.deepStrictEqual(pipe(length, apply("hello")), 5)
@@ -84,7 +80,12 @@ export const dual = <
 export const apply = <A>(a: A) => <B>(self: (a: A) => B): B => self(a)
 
 /**
- * A lazy argument
+ * A lazy argument.
+ *
+ * @example
+ * import { LazyArg, constant } from "@fp-ts/core/Function"
+ *
+ * export const constNull: LazyArg<null> = constant(null)
  *
  * @since 1.0.0
  */
@@ -94,7 +95,7 @@ export interface LazyArg<A> {
 
 /**
  * @example
- * import { FunctionN } from '@fp-ts/core/Function'
+ * import { FunctionN } from "@fp-ts/core/Function"
  *
  * export const sum: FunctionN<[number, number], number> = (a, b) => a + b
  *
@@ -105,11 +106,29 @@ export interface FunctionN<A extends ReadonlyArray<unknown>, B> {
 }
 
 /**
+ * The identity function, i.e. A function that returns its input argument.
+ *
+ * @param a - The input argument.
+ *
+ * @example
+ * import { identity } from "@fp-ts/core/Function"
+ *
+ * assert.deepStrictEqual(identity(5), 5)
+ *
  * @since 1.0.0
  */
 export const identity = <A>(a: A): A => a
 
 /**
+ * Casts the result to the specified type.
+ *
+ * @param a - The value to be casted to the target type.
+ *
+ * @example
+ * import { unsafeCoerce, identity } from "@fp-ts/core/function"
+ *
+ * assert.deepStrictEqual(unsafeCoerce, identity)
+ *
  * @since 1.0.0
  */
 export const unsafeCoerce: <A, B>(a: A) => B = identity as any
@@ -120,7 +139,15 @@ export const unsafeCoerce: <A, B>(a: A) => B = identity as any
  * This is useful when you want to pass a value to a higher-order function (a function that takes another function as its argument)
  * and want that inner function to always use the same value, no matter how many times it is called.
  *
- * @param value - The constant value to be returned
+ * @param value - The constant value to be returned.
+ *
+ * @example
+ * import { constant } from "@fp-ts/core/Function"
+ *
+ * const constNull = constant(null)
+ *
+ * assert.deepStrictEqual(constNull(), null)
+ * assert.deepStrictEqual(constNull(), null)
  *
  * @since 1.0.0
  */
@@ -129,12 +156,22 @@ export const constant = <A>(value: A): LazyArg<A> => () => value
 /**
  * A thunk that returns always `true`.
  *
+ * @example
+ * import { constTrue } from "@fp-ts/core/Function"
+ *
+ * assert.deepStrictEqual(constTrue(), true)
+ *
  * @since 1.0.0
  */
 export const constTrue: LazyArg<boolean> = constant(true)
 
 /**
  * A thunk that returns always `false`.
+ *
+ * @example
+ * import { constFalse } from "@fp-ts/core/Function"
+ *
+ * assert.deepStrictEqual(constFalse(), false)
  *
  * @since 1.0.0
  */
@@ -143,6 +180,11 @@ export const constFalse: LazyArg<boolean> = constant(false)
 /**
  * A thunk that returns always `null`.
  *
+ * @example
+ * import { constNull } from "@fp-ts/core/Function"
+ *
+ * assert.deepStrictEqual(constNull(), null)
+ *
  * @since 1.0.0
  */
 export const constNull: LazyArg<null> = constant(null)
@@ -150,12 +192,22 @@ export const constNull: LazyArg<null> = constant(null)
 /**
  * A thunk that returns always `undefined`.
  *
+ * @example
+ * import { constUndefined } from "@fp-ts/core/Function"
+ *
+ * assert.deepStrictEqual(constUndefined(), undefined)
+ *
  * @since 1.0.0
  */
 export const constUndefined: LazyArg<undefined> = constant(undefined)
 
 /**
  * A thunk that returns always `void`.
+ *
+ * @example
+ * import { constVoid } from "@fp-ts/core/Function"
+ *
+ * assert.deepStrictEqual(constVoid(), undefined)
  *
  * @since 1.0.0
  */
@@ -167,7 +219,7 @@ export const constVoid: LazyArg<void> = constUndefined
  * @param f - A curried function that takes multiple arguments.
  *
  * @example
- * import { flip } from '@fp-ts/core/Function'
+ * import { flip } from "@fp-ts/core/Function"
  *
  * const f = (a: number) => (b: string) => a - b.length
  *
@@ -183,7 +235,7 @@ export const flip = <A extends Array<unknown>, B extends Array<unknown>, C>(
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
  *
  * @example
- * import { flow } from '@fp-ts/core/Function'
+ * import { flow } from "@fp-ts/core/Function"
  *
  * const len = (s: string): number => s.length
  * const double = (n: number): number => n * 2
@@ -314,12 +366,12 @@ export function flow(
  * @param bc - A function that maps from `B` to `C`.
  *
  * @example
- * import { compose } from '@fp-ts/core/Function'
+ * import { compose } from "@fp-ts/core/Function"
  *
- * const inc = (n: number) => n + 1;
+ * const increment = (n: number) => n + 1;
  * const square = (n: number) => n * n;
  *
- * assert.strictEqual(compose(inc, square)(2), 9);
+ * assert.strictEqual(compose(increment, square)(2), 9);
  *
  * @since 1.0.0
  */
@@ -332,8 +384,7 @@ export const compose: {
  * The `absurd` function is a stub for cases where a value of type `never` is encountered in your code,
  * meaning that it should be impossible for this code to be executed.
  *
- * This function is particularly useful in functional programming, where it's often necessary to specify that certain cases are impossible.
- * By calling `absurd`, you can ensure that the type system correctly reflects that a certain value should never occur.
+ * This function is particularly when it's necessary to specify that certain cases are impossible.
  *
  * @since 1.0.0
  */
@@ -345,11 +396,11 @@ export const absurd = <A>(_: never): A => {
  * Creates a tupled version of this function: instead of `n` arguments, it accepts a single tuple argument.
  *
  * @example
- * import { tupled } from '@fp-ts/core/Function'
+ * import { tupled } from "@fp-ts/core/Function"
  *
- * const add = tupled((x: number, y: number): number => x + y)
+ * const sumTupled = tupled((x: number, y: number): number => x + y)
  *
- * assert.deepStrictEqual(add([1, 2]), 3)
+ * assert.deepStrictEqual(sumTupled([1, 2]), 3)
  *
  * @since 1.0.0
  */
@@ -359,6 +410,13 @@ export const tupled = <A extends ReadonlyArray<unknown>, B>(f: (...a: A) => B): 
 /**
  * Inverse function of `tupled`
  *
+ * @example
+ * import { untupled } from "@fp-ts/core/Function"
+ *
+ * const getFirst = untupled(<A, B>(tuple: [A, B]): A => tuple[0])
+ *
+ * assert.deepStrictEqual(getFirst(1, 2), 1)
+ *
  * @since 1.0.0
  */
 export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): ((...a: A) => B) =>
@@ -367,13 +425,20 @@ export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (
 /**
  * Pipes the value of an expression into a pipeline of functions.
  *
+ * This is useful in combination with data-last functions as a simulation of methods:
+ *
+ * ```
+ * as.map(f).filter(g) -> pipe(as, map(f), filter(g))
+ * ```
+ *
  * @example
- * import { pipe } from '@fp-ts/core/Function'
+ * import { pipe } from "@fp-ts/core/Function"
  *
- * const len = (s: string): number => s.length
+ * const length = (s: string): number => s.length
  * const double = (n: number): number => n * 2
+ * const decrement = (n: number): number => n - 1
  *
- * assert.deepStrictEqual(pipe('aaa', len, double), 6)
+ * assert.deepStrictEqual(pipe(length("hello"), double, decrement), 9)
  *
  * @see {@link flow}
  * @since 1.0.0
@@ -660,11 +725,11 @@ export function pipe(
 }
 
 /**
- * Type hole simulation
+ * Type hole simulation.
  *
  * @since 1.0.0
  */
-export const hole: <T>() => T = absurd as any
+export const hole: <T>() => T = unsafeCoerce(absurd)
 
 /**
  * The SK combinator, also known as the "S-K combinator" or "S-combinator", is a fundamental combinator in the
@@ -676,9 +741,9 @@ export const hole: <T>() => T = absurd as any
  * @param b - The second argument to be returned.
  *
  * @example
- * import { SK } from '@fp-ts/core/Function';
+ * import { SK } from "@fp-ts/core/Function";
  *
- * assert.deepStrictEqual(SK(0, 'hello'), 'hello')
+ * assert.deepStrictEqual(SK(0, "hello"), "hello")
  *
  * @since 1.0.0
  */

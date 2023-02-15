@@ -102,7 +102,7 @@ Added in v1.0.0
 
 ## LazyArg (interface)
 
-A lazy argument
+A lazy argument.
 
 **Signature**
 
@@ -110,6 +110,14 @@ A lazy argument
 export interface LazyArg<A> {
   (): A
 }
+```
+
+**Example**
+
+```ts
+import { LazyArg, constant } from '@fp-ts/core/Function'
+
+export const constNull: LazyArg<null> = constant(null)
 ```
 
 Added in v1.0.0
@@ -142,8 +150,7 @@ Added in v1.0.0
 The `absurd` function is a stub for cases where a value of type `never` is encountered in your code,
 meaning that it should be impossible for this code to be executed.
 
-This function is particularly useful in functional programming, where it's often necessary to specify that certain cases are impossible.
-By calling `absurd`, you can ensure that the type system correctly reflects that a certain value should never occur.
+This function is particularly when it's necessary to specify that certain cases are impossible.
 
 **Signature**
 
@@ -193,10 +200,10 @@ export declare const compose: {
 ```ts
 import { compose } from '@fp-ts/core/Function'
 
-const inc = (n: number) => n + 1
+const increment = (n: number) => n + 1
 const square = (n: number) => n * n
 
-assert.strictEqual(compose(inc, square)(2), 9)
+assert.strictEqual(compose(increment, square)(2), 9)
 ```
 
 Added in v1.0.0
@@ -211,6 +218,14 @@ A thunk that returns always `false`.
 export declare const constFalse: LazyArg<boolean>
 ```
 
+**Example**
+
+```ts
+import { constFalse } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(constFalse(), false)
+```
+
 Added in v1.0.0
 
 ## constNull
@@ -221,6 +236,14 @@ A thunk that returns always `null`.
 
 ```ts
 export declare const constNull: LazyArg<null>
+```
+
+**Example**
+
+```ts
+import { constNull } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(constNull(), null)
 ```
 
 Added in v1.0.0
@@ -235,6 +258,14 @@ A thunk that returns always `true`.
 export declare const constTrue: LazyArg<boolean>
 ```
 
+**Example**
+
+```ts
+import { constTrue } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(constTrue(), true)
+```
+
 Added in v1.0.0
 
 ## constUndefined
@@ -247,6 +278,14 @@ A thunk that returns always `undefined`.
 export declare const constUndefined: LazyArg<undefined>
 ```
 
+**Example**
+
+```ts
+import { constUndefined } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(constUndefined(), undefined)
+```
+
 Added in v1.0.0
 
 ## constVoid
@@ -257,6 +296,14 @@ A thunk that returns always `void`.
 
 ```ts
 export declare const constVoid: LazyArg<void>
+```
+
+**Example**
+
+```ts
+import { constVoid } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(constVoid(), undefined)
 ```
 
 Added in v1.0.0
@@ -274,6 +321,17 @@ and want that inner function to always use the same value, no matter how many ti
 export declare const constant: <A>(value: A) => LazyArg<A>
 ```
 
+**Example**
+
+```ts
+import { constant } from '@fp-ts/core/Function'
+
+const constNull = constant(null)
+
+assert.deepStrictEqual(constNull(), null)
+assert.deepStrictEqual(constNull(), null)
+```
+
 Added in v1.0.0
 
 ## dual
@@ -287,7 +345,7 @@ export declare const dual: <
   DataLast extends (...args: Array<any>) => any,
   DataFirst extends (...args: Array<any>) => any
 >(
-  dataFirstArity: Parameters<DataFirst>['length'],
+  arity: Parameters<DataFirst>['length'],
   body: DataFirst
 ) => DataLast & DataFirst
 ```
@@ -419,7 +477,7 @@ Added in v1.0.0
 
 ## hole
 
-Type hole simulation
+Type hole simulation.
 
 **Signature**
 
@@ -431,10 +489,20 @@ Added in v1.0.0
 
 ## identity
 
+The identity function, i.e. A function that returns its input argument.
+
 **Signature**
 
 ```ts
 export declare const identity: <A>(a: A) => A
+```
+
+**Example**
+
+```ts
+import { identity } from '@fp-ts/core/Function'
+
+assert.deepStrictEqual(identity(5), 5)
 ```
 
 Added in v1.0.0
@@ -442,6 +510,12 @@ Added in v1.0.0
 ## pipe
 
 Pipes the value of an expression into a pipeline of functions.
+
+This is useful in combination with data-last functions as a simulation of methods:
+
+```
+as.map(f).filter(g) -> pipe(as, map(f), filter(g))
+```
 
 **Signature**
 
@@ -683,10 +757,11 @@ export declare function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, 
 ```ts
 import { pipe } from '@fp-ts/core/Function'
 
-const len = (s: string): number => s.length
+const length = (s: string): number => s.length
 const double = (n: number): number => n * 2
+const decrement = (n: number): number => n - 1
 
-assert.deepStrictEqual(pipe('aaa', len, double), 6)
+assert.deepStrictEqual(pipe(length('hello'), double, decrement), 9)
 ```
 
 Added in v1.0.0
@@ -706,19 +781,29 @@ export declare const tupled: <A extends readonly unknown[], B>(f: (...a: A) => B
 ```ts
 import { tupled } from '@fp-ts/core/Function'
 
-const add = tupled((x: number, y: number): number => x + y)
+const sumTupled = tupled((x: number, y: number): number => x + y)
 
-assert.deepStrictEqual(add([1, 2]), 3)
+assert.deepStrictEqual(sumTupled([1, 2]), 3)
 ```
 
 Added in v1.0.0
 
 ## unsafeCoerce
 
+Casts the result to the specified type.
+
 **Signature**
 
 ```ts
 export declare const unsafeCoerce: <A, B>(a: A) => B
+```
+
+**Example**
+
+```ts
+import { unsafeCoerce, identity } from '@fp-ts/core/function'
+
+assert.deepStrictEqual(unsafeCoerce, identity)
 ```
 
 Added in v1.0.0
@@ -731,6 +816,16 @@ Inverse function of `tupled`
 
 ```ts
 export declare const untupled: <A extends readonly unknown[], B>(f: (a: A) => B) => (...a: A) => B
+```
+
+**Example**
+
+```ts
+import { untupled } from '@fp-ts/core/Function'
+
+const getFirst = untupled(<A, B>(tuple: [A, B]): A => tuple[0])
+
+assert.deepStrictEqual(getFirst(1, 2), 1)
 ```
 
 Added in v1.0.0
