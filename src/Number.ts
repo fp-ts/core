@@ -31,8 +31,7 @@ import * as semigroup from "@fp-ts/core/typeclass/Semigroup"
 export const isNumber: (input: unknown) => input is number = predicate.isNumber
 
 /**
- * Provides an addition operation on numbers.
- * It can be used as a binary function or a curried function.
+ * Provides an addition operation on `number`s.
  *
  * @param self - The first operand.
  * @param that - The second operand.
@@ -42,7 +41,7 @@ export const isNumber: (input: unknown) => input is number = predicate.isNumber
  *
  * assert.deepStrictEqual(sum(2, 3), 5)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const sum: {
@@ -51,8 +50,7 @@ export const sum: {
 } = dual(2, semigroup.numberSum.combine)
 
 /**
- * Provides a multiplication operation on numbers.
- * It can be used as a binary function or a curried function.
+ * Provides a multiplication operation on `number`s.
  *
  * @param self - The first operand.
  * @param that - The second operand.
@@ -62,7 +60,7 @@ export const sum: {
  *
  * assert.deepStrictEqual(multiply(2, 3), 6)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const multiply: {
@@ -71,8 +69,7 @@ export const multiply: {
 } = dual(2, semigroup.numberMultiply.combine)
 
 /**
- * Provides a subtraction operation on numbers.
- * It can be used as a binary function or a curried function.
+ * Provides a subtraction operation on `number`s.
  *
  * @param self - The first operand.
  * @param that - The second operand.
@@ -82,7 +79,7 @@ export const multiply: {
  *
  * assert.deepStrictEqual(subtract(2, 3), -1)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const subtract: {
@@ -91,18 +88,17 @@ export const subtract: {
 } = dual(2, (self: number, that: number): number => self - that)
 
 /**
- * Provides a division operation on numbers.
- * It can be used as a binary function or a curried function.
+ * Provides a division operation on `number`s.
  *
- * @param self - The first operand.
- * @param that - The second operand.
+ * @param self - The dividend operand.
+ * @param that - The divisor operand.
  *
  * @example
  * import { divide } from '@fp-ts/core/Number'
  *
  * assert.deepStrictEqual(divide(6, 3), 2)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const divide: {
@@ -113,13 +109,14 @@ export const divide: {
 /**
  * Returns the result of adding `1` to a given number.
  *
- * @param n - A number to be incremented.
+ * @param n - A `number` to be incremented.
  *
  * @example
  * import { increment } from '@fp-ts/core/Number'
  *
  * assert.deepStrictEqual(increment(2), 3)
  *
+ * @category math
  * @since 1.0.0
  */
 export const increment = (n: number): number => n + 1
@@ -127,13 +124,14 @@ export const increment = (n: number): number => n + 1
 /**
  * Decrements a number by `1`.
  *
- * @param n - A number to be decremented.
+ * @param n - A `number` to be decremented.
  *
  * @example
  * import { decrement } from '@fp-ts/core/Number'
  *
  * assert.deepStrictEqual(decrement(3), 2)
  *
+ * @category math
  * @since 1.0.0
  */
 export const decrement = (n: number): number => n - 1
@@ -172,10 +170,10 @@ export const lessThan: {
 } = order.lessThan(Order)
 
 /**
- * Returns a function that checks if a given number is less than or equal to the provided one.
+ * Returns a function that checks if a given `number` is less than or equal to the provided one.
  *
- * @param self - The first number to compare with.
- * @param that - The second number to compare with.
+ * @param self - The first `number` to compare with.
+ * @param that - The second `number` to compare with.
  *
  * @example
  * import { lessThanOrEqualTo } from '@fp-ts/core/Number'
@@ -214,10 +212,10 @@ export const greaterThan: {
 } = order.greaterThan(Order)
 
 /**
- * Returns a function that checks if a given number is greater than or equal to the provided one.
+ * Returns a function that checks if a given `number` is greater than or equal to the provided one.
  *
- * @param self - The first number to compare with.
- * @param that - The second number to compare with.
+ * @param self - The first `number` to compare with.
+ * @param that - The second `number` to compare with.
  *
  * @example
  * import { greaterThanOrEqualTo } from '@fp-ts/core/Number'
@@ -235,11 +233,11 @@ export const greaterThanOrEqualTo: {
 } = order.greaterThanOrEqualTo(Order)
 
 /**
- * Checks if a number is between a minimum and maximum value (inclusive).
+ * Checks if a `number` is between a `minimum` and `maximum` value (inclusive).
  *
- * @param self - The number to check.
- * @param minimum - The minimum value to check.
- * @param maximum - The maximum value to check.
+ * @param self - The `number` to check.
+ * @param minimum - The `minimum` value to check.
+ * @param maximum - The `maximum` value to check.
  *
  * @example
  * import { between } from '@fp-ts/core/Number'
@@ -257,13 +255,13 @@ export const between: {
 } = order.between(Order)
 
 /**
- * Restricts the given number to be within the range specified by the minimum and maximum values.
+ * Restricts the given `number` to be within the range specified by the `minimum` and `maximum` values.
  *
- * - If the number is less than the minimum value, the function returns the minimum value.
- * - If the number is greater than the maximum value, the function returns the maximum value.
- * - Otherwise, it returns the original number.
+ * - If the `number` is less than the `minimum` value, the function returns the `minimum` value.
+ * - If the `number` is greater than the `maximum` value, the function returns the `maximum` value.
+ * - Otherwise, it returns the original `number`.
  *
- * @param self - The number to be clamped.
+ * @param self - The `number` to be clamped.
  * @param minimum - The lower end of the range.
  * @param maximum - The upper end of the range.
  *
@@ -282,10 +280,10 @@ export const clamp: {
 } = order.clamp(Order)
 
 /**
- * Returns the minimum between two numbers.
+ * Returns the minimum between two `number`s.
  *
- * @param self - The first number.
- * @param that - The second number.
+ * @param self - The first `number`.
+ * @param that - The second `number`.
  *
  * @example
  * import { min } from '@fp-ts/core/Number'
@@ -300,10 +298,10 @@ export const min: {
 } = order.min(Order)
 
 /**
- * Returns the maximum between two numbers.
+ * Returns the maximum between two `number`s.
  *
- * @param self - The first number.
- * @param that - The second number.
+ * @param self - The first `number`.
+ * @param that - The second `number`.
  *
  * @example
  * import { max } from '@fp-ts/core/Number'
@@ -337,18 +335,6 @@ export const Bounded: bounded.Bounded<number> = bounded.number
 export const SemigroupSum: semigroup.Semigroup<number> = semigroup.numberSum
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const SemigroupMax: semigroup.Semigroup<number> = semigroup.max(Order)
-
-/**
- * @category instances
- * @since 1.0.0
- */
-export const SemigroupMin: semigroup.Semigroup<number> = semigroup.min(Order)
-
-/**
  * `number` semigroup under multiplication.
  *
  * @example
@@ -362,9 +348,41 @@ export const SemigroupMin: semigroup.Semigroup<number> = semigroup.min(Order)
 export const SemigroupMultiply: semigroup.Semigroup<number> = semigroup.numberMultiply
 
 /**
+ * A `Semigroup` that uses the minimum between two values.
+ *
+ * @example
+ * import { SemigroupMin } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(SemigroupMin.combine(2, 3), 2)
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemigroupMin: semigroup.Semigroup<number> = semigroup.min(Order)
+
+/**
+ * A `Semigroup` that uses the maximum between two values.
+ *
+ * @example
+ * import { SemigroupMax } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(SemigroupMax.combine(2, 3), 3)
+ *
+ * @category instances
+ * @since 1.0.0
+ */
+export const SemigroupMax: semigroup.Semigroup<number> = semigroup.max(Order)
+
+/**
  * `number` monoid under addition.
  *
  * The `empty` value is `0`.
+ *
+ * @example
+ * import { MonoidSum } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(MonoidSum.combine(2, 3), 5)
+ * assert.deepStrictEqual(MonoidSum.combine(2, MonoidSum.empty), 2)
  *
  * @category instances
  * @since 1.0.0
@@ -376,36 +394,92 @@ export const MonoidSum: monoid.Monoid<number> = monoid.numberSum
  *
  * The `empty` value is `1`.
  *
+ * @example
+ * import { MonoidMultiply } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(MonoidMultiply.combine(2, 3), 6)
+ * assert.deepStrictEqual(MonoidMultiply.combine(2, MonoidMultiply.empty), 2)
+ *
  * @category instances
  * @since 1.0.0
  */
 export const MonoidMultiply: monoid.Monoid<number> = monoid.numberMultiply
 
 /**
- * @category instances
- * @since 1.0.0
- */
-export const MonoidMax: monoid.Monoid<number> = bounded.max(Bounded)
-
-/**
+ * A `Monoid` that uses the minimum between two values.
+ *
+ * The `empty` value is `-Infinity`.
+ *
+ * @example
+ * import { MonoidMin } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(MonoidMin.combine(2, 3), 2)
+ * assert.deepStrictEqual(MonoidMin.combine(2, MonoidMin.empty), 2)
+ *
  * @category instances
  * @since 1.0.0
  */
 export const MonoidMin: monoid.Monoid<number> = bounded.min(Bounded)
 
 /**
+ * A `Monoid` that uses the maximum between two values.
+ *
+ * The `empty` value is `Infinity`.
+ *
+ * @example
+ * import { MonoidMax } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(MonoidMax.combine(2, 3), 3)
+ * assert.deepStrictEqual(MonoidMax.combine(2, MonoidMax.empty), 2)
+ *
+ * @category instances
  * @since 1.0.0
  */
-export const sign = (n: number): Ordering => n < 0 ? -1 : n > 0 ? 1 : 0
+export const MonoidMax: monoid.Monoid<number> = bounded.max(Bounded)
 
 /**
- * @category algebraic operations
+ * Determines the sign of a given `number`.
+ *
+ * @param n - The `number` to determine the sign of.
+ *
+ * @example
+ * import { sign } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(sign(-5), -1)
+ * assert.deepStrictEqual(sign(0), 0)
+ * assert.deepStrictEqual(sign(5), 1)
+ *
+ * @category math
+ * @since 1.0.0
+ */
+export const sign = (n: number): Ordering => Order.compare(n, 0)
+
+/**
+ * Takes an `Iterable` of `number`s and returns their sum as a single `number`.
+ *
+ * @param collection - The collection of `number`s to sum.
+ *
+ * @example
+ * import { sumAll } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(sumAll([2, 3, 4]), 9)
+ *
+ * @category math
  * @since 1.0.0
  */
 export const sumAll: (collection: Iterable<number>) => number = MonoidSum.combineAll
 
 /**
- * @category algebraic operations
+ * Takes an `Iterable` of `number`s and returns their multiplication as a single `number`.
+ *
+ * @param collection - The collection of `number`s to multiply.
+ *
+ * @example
+ * import { multiplyAll } from '@fp-ts/core/Number'
+ *
+ * assert.deepStrictEqual(multiplyAll([2, 3, 4]), 24)
+ *
+ * @category math
  * @since 1.0.0
  */
 export const multiplyAll: (collection: Iterable<number>) => number = MonoidMultiply.combineAll
@@ -425,7 +499,7 @@ export const multiplyAll: (collection: Iterable<number>) => number = MonoidMulti
  * assert.deepStrictEqual(remainder(3, 2), 1)
  * assert.deepStrictEqual(remainder(-4, 2), -0)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const remainder: {
@@ -440,14 +514,3 @@ export const remainder: {
   const divisorInt = parseInt(divisor.toFixed(decCount).replace(".", ""))
   return (selfInt % divisorInt) / Math.pow(10, decCount)
 })
-
-/*
-
-  Missing:
-
-  - toFixed
-  - toPrecision
-  - toExponential
-  - toLocaleString
-
-*/

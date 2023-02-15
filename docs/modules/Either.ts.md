@@ -12,11 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [algebraic operations](#algebraic-operations)
-  - [divide](#divide)
-  - [multiply](#multiply)
-  - [subtract](#subtract)
-  - [sum](#sum)
 - [combinators](#combinators)
   - [tap](#tap)
 - [combining](#combining)
@@ -110,6 +105,11 @@ Added in v1.0.0
   - [bimap](#bimap)
   - [flap](#flap)
   - [map](#map)
+- [math](#math)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [subtract](#subtract)
+  - [sum](#sum)
 - [models](#models)
   - [Either (type alias)](#either-type-alias)
   - [Left (interface)](#left-interface)
@@ -135,60 +135,6 @@ Added in v1.0.0
   - [unit](#unit)
 
 ---
-
-# algebraic operations
-
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: {
-  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
-  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-}
-```
-
-Added in v1.0.0
-
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: {
-  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
-  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-}
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: {
-  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
-  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-}
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: {
-  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
-  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
-}
-```
-
-Added in v1.0.0
 
 # combinators
 
@@ -1441,6 +1387,60 @@ Maps the `Right` side of an `Either` value to a new `Either` value.
 export declare const map: {
   <A, B>(f: (a: A) => B): <E>(self: Either<E, A>) => Either<E, B>
   <E, A, B>(self: Either<E, A>, f: (a: A) => B): Either<E, B>
+}
+```
+
+Added in v1.0.0
+
+# math
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
+}
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: {
+  <E1, E2>(self: Either<E1, number>, that: Either<E2, number>): Either<E1 | E2, number>
+  <E2>(that: Either<E2, number>): <E1>(self: Either<E1, number>) => Either<E2 | E1, number>
 }
 ```
 

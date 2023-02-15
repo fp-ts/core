@@ -16,14 +16,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [algebraic operations](#algebraic-operations)
-  - [divide](#divide)
-  - [multiply](#multiply)
-  - [multiplyAll](#multiplyall)
-  - [remainder](#remainder)
-  - [subtract](#subtract)
-  - [sum](#sum)
-  - [sumAll](#sumall)
 - [guards](#guards)
   - [isNumber](#isnumber)
 - [instances](#instances)
@@ -38,6 +30,17 @@ Added in v1.0.0
   - [SemigroupMin](#semigroupmin)
   - [SemigroupMultiply](#semigroupmultiply)
   - [SemigroupSum](#semigroupsum)
+- [math](#math)
+  - [decrement](#decrement)
+  - [divide](#divide)
+  - [increment](#increment)
+  - [multiply](#multiply)
+  - [multiplyAll](#multiplyall)
+  - [remainder](#remainder)
+  - [sign](#sign)
+  - [subtract](#subtract)
+  - [sum](#sum)
+  - [sumAll](#sumall)
 - [predicates](#predicates)
   - [between](#between)
   - [greaterThan](#greaterthan)
@@ -46,143 +49,10 @@ Added in v1.0.0
   - [lessThanOrEqualTo](#lessthanorequalto)
 - [utils](#utils)
   - [clamp](#clamp)
-  - [decrement](#decrement)
-  - [increment](#increment)
   - [max](#max)
   - [min](#min)
-  - [sign](#sign)
 
 ---
-
-# algebraic operations
-
-## divide
-
-Provides a division operation on numbers.
-It can be used as a binary function or a curried function.
-
-**Signature**
-
-```ts
-export declare const divide: { (that: number): (self: number) => number; (self: number, that: number): number }
-```
-
-**Example**
-
-```ts
-import { divide } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(divide(6, 3), 2)
-```
-
-Added in v1.0.0
-
-## multiply
-
-Provides a multiplication operation on numbers.
-It can be used as a binary function or a curried function.
-
-**Signature**
-
-```ts
-export declare const multiply: { (that: number): (self: number) => number; (self: number, that: number): number }
-```
-
-**Example**
-
-```ts
-import { multiply } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(multiply(2, 3), 6)
-```
-
-Added in v1.0.0
-
-## multiplyAll
-
-**Signature**
-
-```ts
-export declare const multiplyAll: (collection: Iterable<number>) => number
-```
-
-Added in v1.0.0
-
-## remainder
-
-Returns the remainder left over when one operand is divided by a second operand.
-
-It always takes the sign of the dividend.
-
-**Signature**
-
-```ts
-export declare const remainder: { (divisor: number): (self: number) => number; (self: number, divisor: number): number }
-```
-
-**Example**
-
-```ts
-import { remainder } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(remainder(2, 2), 0)
-assert.deepStrictEqual(remainder(3, 2), 1)
-assert.deepStrictEqual(remainder(-4, 2), -0)
-```
-
-Added in v1.0.0
-
-## subtract
-
-Provides a subtraction operation on numbers.
-It can be used as a binary function or a curried function.
-
-**Signature**
-
-```ts
-export declare const subtract: { (that: number): (self: number) => number; (self: number, that: number): number }
-```
-
-**Example**
-
-```ts
-import { subtract } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(subtract(2, 3), -1)
-```
-
-Added in v1.0.0
-
-## sum
-
-Provides an addition operation on numbers.
-It can be used as a binary function or a curried function.
-
-**Signature**
-
-```ts
-export declare const sum: { (that: number): (self: number) => number; (self: number, that: number): number }
-```
-
-**Example**
-
-```ts
-import { sum } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(sum(2, 3), 5)
-```
-
-Added in v1.0.0
-
-## sumAll
-
-**Signature**
-
-```ts
-export declare const sumAll: (collection: Iterable<number>) => number
-```
-
-Added in v1.0.0
 
 # guards
 
@@ -231,20 +101,46 @@ Added in v1.0.0
 
 ## MonoidMax
 
+A `Monoid` that uses the maximum between two values.
+
+The `empty` value is `Infinity`.
+
 **Signature**
 
 ```ts
 export declare const MonoidMax: monoid.Monoid<number>
 ```
 
+**Example**
+
+```ts
+import { MonoidMax } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(MonoidMax.combine(2, 3), 3)
+assert.deepStrictEqual(MonoidMax.combine(2, MonoidMax.empty), 2)
+```
+
 Added in v1.0.0
 
 ## MonoidMin
+
+A `Monoid` that uses the minimum between two values.
+
+The `empty` value is `-Infinity`.
 
 **Signature**
 
 ```ts
 export declare const MonoidMin: monoid.Monoid<number>
+```
+
+**Example**
+
+```ts
+import { MonoidMin } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(MonoidMin.combine(2, 3), 2)
+assert.deepStrictEqual(MonoidMin.combine(2, MonoidMin.empty), 2)
 ```
 
 Added in v1.0.0
@@ -261,6 +157,15 @@ The `empty` value is `1`.
 export declare const MonoidMultiply: monoid.Monoid<number>
 ```
 
+**Example**
+
+```ts
+import { MonoidMultiply } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(MonoidMultiply.combine(2, 3), 6)
+assert.deepStrictEqual(MonoidMultiply.combine(2, MonoidMultiply.empty), 2)
+```
+
 Added in v1.0.0
 
 ## MonoidSum
@@ -273,6 +178,15 @@ The `empty` value is `0`.
 
 ```ts
 export declare const MonoidSum: monoid.Monoid<number>
+```
+
+**Example**
+
+```ts
+import { MonoidSum } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(MonoidSum.combine(2, 3), 5)
+assert.deepStrictEqual(MonoidSum.combine(2, MonoidSum.empty), 2)
 ```
 
 Added in v1.0.0
@@ -289,20 +203,40 @@ Added in v1.0.0
 
 ## SemigroupMax
 
+A `Semigroup` that uses the maximum between two values.
+
 **Signature**
 
 ```ts
 export declare const SemigroupMax: semigroup.Semigroup<number>
 ```
 
+**Example**
+
+```ts
+import { SemigroupMax } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(SemigroupMax.combine(2, 3), 3)
+```
+
 Added in v1.0.0
 
 ## SemigroupMin
+
+A `Semigroup` that uses the minimum between two values.
 
 **Signature**
 
 ```ts
 export declare const SemigroupMin: semigroup.Semigroup<number>
+```
+
+**Example**
+
+```ts
+import { SemigroupMin } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(SemigroupMin.combine(2, 3), 2)
 ```
 
 Added in v1.0.0
@@ -347,11 +281,219 @@ assert.deepStrictEqual(SemigroupSum.combine(2, 3), 5)
 
 Added in v1.0.0
 
+# math
+
+## decrement
+
+Decrements a number by `1`.
+
+**Signature**
+
+```ts
+export declare const decrement: (n: number) => number
+```
+
+**Example**
+
+```ts
+import { decrement } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(decrement(3), 2)
+```
+
+Added in v1.0.0
+
+## divide
+
+Provides a division operation on `number`s.
+
+**Signature**
+
+```ts
+export declare const divide: { (that: number): (self: number) => number; (self: number, that: number): number }
+```
+
+**Example**
+
+```ts
+import { divide } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(divide(6, 3), 2)
+```
+
+Added in v1.0.0
+
+## increment
+
+Returns the result of adding `1` to a given number.
+
+**Signature**
+
+```ts
+export declare const increment: (n: number) => number
+```
+
+**Example**
+
+```ts
+import { increment } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(increment(2), 3)
+```
+
+Added in v1.0.0
+
+## multiply
+
+Provides a multiplication operation on `number`s.
+
+**Signature**
+
+```ts
+export declare const multiply: { (that: number): (self: number) => number; (self: number, that: number): number }
+```
+
+**Example**
+
+```ts
+import { multiply } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(multiply(2, 3), 6)
+```
+
+Added in v1.0.0
+
+## multiplyAll
+
+Takes an `Iterable` of `number`s and returns their multiplication as a single `number`.
+
+**Signature**
+
+```ts
+export declare const multiplyAll: (collection: Iterable<number>) => number
+```
+
+**Example**
+
+```ts
+import { multiplyAll } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(multiplyAll([2, 3, 4]), 24)
+```
+
+Added in v1.0.0
+
+## remainder
+
+Returns the remainder left over when one operand is divided by a second operand.
+
+It always takes the sign of the dividend.
+
+**Signature**
+
+```ts
+export declare const remainder: { (divisor: number): (self: number) => number; (self: number, divisor: number): number }
+```
+
+**Example**
+
+```ts
+import { remainder } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(remainder(2, 2), 0)
+assert.deepStrictEqual(remainder(3, 2), 1)
+assert.deepStrictEqual(remainder(-4, 2), -0)
+```
+
+Added in v1.0.0
+
+## sign
+
+Determines the sign of a given `number`.
+
+**Signature**
+
+```ts
+export declare const sign: (n: number) => Ordering
+```
+
+**Example**
+
+```ts
+import { sign } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(sign(-5), -1)
+assert.deepStrictEqual(sign(0), 0)
+assert.deepStrictEqual(sign(5), 1)
+```
+
+Added in v1.0.0
+
+## subtract
+
+Provides a subtraction operation on `number`s.
+
+**Signature**
+
+```ts
+export declare const subtract: { (that: number): (self: number) => number; (self: number, that: number): number }
+```
+
+**Example**
+
+```ts
+import { subtract } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(subtract(2, 3), -1)
+```
+
+Added in v1.0.0
+
+## sum
+
+Provides an addition operation on `number`s.
+
+**Signature**
+
+```ts
+export declare const sum: { (that: number): (self: number) => number; (self: number, that: number): number }
+```
+
+**Example**
+
+```ts
+import { sum } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(sum(2, 3), 5)
+```
+
+Added in v1.0.0
+
+## sumAll
+
+Takes an `Iterable` of `number`s and returns their sum as a single `number`.
+
+**Signature**
+
+```ts
+export declare const sumAll: (collection: Iterable<number>) => number
+```
+
+**Example**
+
+```ts
+import { sumAll } from '@fp-ts/core/Number'
+
+assert.deepStrictEqual(sumAll([2, 3, 4]), 9)
+```
+
+Added in v1.0.0
+
 # predicates
 
 ## between
 
-Checks if a number is between a minimum and maximum value (inclusive).
+Checks if a `number` is between a `minimum` and `maximum` value (inclusive).
 
 **Signature**
 
@@ -398,7 +540,7 @@ Added in v1.0.0
 
 ## greaterThanOrEqualTo
 
-Returns a function that checks if a given number is greater than or equal to the provided one.
+Returns a function that checks if a given `number` is greater than or equal to the provided one.
 
 **Signature**
 
@@ -445,7 +587,7 @@ Added in v1.0.0
 
 ## lessThanOrEqualTo
 
-Returns a function that checks if a given number is less than or equal to the provided one.
+Returns a function that checks if a given `number` is less than or equal to the provided one.
 
 **Signature**
 
@@ -472,11 +614,11 @@ Added in v1.0.0
 
 ## clamp
 
-Restricts the given number to be within the range specified by the minimum and maximum values.
+Restricts the given `number` to be within the range specified by the `minimum` and `maximum` values.
 
-- If the number is less than the minimum value, the function returns the minimum value.
-- If the number is greater than the maximum value, the function returns the maximum value.
-- Otherwise, it returns the original number.
+- If the `number` is less than the `minimum` value, the function returns the `minimum` value.
+- If the `number` is greater than the `maximum` value, the function returns the `maximum` value.
+- Otherwise, it returns the original `number`.
 
 **Signature**
 
@@ -499,49 +641,9 @@ assert.deepStrictEqual(clamp(0, 5)(6), 5)
 
 Added in v1.0.0
 
-## decrement
-
-Decrements a number by `1`.
-
-**Signature**
-
-```ts
-export declare const decrement: (n: number) => number
-```
-
-**Example**
-
-```ts
-import { decrement } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(decrement(3), 2)
-```
-
-Added in v1.0.0
-
-## increment
-
-Returns the result of adding `1` to a given number.
-
-**Signature**
-
-```ts
-export declare const increment: (n: number) => number
-```
-
-**Example**
-
-```ts
-import { increment } from '@fp-ts/core/Number'
-
-assert.deepStrictEqual(increment(2), 3)
-```
-
-Added in v1.0.0
-
 ## max
 
-Returns the maximum between two numbers.
+Returns the maximum between two `number`s.
 
 **Signature**
 
@@ -561,7 +663,7 @@ Added in v1.0.0
 
 ## min
 
-Returns the minimum between two numbers.
+Returns the minimum between two `number`s.
 
 **Signature**
 
@@ -575,16 +677,6 @@ export declare const min: { (that: number): (self: number) => number; (self: num
 import { min } from '@fp-ts/core/Number'
 
 assert.deepStrictEqual(min(2, 3), 2)
-```
-
-Added in v1.0.0
-
-## sign
-
-**Signature**
-
-```ts
-export declare const sign: (n: number) => Ordering
 ```
 
 Added in v1.0.0

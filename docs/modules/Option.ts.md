@@ -12,13 +12,6 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [algebraic operations](#algebraic-operations)
-  - [divide](#divide)
-  - [multiply](#multiply)
-  - [multiplyCompact](#multiplycompact)
-  - [subtract](#subtract)
-  - [sum](#sum)
-  - [sumCompact](#sumcompact)
 - [combining](#combining)
   - [all](#all)
   - [ap](#ap)
@@ -83,6 +76,13 @@ Added in v1.0.0
   - [lift2](#lift2)
   - [liftEither](#lifteither)
   - [liftPredicate](#liftpredicate)
+- [math](#math)
+  - [divide](#divide)
+  - [multiply](#multiply)
+  - [multiplyCompact](#multiplycompact)
+  - [subtract](#subtract)
+  - [sum](#sum)
+  - [sumCompact](#sumcompact)
 - [models](#models)
   - [None (interface)](#none-interface)
   - [Option (type alias)](#option-type-alias)
@@ -131,102 +131,6 @@ Added in v1.0.0
   - [unit](#unit)
 
 ---
-
-# algebraic operations
-
-## divide
-
-**Signature**
-
-```ts
-export declare const divide: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-}
-```
-
-Added in v1.0.0
-
-## multiply
-
-**Signature**
-
-```ts
-export declare const multiply: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-}
-```
-
-Added in v1.0.0
-
-## multiplyCompact
-
-Multiply all numbers in an iterable of `Option<number>` ignoring the `None` values.
-
-**Signature**
-
-```ts
-export declare const multiplyCompact: (self: Iterable<Option<number>>) => number
-```
-
-**Example**
-
-```ts
-import { multiplyCompact, some, none } from '@fp-ts/core/Option'
-
-const iterable = [some(2), none(), some(3), none()]
-assert.deepStrictEqual(multiplyCompact(iterable), 6)
-```
-
-Added in v1.0.0
-
-## subtract
-
-**Signature**
-
-```ts
-export declare const subtract: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-}
-```
-
-Added in v1.0.0
-
-## sum
-
-**Signature**
-
-```ts
-export declare const sum: {
-  (self: Option<number>, that: Option<number>): Option<number>
-  (that: Option<number>): (self: Option<number>) => Option<number>
-}
-```
-
-Added in v1.0.0
-
-## sumCompact
-
-Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
-
-**Signature**
-
-```ts
-export declare const sumCompact: (self: Iterable<Option<number>>) => number
-```
-
-**Example**
-
-```ts
-import { sumCompact, some, none } from '@fp-ts/core/Option'
-
-const iterable = [some(2), none(), some(3), none()]
-assert.deepStrictEqual(sumCompact(iterable), 5)
-```
-
-Added in v1.0.0
 
 # combining
 
@@ -1353,6 +1257,102 @@ const getOption = O.liftPredicate((n: number) => n >= 0)
 
 assert.deepStrictEqual(getOption(-1), O.none())
 assert.deepStrictEqual(getOption(1), O.some(1))
+```
+
+Added in v1.0.0
+
+# math
+
+## divide
+
+**Signature**
+
+```ts
+export declare const divide: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
+```
+
+Added in v1.0.0
+
+## multiply
+
+**Signature**
+
+```ts
+export declare const multiply: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
+```
+
+Added in v1.0.0
+
+## multiplyCompact
+
+Multiply all numbers in an iterable of `Option<number>` ignoring the `None` values.
+
+**Signature**
+
+```ts
+export declare const multiplyCompact: (self: Iterable<Option<number>>) => number
+```
+
+**Example**
+
+```ts
+import { multiplyCompact, some, none } from '@fp-ts/core/Option'
+
+const iterable = [some(2), none(), some(3), none()]
+assert.deepStrictEqual(multiplyCompact(iterable), 6)
+```
+
+Added in v1.0.0
+
+## subtract
+
+**Signature**
+
+```ts
+export declare const subtract: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
+```
+
+Added in v1.0.0
+
+## sum
+
+**Signature**
+
+```ts
+export declare const sum: {
+  (self: Option<number>, that: Option<number>): Option<number>
+  (that: Option<number>): (self: Option<number>) => Option<number>
+}
+```
+
+Added in v1.0.0
+
+## sumCompact
+
+Sum all numbers in an iterable of `Option<number>` ignoring the `None` values.
+
+**Signature**
+
+```ts
+export declare const sumCompact: (self: Iterable<Option<number>>) => number
+```
+
+**Example**
+
+```ts
+import { sumCompact, some, none } from '@fp-ts/core/Option'
+
+const iterable = [some(2), none(), some(3), none()]
+assert.deepStrictEqual(sumCompact(iterable), 5)
 ```
 
 Added in v1.0.0

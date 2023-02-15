@@ -1521,11 +1521,11 @@ export const exists: {
 )
 
 // -------------------------------------------------------------------------------------
-// algebraic operations
+// math
 // -------------------------------------------------------------------------------------
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const sum: {
@@ -1534,7 +1534,7 @@ export const sum: {
 } = lift2(N.sum)
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const multiply: {
@@ -1543,7 +1543,7 @@ export const multiply: {
 } = lift2(N.multiply)
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const subtract: {
@@ -1552,7 +1552,7 @@ export const subtract: {
 } = lift2(N.subtract)
 
 /**
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const divide: {
@@ -1571,7 +1571,7 @@ export const divide: {
  * const iterable = [some(2), none(), some(3), none()]
  * assert.deepStrictEqual(sumCompact(iterable), 5)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const sumCompact = (self: Iterable<Option<number>>): number => {
@@ -1595,7 +1595,7 @@ export const sumCompact = (self: Iterable<Option<number>>): number => {
  * const iterable = [some(2), none(), some(3), none()]
  * assert.deepStrictEqual(multiplyCompact(iterable), 6)
  *
- * @category algebraic operations
+ * @category math
  * @since 1.0.0
  */
 export const multiplyCompact = (self: Iterable<Option<number>>): number => {
