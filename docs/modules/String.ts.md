@@ -133,6 +133,8 @@ Added in v1.0.0
 
 ## empty
 
+The empty string `""`.
+
 **Signature**
 
 ```ts

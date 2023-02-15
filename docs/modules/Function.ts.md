@@ -394,6 +394,8 @@ Added in v1.0.0
 
 Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
 
+See also {@link pipe}.
+
 **Signature**
 
 ```ts
@@ -516,6 +518,8 @@ This is useful in combination with data-last functions as a simulation of method
 ```
 as.map(f).filter(g) -> pipe(as, map(f), filter(g))
 ```
+
+See also {@link flow}.
 
 **Signature**
 
