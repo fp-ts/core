@@ -63,6 +63,8 @@ export const Semigroup: semigroup.Semigroup<string> = semigroup.string
 export const Monoid: monoid.Monoid<string> = monoid.string
 
 /**
+ * The empty string `""`.
+ *
  * @since 1.0.0
  */
 export const empty: "" = "" as const

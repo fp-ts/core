@@ -234,6 +234,8 @@ export const flip = <A extends Array<unknown>, B extends Array<unknown>, C>(
 /**
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
  *
+ * See also {@link pipe}.
+ *
  * @example
  * import { flow } from "@fp-ts/core/Function"
  *
@@ -244,7 +246,6 @@ export const flip = <A extends Array<unknown>, B extends Array<unknown>, C>(
  *
  * assert.deepStrictEqual(f('aaa'), 6)
  *
- * @see {@link pipe}
  * @since 1.0.0
  */
 export function flow<A extends ReadonlyArray<unknown>, B>(ab: (...a: A) => B): (...a: A) => B
@@ -431,6 +432,8 @@ export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (
  * as.map(f).filter(g) -> pipe(as, map(f), filter(g))
  * ```
  *
+ * See also {@link flow}.
+ *
  * @example
  * import { pipe } from "@fp-ts/core/Function"
  *
@@ -440,7 +443,6 @@ export const untupled = <A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (
  *
  * assert.deepStrictEqual(pipe(length("hello"), double, decrement), 9)
  *
- * @see {@link flow}
  * @since 1.0.0
  */
 export function pipe<A>(a: A): A
