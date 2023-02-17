@@ -1,5 +1,6 @@
 import { pipe } from '@fp-ts/core/Function'
 import * as RA from '@fp-ts/core/ReadonlyArray'
+import * as O from '@fp-ts/core/Option'
 
 declare const neras: RA.NonEmptyReadonlyArray<number>
 declare const neas: RA.NonEmptyArray<number>
@@ -15,10 +16,20 @@ if (RA.isEmpty(ras)) {
   ras
 }
 
-if (RA.isEmpty(as)) {
+// $ExpectType <A>(c: readonly A[]) => Option<readonly []>
+O.liftPredicate(RA.isEmpty)
+
+// -------------------------------------------------------------------------------------
+// isEmptyArray
+// -------------------------------------------------------------------------------------
+
+if (RA.isEmptyArray(as)) {
   // $ExpectType []
   as
 }
+
+// $ExpectType <A>(c: A[]) => Option<[]>
+O.liftPredicate(RA.isEmptyArray)
 
 // -------------------------------------------------------------------------------------
 // isNonEmpty
@@ -29,10 +40,20 @@ if (RA.isNonEmpty(ras)) {
   ras
 }
 
-if (RA.isNonEmpty(as)) {
+// $ExpectType <A>(c: readonly A[]) => Option<readonly [A, ...A[]]>
+O.liftPredicate(RA.isNonEmpty)
+
+// -------------------------------------------------------------------------------------
+// isNonEmptyArray
+// -------------------------------------------------------------------------------------
+
+if (RA.isNonEmptyArray(as)) {
   // $ExpectType [number, ...number[]]
   as
 }
+
+// $ExpectType <A>(c: A[]) => Option<[A, ...A[]]>
+O.liftPredicate(RA.isNonEmptyArray)
 
 // -------------------------------------------------------------------------------------
 // map

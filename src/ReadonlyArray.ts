@@ -311,7 +311,23 @@ export const scanRight: {
 })
 
 /**
- * Determine if a `ReadonlyArray` is empty narrowing down the type to `[]`.
+ * Determine if an `Array` is empty narrowing down the type to `[]`.
+ *
+ * @param self - The `Array` to check.
+ *
+ * @example
+ * import { isEmptyArray } from "@fp-ts/core/ReadonlyArray"
+ *
+ * assert.deepStrictEqual(isEmptyArray([]), true);
+ * assert.deepStrictEqual(isEmptyArray([1, 2, 3]), false);
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isEmptyArray = <A>(self: Array<A>): self is [] => self.length === 0
+
+/**
+ * Determine if a `ReadonlyArray` is empty narrowing down the type to `readonly []`.
  *
  * @param self - The `ReadonlyArray` to check.
  *
@@ -324,14 +340,30 @@ export const scanRight: {
  * @category guards
  * @since 1.0.0
  */
-export function isEmpty<A>(self: Array<A>): self is []
-export function isEmpty<A>(self: ReadonlyArray<A>): self is readonly []
-export function isEmpty<A>(self: ReadonlyArray<A>): self is readonly [] {
-  return self.length === 0
-}
+// TODO: rename to isEmptyReadonlyArray
+export const isEmpty: <A>(self: ReadonlyArray<A>) => self is readonly [] = isEmptyArray as any
 
 /**
- * Determine if a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyArray`.
+ * Determine if an `Array` is non empty narrowing down the type to `NonEmptyArray`.
+ *
+ * An `Array` is considered to be a `NonEmptyArray` if it contains at least one element.
+ *
+ * @param self - The `Array` to check.
+ *
+ * @example
+ * import { isNonEmptyArray } from "@fp-ts/core/ReadonlyArray"
+ *
+ * assert.deepStrictEqual(isNonEmptyArray([]), false);
+ * assert.deepStrictEqual(isNonEmptyArray([1, 2, 3]), true);
+ *
+ * @category guards
+ * @since 1.0.0
+ */
+export const isNonEmptyArray: <A>(self: Array<A>) => self is NonEmptyArray<A> =
+  readonlyArray.isNonEmptyArray
+
+/**
+ * Determine if a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyReadonlyArray`.
  *
  * A `ReadonlyArray` is considered to be a `NonEmptyReadonlyArray` if it contains at least one element.
  *
@@ -346,10 +378,9 @@ export function isEmpty<A>(self: ReadonlyArray<A>): self is readonly [] {
  * @category guards
  * @since 1.0.0
  */
-export const isNonEmpty: {
-  <A>(self: Array<A>): self is NonEmptyArray<A>
-  <A>(self: ReadonlyArray<A>): self is NonEmptyReadonlyArray<A>
-} = readonlyArray.isNonEmpty
+// TODO: rename to isNonEmptyReadonlyArray
+export const isNonEmpty: <A>(self: ReadonlyArray<A>) => self is NonEmptyReadonlyArray<A> =
+  readonlyArray.isNonEmptyArray
 
 /**
  * Return the number of elements in a `ReadonlyArray`.
@@ -1181,7 +1212,7 @@ export const chopNonEmpty: {
   const [b, rest] = f(self)
   const out: NonEmptyArray<B> = [b]
   let next: ReadonlyArray<A> = rest
-  while (readonlyArray.isNonEmpty(next)) {
+  while (readonlyArray.isNonEmptyArray(next)) {
     const [b, rest] = f(next)
     out.push(b)
     next = rest

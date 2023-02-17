@@ -1020,15 +1020,23 @@ describe.concurrent("ReadonlyArray", () => {
   })
 
   it("isEmpty", () => {
-    const as: ReadonlyArray<number> = [1, 2, 3]
-    deepStrictEqual(RA.isEmpty(as), false)
+    deepStrictEqual(RA.isEmpty([1, 2, 3]), false)
     deepStrictEqual(RA.isEmpty([]), true)
   })
 
+  it("isEmptyArray", () => {
+    deepStrictEqual(RA.isEmptyArray([1, 2, 3]), false)
+    deepStrictEqual(RA.isEmptyArray([]), true)
+  })
+
   it("isNotEmpty", () => {
-    const as: ReadonlyArray<number> = [1, 2, 3]
-    deepStrictEqual(RA.isNonEmpty(as), true)
+    deepStrictEqual(RA.isNonEmpty([1, 2, 3]), true)
     deepStrictEqual(RA.isNonEmpty([]), false)
+  })
+
+  it("isNonEmptyArray", () => {
+    deepStrictEqual(RA.isNonEmptyArray([1, 2, 3]), true)
+    deepStrictEqual(RA.isNonEmptyArray([]), false)
   })
 
   it("head", () => {

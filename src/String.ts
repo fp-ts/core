@@ -10,7 +10,7 @@ import { dual } from "@fp-ts/core/Function"
 import * as readonlyArray from "@fp-ts/core/internal/ReadonlyArray"
 import type { Refinement } from "@fp-ts/core/Predicate"
 import * as predicate from "@fp-ts/core/Predicate"
-import type { NonEmptyReadonlyArray } from "@fp-ts/core/ReadonlyArray"
+import type { NonEmptyArray } from "@fp-ts/core/ReadonlyArray"
 import * as equivalence from "@fp-ts/core/typeclass/Equivalence"
 import * as monoid from "@fp-ts/core/typeclass/Monoid"
 import * as order from "@fp-ts/core/typeclass/Order"
@@ -204,11 +204,11 @@ export const length = (self: string): number => self.length
  * @since 1.0.0
  */
 export const split: {
-  (separator: string | RegExp): (self: string) => NonEmptyReadonlyArray<string>
-  (self: string, separator: string | RegExp): NonEmptyReadonlyArray<string>
-} = dual(2, (self: string, separator: string | RegExp): NonEmptyReadonlyArray<string> => {
+  (separator: string | RegExp): (self: string) => NonEmptyArray<string>
+  (self: string, separator: string | RegExp): NonEmptyArray<string>
+} = dual(2, (self: string, separator: string | RegExp): NonEmptyArray<string> => {
   const out = self.split(separator)
-  return readonlyArray.isNonEmpty(out) ? out : [self]
+  return readonlyArray.isNonEmptyArray(out) ? out : [self]
 })
 
 /**

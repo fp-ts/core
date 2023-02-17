@@ -340,8 +340,8 @@ Added in v1.0.0
 
 ```ts
 export declare const split: {
-  (separator: string | RegExp): (self: string) => readonly [string, ...string[]]
-  (self: string, separator: string | RegExp): readonly [string, ...string[]]
+  (separator: string | RegExp): (self: string) => [string, ...string[]]
+  (self: string, separator: string | RegExp): [string, ...string[]]
 }
 ```
 
