@@ -92,7 +92,9 @@ Added in v1.0.0
   - [groupBy](#groupby)
 - [guards](#guards)
   - [isEmpty](#isempty)
+  - [isEmptyArray](#isemptyarray)
   - [isNonEmpty](#isnonempty)
+  - [isNonEmptyArray](#isnonemptyarray)
 - [instances](#instances)
   - [Applicative](#applicative)
   - [Chainable](#chainable)
@@ -1169,13 +1171,12 @@ Added in v1.0.0
 
 ## isEmpty
 
-Determine if a `ReadonlyArray` is empty narrowing down the type to `[]`.
+Determine if a `ReadonlyArray` is empty narrowing down the type to `readonly []`.
 
 **Signature**
 
 ```ts
-export declare function isEmpty<A>(self: Array<A>): self is []
-export declare function isEmpty<A>(self: ReadonlyArray<A>): self is readonly []
+export declare const isEmpty: <A>(self: readonly A[]) => self is readonly []
 ```
 
 **Example**
@@ -1189,19 +1190,37 @@ assert.deepStrictEqual(isEmpty([1, 2, 3]), false)
 
 Added in v1.0.0
 
+## isEmptyArray
+
+Determine if an `Array` is empty narrowing down the type to `[]`.
+
+**Signature**
+
+```ts
+export declare const isEmptyArray: <A>(self: A[]) => self is []
+```
+
+**Example**
+
+```ts
+import { isEmptyArray } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(isEmptyArray([]), true)
+assert.deepStrictEqual(isEmptyArray([1, 2, 3]), false)
+```
+
+Added in v1.0.0
+
 ## isNonEmpty
 
-Determine if a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyArray`.
+Determine if a `ReadonlyArray` is non empty narrowing down the type to `NonEmptyReadonlyArray`.
 
 A `ReadonlyArray` is considered to be a `NonEmptyReadonlyArray` if it contains at least one element.
 
 **Signature**
 
 ```ts
-export declare const isNonEmpty: {
-  <A>(self: A[]): self is [A, ...A[]]
-  <A>(self: readonly A[]): self is readonly [A, ...A[]]
-}
+export declare const isNonEmpty: <A>(self: readonly A[]) => self is readonly [A, ...A[]]
 ```
 
 **Example**
@@ -1211,6 +1230,29 @@ import { isNonEmpty } from '@fp-ts/core/ReadonlyArray'
 
 assert.deepStrictEqual(isNonEmpty([]), false)
 assert.deepStrictEqual(isNonEmpty([1, 2, 3]), true)
+```
+
+Added in v1.0.0
+
+## isNonEmptyArray
+
+Determine if an `Array` is non empty narrowing down the type to `NonEmptyArray`.
+
+An `Array` is considered to be a `NonEmptyArray` if it contains at least one element.
+
+**Signature**
+
+```ts
+export declare const isNonEmptyArray: <A>(self: A[]) => self is [A, ...A[]]
+```
+
+**Example**
+
+```ts
+import { isNonEmptyArray } from '@fp-ts/core/ReadonlyArray'
+
+assert.deepStrictEqual(isNonEmptyArray([]), false)
+assert.deepStrictEqual(isNonEmptyArray([1, 2, 3]), true)
 ```
 
 Added in v1.0.0
