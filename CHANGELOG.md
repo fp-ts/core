@@ -1,5 +1,25 @@
 # @fp-ts/core
 
+## 0.2.2
+
+### Patch Changes
+
+- [#68](https://github.com/fp-ts/core/pull/68) [`6914a7d0`](https://github.com/fp-ts/core/commit/6914a7d02ad0be538207657ad314777fd7d77aeb) Thanks [@gcanti](https://github.com/gcanti)! - Tuple: add more APIs
+
+- [#66](https://github.com/fp-ts/core/pull/66) [`f7cc0fc1`](https://github.com/fp-ts/core/commit/f7cc0fc1ccdf930704358ee84cca22faada172bf) Thanks [@gcanti](https://github.com/gcanti)! - export productAll from Option, Either, Predicate
+
+- [#64](https://github.com/fp-ts/core/pull/64) [`ec4e4667`](https://github.com/fp-ts/core/commit/ec4e466741b343ae120f394b648dc4acfae9ddec) Thanks [@KhraksMamtsov](https://github.com/KhraksMamtsov)! - fix bounds flipping in reverse function
+
+- [#71](https://github.com/fp-ts/core/pull/71) [`f6e0f6d4`](https://github.com/fp-ts/core/commit/f6e0f6d42cc8ab77641c1882fac60c53255a839c) Thanks [@gcanti](https://github.com/gcanti)! - Function: swap apply arguments
+
+- [#62](https://github.com/fp-ts/core/pull/62) [`61707e83`](https://github.com/fp-ts/core/commit/61707e83fc5a5533bf9a70e10577befe79983947) Thanks [@KhraksMamtsov](https://github.com/KhraksMamtsov)! - add missing boolean semigroups, monoids and combinators
+
+- [#70](https://github.com/fp-ts/core/pull/70) [`cb22f2a7`](https://github.com/fp-ts/core/commit/cb22f2a7bf1c76471eb09a6b0a6883e4ad4dff90) Thanks [@gcanti](https://github.com/gcanti)! - Bigint: feature parity with Number
+
+- [#66](https://github.com/fp-ts/core/pull/66) [`d732ea1f`](https://github.com/fp-ts/core/commit/d732ea1fad36fd363ddffe9fb593b3400efb2369) Thanks [@gcanti](https://github.com/gcanti)! - Number: add missing functions (derivable from Order)
+
+- [#72](https://github.com/fp-ts/core/pull/72) [`f031207e`](https://github.com/fp-ts/core/commit/f031207e5f0f1b494d5ac8f370f8392b49e199bd) Thanks [@gcanti](https://github.com/gcanti)! - ReadonlyRecord: map: add support for structs
+
 ## 0.2.1
 
 ### Patch Changes
