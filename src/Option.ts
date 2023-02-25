@@ -849,6 +849,15 @@ export const andThenDiscard: {
  * @param f - Function to apply to the value of the `Option` if it is `Some`
  * @param self - The `Option` to apply the function to
  *
+ * @example
+ * import * as O from "@fp-ts/core/Option"
+ *
+ * const getInteger = (n: number) => n === n.toFixed(0) ? O.some(n) : O.none()
+ *
+ * assert.deepStrictEqual(O.tap(O.none(), getInteger), O.none())
+ * assert.deepStrictEqual(O.tap(O.some(1), getInteger), O.some(1))
+ * assert.deepStrictEqual(O.tap(O.some(1.14), getInteger), O.none())
+ *
  * @category transforming
  * @since 1.0.0
  */

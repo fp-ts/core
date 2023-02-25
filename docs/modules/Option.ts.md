@@ -1694,6 +1694,18 @@ export declare const tap: {
 }
 ```
 
+**Example**
+
+```ts
+import * as O from "@fp-ts/core/Option"
+
+const getInteger = (n: number) => n === n.toFixed(0) ? O.some(n) : O.none()
+
+assert.deepStrictEqual(O.tap(O.none(), getInteger), O.none())
+assert.deepStrictEqual(O.tap(O.some(1), getInteger), O.some(1))
+assert.deepStrictEqual(O.tap(O.some(1.14), getInteger), O.none())
+```
+
 Added in v1.0.0
 
 # type lambdas
